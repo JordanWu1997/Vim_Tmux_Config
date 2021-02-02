@@ -1,115 +1,109 @@
-# Vim_Setting
+# Vim_Tmux_Config
 
-Backup for my personal vim setting and vim plugins
+Vim is a powerful text editor with long history, and Tmux is a powerful windows manager in terminal interface. With both powerful tools, coding can be more efficient. This repository is to backup my personal configuration of vim and tmux. Thanks for tutorials and configurations in my reference. I would like to share my result to other people. Since I am still a nood in vim and tmux, if there's anything I can improve in my configuration, please let me know. This configuration is tested under fedora 33.
+
+## First time usage
+### 1. Preinstall packages / dependcies
+- git: https://en.wikipedia.org/wiki/Git
+    - ```dnf install git```
+- curl: https://en.wikipedia.org/wiki/CURL
+    - ```dnf install curl```
+- Nerd font (Powerline font support): https://github.com/ryanoasis/nerd-fonts
+    - Under current git directory, run ``` ./vim_font_setup.sh ``` in terminal
+- Tpm (Tmux plugin manager): https://github.com/tmux-plugins/tpm
+    - Under current git directory, run ``` ./tpm_setup.sh ``` in terminal
+
+### 2. Vim 
+1. In terminal, run ```ln -s $PATH/vimrc .vimrc```
+    - Please change $PATH to path of current git directory
+2. In vim, type ```:PlugInstall``` in command line mode
+    - Plugins installation should start automatically
+### 3. Tmux
+1. In tmux, type ```prefix + i```
+    - Plug installation should start automatically
+    - Note: default prefix is ```Ctrl+b```
+
+## Basic Vim & Tmux usage
+Please check https://github.com/shengjunlin/vimrc/blob/master/Vim%20%26%20Tmux.pdf
+
+## Vim cheat sheet
+This session is about key mapping and usage tip in vim. Here I only list some commonly used hotkeys that I map, as for the other hotkeys, you can use ```:nmap```, ```:vmanp``` or ```:map``` to check hotkeys in different modes respectively. For those hotkeys of plugins that I don't modified any key mappings, I will not add them to my cheat sheet except for those keys are really commonly used in daily coding.
+
+### Hotkey map
+
+- #### Comman key mapping
+    - key ```<leader>``` is mapped to ```<space>```
+    - key ```<Esc>``` in insert mode is also mapped to ```<j+k>``` and ```<k+j>``` 
+
+- #### Function key mapping
+| Key | Action | More Information |
+| :-: | :----: | :--------------: |
+| ```(<leader>) + F1``` | Switch to (previous)/next buffer | Buffer here is more like opened file |
+| ```(<leader>) + F2``` | Swtich to (previous)/next tabe | Tabe here is more like workspace |
+| ```<leader> + F3``` | Toggle NerdTree | File manager (vim-plugin) |
+| ```<leader> + F4``` | Toggle TagBar | Function, variable, tag inspector (vim-plugin) |
+| ```<leader> + F5``` | Show line number (abs) | Absolute |
+| ```<leader> + F6``` | Show line number (rel) | Relative |
+| ```F5 + F6```       | Show line number (combined) | Show relative line number except for current line |
+| ```<leader> + F8``` | Toggle comment highlight | Comment will be highlight in cyan |
+| ```<leader> + F9``` | Excute current file in python | Python to use need to be assigned in .vimrc |
+
+- #### File I/O mapping
+| Key | Action | More Information |
+| :-: | :----: | :--------------: |
+| ```<leader> + q```  | Quit current file | 
+| ```<leader> + qa``` | Quit all files    |
+| ```<leader> + Q ```  | Quit current file without saving |
+| ```<leader> + Qa ``` | Quit all files without saving    |
+| ```<leader> + w```  | Write current file | 
+| ```<leader> + wa``` | Write all files    |
+| ```<leader> + W ```  | Write current file without saving |
+| ```<leader> + Wa ``` | Write all files without saving    |
+
+- #### Vim split mapping
+| Key | Action | More Information |
+| :-: | :----: | :--------------: |
+| ```<leader> + s``` | Split horizontally |
+| ```<leader> + v``` | Split veritcally |
+| ```<leader> + h/j/k/l``` | Move in split pane | Both vim-like keys and arrowkeys are accepted | 
+| ```<leader> + H/J/K/L``` | Swap in split pane | Only vim-like keys are accepted |
+| ```<leader> + </,/./>``` | Modify pane size in split pane (vertically) | -20/-5/+5/+20 columns |
+| ```<leader> + _/-/=/+``` | Modify pane size in split pane (horizontally) | -20/-5/+5/+20 rows |
+| ```<leader> + ==``` | Equally redistribute split pane | 
+
+- #### Vim code-folding mapping
+
+- #### Vim pane layout mapping
+
+- #### Vim-Plugins hotkey
+
+- easymotion
+- nerd-commentary
+- ale
+- autopair
+- fzf
+- autopop
+- gitgutter
+- fzf
+- indent guides
+- rainbow parentheses
+- nerdtree
+
+- ### Vim usage tip
+- #### Advanced vim usage
+
+## Tmux Cheat Sheet
+### Hotkey Map
+- #### Tmux command hotkey
+- #### Session hotkey
+- #### Window hotkey
+- #### Pane hotkey
+- #### Tmux-Plugins hotkey
+### Tmux usage tip
 
 ## Reference:
-
 1. Fisa-vim-config          : http://fisadev.github.io/fisa-vim-config
 2. shengjunlin config       : https://github.com/shengjunlin/vimrc
 3. Nady's Note  VIM folding : http://nadypan.blogspot.com/2014/01/vim-fold.html
 4. Use Vim as IDE           : https://github.com/yangyangwithgnu/use_vim_as_ide
 5. Vim Cheat Sheet          : https://factorpad.com/tech/vim-cheat-sheet.html#structure
-
-## First Time Useage
-
-- Vim setting:
-	- If "curl" is not installed on machine, then copy "vim" directory in "Vim_Setting" to home under user and change directory name to ".vim"
-	- Copy "vimrc" file in "Vim_Setting" to home under user and change file name to ".vimrc"
-- Vim plugins installations:
-	- In VIM, Type ":PlugInstall" and then plugins will be installed a
-utomatically
-
-
-## Hot Key Table (\`, Ctrl, Tab, Leaderkey)
-
-- \`
-    - \` + \` : Word Suggestion (Suggest input keymap from present unfinished words)
-    - \` + 1 : Word Suggestion (Suggest input keymap from previous finished words)
-
-- Ctrl
-    - Ctrl + h : Highlight On (Highlight Comment in Cyan)
-    - Ctrl + o : Highlight Off (Highlight Comment in Gray)
-    - Ctrl + n : Multi-cursor on selected word ("I" to insert words)
-
-- Tab
-    - Tab + Tab : Toggle NerdTabManager (Manage open tabs)
-
-- Leaderkey: <space>
-    - Leader + ss  : Toggle Syntastic Plugin (Default: On)
-    - Leader + rb  : Toggle Rainbow Bracket (Default: Off)
-    - Leader + cc  : Comment all selected lines
-    - Leader + cu  : Anti-comment all selected lines
-    - Leader + cy  : Comment and yank all selected lines
-    - Leader + bo  : 80-character warning on
-    - Leader + bf  : 80-character warning off
-    - Leader + f   : Zen mode on (In normal mode)
-    - Leader + F   : Zen mode off (In Zen mode)
-    - Leader + b   : Move to the beginning of the line
-    - Leader + e   : Move to the end of the line
-    - Leader + y   : Copy (Yank) in visual mode
-    - Leader + p   : Paste in normal mode
-    - Leader + q/w : Quit/Write current file
-    - Leader + rr  : Replace word W/O whole word criteria W/O confirmation
-    - Leader + rw  : Replace word W/I whole word criteria W/O confirmation
-    - Leader + rc  : Replace word W/O whole word criteria W/I confirmation
-    - Leader + rcw : Replace word W/I whole word criteria W/I confirmation
-
-- Hot Key Table (Function key):
-    - Leader + F1 : Next Tab
-    - Leader + F2 : Previous Tab
-    - Leader + F3 : Nerd Tree (Tree Structure Directories)
-    - Leader + F4 : Tagbar (Point out classes and methods)
-    - Leader + F5 : Toggle Line Number (Absolute)
-    - Leader + F6 : Toggle Line Number (Relative)
-    - Leader + F7 : Fold Column On
-    - Leader + F8 : Fold Column Off
-    - Leader + F9 : Run Python (2 or 3, need to check)
-
-## Folding Method In VIM
-
-- __*zn : Turn off fold method*__
-- __*zN : Turn on fold method*__
-
-- Mannual fold method (VIM built-in)
-    - zf : Create fold *(zf + direction + num_of_line)*
-    - zx : Update fold (*Close all folds except current one*)
-    - zd : Delete current fold
-    - zE : Delete __*all folds*__
-    - zj : Move to next fold
-    - zk : Move to previous fold
-    - zo : Open current fold
-    - zc : Close current fold
-
-- Hotkey
-    - Leader + Leader : Toggle current fold
-    - Leader + zM     : Close all folds
-    - Leader + zR     : Open all folds
-
-## Split Method in VIM
-
-- VIM built-in method
-    - Ctrl + w + hjkl: Move to different split window
-    - Ctrl + w + num + "+" : Resize split window (number of lines)
-    - Ctrl + w + = : Reset size of all split windows
-
-- Hotkey
-    - Leader + s : Split horizontally
-    - Leader + v : Split vertically
-    - Leader + - : Shrink column size
-    - Leader + + : Expand column size
-    - Leader + < : Shrink row size
-    - Leader + > : Expand row size
-    - Leader + z : Zoom in/out current window
-    - Leader + h/j/k/l : Switch to pane in different location
-    - Leader + H/J/K/L : Change current pane location
-    - Leader + mk : Save Current Setting (Including Code Folding)
-    - Leader + ld : Load Previous Setting (Including Code Folding)
-
-## Convenient Input Premap
-
-- < + < : \<Input>
-- < + > : \<Input/>
-- { + { : {Input}
-- { + Enter : { CR Input }
-- ' + ' + ' : ''' CR '''
-- " + " + " : """ CR """
