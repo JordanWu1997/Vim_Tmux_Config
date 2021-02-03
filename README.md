@@ -69,27 +69,58 @@ This session is about key mapping and usage tip in vim. Here I only list some co
 | ```<leader> + H/J/K/L``` | Swap in split pane | Only vim-like keys are accepted |
 | ```<leader> + </,/./>``` | Modify pane size in split pane (vertically) | -20/-5/+5/+20 columns |
 | ```<leader> + _/-/=/+``` | Modify pane size in split pane (horizontally) | -20/-5/+5/+20 rows |
-| ```<leader> + ==``` | Equally redistribute split pane | 
+| ```<leader> + ==``` | Equally redistribute split pane | Both horizontal and vertical directions |
 
 - #### Vim code-folding mapping
+| Key | Action | More Information |
+| :-: | :----: | :--------------: |
 
-- #### Vim pane layout mapping
+- #### Vim pane layout setting mapping
+| Key | Action | More Information |
+| :-: | :----: | :--------------: |
 
-- #### Vim-Plugins hotkey
+- ### Vim-Plugins hotkey (Order in alphabet)
+- #### Ale (https://github.com/dense-analysis/ale)
+| Key | Action | More Information |
+| :-: | :----: | :--------------: |
 
-- easymotion
-- nerd-commentary
-- ale
-- autopair
-- fzf
-- autopop
-- gitgutter
-- fzf
-- indent guides
-- rainbow parentheses
-- nerdtree
+- #### Autopair (https://github.com/jiangmiao/auto-pairs
+| Key | Action | More Information |
+| :-: | :----: | :--------------: |
 
-- ### Vim usage tip
+- #### AutoComlPop (https://github.com/vim-scripts/AutoComplPop)
+| Key | Action | More Information |
+| :-: | :----: | :--------------: |
+
+- #### Easymotion (https://github.com/easymotion/vim-easymotion)
+| Key | Action | More Information |
+| :-: | :----: | :--------------: |
+
+- #### Fzf (https://github.com/junegunn/fzf.vim)
+| Key | Action | More Information |
+| :-: | :----: | :--------------: |
+
+- #### Gitgutter (https://github.com/airblade/vim-gitgutter)
+| Key | Action | More Information |
+| :-: | :----: | :--------------: |
+
+- #### Indent guides (https://github.com/nathanaelkane/vim-indent-guides)
+| Key | Action | More Information |
+| :-: | :----: | :--------------: |
+
+- #### Nerdtree (https://github.com/preservim/nerdtree)
+| Key | Action | More Information |
+| :-: | :----: | :--------------: |
+
+- #### Nerdcommenter (https://github.com/preservim/nerdcommenter)
+| Key | Action | More Information |
+| :-: | :----: | :--------------: |
+
+- #### Rainbow parentheses (https://github.com/luochen1990/rainbow)
+| Key | Action | More Information |
+| :-: | :----: | :--------------: |
+
+### Vim usage tip
 - #### Advanced vim usage
 
 ## Tmux Cheat Sheet
