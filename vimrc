@@ -216,23 +216,6 @@ function! RemoveTrailingWhitespace()
 endfunction
 autocmd BufWritePre * call RemoveTrailingWhitespace()
 
-" Function - Line length warnings [Not working now] ----------------------------
-"function! RemoveWidthLimitWarnigns()
-    "silent! call matchdelete(4)
-"endfunction
-"function! InsertWidthLimitWarnings()
-    "call RemoveWidthLimitWarnigns()
-    "call matchadd('ErrorMsg', '\\%>79v.\\+', 10, 4)
-"endfunction
-"nnoremap <leader>bo :call InsertWidthLimitWarnings()<CR>:echo '80 char-bound ON'<CR>
-"nnoremap <leader>bf :call RemoveWidthLimitWarnigns()<CR>:echo '80 char-bound OFF'<CR>
-
-" Function - Line length warnings [Working instead] ----------------------------
-highlight OverLength ctermbg=red ctermfg=white guibg=#ff0000 guifg=#ffffff
-highlight UnlimitLength ctermbg=NONE guibg=NONE
-nnoremap <leader>bo :match OverLength /\%81v.\+/<CR>:echo '80 char-bound ON'<CR>
-nnoremap <leader>bf :match UnlimitLength /\%81v.\+/<CR>:echo '80 char-bound OFF'<CR>
-
 " Function - Word replacement --------------------------------------------------
 function! Replace(confirm, wholeword, replace)
     wa
@@ -359,6 +342,7 @@ Plug 'vim-python/python-syntax'
 " [Optional] ------------------------------------------------------------------
 Plug 'ryanoasis/vim-devicons'
 Plug 'shime/vim-livedown'
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'tmux-plugins/vim-tmux-focus-events'
 "Plug 'roxma/vim-tmux-clipboard'
 "Plug 'davidhalter/jedi-vim'
@@ -579,6 +563,7 @@ let g:livedown_port = 1337
 " the browser to use, can also be firefox, chrome or other,
 " depending on your executable
 let g:livedown_browser = "brave-browser"
+
 " Vim Colorscheme - Gruvbox ---------------------------------------------------
 let g:gruvbox_contrast_dark='soft'
 
@@ -613,6 +598,12 @@ set bg=dark
 hi LineNr cterm=bold ctermfg=DarkGrey ctermbg=NONE gui=bold guifg=#808080 guibg=NONE
 hi CursorLineNr cterm=bold ctermfg=Green ctermbg=NONE gui=bold guifg=#00ff00 guibg=NONE
 hi Normal guibg=NONE ctermbg=NONE
+
+" Function - Line length warnings [Must be added at last ]---------------------
+highlight OverLength ctermbg=red ctermfg=white guibg=#ff0000 guifg=#ffffff
+highlight UnlimitLength ctermbg=NONE guibg=NONE
+nnoremap <leader>bo :match OverLength /\%81v.\+/<CR>:echo '80 char-bound ON'<CR>
+nnoremap <leader>bf :match UnlimitLength /\%81v.\+/<CR>:echo '80 char-bound OFF'<CR>
 
 " =============================================================================
 " End of Vim configuration, automatically reload current config after saving
