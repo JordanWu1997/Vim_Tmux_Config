@@ -316,7 +316,6 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'alvan/vim-closetag'
 
 " [Not Must-have but Useful] --------------------------------------------------
-Plug 'vim-scripts/AutoComplPop'
 Plug 'junegunn/fzf' ", { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'lilydjwg/colorizer'
@@ -339,9 +338,14 @@ Plug 'dense-analysis/ale'
 Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'vim-python/python-syntax'
 
+" [Fortran coding] -------------------------------------------------------------
+"Plug 'tomedunn/vim.fortran' [Already built-in]
+
 " [Optional] ------------------------------------------------------------------
 Plug 'ryanoasis/vim-devicons'
 Plug 'shime/vim-livedown'
+Plug 'vim-scripts/AutoComplPop' "must be disable is kiteco is enable
+"Plug 'kiteco/vim-plugin'        "must be disable is autocomplpop is enable
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'tmux-plugins/vim-tmux-focus-events'
 "Plug 'roxma/vim-tmux-clipboard'
@@ -425,8 +429,8 @@ map <leader>pwd :pwd<CR>
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 let g:NERDTreeMouseMode = 3
 let g:NERDTreeDirArrows = ''
-" auto show NERDTree if there's no file
-autocmd vimenter * if !argc() | NERDTree | endif
+" auto show NERDTree if there's no file [not used]
+"autocmd vimenter * if !argc() | NERDTree | endif
 
 " Rainbow parentheses ---------------------------------------------------------
 " don;t enable when start up
@@ -505,9 +509,9 @@ map <leader><leader>j <Plug>(easymotion-j)
 map <leader><leader>k <Plug>(easymotion-k)
 map <leader><leader>l <Plug>(easymotion-lineforward)
 map <leader><leader>h <Plug>(easymotion-linebackward)
-nmap <leader><leader>f <Plug>(easymotion-overwin-f)
-nmap <leader>1 <Plug>(easymotion-overwin-f2)
-nmap <leader>2 <Plug>(easymotion-overwin-fn)
+map <leader><leader>1 <Plug>(easymotion-overwin-f)
+map <leader><leader>2 <Plug>(easymotion-overwin-f2)
+"map <leader><leader>n <Plug>(easymotion-overwin-fn)
 
 " Incsearch Easymotion --------------------------------------------------------
 map z/ <Plug>(incsearch-easymotion-/)
@@ -533,8 +537,9 @@ let g:syntastic_python_checkers = ['pylint']
 let g:syntastic_shell_checkers = ['shellcheck']
 
 " AutoComplPop ----------------------------------------------------------------
+" -- This section must be comment out is kite is used
 set complete+=kspell
-set completeopt=noinsert,noselect,menuone
+set completeopt=noselect,menuone
 " previous/next suggestion
 inoremap `` <C-p>
 inoremap `1 <C-n>
@@ -547,6 +552,17 @@ inoremap <expr><C-u> pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 " enable/disable autopop
 map <leader>` :AcpDisable<CR>
 map <leader>~ :AcpEnable<CR>
+
+" Kite ------------------------------------------------------------------------
+" -- This section must be comment out is AutoComplPop is used
+"let g:kite_supported_languages=['python']
+"let g:kite_tab_complete=1
+"set completeopt+=menuone
+"set completeopt+=noselect
+""set completeopt+=noinsert
+"set completeopt+=preview
+"autocmd CompleteDone * if !pumvisible() | pclose | endif
+"nmap <silent> <buffer> gK <Plug>(kite-docs)
 
 " Vim GitGutter ---------------------------------------------------------------
 set updatetime=100
@@ -586,7 +602,7 @@ let g:PaperColor_Theme_Options = {
   \ }
 
 " Colorscheme -----------------------------------------------------------------
-colorscheme vim-monokai-tasty
+colorscheme vim-monokai-tasty "Weird fortan syntax highlight
 "colorscheme gruvbox
 "colorscheme cobalt
 "colorscheme PaperColor
