@@ -184,7 +184,8 @@ nnoremap <leader>S :split<CR>
 nnoremap <leader>V :vsplit<CR>
 
 " Window Chooser --------------------------------------------------------------
-nmap  <leader>c <Plug>(choosewin)
+nmap  <leader><Enter> <Plug>(choosewin)
+nmap  <leader>c       <Plug>(choosewin)
 " show big letters
 let g:choosewin_overlay_enable = 1
 
@@ -337,8 +338,8 @@ Plug 'vim-utils/vim-man'
 Plug 'vim-scripts/LargeFile'
 " History of yank
 Plug 'vim-scripts/YankRing.vim'
-" Auto popup completion options from vim
-Plug 'vim-scripts/AutoComplPop'
+"" Auto popup completion options from vim
+"Plug 'vim-scripts/AutoComplPop'
 " Generate bracket/quotation in pair
 Plug 'jiangmiao/auto-pairs'
 " Functions related to quotation
@@ -377,6 +378,17 @@ Plug 'mhinz/vim-signify'
 Plug 'fisadev/vim-isort'
 " More python syntax highlight
 Plug 'vim-python/python-syntax'
+" Python autocompletion
+Plug 'Shougo/deoplete.nvim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+" Python autocompletion
+Plug 'deoplete-plugins/deoplete-jedi'
+" Completion from other opened files
+Plug 'Shougo/context_filetype.vim'
+" Just to add the python go-to-definition and similar features, autocompletion
+" from this plugin is disabled
+Plug 'davidhalter/jedi-vim'
 
 " [Fortran coding] ------------------------------------------------------------
 " Fortran syntax support
@@ -581,20 +593,45 @@ highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
 highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
 " AutoComplPop ----------------------------------------------------------------
-set complete+=kspell
-set completeopt+=noselect
-" previous/next suggestion
-inoremap `` <C-p>
-inoremap `1 <C-n>
-inoremap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-inoremap <expr><C-k> pumvisible() ? "\<c-p>" : "\<C-k>"
-inoremap <expr><C-j> pumvisible() ? "\<c-n>" : "\<C-j>"
-inoremap <expr><C-d> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-inoremap <expr><C-u> pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
-" enable/disable autopop
-map <leader>` :AcpDisable<CR>
-map <leader>~ :AcpEnable<CR>
+"set complete+=kspell
+"set completeopt+=noselect
+"" previous/next suggestion
+"inoremap `` <C-p>
+"inoremap `1 <C-n>
+"inoremap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
+"inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+"inoremap <expr><C-k> pumvisible() ? "\<c-p>" : "\<C-k>"
+"inoremap <expr><C-j> pumvisible() ? "\<c-n>" : "\<C-j>"
+"inoremap <expr><C-d> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+"inoremap <expr><C-u> pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+"" enable/disable autopop
+"map <leader>` :AcpDisable<CR>
+"map <leader>~ :AcpEnable<CR>
+
+" Deoplete --------------------------------------------------------------------
+" Use deoplete.
+let g:deoplete#enable_at_startup = 1
+call deoplete#custom#option({
+\   'ignore_case': v:true,
+\   'smart_case': v:true,
+\})
+" complete with words from any opened file
+let g:context_filetype#same_filetypes = {}
+let g:context_filetype#same_filetypes._ = '_'
+
+" Jedi-vim --------------------------------------------------------------------
+" Disable autocompletion (using deoplete instead)
+let g:jedi#completions_enabled = 0
+
+" All these mappings work only for python code:
+" Go to definition
+let g:jedi#goto_command = ',d'
+" Find ocurrences
+let g:jedi#usages_command = ',o'
+" Find assignments
+let g:jedi#goto_assignments_command = ',a'
+" Go to definition in new tab
+nmap ,D :tab split<CR>:call jedi#goto()<CR>
 
 " Colorscheme -----------------------------------------------------------------
 colorscheme vim-monokai-tasty
