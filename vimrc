@@ -20,17 +20,6 @@ let mapleader = ' '
 inoremap jk <Esc>
 inoremap kj <Esc>
 
-" Shell command ---------------------------------------------------------------
-map <C-c> :!
-imap <C-c> :!
-map cht :!curl cht.sh/
-map <leader>m :Man<space>
-
-" VIM built-in setting --------------------------------------------------------
-syntax enable
-filetype on
-filetype plugin on
-
 " Beginning/End, PageUp/PageDown ----------------------------------------------
 map <leader>b 0
 map <leader>e $
@@ -46,6 +35,16 @@ map <leader>w :w<CR>
 map <leader>wq :wq<CR>
 map <leader>Wq :wa<CR>:q<CR>
 map <leader>WQ :wa<CR>:qa<CR>
+
+" Shell command ---------------------------------------------------------------
+map <C-c> :!
+imap <C-c> :!
+map <leader>m :Man<space>
+
+" VIM built-in setting --------------------------------------------------------
+syntax enable
+filetype on
+filetype plugin on
 
 " VIM window control ----------------------------------------------------------
 nnoremap <silent><leader>; <C-W><C-W>
@@ -78,6 +77,7 @@ set incsearch
 set ignorecase
 set nocompatible
 set nostartofline
+set modifiable
 set noshowmode "no vim-built-in statusline
 set wildmenu "show memu options
 set clipboard=unnamedplus
@@ -85,6 +85,9 @@ set clipboard=unnamedplus
 " Comment  highlight ----------------------------------------------------------
 noremap <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
 noremap <leader><F8> :hi Comment ctermfg=245 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'<CR>
+
+" Wild menu settings ----------------------------------------------------------
+"set wildmode=list:longest
 
 " Search settings -------------------------------------------------------------
 set ruler
@@ -168,16 +171,22 @@ nnoremap <leader>md :Delmarks<space>
 set scrolloff=2
 set display+=lastline
 set title
-"set spell
 
 " Split -----------------------------------------------------------------------
 " More natural split opening
 set splitbelow
 set splitright
+" remove ugly vertical lines on window division
+set fillchars+=vert:\
 nnoremap <leader>s :split<space>
 nnoremap <leader>v :vsplit<space>
 nnoremap <leader>S :split<CR>
 nnoremap <leader>V :vsplit<CR>
+
+" Window Chooser --------------------------------------------------------------
+nmap  <leader>c <Plug>(choosewin)
+" show big letters
+let g:choosewin_overlay_enable = 1
 
 " Better backup, swap and undos storage ---------------------------------------
 set directory=~/.vim/dirs/tmp     " directory to place swap files in
@@ -299,67 +308,94 @@ call plug#begin('~/.vim/plugged')
 " *****************************************************************************
 
 " [Vim theme] -----------------------------------------------------------------
-Plug 'morhetz/gruvbox'
-Plug 'gkjgh/cobalt'
-Plug 'NLKNguyen/papercolor-theme'
+" Color themes
 Plug 'patstockwell/vim-monokai-tasty'
+" Airline (status line)
 Plug 'vim-airline/vim-airline'
+" Airline themes
 Plug 'vim-airline/vim-airline-themes'
+" Powerline symbols
+Plug 'ryanoasis/vim-devicons'
 
-" [Must-have] -----------------------------------------------------------------
-Plug 'majutsushi/tagbar'
-Plug 'vim-scripts/IndexedSearch'
-Plug 'vim-scripts/LargeFile'
-Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/nerdcommenter'
-Plug 'jiangmiao/auto-pairs'
-Plug 'alvan/vim-closetag'
-
-" [Not Must-have but Useful] --------------------------------------------------
-Plug 'junegunn/fzf' ", { 'do': { -> fzf#install() } }
+" [File/Code Browsing] --------------------------------------------------------
+" Code and files fuzzy finder
+Plug 'junegunn/fzf' ", { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'lilydjwg/colorizer'
-Plug 'luochen1990/rainbow'
-Plug 'Yggdroot/indentLine'
-Plug 'nathanaelkane/vim-indent-guides'
+" File browser
+Plug 'scrooloose/nerdtree'
+" Class/module browser
+Plug 'majutsushi/tagbar'
+" Search results counter
+Plug 'vim-scripts/IndexedSearch'
+" Code commenter
+Plug 'scrooloose/nerdcommenter'
+" System Man usage
 Plug 'vim-utils/vim-man'
-Plug 'terryma/vim-multiple-cursors'
+
+" [Vim extra functions] -------------------------------------------------------
+" Vim settings for opening large files
+Plug 'vim-scripts/LargeFile'
+" History of yank
+Plug 'vim-scripts/YankRing.vim'
+" Auto popup completion options from vim
+Plug 'vim-scripts/AutoComplPop'
+" Generate bracket/quotation in pair
+Plug 'jiangmiao/auto-pairs'
+" Functions related to quotation
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-repeat'
+" Vim window maximizer
 Plug 'szw/vim-maximizer'
+" Window chooser
+Plug 't9md/vim-choosewin'
+" Easymotion (Key-mapping moving in vim)
 Plug 'easymotion/vim-easymotion'
-Plug 'haya14busa/incsearch.vim'
+" Easymotion + incsearch
 Plug 'haya14busa/incsearch-easymotion.vim'
-Plug 'airblade/vim-gitgutter'
+
+" [Functions for coding] ------------------------------------------------------
+" Paint paired bracket/quotation in different color
+Plug 'luochen1990/rainbow'
+" Save last . motion for next time usage
+Plug 'tpope/vim-repeat'
+" Multiple cursor with incsearch support
+Plug 'terryma/vim-multiple-cursors'
+" Multiple language syntax support
+Plug 'dense-analysis/ale'
+" Languge packs
+Plug 'sheerun/vim-polyglot'
+" Indent guide
+Plug 'nathanaelkane/vim-indent-guides'
+
+" [Git] -----------------------------------------------------------------------
+" Git integration
 Plug 'tpope/vim-fugitive'
+" Git/mercurial/others diff icons on the side of the file lines
+Plug 'mhinz/vim-signify'
 
 " [Python coding] -------------------------------------------------------------
-Plug 'dense-analysis/ale'
-Plug 'Vimjas/vim-python-pep8-indent'
+" Sort python import
+Plug 'fisadev/vim-isort'
+" More python syntax highlight
 Plug 'vim-python/python-syntax'
 
-" [Fortran coding] -------------------------------------------------------------
-"Plug 'tomedunn/vim.fortran' [Already built-in]
+" [Fortran coding] ------------------------------------------------------------
+" Fortran syntax support
+Plug 'tomedunn/vim.fortran'
 
-" [Optional] ------------------------------------------------------------------
-Plug 'ryanoasis/vim-devicons'
-Plug 'shime/vim-livedown'
-Plug 'vim-scripts/AutoComplPop' "must be disable is kiteco is enable
-"Plug 'kiteco/vim-plugin'        "must be disable is autocomplpop is enable
-"Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"Plug 'tmux-plugins/vim-tmux-focus-events'
-"Plug 'roxma/vim-tmux-clipboard'
-"Plug 'davidhalter/jedi-vim'
-"Plug 'junegunn/goyo.vim'
-"
-" [Not used anymore, just backup] ---------------------------------------------
-"Plug 'scrooloose/syntastic'
-"Plug 'dyng/ctrlsf.vim'
-"Plug 'jremmen/vim-ripgrep'
-"Plug 'kien/tabman.vim'
-"Plug 'dbeniamine/cheat.sh-vim'
-"Plug 'junegunn/limelight.vim'
-"Plug 'ycm-core/YouCompleteMe'
+" [Tmux] ----------------------------------------------------------------------
+Plug 'tmux-plugins/vim-tmux-focus-events'
+" Share clipboard between vim and tmux
+Plug 'roxma/vim-tmux-clipboard'
+
+" [HTML coding] ---------------------------------------------------------------
+" Paint css colors with the real color
+Plug 'lilydjwg/colorizer'
+" Highlight matching html tags
+Plug 'valloric/MatchTagAlways'
+" Generate html in a simple way
+Plug 'mattn/emmet-vim'
+" Generate closetag for HTML
+Plug 'alvan/vim-closetag'
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
@@ -391,7 +427,8 @@ endif
 " mkdir -p ~/.local/share/fonts
 "cd ~/.local/share/fonts && curl -fLo \
 "Droid Sans Mono for Powerline Nerd Font Complete.otf" \
-"https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
+"https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/\
+"DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 
 " Vim Airline -----------------------------------------------------------------
 let g:airline_powerline_fonts = 0
@@ -402,8 +439,8 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
 " Vim Airline Colortheme ------------------------------------------------------
-"let g:airline_theme = 'base16_gruvbox_dark_hard'
-let g:airline_theme = 'powerlineish'
+"let g:airline_theme = 'base16_gruvbox_dark_hard' "'powerlineish'
+let g:airline_theme = 'bubblegum'
 set laststatus=2 " Always display the statusline in all windows
 set showtabline=2 " Always display the tabline, even if there is only one tab
 map <silent><leader>af :AirlineRefresh<CR>:echo 'Airline Refreshed'<CR>
@@ -418,8 +455,6 @@ map <silent><F4> :TagbarToggle<CR>
 map <silent><leader><F4> :TagbarToggle<CR>
 
 " NERDTree --------------------------------------------------------------------
-" auto turn on NERDTree
-" autocmd vimenter * NERDTree
 " toggle nerdtree display
 map <silent><leader><F3> :NERDTreeToggle<CR>
 " open nerdtree with the current file selected
@@ -429,8 +464,6 @@ map <leader>pwd :pwd<CR>
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 let g:NERDTreeMouseMode = 3
 let g:NERDTreeDirArrows = ''
-" auto show NERDTree if there's no file [not used]
-"autocmd vimenter * if !argc() | NERDTree | endif
 
 " Rainbow parentheses ---------------------------------------------------------
 " don;t enable when start up
@@ -468,11 +501,11 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
 nnoremap <leader>ig :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
 
-" Indent Line -----------------------------------------------------------------
-let g:indentLine_enabled = 0
-let g:indentLine_char = '¦'
+" YankRing --------------------------------------------------------------------
+nmap <leader>ys :YRShow<CR>
 
 " Auto-pairs ------------------------------------------------------------------
+let g:yankring_history_dir = '~/.vim/dirs/'
 let g:AutoPairsShortcutToggle = '<leader>ap'
 
 " fzf.vim ---------------------------------------------------------------------
@@ -532,14 +565,24 @@ nnoremap <silent><leader>z :MaximizerToggle<CR>
 vnoremap <silent><leader>z :MaximizerToggle<CR>gv
 inoremap <silent><leader>z <C-o>:MaximizerToggle<CR>
 
-" Vim cheat -------------------------------------------------------------------
-let g:syntastic_python_checkers = ['pylint']
-let g:syntastic_shell_checkers = ['shellcheck']
+" Signify ------------------------------
+" this first setting decides in which order try to guess your current vcs
+" UPDATE it to reflect your preferences, it will speed up opening files
+let g:signify_vcs_list = ['git', 'hg']
+" mappings to jump to changed blocks
+nmap <leader>sn <plug>(signify-next-hunk)
+nmap <leader>sp <plug>(signify-prev-hunk)
+" nicer colors
+highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
+highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
+highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
+highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
+highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
+highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
 " AutoComplPop ----------------------------------------------------------------
-" -- This section must be comment out is kite is used
 set complete+=kspell
-set completeopt=noselect,menuone
+set completeopt+=noselect
 " previous/next suggestion
 inoremap `` <C-p>
 inoremap `1 <C-n>
@@ -553,59 +596,8 @@ inoremap <expr><C-u> pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 map <leader>` :AcpDisable<CR>
 map <leader>~ :AcpEnable<CR>
 
-" Kite ------------------------------------------------------------------------
-" -- This section must be comment out is AutoComplPop is used
-"let g:kite_supported_languages=['python']
-"let g:kite_tab_complete=1
-"set completeopt+=menuone
-"set completeopt+=noselect
-""set completeopt+=noinsert
-"set completeopt+=preview
-"autocmd CompleteDone * if !pumvisible() | pclose | endif
-"nmap <silent> <buffer> gK <Plug>(kite-docs)
-
-" Vim GitGutter ---------------------------------------------------------------
-set updatetime=100
-map <leader>gt :GitGutterToggle<CR>
-
-" Livedown --------------------------------------------------------------------
-" https://github.com/shime/vim-livedown
-" should markdown preview get shown automatically upon opening markdown buffer
-let g:livedown_autorun = 0
-" should the browser window pop-up upon previewing
-let g:livedown_open = 1
-" the port on which Livedown server will run
-let g:livedown_port = 1337
-" the browser to use, can also be firefox, chrome or other,
-" depending on your executable
-let g:livedown_browser = "brave-browser"
-
-" Vim Colorscheme - Gruvbox ---------------------------------------------------
-let g:gruvbox_contrast_dark='soft'
-
-" Vim Colorscheme - Monokai-tasty ---------------------------------------------
-let g:vim_monokai_tasty_italic = 1
-
-" Vim Colorscheme - Papercolor ------------------------------------------------
-let g:PaperColor_Theme_Options = {
-  \   'language': {
-  \     'python': {
-  \       'highlight_builtins' : 1
-  \     },
-  \     'cpp': {
-  \       'highlight_standard_library': 1
-  \     },
-  \     'c': {
-  \       'highlight_builtins' : 1
-  \     }
-  \   }
-  \ }
-
 " Colorscheme -----------------------------------------------------------------
-colorscheme vim-monokai-tasty "Weird fortan syntax highlight
-"colorscheme gruvbox
-"colorscheme cobalt
-"colorscheme PaperColor
+colorscheme vim-monokai-tasty
 
 " Common Background Setting (Transparent Background) --------------------------
 " hi command must be entered after colorscheme
