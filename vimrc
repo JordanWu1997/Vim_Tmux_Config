@@ -21,6 +21,8 @@ let mapleader = ' '
 inoremap ii <Esc>
 inoremap jk <Esc>
 inoremap kj <Esc>
+vnoremap jk <Esc>
+vnoremap kj <Esc>
 
 " Beginning/End, PageUp/PageDown ----------------------------------------------
 map <leader>b 0
@@ -75,6 +77,7 @@ nnoremap <silent><leader>== <C-W>=
 nnoremap <silent><leader>++ <C-W>=
 
 " VIM settings ----------------------------------------------------------------
+set wrap
 set confirm
 set incsearch
 set ignorecase
@@ -97,8 +100,8 @@ set ruler
 set cursorline
 set cursorcolumn
 set hlsearch
-map // :set hlsearch!<CR>:echo 'Toggle Highlight'<CR>
-map ?? :set hlsearch!<CR>:echo 'Toggle Highlight'<CR>
+map <leader>/ :set hlsearch!<CR>:echo 'Toggle Highlight'<CR>
+map <leader>? :set hlsearch!<CR>:echo 'Toggle Highlight'<CR>
 
 " Line number settings --------------------------------------------------------
 set number
@@ -125,7 +128,7 @@ set expandtab
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
-filetype plugin indent on
+filetype indent on
 autocmd FileType python setlocal et ts=4 sw=4 sts=4
 map <leader>ts :tabs<CR>
 map <leader>tt :tabnew<space>
@@ -248,15 +251,16 @@ inoremap <leader><F7> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 command! Sudow execute 'w !sudo tee % > /dev/null'
 
 " Unicode display --------------------------------------------------------------
-if has('multi_byte')
-    if &termencoding == ''
-        let &termencoding = &encoding
-    endif
-    set encoding=utf-8
-    setglobal fileencoding=utf-8
-    "setglobal bomb
-    set fileencodings=ucs-bom,utf-8,latin1
-endif
+set encoding=utf-8
+"if has('multi_byte')
+    "if &termencoding == ''
+        "let &termencoding = &encoding
+    "endif
+    "set encoding=utf-8
+    "setglobal fileencoding=utf-8
+    ""setglobal bomb
+    "set fileencodings=ucs-bom,utf-8,latin1
+"endif
 
 " Run python script in vim -----------------------------------------------------
 " # Test python version that want (In python)
@@ -304,7 +308,7 @@ Plug 'vim-airline/vim-airline'
 " Airline themes
 Plug 'vim-airline/vim-airline-themes'
 " Powerline symbols
-Plug 'ryanoasis/vim-devicons'
+"Plug 'ryanoasis/vim-devicons'
 
 " [File/Code Browsing] --------------------------------------------------------
 " Code and files fuzzy finder
@@ -370,13 +374,14 @@ Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 
 " [Python coding] -------------------------------------------------------------
-" Sort python import
-Plug 'fisadev/vim-isort'
+" Sort python import [too much time-consuming]
+"Plug 'fisadev/vim-isort'
 " More python syntax highlight
 Plug 'vim-python/python-syntax'
 " Python autocompletion
 Plug 'Shougo/deoplete.nvim'
 Plug 'roxma/nvim-yarp'
+" Help communicate beteen vim and neovim [needed for deoplete.nvim]
 Plug 'roxma/vim-hug-neovim-rpc'
 " Python autocompletion
 Plug 'deoplete-plugins/deoplete-jedi'
@@ -565,7 +570,6 @@ map <leader><leader>l <Plug>(easymotion-lineforward)
 map <leader><leader>h <Plug>(easymotion-linebackward)
 map <leader><leader>1 <Plug>(easymotion-overwin-f)
 map <leader><leader>2 <Plug>(easymotion-overwin-f2)
-"map <leader><leader>n <Plug>(easymotion-overwin-fn)
 
 " Incsearch Easymotion --------------------------------------------------------
 "map z/ <Plug>(incsearch-easymotion-/)
@@ -604,7 +608,7 @@ highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 " AutoComplPop ----------------------------------------------------------------
 "set complete+=kspell
 "set completeopt+=noselect
-"" previous/next suggestion
+" previous/next suggestion
 "inoremap `` <C-p>
 "inoremap `1 <C-n>
 "inoremap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
@@ -619,7 +623,6 @@ highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
 " Deoplete --------------------------------------------------------------------
 " pynvim is needed [Installation: pip3 install --user pynvim]
-"
 " needed so deoplete can auto select the first suggestion
 set completeopt+=noinsert
 " comment this line to enable autocompletion preview window
@@ -637,9 +640,8 @@ let g:context_filetype#same_filetypes = {}
 let g:context_filetype#same_filetypes._ = '_'
 
 " Jedi-vim --------------------------------------------------------------------
-" Disable autocompletion (using deoplete instead)
+"" Disable autocompletion (using deoplete instead)
 let g:jedi#completions_enabled = 0
-
 " All these mappings work only for python code:
 " Go to definition
 let g:jedi#goto_command = ',d'
