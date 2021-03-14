@@ -80,7 +80,7 @@ set nostartofline
 set modifiable
 set noshowmode "no vim-built-in statusline
 set wildmenu "show memu options
-set clipboard=unnamedplus
+set clipboard=unnamedplus "shared system clipboard"
 
 " Comment  highlight ----------------------------------------------------------
 noremap <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
@@ -124,30 +124,30 @@ set softtabstop=4
 set shiftwidth=4
 filetype plugin indent on
 autocmd FileType python setlocal et ts=4 sw=4 sts=4
+map <leader>ts :tabs<CR>
+map <leader>tt :tabnew<space>
+map <leader>td :tabclose<space>
+map <leader>tdd :tabclose<CR>:echo 'CLOSE CURRENT TAB'<CR>
 map <tab>p :tabprevious<CR>:echo 'PREVIOUS TAB'<CR>
 map <tab>n :tabnext<CR>:echo 'NEXT TAB'<CR>
 map <silent><C-Left> :tabprevious<CR>
 map <silent><C-Right> :tabnext<CR>
 map <silent><A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 map <silent><A-Right> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
-map <leader><F1> <Esc>:tabprevious<CR>:echo 'PREVIOUS TAB'<CR>
-map <F1> <Esc>:tabnext<CR>:echo 'NEXT TAB'<CR>
-map <leader>ts :tabs<CR>
-map <leader>tt :tabnew<space>
-map <leader>td :tabclose<space>
-map <leader>tdd :tabclose<CR>:echo 'CLOSE CURRENT TAB'<CR>
+map <silent><leader><F1> <Esc>:tabprevious<CR>:echo 'PREVIOUS TAB'<CR>
+map <silent><F1> <Esc>:tabnext<CR>:echo 'NEXT TAB'<CR>
 
 " Buffer Setting --------------------------------------------------------------
 set hidden
-map ls :ls<CR>
-map ed :edit<space>
-map bf :buffer<space>
-map bs :buffers<CR>
-map ba :badd<space>
-map bd :bdelete<space>
-map bdd :bdelete<CR>:echo 'DELETE CURRENT BUFFER'<CR>
-map <leader><F2> <Esc>:bp<CR>:echo 'PREVIOUS BUFFER'<CR>
-map <F2> <Esc>:bn<CR>:echo 'NEXT BUFFER'<CR>
+map <leader>ls :ls<CR>
+map <leader>bb :edit<space>
+"map <leader>bf :buffer<space>
+map <leader>bs :buffers<CR>
+map <leader>ba :badd<space>
+map <leader>bd :bdelete<space>
+map <silent><leader>bdd :bdelete<CR>:echo 'DELETE CURRENT BUFFER'<CR>
+map <silent><leader><F2> <Esc>:bp<CR>:echo 'PREVIOUS BUFFER'<CR>
+map <silent><F2> <Esc>:bn<CR>:echo 'NEXT BUFFER'<CR>
 
 " Netrw Setting ---------------------------------------------------------------
 "map <leader>ex :Vexplore<space>
@@ -179,9 +179,9 @@ set splitbelow
 set splitright
 " remove ugly vertical lines on window division
 set fillchars+=vert:\
-nnoremap <leader>s :split<space>
+nnoremap <leader>z :split<space>
 nnoremap <leader>v :vsplit<space>
-nnoremap <leader>S :split<CR>
+nnoremap <leader>Z :split<CR>
 nnoremap <leader>V :vsplit<CR>
 
 " Window Chooser --------------------------------------------------------------
@@ -402,7 +402,7 @@ Plug 'tomedunn/vim.fortran'
 " [Tmux] ----------------------------------------------------------------------
 Plug 'tmux-plugins/vim-tmux-focus-events'
 " Share clipboard between vim and tmux
-Plug 'roxma/vim-tmux-clipboard'
+"Plug 'roxma/vim-tmux-clipboard'
 
 " [HTML coding] ---------------------------------------------------------------
 " Paint css colors with the real color
@@ -591,9 +591,9 @@ let g:multi_cursor_skip_key            = '<C-x>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
 " Vim maximizer ---------------------------------------------------------------
-nnoremap <silent><leader>z :MaximizerToggle<CR>
-vnoremap <silent><leader>z :MaximizerToggle<CR>gv
-inoremap <silent><leader>z <C-o>:MaximizerToggle<CR>
+nnoremap <silent><leader>x :MaximizerToggle<CR>
+vnoremap <silent><leader>x :MaximizerToggle<CR>gv
+inoremap <silent><leader>x <C-o>:MaximizerToggle<CR>
 
 " Signify ------------------------------
 " this first setting decides in which order try to guess your current vcs
