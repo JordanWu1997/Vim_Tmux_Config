@@ -11,7 +11,7 @@
 " TERM GUI color --------------------------------------------------------------
 " require terminal color (transparent not working on remote terminal)
 " comment below line if color is not support for terminal
-set termguicolors
+"set termguicolors
 
 " Set leaderkey ---------------------------------------------------------------
 let mapleader = ' '
@@ -87,14 +87,15 @@ noremap <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
 noremap <leader><F8> :hi Comment ctermfg=245 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'<CR>
 
 " Wild menu settings ----------------------------------------------------------
-"set wildmode=list:longest
+set wildmode=list:full
 
 " Search settings -------------------------------------------------------------
 set ruler
 set cursorline
 set cursorcolumn
 set hlsearch
-map <leader>hl :set hlsearch!<CR>:echo 'Toggle Highlight'<CR>
+map // :set hlsearch!<CR>:echo 'Toggle Highlight'<CR>
+map ?? :set hlsearch!<CR>:echo 'Toggle Highlight'<CR>
 
 " Line number settings --------------------------------------------------------
 set number
@@ -110,7 +111,7 @@ inoremap <leader><F6> <Esc>:set relativenumber!<CR>:echo 'Toggle Rel Line Number
 set nofoldenable
 set foldmethod=indent
 "set foldmethod=syntax
-nnoremap <leader>mk :mkview<CR>:echo 'Setting Saved ...'<CR>
+nnoremap <leader>sv :mkview<CR>:echo 'Setting Saved ...'<CR>
 nnoremap <leader>ld :loadview<CR>:echo 'Setting Loaded ...'<CR>
 nnoremap <leader>ff za<CR>:echo 'Toggle Current Fold...'<CR>
 nnoremap <leader>cf zM<CR>:echo 'Close All Folds ...'<CR>
@@ -133,8 +134,8 @@ map <leader><F1> <Esc>:tabprevious<CR>:echo 'PREVIOUS TAB'<CR>
 map <F1> <Esc>:tabnext<CR>:echo 'NEXT TAB'<CR>
 map <leader>ts :tabs<CR>
 map <leader>tt :tabnew<space>
-map <leader>T :tabclose<space>
-map <leader>TT :tabclose<CR>:echo 'CLOSE CURRENT TAB'<CR>
+map <leader>td :tabclose<space>
+map <leader>tdd :tabclose<CR>:echo 'CLOSE CURRENT TAB'<CR>
 
 " Buffer Setting --------------------------------------------------------------
 set hidden
@@ -149,26 +150,26 @@ map <leader><F2> <Esc>:bp<CR>:echo 'PREVIOUS BUFFER'<CR>
 map <F2> <Esc>:bn<CR>:echo 'NEXT BUFFER'<CR>
 
 " Netrw Setting ---------------------------------------------------------------
-map <leader>ex :Vexplore<space>
-map ex :Vexplore ./<CR>
-let g:netrw_hide = 1
-let g:netrw_liststyle = 3
-let g:netrw_banner = 0
-let g:netrw_browse_split = 4
-let g:netrw_winsize = 25
-let g:netrw_altv = 1
-let g:netrw_chgwin = 2
-let g:netrw_list_hide = '.*\.swp$'
-let g:netrw_localrmdir = 'rm -rf'
-let g:netrw_sort_by = 'time'
-let g:netrw_sort_direction = 'reverse'
+"map <leader>ex :Vexplore<space>
+"map ex :Vexplore ./<CR>
+"let g:netrw_hide = 1
+"let g:netrw_liststyle = 3
+"let g:netrw_banner = 0
+"let g:netrw_browse_split = 4
+"let g:netrw_winsize = 25
+"let g:netrw_altv = 1
+"let g:netrw_chgwin = 2
+"let g:netrw_list_hide = '.*\.swp$'
+"let g:netrw_localrmdir = 'rm -rf'
+"let g:netrw_sort_by = 'time'
+"let g:netrw_sort_direction = 'reverse'
 
 " Marks Setting ---------------------------------------------------------------
 nnoremap <leader>md :Delmarks<space>
 
 " Display ---------------------------------------------------------------------
 " when scrolling, keep cursor 2 lines away from screen border
-set scrolloff=2
+set scrolloff=3
 set display+=lastline
 set title
 
@@ -336,9 +337,11 @@ Plug 'vim-utils/vim-man'
 " [Vim extra functions] -------------------------------------------------------
 " Vim settings for opening large files
 Plug 'vim-scripts/LargeFile'
+" Override configs by directory
+Plug 'arielrossanigo/dir-configs-override.vim'
 " History of yank
 Plug 'vim-scripts/YankRing.vim'
-"" Auto popup completion options from vim
+"" Auto popup completion options from vim [Must be disable if deoplete is used]
 "Plug 'vim-scripts/AutoComplPop'
 " Generate bracket/quotation in pair
 Plug 'jiangmiao/auto-pairs'
@@ -351,9 +354,11 @@ Plug 't9md/vim-choosewin'
 " Easymotion (Key-mapping moving in vim)
 Plug 'easymotion/vim-easymotion'
 " Easymotion + incsearch
-Plug 'haya14busa/incsearch-easymotion.vim'
+"Plug 'haya14busa/incsearch-easymotion.vim'
 
 " [Functions for coding] ------------------------------------------------------
+" Pending tasks list
+Plug 'fisadev/FixedTaskList.vim'
 " Paint paired bracket/quotation in different color
 Plug 'luochen1990/rainbow'
 " Save last . motion for next time usage
@@ -411,6 +416,9 @@ Plug 'alvan/vim-closetag'
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
+
+" Check vim startup time
+" vim --startuptime timeCost.txt timeCost.txt
 
 " =============================================================================
 " Install plugins the first time vim runs
@@ -477,6 +485,9 @@ let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 let g:NERDTreeMouseMode = 3
 let g:NERDTreeDirArrows = ''
 
+" Tasklist --------------------------------------------------------------------
+map <leader>tl :TaskList<CR>
+
 " Rainbow parentheses ---------------------------------------------------------
 " don;t enable when start up
 let g:rainbow_active = 0
@@ -527,16 +538,16 @@ let g:AutoPairsShortcutToggle = '<leader>ap'
 "   - <Ctrl + T> : Open in new tab
 "   - <Ctrl + X> : Open in new horizontal split
 "   - <Ctrl + V> : Open in new vertical split
-nnoremap <leader>bs :Buffers<CR>
+nnoremap <leader>bf :Buffers<CR>
 nnoremap <leader>fs :Files<space>
 nnoremap <leader>lc :Locate<space>
 nnoremap <leader>rg :Rg<space>
-nnoremap <leader>ll :Lines<CR>
+nnoremap <leader>ln :Lines<CR>
 nnoremap <leader>bl :BLines<CR>
 nnoremap <leader>tg :Tags<CR>
 nnoremap <leader>bg :BTags<CR>
-nnoremap <leader>hh :History<R>
-nnoremap <leader>ma :Marks<CR>
+nnoremap <leader>hs :History<CR>
+nnoremap <leader>mk :Marks<CR>
 nnoremap <leader>dd :Windows<CR>
 nnoremap <leader>ft :Filetypes<CR>
 nnoremap <leader>cd :Commands<CR>
@@ -550,6 +561,13 @@ let g:EasyMotion_smartcase = 1
 " Keep cursor column
 let g:EasyMotion_startofline = 0
 " JK motions: Line motions
+map <leader>jj <Plug>(easymotion-j)
+map <leader>kk <Plug>(easymotion-k)
+map <leader>ll <Plug>(easymotion-lineforward)
+map <leader>hh <Plug>(easymotion-linebackward)
+map <leader>11 <Plug>(easymotion-overwin-f)
+map <leader>22 <Plug>(easymotion-overwin-f2)
+"map <leader>nn <Plug>(easymotion-overwin-fn)
 map <leader><leader>j <Plug>(easymotion-j)
 map <leader><leader>k <Plug>(easymotion-k)
 map <leader><leader>l <Plug>(easymotion-lineforward)
@@ -559,9 +577,9 @@ map <leader><leader>2 <Plug>(easymotion-overwin-f2)
 "map <leader><leader>n <Plug>(easymotion-overwin-fn)
 
 " Incsearch Easymotion --------------------------------------------------------
-map z/ <Plug>(incsearch-easymotion-/)
-map z? <Plug>(incsearch-easymotion-?)
-map zg/ <Plug>(incsearch-easymotion-stay)
+"map z/ <Plug>(incsearch-easymotion-/)
+"map z? <Plug>(incsearch-easymotion-?)
+"map zg/ <Plug>(incsearch-easymotion-stay)
 
 " Multiple Cursors ------------------------------------------------------------
 let g:multi_cursor_use_default_mapping = 0
@@ -609,6 +627,12 @@ highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 "map <leader>~ :AcpEnable<CR>
 
 " Deoplete --------------------------------------------------------------------
+" needed so deoplete can auto select the first suggestion
+set completeopt+=noinsert
+" comment this line to enable autocompletion preview window
+" (displays documentation related to the selected completion option)
+" disabled by default because preview makes the window flicker
+set completeopt-=preview
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
 call deoplete#custom#option({
@@ -647,11 +671,11 @@ hi Normal guibg=NONE ctermbg=NONE
 " Function - Line length warnings [Must be added at last ]---------------------
 highlight OverLength ctermbg=red ctermfg=white guibg=#ff0000 guifg=#ffffff
 highlight UnlimitLength ctermbg=NONE guibg=NONE
-nnoremap <leader>bo :match OverLength /\%81v.\+/<CR>:echo '80 char-bound ON'<CR>
-nnoremap <leader>bf :match UnlimitLength /\%81v.\+/<CR>:echo '80 char-bound OFF'<CR>
+nnoremap <leader>wo :match OverLength /\%81v.\+/<CR>:echo '80 char-bound ON'<CR>
+nnoremap <leader>wf :match UnlimitLength /\%81v.\+/<CR>:echo '80 char-bound OFF'<CR>
 
 " =============================================================================
 " End of Vim configuration, automatically reload current config after saving
 " =============================================================================
 " Automated run vim configuration file just after saving -----------------------
-autocmd BufWritePost $MYVIMRC source $MYVIMRC
+"autocmd BufWritePost $MYVIMRC source $MYVIMRC
