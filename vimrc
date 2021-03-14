@@ -11,17 +11,20 @@
 " TERM GUI color --------------------------------------------------------------
 " require terminal color (transparent not working on remote terminal)
 " comment below line if color is not support for terminal
-"set termguicolors
+set termguicolors
 
 " Set leaderkey ---------------------------------------------------------------
 let mapleader = ' '
 
-" map insert mode Esc key -----------------------------------------------------
+" Map insert mode Esc key -----------------------------------------------------
+" - Use Ctrl+v to escape
+inoremap ii <Esc>
 inoremap jk <Esc>
 inoremap kj <Esc>
 
 " Beginning/End, PageUp/PageDown ----------------------------------------------
 map <leader>b 0
+map <leader>s 0
 map <leader>e $
 map <leader>d <PageDown>
 map <leader>u <PageUp>
@@ -80,7 +83,7 @@ set nostartofline
 set modifiable
 set noshowmode "no vim-built-in statusline
 set wildmenu "show memu options
-set clipboard=unnamedplus "shared system clipboard"
+set clipboard=unnamedplus "shared system clipboard, gvim must be installed"
 
 " Comment  highlight ----------------------------------------------------------
 noremap <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
@@ -149,21 +152,6 @@ map <silent><leader>bdd :bdelete<CR>:echo 'DELETE CURRENT BUFFER'<CR>
 map <silent><leader><F2> <Esc>:bp<CR>:echo 'PREVIOUS BUFFER'<CR>
 map <silent><F2> <Esc>:bn<CR>:echo 'NEXT BUFFER'<CR>
 
-" Netrw Setting ---------------------------------------------------------------
-"map <leader>ex :Vexplore<space>
-"map ex :Vexplore ./<CR>
-"let g:netrw_hide = 1
-"let g:netrw_liststyle = 3
-"let g:netrw_banner = 0
-"let g:netrw_browse_split = 4
-"let g:netrw_winsize = 25
-"let g:netrw_altv = 1
-"let g:netrw_chgwin = 2
-"let g:netrw_list_hide = '.*\.swp$'
-"let g:netrw_localrmdir = 'rm -rf'
-"let g:netrw_sort_by = 'time'
-"let g:netrw_sort_direction = 'reverse'
-
 " Marks Setting ---------------------------------------------------------------
 nnoremap <leader>md :Delmarks<space>
 
@@ -186,7 +174,6 @@ nnoremap <leader>V :vsplit<CR>
 
 " Window Chooser --------------------------------------------------------------
 nmap  <leader><Enter> <Plug>(choosewin)
-nmap  <leader>c       <Plug>(choosewin)
 " show big letters
 let g:choosewin_overlay_enable = 1
 
@@ -194,7 +181,7 @@ let g:choosewin_overlay_enable = 1
 set directory=~/.vim/dirs/tmp     " directory to place swap files in
 set backup                        " make backup files
 set backupdir=~/.vim/dirs/backups " where to put backup files
-set undofile                      " persistent undos - undo after you re-open the file
+set undofile                      " persistent undos - undo after re-opening
 set undodir=~/.vim/dirs/undos
 set viminfo+=n~/.vim/dirs/viminfo
 " create needed directories if they don't exist
@@ -335,6 +322,8 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'vim-utils/vim-man'
 
 " [Vim extra functions] -------------------------------------------------------
+" Fancy startup page of vim
+Plug 'mhinz/vim-startify'
 " Vim settings for opening large files
 Plug 'vim-scripts/LargeFile'
 " Override configs by directory
@@ -364,13 +353,15 @@ Plug 'luochen1990/rainbow'
 " Save last . motion for next time usage
 Plug 'tpope/vim-repeat'
 " Multiple cursor with incsearch support
-Plug 'terryma/vim-multiple-cursors'
+"Plug 'terryma/vim-multiple-cursors'
 " Multiple language syntax support
 Plug 'dense-analysis/ale'
 " Languge packs
 Plug 'sheerun/vim-polyglot'
 " Indent guide
 Plug 'nathanaelkane/vim-indent-guides'
+" Indent text object
+Plug 'michaeljsmith/vim-indent-object'
 
 " [Git] -----------------------------------------------------------------------
 " Git integration
@@ -402,7 +393,7 @@ Plug 'tomedunn/vim.fortran'
 " [Tmux] ----------------------------------------------------------------------
 Plug 'tmux-plugins/vim-tmux-focus-events'
 " Share clipboard between vim and tmux
-"Plug 'roxma/vim-tmux-clipboard'
+Plug 'roxma/vim-tmux-clipboard'
 
 " [HTML coding] ---------------------------------------------------------------
 " Paint css colors with the real color
@@ -582,13 +573,13 @@ map <leader><leader>2 <Plug>(easymotion-overwin-f2)
 "map zg/ <Plug>(incsearch-easymotion-stay)
 
 " Multiple Cursors ------------------------------------------------------------
-let g:multi_cursor_use_default_mapping = 0
-let g:multi_cursor_start_word_key      = '<C-n>'
-let g:multi_cursor_select_all_word_key = '<C-l>'
-let g:multi_cursor_next_key            = '<C-n>'
-let g:multi_cursor_prev_key            = '<C-p>'
-let g:multi_cursor_skip_key            = '<C-x>'
-let g:multi_cursor_quit_key            = '<Esc>'
+"let g:multi_cursor_use_default_mapping = 0
+"let g:multi_cursor_start_word_key      = '<C-n>'
+"let g:multi_cursor_select_all_word_key = '<C-l>'
+"let g:multi_cursor_next_key            = '<C-n>'
+"let g:multi_cursor_prev_key            = '<C-p>'
+"let g:multi_cursor_skip_key            = '<C-x>'
+"let g:multi_cursor_quit_key            = '<Esc>'
 
 " Vim maximizer ---------------------------------------------------------------
 nnoremap <silent><leader>x :MaximizerToggle<CR>
@@ -627,6 +618,8 @@ highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 "map <leader>~ :AcpEnable<CR>
 
 " Deoplete --------------------------------------------------------------------
+" pynvim is needed [Installation: pip3 install --user pynvim]
+"
 " needed so deoplete can auto select the first suggestion
 set completeopt+=noinsert
 " comment this line to enable autocompletion preview window
