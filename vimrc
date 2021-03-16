@@ -52,14 +52,15 @@ filetype on
 filetype plugin on
 
 " VIM window control ----------------------------------------------------------
+" [Also integrate with tmux now, check vim-tmux-navigator]
 nnoremap <silent><leader>; <C-W><C-W>
 nnoremap <silent><leader>h <C-W>h
 nnoremap <silent><leader>j <C-W>j
 nnoremap <silent><leader>k <C-W>k
 nnoremap <silent><leader>l <C-W>l
-nnoremap <silent><leader><Left> <C-W>h
-nnoremap <silent><leader><Down> <C-W>j
-nnoremap <silent><leader><Up> <C-W>k
+nnoremap <silent><leader><Left>  <C-W>h
+nnoremap <silent><leader><Down>  <C-W>j
+nnoremap <silent><leader><Up>    <C-W>k
 nnoremap <silent><leader><Right> <C-W>l
 nnoremap <silent><leader>H <C-W>H
 nnoremap <silent><leader>J <C-W>J
@@ -308,7 +309,7 @@ Plug 'vim-airline/vim-airline'
 " Airline themes
 Plug 'vim-airline/vim-airline-themes'
 " Powerline symbols
-"Plug 'ryanoasis/vim-devicons'
+Plug 'ryanoasis/vim-devicons'
 
 " [File/Code Browsing] --------------------------------------------------------
 " Code and files fuzzy finder
@@ -396,9 +397,11 @@ Plug 'davidhalter/jedi-vim'
 Plug 'tomedunn/vim.fortran'
 
 " [Tmux] ----------------------------------------------------------------------
-Plug 'tmux-plugins/vim-tmux-focus-events'
 " Share clipboard between vim and tmux
+Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'roxma/vim-tmux-clipboard'
+" Navigate seamlessly in vim and tmux
+Plug 'christoomey/vim-tmux-navigator'
 
 " [HTML coding] ---------------------------------------------------------------
 " Paint css colors with the real color
@@ -446,20 +449,22 @@ endif
 "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/\
 "DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 
-" Vim Airline -----------------------------------------------------------------
-let g:airline_powerline_fonts = 0
+" Vim Airline colortheme ------------------------------------------------------
+" Option 1: Fancy fonts
+let g:airline_theme = 'bubblegum'
+let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
+" Option 2: Blend fonts
+"let g:airline_powerline_fonts = 0
+"let g:airline#extensions#tabline#left_sep = ' '
+"let g:airline#extensions#tabline#left_alt_sep = '|'
+
+" Vim Airline -----------------------------------------------------------------
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#formatter = 'default'
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-
-" Vim Airline Colortheme ------------------------------------------------------
-"let g:airline_theme = 'base16_gruvbox_dark_hard' "'powerlineish'
-let g:airline_theme = 'bubblegum'
 set laststatus=2 " Always display the statusline in all windows
 set showtabline=2 " Always display the tabline, even if there is only one tab
-map <silent><leader>af :AirlineRefresh<CR>:echo 'Airline Refreshed'<CR>
+map <silent><leader>af :AirlineRefresh<CR>:echo 'Airline Refreshed ...'<CR>
 set showcmd " This line must be added after airline plugin"
 
 " Tagbar ----------------------------------------------------------------------
@@ -521,10 +526,10 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
 nnoremap <leader>ig :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
 
 " YankRing --------------------------------------------------------------------
+let g:yankring_history_dir = '~/.vim/dirs/'
 nmap <leader>ys :YRShow<CR>
 
 " Auto-pairs ------------------------------------------------------------------
-let g:yankring_history_dir = '~/.vim/dirs/'
 let g:AutoPairsShortcutToggle = '<leader>ap'
 
 " fzf.vim ---------------------------------------------------------------------
@@ -606,18 +611,10 @@ highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
 highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
 " AutoComplPop ----------------------------------------------------------------
+" Disabled if Deoplete is enabled
 "set complete+=kspell
 "set completeopt+=noselect
-" previous/next suggestion
-"inoremap `` <C-p>
-"inoremap `1 <C-n>
-"inoremap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
-"inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-"inoremap <expr><C-k> pumvisible() ? "\<c-p>" : "\<C-k>"
-"inoremap <expr><C-j> pumvisible() ? "\<c-n>" : "\<C-j>"
-"inoremap <expr><C-d> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-"inoremap <expr><C-u> pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
-"" enable/disable autopop
+" enable/disable autopop
 "map <leader>` :AcpDisable<CR>
 "map <leader>~ :AcpEnable<CR>
 
@@ -638,6 +635,15 @@ call deoplete#custom#option({
 " complete with words from any opened file
 let g:context_filetype#same_filetypes = {}
 let g:context_filetype#same_filetypes._ = '_'
+
+" Popup window selection ------------------------------------------------------
+" previous/next suggestion
+inoremap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr><C-k> pumvisible() ? "\<c-p>" : "\<C-k>"
+inoremap <expr><C-j> pumvisible() ? "\<c-n>" : "\<C-j>"
+inoremap <expr><C-d> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+inoremap <expr><C-u> pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
 " Jedi-vim --------------------------------------------------------------------
 "" Disable autocompletion (using deoplete instead)
