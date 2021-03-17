@@ -8,18 +8,6 @@
 " ============================================================================
 " All parameter settings and hotkey mapping
 
-" TERM GUI color -------------------------------------------------------------
-" require terminal color (transparent not working on remote terminal)
-" comment below line if color is not support for terminal
-if has("termguicolors")
-    set termguicolors
-endif
-
-" 256 term color support
-if !has('gui_running')
-    set t_Co=256
-endif
-
 " Set leaderkey --------------------------------------------------------------
 let mapleader = ' '
 
@@ -55,7 +43,7 @@ map <leader>m :Man<space>
 
 " VIM built-in setting -------------------------------------------------------
 filetype on
-" Automatically executed by VIM-plug
+" Following settings are automatically executed by VIM-plug
 "filetype plugin on
 "filetype indent on
 "syntax enable
@@ -76,6 +64,7 @@ nnoremap <silent><leader>J <C-W>J
 nnoremap <silent><leader>K <C-W>K
 nnoremap <silent><leader>L <C-W>L
 nnoremap <silent><leader>. :vertical resize +5<CR>
+nnoremap <silent><leader>. :vertical resize +5<CR>
 nnoremap <silent><leader>, :vertical resize -5<CR>
 nnoremap <silent><leader>> :vertical resize +20<CR>
 nnoremap <silent><leader>< :vertical resize -20<CR>
@@ -87,30 +76,32 @@ nnoremap <silent><leader>== <C-W>=
 nnoremap <silent><leader>++ <C-W>=
 
 " VIM settings ---------------------------------------------------------------
-set wrap
-set confirm
-set incsearch
-set ignorecase
-set nocompatible
-set nostartofline
-set modifiable
-set wildmenu "show memu options
-set clipboard=unnamedplus "shared system clipboard, gvim must be installed"
+set wrap                  " Line wrap for small monitor or display window
+set confirm               " Ask for confirmation before leaving vim
+set ignorecase            " Ignore upper/lower case when searching
+set nocompatible          " Not compatible with traditional vi
+set nostartofline         " Move up down not back to start of line
+set modifiable            " Make buffer modifable
+set clipboard=unnamedplus " Shared system clipboard, gvim must be installed"
 
 " Comment  highlight ---------------------------------------------------------
 noremap <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
 noremap <leader><F8> :hi Comment ctermfg=245 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'<CR>
 
 " Wild menu settings ---------------------------------------------------------
-set wildmode=list:full
+set wildmenu              " Show memu options
+set wildmode=list:full    " Show all available input options
+
+" Cursor settings ------------------------------------------------------------
+set ruler                 " Show cursor position in statusline
+set cursorline            " Show vertical line
+set cursorcolumn          " Show horizontal line
 
 " Search settings ------------------------------------------------------------
-set ruler
-set cursorline
-set cursorcolumn
+set incsearch
 set hlsearch
-map <leader>/ :set hlsearch!<CR>:echo 'Toggle Highlight'<CR>
-map <leader>? :set hlsearch!<CR>:echo 'Toggle Highlight'<CR>
+map <leader>/ :set nohlsearch<CR>:echo 'Disable Search Highlight'<CR>
+map <leader>? :set hlsearch<CR>:echo 'Enable Search Highlight'<CR>
 
 " Line number settings -------------------------------------------------------
 set number
@@ -148,30 +139,31 @@ map <silent><C-Left> :tabprevious<CR>
 map <silent><C-Right> :tabnext<CR>
 map <silent><A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 map <silent><A-Right> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
-map <silent><leader><F1> <Esc>:tabprevious<CR>:echo 'PREVIOUS TAB'<CR>
-map <silent><F1> <Esc>:tabnext<CR>:echo 'NEXT TAB'<CR>
+map <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREVIOUS TAB'<CR>
+map <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB'<CR>
 
 " Buffer Setting -------------------------------------------------------------
 set hidden
 map <leader>ls :ls<CR>
 map <leader>bb :edit<space>
-"map <leader>bf :buffer<space>
 map <leader>bs :buffers<CR>
 map <leader>ba :badd<space>
 map <leader>bd :bdelete<space>
 map <silent><leader>bdd :bdelete<CR>:echo 'DELETE CURRENT BUFFER'<CR>
-map <silent><leader><F2> <Esc>:bp<CR>:echo 'PREVIOUS BUFFER'<CR>
-map <silent><F2> <Esc>:bn<CR>:echo 'NEXT BUFFER'<CR>
+map <silent><leader><F1> <Esc>:bp<CR>:echo 'PREVIOUS BUFFER'<CR>
+map <silent><F1> <Esc>:bn<CR>:echo 'NEXT BUFFER'<CR>
 
 " Marks Setting --------------------------------------------------------------
 nnoremap <leader>md :Delmarks<space>
 
-" Display --------------------------------------------------------------------
-" when scrolling, keep cursor 2 lines away from screen border
-set scrolloff=3
-set display+=lastline
-set title
+" Registers Setting ----------------------------------------------------------
+nnoremap <leader>re :registers<CR>
 
+" Display --------------------------------------------------------------------
+" When scrolling, keep cursor 2 lines away from screen border
+set scrolloff=3                   " Keep cursor 3 lines away from bottom
+set display+=lastline             "
+set title                         " Let vim change terminal title
 " Split ----------------------------------------------------------------------
 " More natural split opening
 set splitbelow
@@ -184,10 +176,10 @@ nnoremap <leader>Z :split<CR>
 nnoremap <leader>V :vsplit<CR>
 
 " Better backup, swap and undos storage --------------------------------------
-set directory=~/.vim/dirs/tmp     " directory to place swap files in
-set backup                        " make backup files
-set backupdir=~/.vim/dirs/backups " where to put backup files
-set undofile                      " persistent undos - undo after re-opening
+set directory=~/.vim/dirs/tmp     " Directory to place swap files in
+set backup                        " Make backup files
+set backupdir=~/.vim/dirs/backups " Where to put backup files
+set undofile                      " Persistent undos - undo after re-opening
 set undodir=~/.vim/dirs/undos
 set viminfo+=n~/.vim/dirs/viminfo
 " create needed directories if they don't exist
@@ -295,8 +287,10 @@ call plug#begin('~/.vim/plugged')
 " ****************************************************************************
 
 " [Vim theme] ----------------------------------------------------------------
-" Color themes
+" Color themes (Monokair - high contrast)
 Plug 'patstockwell/vim-monokai-tasty'
+" Color themes (Gruvbox - low contrast)
+"Plug 'morhetz/gruvbox'
 " Lightline (status line)
 Plug 'itchyny/lightline.vim'
 " Lightline bufferline
@@ -316,12 +310,12 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Class/module browser
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+" System Man usage
+Plug 'vim-utils/vim-man', { 'on': 'Man' }
 " Search results counter
 Plug 'vim-scripts/IndexedSearch'
 " Code commenter
 Plug 'scrooloose/nerdcommenter'
-" System Man usage
-Plug 'vim-utils/vim-man'
 
 " [Vim extra functions] ------------------------------------------------------
 " Vim settings for opening large files
@@ -386,7 +380,7 @@ Plug 'Shougo/context_filetype.vim', { 'for': 'python' }
 " from this plugin is disabled
 Plug 'davidhalter/jedi-vim', { 'for': 'python' }
 " Sort python import [too much time-consuming]
-"Plug 'fisadev/vim-isort'
+Plug 'fisadev/vim-isort', { 'on': 'Isort' }
 
 " [Fortran coding] -----------------------------------------------------------
 " Fortran syntax support
@@ -410,7 +404,7 @@ Plug 'alvan/vim-closetag', { 'for': 'html' }
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
 
-" Check vim startup time
+" Check vim startup time and loaded plugins
 " vim --startuptime timeCost.txt timeCost.txt
 
 " ============================================================================
@@ -476,17 +470,37 @@ endif
 "map <silent><leader>af :AirlineRefresh<CR>:echo 'Airline Refreshed ...'<CR>
 
 " Lightline ------------------------------------------------------------------
-let g:lightline = {
-      \ 'colorscheme': 'deus',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead'
-      \ },
-      \
-      \ }
+let fancy_symbols_enabled = 1 " assign 0 to disable
+
+if fancy_symbols_enabled
+    let g:lightline = {
+          \ 'colorscheme': 'deus',
+          \ 'active': {
+          \   'left': [ [ 'mode', 'paste' ],
+          \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+          \ },
+          \ 'component_function': {
+          \   'gitbranch': 'FugitiveHead'
+          \ },
+          \ 'separator': {
+          \   'left': "", "right": ""
+          \ },
+          \ 'subseparator': {
+          \   'left': '/', 'right': '/'
+          \ },
+          \ }
+else
+    let g:lightline = {
+          \ 'colorscheme': 'deus',
+          \ 'active': {
+          \   'left': [ [ 'mode', 'paste' ],
+          \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+          \ },
+          \ 'component_function': {
+          \   'gitbranch': 'FugitiveHead'
+          \ },
+          \ }
+endif
 
 " Lightline tabline ----------------------------------------------------------
 let g:lightline#bufferline#show_number  = 1
@@ -495,9 +509,11 @@ let g:lightline#bufferline#unnamed      = '[No Name]'
 let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
 let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
 let g:lightline.component_type   = {'buffers': 'tabsel'}
+" Force refresh tabline whenever there is change in vim
+"autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 
 " Status line ----------------------------------------------------------------
-set noshowmode    "no vim-built-in mode statusline
+set noshowmode    " No vim-built-in mode statusline
 set laststatus=2  " Always display the statusline in all windows
 set showtabline=2 " Always display the tabline, even if there is only one tab
 set showcmd       " This line must be added after airline plugin"
@@ -667,11 +683,11 @@ let g:context_filetype#same_filetypes._ = '_'
 " Popup window selection -----------------------------------------------------
 " previous/next suggestion
 inoremap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-inoremap <expr><C-k> pumvisible() ? "\<c-p>" : "\<C-k>"
-inoremap <expr><C-j> pumvisible() ? "\<c-n>" : "\<C-j>"
-inoremap <expr><C-d> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-inoremap <expr><C-u> pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+inoremap <expr><tab>   pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr><C-k>   pumvisible() ? "\<c-p>" : "\<C-k>"
+inoremap <expr><C-j>   pumvisible() ? "\<c-n>" : "\<C-j>"
+inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
 " Jedi-vim -------------------------------------------------------------------
 "" Disable autocompletion (using deoplete instead)
@@ -688,6 +704,7 @@ nmap ,D :tab split<CR>:call jedi#goto()<CR>
 
 " Colorscheme ----------------------------------------------------------------
 colorscheme vim-monokai-tasty
+autocmd Filetype fortran colorscheme koehler "or elflord for 'fortran' support
 
 " Common Background Setting (Transparent Background) -------------------------
 " hi command must be entered after colorscheme
@@ -695,6 +712,18 @@ set bg=dark
 hi LineNr cterm=bold ctermfg=DarkGrey ctermbg=NONE gui=bold guifg=#808080 guibg=NONE
 hi CursorLineNr cterm=bold ctermfg=Green ctermbg=NONE gui=bold guifg=#00ff00 guibg=NONE
 hi Normal guibg=NONE ctermbg=NONE
+
+" TERM GUI color -------------------------------------------------------------
+" require terminal color (transparent not working on remote terminal)
+" comment below line if color is not support for terminal
+if has("termguicolors")
+    set termguicolors
+endif
+
+" 256 term color support
+if !has('gui_running')
+    set t_Co=256
+endif
 
 " Function - Line length warnings [Must be added at last ]--------------------
 " Here adopt default vim-textwidth 78 as maximum line length
