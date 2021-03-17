@@ -183,11 +183,6 @@ nnoremap <leader>v :vsplit<space>
 nnoremap <leader>Z :split<CR>
 nnoremap <leader>V :vsplit<CR>
 
-" Window Chooser --------------------------------------------------------------
-nmap  <leader><Enter> <Plug>(choosewin)
-" show big letters
-let g:choosewin_overlay_enable = 1
-
 " Better backup, swap and undos storage ---------------------------------------
 set directory=~/.vim/dirs/tmp     " directory to place swap files in
 set backup                        " make backup files
@@ -302,14 +297,16 @@ call plug#begin('~/.vim/plugged')
 " [Vim theme] -----------------------------------------------------------------
 " Color themes
 Plug 'patstockwell/vim-monokai-tasty'
+" Lightline (status line)
+Plug 'itchyny/lightline.vim'
+" Lightline bufferline
+Plug 'mengelbrecht/lightline-bufferline'
 " Airline (status line)
 "Plug 'vim-airline/vim-airline'
 " Airline themes
 "Plug 'vim-airline/vim-airline-themes'
 " Powerline symbols
 "Plug 'ryanoasis/vim-devicons'
-" Lightline
-Plug 'itchyny/lightline.vim'
 
 " [File/Code Browsing] --------------------------------------------------------
 " Code and files fuzzy finder
@@ -343,10 +340,8 @@ Plug 'szw/vim-maximizer'
 Plug 't9md/vim-choosewin'
 " Easymotion (Key-mapping moving in vim)
 Plug 'easymotion/vim-easymotion'
-" Easymotion + incsearch [Not used anymore]
-"Plug 'haya14busa/incsearch-easymotion.vim'
-"" Auto popup completion options from vim [Must be disable if deoplete is used]
-"Plug 'vim-scripts/AutoComplPop' [Not used anymore]
+" Auto popup completion options from vim
+Plug 'vim-scripts/AutoComplPop'
 " Fancy startup page of vim [Not used anymore]
 "Plug 'mhinz/vim-startify'
 
@@ -359,16 +354,16 @@ Plug 'lilydjwg/colorizer'
 Plug 'luochen1990/rainbow'
 " Save last . motion for next time usage
 Plug 'tpope/vim-repeat'
-" Multiple language syntax support
+" Multiple language syntax support [Not working on fomalhaut (vim=7.0)]
 Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
-" Languge packs
+" Languge packs [Not working on fomalhaut (vim=7.0)]
 Plug 'sheerun/vim-polyglot'
 " Indent guide
 Plug 'nathanaelkane/vim-indent-guides', { 'for': 'python' }
 " Indent text object
 Plug 'michaeljsmith/vim-indent-object'
-" Multiple cursor with incsearch support [Not used anymore]
-"Plug 'terryma/vim-multiple-cursors'
+ "Multiple cursor with incsearch support
+Plug 'terryma/vim-multiple-cursors'
 
 " [Git] -----------------------------------------------------------------------
 " Git integration
@@ -481,22 +476,19 @@ endif
 "map <silent><leader>af :AirlineRefresh<CR>:echo 'Airline Refreshed ...'<CR>
 
 " Lightline -------------------------------------------------------------------
-let g:lightline = {
-      \ 'colorscheme': 'wombat',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead'
-      \ },
-      \ }
+let g:lightline#bufferline#show_number  = 1
+let g:lightline#bufferline#shorten_path = 0
+let g:lightline#bufferline#unnamed      = '[No Name]'
+let g:lightline                  = {'colorscheme': 'wombat'}
+let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
+let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
+let g:lightline.component_type   = {'buffers': 'tabsel'}
 
 " Status line -----------------------------------------------------------------
-set noshowmode "no vim-built-in mode statusline
-set laststatus=2 " Always display the statusline in all windows
+set noshowmode    "no vim-built-in mode statusline
+set laststatus=2  " Always display the statusline in all windows
 set showtabline=2 " Always display the tabline, even if there is only one tab
-set showcmd " This line must be added after airline plugin"
+set showcmd       " This line must be added after airline plugin"
 
 " Tagbar ----------------------------------------------------------------------
 " autofocus on tagbar open
@@ -517,17 +509,13 @@ let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 let g:NERDTreeMouseMode = 3
 let g:NERDTreeDirArrows = ''
 
-" Tasklist --------------------------------------------------------------------
+" tasklist --------------------------------------------------------------------
 map <leader>tl :TaskList<CR>
 
 " Rainbow parentheses ---------------------------------------------------------
 " don;t enable when start up
 let g:rainbow_active = 0
 nnoremap <leader>rb :RainbowToggle<CR>:echo 'Toggle Rainbow'<CR>
-
-" Commentary ------------------------------------------------------------------
-"autocmd FileType python,shell set commentstring=#\ %s
-"autocmd FileType mako set cms=##\ %s
 
 " Ale (Syntax check) ----------------------------------------------------------
 let g:ale_enabled = 0
@@ -607,19 +595,19 @@ map <leader><leader>h <Plug>(easymotion-linebackward)
 map <leader><leader>1 <Plug>(easymotion-overwin-f)
 map <leader><leader>2 <Plug>(easymotion-overwin-f2)
 
-" Incsearch Easymotion --------------------------------------------------------
-"map z/ <Plug>(incsearch-easymotion-/)
-"map z? <Plug>(incsearch-easymotion-?)
-"map zg/ <Plug>(incsearch-easymotion-stay)
-
 " Multiple Cursors ------------------------------------------------------------
-"let g:multi_cursor_use_default_mapping = 0
-"let g:multi_cursor_start_word_key      = '<C-n>'
-"let g:multi_cursor_select_all_word_key = '<C-l>'
-"let g:multi_cursor_next_key            = '<C-n>'
-"let g:multi_cursor_prev_key            = '<C-p>'
-"let g:multi_cursor_skip_key            = '<C-x>'
-"let g:multi_cursor_quit_key            = '<Esc>'
+let g:multi_cursor_use_default_mapping = 0
+let g:multi_cursor_start_word_key      = '<C-n>'
+let g:multi_cursor_select_all_word_key = '<C-l>'
+let g:multi_cursor_next_key            = '<C-n>'
+let g:multi_cursor_prev_key            = '<C-p>'
+let g:multi_cursor_skip_key            = '<C-x>'
+let g:multi_cursor_quit_key            = '<Esc>'
+
+" Window Chooser --------------------------------------------------------------
+nmap  <leader><Enter> <Plug>(choosewin)
+" show big letters
+let g:choosewin_overlay_enable = 1
 
 " Vim maximizer ---------------------------------------------------------------
 nnoremap <silent><leader>x :MaximizerToggle<CR>
@@ -642,12 +630,9 @@ highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
 highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
 " AutoComplPop ----------------------------------------------------------------
-" Disabled if Deoplete is enabled
-"set complete+=kspell
-"set completeopt+=noselect
 " enable/disable autopop
-"map <leader>` :AcpDisable<CR>
-"map <leader>~ :AcpEnable<CR>
+map <leader>` :AcpDisable<CR>
+map <leader>~ :AcpEnable<CR>
 
 " Deoplete --------------------------------------------------------------------
 " pynvim is needed [Installation: pip3 install --user pynvim]
@@ -700,13 +685,14 @@ hi CursorLineNr cterm=bold ctermfg=Green ctermbg=NONE gui=bold guifg=#00ff00 gui
 hi Normal guibg=NONE ctermbg=NONE
 
 " Function - Line length warnings [Must be added at last ]---------------------
+" Here adopt default vim-textwidth 78 as maximum line length
 highlight OverLength ctermbg=red ctermfg=white guibg=#ff0000 guifg=#ffffff
 highlight UnlimitLength ctermbg=NONE guibg=NONE
-nnoremap <leader>wo :match OverLength /\%81v.\+/<CR>:echo '80 char-bound ON'<CR>
-nnoremap <leader>wf :match UnlimitLength /\%81v.\+/<CR>:echo '80 char-bound OFF'<CR>
+nnoremap <leader>wo :match OverLength /\%79v.\+/<CR>:echo '78 char-bound ON'<CR>
+nnoremap <leader>wf :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
 
 " =============================================================================
 " End of Vim configuration, automatically reload current config after saving
 " =============================================================================
 " Automated run vim configuration file just after saving -----------------------
-"autocmd BufWritePost $MYVIMRC source $MYVIMRC
+autocmd BufWritePost $MYVIMRC source $MYVIMRC
