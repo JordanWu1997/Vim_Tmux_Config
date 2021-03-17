@@ -11,7 +11,14 @@
 " TERM GUI color --------------------------------------------------------------
 " require terminal color (transparent not working on remote terminal)
 " comment below line if color is not support for terminal
-set termguicolors
+if has("termguicolors")
+    set termguicolors
+endif
+
+" 256 term color support
+if !has('gui_running')
+    set t_Co=256
+endif
 
 " Set leaderkey ---------------------------------------------------------------
 let mapleader = ' '
@@ -47,9 +54,11 @@ imap <C-c> :!
 map <leader>m :Man<space>
 
 " VIM built-in setting --------------------------------------------------------
-syntax enable
 filetype on
-filetype plugin on
+" Automatically executed by VIM-plug
+"filetype plugin on
+"filetype indent on
+"syntax enable
 
 " VIM window control ----------------------------------------------------------
 " [Also integrate with tmux now, check vim-tmux-navigator]
@@ -85,7 +94,6 @@ set ignorecase
 set nocompatible
 set nostartofline
 set modifiable
-set noshowmode "no vim-built-in statusline
 set wildmenu "show memu options
 set clipboard=unnamedplus "shared system clipboard, gvim must be installed"
 
@@ -129,8 +137,7 @@ set expandtab
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
-filetype indent on
-autocmd FileType python setlocal et ts=4 sw=4 sts=4
+"autocmd FileType python setlocal et ts=4 sw=4 sts=4
 map <leader>ts :tabs<CR>
 map <leader>tt :tabnew<space>
 map <leader>td :tabclose<space>
@@ -253,15 +260,6 @@ command! Sudow execute 'w !sudo tee % > /dev/null'
 
 " Unicode display --------------------------------------------------------------
 set encoding=utf-8
-"if has('multi_byte')
-    "if &termencoding == ''
-        "let &termencoding = &encoding
-    "endif
-    "set encoding=utf-8
-    "setglobal fileencoding=utf-8
-    ""setglobal bomb
-    "set fileencodings=ucs-bom,utf-8,latin1
-"endif
 
 " Run python script in vim -----------------------------------------------------
 " # Test python version that want (In python)
@@ -305,20 +303,22 @@ call plug#begin('~/.vim/plugged')
 " Color themes
 Plug 'patstockwell/vim-monokai-tasty'
 " Airline (status line)
-Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline'
 " Airline themes
-Plug 'vim-airline/vim-airline-themes'
+"Plug 'vim-airline/vim-airline-themes'
 " Powerline symbols
-Plug 'ryanoasis/vim-devicons'
+"Plug 'ryanoasis/vim-devicons'
+" Lightline
+Plug 'itchyny/lightline.vim'
 
 " [File/Code Browsing] --------------------------------------------------------
 " Code and files fuzzy finder
-Plug 'junegunn/fzf' ", { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 " File browser
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Class/module browser
-Plug 'majutsushi/tagbar'
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 " Search results counter
 Plug 'vim-scripts/IndexedSearch'
 " Code commenter
@@ -327,16 +327,12 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'vim-utils/vim-man'
 
 " [Vim extra functions] -------------------------------------------------------
-" Fancy startup page of vim
-Plug 'mhinz/vim-startify'
 " Vim settings for opening large files
 Plug 'vim-scripts/LargeFile'
 " Override configs by directory
 Plug 'arielrossanigo/dir-configs-override.vim'
 " History of yank
 Plug 'vim-scripts/YankRing.vim'
-"" Auto popup completion options from vim [Must be disable if deoplete is used]
-"Plug 'vim-scripts/AutoComplPop'
 " Generate bracket/quotation in pair
 Plug 'jiangmiao/auto-pairs'
 " Functions related to quotation
@@ -347,26 +343,32 @@ Plug 'szw/vim-maximizer'
 Plug 't9md/vim-choosewin'
 " Easymotion (Key-mapping moving in vim)
 Plug 'easymotion/vim-easymotion'
-" Easymotion + incsearch
+" Easymotion + incsearch [Not used anymore]
 "Plug 'haya14busa/incsearch-easymotion.vim'
+"" Auto popup completion options from vim [Must be disable if deoplete is used]
+"Plug 'vim-scripts/AutoComplPop' [Not used anymore]
+" Fancy startup page of vim [Not used anymore]
+"Plug 'mhinz/vim-startify'
 
 " [Functions for coding] ------------------------------------------------------
 " Pending tasks list
 Plug 'fisadev/FixedTaskList.vim'
+" Paint css colors with the real color
+Plug 'lilydjwg/colorizer'
 " Paint paired bracket/quotation in different color
 Plug 'luochen1990/rainbow'
 " Save last . motion for next time usage
 Plug 'tpope/vim-repeat'
-" Multiple cursor with incsearch support
-"Plug 'terryma/vim-multiple-cursors'
 " Multiple language syntax support
-Plug 'dense-analysis/ale'
+Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
 " Languge packs
 Plug 'sheerun/vim-polyglot'
 " Indent guide
-Plug 'nathanaelkane/vim-indent-guides'
+Plug 'nathanaelkane/vim-indent-guides', { 'for': 'python' }
 " Indent text object
 Plug 'michaeljsmith/vim-indent-object'
+" Multiple cursor with incsearch support [Not used anymore]
+"Plug 'terryma/vim-multiple-cursors'
 
 " [Git] -----------------------------------------------------------------------
 " Git integration
@@ -375,26 +377,25 @@ Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 
 " [Python coding] -------------------------------------------------------------
-" Sort python import [too much time-consuming]
-"Plug 'fisadev/vim-isort'
 " More python syntax highlight
-Plug 'vim-python/python-syntax'
+Plug 'vim-python/python-syntax', { 'for': 'python' }
 " Python autocompletion
-Plug 'Shougo/deoplete.nvim'
-Plug 'roxma/nvim-yarp'
+Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
+Plug 'roxma/nvim-yarp', { 'for': 'python' }
 " Help communicate beteen vim and neovim [needed for deoplete.nvim]
-Plug 'roxma/vim-hug-neovim-rpc'
+Plug 'roxma/vim-hug-neovim-rpc', { 'for': 'python' }
 " Python autocompletion
-Plug 'deoplete-plugins/deoplete-jedi'
-" Completion from other opened files
-Plug 'Shougo/context_filetype.vim'
+Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
+Plug 'Shougo/context_filetype.vim', { 'for': 'python' }
 " Just to add the python go-to-definition and similar features, autocompletion
 " from this plugin is disabled
-Plug 'davidhalter/jedi-vim'
+Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+" Sort python import [too much time-consuming]
+"Plug 'fisadev/vim-isort'
 
 " [Fortran coding] ------------------------------------------------------------
 " Fortran syntax support
-Plug 'tomedunn/vim.fortran'
+Plug 'tomedunn/vim.fortran', { 'for': 'fortran' }
 
 " [Tmux] ----------------------------------------------------------------------
 " Share clipboard between vim and tmux
@@ -404,14 +405,12 @@ Plug 'roxma/vim-tmux-clipboard'
 Plug 'christoomey/vim-tmux-navigator'
 
 " [HTML coding] ---------------------------------------------------------------
-" Paint css colors with the real color
-Plug 'lilydjwg/colorizer'
 " Highlight matching html tags
-Plug 'valloric/MatchTagAlways'
+Plug 'valloric/MatchTagAlways', { 'for': 'html' }
 " Generate html in a simple way
-Plug 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim', { 'for': 'html' }
 " Generate closetag for HTML
-Plug 'alvan/vim-closetag'
+Plug 'alvan/vim-closetag', { 'for': 'html' }
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
@@ -432,7 +431,7 @@ endif
 " =============================================================================
 " Edit them as you wish.
 
-" Backup of old vim-powerline installation
+" Backup of old vim-powerline installation [Not used anymore, use airline now]
 " Powerline-status ------------------------------------------------------------
 " " (1) sudo intall vim-powerline (Fedora)
 " " (2) sudo apt-get install powerline (Ubuntu)
@@ -450,21 +449,53 @@ endif
 "DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 
 " Vim Airline colortheme ------------------------------------------------------
-" Option 1: Fancy fonts
-let g:airline_theme = 'bubblegum'
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-" Option 2: Blend fonts
-"let g:airline_powerline_fonts = 0
-"let g:airline#extensions#tabline#left_sep = ' '
-"let g:airline#extensions#tabline#left_alt_sep = '|'
+"let fancy_symbols_enabled = 1
+
+"if fancy_symbols_enabled
+    " Option 1: Fancy fonts
+    "let g:airline_theme = 'bubblegum'
+    "let g:airline_powerline_fonts = 1
+    "let g:airline#extensions#tabline#enabled = 1
+    """ custom airline symbols
+    "if !exists('g:airline_symbols')
+       "let g:airline_symbols = {}
+    "endif
+    "let g:airline_left_sep = ''
+    "let g:airline_left_alt_sep = ''
+    "let g:airline_right_sep = ''
+    "let g:airline_right_alt_sep = ''
+    "let g:airline_symbols.branch = '⭠'
+    "let g:airline_symbols.readonly = '⭤'
+    "let g:airline_symbols.linenr = '⭡'
+"else
+    " Option 2: Blend fonts
+    "let g:airline_powerline_fonts = 0
+    "let g:airline#extensions#tabline#left_sep = ' '
+    "let g:airline#extensions#tabline#left_alt_sep = '|'
+    "let g:webdevicons_enable = 0
+"endif
 
 " Vim Airline -----------------------------------------------------------------
-let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline#extensions#tabline#formatter = 'default'
+"let g:airline#extensions#tabline#buffer_nr_show = 1
+"let g:airline#extensions#tabline#formatter = 'default'
+"map <silent><leader>af :AirlineRefresh<CR>:echo 'Airline Refreshed ...'<CR>
+
+" Lightline -------------------------------------------------------------------
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
+      \ }
+
+" Status line -----------------------------------------------------------------
+set noshowmode "no vim-built-in mode statusline
 set laststatus=2 " Always display the statusline in all windows
 set showtabline=2 " Always display the tabline, even if there is only one tab
-map <silent><leader>af :AirlineRefresh<CR>:echo 'Airline Refreshed ...'<CR>
 set showcmd " This line must be added after airline plugin"
 
 " Tagbar ----------------------------------------------------------------------
@@ -495,8 +526,8 @@ let g:rainbow_active = 0
 nnoremap <leader>rb :RainbowToggle<CR>:echo 'Toggle Rainbow'<CR>
 
 " Commentary ------------------------------------------------------------------
-autocmd FileType python,shell set commentstring=#\ %s
-autocmd FileType mako set cms=##\ %s
+"autocmd FileType python,shell set commentstring=#\ %s
+"autocmd FileType mako set cms=##\ %s
 
 " Ale (Syntax check) ----------------------------------------------------------
 let g:ale_enabled = 0
@@ -628,7 +659,7 @@ set completeopt+=noinsert
 set completeopt-=preview
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
-call deoplete#custom#option({
+autocmd FileType python call deoplete#custom#option({
 \   'ignore_case': v:true,
 \   'smart_case': v:true,
 \})
@@ -663,7 +694,6 @@ colorscheme vim-monokai-tasty
 
 " Common Background Setting (Transparent Background) --------------------------
 " hi command must be entered after colorscheme
-set t_Co=256
 set bg=dark
 hi LineNr cterm=bold ctermfg=DarkGrey ctermbg=NONE gui=bold guifg=#808080 guibg=NONE
 hi CursorLineNr cterm=bold ctermfg=Green ctermbg=NONE gui=bold guifg=#00ff00 guibg=NONE
