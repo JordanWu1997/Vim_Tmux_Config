@@ -3,6 +3,26 @@
 " http://fisadev.github.io/fisa-vim-config/
 " Modified version: 8.2  by Sheng-Jun Lin, Kuan-Hsien Wu
 
+" Notes:
+" Backup of old vim-powerline installation [Not used anymore, use airline now]
+" Powerline-status -----------------------------------------------------------
+" " (1) sudo intall vim-powerline (Fedora)
+" " (2) sudo apt-get install powerline (Ubuntu)
+" " (3) activate manually
+" "   - python3 from powerline.vim import setup as powerline_setup
+" "   - python3 powerline_setup()
+" "   - python3 del powerline_setup
+
+" Notes:
+" For special character support
+" NERDFont Installation ------------------------------------------------------
+" mkdir -p ~/.local/share/fonts
+"cd ~/.local/share/fonts && curl -fLo \
+"Droid Sans Mono for Powerline Nerd Font Complete.otf" \
+"https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/\
+"DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
+
+" Vim Airline colortheme -----------------------------------------------------
 " ============================================================================
 " Vim built-in function settings and Vim hotkeys settings
 " ============================================================================
@@ -76,13 +96,15 @@ nnoremap <silent><leader>== <C-W>=
 nnoremap <silent><leader>++ <C-W>=
 
 " VIM settings ---------------------------------------------------------------
-set wrap                  " Line wrap for small monitor or display window
+set nocompatible          " Not compatible with traditional vi
 set confirm               " Ask for confirmation before leaving vim
 set ignorecase            " Ignore upper/lower case when searching
-set nocompatible          " Not compatible with traditional vi
-set nostartofline         " Move up down not back to start of line
 set modifiable            " Make buffer modifable
 set clipboard=unnamedplus " Shared system clipboard, gvim must be installed"
+
+" Line wrap ------------------------------------------------------------------
+set wrap                  " Line wrap for small monitor or display window
+noremap <leader>wp :set wrap!<CR>:echo 'Toggle Line Wrap'<CR>
 
 " Comment  highlight ---------------------------------------------------------
 noremap <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
@@ -162,8 +184,9 @@ nnoremap <leader>re :registers<CR>
 " Display --------------------------------------------------------------------
 " When scrolling, keep cursor 2 lines away from screen border
 set scrolloff=3                   " Keep cursor 3 lines away from bottom
-set display+=lastline             "
+set display+=lastline             " Show line as much as possible
 set title                         " Let vim change terminal title
+
 " Split ----------------------------------------------------------------------
 " More natural split opening
 set splitbelow
@@ -353,7 +376,7 @@ Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
 " Languge packs [Not working on fomalhaut (vim=7.0)]
 Plug 'sheerun/vim-polyglot'
 " Indent guide
-Plug 'nathanaelkane/vim-indent-guides', { 'for': 'python' }
+Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
 " Indent text object
 Plug 'michaeljsmith/vim-indent-object'
  "Multiple cursor with incsearch support
@@ -387,8 +410,9 @@ Plug 'fisadev/vim-isort', { 'on': 'Isort' }
 Plug 'tomedunn/vim.fortran', { 'for': 'fortran' }
 
 " [Tmux] ---------------------------------------------------------------------
-" Share clipboard between vim and tmux
+" Share focus between vim and tmux
 Plug 'tmux-plugins/vim-tmux-focus-events'
+" Share clipboard between vim and tmux
 Plug 'roxma/vim-tmux-clipboard'
 " Navigate seamlessly in vim and tmux
 Plug 'christoomey/vim-tmux-navigator'
@@ -420,24 +444,6 @@ endif
 " ============================================================================
 " Edit them as you wish.
 
-" Backup of old vim-powerline installation [Not used anymore, use airline now]
-" Powerline-status -----------------------------------------------------------
-" " (1) sudo intall vim-powerline (Fedora)
-" " (2) sudo apt-get install powerline (Ubuntu)
-" " (3) activate manually
-" "   - python3 from powerline.vim import setup as powerline_setup
-" "   - python3 powerline_setup()
-" "   - python3 del powerline_setup
-
-" For special character support
-" NERDFont Installation ------------------------------------------------------
-" mkdir -p ~/.local/share/fonts
-"cd ~/.local/share/fonts && curl -fLo \
-"Droid Sans Mono for Powerline Nerd Font Complete.otf" \
-"https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/\
-"DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
-
-" Vim Airline colortheme -----------------------------------------------------
 "let fancy_symbols_enabled = 1
 
 "if fancy_symbols_enabled
@@ -506,10 +512,10 @@ endif
 let g:lightline#bufferline#show_number  = 1
 let g:lightline#bufferline#shorten_path = 0
 let g:lightline#bufferline#unnamed      = '[No Name]'
-let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
-let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
-let g:lightline.component_type   = {'buffers': 'tabsel'}
-" Force refresh tabline whenever there is change in vim
+let g:lightline.tabline          = { 'left': [['tabs']], 'right': [['buffers']] }
+let g:lightline.component_expand = { 'buffers': 'lightline#bufferline#buffers' }
+let g:lightline.component_type   = { 'buffers': 'tabsel' }
+" Force refresh tabline whenever the re is change in vim
 "autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 
 " Status line ----------------------------------------------------------------
@@ -527,21 +533,23 @@ map <silent><F4> :TagbarToggle<CR>
 map <silent><leader><F4> :TagbarToggle<CR>
 
 " NERDTree -------------------------------------------------------------------
-" toggle nerdtree display
+" Disable vim built-in netrw
+let loaded_netrwPlugin = 1
+" Toggle nerdtree display
 map <silent><leader><F3> :NERDTreeToggle<CR>
-" open nerdtree with the current file selected
+" Open nerdtree with the current file selected
 map <silent>,t :NERDTreeFind<CR>
 map <leader>pwd :pwd<CR>
-" don;t show these file types
+" Don;t show these file types
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 let g:NERDTreeMouseMode = 3
 let g:NERDTreeDirArrows = ''
 
-" tasklist -------------------------------------------------------------------
+" Tasklist -------------------------------------------------------------------
 map <leader>tl :TaskList<CR>
 
 " Rainbow parentheses --------------------------------------------------------
-" don;t enable when start up
+" Don;t enable when start up
 let g:rainbow_active = 0
 nnoremap <leader>rb :RainbowToggle<CR>:echo 'Toggle Rainbow'<CR>
 
@@ -603,7 +611,10 @@ nnoremap <leader>nm :Maps<CR>
 nnoremap <leader>ht :Helptags<CR>
 
 " Easymotion -----------------------------------------------------------------
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
+" Move up and down not back to start of line
+set nostartofline
+" Disable default mappings
+let g:EasyMotion_do_mapping = 0
 " Turn on case-insensitive feature
 let g:EasyMotion_smartcase = 1
 " Keep cursor column
@@ -643,13 +654,13 @@ vnoremap <silent><leader>x :MaximizerToggle<CR>gv
 inoremap <silent><leader>x <C-o>:MaximizerToggle<CR>
 
 " Signify --------------------------------------------------------------------
-" this first setting decides in which order try to guess your current vcs
+" This first setting decides in which order try to guess your current vcs
 " UPDATE it to reflect your preferences, it will speed up opening files
 let g:signify_vcs_list = ['git', 'hg']
-" mappings to jump to changed blocks
+" Mappings to jump to changed blocks
 nmap <leader>sn <plug>(signify-next-hunk)
 nmap <leader>sp <plug>(signify-prev-hunk)
-" nicer colors
+" Nicer colors
 highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
 highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
 highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
@@ -658,17 +669,17 @@ highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
 highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
 " AutoComplPop ---------------------------------------------------------------
-" enable/disable autopop
+" Enable/disable autopop
 map <leader>` :AcpDisable<CR>
 map <leader>~ :AcpEnable<CR>
 
 " Deoplete -------------------------------------------------------------------
-" pynvim is needed [Installation: pip3 install --user pynvim]
-" needed so deoplete can auto select the first suggestion
+" Pynvim is needed [Installation: pip3 install --user pynvim]
+" Needed so deoplete can auto select the first suggestion
 set completeopt+=noinsert
-" comment this line to enable autocompletion preview window
+" Comment this line to enable autocompletion preview window
 " (displays documentation related to the selected completion option)
-" disabled by default because preview makes the window flicker
+" Disabled by default because preview makes the window flicker
 set completeopt-=preview
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
@@ -676,12 +687,12 @@ autocmd FileType python call deoplete#custom#option({
 \   'ignore_case': v:true,
 \   'smart_case': v:true,
 \})
-" complete with words from any opened file
+" Complete with words from any opened file
 let g:context_filetype#same_filetypes = {}
 let g:context_filetype#same_filetypes._ = '_'
 
 " Popup window selection -----------------------------------------------------
-" previous/next suggestion
+" Previous/next suggestion
 inoremap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
 inoremap <expr><tab>   pumvisible() ? "\<c-n>" : "\<tab>"
 inoremap <expr><C-k>   pumvisible() ? "\<c-p>" : "\<C-k>"
@@ -714,8 +725,8 @@ hi CursorLineNr cterm=bold ctermfg=Green ctermbg=NONE gui=bold guifg=#00ff00 gui
 hi Normal guibg=NONE ctermbg=NONE
 
 " TERM GUI color -------------------------------------------------------------
-" require terminal color (transparent not working on remote terminal)
-" comment below line if color is not support for terminal
+" Require terminal color (transparent not working on remote terminal)
+" Comment below line if color is not support for terminal
 if has("termguicolors")
     set termguicolors
 endif
