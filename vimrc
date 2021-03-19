@@ -22,7 +22,6 @@
 "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/\
 "DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 
-" Vim Airline colortheme -----------------------------------------------------
 " ============================================================================
 " Vim built-in function settings and Vim hotkeys settings
 " ============================================================================
@@ -165,6 +164,7 @@ map <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREVIOUS TAB'<CR>
 map <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB'<CR>
 
 " Buffer Setting -------------------------------------------------------------
+" Let vim keep buffer after editing other buffer instead of throwing away it
 set hidden
 map <leader>ls :ls<CR>
 map <leader>bb :edit<space>
@@ -205,7 +205,7 @@ set backupdir=~/.vim/dirs/backups " Where to put backup files
 set undofile                      " Persistent undos - undo after re-opening
 set undodir=~/.vim/dirs/undos
 set viminfo+=n~/.vim/dirs/viminfo
-" create needed directories if they don't exist
+" Create needed directories if they don't exist
 if !isdirectory(&backupdir)
     call mkdir(&backupdir, 'p')
 endif
@@ -216,7 +216,7 @@ if !isdirectory(&undodir)
     call mkdir(&undodir, 'p')
 endif
 
-" NO system bell -------------------------------------------------------------
+" No system bell -------------------------------------------------------------
 set visualbell    " ┐
 set noerrorbells  " │ Disable beeping and window flashing
 set t_vb=         " ┘ https://vim.wikia.com/wiki/Disable_beeping
@@ -313,7 +313,7 @@ call plug#begin('~/.vim/plugged')
 " Color themes (Monokair - high contrast)
 Plug 'patstockwell/vim-monokai-tasty'
 " Color themes (Gruvbox - low contrast)
-"Plug 'morhetz/gruvbox'
+Plug 'morhetz/gruvbox'
 " Lightline (status line)
 Plug 'itchyny/lightline.vim'
 " Lightline bufferline
@@ -398,6 +398,7 @@ Plug 'roxma/nvim-yarp', { 'for': 'python' }
 Plug 'roxma/vim-hug-neovim-rpc', { 'for': 'python' }
 " Python autocompletion
 Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
+" Completion from other opened files
 Plug 'Shougo/context_filetype.vim', { 'for': 'python' }
 " Just to add the python go-to-definition and similar features, autocompletion
 " from this plugin is disabled
@@ -444,6 +445,7 @@ endif
 " ============================================================================
 " Edit them as you wish.
 
+" Vim Airline colortheme -----------------------------------------------------
 "let fancy_symbols_enabled = 1
 
 "if fancy_symbols_enabled
@@ -562,8 +564,7 @@ let g:python_highlight_all = 1
 
 " Fortran --------------------------------------------------------------------
 " Ensure correct highlighting for
-" Fortran free-form source code
-" and turn syntax highlighting on
+" Fortran free-form source code and turn syntax highlighting on
 let fortran_free_source = 1
 let fortran_do_enddo = 1
 
@@ -591,9 +592,9 @@ let g:AutoPairsShortcutToggle = '<leader>ap'
 " Caution:
 "   - ripgrep must be installed if Rg function is needed
 " In fzf:
-"   - <Ctrl + T> : Open in new tab
-"   - <Ctrl + X> : Open in new horizontal split
-"   - <Ctrl + V> : Open in new vertical split
+"   - <Ctrl + t> : Open in new tab
+"   - <Ctrl + x> : Open in new horizontal split
+"   - <Ctrl + v> : Open in new vertical split
 nnoremap <leader>bf :Buffers<CR>
 nnoremap <leader>fs :Files<space>
 nnoremap <leader>lc :Locate<space>
@@ -626,7 +627,6 @@ map <leader>ll <Plug>(easymotion-lineforward)
 map <leader>hh <Plug>(easymotion-linebackward)
 map <leader>11 <Plug>(easymotion-overwin-f)
 map <leader>22 <Plug>(easymotion-overwin-f2)
-"map <leader>nn <Plug>(easymotion-overwin-fn)
 map <leader><leader>j <Plug>(easymotion-j)
 map <leader><leader>k <Plug>(easymotion-k)
 map <leader><leader>l <Plug>(easymotion-lineforward)
@@ -714,6 +714,7 @@ let g:jedi#goto_assignments_command = ',a'
 nmap ,D :tab split<CR>:call jedi#goto()<CR>
 
 " Colorscheme ----------------------------------------------------------------
+"colorscheme gruvbox
 colorscheme vim-monokai-tasty
 autocmd Filetype fortran colorscheme koehler "or elflord for 'fortran' support
 
@@ -747,4 +748,3 @@ nnoremap <leader>wf :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'
 " End of Vim configuration, automatically reload current config after saving
 " ============================================================================
 " Automated run vim configuration file just after saving ---------------------
-autocmd BufWritePost $MYVIMRC source $MYVIMRC
