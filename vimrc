@@ -136,8 +136,8 @@ inoremap <leader><F6> <Esc>:set relativenumber!<CR>:echo 'Toggle Rel Line Number
 
 " Fold Setting ---------------------------------------------------------------
 set nofoldenable
-set foldmethod=indent
-"set foldmethod=syntax
+set foldmethod=syntax
+"set foldmethod=indent
 nnoremap <leader>sv :mkview<CR>:echo 'Setting Saved ...'<CR>
 nnoremap <leader>ld :loadview<CR>:echo 'Setting Loaded ...'<CR>
 nnoremap <leader>ff za<CR>:echo 'Toggle Current Fold...'<CR>
@@ -193,9 +193,9 @@ set splitbelow
 set splitright
 " remove ugly vertical lines on window division
 set fillchars+=vert:\
-nnoremap <leader>z :split<space>
+nnoremap <leader>x :split<space>
 nnoremap <leader>v :vsplit<space>
-nnoremap <leader>Z :split<CR>
+nnoremap <leader>X :split<CR>
 nnoremap <leader>V :vsplit<CR>
 
 " Better backup, swap and undos storage --------------------------------------
@@ -381,6 +381,8 @@ Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
 Plug 'michaeljsmith/vim-indent-object'
  "Multiple cursor with incsearch support
 Plug 'terryma/vim-multiple-cursors'
+" Multi-language support debugger
+"Plug 'puremourning/vimspector', { 'for': 'python' }
 
 " [Git] ----------------------------------------------------------------------
 " Git integration
@@ -425,6 +427,10 @@ Plug 'valloric/MatchTagAlways', { 'for': 'html' }
 Plug 'mattn/emmet-vim', { 'for': 'html' }
 " Generate closetag for HTML
 Plug 'alvan/vim-closetag', { 'for': 'html' }
+
+" [Latex] --------------------------------------------------------------------
+Plug 'vim-latex/vim-latex', { 'for': 'tex' }
+Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
@@ -517,6 +523,14 @@ let g:lightline#bufferline#unnamed      = '[No Name]'
 let g:lightline.tabline          = { 'left': [['tabs']], 'right': [['buffers']] }
 let g:lightline.component_expand = { 'buffers': 'lightline#bufferline#buffers' }
 let g:lightline.component_type   = { 'buffers': 'tabsel' }
+" Central bar transparcy
+let s:palette = g:lightline#colorscheme#{g:lightline.colorscheme}#palette
+let s:palette.normal.middle = [ [ 'NONE', 'NONE', 'NONE', 'NONE' ] ]
+let s:palette.visual.middle = s:palette.normal.middle
+let s:palette.insert.middle = s:palette.normal.middle
+let s:palette.inactive.middle = s:palette.normal.middle
+let s:palette.tabline.middle = s:palette.normal.middle
+let s:palette.replace.middle = s:palette.normal.middle
 " Force refresh tabline whenever the re is change in vim
 "autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 
@@ -591,6 +605,7 @@ let g:AutoPairsShortcutToggle = '<leader>ap'
 " fzf.vim --------------------------------------------------------------------
 " Caution:
 "   - ripgrep must be installed if Rg function is needed
+"   - if syntax highlight is needed, please install bat from command line
 " In fzf:
 "   - <Ctrl + t> : Open in new tab
 "   - <Ctrl + x> : Open in new horizontal split
@@ -649,9 +664,9 @@ nmap  <leader><Enter> <Plug>(choosewin)
 let g:choosewin_overlay_enable = 1
 
 " Vim maximizer --------------------------------------------------------------
-nnoremap <silent><leader>x :MaximizerToggle<CR>
-vnoremap <silent><leader>x :MaximizerToggle<CR>gv
-inoremap <silent><leader>x <C-o>:MaximizerToggle<CR>
+nnoremap <silent><leader>z :MaximizerToggle<CR>
+vnoremap <silent><leader>z :MaximizerToggle<CR>gv
+inoremap <silent><leader>z <C-o>:MaximizerToggle<CR>
 
 " Signify --------------------------------------------------------------------
 " This first setting decides in which order try to guess your current vcs
@@ -737,12 +752,28 @@ if !has('gui_running')
     set t_Co=256
 endif
 
-" Function - Line length warnings [Must be added at last ]--------------------
+" Function - Line length warnings [ Must be added after color setup ] --------
 " Here adopt default vim-textwidth 78 as maximum line length
 highlight OverLength ctermbg=red ctermfg=white guibg=#ff0000 guifg=#ffffff
 highlight UnlimitLength ctermbg=NONE guibg=NONE
 nnoremap <leader>wo :match OverLength /\%79v.\+/<CR>:echo '78 char-bound ON'<CR>
 nnoremap <leader>wf :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
+
+" Function - Markdown viewer -------------------------------------------------
+" From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
+let $VIMBROWSER='google-chrome'
+let $OPENBROWSER='nnoremap <F3> :!'. $VIMBROWSER .' %:p &<CR>'
+augroup OpenMdFile
+  autocmd!
+  autocmd BufEnter *.md echom "Press F3 to Open .md File"
+  autocmd BufEnter *.md exe $OPENBROWSER
+augroup END
+
+" Function - LaTex viewer  --------------------------------------------------
+let g:livepreview_previwer = 'okular'
+let g:livepreview_engine = 'pdflatex'
+autocmd filetype tex setl updatetime=10000 " Unit: milisecond
+autocmd filetype tex map <F3> :LLPStartPreview<CR>
 
 " ============================================================================
 " End of Vim configuration, automatically reload current config after saving
