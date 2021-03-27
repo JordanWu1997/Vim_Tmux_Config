@@ -29,6 +29,7 @@
 
 " Set leaderkey --------------------------------------------------------------
 let mapleader = ' '
+"let mapleader = ';'
 
 " Map insert mode Esc key ----------------------------------------------------
 " - Use Ctrl+v to escape
@@ -101,6 +102,9 @@ set ignorecase            " Ignore upper/lower case when searching
 set modifiable            " Make buffer modifable
 set clipboard=unnamedplus " Shared system clipboard, gvim must be installed"
 
+" Paste mode -----------------------------------------------------------------
+"map <F10> :set pastetoggle<CR>:echo 'Toggle paste mode'<CR>
+
 " Line wrap ------------------------------------------------------------------
 set wrap                  " Line wrap for small monitor or display window
 noremap <leader>wp :set wrap!<CR>:echo 'Toggle Line Wrap'<CR>
@@ -140,16 +144,16 @@ set foldmethod=syntax
 "set foldmethod=indent
 nnoremap <leader>sv :mkview<CR>:echo 'Setting Saved ...'<CR>
 nnoremap <leader>ld :loadview<CR>:echo 'Setting Loaded ...'<CR>
-nnoremap <leader>ff za<CR>:echo 'Toggle Current Fold...'<CR>
+nnoremap <leader>f za<CR>:echo 'Toggle Current Fold...'<CR>
 nnoremap <leader>cf zM<CR>:echo 'Close All Folds ...'<CR>
 nnoremap <leader>of zR<CR>:echo 'Open All Folds ...'<CR>
 
 " Tab Setting ----------------------------------------------------------------
 set expandtab
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-"autocmd FileType python setlocal et ts=4 sw=4 sts=4
+set tabstop=4 softtabstop=4 shiftwidth=4
+" PEP8 recommendation for tab settings
+autocmd FileType python setlocal et ts=4 sw=4 sts=4
+" Tabs operations
 map <leader>ts :tabs<CR>
 map <leader>tt :tabnew<space>
 map <leader>td :tabclose<space>
@@ -233,7 +237,9 @@ function! RemoveTrailingWhitespace()
         call cursor(b:curline, b:curcol)
     endif
 endfunction
-autocmd BufWritePre * call RemoveTrailingWhitespace()
+" Remove trailing white space for python codes
+autocmd BufWritePre *.py call RemoveTrailingWhitespace()
+nmap <leader>rm :call RemoveTrailingWhitespace()<CR>:echo "Remove whitespaces"<CR>
 
 " Function - Word replacement ------------------------------------------------
 function! Replace(confirm, wholeword, replace)
@@ -359,6 +365,8 @@ Plug 't9md/vim-choosewin'
 Plug 'easymotion/vim-easymotion'
 " Auto popup completion options from vim
 Plug 'vim-scripts/AutoComplPop'
+" Vim-wiki
+Plug 'vimwiki/vimwiki'
 " Fancy startup page of vim [Not used anymore]
 "Plug 'mhinz/vim-startify'
 
@@ -381,7 +389,7 @@ Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
 Plug 'michaeljsmith/vim-indent-object'
  "Multiple cursor with incsearch support
 Plug 'terryma/vim-multiple-cursors'
-" Multi-language support debugger
+" Multi-language support debugger [Not implemented now]
 "Plug 'puremourning/vimspector', { 'for': 'python' }
 
 " [Git] ----------------------------------------------------------------------
@@ -395,6 +403,7 @@ Plug 'mhinz/vim-signify'
 Plug 'vim-python/python-syntax', { 'for': 'python' }
 " Python autocompletion
 Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
+" Yet Another Remote Plugin Framework for Neovim [needed for deoplete.nvim]
 Plug 'roxma/nvim-yarp', { 'for': 'python' }
 " Help communicate beteen vim and neovim [needed for deoplete.nvim]
 Plug 'roxma/vim-hug-neovim-rpc', { 'for': 'python' }
@@ -429,7 +438,9 @@ Plug 'mattn/emmet-vim', { 'for': 'html' }
 Plug 'alvan/vim-closetag', { 'for': 'html' }
 
 " [Latex] --------------------------------------------------------------------
+" Latex compiler support
 Plug 'vim-latex/vim-latex', { 'for': 'tex' }
+" Real time Tex -> Pdf file preview
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 
 " Tell vim-plug we finished declaring plugins, so it can load them
@@ -545,7 +556,7 @@ set showcmd       " This line must be added after airline plugin"
 let g:tagbar_autofocus = 1
 let g:tagbar_map_showproto = 'd'
 " toggle tagbar display
-map <silent><F4> :TagbarToggle<CR>
+"map <silent><F4> :TagbarToggle<CR>
 map <silent><leader><F4> :TagbarToggle<CR>
 
 " NERDTree -------------------------------------------------------------------
@@ -560,6 +571,10 @@ map <leader>pwd :pwd<CR>
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 let g:NERDTreeMouseMode = 3
 let g:NERDTreeDirArrows = ''
+let g:WebDevIconsNerdTreeBeforeGlyphPadding = ''
+let g:WebDevIconsUnicodeDecorateFolderNodes = v:true
+let g:NERDTreeDirArrowExpandable = "\u00a0"
+let g:NERDTreeDirArrowCollapsible = "\u00a0"
 
 " Tasklist -------------------------------------------------------------------
 map <leader>tl :TaskList<CR>
@@ -728,10 +743,21 @@ let g:jedi#goto_assignments_command = ',a'
 " Go to definition in new tab
 nmap ,D :tab split<CR>:call jedi#goto()<CR>
 
+" Vim-LaTex viewer -----------------------------------------------------------
+let g:livepreview_previwer = 'okular'
+let g:livepreview_engine = 'pdflatex'
+autocmd filetype tex setl updatetime=10000 " Unit: milisecond
+autocmd filetype tex map <F3> :LLPStartPreview<CR>
+
+" Vim-Wiki -------------------------------------------------------------------
+let g:vimwiki_list = [{'path': '~/Documents/vimwiki/',
+                      \ 'syntax': 'markdown', 'ext': '.md'}]
+
 " Colorscheme ----------------------------------------------------------------
 "colorscheme gruvbox
 colorscheme vim-monokai-tasty
-autocmd Filetype fortran colorscheme koehler "or elflord for 'fortran' support
+" Use either 'koehler' or 'elflord' for 'fortran' syntax support
+autocmd Filetype fortran colorscheme elflord
 
 " Common Background Setting (Transparent Background) -------------------------
 " hi command must be entered after colorscheme
@@ -746,8 +772,7 @@ hi Normal guibg=NONE ctermbg=NONE
 if has("termguicolors")
     set termguicolors
 endif
-
-" 256 term color support
+" 256 term color support in vim
 if !has('gui_running')
     set t_Co=256
 endif
@@ -769,13 +794,8 @@ augroup OpenMdFile
   autocmd BufEnter *.md exe $OPENBROWSER
 augroup END
 
-" Function - LaTex viewer  --------------------------------------------------
-let g:livepreview_previwer = 'okular'
-let g:livepreview_engine = 'pdflatex'
-autocmd filetype tex setl updatetime=10000 " Unit: milisecond
-autocmd filetype tex map <F3> :LLPStartPreview<CR>
-
 " ============================================================================
 " End of Vim configuration, automatically reload current config after saving
 " ============================================================================
 " Automated run vim configuration file just after saving ---------------------
+"autocmd BufWritePost $MYVIMRC source $MYVIMRC
