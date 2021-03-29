@@ -4,7 +4,7 @@
 " Modified version: 8.2  by Sheng-Jun Lin, Kuan-Hsien Wu
 
 " Notes:
-" Backup of old vim-powerline installation [Not used anymore, use airline now]
+" Backup of old vim-powerline installation [Not use anymore, use lightline now]
 " Powerline-status -----------------------------------------------------------
 " " (1) sudo intall vim-powerline (Fedora)
 " " (2) sudo apt-get install powerline (Ubuntu)
@@ -29,15 +29,14 @@
 
 " Set leaderkey --------------------------------------------------------------
 let mapleader = ' '
-"let mapleader = ';'
 
 " Map insert mode Esc key ----------------------------------------------------
 " - Use Ctrl+v to escape
 inoremap ii <Esc>
 inoremap jk <Esc>
 inoremap kj <Esc>
-vnoremap jk <Esc>
-vnoremap kj <Esc>
+"vnoremap jk <Esc>
+"vnoremap kj <Esc>
 
 " Beginning/End, PageUp/PageDown ---------------------------------------------
 map <leader>b 0
@@ -148,12 +147,20 @@ nnoremap <leader>f za<CR>:echo 'Toggle Current Fold...'<CR>
 nnoremap <leader>cf zM<CR>:echo 'Close All Folds ...'<CR>
 nnoremap <leader>of zR<CR>:echo 'Open All Folds ...'<CR>
 
-" Tab Setting ----------------------------------------------------------------
+" Tab Key Setting ------------------------------------------------------------
 set expandtab
 set tabstop=4 softtabstop=4 shiftwidth=4
 " PEP8 recommendation for tab settings
 autocmd FileType python setlocal et ts=4 sw=4 sts=4
-" Tabs operations
+" Tab key in all modes
+nnoremap <Tab> >>_
+nnoremap <S-Tab> <<_
+inoremap <S-Tab> <C-D>
+vnoremap <Tab> >gv
+vnoremap <S-Tab> <gv
+
+" Tabe Setting ---------------------------------------------------------------
+" Tabe operations
 map <leader>ts :tabs<CR>
 map <leader>tt :tabnew<space>
 map <leader>td :tabclose<space>
@@ -164,8 +171,8 @@ map <silent><C-Left> :tabprevious<CR>
 map <silent><C-Right> :tabnext<CR>
 map <silent><A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 map <silent><A-Right> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
-map <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREVIOUS TAB'<CR>
 map <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB'<CR>
+map <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREVIOUS TAB'<CR>
 
 " Buffer Setting -------------------------------------------------------------
 " Let vim keep buffer after editing other buffer instead of throwing away it
@@ -324,10 +331,6 @@ Plug 'morhetz/gruvbox'
 Plug 'itchyny/lightline.vim'
 " Lightline bufferline
 Plug 'mengelbrecht/lightline-bufferline'
-" Airline (status line)
-"Plug 'vim-airline/vim-airline'
-" Airline themes
-"Plug 'vim-airline/vim-airline-themes'
 " Powerline symbols
 "Plug 'ryanoasis/vim-devicons'
 
@@ -462,38 +465,6 @@ endif
 " ============================================================================
 " Edit them as you wish.
 
-" Vim Airline colortheme -----------------------------------------------------
-"let fancy_symbols_enabled = 1
-
-"if fancy_symbols_enabled
-    " Option 1: Fancy fonts
-    "let g:airline_theme = 'bubblegum'
-    "let g:airline_powerline_fonts = 1
-    "let g:airline#extensions#tabline#enabled = 1
-    """ custom airline symbols
-    "if !exists('g:airline_symbols')
-       "let g:airline_symbols = {}
-    "endif
-    "let g:airline_left_sep = ''
-    "let g:airline_left_alt_sep = ''
-    "let g:airline_right_sep = ''
-    "let g:airline_right_alt_sep = ''
-    "let g:airline_symbols.branch = '⭠'
-    "let g:airline_symbols.readonly = '⭤'
-    "let g:airline_symbols.linenr = '⭡'
-"else
-    " Option 2: Blend fonts
-    "let g:airline_powerline_fonts = 0
-    "let g:airline#extensions#tabline#left_sep = ' '
-    "let g:airline#extensions#tabline#left_alt_sep = '|'
-    "let g:webdevicons_enable = 0
-"endif
-
-" Vim Airline ----------------------------------------------------------------
-"let g:airline#extensions#tabline#buffer_nr_show = 1
-"let g:airline#extensions#tabline#formatter = 'default'
-"map <silent><leader>af :AirlineRefresh<CR>:echo 'Airline Refreshed ...'<CR>
-
 " Lightline ------------------------------------------------------------------
 let fancy_symbols_enabled = 1 " assign 0 to disable
 
@@ -534,14 +505,14 @@ let g:lightline#bufferline#unnamed      = '[No Name]'
 let g:lightline.tabline          = { 'left': [['tabs']], 'right': [['buffers']] }
 let g:lightline.component_expand = { 'buffers': 'lightline#bufferline#buffers' }
 let g:lightline.component_type   = { 'buffers': 'tabsel' }
-" Central bar transparcy
-let s:palette = g:lightline#colorscheme#{g:lightline.colorscheme}#palette
-let s:palette.normal.middle = [ [ 'NONE', 'NONE', 'NONE', 'NONE' ] ]
-let s:palette.visual.middle = s:palette.normal.middle
-let s:palette.insert.middle = s:palette.normal.middle
-let s:palette.inactive.middle = s:palette.normal.middle
-let s:palette.tabline.middle = s:palette.normal.middle
-let s:palette.replace.middle = s:palette.normal.middle
+" Central bar transparency [Not work well with vim-split panes]
+"let s:palette = g:lightline#colorscheme#{g:lightline.colorscheme}#palette
+"let s:palette.normal.middle = [ [ 'NONE', 'NONE', 'NONE', 'NONE' ] ]
+"let s:palette.visual.middle = s:palette.normal.middle
+"let s:palette.insert.middle = s:palette.normal.middle
+"let s:palette.inactive.middle = s:palette.normal.middle
+"let s:palette.tabline.middle = s:palette.normal.middle
+"let s:palette.replace.middle = s:palette.normal.middle
 " Force refresh tabline whenever the re is change in vim
 "autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 
@@ -549,7 +520,7 @@ let s:palette.replace.middle = s:palette.normal.middle
 set noshowmode    " No vim-built-in mode statusline
 set laststatus=2  " Always display the statusline in all windows
 set showtabline=2 " Always display the tabline, even if there is only one tab
-set showcmd       " This line must be added after airline plugin"
+set showcmd       " This line must be added after statusline plugin"
 
 " Tagbar ---------------------------------------------------------------------
 " autofocus on tagbar open
