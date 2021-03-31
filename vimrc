@@ -1,7 +1,9 @@
 " .vimrc
+" ============================================================================
 " Fisa-vim-config
 " http://fisadev.github.io/fisa-vim-config/
-" Modified version: 8.2  by Sheng-Jun Lin, Kuan-Hsien Wu
+" Modified version: 8.2  by Kuan-Hsien Wu, Sheng-Jun Lin
+" ============================================================================
 
 " Notes:
 " Backup of old vim-powerline installation [Not use anymore, use lightline now]
@@ -9,18 +11,31 @@
 " " (1) sudo intall vim-powerline (Fedora)
 " " (2) sudo apt-get install powerline (Ubuntu)
 " " (3) activate manually
-" "   - python3 from powerline.vim import setup as powerline_setup
-" "   - python3 powerline_setup()
-" "   - python3 del powerline_setup
+" "   -- python3 from powerline.vim import setup as powerline_setup
+" "   -- python3 powerline_setup()
+" "   -- python3 del powerline_setup
 
 " Notes:
 " For special character support
 " NERDFont Installation ------------------------------------------------------
-" mkdir -p ~/.local/share/fonts
-"cd ~/.local/share/fonts && curl -fLo \
-"Droid Sans Mono for Powerline Nerd Font Complete.otf" \
-"https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/\
-"DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
+" " (1) mkdir -p ~/.local/share/fonts
+" " (2) cd ~/.local/share/fonts && curl -fLo \
+"       Droid Sans Mono for Powerline Nerd Font Complete.otf" \
+"       https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/\
+"       DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
+
+" Notes:
+" Vim-Plugin Support ---------------------------------------------------------
+" -- If curl is installed, vim-plug (vim-plugin manger) should automatically
+"    run all installaion at your first time loading vim.
+" -- If vim-plug somehow not working automatically or if you want mannual
+"    installation, in vim command mode, type :PlugInstall
+
+" Notes:
+" Vim-Features Support -------------------------------------------------------
+" -- In Fedora, vim is complied without clipboard and python3/dyn features,
+" -- For those feature support, you can try either recomplie vim from source
+"    codes or [Recommended] just install gvim (gui-vim) from Fedora instead.
 
 " ============================================================================
 " Vim built-in function settings and Vim hotkeys settings
@@ -35,8 +50,6 @@ let mapleader = ' '
 inoremap ii <Esc>
 inoremap jk <Esc>
 inoremap kj <Esc>
-"vnoremap jk <Esc>
-"vnoremap kj <Esc>
 
 " Beginning/End, PageUp/PageDown ---------------------------------------------
 map <leader>b 0
@@ -98,7 +111,8 @@ nnoremap <silent><leader>++ <C-W>=
 set nocompatible          " Not compatible with traditional vi
 set confirm               " Ask for confirmation before leaving vim
 set ignorecase            " Ignore upper/lower case when searching
-set modifiable            " Make buffer modifable
+set modifiable            " Make editing buffer modifable
+set encoding=utf-8        " Unicode display
 set clipboard=unnamedplus " Shared system clipboard, gvim must be installed"
 
 " Paste mode -----------------------------------------------------------------
@@ -146,18 +160,6 @@ nnoremap <leader>ld :loadview<CR>:echo 'Setting Loaded ...'<CR>
 nnoremap <leader>f za<CR>:echo 'Toggle Current Fold...'<CR>
 nnoremap <leader>cf zM<CR>:echo 'Close All Folds ...'<CR>
 nnoremap <leader>of zR<CR>:echo 'Open All Folds ...'<CR>
-
-" Tab Key Setting ------------------------------------------------------------
-set expandtab
-set tabstop=4 softtabstop=4 shiftwidth=4
-" PEP8 recommendation for tab settings
-autocmd FileType python setlocal et ts=4 sw=4 sts=4
-" Tab key in all modes
-nnoremap <Tab> >>_
-nnoremap <S-Tab> <<_
-inoremap <S-Tab> <C-D>
-vnoremap <Tab> >gv
-vnoremap <S-Tab> <gv
 
 " Tabe Setting ---------------------------------------------------------------
 " Tabe operations
@@ -281,9 +283,6 @@ inoremap <leader><F7> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 " Function - Overwrite
 command! Sudow execute 'w !sudo tee % > /dev/null'
 
-" Unicode display ------------------------------------------------------------
-set encoding=utf-8
-
 " Run python script in vim ---------------------------------------------------
 " # Test python version that want (In python)
 " import sys
@@ -338,8 +337,9 @@ Plug 'mengelbrecht/lightline-bufferline'
 " Code and files fuzzy finder
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-" File browser
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+" File browser [Support netrw (vim built-in file browser) functions]
+Plug 'scrooloose/nerdtree'
+"Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Class/module browser
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 " System Man usage
@@ -370,7 +370,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'vim-scripts/AutoComplPop'
 " Vim-wiki
 Plug 'vimwiki/vimwiki'
-" Fancy startup page of vim [Not used anymore]
+" Fancy startup page of vim [Not use anymore, too loadtime-consuming]
 "Plug 'mhinz/vim-startify'
 
 " [Functions for coding] -----------------------------------------------------
@@ -386,9 +386,11 @@ Plug 'tpope/vim-repeat'
 Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
 " Languge packs [Not working on fomalhaut (vim=7.0)]
 Plug 'sheerun/vim-polyglot'
-" Indent guide
+" Indent line guide [Color column]
 Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
-" Indent text object
+" Indent line guide [Symbol column]
+"Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle' }
+" Indent text object (i for indent as w for word)
 Plug 'michaeljsmith/vim-indent-object'
  "Multiple cursor with incsearch support
 Plug 'terryma/vim-multiple-cursors'
@@ -427,7 +429,7 @@ Plug 'tomedunn/vim.fortran', { 'for': 'fortran' }
 " [Tmux] ---------------------------------------------------------------------
 " Share focus between vim and tmux
 Plug 'tmux-plugins/vim-tmux-focus-events'
-" Share clipboard between vim and tmux
+" Share clipboard between vim and tmux [Not working on Zeus]
 Plug 'roxma/vim-tmux-clipboard'
 " Navigate seamlessly in vim and tmux
 Plug 'christoomey/vim-tmux-navigator'
@@ -464,6 +466,23 @@ endif
 " Plugins settings and mappings
 " ============================================================================
 " Edit them as you wish.
+
+" Tab Key Setting [Must be added after vim-plug] -----------------------------
+set expandtab        " expand tab to spaces
+set tabstop=4        " numbers of space that tab in the file counts
+set shiftwidth=4     " number of space of auto-indent length
+set softtabstop=-1   " numbers of space that tab while editing
+                     " negative value -> adopt shiftwidth value
+" PEP8 recommendation for tab settings
+autocmd FileType python setlocal et ts=4 sw=4 sts=4
+" Makefile not support expand tabs to spaces
+autocmd FileType make setlocal noet
+"Tab key in all modes
+nnoremap <Tab> >>
+nnoremap <S-Tab> <<
+inoremap <S-Tab> <C-D>
+vnoremap <Tab> >gv
+vnoremap <S-Tab> <gv
 
 " Lightline ------------------------------------------------------------------
 let fancy_symbols_enabled = 1 " assign 0 to disable
@@ -579,7 +598,11 @@ let g:indent_guides_guide_size = 1
 let g:indent_guides_auto_colors = 0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
-nnoremap <leader>ig :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
+map <leader>ig :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
+
+" Indent Lines ---------------------------------------------------------------
+"let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+"map <leader>ig :IndentLinesToggle<CR>:echo 'Toggle Indent Guides'<CR>
 
 " YankRing -------------------------------------------------------------------
 let g:yankring_history_dir = '~/.vim/dirs/'
@@ -674,6 +697,16 @@ highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 map <leader>` :AcpDisable<CR>
 map <leader>~ :AcpEnable<CR>
 
+" Popup window selection -----------------------------------------------------
+" Previous/next suggestion
+" [Double quotation matters here, do not change to single quotation]
+inoremap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
+inoremap <expr><tab>   pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr><C-k>   pumvisible() ? "\<c-p>" : "\<C-k>"
+inoremap <expr><C-j>   pumvisible() ? "\<c-n>" : "\<C-j>"
+inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+
 " Deoplete -------------------------------------------------------------------
 " Pynvim is needed [Installation: pip3 install --user pynvim]
 " Needed so deoplete can auto select the first suggestion
@@ -692,17 +725,8 @@ autocmd FileType python call deoplete#custom#option({
 let g:context_filetype#same_filetypes = {}
 let g:context_filetype#same_filetypes._ = '_'
 
-" Popup window selection -----------------------------------------------------
-" Previous/next suggestion
-inoremap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
-inoremap <expr><tab>   pumvisible() ? "\<c-n>" : "\<tab>"
-inoremap <expr><C-k>   pumvisible() ? "\<c-p>" : "\<C-k>"
-inoremap <expr><C-j>   pumvisible() ? "\<c-n>" : "\<C-j>"
-inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
-
 " Jedi-vim -------------------------------------------------------------------
-"" Disable autocompletion (using deoplete instead)
+" Disable autocompletion (using deoplete instead)
 let g:jedi#completions_enabled = 0
 " All these mappings work only for python code:
 " Go to definition
@@ -738,12 +762,11 @@ hi CursorLineNr cterm=bold ctermfg=Green ctermbg=NONE gui=bold guifg=#00ff00 gui
 hi Normal guibg=NONE ctermbg=NONE
 
 " TERM GUI color -------------------------------------------------------------
-" Require terminal color (transparent not working on remote terminal)
-" Comment below line if color is not support for terminal
-if has("termguicolors")
+" Require terminal realcolor (transparent not working on remote terminal)
+if has('termguicolors')
     set termguicolors
 endif
-" 256 term color support in vim
+" 256 term color support in vim TUI
 if !has('gui_running')
     set t_Co=256
 endif
@@ -761,9 +784,14 @@ let $VIMBROWSER='google-chrome'
 let $OPENBROWSER='nnoremap <F3> :!'. $VIMBROWSER .' %:p &<CR>'
 augroup OpenMdFile
   autocmd!
-  autocmd BufEnter *.md echom "Press F3 to Open .md File"
+  autocmd BufEnter *.md echom 'Press F3 to Open .md File'
   autocmd BufEnter *.md exe $OPENBROWSER
 augroup END
+
+" Function - Hex editor ------------------------------------------------------
+" From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
+map <leader>ho :%! xxd<CR>:echo 'Hex editor on: TF to binary data'<CR>
+map <leader>hf :%! xxd -r<CR>:echo 'Hex editor off: TF to original data'<CR>
 
 " ============================================================================
 " End of Vim configuration, automatically reload current config after saving
