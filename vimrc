@@ -338,8 +338,8 @@ Plug 'mengelbrecht/lightline-bufferline'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 " File browser [Support netrw (vim built-in file browser) functions]
-Plug 'scrooloose/nerdtree'
 "Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'scrooloose/nerdtree'
 " Class/module browser
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 " System Man usage
@@ -350,10 +350,14 @@ Plug 'vim-scripts/IndexedSearch'
 Plug 'scrooloose/nerdcommenter'
 
 " [Vim extra functions] ------------------------------------------------------
+" Override configs by directory [Too time-consumption for initialization]
+"Plug 'arielrossanigo/dir-configs-override.vim'
+" Fancy startup page of vim [Not use anymore, too loadtime-consuming]
+"Plug 'mhinz/vim-startify'
+" Vim-wiki [Not use for now]
+"Plug 'vimwiki/vimwiki'
 " Vim settings for opening large files
 Plug 'vim-scripts/LargeFile'
-" Override configs by directory
-Plug 'arielrossanigo/dir-configs-override.vim'
 " History of yank
 Plug 'vim-scripts/YankRing.vim'
 " Generate bracket/quotation in pair
@@ -368,12 +372,12 @@ Plug 't9md/vim-choosewin'
 Plug 'easymotion/vim-easymotion'
 " Auto popup completion options from vim
 Plug 'vim-scripts/AutoComplPop'
-" Vim-wiki
-Plug 'vimwiki/vimwiki'
-" Fancy startup page of vim [Not use anymore, too loadtime-consuming]
-"Plug 'mhinz/vim-startify'
 
 " [Functions for coding] -----------------------------------------------------
+" Multiple language syntax support [Not working on fomalhaut (vim=7.0)]
+Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
+" Languge packs [Not working on fomalhaut (vim=7.0)]
+Plug 'sheerun/vim-polyglot'
 " Pending tasks list
 Plug 'fisadev/FixedTaskList.vim'
 " Paint css colors with the real color
@@ -382,10 +386,6 @@ Plug 'lilydjwg/colorizer'
 Plug 'luochen1990/rainbow'
 " Save last . motion for next time usage
 Plug 'tpope/vim-repeat'
-" Multiple language syntax support [Not working on fomalhaut (vim=7.0)]
-Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
-" Languge packs [Not working on fomalhaut (vim=7.0)]
-Plug 'sheerun/vim-polyglot'
 " Indent line guide [Color column]
 Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
 " Indent line guide [Symbol column]
@@ -404,21 +404,23 @@ Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 
 " [Python coding] ------------------------------------------------------------
-" More python syntax highlight
-Plug 'vim-python/python-syntax', { 'for': 'python' }
-" Python autocompletion
+" Python autocompletion [Not working on Zeus (lack of dependence)]
 Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
 " Yet Another Remote Plugin Framework for Neovim [needed for deoplete.nvim]
+" [Not working on Zeus (lack of dependence)]
 Plug 'roxma/nvim-yarp', { 'for': 'python' }
 " Help communicate beteen vim and neovim [needed for deoplete.nvim]
+" [Not working on Zeus (lack of dependence)]
 Plug 'roxma/vim-hug-neovim-rpc', { 'for': 'python' }
-" Python autocompletion
+" Python autocompletion [Not working on Zeus (lack of dependence)]
 Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
-" Completion from other opened files
+" Completion from other opened files [Not working on Zeus (lack of dependence)]
 Plug 'Shougo/context_filetype.vim', { 'for': 'python' }
 " Just to add the python go-to-definition and similar features, autocompletion
-" from this plugin is disabled
+" from this plugin is disabled [Not working on Zeus (lack of dependence)]
 Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+" More python syntax highlight
+Plug 'vim-python/python-syntax', { 'for': 'python' }
 " Sort python import [too much time-consuming]
 Plug 'fisadev/vim-isort', { 'on': 'Isort' }
 
@@ -427,7 +429,7 @@ Plug 'fisadev/vim-isort', { 'on': 'Isort' }
 Plug 'tomedunn/vim.fortran', { 'for': 'fortran' }
 
 " [Tmux] ---------------------------------------------------------------------
-" Share focus between vim and tmux
+" Share focus between vim and tmux [Needed for clilpboard sharing]
 Plug 'tmux-plugins/vim-tmux-focus-events'
 " Share clipboard between vim and tmux [Not working on Zeus]
 Plug 'roxma/vim-tmux-clipboard'
@@ -708,6 +710,7 @@ inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
 inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
 " Deoplete -------------------------------------------------------------------
+" [Not working on Zeus (lack of dependence)]
 " Pynvim is needed [Installation: pip3 install --user pynvim]
 " Needed so deoplete can auto select the first suggestion
 set completeopt+=noinsert
@@ -726,6 +729,7 @@ let g:context_filetype#same_filetypes = {}
 let g:context_filetype#same_filetypes._ = '_'
 
 " Jedi-vim -------------------------------------------------------------------
+" [Not working on Zeus (lack of dependence)]
 " Disable autocompletion (using deoplete instead)
 let g:jedi#completions_enabled = 0
 " All these mappings work only for python code:
