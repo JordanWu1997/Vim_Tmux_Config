@@ -37,6 +37,15 @@
 " -- For those feature support, you can try either recomplie vim from source
 "    codes or [Recommended] just install gvim (gui-vim) from Fedora instead.
 
+" Notes:
+" Leaderkey Delay Solution ---------------------------------------------------
+" -- In the following configuration, I use space as leaderkey, however, it
+"    will encounter delay problem in insert mode (Need wait for a little bit
+"    time to enter space character). There are two solutions: One is to set
+"    leaderkey to other key than space; The other one (Recommended) is to
+"    remap all keymaps that start with space in insert mode (which you can
+"    search in vim by command :inoremap)
+
 " ============================================================================
 " Vim built-in function settings and Vim hotkeys settings
 " ============================================================================
@@ -144,12 +153,12 @@ map <leader>? :set hlsearch<CR>:echo 'Enable Search Highlight'<CR>
 " Line number settings -------------------------------------------------------
 set number
 set relativenumber
+inoremap <F5> <Esc>:set number!<CR>:echo 'Toggle Line Number'<CR>i
+inoremap <F6> <Esc>:set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>i
 nnoremap <F5> :set number!<CR>:echo 'Toggle Line Number'<CR>
 nnoremap <F6> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
 nnoremap <leader><F5> :set number!<CR>:echo 'Toggle Line Number'<CR>
 nnoremap <leader><F6> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
-inoremap <leader><F5> <Esc>:set number!<CR>:echo 'Toggle Line Number'<CR>i
-inoremap <leader><F6> <Esc>:set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>i
 
 " Fold Setting ---------------------------------------------------------------
 set nofoldenable
@@ -277,8 +286,6 @@ noremap <leader>rwc :call Replace(1, 1, input('Replace '.expand('<cword>').' wit
 " Function - Foldcolumn display ----------------------------------------------
 noremap <F7> :set foldcolumn=6<CR>:echo 'Foldcolumn ON'<CR>
 noremap <leader><F7> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
-inoremap <F7> :set foldcolumn=6<CR>:echo 'Foldcolumn ON'<CR>
-inoremap <leader><F7> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 
 " Function - Overwrite
 command! Sudow execute 'w !sudo tee % > /dev/null'
@@ -611,7 +618,8 @@ let g:yankring_history_dir = '~/.vim/dirs/'
 nmap <leader>ys :YRShow<CR>
 
 " Auto-pairs -----------------------------------------------------------------
-let g:AutoPairsShortcutToggle = '<leader>ap'
+" Use ';' instead of ' ' (Space) to prevent leaderkey delay effect
+let g:AutoPairsShortcutToggle = ';ap'
 
 " fzf.vim --------------------------------------------------------------------
 " Caution:
@@ -677,7 +685,6 @@ let g:choosewin_overlay_enable = 1
 " Vim maximizer --------------------------------------------------------------
 nnoremap <silent><leader>z :MaximizerToggle<CR>
 vnoremap <silent><leader>z :MaximizerToggle<CR>gv
-inoremap <silent><leader>z <C-o>:MaximizerToggle<CR>
 
 " Signify --------------------------------------------------------------------
 " This first setting decides in which order try to guess your current vcs
@@ -745,6 +752,7 @@ nmap ,D :tab split<CR>:call jedi#goto()<CR>
 " Vim-LaTex viewer -----------------------------------------------------------
 let g:livepreview_previwer = 'okular'
 let g:livepreview_engine = 'pdflatex'
+autocmd FileType tex setlocal spell
 autocmd filetype tex setl updatetime=10000 " Unit: milisecond
 autocmd filetype tex map <F3> :LLPStartPreview<CR>
 
