@@ -49,7 +49,7 @@
 " ============================================================================
 " Vim built-in function settings and Vim hotkeys settings
 " ============================================================================
-" All parameter settings and hotkey mappings
+" All parameter settings and hotkey mapping
 
 " Set leaderkey --------------------------------------------------------------
 let mapleader = ' '
@@ -409,21 +409,21 @@ Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 
 " [Python coding] ------------------------------------------------------------
-" Python autocompletion [Not working on Zeus (lack of dependence)]
-Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
-" Yet Another Remote Plugin Framework for Neovim [needed for deoplete.nvim]
-" [Not working on Zeus (lack of dependence)]
-Plug 'roxma/nvim-yarp', { 'for': 'python' }
-" Help communicate beteen vim and neovim [needed for deoplete.nvim]
-" [Not working on Zeus (lack of dependence)]
-Plug 'roxma/vim-hug-neovim-rpc', { 'for': 'python' }
-" Python autocompletion [Not working on Zeus (lack of dependence)]
-Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
-" Completion from other opened files [Not working on Zeus (lack of dependence)]
-Plug 'Shougo/context_filetype.vim', { 'for': 'python' }
-" Just to add the python go-to-definition and similar features, autocompletion
-" from this plugin is disabled [Not working on Zeus (lack of dependence)]
-Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+"" Python autocompletion [Not working on Zeus (lack of dependence)]
+"Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
+"" Yet Another Remote Plugin Framework for Neovim [needed for deoplete.nvim]
+"" [Not working on Zeus (lack of dependence)]
+"Plug 'roxma/nvim-yarp', { 'for': 'python' }
+"" Help communicate beteen vim and neovim [needed for deoplete.nvim]
+"" [Not working on Zeus (lack of dependence)]
+"Plug 'roxma/vim-hug-neovim-rpc', { 'for': 'python' }
+"" Python autocompletion [Not working on Zeus (lack of dependence)]
+"Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
+"" Completion from other opened files [Not working on Zeus (lack of dependence)]
+"Plug 'Shougo/context_filetype.vim', { 'for': 'python' }
+"" Just to add the python go-to-definition and similar features, autocompletion
+"" from this plugin is disabled [Not working on Zeus (lack of dependence)]
+"Plug 'davidhalter/jedi-vim', { 'for': 'python' }
 " More python syntax highlight
 Plug 'vim-python/python-syntax', { 'for': 'python' }
 " Sort python import [too much time-consuming]
@@ -434,27 +434,27 @@ Plug 'fisadev/vim-isort', { 'on': 'Isort' }
 Plug 'tomedunn/vim.fortran', { 'for': 'fortran' }
 
 " [Tmux] ---------------------------------------------------------------------
-" Share focus between vim and tmux [Needed for clilpboard sharing]
-" [Not working on Zeus]
-Plug 'tmux-plugins/vim-tmux-focus-events'
-" Share clipboard between vim and tmux [Not working on Zeus]
-Plug 'roxma/vim-tmux-clipboard'
+"" Share focus between vim and tmux [Needed for clilpboard sharing]
+"" [Not working on Zeus]
+"Plug 'tmux-plugins/vim-tmux-focus-events'
+"" Share clipboard between vim and tmux [Not working on Zeus]
+"Plug 'roxma/vim-tmux-clipboard'
 " Navigate seamlessly in vim and tmux
 Plug 'christoomey/vim-tmux-navigator'
 
 " [HTML coding] --------------------------------------------------------------
-" Highlight matching html tags
-Plug 'valloric/MatchTagAlways', { 'for': 'html' }
-" Generate html in a simple way
-Plug 'mattn/emmet-vim', { 'for': 'html' }
-" Generate closetag for HTML
-Plug 'alvan/vim-closetag', { 'for': 'html' }
+"" Highlight matching html tags
+"Plug 'valloric/MatchTagAlways', { 'for': 'html' }
+"" Generate html in a simple way
+"Plug 'mattn/emmet-vim', { 'for': 'html' }
+"" Generate closetag for HTML
+"Plug 'alvan/vim-closetag', { 'for': 'html' }
 
 " [Latex] --------------------------------------------------------------------
-" Latex compiler support
-Plug 'vim-latex/vim-latex', { 'for': 'tex' }
-" Real time Tex -> Pdf file preview
-Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
+"" Latex compiler support
+"Plug 'vim-latex/vim-latex', { 'for': 'tex' }
+"" Real time Tex -> Pdf file preview
+"Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
@@ -747,37 +747,37 @@ inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
 inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
 " Deoplete -------------------------------------------------------------------
-" [Not working on Zeus (lack of dependence)]
-" Pynvim is needed [Installation: pip3 install --user pynvim]
-" Needed so deoplete can auto select the first suggestion
-set completeopt+=noinsert
-" Comment this line to enable autocompletion preview window
-" (displays documentation related to the selected completion option)
-" Disabled by default because preview makes the window flicker
-set completeopt-=preview
-" Use deoplete.
-let g:deoplete#enable_at_startup = 1
-autocmd FileType python call deoplete#custom#option({
-\   'ignore_case': v:true,
-\   'smart_case': v:true,
-\})
-" Complete with words from any opened file
-let g:context_filetype#same_filetypes = {}
-let g:context_filetype#same_filetypes._ = '_'
+"" [Not working on Zeus (lack of dependence)]
+"" Pynvim is needed [Installation: pip3 install --user pynvim]
+"" Needed so deoplete can auto select the first suggestion
+"set completeopt+=noinsert
+"" Comment this line to enable autocompletion preview window
+"" (displays documentation related to the selected completion option)
+"" Disabled by default because preview makes the window flicker
+"set completeopt-=preview
+"" Use deoplete.
+"let g:deoplete#enable_at_startup = 1
+"autocmd FileType python call deoplete#custom#option({
+"\   'ignore_case': v:true,
+"\   'smart_case': v:true,
+"\})
+"" Complete with words from any opened file
+"let g:context_filetype#same_filetypes = {}
+"let g:context_filetype#same_filetypes._ = '_'
 
 " Jedi-vim -------------------------------------------------------------------
-" [Not working on Zeus (lack of dependence)]
-" Disable autocompletion (using deoplete instead)
-let g:jedi#completions_enabled = 0
-" All these mappings work only for python code:
-" Go to definition
-let g:jedi#goto_command = ',d'
-" Find ocurrences
-let g:jedi#usages_command = ',o'
-" Find assignments
-let g:jedi#goto_assignments_command = ',a'
-" Go to definition in new tab
-nmap ,D :tab split<CR>:call jedi#goto()<CR>
+"" [Not working on Zeus (lack of dependence)]
+"" Disable autocompletion (using deoplete instead)
+"let g:jedi#completions_enabled = 0
+"" All these mappings work only for python code:
+"" Go to definition
+"let g:jedi#goto_command = ',d'
+"" Find ocurrences
+"let g:jedi#usages_command = ',o'
+"" Find assignments
+"let g:jedi#goto_assignments_command = ',a'
+"" Go to definition in new tab
+"nmap ,D :tab split<CR>:call jedi#goto()<CR>
 
 " Vim-LaTex viewer -----------------------------------------------------------
 let g:livepreview_previwer = 'okular'
