@@ -57,17 +57,17 @@ let mapleader = ' '
 " Map insert mode Esc key ----------------------------------------------------
 " - Use Ctrl+v to escape
 inoremap ii <Esc>
-inoremap jk <Esc>
 inoremap kj <Esc>
+inoremap jk <Esc>
 
 " Beginning/End, PageUp/PageDown ---------------------------------------------
 map <leader>b 0
-map <leader>s 0
+map <leader>s ^
 map <leader>e $
-map <leader>d <PageDown>
-map <leader>u <PageUp>
 
 " Save/Load file hotkey ------------------------------------------------------
+" - ZZ (Quit and save if there's change in file)
+" - :f <new-filename> (Save current file with new filename)
 map <leader>q :q<CR>
 map <leader>qa :qa<CR>
 map <leader>Q :q!<CR>
@@ -78,6 +78,8 @@ map <leader>Wq :wa<CR>:q<CR>
 map <leader>WQ :wa<CR>:qa<CR>
 
 " Shell command --------------------------------------------------------------
+" - :r !date (Insert timestamp)
+" - :K (Manpage for current selected word)
 map <C-c> :!
 imap <C-c> :!
 map <leader>m :Man<space>
@@ -105,7 +107,6 @@ nnoremap <silent><leader>J <C-W>J
 nnoremap <silent><leader>K <C-W>K
 nnoremap <silent><leader>L <C-W>L
 nnoremap <silent><leader>. :vertical resize +5<CR>
-nnoremap <silent><leader>. :vertical resize +5<CR>
 nnoremap <silent><leader>, :vertical resize -5<CR>
 nnoremap <silent><leader>> :vertical resize +20<CR>
 nnoremap <silent><leader>< :vertical resize -20<CR>
@@ -123,9 +124,6 @@ set ignorecase            " Ignore upper/lower case when searching
 set modifiable            " Make editing buffer modifable
 set encoding=utf-8        " Unicode display
 set clipboard=unnamedplus " Shared system clipboard, gvim must be installed"
-
-" Paste mode -----------------------------------------------------------------
-"map <F10> :set pastetoggle<CR>:echo 'Toggle paste mode'<CR>
 
 " Line wrap ------------------------------------------------------------------
 set wrap                  " Line wrap for small monitor or display window
@@ -186,8 +184,8 @@ map <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB'<CR>
 map <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREVIOUS TAB'<CR>
 
 " Buffer Setting -------------------------------------------------------------
-" Let vim keep buffer after editing other buffer instead of throwing away it
-set hidden
+" - Use ':e#' or 'Ctrl-^' to edit between two buffers
+set hidden " Keep buffer after editing other buffer instead of deleting it
 map <leader>ls :ls<CR>
 map <leader>bb :edit<space>
 map <leader>bs :buffers<CR>
@@ -294,8 +292,8 @@ command! Sudow execute 'w !sudo tee % > /dev/null'
 " # Test python version that want (In python)
 " import sys
 " print(sys.version_info)
-autocmd FileType python map <buffer> <leader><F9> :w<CR>:exec '!python' shellescape(@%, 1)<CR>
-autocmd FileType python imap <buffer> <leader><F9> <esc>:w<CR>:exec '!python' shellescape(@%, 1)<CR>
+autocmd FileType python map <buffer> <leader><F10> :w<CR>:exec '!python' shellescape(@%, 1)<CR>
+autocmd FileType python imap <buffer> <leader><F10> <esc>:w<CR>:exec '!python' shellescape(@%, 1)<CR>
 
 " ============================================================================
 " Vim-plug initialization (Get vim-plug by curl)
@@ -437,6 +435,7 @@ Plug 'tomedunn/vim.fortran', { 'for': 'fortran' }
 
 " [Tmux] ---------------------------------------------------------------------
 " Share focus between vim and tmux [Needed for clilpboard sharing]
+" [Not working on Zeus]
 Plug 'tmux-plugins/vim-tmux-focus-events'
 " Share clipboard between vim and tmux [Not working on Zeus]
 Plug 'roxma/vim-tmux-clipboard'
@@ -555,13 +554,14 @@ set showcmd       " This line must be added after statusline plugin"
 let g:tagbar_autofocus = 1
 let g:tagbar_map_showproto = 'd'
 " toggle tagbar display
-"map <silent><F4> :TagbarToggle<CR>
+map <silent><F4> :TagbarToggle<CR>
 map <silent><leader><F4> :TagbarToggle<CR>
 
 " NERDTree -------------------------------------------------------------------
 " Disable vim built-in netrw
 let loaded_netrwPlugin = 1
 " Toggle nerdtree display
+map <silent><F3> :NERDTreeToggle<CR>
 map <silent><leader><F3> :NERDTreeToggle<CR>
 " Open nerdtree with the current file selected
 map <silent>,t :NERDTreeFind<CR>
@@ -619,7 +619,21 @@ nmap <leader>ys :YRShow<CR>
 
 " Auto-pairs -----------------------------------------------------------------
 " Use ';' instead of ' ' (Space) to prevent leaderkey delay effect
-let g:AutoPairsShortcutToggle = ';ap'
+"let g:AutoPairsShortcutToggle = ';ap'
+let g:AutoPairsShortcutToggle = '<F9>'
+
+" Surround -------------------------------------------------------------------
+" Disable default surround mappings
+let g:surround_no_mappings = 1
+" d: delete, c: change, y:yield
+nmap ds <Plug>Dsurround
+nmap cs <Plug>Csurround
+nmap cS <Plug>CSurround
+nmap ys <Plug>Ysurround
+nmap yS <Plug>YSurround
+nmap yss <Plug>Yssurround
+nmap ySs <Plug>YSsurround
+nmap ySS <Plug>YSsurround
 
 " fzf.vim --------------------------------------------------------------------
 " Caution:
@@ -638,12 +652,23 @@ nnoremap <leader>bl :BLines<CR>
 nnoremap <leader>tg :Tags<CR>
 nnoremap <leader>bg :BTags<CR>
 nnoremap <leader>hs :History<CR>
+nnoremap <leader>h: :History:<CR>
+nnoremap <leader>h/ :History/<CR>
 nnoremap <leader>mk :Marks<CR>
-nnoremap <leader>dd :Windows<CR>
+nnoremap <leader>ds :Windows<CR>
 nnoremap <leader>ft :Filetypes<CR>
 nnoremap <leader>cd :Commands<CR>
 nnoremap <leader>nm :Maps<CR>
 nnoremap <leader>ht :Helptags<CR>
+" Insert mode completion
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+" Path completion with custom source command
+inoremap <expr> <c-x><c-f> fzf#vim#complete#path('fd')
+inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
+" Word completion with custom spec with popup layout option
+inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
 
 " Easymotion -----------------------------------------------------------------
 " Move up and down not back to start of line
@@ -655,12 +680,12 @@ let g:EasyMotion_smartcase = 1
 " Keep cursor column
 let g:EasyMotion_startofline = 0
 " JK motions: Line motions
-map <leader>jj <Plug>(easymotion-j)
-map <leader>kk <Plug>(easymotion-k)
-map <leader>ll <Plug>(easymotion-lineforward)
-map <leader>hh <Plug>(easymotion-linebackward)
-map <leader>11 <Plug>(easymotion-overwin-f)
-map <leader>22 <Plug>(easymotion-overwin-f2)
+"map <leader>jj <Plug>(easymotion-j)
+"map <leader>kk <Plug>(easymotion-k)
+"map <leader>ll <Plug>(easymotion-lineforward)
+"map <leader>hh <Plug>(easymotion-linebackward)
+"map <leader>11 <Plug>(easymotion-overwin-f)
+"map <leader>22 <Plug>(easymotion-overwin-f2)
 map <leader><leader>j <Plug>(easymotion-j)
 map <leader><leader>k <Plug>(easymotion-k)
 map <leader><leader>l <Plug>(easymotion-lineforward)
@@ -679,10 +704,12 @@ let g:multi_cursor_quit_key            = '<Esc>'
 
 " Window Chooser -------------------------------------------------------------
 nmap  <leader><Enter> <Plug>(choosewin)
-" show big letters
+" Show big letters
 let g:choosewin_overlay_enable = 1
 
 " Vim maximizer --------------------------------------------------------------
+" Default mapping is <F3> (Disabled now)
+let g:maximizer_set_default_mapping = 0
 nnoremap <silent><leader>z :MaximizerToggle<CR>
 vnoremap <silent><leader>z :MaximizerToggle<CR>gv
 
@@ -703,8 +730,8 @@ highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
 " AutoComplPop ---------------------------------------------------------------
 " Enable/disable autopop
-map <leader>` :AcpDisable<CR>
-map <leader>~ :AcpEnable<CR>
+map <leader>` :AcpDisable<CR>:echo 'Disable Auto-Pop Suggestion'<CR>
+map <leader>~ :AcpEnable<CR>:echo 'Enable Auto-Pop Suggestion'<CR>
 
 " Popup window selection -----------------------------------------------------
 " Previous/next suggestion
