@@ -80,8 +80,8 @@ map <leader>WQ :wa<CR>:qa<CR>
 " Shell command --------------------------------------------------------------
 " - :r !date (Insert timestamp)
 " - :K (Manpage for current selected word)
-map <C-c> :!
-imap <C-c> :!
+map <C-s> :!
+imap <C-s> :!
 map <leader>m :Man<space>
 
 " VIM built-in setting -------------------------------------------------------
@@ -161,39 +161,74 @@ nnoremap <leader><F6> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
 " Fold Setting ---------------------------------------------------------------
 set nofoldenable
 set foldmethod=syntax
-"set foldmethod=indent
-nnoremap <leader>sv :mkview<CR>:echo 'Setting Saved ...'<CR>
-nnoremap <leader>ld :loadview<CR>:echo 'Setting Loaded ...'<CR>
-nnoremap <leader>f za<CR>:echo 'Toggle Current Fold...'<CR>
-nnoremap <leader>cf zM<CR>:echo 'Close All Folds ...'<CR>
-nnoremap <leader>of zR<CR>:echo 'Open All Folds ...'<CR>
+autocmd FileType python setlocal foldmethod=indent
+nnoremap <silent><leader>sv :mkview<CR>:echo 'Setting Saved ...'<CR>
+nnoremap <silent><leader>ld :loadview<CR>:echo 'Setting Loaded ...'<CR>
+nnoremap <silent><leader>ff za<CR>:echo 'Toggle Current Fold...'<CR>
+nnoremap <silent><leader>cf zM<CR>:echo 'Close All Folds ...'<CR>
+nnoremap <silent><leader>of zR<CR>:echo 'Open All Folds ...'<CR>
 
-" Tabe Setting ---------------------------------------------------------------
-" Tabe operations
+" Tabe (Window) Setting ------------------------------------------------------
+" Tabe (Window) operations
 map <leader>ts :tabs<CR>
 map <leader>tt :tabnew<space>
 map <leader>td :tabclose<space>
-map <leader>tdd :tabclose<CR>:echo 'CLOSE CURRENT TAB'<CR>
-map <tab>p :tabprevious<CR>:echo 'PREVIOUS TAB'<CR>
-map <tab>n :tabnext<CR>:echo 'NEXT TAB'<CR>
-map <silent><C-Left> :tabprevious<CR>
-map <silent><C-Right> :tabnext<CR>
+map <silent><leader>tdd :tabclose<CR>:echo 'CLOSE CURRENT TAB ...'<CR>
+" Tabe (Window) navigation
+"map <tab>p :tabprevious<CR>:echo 'PREVIOUS TAB'<CR>
+"map <tab>n :tabnext<CR>:echo 'NEXT TAB'<CR>
+map <silent><C-Left>  :tabprevious<CR>:echo 'PREVIOUS TAB ...'<CR>
+map <silent><C-Right> :tabnext<CR>:echo 'NEXT TAB ...'<CR>
+map <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB ...'<CR>
+map <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREVIOUS TAB ...'<CR>
+" Tabe (Window) swap
 map <silent><A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 map <silent><A-Right> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
-map <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB'<CR>
-map <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREVIOUS TAB'<CR>
+
+" Arglist Setting ------------------------------------------------------------
+" Initial when vim is opened
+" Static buffer list [Only change if command executed]
+map <silent><leader>ap :prev<CR>
+map <silent><leader>an :next<CR>
+map <leader>ag :args<space>
+map <leader>as :args<CR>
+map <leader>aa :argadd<space>
+map <leader>ad :argdo<space>
 
 " Buffer Setting -------------------------------------------------------------
-" - Use ':e#' or 'Ctrl-^' to edit between two buffers
-set hidden " Keep buffer after editing other buffer instead of deleting it
-map <leader>ls :ls<CR>
+" -- Reference: https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
+" -- Useful command:  ':e#' or 'Ctrl-^' to edit between two buffers
+" -- A buffer becomes hidden when it is abandoned
+set hidden
+" Don't close window, when deleting a buffer
+command! Bclose call <SID>BufcloseCloseIt()
+function! <SID>BufcloseCloseIt()
+    let l:currentBufNum = bufnr("%")
+    let l:alternateBufNum = bufnr("#")
+    if buflisted(l:alternateBufNum)
+        buffer #
+    else
+        bnext
+    endif
+
+    if bufnr("%") == l:currentBufNum
+        new
+    endif
+
+    if buflisted(l:currentBufNum)
+        execute("bdelete! ".l:currentBufNum)
+    endif
+endfunction
+" Buffer key mappings
+map <silent><leader>ls :ls<CR>
 map <leader>bb :edit<space>
-map <leader>bs :buffers<CR>
+map <silent><leader>bs :buffers<CR>
 map <leader>ba :badd<space>
 map <leader>bd :bdelete<space>
-map <silent><leader>bdd :bdelete<CR>:echo 'DELETE CURRENT BUFFER'<CR>
-map <silent><leader><F1> <Esc>:bp<CR>:echo 'PREVIOUS BUFFER'<CR>
-map <silent><F1> <Esc>:bn<CR>:echo 'NEXT BUFFER'<CR>
+map <silent><leader>dd :bdelete<CR>:echo 'DELETE CURRENT BUFFER [PRESS CTRL+O TO RECOVER]'<CR>
+map <silent><leader>bdd :bdelete<CR>:echo 'DELETE CURRENT BUFFER ...'<CR>
+map <silent><leader><F1> <Esc>:bp<CR>:echo 'PREVIOUS BUFFER ...'<CR>
+map <silent><F1> <Esc>:bn<CR>:echo 'NEXT BUFFER ...'<CR>
 
 " Marks Setting --------------------------------------------------------------
 nnoremap <leader>md :Delmarks<space>
@@ -585,7 +620,7 @@ nnoremap <leader>rb :RainbowToggle<CR>:echo 'Toggle Rainbow'<CR>
 
 " Ale (Syntax check) ---------------------------------------------------------
 let g:ale_enabled = 0
-nnoremap <leader>ss :ALEToggle<CR>
+nnoremap <leader>al :ALEToggle<CR>
 
 " Python Syntax --------------------------------------------------------------
 let g:python_highlight_all = 1
@@ -602,14 +637,17 @@ let g:LargeFile = 10
 
 " Indent Guides --------------------------------------------------------------
 let g:indent_guides_enable_on_vim_startup = 0
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size = 1
+let g:indent_guides_start_level = 1
+let g:indent_guides_guide_size = 4 
 let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
+"autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
+"autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg='#24242d' ctermbg=194
 map <leader>ig :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
 
-" Indent Lines ---------------------------------------------------------------
+" Indent Lines --------------------------------------------------------------- 
+"let g:indentLine_enabled = 0
 "let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 "map <leader>ig :IndentLinesToggle<CR>:echo 'Toggle Indent Guides'<CR>
 
@@ -619,7 +657,6 @@ nmap <leader>ys :YRShow<CR>
 
 " Auto-pairs -----------------------------------------------------------------
 " Use ';' instead of ' ' (Space) to prevent leaderkey delay effect
-"let g:AutoPairsShortcutToggle = ';ap'
 let g:AutoPairsShortcutToggle = '<F9>'
 
 " Surround -------------------------------------------------------------------
@@ -699,7 +736,7 @@ map <leader><leader>2 <Plug>(easymotion-overwin-f2)
 " Multiple Cursors -----------------------------------------------------------
 let g:multi_cursor_use_default_mapping = 0
 let g:multi_cursor_start_word_key      = '<C-n>'
-let g:multi_cursor_select_all_word_key = '<C-l>'
+let g:multi_cursor_select_all_word_key = '<C-a>'
 let g:multi_cursor_next_key            = '<C-n>'
 let g:multi_cursor_prev_key            = '<C-p>'
 let g:multi_cursor_skip_key            = '<C-x>'
@@ -779,6 +816,13 @@ let g:jedi#goto_assignments_command = ',a'
 " Go to definition in new tab
 nmap ,D :tab split<CR>:call jedi#goto()<CR>
 
+" vim-TMUX navigator ---------------------------------------------------------
+" [Not working for now]
+"noremap <C-Up>    :TmuxNavigateUp<cr>
+"noremap <C-Down>  :TmuxNavigateDown<cr>
+"noremap <C-Left>  :TmuxNavigateLeft<cr>
+"noremap <C-Right> :TmuxNavigateRight<cr>
+
 " Vim-LaTex viewer -----------------------------------------------------------
 let g:livepreview_previwer = 'okular'
 let g:livepreview_engine = 'pdflatex'
@@ -825,9 +869,9 @@ nnoremap <leader>wf :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'
 let $VIMBROWSER='google-chrome'
 let $OPENBROWSER='nnoremap <F3> :!'. $VIMBROWSER .' %:p &<CR>'
 augroup OpenMdFile
-  autocmd!
-  autocmd BufEnter *.md echom 'Press F3 to Open .md File'
-  autocmd BufEnter *.md exe $OPENBROWSER
+    autocmd!
+    autocmd BufEnter *.md echom 'Press F3 to Open .md File'
+    autocmd BufEnter *.md exe $OPENBROWSER
 augroup END
 
 " Function - Hex editor ------------------------------------------------------
