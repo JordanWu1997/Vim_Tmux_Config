@@ -6,6 +6,13 @@
 " ============================================================================
 
 " Notes:
+" Vim / Neovim configuration file --------------------------------------------
+" Vim configuration file
+" -- Store in ~/.vimrc 
+" Neovim configuration file
+" -- Store in ~/.config/nvim/init.vim
+
+" Notes:
 " Backup of old vim-powerline installation [Not use anymore, use lightline now]
 " Powerline-status -----------------------------------------------------------
 " " (1) sudo intall vim-powerline (Fedora)
@@ -45,6 +52,19 @@
 "    leaderkey to other key than space; The other one (Recommended) is to
 "    remap all keymaps that start with space in insert mode (which you can
 "    search in vim by command :inoremap)
+
+" ============================================================================
+" Vim and Neovim settings
+" ============================================================================
+" Use vim or neovim
+let using_neovim = has('nvim')
+let using_vim = !using_neovim
+
+" If not on remote machine (e.g. Zeus, Fomalhaut)
+let not_on_remote = 1         " assign 0 to disable
+
+" Fancy symbols
+let fancy_symbols_enabled = 1 " assign 0 to disable
 
 " ============================================================================
 " Vim built-in function settings and Vim hotkeys settings
@@ -175,8 +195,8 @@ map <leader>tt :tabnew<space>
 map <leader>td :tabclose<space>
 map <silent><leader>tdd :tabclose<CR>:echo 'CLOSE CURRENT TAB ...'<CR>
 " Tabe (Window) navigation
-"map <tab>p :tabprevious<CR>:echo 'PREVIOUS TAB'<CR>
-"map <tab>n :tabnext<CR>:echo 'NEXT TAB'<CR>
+map <tab>p :tabprevious<CR>:echo 'PREVIOUS TAB'<CR>
+map <tab>n :tabnext<CR>:echo 'NEXT TAB'<CR>
 map <silent><C-Left>  :tabprevious<CR>:echo 'PREVIOUS TAB ...'<CR>
 map <silent><C-Right> :tabnext<CR>:echo 'NEXT TAB ...'<CR>
 map <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB ...'<CR>
@@ -197,7 +217,7 @@ map <leader>ad :argdo<space>
 
 " Buffer Setting -------------------------------------------------------------
 " -- Reference: https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
-" -- Useful command:  ':e#' or 'Ctrl-^' to edit between two buffers
+" -- Useful command: ':e#' or 'Ctrl-^' to edit between two buffers
 " -- A buffer becomes hidden when it is abandoned
 set hidden
 " Don't close window, when deleting a buffer
@@ -210,11 +230,9 @@ function! <SID>BufcloseCloseIt()
     else
         bnext
     endif
-
     if bufnr("%") == l:currentBufNum
         new
     endif
-
     if buflisted(l:currentBufNum)
         execute("bdelete! ".l:currentBufNum)
     endif
@@ -231,13 +249,13 @@ map <silent><leader><F1> <Esc>:bp<CR>:echo 'PREVIOUS BUFFER ...'<CR>
 map <silent><F1> <Esc>:bn<CR>:echo 'NEXT BUFFER ...'<CR>
 
 " Marks Setting --------------------------------------------------------------
-nnoremap <leader>md :Delmarks<space>
+nnoremap <leader>md :delmarks<space>
 
 " Registers Setting ----------------------------------------------------------
 nnoremap <leader>re :registers<CR>
 
 " Display --------------------------------------------------------------------
-" When scrolling, keep cursor 2 lines away from screen border
+" When scrolling, keep cursor N lines away from screen border
 set scrolloff=3                   " Keep cursor 3 lines away from bottom
 set display+=lastline             " Show line as much as possible
 set title                         " Let vim change terminal title
@@ -254,21 +272,40 @@ nnoremap <leader>X :split<CR>
 nnoremap <leader>V :vsplit<CR>
 
 " Better backup, swap and undos storage --------------------------------------
-set directory=~/.vim/dirs/tmp     " Directory to place swap files in
-set backup                        " Make backup files
-set backupdir=~/.vim/dirs/backups " Where to put backup files
-set undofile                      " Persistent undos - undo after re-opening
-set undodir=~/.vim/dirs/undos
-set viminfo+=n~/.vim/dirs/viminfo
-" Create needed directories if they don't exist
-if !isdirectory(&backupdir)
-    call mkdir(&backupdir, 'p')
-endif
-if !isdirectory(&directory)
-    call mkdir(&directory, 'p')
-endif
-if !isdirectory(&undodir)
-    call mkdir(&undodir, 'p')
+if using_neovim
+    set directory=~/.config/nvim/dirs/tmp     " Directory to place swap files in
+    set backup                                " Make backup files
+    set backupdir=~/.config/nvim/dirs/backups " Where to put backup files
+    set undofile                              " Persistent undos - undo after re-opening
+    set undodir=~/.config/nvim/dirs/undos
+    set viminfo+=n~/.config/nvim/dirs/viminfo
+    " Create needed directories if they don't exist
+    if !isdirectory(&backupdir)
+        call mkdir(&backupdir, 'p')
+    endif
+    if !isdirectory(&directory)
+        call mkdir(&directory, 'p')
+    endif
+    if !isdirectory(&undodir)
+        call mkdir(&undodir, 'p')
+    endif
+else
+    set directory=~/.vim/dirs/tmp             " Directory to place swap files in
+    set backup                                " Make backup files
+    set backupdir=~/.vim/dirs/backups         " Where to put backup files
+    set undofile                              " Persistent undos - undo after re-opening
+    set undodir=~/.vim/dirs/undos
+    set viminfo+=n~/.vim/dirs/viminfo
+    " Create needed directories if they don't exist
+    if !isdirectory(&backupdir)
+        call mkdir(&backupdir, 'p')
+    endif
+    if !isdirectory(&directory)
+        call mkdir(&directory, 'p')
+    endif
+    if !isdirectory(&undodir)
+        call mkdir(&undodir, 'p')
+    endif
 endif
 
 " No system bell -------------------------------------------------------------
@@ -290,7 +327,7 @@ function! RemoveTrailingWhitespace()
 endfunction
 " Remove trailing white space for python codes
 autocmd BufWritePre *.py call RemoveTrailingWhitespace()
-nmap <leader>rm :call RemoveTrailingWhitespace()<CR>:echo "Remove whitespaces"<CR>
+nmap <leader>rm :call RemoveTrailingWhitespace()<CR>:echo "Remove Tail Whitespaces"<CR>
 
 " Function - Word replacement ------------------------------------------------
 function! Replace(confirm, wholeword, replace)
@@ -335,13 +372,26 @@ autocmd FileType python imap <buffer> <leader><F10> <esc>:w<CR>:exec '!python' s
 " ============================================================================
 " Avoid modify this section, unless you are very sure of what you are doing
 " Note: curl must already be installed
+
+" Setup Vim-Plug path for neovim or vim
 let vim_plug_just_installed = 0
-let vim_plug_path = expand('~/.vim/autoload/plug.vim')
+if using_neovim
+    let vim_plug_path = expand('~/.config/nvim/autoload/plug.vim')
+else
+    let vim_plug_path = expand('~/.vim/autoload/plug.vim')
+endif
+
+" Install Vim-Plug for neovim or vim
 if !filereadable(vim_plug_path)
     echo 'Installing Vim-plug...'
     echo ''
-    silent !mkdir -p ~/.vim/autoload
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    if using_neovim
+        silent !mkdir -p ~/.config/nvim/autoload
+        silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    else
+        silent !mkdir -p ~/.vim/autoload
+        silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    endif
     let vim_plug_just_installed = 1
 endif
 
@@ -354,9 +404,14 @@ endif
 " Vim Active plugins
 " ============================================================================
 " You can disable or add new ones here:
-" this needs to be here, so vim-plug knows we are declaring the plugins we
+
+" This needs to be here, so vim-plug knows we are declaring the plugins we
 " want to use
-call plug#begin('~/.vim/plugged')
+if using_neovim
+    call plug#begin("~/.config/nvim/plugged")
+else
+    call plug#begin("~/.vim/plugged")
+endif
 
 " Plugins from github repos:
 " ****************************************************************************
@@ -444,21 +499,27 @@ Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 
 " [Python coding] ------------------------------------------------------------
-" Python autocompletion [Not working on Zeus (lack of dependence)]
-Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
-" Yet Another Remote Plugin Framework for Neovim [needed for deoplete.nvim]
-" [Not working on Zeus (lack of dependence)]
-Plug 'roxma/nvim-yarp', { 'for': 'python' }
-" Help communicate beteen vim and neovim [needed for deoplete.nvim]
-" [Not working on Zeus (lack of dependence)]
-Plug 'roxma/vim-hug-neovim-rpc', { 'for': 'python' }
-" Python autocompletion [Not working on Zeus (lack of dependence)]
-Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
-" Completion from other opened files [Not working on Zeus (lack of dependence)]
-Plug 'Shougo/context_filetype.vim', { 'for': 'python' }
-" Just to add the python go-to-definition and similar features, autocompletion
-" from this plugin is disabled [Not working on Zeus (lack of dependence)]
-Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+if not_on_remote
+    " Python autocompletion [Not working on Zeus (lack of dependence)]
+    if using_neovim && vim_plug_just_installed
+        Plug 'Shougo/deoplete.nvim', {'do': ':autocmd VimEnter * UpdateRemotePlugins , 'for': 'python'}
+    else
+        Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
+    endif
+    " Yet Another Remote Plugin Framework for Neovim [needed for deoplete.nvim]
+    " [Not working on Zeus (lack of dependence)]
+    Plug 'roxma/nvim-yarp', { 'for': 'python' }
+    " Help communicate beteen vim and neovim [needed for deoplete.nvim]
+    " [Not working on Zeus (lack of dependence)]
+    Plug 'roxma/vim-hug-neovim-rpc', { 'for': 'python' }
+    " Python autocompletion [Not working on Zeus (lack of dependence)]
+    Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
+    " Completion from other opened files [Not working on Zeus (lack of dependence)]
+    Plug 'Shougo/context_filetype.vim', { 'for': 'python' }
+    " Just to add the python go-to-definition and similar features, autocompletion
+    " from this plugin is disabled [Not working on Zeus (lack of dependence)]
+    Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+endif
 " More python syntax highlight
 Plug 'vim-python/python-syntax', { 'for': 'python' }
 " Sort python import [too much time-consuming]
@@ -469,27 +530,33 @@ Plug 'fisadev/vim-isort', { 'on': 'Isort' }
 Plug 'tomedunn/vim.fortran', { 'for': 'fortran' }
 
 " [Tmux] ---------------------------------------------------------------------
-" Share focus between vim and tmux [Needed for clilpboard sharing]
-" [Not working on Zeus]
-Plug 'tmux-plugins/vim-tmux-focus-events'
-" Share clipboard between vim and tmux [Not working on Zeus]
-Plug 'roxma/vim-tmux-clipboard'
+if not_on_remote
+    "" Share focus between vim and tmux [Needed for clilpboard sharing]
+    " [Not working on Zeus]
+    Plug 'tmux-plugins/vim-tmux-focus-events'
+    " Share clipboard between vim and tmux [Not working on Zeus]
+    Plug 'roxma/vim-tmux-clipboard'
+endif
 " Navigate seamlessly in vim and tmux
 Plug 'christoomey/vim-tmux-navigator'
 
 " [HTML coding] --------------------------------------------------------------
-" Highlight matching html tags
-Plug 'valloric/MatchTagAlways', { 'for': 'html' }
-" Generate html in a simple way
-Plug 'mattn/emmet-vim', { 'for': 'html' }
-" Generate closetag for HTML
-Plug 'alvan/vim-closetag', { 'for': 'html' }
+if not_on_remote
+    " Highlight matching html tags
+    Plug 'valloric/MatchTagAlways', { 'for': 'html' }
+    " Generate html in a simple way
+    Plug 'mattn/emmet-vim', { 'for': 'html' }
+    " Generate closetag for HTML
+    Plug 'alvan/vim-closetag', { 'for': 'html' }
+endif
 
 " [Latex] --------------------------------------------------------------------
-" Latex compiler support
-Plug 'vim-latex/vim-latex', { 'for': 'tex' }
-" Real time Tex -> Pdf file preview
-Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
+if not_on_remote
+    " Latex compiler support
+    Plug 'vim-latex/vim-latex', { 'for': 'tex' }
+    " Real time Tex -> Pdf file preview
+    Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
+endif
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
@@ -528,8 +595,6 @@ vnoremap <Tab> >gv
 vnoremap <S-Tab> <gv
 
 " Lightline ------------------------------------------------------------------
-let fancy_symbols_enabled = 1 " assign 0 to disable
-
 if fancy_symbols_enabled
     let g:lightline = {
           \ 'colorscheme': 'deus',
@@ -568,13 +633,13 @@ let g:lightline.tabline          = { 'left': [['tabs']], 'right': [['buffers']] 
 let g:lightline.component_expand = { 'buffers': 'lightline#bufferline#buffers' }
 let g:lightline.component_type   = { 'buffers': 'tabsel' }
 " Central bar transparency [Not work well with vim-split panes]
-"let s:palette = g:lightline#colorscheme#{g:lightline.colorscheme}#palette
-"let s:palette.normal.middle = [ [ 'NONE', 'NONE', 'NONE', 'NONE' ] ]
-"let s:palette.visual.middle = s:palette.normal.middle
-"let s:palette.insert.middle = s:palette.normal.middle
-"let s:palette.inactive.middle = s:palette.normal.middle
-"let s:palette.tabline.middle = s:palette.normal.middle
-"let s:palette.replace.middle = s:palette.normal.middle
+let s:palette = g:lightline#colorscheme#{g:lightline.colorscheme}#palette
+let s:palette.normal.middle = [ [ 'NONE', 'NONE', 'NONE', 'NONE' ] ]
+let s:palette.visual.middle = s:palette.normal.middle
+let s:palette.insert.middle = s:palette.normal.middle
+let s:palette.inactive.middle = s:palette.normal.middle
+let s:palette.tabline.middle = s:palette.normal.middle
+let s:palette.replace.middle = s:palette.normal.middle
 " Force refresh tabline whenever the re is change in vim
 "autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 
@@ -638,7 +703,7 @@ let g:LargeFile = 10
 " Indent Guides --------------------------------------------------------------
 let g:indent_guides_enable_on_vim_startup = 0
 let g:indent_guides_start_level = 1
-let g:indent_guides_guide_size = 4 
+let g:indent_guides_guide_size = 4
 let g:indent_guides_auto_colors = 0
 "autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
 "autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
@@ -652,7 +717,14 @@ map <leader>ig :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
 "map <leader>ig :IndentLinesToggle<CR>:echo 'Toggle Indent Guides'<CR>
 
 " YankRing -------------------------------------------------------------------
-let g:yankring_history_dir = '~/.vim/dirs/'
+if using_neovim
+    let g:yankring_history_dir = '~/.config/nvim/'
+    " Fix for yankring and neovim problem when system has non-text things
+    " copied in clipboard
+    let g:yankring_clipboard_monitor = 0
+else
+    let g:yankring_history_dir = '~/.vim/dirs/'
+endif
 nmap <leader>ys :YRShow<CR>
 
 " Auto-pairs -----------------------------------------------------------------
@@ -736,7 +808,7 @@ map <leader><leader>2 <Plug>(easymotion-overwin-f2)
 " Multiple Cursors -----------------------------------------------------------
 let g:multi_cursor_use_default_mapping = 0
 let g:multi_cursor_start_word_key      = '<C-n>'
-let g:multi_cursor_select_all_word_key = '<C-a>'
+let g:multi_cursor_select_all_word_key = '<C-m>'
 let g:multi_cursor_next_key            = '<C-n>'
 let g:multi_cursor_prev_key            = '<C-p>'
 let g:multi_cursor_skip_key            = '<C-x>'
@@ -784,44 +856,41 @@ inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
 inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
 " Deoplete -------------------------------------------------------------------
-" [Not working on Zeus (lack of dependence)]
-" Pynvim is needed [Installation: pip3 install --user pynvim]
-" Needed so deoplete can auto select the first suggestion
-set completeopt+=noinsert
-" Comment this line to enable autocompletion preview window
-" (displays documentation related to the selected completion option)
-" Disabled by default because preview makes the window flicker
-set completeopt-=preview
-" Use deoplete.
-let g:deoplete#enable_at_startup = 1
-autocmd FileType python call deoplete#custom#option({
-\   'ignore_case': v:true,
-\   'smart_case': v:true,
-\})
-" Complete with words from any opened file
-let g:context_filetype#same_filetypes = {}
-let g:context_filetype#same_filetypes._ = '_'
+if using_neovim
+    " [Not working on Zeus (lack of dependence)]
+    " Pynvim is needed [Installation: pip3 install --user pynvim]
+    " Needed so deoplete can auto select the first suggestion
+    set completeopt+=noinsert
+    " Comment this line to enable autocompletion preview window
+    " (displays documentation related to the selected completion option)
+    " Disabled by default because preview makes the window flicker
+    set completeopt-=preview
+    " Use deoplete.
+    let g:deoplete#enable_at_startup = 1
+    autocmd FileType python call deoplete#custom#option({
+    \   'ignore_case': v:true,
+    \   'smart_case': v:true,
+    \})
+    " Complete with words from any opened file
+    let g:context_filetype#same_filetypes = {}
+    let g:context_filetype#same_filetypes._ = '_'
+endif
 
 " Jedi-vim -------------------------------------------------------------------
-" [Not working on Zeus (lack of dependence)]
-" Disable autocompletion (using deoplete instead)
-let g:jedi#completions_enabled = 0
-" All these mappings work only for python code:
-" Go to definition
-let g:jedi#goto_command = ',d'
-" Find ocurrences
-let g:jedi#usages_command = ',o'
-" Find assignments
-let g:jedi#goto_assignments_command = ',a'
-" Go to definition in new tab
-nmap ,D :tab split<CR>:call jedi#goto()<CR>
-
-" vim-TMUX navigator ---------------------------------------------------------
-" [Not working for now]
-"noremap <C-Up>    :TmuxNavigateUp<cr>
-"noremap <C-Down>  :TmuxNavigateDown<cr>
-"noremap <C-Left>  :TmuxNavigateLeft<cr>
-"noremap <C-Right> :TmuxNavigateRight<cr>
+if using_neovim
+    " [Not working on Zeus (lack of dependence)]
+    " Disable autocompletion (using deoplete instead)
+    let g:jedi#completions_enabled = 0
+    " All these mappings work only for python code:
+    " Go to definition
+    let g:jedi#goto_command = ',d'
+    " Find ocurrences
+    let g:jedi#usages_command = ',o'
+    " Find assignments
+    let g:jedi#goto_assignments_command = ',a'
+    " Go to definition in new tab
+    nmap ,D :tab split<CR>:call jedi#goto()<CR>
+endif
 
 " Vim-LaTex viewer -----------------------------------------------------------
 let g:livepreview_previwer = 'okular'
