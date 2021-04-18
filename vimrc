@@ -502,7 +502,7 @@ Plug 'mhinz/vim-signify'
 if not_on_remote
     " Python autocompletion [Not working on Zeus (lack of dependence)]
     if using_neovim && vim_plug_just_installed
-        Plug 'Shougo/deoplete.nvim', {'do': ':autocmd VimEnter * UpdateRemotePlugins , 'for': 'python'}
+        Plug 'Shougo/deoplete.nvim', { 'do': ':autocmd VimEnter * UpdateRemotePlugins' }
     else
         Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
     endif
@@ -856,7 +856,7 @@ inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
 inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
 " Deoplete -------------------------------------------------------------------
-if using_neovim
+if not_on_remote
     " [Not working on Zeus (lack of dependence)]
     " Pynvim is needed [Installation: pip3 install --user pynvim]
     " Needed so deoplete can auto select the first suggestion
@@ -877,7 +877,7 @@ if using_neovim
 endif
 
 " Jedi-vim -------------------------------------------------------------------
-if using_neovim
+if not_on_remote
     " [Not working on Zeus (lack of dependence)]
     " Disable autocompletion (using deoplete instead)
     let g:jedi#completions_enabled = 0
