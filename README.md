@@ -1,2 +1,2 @@
-# Vim_Tmux_Config [Not Maintained For Now]
+# Vim_Tmux_Config
 Backup for my vim and tmux configuration
