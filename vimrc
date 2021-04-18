@@ -8,7 +8,7 @@
 " Notes:
 " Vim / Neovim configuration file --------------------------------------------
 " Vim configuration file
-" -- Store in ~/.vimrc 
+" -- Store in ~/.vimrc
 " Neovim configuration file
 " -- Store in ~/.config/nvim/init.vim
 
@@ -239,6 +239,7 @@ function! <SID>BufcloseCloseIt()
 endfunction
 " Buffer key mappings
 map <silent><leader>ls :ls<CR>
+map <leader>ed :edit<space>
 map <leader>bb :edit<space>
 map <silent><leader>bs :buffers<CR>
 map <leader>ba :badd<space>
@@ -357,8 +358,8 @@ noremap <leader>rwc :call Replace(1, 1, input('Replace '.expand('<cword>').' wit
 noremap <F7> :set foldcolumn=6<CR>:echo 'Foldcolumn ON'<CR>
 noremap <leader><F7> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 
-" Function - Overwrite
-command! Sudow execute 'w !sudo tee % > /dev/null'
+" Function - Overwrite [Not working for now] ---------------------------------
+"command! Sudow execute 'w !sudo -S tee % > /dev/null'
 
 " Run python script in vim ---------------------------------------------------
 " # Test python version that want (In python)
@@ -366,6 +367,11 @@ command! Sudow execute 'w !sudo tee % > /dev/null'
 " print(sys.version_info)
 autocmd FileType python map <buffer> <leader><F10> :w<CR>:exec '!python' shellescape(@%, 1)<CR>
 autocmd FileType python imap <buffer> <leader><F10> <esc>:w<CR>:exec '!python' shellescape(@%, 1)<CR>
+
+" Ability to add python breakpoints ------------------------------------------
+" # ipdb must be installed first
+" -- pip install ipdb
+autocmd FileType python map <silent> <leader>b Oimport ipdb; ipdb.set_trace()<esc>
 
 " ============================================================================
 " Vim-plug initialization (Get vim-plug by curl)
@@ -445,13 +451,13 @@ Plug 'vim-scripts/IndexedSearch'
 Plug 'scrooloose/nerdcommenter'
 
 " [Vim extra functions] ------------------------------------------------------
-" Override configs by directory [Too time-consumption for initialization]
-"Plug 'arielrossanigo/dir-configs-override.vim'
-" Fancy startup page of vim [Not use anymore, too loadtime-consuming]
-"Plug 'mhinz/vim-startify'
-" Vim-wiki [Not use for now]
-"Plug 'vimwiki/vimwiki'
-" Vim settings for opening large files
+if using_neovim
+    " Override configs by directory [Too time-consumption for initialization]
+    Plug 'arielrossanigo/dir-configs-override.vim'
+    " Fancy startup page of vim [Not use in vim, too loadtime-consuming]
+    Plug 'mhinz/vim-startify'
+endif
+"Vim settings for opening large files
 Plug 'vim-scripts/LargeFile'
 " History of yank
 Plug 'vim-scripts/YankRing.vim'
@@ -467,6 +473,10 @@ Plug 't9md/vim-choosewin'
 Plug 'easymotion/vim-easymotion'
 " Auto popup completion options from vim
 Plug 'vim-scripts/AutoComplPop'
+" Goyo (Distraction-Free)
+Plug 'junegunn/goyo.vim'
+" Vim-wiki [Not use for now]
+"Plug 'vimwiki/vimwiki'
 
 " [Functions for coding] -----------------------------------------------------
 " Multiple language syntax support [Not working on fomalhaut (vim=7.0)]
@@ -576,6 +586,10 @@ endif
 " Plugins settings and mappings
 " ============================================================================
 " Edit them as you wish.
+
+" Fix problems with uncommon shells (fish, xonsh) and plugins running commands
+" (neomake, ...)
+set shell=/bin/bash
 
 " Tab Key Setting [Must be added after vim-plug] -----------------------------
 set expandtab        " expand tab to spaces
@@ -711,7 +725,7 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg='#24242d' ctermbg=194
 map <leader>ig :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
 
-" Indent Lines --------------------------------------------------------------- 
+" Indent Lines ---------------------------------------------------------------
 "let g:indentLine_enabled = 0
 "let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 "map <leader>ig :IndentLinesToggle<CR>:echo 'Toggle Indent Guides'<CR>
@@ -842,8 +856,11 @@ highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
 " AutoComplPop ---------------------------------------------------------------
 " Enable/disable autopop
-map <leader>` :AcpDisable<CR>:echo 'Disable Auto-Pop Suggestion'<CR>
-map <leader>~ :AcpEnable<CR>:echo 'Enable Auto-Pop Suggestion'<CR>
+if not_on_remote
+    autocmd FileType python let g:acp_enableAtStartup = 0
+endif
+map <leader>~ :AcpDisable<CR>:echo 'Disable Auto-Pop Suggestion'<CR>
+map <leader>` :AcpEnable<CR>:echo 'Enable Auto-Pop Suggestion'<CR>
 
 " Popup window selection -----------------------------------------------------
 " Previous/next suggestion
