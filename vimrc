@@ -96,22 +96,26 @@ map <leader>w :w<CR>
 map <leader>wq :wq<CR>
 map <leader>Wq :wa<CR>:q<CR>
 map <leader>WQ :wa<CR>:qa<CR>
+" Overwrite (Not working for now)
+command! Sudow execute 'w !sudo -S tee % > /dev/null'
 
 " Shell command --------------------------------------------------------------
-" - :r !date (Insert timestamp)
-" - :K (Manpage for current selected word)
-map <C-s> :!
-imap <C-s> :!
+" -- :r !date (Insert timestamp)
+" -- :K (Manpage for current selected word)
 map <leader>m :Man<space>
 
-" VIM built-in setting -------------------------------------------------------
+" Vim built-in setting -------------------------------------------------------
 filetype on
 " Following settings are automatically executed by VIM-plug
 "filetype plugin on
 "filetype indent on
 "syntax enable
 
-" VIM window control ---------------------------------------------------------
+" Vim window/pane/fold configuration -----------------------------------------
+nnoremap <silent><leader>sv :mkview<CR>:echo 'Setting Saved ...'<CR>
+nnoremap <silent><leader>ld :loadview<CR>:echo 'Setting Loaded ...'<CR>
+
+" Vim window control ---------------------------------------------------------
 " [Also integrate with tmux now, check vim-tmux-navigator]
 nnoremap <silent><leader>; <C-W><C-W>
 nnoremap <silent><leader>h <C-W>h
@@ -137,7 +141,7 @@ nnoremap <silent><leader>+ :resize -20<CR>
 nnoremap <silent><leader>== <C-W>=
 nnoremap <silent><leader>++ <C-W>=
 
-" VIM settings ---------------------------------------------------------------
+" Vim settings ---------------------------------------------------------------
 set nocompatible          " Not compatible with traditional vi
 set confirm               " Ask for confirmation before leaving vim
 set ignorecase            " Ignore upper/lower case when searching
@@ -182,8 +186,6 @@ nnoremap <leader><F6> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
 set nofoldenable
 set foldmethod=syntax
 autocmd FileType python setlocal foldmethod=indent
-nnoremap <silent><leader>sv :mkview<CR>:echo 'Setting Saved ...'<CR>
-nnoremap <silent><leader>ld :loadview<CR>:echo 'Setting Loaded ...'<CR>
 nnoremap <silent><leader>ff za<CR>:echo 'Toggle Current Fold...'<CR>
 nnoremap <silent><leader>cf zM<CR>:echo 'Close All Folds ...'<CR>
 nnoremap <silent><leader>of zR<CR>:echo 'Open All Folds ...'<CR>
@@ -204,16 +206,6 @@ map <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREVIOUS TAB ...'<CR>
 " Tabe (Window) swap
 map <silent><A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 map <silent><A-Right> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
-
-" Arglist Setting ------------------------------------------------------------
-" Initial when vim is opened
-" Static buffer list [Only change if command executed]
-map <silent><leader>ap :prev<CR>
-map <silent><leader>an :next<CR>
-map <leader>ag :args<space>
-map <leader>as :args<CR>
-map <leader>aa :argadd<space>
-map <leader>ad :argdo<space>
 
 " Buffer Setting -------------------------------------------------------------
 " -- Reference: https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
@@ -239,9 +231,9 @@ function! <SID>BufcloseCloseIt()
 endfunction
 " Buffer key mappings
 map <silent><leader>ls :ls<CR>
-map <leader>ed :edit<space>
-map <leader>bb :edit<space>
 map <silent><leader>bs :buffers<CR>
+map <leader>bb :b<space>
+map <leader>bn :edit<space>
 map <leader>ba :badd<space>
 map <leader>bd :bdelete<space>
 map <silent><leader>dd :bdelete<CR>:echo 'DELETE CURRENT BUFFER [PRESS CTRL+O TO RECOVER]'<CR>
@@ -265,8 +257,6 @@ set title                         " Let vim change terminal title
 " More natural split opening
 set splitbelow
 set splitright
-" remove ugly vertical lines on window division
-set fillchars+=vert:\
 nnoremap <leader>x :split<space>
 nnoremap <leader>v :vsplit<space>
 nnoremap <leader>X :split<CR>
@@ -330,47 +320,35 @@ endfunction
 autocmd BufWritePre *.py call RemoveTrailingWhitespace()
 nmap <leader>rm :call RemoveTrailingWhitespace()<CR>:echo "Remove Tail Whitespaces"<CR>
 
-" Function - Word replacement ------------------------------------------------
-function! Replace(confirm, wholeword, replace)
-    wa
-    let flag = ''
-    if a:confirm
-        let flag .= 'gec'
-    else
-        let flag .= 'ge'
-    endif
-    let search = ''
-    if a:wholeword
-        let search .= '\<' . escape(expand('<cword>'), '/\.*$^~[') . '\>'
-    else
-        let search .= expand('<cword>')
-    endif
-    let replace = escape(a:replace, '/\&~')
-    execute 'argdo %s/' . search . '/' . replace . '/' . flag . '| update'
-endfunction
-noremap <leader>rr :call Replace(0, 0, input('Replace '.expand('<cword>').' with: '))<CR>
-noremap <leader>rw :call Replace(0, 1, input('Replace '.expand('<cword>').' with: '))<CR>
-noremap <leader>rc :call Replace(1, 0, input('Replace '.expand('<cword>').' with: '))<CR>
-noremap <leader>rcw :call Replace(1, 1, input('Replace '.expand('<cword>').' with: '))<CR>
-noremap <leader>rwc :call Replace(1, 1, input('Replace '.expand('<cword>').' with: '))<CR>
-
 " Function - Foldcolumn display ----------------------------------------------
 noremap <F7> :set foldcolumn=6<CR>:echo 'Foldcolumn ON'<CR>
 noremap <leader><F7> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 
-" Function - Overwrite [Not working for now] ---------------------------------
-"command! Sudow execute 'w !sudo -S tee % > /dev/null'
+" Terminal Mode - Open terminal in vim buffer --------------------------------
+" -- Enter insert mode to use terminal command line
+" -- In terminal buffer, <C-\><C-n> back to normal mode
 
-" Run python script in vim ---------------------------------------------------
-" # Test python version that want (In python)
-" import sys
-" print(sys.version_info)
-autocmd FileType python map <buffer> <leader><F10> :w<CR>:exec '!python' shellescape(@%, 1)<CR>
-autocmd FileType python imap <buffer> <leader><F10> <esc>:w<CR>:exec '!python' shellescape(@%, 1)<CR>
+" Set terminal shell
+if not_on_remote
+    set shell=/bin/fish
+else
+    set shell=/bin/bash
+endif
+" Open terminal buffer
+if using_neovim
+    map <F10> :split<CR>:resize -5<CR>:term<CR>:echo 'Open Terminal'<CR>
+else
+    map <F10> :below terminal<CR>
+endif
+" Map key to go back from terminal mode to normal mode
+tnoremap <leader><F10> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
+tnoremap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
+" Do not use Esc (which conflicts with fzf window)
+"tnoremap <Esc> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
 
 " Ability to add python breakpoints ------------------------------------------
 " # ipdb must be installed first
-" -- pip install ipdb
+" -- In termianl: run 'pip install ipdb'
 autocmd FileType python map <silent> <leader>b Oimport ipdb; ipdb.set_trace()<esc>
 
 " ============================================================================
@@ -407,7 +385,7 @@ if vim_plug_just_installed
 endif
 
 " ============================================================================
-" Vim Active plugins
+" Vim active plugins
 " ============================================================================
 " You can disable or add new ones here:
 
@@ -426,7 +404,7 @@ endif
 " Color themes (Monokair - high contrast)
 Plug 'patstockwell/vim-monokai-tasty'
 " Color themes (Gruvbox - low contrast)
-Plug 'morhetz/gruvbox'
+"Plug 'morhetz/gruvbox'
 " Lightline (status line)
 Plug 'itchyny/lightline.vim'
 " Lightline bufferline
@@ -451,11 +429,15 @@ Plug 'vim-scripts/IndexedSearch'
 Plug 'scrooloose/nerdcommenter'
 
 " [Vim extra functions] ------------------------------------------------------
-if using_neovim
+if using_neovim && not_on_remote
     " Override configs by directory [Too time-consumption for initialization]
     Plug 'arielrossanigo/dir-configs-override.vim'
     " Fancy startup page of vim [Not use in vim, too loadtime-consuming]
     Plug 'mhinz/vim-startify'
+    " Goyo (Distraction-free mode)
+    Plug 'junegunn/goyo.vim'
+    " Vim-wiki [Not use in vim]
+    Plug 'vimwiki/vimwiki'
 endif
 "Vim settings for opening large files
 Plug 'vim-scripts/LargeFile'
@@ -473,14 +455,12 @@ Plug 't9md/vim-choosewin'
 Plug 'easymotion/vim-easymotion'
 " Auto popup completion options from vim
 Plug 'vim-scripts/AutoComplPop'
-" Goyo (Distraction-Free)
-Plug 'junegunn/goyo.vim'
-" Vim-wiki [Not use for now]
-"Plug 'vimwiki/vimwiki'
 
 " [Functions for coding] -----------------------------------------------------
 " Multiple language syntax support [Not working on fomalhaut (vim=7.0)]
 Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
+" Syntax support (Improved syntastics)
+"Plug 'neomake/neomake'
 " Languge packs [Not working on fomalhaut (vim=7.0)]
 Plug 'sheerun/vim-polyglot'
 " Pending tasks list
@@ -493,14 +473,10 @@ Plug 'luochen1990/rainbow'
 Plug 'tpope/vim-repeat'
 " Indent line guide [Color column]
 Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
-" Indent line guide [Symbol column]
-"Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle' }
 " Indent text object (i for indent as w for word)
 Plug 'michaeljsmith/vim-indent-object'
  "Multiple cursor with incsearch support
 Plug 'terryma/vim-multiple-cursors'
-" Multi-language support debugger [Not implemented now]
-"Plug 'puremourning/vimspector', { 'for': 'python' }
 
 " [Git] ----------------------------------------------------------------------
 " Git integration
@@ -532,7 +508,7 @@ if not_on_remote
 endif
 " More python syntax highlight
 Plug 'vim-python/python-syntax', { 'for': 'python' }
-" Sort python import [too much time-consuming]
+" Sort python import (too much time-consuming)
 Plug 'fisadev/vim-isort', { 'on': 'Isort' }
 
 " [Fortran coding] -----------------------------------------------------------
@@ -587,10 +563,6 @@ endif
 " ============================================================================
 " Edit them as you wish.
 
-" Fix problems with uncommon shells (fish, xonsh) and plugins running commands
-" (neomake, ...)
-set shell=/bin/bash
-
 " Tab Key Setting [Must be added after vim-plug] -----------------------------
 set expandtab        " expand tab to spaces
 set tabstop=4        " numbers of space that tab in the file counts
@@ -640,13 +612,13 @@ else
 endif
 
 " Lightline tabline ----------------------------------------------------------
-let g:lightline#bufferline#show_number  = 1
+let g:lightline#bufferline#show_number  = 0
 let g:lightline#bufferline#shorten_path = 0
 let g:lightline#bufferline#unnamed      = '[No Name]'
 let g:lightline.tabline          = { 'left': [['tabs']], 'right': [['buffers']] }
 let g:lightline.component_expand = { 'buffers': 'lightline#bufferline#buffers' }
 let g:lightline.component_type   = { 'buffers': 'tabsel' }
-" Central bar transparency [Not work well with vim-split panes]
+" Central bar transparency
 let s:palette = g:lightline#colorscheme#{g:lightline.colorscheme}#palette
 let s:palette.normal.middle = [ [ 'NONE', 'NONE', 'NONE', 'NONE' ] ]
 let s:palette.visual.middle = s:palette.normal.middle
@@ -654,8 +626,6 @@ let s:palette.insert.middle = s:palette.normal.middle
 let s:palette.inactive.middle = s:palette.normal.middle
 let s:palette.tabline.middle = s:palette.normal.middle
 let s:palette.replace.middle = s:palette.normal.middle
-" Force refresh tabline whenever the re is change in vim
-"autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 
 " Status line ----------------------------------------------------------------
 set noshowmode    " No vim-built-in mode statusline
@@ -725,11 +695,6 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg='#24242d' ctermbg=194
 map <leader>ig :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
 
-" Indent Lines ---------------------------------------------------------------
-"let g:indentLine_enabled = 0
-"let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-"map <leader>ig :IndentLinesToggle<CR>:echo 'Toggle Indent Guides'<CR>
-
 " YankRing -------------------------------------------------------------------
 if using_neovim
     let g:yankring_history_dir = '~/.config/nvim/'
@@ -739,7 +704,7 @@ if using_neovim
 else
     let g:yankring_history_dir = '~/.vim/dirs/'
 endif
-nmap <leader>ys :YRShow<CR>
+nmap <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
 
 " Auto-pairs -----------------------------------------------------------------
 " Use ';' instead of ' ' (Space) to prevent leaderkey delay effect
@@ -764,9 +729,6 @@ nmap ySS <Plug>YSsurround
 "   - if syntax highlight is needed, please install bat from command line
 
 " This is the default extra key bindings
-"   - <Ctrl + t> : Open in new tab
-"   - <Ctrl + x> : Open in new horizontal split
-"   - <Ctrl + v> : Open in new vertical split
 let g:fzf_action = {
             \ 'ctrl-t': 'tab split',
             \ 'ctrl-x': 'split',
@@ -819,13 +781,13 @@ map <leader><leader>h <Plug>(easymotion-linebackward)
 map <leader><leader>1 <Plug>(easymotion-overwin-f)
 map <leader><leader>2 <Plug>(easymotion-overwin-f2)
 
-" Multiple Cursors -----------------------------------------------------------
+" Multiple-cursors -----------------------------------------------------------
 let g:multi_cursor_use_default_mapping = 0
-let g:multi_cursor_start_word_key      = '<C-n>'
-let g:multi_cursor_select_all_word_key = '<C-m>'
-let g:multi_cursor_next_key            = '<C-n>'
-let g:multi_cursor_prev_key            = '<C-p>'
-let g:multi_cursor_skip_key            = '<C-x>'
+let g:multi_cursor_start_word_key      = '<S-j>'
+let g:multi_cursor_select_all_word_key = '<S-m>'
+let g:multi_cursor_next_key            = '<S-j>'
+let g:multi_cursor_prev_key            = '<S-k>'
+let g:multi_cursor_skip_key            = '<S-o>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
 " Window Chooser -------------------------------------------------------------
@@ -909,13 +871,6 @@ if not_on_remote
     nmap ,D :tab split<CR>:call jedi#goto()<CR>
 endif
 
-" Vim-LaTex viewer -----------------------------------------------------------
-let g:livepreview_previwer = 'okular'
-let g:livepreview_engine = 'pdflatex'
-autocmd FileType tex setlocal spell
-autocmd filetype tex setl updatetime=10000 " Unit: milisecond
-autocmd filetype tex map <F3> :LLPStartPreview<CR>
-
 " Vim-Wiki -------------------------------------------------------------------
 let g:vimwiki_list = [{'path': '~/Documents/vimwiki/',
                       \ 'syntax': 'markdown', 'ext': '.md'}]
@@ -924,7 +879,7 @@ let g:vimwiki_list = [{'path': '~/Documents/vimwiki/',
 "colorscheme gruvbox
 colorscheme vim-monokai-tasty
 " Use either 'koehler' or 'elflord' for 'fortran' syntax support
-autocmd Filetype fortran colorscheme elflord
+autocmd FileType fortran colorscheme elflord
 
 " Common Background Setting (Transparent Background) -------------------------
 " hi command must be entered after colorscheme
@@ -950,15 +905,26 @@ highlight UnlimitLength ctermbg=NONE guibg=NONE
 nnoremap <leader>wo :match OverLength /\%79v.\+/<CR>:echo '78 char-bound ON'<CR>
 nnoremap <leader>wf :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
 
+" Vim-LaTex viewer -----------------------------------------------------------
+if not_on_remote
+    let g:livepreview_previwer = 'okular'
+    let g:livepreview_engine = 'pdflatex'
+    autocmd FileType tex setlocal spell
+    autocmd FileType tex setl updatetime=10000 " Unit: milisecond
+    autocmd FileType tex map <F3> :LLPStartPreview<CR>
+endif
+
 " Function - Markdown viewer -------------------------------------------------
 " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
-let $VIMBROWSER='google-chrome'
-let $OPENBROWSER='nnoremap <F3> :!'. $VIMBROWSER .' %:p &<CR>'
-augroup OpenMdFile
-    autocmd!
-    autocmd BufEnter *.md echom 'Press F3 to Open .md File'
-    autocmd BufEnter *.md exe $OPENBROWSER
-augroup END
+if not_on_remote
+    let $VIMBROWSER='google-chrome'
+    let $OPENBROWSER='nnoremap <F3> :!'. $VIMBROWSER .' %:p &<CR>'
+    augroup OpenMdFile
+        autocmd!
+        autocmd BufEnter *.md echom 'Press F3 to Open .md File'
+        autocmd BufEnter *.md exe $OPENBROWSER
+    augroup END
+endif
 
 " Function - Hex editor ------------------------------------------------------
 " From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
