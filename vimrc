@@ -331,20 +331,19 @@ noremap <leader><F7> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 " Set terminal shell
 if not_on_remote
     set shell=/bin/fish
+    " Open terminal buffer
+    if using_neovim
+        map <F10> :split<CR>:resize -5<CR>:term<CR>:echo 'Open Terminal'<CR>
+    else
+        map <F10> :below terminal<CR>
+    endif
+    " Map key to go back from terminal mode to normal mode
+    " Do not use Esc (which conflicts with fzf window)
+    tnoremap <leader><F10> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
+    tnoremap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
 else
     set shell=/bin/bash
 endif
-" Open terminal buffer
-if using_neovim
-    map <F10> :split<CR>:resize -5<CR>:term<CR>:echo 'Open Terminal'<CR>
-else
-    map <F10> :below terminal<CR>
-endif
-" Map key to go back from terminal mode to normal mode
-tnoremap <leader><F10> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
-tnoremap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
-" Do not use Esc (which conflicts with fzf window)
-"tnoremap <Esc> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
 
 " Ability to add python breakpoints ------------------------------------------
 " # ipdb must be installed first
