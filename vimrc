@@ -27,7 +27,7 @@
 " NERDFont Installation ------------------------------------------------------
 " " (1) mkdir -p ~/.local/share/fonts
 " " (2) cd ~/.local/share/fonts && curl -fLo \
-"       Droid Sans Mono for Powerline Nerd Font Complete.otf" \
+"       "Droid Sans Mono for Powerline Nerd Font Complete.otf" \
 "       https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/\
 "       DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 
@@ -140,6 +140,7 @@ nnoremap <silent><leader>_ :resize +20<CR>
 nnoremap <silent><leader>+ :resize -20<CR>
 nnoremap <silent><leader>== <C-W>=
 nnoremap <silent><leader>++ <C-W>=
+nnoremap <silent><leader>wc <C-W>c
 
 " Vim settings ---------------------------------------------------------------
 set nocompatible          " Not compatible with traditional vi
@@ -147,7 +148,7 @@ set confirm               " Ask for confirmation before leaving vim
 set ignorecase            " Ignore upper/lower case when searching
 set modifiable            " Make editing buffer modifable
 set encoding=utf-8        " Unicode display
-set clipboard=unnamedplus " Shared system clipboard, gvim must be installed"
+set clipboard=unnamedplus " Shared system clipboard, gvim must be installed
 
 " Line wrap ------------------------------------------------------------------
 set wrap                  " Line wrap for small monitor or display window
@@ -430,9 +431,9 @@ Plug 'scrooloose/nerdcommenter'
 " [Vim extra functions] ------------------------------------------------------
 if using_neovim && not_on_remote
     " Override configs by directory [Too time-consumption for initialization]
-    Plug 'arielrossanigo/dir-configs-override.vim'
+    "Plug 'arielrossanigo/dir-configs-override.vim'
     " Fancy startup page of vim [Not use in vim, too loadtime-consuming]
-    Plug 'mhinz/vim-startify'
+    "Plug 'mhinz/vim-startify'
     " Goyo (Distraction-free mode)
     Plug 'junegunn/goyo.vim'
     " Vim-wiki [Not use in vim]
@@ -454,6 +455,8 @@ Plug 't9md/vim-choosewin'
 Plug 'easymotion/vim-easymotion'
 " Auto popup completion options from vim
 Plug 'vim-scripts/AutoComplPop'
+" Paint css colors with the real color
+Plug 'lilydjwg/colorizer'
 
 " [Functions for coding] -----------------------------------------------------
 " Multiple language syntax support [Not working on fomalhaut (vim=7.0)]
@@ -463,11 +466,9 @@ Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
 " Languge packs [Not working on fomalhaut (vim=7.0)]
 Plug 'sheerun/vim-polyglot'
 " Pending tasks list
-Plug 'fisadev/FixedTaskList.vim'
-" Paint css colors with the real color
-Plug 'lilydjwg/colorizer'
+Plug 'fisadev/FixedTaskList.vim', { 'on': 'TaskList' }
 " Paint paired bracket/quotation in different color
-Plug 'luochen1990/rainbow'
+Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle' } 
 " Save last . motion for next time usage
 Plug 'tpope/vim-repeat'
 " Indent line guide [Color column]
@@ -479,7 +480,7 @@ Plug 'terryma/vim-multiple-cursors'
 
 " [Git] ----------------------------------------------------------------------
 " Git integration
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive', { 'on': 'Git' }
 " Git/mercurial/others diff icons on the side of the file lines
 Plug 'mhinz/vim-signify'
 
@@ -630,7 +631,7 @@ let s:palette.replace.middle = s:palette.normal.middle
 set noshowmode    " No vim-built-in mode statusline
 set laststatus=2  " Always display the statusline in all windows
 set showtabline=2 " Always display the tabline, even if there is only one tab
-set showcmd       " This line must be added after statusline plugin"
+set showcmd       " This line must be added after statusline plugin
 
 " Tagbar ---------------------------------------------------------------------
 " autofocus on tagbar open
@@ -664,7 +665,7 @@ map <leader>tl :TaskList<CR>
 " Rainbow parentheses --------------------------------------------------------
 " Don;t enable when start up
 let g:rainbow_active = 0
-nnoremap <leader>rb :RainbowToggle<CR>:echo 'Toggle Rainbow'<CR>
+nnoremap <leader>rb :RainbowToggle<CR>
 
 " Ale (Syntax check) ---------------------------------------------------------
 let g:ale_enabled = 0
@@ -789,7 +790,7 @@ let g:multi_cursor_prev_key            = '<S-k>'
 let g:multi_cursor_skip_key            = '<S-o>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
-" Window Chooser -------------------------------------------------------------
+" Window-chooser -------------------------------------------------------------
 nmap  <leader><Enter> <Plug>(choosewin)
 " Show big letters
 let g:choosewin_overlay_enable = 1
@@ -878,7 +879,7 @@ let g:vimwiki_list = [{'path': '~/Documents/vimwiki/',
 "colorscheme gruvbox
 colorscheme vim-monokai-tasty
 " Use either 'koehler' or 'elflord' for 'fortran' syntax support
-autocmd FileType fortran colorscheme elflord
+autocmd FileType fortran colorscheme koehler 
 
 " Common Background Setting (Transparent Background) -------------------------
 " hi command must be entered after colorscheme
