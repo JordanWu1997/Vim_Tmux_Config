@@ -4,7 +4,7 @@
 " http://fisadev.github.io/fisa-vim-config/
 " Modified version: 8.2  by Kuan-Hsien Wu, Sheng-Jun Lin
 " ============================================================================
-
+" This vim configuration is for both vim and neovim
 " Notes:
 " Vim / Neovim configuration file --------------------------------------------
 " Vim configuration file
@@ -53,18 +53,39 @@
 "    remap all keymaps that start with space in insert mode (which you can
 "    search in vim by command :inoremap)
 
+" Notes:
+" Neoformat (Formatter) ------------------------------------------------------
+" Call multi-language code formatter [formatter need to be installed ]
+" For code formatter support: https://github.com/sbdchd/neoformat
+" Example: python code formatter
+" -- pip install yapf                  # Install formatter
+" -- In vim, :Neoformat! python yapf   # Format with yapf formatter
+
 " ============================================================================
 " Vim and Neovim settings
 " ============================================================================
-" Use vim or neovim
+" Enable/Disable Vim-plug
+
+" Use vim or neovim (Auto-detect)
 let using_neovim = has('nvim')
 let using_vim = !using_neovim
-
-" If not on remote machine (e.g. Zeus, Fomalhaut)
-let not_on_remote = 1         " assign 0 to disable
-
-" Fancy symbols
-let fancy_symbols_enabled = 1 " assign 0 to disable
+" Vim >= 8.0 (Assign 0 to disable)
+" Disable this for remote machine that vim <= 8.0 (e.g. Zeus, Fomalhaut)
+let using_vim8 = 1
+" Vim >= 8.0 can call termininal inside vim (But very time-consuming)
+let using_customized_terminal = 0
+" Customize vim theme (Assing 0 to disable)
+let using_customized_theme = 1
+" Fancy symbols (Assign 0 to disable)
+" Mainly affect to Nertree and Lightline
+let using_fancy_symbols = 1
+" Extra vim-plug (Assing 0 to disable)
+let using_extra_plug = 1
+" Coding tools vim-plug (Assing 0 to disable)
+let using_coding_tool_plug = 1
+" Python Completion (Assing 0 to disable)
+let using_python_completion = 0
+autocmd FileType python let using_python_completion = 1
 
 " ============================================================================
 " Vim built-in function settings and Vim hotkeys settings
@@ -96,8 +117,8 @@ map <leader>w :w<CR>
 map <leader>wq :wq<CR>
 map <leader>Wq :wa<CR>:q<CR>
 map <leader>WQ :wa<CR>:qa<CR>
-" Overwrite (Not working for now)
-command! Sudow execute 'w !sudo -S tee % > /dev/null'
+" Overwrite (Not working for now, use plug-in suda.vim instead)
+"command! Sudow execute 'w !sudo -S tee % > /dev/null'
 
 " Shell command --------------------------------------------------------------
 " -- :r !date (Insert timestamp)
@@ -115,21 +136,27 @@ filetype on
 nnoremap <silent><leader>sv :mkview<CR>:echo 'Setting Saved ...'<CR>
 nnoremap <silent><leader>ld :loadview<CR>:echo 'Setting Loaded ...'<CR>
 
-" Vim window control ---------------------------------------------------------
+" Vim split window (pane) control --------------------------------------------
+" Split pane - more natural split opening
+set splitbelow
+set splitright
+" Split pane navigation
 " [Also integrate with tmux now, check vim-tmux-navigator]
 nnoremap <silent><leader>; <C-W><C-W>
-nnoremap <silent><leader>h <C-W>h
-nnoremap <silent><leader>j <C-W>j
-nnoremap <silent><leader>k <C-W>k
-nnoremap <silent><leader>l <C-W>l
-nnoremap <silent><leader><Left>  <C-W>h
-nnoremap <silent><leader><Down>  <C-W>j
-nnoremap <silent><leader><Up>    <C-W>k
-nnoremap <silent><leader><Right> <C-W>l
-nnoremap <silent><leader>H <C-W>H
-nnoremap <silent><leader>J <C-W>J
-nnoremap <silent><leader>K <C-W>K
-nnoremap <silent><leader>L <C-W>L
+nnoremap <silent><leader>h :wincmd h<CR>
+nnoremap <silent><leader>j :wincmd j<CR>
+nnoremap <silent><leader>k :wincmd k<CR>
+nnoremap <silent><leader>l :wincmd l<CR>
+nnoremap <silent><leader><Left>  :wincmd h<CR>
+nnoremap <silent><leader><Down>  :wincmd j<CR>
+nnoremap <silent><leader><Up>    :wincmd k<CR>
+nnoremap <silent><leader><Right> :wincmd l<CR>
+" Split pane location swap
+nnoremap <silent><leader>H :wincmd H<CR>
+nnoremap <silent><leader>J :wincmd J<CR>
+nnoremap <silent><leader>K :wincmd K<CR>
+nnoremap <silent><leader>L :wincmd L<CR>
+" Split pane resize
 nnoremap <silent><leader>. :vertical resize +5<CR>
 nnoremap <silent><leader>, :vertical resize -5<CR>
 nnoremap <silent><leader>> :vertical resize +20<CR>
@@ -138,9 +165,16 @@ nnoremap <silent><leader>- :resize +5<CR>
 nnoremap <silent><leader>= :resize -5<CR>
 nnoremap <silent><leader>_ :resize +20<CR>
 nnoremap <silent><leader>+ :resize -20<CR>
-nnoremap <silent><leader>== <C-W>=
-nnoremap <silent><leader>++ <C-W>=
-nnoremap <silent><leader>wc <C-W>c
+nnoremap <silent><leader>== :wincmd =<CR>
+nnoremap <silent><leader>++ :wincmd =<CR>
+" Split pane action
+nnoremap <silent><leader>wt :wincmd T<CR>
+nnoremap <silent><leader>wc :wincmd c<CR>
+nnoremap <leader>wn :wincmd n<CR>
+nnoremap <leader>wx :split<space>
+nnoremap <leader>wv :vsplit<space>
+nnoremap <leader>wX :split<CR>
+nnoremap <leader>wV :vsplit<CR>
 
 " Vim settings ---------------------------------------------------------------
 set nocompatible          " Not compatible with traditional vi
@@ -233,8 +267,8 @@ endfunction
 " Buffer key mappings
 map <silent><leader>ls :ls<CR>
 map <silent><leader>bs :buffers<CR>
-map <leader>bb :b<space>
-map <leader>bn :edit<space>
+map <leader>b :b<space>
+map <leader>bb :edit<space>
 map <leader>ba :badd<space>
 map <leader>bd :bdelete<space>
 map <silent><leader>dd :bdelete<CR>:echo 'DELETE CURRENT BUFFER [PRESS CTRL+O TO RECOVER]'<CR>
@@ -243,25 +277,17 @@ map <silent><leader><F1> <Esc>:bp<CR>:echo 'PREVIOUS BUFFER ...'<CR>
 map <silent><F1> <Esc>:bn<CR>:echo 'NEXT BUFFER ...'<CR>
 
 " Marks Setting --------------------------------------------------------------
-nnoremap <leader>md :delmarks<space>
+map <leader>md :delmarks<space>
 
 " Registers Setting ----------------------------------------------------------
-nnoremap <leader>re :registers<CR>
+" Show registers in vim
+map <leader>re :registers<CR>
 
 " Display --------------------------------------------------------------------
 " When scrolling, keep cursor N lines away from screen border
 set scrolloff=3                   " Keep cursor 3 lines away from bottom
 set display+=lastline             " Show line as much as possible
 set title                         " Let vim change terminal title
-
-" Split ----------------------------------------------------------------------
-" More natural split opening
-set splitbelow
-set splitright
-nnoremap <leader>x :split<space>
-nnoremap <leader>v :vsplit<space>
-nnoremap <leader>X :split<CR>
-nnoremap <leader>V :vsplit<CR>
 
 " Better backup, swap and undos storage --------------------------------------
 if using_neovim
@@ -282,10 +308,10 @@ if using_neovim
         call mkdir(&undodir, 'p')
     endif
 else
-    set directory=~/.vim/dirs/tmp             " Directory to place swap files in
-    set backup                                " Make backup files
-    set backupdir=~/.vim/dirs/backups         " Where to put backup files
-    set undofile                              " Persistent undos - undo after re-opening
+    set directory=~/.vim/dirs/tmp     " Directory to place swap files in
+    set backup                        " Make backup files
+    set backupdir=~/.vim/dirs/backups " Where to put backup files
+    set undofile                      " Persistent undos - undo after re-opening
     set undodir=~/.vim/dirs/undos
     set viminfo+=n~/.vim/dirs/viminfo
     " Create needed directories if they don't exist
@@ -330,7 +356,8 @@ noremap <leader><F7> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 " -- In terminal buffer, <C-\><C-n> back to normal mode
 
 " Set terminal shell
-if not_on_remote
+if using_vim8 && using_customized_terminal
+    " Set terminal shell inside vim
     set shell=/bin/fish
     " Open terminal buffer
     if using_neovim
@@ -342,8 +369,6 @@ if not_on_remote
     " Do not use Esc (which conflicts with fzf window)
     tnoremap <leader><F10> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
     tnoremap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
-else
-    set shell=/bin/bash
 endif
 
 " Ability to add python breakpoints ------------------------------------------
@@ -401,16 +426,16 @@ endif
 " ****************************************************************************
 
 " [Vim theme] ----------------------------------------------------------------
-" Color themes (Monokair - high contrast)
-Plug 'patstockwell/vim-monokai-tasty'
-" Color themes (Gruvbox - low contrast)
-"Plug 'morhetz/gruvbox'
-" Lightline (status line)
-Plug 'itchyny/lightline.vim'
-" Lightline bufferline
-Plug 'mengelbrecht/lightline-bufferline'
-" Powerline symbols
-"Plug 'ryanoasis/vim-devicons'
+if using_customized_theme
+    " Color themes (Monokair - high contrast)
+    Plug 'patstockwell/vim-monokai-tasty'
+    " Color themes (Gruvbox - low contrast)
+    "Plug 'morhetz/gruvbox'
+    " Lightline (status line)
+    Plug 'itchyny/lightline.vim'
+    " Lightline bufferline
+    Plug 'mengelbrecht/lightline-bufferline'
+endif
 
 " [File/Code Browsing] -------------------------------------------------------
 " Code and files fuzzy finder
@@ -419,73 +444,85 @@ Plug 'junegunn/fzf.vim'
 " File browser [Support netrw (vim built-in file browser) functions]
 "Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdtree'
-" Class/module browser
+if using_fancy_symbols
+    " Nerdtree and other vim-plug powerline symbols support
+    Plug 'ryanoasis/vim-devicons'
+    " More highlight in nertree
+    Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+endif
+"Class/module browser
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+
+" [Vim useful functions] -----------------------------------------------------
+" Sudo write/read files in vim
+Plug 'lambdalisue/suda.vim'
+"Vim settings for opening large files
+Plug 'vim-scripts/LargeFile'
 " System Man usage
 Plug 'vim-utils/vim-man', { 'on': 'Man' }
 " Search results counter
 Plug 'vim-scripts/IndexedSearch'
 " Code commenter
 Plug 'scrooloose/nerdcommenter'
-
-" [Vim extra functions] ------------------------------------------------------
-if using_neovim && not_on_remote
-    " Override configs by directory [Too time-consumption for initialization]
-    "Plug 'arielrossanigo/dir-configs-override.vim'
-    " Fancy startup page of vim [Not use in vim, too loadtime-consuming]
-    "Plug 'mhinz/vim-startify'
-    " Goyo (Distraction-free mode)
-    Plug 'junegunn/goyo.vim'
-    " Vim-wiki [Not use in vim]
-    Plug 'vimwiki/vimwiki'
-endif
-"Vim settings for opening large files
-Plug 'vim-scripts/LargeFile'
-" History of yank
-Plug 'vim-scripts/YankRing.vim'
 " Generate bracket/quotation in pair
-Plug 'jiangmiao/auto-pairs'
-" Functions related to quotation
 Plug 'tpope/vim-surround'
 " Vim window maximizer
-Plug 'szw/vim-maximizer'
-" Window chooser
 Plug 't9md/vim-choosewin'
-" Easymotion (Key-mapping moving in vim)
-Plug 'easymotion/vim-easymotion'
-" Auto popup completion options from vim
-Plug 'vim-scripts/AutoComplPop'
-" Paint css colors with the real color
-Plug 'lilydjwg/colorizer'
+" Auto-pair for quotations and brackets
+Plug 'jiangmiao/auto-pairs'
+
+" [Vim extra functions] ------------------------------------------------------
+if using_extra_plug
+    if using_neovim
+        " Override configs by directory [Time-consuming for initialization]
+        Plug 'arielrossanigo/dir-configs-override.vim'
+        " Fancy startup page of vim [Not use in vim, too loadtime-consuming]
+        Plug 'mhinz/vim-startify'
+        " Goyo (Distraction-free mode)
+        Plug 'junegunn/goyo.vim'
+        " Vim-wiki [Not use in vim]
+        Plug 'vimwiki/vimwiki'
+    endif
+    " History of yank
+    Plug 'vim-scripts/YankRing.vim'
+    " Easymotion (Key-mapping moving in vim)
+    Plug 'easymotion/vim-easymotion'
+    " Auto popup completion options from vim
+    Plug 'vim-scripts/AutoComplPop'
+    " Paint css colors with the real color
+    Plug 'lilydjwg/colorizer'
+endif
 
 " [Functions for coding] -----------------------------------------------------
-" Multiple language syntax support [Not working on fomalhaut (vim=7.0)]
-Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
-" Syntax support (Improved syntastics)
-"Plug 'neomake/neomake'
-" Languge packs [Not working on fomalhaut (vim=7.0)]
-Plug 'sheerun/vim-polyglot'
-" Pending tasks list
-Plug 'fisadev/FixedTaskList.vim', { 'on': 'TaskList' }
-" Paint paired bracket/quotation in different color
-Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle' } 
-" Save last . motion for next time usage
-Plug 'tpope/vim-repeat'
-" Indent line guide [Color column]
-Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
-" Indent text object (i for indent as w for word)
-Plug 'michaeljsmith/vim-indent-object'
- "Multiple cursor with incsearch support
-Plug 'terryma/vim-multiple-cursors'
-
-" [Git] ----------------------------------------------------------------------
-" Git integration
-Plug 'tpope/vim-fugitive', { 'on': 'Git' }
-" Git/mercurial/others diff icons on the side of the file lines
-Plug 'mhinz/vim-signify'
+if using_coding_tool_plug
+    " Languge packs [Not working on fomalhaut (vim=7.0)]
+    Plug 'sheerun/vim-polyglot'
+    " Multiple language syntax support [Not working on fomalhaut (vim=7.0)]
+    Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
+    " Code formatter
+    Plug 'sbdchd/neoformat', { 'on': 'Neoformat' }
+    " Syntax support (Improved syntastics)
+    "Plug 'neomake/neomake'
+    " Pending tasks list
+    Plug 'fisadev/FixedTaskList.vim', { 'on': 'TaskList' }
+    " Paint paired bracket/quotation in different color
+    Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle' }
+    " Save last . motion for next time usage
+    Plug 'tpope/vim-repeat'
+    " Indent line guide [Color column]
+    Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
+    " Indent text object (i for indent as w for word)
+    Plug 'michaeljsmith/vim-indent-object'
+     "Multiple cursor with incsearch support
+    Plug 'terryma/vim-multiple-cursors'
+    " Git integration
+    Plug 'tpope/vim-fugitive', { 'on': 'Git' }
+    " Git/mercurial/others diff icons on the side of the file lines
+    Plug 'mhinz/vim-signify', { 'on': 'SignifyToggle' }
+endif
 
 " [Python coding] ------------------------------------------------------------
-if not_on_remote
+if using_python_completion
     " Python autocompletion [Not working on Zeus (lack of dependence)]
     if using_neovim && vim_plug_just_installed
         Plug 'Shougo/deoplete.nvim', { 'do': ':autocmd VimEnter * UpdateRemotePlugins' }
@@ -509,14 +546,14 @@ endif
 " More python syntax highlight
 Plug 'vim-python/python-syntax', { 'for': 'python' }
 " Sort python import (too much time-consuming)
-Plug 'fisadev/vim-isort', { 'on': 'Isort' }
+Plug 'fisadev/vim-isort', { 'on': 'Isort', 'for': 'python' }
 
 " [Fortran coding] -----------------------------------------------------------
 " Fortran syntax support
 Plug 'tomedunn/vim.fortran', { 'for': 'fortran' }
 
 " [Tmux] ---------------------------------------------------------------------
-if not_on_remote
+if using_vim8
     "" Share focus between vim and tmux [Needed for clilpboard sharing]
     " [Not working on Zeus]
     Plug 'tmux-plugins/vim-tmux-focus-events'
@@ -527,7 +564,7 @@ endif
 Plug 'christoomey/vim-tmux-navigator'
 
 " [HTML coding] --------------------------------------------------------------
-if not_on_remote
+if using_vim8
     " Highlight matching html tags
     Plug 'valloric/MatchTagAlways', { 'for': 'html' }
     " Generate html in a simple way
@@ -537,7 +574,7 @@ if not_on_remote
 endif
 
 " [Latex] --------------------------------------------------------------------
-if not_on_remote
+if using_vim8
     " Latex compiler support
     Plug 'vim-latex/vim-latex', { 'for': 'tex' }
     " Real time Tex -> Pdf file preview
@@ -576,62 +613,66 @@ autocmd FileType make setlocal noet
 "Tab key in all modes
 nnoremap <Tab> >>
 nnoremap <S-Tab> <<
-inoremap <S-Tab> <C-D>
 vnoremap <Tab> >gv
 vnoremap <S-Tab> <gv
 
 " Lightline ------------------------------------------------------------------
-if fancy_symbols_enabled
-    let g:lightline = {
-          \ 'colorscheme': 'deus',
-          \ 'active': {
-          \   'left': [ [ 'mode', 'paste' ],
-          \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-          \ },
-          \ 'component_function': {
-          \   'gitbranch': 'FugitiveHead'
-          \ },
-          \ 'separator': {
-          \   'left': "", "right": ""
-          \ },
-          \ 'subseparator': {
-          \   'left': '/', 'right': '/'
-          \ },
-          \ }
-else
-    let g:lightline = {
-          \ 'colorscheme': 'deus',
-          \ 'active': {
-          \   'left': [ [ 'mode', 'paste' ],
-          \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-          \ },
-          \ 'component_function': {
-          \   'gitbranch': 'FugitiveHead'
-          \ },
-          \ }
+if using_customized_theme
+    if using_fancy_symbols
+        let g:lightline = {
+            \ 'colorscheme': 'deus',
+            \ 'active': {
+            \   'left': [ [ 'mode', 'paste' ],
+            \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+            \ },
+            \ 'component_function': {
+            \   'gitbranch': 'FugitiveHead'
+            \ },
+            \ 'separator': {
+            \   'left': "", "right": ""
+            \ },
+            \ 'subseparator': {
+            \   'left': '/', 'right': '/'
+            \ },
+            \ }
+    else
+        let g:lightline = {
+            \ 'colorscheme': 'deus',
+            \ 'active': {
+            \   'left': [ [ 'mode', 'paste' ],
+            \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+            \ },
+            \ 'component_function': {
+            \   'gitbranch': 'FugitiveHead'
+            \ },
+            \ }
+    endif
 endif
 
 " Lightline tabline ----------------------------------------------------------
-let g:lightline#bufferline#show_number  = 0
-let g:lightline#bufferline#shorten_path = 0
-let g:lightline#bufferline#unnamed      = '[No Name]'
-let g:lightline.tabline          = { 'left': [['tabs']], 'right': [['buffers']] }
-let g:lightline.component_expand = { 'buffers': 'lightline#bufferline#buffers' }
-let g:lightline.component_type   = { 'buffers': 'tabsel' }
-" Central bar transparency
-let s:palette = g:lightline#colorscheme#{g:lightline.colorscheme}#palette
-let s:palette.normal.middle = [ [ 'NONE', 'NONE', 'NONE', 'NONE' ] ]
-let s:palette.visual.middle = s:palette.normal.middle
-let s:palette.insert.middle = s:palette.normal.middle
-let s:palette.inactive.middle = s:palette.normal.middle
-let s:palette.tabline.middle = s:palette.normal.middle
-let s:palette.replace.middle = s:palette.normal.middle
+if using_customized_theme
+    let g:lightline#bufferline#show_number  = 0
+    let g:lightline#bufferline#shorten_path = 0
+    let g:lightline#bufferline#unnamed      = '[No Name]'
+    let g:lightline.tabline          = { 'left': [['tabs']], 'right': [['buffers']] }
+    let g:lightline.component_expand = { 'buffers': 'lightline#bufferline#buffers' }
+    let g:lightline.component_type   = { 'buffers': 'tabsel' }
+    " Central bar transparency
+    let s:palette = g:lightline#colorscheme#{g:lightline.colorscheme}#palette
+    let s:palette.normal.middle = [ [ 'NONE', 'NONE', 'NONE', 'NONE' ] ]
+    let s:palette.visual.middle = s:palette.normal.middle
+    let s:palette.insert.middle = s:palette.normal.middle
+    let s:palette.inactive.middle = s:palette.normal.middle
+    let s:palette.tabline.middle = s:palette.normal.middle
+    let s:palette.replace.middle = s:palette.normal.middle
+endif
 
 " Status line ----------------------------------------------------------------
 set noshowmode    " No vim-built-in mode statusline
 set laststatus=2  " Always display the statusline in all windows
 set showtabline=2 " Always display the tabline, even if there is only one tab
-set showcmd       " This line must be added after statusline plugin
+set cmdheight=1   " Size of command line height
+set showcmd       " This line must be added AFTER statusline plugin
 
 " Tagbar ---------------------------------------------------------------------
 " autofocus on tagbar open
@@ -654,8 +695,6 @@ map <leader>pwd :pwd<CR>
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 let g:NERDTreeMouseMode = 3
 let g:NERDTreeDirArrows = ''
-let g:WebDevIconsNerdTreeBeforeGlyphPadding = ''
-let g:WebDevIconsUnicodeDecorateFolderNodes = v:true
 let g:NERDTreeDirArrowExpandable = "\u00a0"
 let g:NERDTreeDirArrowCollapsible = "\u00a0"
 
@@ -689,8 +728,6 @@ let g:indent_guides_enable_on_vim_startup = 0
 let g:indent_guides_start_level = 1
 let g:indent_guides_guide_size = 4
 let g:indent_guides_auto_colors = 0
-"autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
-"autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg='#24242d' ctermbg=194
 map <leader>ig :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
@@ -707,7 +744,6 @@ endif
 nmap <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
 
 " Auto-pairs -----------------------------------------------------------------
-" Use ';' instead of ' ' (Space) to prevent leaderkey delay effect
 let g:AutoPairsShortcutToggle = '<F9>'
 
 " Surround -------------------------------------------------------------------
@@ -806,6 +842,7 @@ vnoremap <silent><leader>z :MaximizerToggle<CR>gv
 " UPDATE it to reflect your preferences, it will speed up opening files
 let g:signify_vcs_list = ['git', 'hg']
 " Mappings to jump to changed blocks
+nmap <leader>st :SignifyToggle<CR>
 nmap <leader>sn <plug>(signify-next-hunk)
 nmap <leader>sp <plug>(signify-prev-hunk)
 " Nicer colors
@@ -818,7 +855,7 @@ highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
 " AutoComplPop ---------------------------------------------------------------
 " Enable/disable autopop
-if not_on_remote
+if using_python_completion
     autocmd FileType python let g:acp_enableAtStartup = 0
 endif
 map <leader>~ :AcpDisable<CR>:echo 'Disable Auto-Pop Suggestion'<CR>
@@ -835,7 +872,7 @@ inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
 inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
 " Deoplete -------------------------------------------------------------------
-if not_on_remote
+if using_python_completion
     " [Not working on Zeus (lack of dependence)]
     " Pynvim is needed [Installation: pip3 install --user pynvim]
     " Needed so deoplete can auto select the first suggestion
@@ -856,7 +893,7 @@ if not_on_remote
 endif
 
 " Jedi-vim -------------------------------------------------------------------
-if not_on_remote
+if using_python_completion
     " [Not working on Zeus (lack of dependence)]
     " Disable autocompletion (using deoplete instead)
     let g:jedi#completions_enabled = 0
@@ -876,17 +913,18 @@ let g:vimwiki_list = [{'path': '~/Documents/vimwiki/',
                       \ 'syntax': 'markdown', 'ext': '.md'}]
 
 " Colorscheme ----------------------------------------------------------------
-"colorscheme gruvbox
-colorscheme vim-monokai-tasty
-" Use either 'koehler' or 'elflord' for 'fortran' syntax support
-autocmd FileType fortran colorscheme koehler 
-
-" Common Background Setting (Transparent Background) -------------------------
-" hi command must be entered after colorscheme
-set bg=dark
-hi LineNr cterm=bold ctermfg=DarkGrey ctermbg=NONE gui=bold guifg=#808080 guibg=NONE
-hi CursorLineNr cterm=bold ctermfg=Green ctermbg=NONE gui=bold guifg=#00ff00 guibg=NONE
-hi Normal guibg=NONE ctermbg=NONE
+if using_customized_theme
+    "colorscheme gruvbox
+    colorscheme vim-monokai-tasty
+    " Use either 'koehler' or 'elflord' for 'fortran' syntax support
+    autocmd FileType fortran colorscheme koehler
+    " Common Background Setting (Transparent Background)
+    " hi command must be entered after colorscheme
+    set bg=dark
+    hi LineNr cterm=bold ctermfg=DarkGrey ctermbg=NONE gui=bold guifg=#808080 guibg=NONE
+    hi CursorLineNr cterm=bold ctermfg=Green ctermbg=NONE gui=bold guifg=#00ff00 guibg=NONE
+    hi Normal guibg=NONE ctermbg=NONE
+endif
 
 " TERM GUI color -------------------------------------------------------------
 " Require terminal realcolor (transparent not working on remote terminal)
@@ -906,7 +944,7 @@ nnoremap <leader>wo :match OverLength /\%79v.\+/<CR>:echo '78 char-bound ON'<CR>
 nnoremap <leader>wf :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
 
 " Vim-LaTex viewer -----------------------------------------------------------
-if not_on_remote
+if using_vim8
     let g:livepreview_previwer = 'okular'
     let g:livepreview_engine = 'pdflatex'
     autocmd FileType tex setlocal spell
@@ -916,7 +954,7 @@ endif
 
 " Function - Markdown viewer -------------------------------------------------
 " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
-if not_on_remote
+if using_vim8
     let $VIMBROWSER='google-chrome'
     let $OPENBROWSER='nnoremap <F3> :!'. $VIMBROWSER .' %:p &<CR>'
     augroup OpenMdFile
