@@ -36,6 +36,7 @@
 " -- If curl is installed, vim-plug (vim-plugin manger) should automatically
 "    run all installaion at your first time loading vim.
 " -- If vim-plug somehow not working automatically or if you want mannual
+"
 "    installation, in vim command mode, type :PlugInstall
 
 " Notes:
@@ -109,11 +110,11 @@ map <leader>e $
 " Save/Load file hotkey ------------------------------------------------------
 " - ZZ (Quit and save if there's change in file)
 " - :f <new-filename> (Save current file with new filename)
-map <leader>q :q<CR>
+map <leader>q  :q<CR>
 map <leader>qa :qa<CR>
-map <leader>Q :q!<CR>
+map <leader>Q  :q!<CR>
 map <leader>Qa :qa!<CR>
-map <leader>w :w<CR>
+map <leader>w  :w<CR>
 map <leader>wq :wq<CR>
 map <leader>Wq :wa<CR>:q<CR>
 map <leader>WQ :wa<CR>:qa<CR>
@@ -189,7 +190,8 @@ set wrap                  " Line wrap for small monitor or display window
 noremap <leader>wp :set wrap!<CR>:echo 'Toggle Line Wrap'<CR>
 
 " Comment  highlight ---------------------------------------------------------
-noremap <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
+"noremap <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
+noremap <F8> :hi Comment ctermfg=10 guifg=#5fff5f<CR>:echo 'Hi-Comment ON'<CR>
 noremap <leader><F8> :hi Comment ctermfg=245 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'<CR>
 
 " Wild menu settings ---------------------------------------------------------
@@ -454,6 +456,8 @@ endif
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 
 " [Vim useful functions] -----------------------------------------------------
+" Vim smooth scroll
+Plug 'yuttie/comfortable-motion.vim'
 " Sudo write/read files in vim
 Plug 'lambdalisue/suda.vim'
 "Vim settings for opening large files
@@ -475,7 +479,7 @@ Plug 'jiangmiao/auto-pairs'
 if using_extra_plug
     if using_neovim
         " Override configs by directory [Time-consuming for initialization]
-        Plug 'arielrossanigo/dir-configs-override.vim'
+        "Plug 'arielrossanigo/dir-configs-override.vim'
         " Fancy startup page of vim [Not use in vim, too loadtime-consuming]
         Plug 'mhinz/vim-startify'
         " Goyo (Distraction-free mode)
@@ -518,7 +522,7 @@ if using_coding_tool_plug
     " Git integration
     Plug 'tpope/vim-fugitive', { 'on': 'Git' }
     " Git/mercurial/others diff icons on the side of the file lines
-    Plug 'mhinz/vim-signify', { 'on': 'SignifyToggle' }
+    Plug 'mhinz/vim-signify' ", { 'on': 'SignifyToggle' }
 endif
 
 " [Python coding] ------------------------------------------------------------
@@ -705,6 +709,15 @@ map <leader>tl :TaskList<CR>
 " Don;t enable when start up
 let g:rainbow_active = 0
 nnoremap <leader>rb :RainbowToggle<CR>
+
+" Comfortable motion ---------------------------------------------------------
+" Disable default key mapping
+let g:comfortable_motion_no_default_key_mappings = 1
+" Motion with keyboard and mousewheel 
+nnoremap <silent> <C-d> :call comfortable_motion#flick(100)<CR>
+nnoremap <silent> <C-u> :call comfortable_motion#flick(-100)<CR>
+nnoremap <silent> <C-f> :call comfortable_motion#flick(200)<CR>
+nnoremap <silent> <C-b> :call comfortable_motion#flick(-200)<CR>
 
 " Ale (Syntax check) ---------------------------------------------------------
 let g:ale_enabled = 0
