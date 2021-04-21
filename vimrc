@@ -5,14 +5,15 @@
 " Modified version: 8.2  by Kuan-Hsien Wu, Sheng-Jun Lin
 " ============================================================================
 " This vim configuration is for both vim and neovim
-" Notes:
+
+" Note:
 " Vim / Neovim configuration file --------------------------------------------
 " Vim configuration file
 " -- Store in ~/.vimrc
 " Neovim configuration file
 " -- Store in ~/.config/nvim/init.vim
 
-" Notes:
+" Note:
 " Backup of old vim-powerline installation [Not use anymore, use lightline now]
 " Powerline-status -----------------------------------------------------------
 " " (1) sudo intall vim-powerline (Fedora)
@@ -22,7 +23,7 @@
 " "   -- python3 powerline_setup()
 " "   -- python3 del powerline_setup
 
-" Notes:
+" Note:
 " For special character support
 " NERDFont Installation ------------------------------------------------------
 " " (1) mkdir -p ~/.local/share/fonts
@@ -31,7 +32,7 @@
 "       https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/\
 "       DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 
-" Notes:
+" Note:
 " Vim-Plugin Support ---------------------------------------------------------
 " -- If curl is installed, vim-plug (vim-plugin manger) should automatically
 "    run all installaion at your first time loading vim.
@@ -39,13 +40,13 @@
 "
 "    installation, in vim command mode, type :PlugInstall
 
-" Notes:
+" Note:
 " Vim-Features Support -------------------------------------------------------
 " -- In Fedora, vim is complied without clipboard and python3/dyn features,
 " -- For those feature support, you can try either recomplie vim from source
 "    codes or [Recommended] just install gvim (gui-vim) from Fedora instead.
 
-" Notes:
+" Note:
 " Leaderkey Delay Solution ---------------------------------------------------
 " -- In the following configuration, I use space as leaderkey, however, it
 "    will encounter delay problem in insert mode (Need wait for a little bit
@@ -54,7 +55,7 @@
 "    remap all keymaps that start with space in insert mode (which you can
 "    search in vim by command :inoremap)
 
-" Notes:
+" Note:
 " Neoformat (Formatter) ------------------------------------------------------
 " Call multi-language code formatter [formatter need to be installed ]
 " For code formatter support: https://github.com/sbdchd/neoformat
@@ -85,8 +86,9 @@ let using_extra_plug = 1
 " Coding tools vim-plug (Assing 0 to disable)
 let using_coding_tool_plug = 1
 " Python Completion (Assing 0 to disable)
-let using_python_completion = 0
-autocmd FileType python let using_python_completion = 1
+let using_python_completion = 1
+" Support of externaml gui software (e.g. Okular, Google-chrome, and etc.)
+let using_gui_software = 1
 
 " ============================================================================
 " Vim built-in function settings and Vim hotkeys settings
@@ -180,13 +182,14 @@ nnoremap <leader>wV :vsplit<CR>
 " Vim settings ---------------------------------------------------------------
 set nocompatible          " Not compatible with traditional vi
 set confirm               " Ask for confirmation before leaving vim
-set ignorecase            " Ignore upper/lower case when searching
+set ignorecase            " Close case sensitive
+"set smartcase            " Case sensitive if search contains uppercase letter
 set modifiable            " Make editing buffer modifable
 set encoding=utf-8        " Unicode display
 set clipboard=unnamedplus " Shared system clipboard, gvim must be installed
 
 " Line wrap ------------------------------------------------------------------
-set wrap                  " Line wrap for small monitor or display window
+set nowrap                " Line wrap for small monitor or display window
 noremap <leader>wp :set wrap!<CR>:echo 'Toggle Line Wrap'<CR>
 
 " Comment  highlight ---------------------------------------------------------
@@ -357,26 +360,34 @@ noremap <leader><F7> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 " -- Enter insert mode to use terminal command line
 " -- In terminal buffer, <C-\><C-n> back to normal mode
 
-" Set terminal shell
-if using_vim8 && using_customized_terminal
-    " Set terminal shell inside vim
-    set shell=/bin/fish
-    " Open terminal buffer
-    if using_neovim
-        map <F10> :split<CR>:resize -5<CR>:term<CR>:echo 'Open Terminal'<CR>
+" Set customized terminal shell and keymapping
+if using_vim8
+    if using_customized_terminal
+        " Set terminal shell inside vim
+        set shell=/bin/fish
+        " Open terminal buffer
+        if using_neovim
+            map <F10> :split<CR>:resize -5<CR>:term<CR>:echo 'Open Terminal'<CR>
+        else
+            map <F10> :below terminal<CR>
+        endif
+        " Map key to go back from terminal mode to normal mode
+        " Do not use Esc (which conflicts with fzf window)
+        tnoremap <leader><F10> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
+        tnoremap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
     else
-        map <F10> :below terminal<CR>
+        if using_neovim
+            map <F10> :term<CR>
+        else
+            map <F10> :terminal<CR>
+        endif
     endif
-    " Map key to go back from terminal mode to normal mode
-    " Do not use Esc (which conflicts with fzf window)
-    tnoremap <leader><F10> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
-    tnoremap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
 endif
 
 " Ability to add python breakpoints ------------------------------------------
 " # ipdb must be installed first
 " -- In termianl: run 'pip install ipdb'
-autocmd FileType python map <silent> <leader>b Oimport ipdb; ipdb.set_trace()<esc>
+autocmd FileType python map <silent> <leader>b Oimport ipdb; ipdb.set_trace()<Esc>
 
 " ============================================================================
 " Vim-plug initialization (Get vim-plug by curl)
@@ -432,7 +443,7 @@ if using_customized_theme
     " Color themes (Monokair - high contrast)
     Plug 'patstockwell/vim-monokai-tasty'
     " Color themes (Gruvbox - low contrast)
-    "Plug 'morhetz/gruvbox'
+    Plug 'morhetz/gruvbox'
     " Lightline (status line)
     Plug 'itchyny/lightline.vim'
     " Lightline bufferline
@@ -449,8 +460,8 @@ Plug 'scrooloose/nerdtree'
 if using_fancy_symbols
     " Nerdtree and other vim-plug powerline symbols support
     Plug 'ryanoasis/vim-devicons'
-    " More highlight in nertree
-    Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+    " More highlight in nertree (make nerdtree laggy in large filetree)
+    "Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 endif
 "Class/module browser
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
@@ -458,6 +469,8 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 " [Vim useful functions] -----------------------------------------------------
 " Vim smooth scroll
 Plug 'yuttie/comfortable-motion.vim'
+" Vim-cursorword
+"Plug 'itchyny/vim-cursorword'
 " Sudo write/read files in vim
 Plug 'lambdalisue/suda.vim'
 "Vim settings for opening large files
@@ -493,8 +506,8 @@ if using_extra_plug
     Plug 'easymotion/vim-easymotion'
     " Auto popup completion options from vim
     Plug 'vim-scripts/AutoComplPop'
-    " Paint css colors with the real color
-    Plug 'lilydjwg/colorizer'
+    " Paint css colors with the real color (Integrate with colorizer)
+    Plug 'gko/vim-coloresque'
 endif
 
 " [Functions for coding] -----------------------------------------------------
@@ -522,8 +535,19 @@ if using_coding_tool_plug
     " Git integration
     Plug 'tpope/vim-fugitive', { 'on': 'Git' }
     " Git/mercurial/others diff icons on the side of the file lines
-    Plug 'mhinz/vim-signify' ", { 'on': 'SignifyToggle' }
+    Plug 'mhinz/vim-signify', { 'on': 'SignifyToggle' }
 endif
+
+" [Tmux] ---------------------------------------------------------------------
+if using_vim8
+    "" Share focus between vim and tmux [Needed for clilpboard sharing]
+    " [Not working on Zeus]
+    Plug 'tmux-plugins/vim-tmux-focus-events'
+    " Share clipboard between vim and tmux [Not working on Zeus]
+    Plug 'roxma/vim-tmux-clipboard'
+endif
+" Navigate seamlessly in vim and tmux
+Plug 'christoomey/vim-tmux-navigator'
 
 " [Python coding] ------------------------------------------------------------
 if using_python_completion
@@ -556,34 +580,19 @@ Plug 'fisadev/vim-isort', { 'on': 'Isort', 'for': 'python' }
 " Fortran syntax support
 Plug 'tomedunn/vim.fortran', { 'for': 'fortran' }
 
-" [Tmux] ---------------------------------------------------------------------
-if using_vim8
-    "" Share focus between vim and tmux [Needed for clilpboard sharing]
-    " [Not working on Zeus]
-    Plug 'tmux-plugins/vim-tmux-focus-events'
-    " Share clipboard between vim and tmux [Not working on Zeus]
-    Plug 'roxma/vim-tmux-clipboard'
-endif
-" Navigate seamlessly in vim and tmux
-Plug 'christoomey/vim-tmux-navigator'
-
 " [HTML coding] --------------------------------------------------------------
-if using_vim8
-    " Highlight matching html tags
-    Plug 'valloric/MatchTagAlways', { 'for': 'html' }
-    " Generate html in a simple way
-    Plug 'mattn/emmet-vim', { 'for': 'html' }
-    " Generate closetag for HTML
-    Plug 'alvan/vim-closetag', { 'for': 'html' }
-endif
+" Highlight matching html tags
+Plug 'valloric/MatchTagAlways', { 'for': 'html' }
+" Generate html in a simple way
+Plug 'mattn/emmet-vim', { 'for': 'html' }
+" Generate closetag for HTML
+Plug 'alvan/vim-closetag', { 'for': 'html' }
 
 " [Latex] --------------------------------------------------------------------
-if using_vim8
-    " Latex compiler support
-    Plug 'vim-latex/vim-latex', { 'for': 'tex' }
-    " Real time Tex -> Pdf file preview
-    Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
-endif
+" Latex compiler support
+Plug 'vim-latex/vim-latex', { 'for': 'tex' }
+" Real time Tex -> Pdf file preview
+Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
@@ -658,7 +667,8 @@ if using_customized_theme
     let g:lightline#bufferline#show_number  = 0
     let g:lightline#bufferline#shorten_path = 0
     let g:lightline#bufferline#unnamed      = '[No Name]'
-    let g:lightline.tabline          = { 'left': [['tabs']], 'right': [['buffers']] }
+    let g:lightline.tabline          = { 'left': [ ['tabs'] ],
+                                        \ 'right': [ ['buffers'] ] }
     let g:lightline.component_expand = { 'buffers': 'lightline#bufferline#buffers' }
     let g:lightline.component_type   = { 'buffers': 'tabsel' }
     " Central bar transparency
@@ -713,9 +723,9 @@ nnoremap <leader>rb :RainbowToggle<CR>
 " Comfortable motion ---------------------------------------------------------
 " Disable default key mapping
 let g:comfortable_motion_no_default_key_mappings = 1
-" Motion with keyboard and mousewheel 
-nnoremap <silent> <C-d> :call comfortable_motion#flick(100)<CR>
-nnoremap <silent> <C-u> :call comfortable_motion#flick(-100)<CR>
+" Motion with keyboard and mousewheel
+nnoremap <silent><C-d> :call comfortable_motion#flick(100)<CR>
+nnoremap <silent><C-u> :call comfortable_motion#flick(-100)<CR>
 nnoremap <silent> <C-f> :call comfortable_motion#flick(200)<CR>
 nnoremap <silent> <C-b> :call comfortable_motion#flick(-200)<CR>
 
@@ -754,7 +764,9 @@ if using_neovim
 else
     let g:yankring_history_dir = '~/.vim/dirs/'
 endif
+nmap <leader>yt :YRToggle<CR>:echo 'Toggle Yank History'<CR>
 nmap <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
+nmap <leader>yc :YRClear<CR>:echo 'Clear Yank History'<CR>
 
 " Auto-pairs -----------------------------------------------------------------
 let g:AutoPairsShortcutToggle = '<F9>'
@@ -832,11 +844,11 @@ map <leader><leader>2 <Plug>(easymotion-overwin-f2)
 
 " Multiple-cursors -----------------------------------------------------------
 let g:multi_cursor_use_default_mapping = 0
-let g:multi_cursor_start_word_key      = '<S-j>'
-let g:multi_cursor_select_all_word_key = '<S-m>'
-let g:multi_cursor_next_key            = '<S-j>'
-let g:multi_cursor_prev_key            = '<S-k>'
-let g:multi_cursor_skip_key            = '<S-o>'
+let g:multi_cursor_start_word_key      = '<C-n>'
+let g:multi_cursor_select_all_word_key = '<C-m>'
+let g:multi_cursor_next_key            = '<C-n>'
+let g:multi_cursor_prev_key            = '<C->'
+let g:multi_cursor_skip_key            = '<C-o>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
 " Window-chooser -------------------------------------------------------------
@@ -957,7 +969,7 @@ nnoremap <leader>wo :match OverLength /\%79v.\+/<CR>:echo '78 char-bound ON'<CR>
 nnoremap <leader>wf :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
 
 " Vim-LaTex viewer -----------------------------------------------------------
-if using_vim8
+if using_gui_software
     let g:livepreview_previwer = 'okular'
     let g:livepreview_engine = 'pdflatex'
     autocmd FileType tex setlocal spell
@@ -967,7 +979,7 @@ endif
 
 " Function - Markdown viewer -------------------------------------------------
 " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
-if using_vim8
+if using_gui_software
     let $VIMBROWSER='google-chrome'
     let $OPENBROWSER='nnoremap <F3> :!'. $VIMBROWSER .' %:p &<CR>'
     augroup OpenMdFile
