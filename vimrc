@@ -186,7 +186,7 @@ set ignorecase            " Close case sensitive
 "set smartcase            " Case sensitive if search contains uppercase letter
 set modifiable            " Make editing buffer modifable
 set encoding=utf-8        " Unicode display
-set clipboard=unnamedplus " Shared system clipboard, gvim must be installed
+set clipboard=unnamedplus " Shared system clipboard, gvim must be installed for vim
 
 " Line wrap ------------------------------------------------------------------
 set nowrap                " Line wrap for small monitor or display window
@@ -204,7 +204,7 @@ set wildmode=list:full    " Show all available input options
 " Cursor settings ------------------------------------------------------------
 set ruler                 " Show cursor position in statusline
 set cursorline            " Show vertical line
-set cursorcolumn          " Show horizontal line
+set cursorcolumn          " show horizontal line (laggy in neovim)
 
 " Search settings ------------------------------------------------------------
 set incsearch
@@ -336,7 +336,7 @@ set visualbell    " ┐
 set noerrorbells  " │ Disable beeping and window flashing
 set t_vb=         " ┘ https://vim.wikia.com/wiki/Disable_beeping
 
-" Function - Autoremove white space in end of line ---------------------------
+" Function - Autoremove whitespace in end of line ---------------------------
 " - Remove trailing whitespace when writing a buffer, but not for diff files.
 " - From Vigil <vim5632@rainslide.net>
 function! RemoveTrailingWhitespace()
@@ -348,7 +348,7 @@ function! RemoveTrailingWhitespace()
         call cursor(b:curline, b:curcol)
     endif
 endfunction
-" Remove trailing white space for python codes
+" Remove trailing whitespace for python codes
 autocmd BufWritePre *.py call RemoveTrailingWhitespace()
 nmap <leader>rm :call RemoveTrailingWhitespace()<CR>:echo "Remove Tail Whitespaces"<CR>
 
@@ -387,7 +387,7 @@ endif
 " Ability to add python breakpoints ------------------------------------------
 " # ipdb must be installed first
 " -- In termianl: run 'pip install ipdb'
-autocmd FileType python map <silent> <leader>b Oimport ipdb; ipdb.set_trace()<Esc>
+autocmd FileType python map <silent> <leader>\b Oimport ipdb; ipdb.set_trace()<Esc>
 
 " ============================================================================
 " Vim-plug initialization (Get vim-plug by curl)
@@ -467,10 +467,6 @@ endif
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 
 " [Vim useful functions] -----------------------------------------------------
-" Vim smooth scroll
-Plug 'yuttie/comfortable-motion.vim'
-" Vim-cursorword
-"Plug 'itchyny/vim-cursorword'
 " Sudo write/read files in vim
 Plug 'lambdalisue/suda.vim'
 "Vim settings for opening large files
@@ -483,6 +479,8 @@ Plug 'vim-scripts/IndexedSearch'
 Plug 'scrooloose/nerdcommenter'
 " Generate bracket/quotation in pair
 Plug 'tpope/vim-surround'
+" Enable . (repeat) motion for external plugin commands
+Plug 'tpope/vim-repeat'
 " Vim window maximizer
 Plug 't9md/vim-choosewin'
 " Auto-pair for quotations and brackets
@@ -491,9 +489,13 @@ Plug 'jiangmiao/auto-pairs'
 " [Vim extra functions] ------------------------------------------------------
 if using_extra_plug
     if using_neovim
-        " Override configs by directory [Time-consuming for initialization]
+         "Vim smooth scroll
+        Plug 'yuttie/comfortable-motion.vim'
+         "Vim-cursorword
+        "Plug 'itchyny/vim-cursorword'
+         "Override configs by directory [Time-consuming for initialization]
         "Plug 'arielrossanigo/dir-configs-override.vim'
-        " Fancy startup page of vim [Not use in vim, too loadtime-consuming]
+         "Fancy startup page of vim [Not use in vim, too loadtime-consuming]
         Plug 'mhinz/vim-startify'
         " Goyo (Distraction-free mode)
         Plug 'junegunn/goyo.vim'
@@ -506,8 +508,12 @@ if using_extra_plug
     Plug 'easymotion/vim-easymotion'
     " Auto popup completion options from vim
     Plug 'vim-scripts/AutoComplPop'
-    " Paint css colors with the real color (Integrate with colorizer)
-    Plug 'gko/vim-coloresque'
+    " Pending tasks list
+    Plug 'fisadev/FixedTaskList.vim', { 'on': 'TaskList' }
+    " Paint css colors with the real color
+    Plug 'lilydjwg/colorizer'
+    " Paint css colors with the real color (laggy with cursorcolumn)
+    "Plug 'gko/vim-coloresque'
 endif
 
 " [Functions for coding] -----------------------------------------------------
@@ -520,12 +526,8 @@ if using_coding_tool_plug
     Plug 'sbdchd/neoformat', { 'on': 'Neoformat' }
     " Syntax support (Improved syntastics)
     "Plug 'neomake/neomake'
-    " Pending tasks list
-    Plug 'fisadev/FixedTaskList.vim', { 'on': 'TaskList' }
     " Paint paired bracket/quotation in different color
     Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle' }
-    " Save last . motion for next time usage
-    Plug 'tpope/vim-repeat'
     " Indent line guide [Color column]
     Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
     " Indent text object (i for indent as w for word)
@@ -573,7 +575,7 @@ if using_python_completion
 endif
 " More python syntax highlight
 Plug 'vim-python/python-syntax', { 'for': 'python' }
-" Sort python import (too much time-consuming)
+" Sort python import (Integrate with neoformat)
 Plug 'fisadev/vim-isort', { 'on': 'Isort', 'for': 'python' }
 
 " [Fortran coding] -----------------------------------------------------------
@@ -703,7 +705,7 @@ let loaded_netrwPlugin = 1
 map <silent><F3> :NERDTreeToggle<CR>
 map <silent><leader><F3> :NERDTreeToggle<CR>
 " Open nerdtree with the current file selected
-map <silent>,t :NERDTreeFind<CR>
+map <silent><leader>nt :NERDTreeFind<CR>
 map <leader>pwd :pwd<CR>
 " Don;t show these file types
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
@@ -721,13 +723,15 @@ let g:rainbow_active = 0
 nnoremap <leader>rb :RainbowToggle<CR>
 
 " Comfortable motion ---------------------------------------------------------
-" Disable default key mapping
-let g:comfortable_motion_no_default_key_mappings = 1
-" Motion with keyboard and mousewheel
-nnoremap <silent><C-d> :call comfortable_motion#flick(100)<CR>
-nnoremap <silent><C-u> :call comfortable_motion#flick(-100)<CR>
-nnoremap <silent> <C-f> :call comfortable_motion#flick(200)<CR>
-nnoremap <silent> <C-b> :call comfortable_motion#flick(-200)<CR>
+if using_neovim && using_extra_plug
+    " Disable default key mapping
+    let g:comfortable_motion_no_default_key_mappings = 1
+    " motion with keyboard and mousewheel
+    nnoremap <silent><c-d> :call comfortable_motion#flick(100)<cr>
+    nnoremap <silent><c-u> :call comfortable_motion#flick(-100)<cr>
+    nnoremap <silent><c-f> :call comfortable_motion#flick(200)<cr>
+    nnoremap <silent><c-b> :call comfortable_motion#flick(-200)<cr>
+endif
 
 " Ale (Syntax check) ---------------------------------------------------------
 let g:ale_enabled = 0
@@ -764,7 +768,7 @@ if using_neovim
 else
     let g:yankring_history_dir = '~/.vim/dirs/'
 endif
-nmap <leader>yt :YRToggle<CR>:echo 'Toggle Yank History'<CR>
+nmap <leader>yt :YRToggle<CR>
 nmap <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
 nmap <leader>yc :YRClear<CR>:echo 'Clear Yank History'<CR>
 
@@ -797,24 +801,31 @@ let g:fzf_action = {
 " Default fzf layout (Floating in the center of window)
 " - down / up / left / right
 let g:fzf_layout = { 'down': '~40%' }
+" Buffer (Local vim)
+nmap <leader>bL :BLines<CR>
+nmap <leader>bl :execute ":BLines " . expand('<cword>')<CR>
+nmap <leader>bT :BTags<CR>
+nmap <leader>bt :execute ":BTag " . expand('<cword>')<CR>
+" All files (Global system)
+"nmap <leader>gL :Lines<CR>
+"nmap <leader>gl :execute ":Lines " . expand('<cword>')<CR>
+"nmap <leader>gT :Tags<CR>
+"nmap <leader>gt :execute ":Tag " . expand('<cword>')<CR>
+" File search
+nmap <leader>fs :Files<space>
+nmap <leader>lc :Locate<space>
+nmap <leader>rg :Rg<space>
 " fzf key mapping
-nnoremap <leader>bf :Buffers<CR>
-nnoremap <leader>fs :Files<space>
-nnoremap <leader>lc :Locate<space>
-nnoremap <leader>rg :Rg<space>
-nnoremap <leader>ln :Lines<CR>
-nnoremap <leader>bl :BLines<CR>
-nnoremap <leader>tg :Tags<CR>
-nnoremap <leader>bg :BTags<CR>
-nnoremap <leader>hs :History<CR>
-nnoremap <leader>h: :History:<CR>
-nnoremap <leader>h/ :History/<CR>
-nnoremap <leader>mk :Marks<CR>
-nnoremap <leader>ds :Windows<CR>
-nnoremap <leader>ft :Filetypes<CR>
-nnoremap <leader>cd :Commands<CR>
-nnoremap <leader>nm :Maps<CR>
-nnoremap <leader>ht :Helptags<CR>
+nmap <leader>hs :History<CR>
+nmap <leader>h: :History:<CR>
+nmap <leader>h/ :History/<CR>
+nmap <leader>mk :Marks<CR>
+nmap <leader>bf :Buffers<CR>
+nmap <leader>ds :Windows<CR>
+nmap <leader>ft :Filetypes<CR>
+nmap <leader>cd :Commands<CR>
+nmap <leader>nm :Maps<CR>
+nmap <leader>ht :Helptags<CR>
 " Insert mode completion
 imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
@@ -918,19 +929,23 @@ if using_python_completion
 endif
 
 " Jedi-vim -------------------------------------------------------------------
+" All these mappings work only for python code
 if using_python_completion
     " [Not working on Zeus (lack of dependence)]
     " Disable autocompletion (using deoplete instead)
     let g:jedi#completions_enabled = 0
-    " All these mappings work only for python code:
+    " Use split instead of buffer
+    let g:jedi#use_splits_not_buffers = "bottom"
     " Go to definition
-    let g:jedi#goto_command = ',d'
+    let g:jedi#goto_command = '<leader>d'
     " Find ocurrences
-    let g:jedi#usages_command = ',o'
+    let g:jedi#usages_command = '<leader>o'
     " Find assignments
-    let g:jedi#goto_assignments_command = ',a'
+    let g:jedi#goto_assignments_command = '<leader>a'
     " Go to definition in new tab
-    nmap ,D :tab split<CR>:call jedi#goto()<CR>
+    nmap <leader>D :tab split<CR>:call jedi#goto()<CR>
+    " Open python module
+    nmap <leader>M :Pyimport<space>
 endif
 
 " Vim-Wiki -------------------------------------------------------------------
