@@ -932,20 +932,21 @@ endif
 " All these mappings work only for python code
 if using_python_completion
     " [Not working on Zeus (lack of dependence)]
+    " jedi is needed [Installation: pip3 install --user jedi]
     " Disable autocompletion (using deoplete instead)
     let g:jedi#completions_enabled = 0
     " Use split instead of buffer
     let g:jedi#use_splits_not_buffers = "bottom"
     " Go to definition
-    let g:jedi#goto_command = '<leader>d'
+    let g:jedi#goto_command = '<leader>jd'
     " Find ocurrences
-    let g:jedi#usages_command = '<leader>o'
+    let g:jedi#usages_command = '<leader>jo'
     " Find assignments
-    let g:jedi#goto_assignments_command = '<leader>a'
+    let g:jedi#goto_assignments_command = '<leader>ja'
     " Go to definition in new tab
-    nmap <leader>D :tab split<CR>:call jedi#goto()<CR>
+    nmap <leader>jD :call jedi#goto()<CR>
     " Open python module
-    nmap <leader>M :Pyimport<space>
+    nmap <leader>jM :Pyimport<space>
 endif
 
 " Vim-Wiki -------------------------------------------------------------------
