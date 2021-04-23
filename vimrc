@@ -53,7 +53,7 @@
 "    time to enter space character). There are two solutions: One is to set
 "    leaderkey to other key than space; The other one (Recommended) is to
 "    remap all keymaps that start with space in insert mode (which you can
-"    search in vim by command :inoremap)
+"    search in vim by command :imap)
 
 " Note:
 " Neoformat (Formatter) ------------------------------------------------------
@@ -63,6 +63,13 @@
 " -- pip install yapf                  # Install formatter
 " -- In vim, :Neoformat! python yapf   # Format with yapf formatter
 
+" Note:
+" Python-completion and tmux-yank-clipboard on ZEUS --------------------------
+" Use neovim and everything is fine
+" Warning:
+" neovim support of Fedora repo is for Fedora 25 and higher version
+" For now, Seb uses AppImage directly from neovim website
+"
 " ============================================================================
 " Vim and Neovim settings
 " ============================================================================
@@ -72,7 +79,7 @@
 let using_neovim = has('nvim')
 let using_vim = !using_neovim
 " Vim >= 8.0 (Assign 0 to disable)
-" Disable this for remote machine that vim <= 8.0 (e.g. Zeus, Fomalhaut)
+" Disable this for remote machine that vim <= 8.0 (e.g. Fomalhaut)
 let using_vim8 = 1
 " Vim >= 8.0 can call termininal inside vim (But very time-consuming)
 let using_customized_terminal = 0
@@ -100,9 +107,9 @@ let mapleader = ' '
 
 " Map insert mode Esc key ----------------------------------------------------
 " - Use Ctrl+v to escape
-inoremap ii <Esc>
-inoremap kj <Esc>
-inoremap jk <Esc>
+imap ii <Esc>
+imap kj <Esc>
+imap jk <Esc>
 
 " Beginning/End, PageUp/PageDown ---------------------------------------------
 map <leader>b 0
@@ -136,8 +143,8 @@ filetype on
 "syntax enable
 
 " Vim window/pane/fold configuration -----------------------------------------
-nnoremap <silent><leader>sv :mkview<CR>:echo 'Setting Saved ...'<CR>
-nnoremap <silent><leader>ld :loadview<CR>:echo 'Setting Loaded ...'<CR>
+nmap <silent><leader>sv :mkview<CR>:echo 'Setting Saved ...'<CR>
+nmap <silent><leader>ld :loadview<CR>:echo 'Setting Loaded ...'<CR>
 
 " Vim split window (pane) control --------------------------------------------
 " Split pane - more natural split opening
@@ -145,39 +152,39 @@ set splitbelow
 set splitright
 " Split pane navigation
 " [Also integrate with tmux now, check vim-tmux-navigator]
-nnoremap <silent><leader>; <C-W><C-W>
-nnoremap <silent><leader>h :wincmd h<CR>
-nnoremap <silent><leader>j :wincmd j<CR>
-nnoremap <silent><leader>k :wincmd k<CR>
-nnoremap <silent><leader>l :wincmd l<CR>
-nnoremap <silent><leader><Left>  :wincmd h<CR>
-nnoremap <silent><leader><Down>  :wincmd j<CR>
-nnoremap <silent><leader><Up>    :wincmd k<CR>
-nnoremap <silent><leader><Right> :wincmd l<CR>
+nmap <silent><leader>; <C-W><C-W>
+nmap <silent><leader>h :wincmd h<CR>
+nmap <silent><leader>j :wincmd j<CR>
+nmap <silent><leader>k :wincmd k<CR>
+nmap <silent><leader>l :wincmd l<CR>
+nmap <silent><leader><Left>  :wincmd h<CR>
+nmap <silent><leader><Down>  :wincmd j<CR>
+nmap <silent><leader><Up>    :wincmd k<CR>
+nmap <silent><leader><Right> :wincmd l<CR>
 " Split pane location swap
-nnoremap <silent><leader>H :wincmd H<CR>
-nnoremap <silent><leader>J :wincmd J<CR>
-nnoremap <silent><leader>K :wincmd K<CR>
-nnoremap <silent><leader>L :wincmd L<CR>
+nmap <silent><leader>H :wincmd H<CR>
+nmap <silent><leader>J :wincmd J<CR>
+nmap <silent><leader>K :wincmd K<CR>
+nmap <silent><leader>L :wincmd L<CR>
 " Split pane resize
-nnoremap <silent><leader>. :vertical resize +5<CR>
-nnoremap <silent><leader>, :vertical resize -5<CR>
-nnoremap <silent><leader>> :vertical resize +20<CR>
-nnoremap <silent><leader>< :vertical resize -20<CR>
-nnoremap <silent><leader>- :resize +5<CR>
-nnoremap <silent><leader>= :resize -5<CR>
-nnoremap <silent><leader>_ :resize +20<CR>
-nnoremap <silent><leader>+ :resize -20<CR>
-nnoremap <silent><leader>== :wincmd =<CR>
-nnoremap <silent><leader>++ :wincmd =<CR>
+nmap <silent><leader>. :vertical resize +5<CR>
+nmap <silent><leader>, :vertical resize -5<CR>
+nmap <silent><leader>> :vertical resize +20<CR>
+nmap <silent><leader>< :vertical resize -20<CR>
+nmap <silent><leader>- :resize +5<CR>
+nmap <silent><leader>= :resize -5<CR>
+nmap <silent><leader>_ :resize +20<CR>
+nmap <silent><leader>+ :resize -20<CR>
+nmap <silent><leader>== :wincmd =<CR>
+nmap <silent><leader>++ :wincmd =<CR>
 " Split pane action
-nnoremap <silent><leader>wt :wincmd T<CR>
-nnoremap <silent><leader>wc :wincmd c<CR>
-nnoremap <leader>wn :wincmd n<CR>
-nnoremap <leader>wx :split<space>
-nnoremap <leader>wv :vsplit<space>
-nnoremap <leader>wX :split<CR>
-nnoremap <leader>wV :vsplit<CR>
+nmap <silent><leader>wt :wincmd T<CR>
+nmap <silent><leader>wc :wincmd c<CR>
+nmap <leader>wn :wincmd n<CR>
+nmap <leader>wx :split<space>
+nmap <leader>wv :vsplit<space>
+nmap <leader>wX :split<CR>
+nmap <leader>wV :vsplit<CR>
 
 " Vim settings ---------------------------------------------------------------
 set nocompatible          " Not compatible with traditional vi
@@ -190,12 +197,12 @@ set clipboard=unnamedplus " Shared system clipboard, gvim must be installed for 
 
 " Line wrap ------------------------------------------------------------------
 set nowrap                " Line wrap for small monitor or display window
-noremap <leader>wp :set wrap!<CR>:echo 'Toggle Line Wrap'<CR>
+map <leader>wp :set wrap!<CR>:echo 'Toggle Line Wrap'<CR>
 
 " Comment  highlight ---------------------------------------------------------
-"noremap <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
-noremap <F8> :hi Comment ctermfg=10 guifg=#5fff5f<CR>:echo 'Hi-Comment ON'<CR>
-noremap <leader><F8> :hi Comment ctermfg=245 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'<CR>
+"map <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
+map <F8> :hi Comment ctermfg=10 guifg=#5fff5f<CR>:echo 'Hi-Comment ON'<CR>
+map <leader><F8> :hi Comment ctermfg=245 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'<CR>
 
 " Wild menu settings ---------------------------------------------------------
 set wildmenu              " Show memu options
@@ -215,20 +222,20 @@ map <leader>? :set hlsearch<CR>:echo 'Enable Search Highlight'<CR>
 " Line number settings -------------------------------------------------------
 set number
 set relativenumber
-inoremap <F5> <Esc>:set number!<CR>:echo 'Toggle Line Number'<CR>i
-inoremap <F6> <Esc>:set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>i
-nnoremap <F5> :set number!<CR>:echo 'Toggle Line Number'<CR>
-nnoremap <F6> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
-nnoremap <leader><F5> :set number!<CR>:echo 'Toggle Line Number'<CR>
-nnoremap <leader><F6> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
+imap <F5> <Esc>:set number!<CR>:echo 'Toggle Line Number'<CR>i
+imap <F6> <Esc>:set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>i
+map <F5> :set number!<CR>:echo 'Toggle Line Number'<CR>
+map <F6> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
+map <leader><F5> :set number!<CR>:echo 'Toggle Line Number'<CR>
+map <leader><F6> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
 
 " Fold Setting ---------------------------------------------------------------
 set nofoldenable
 set foldmethod=syntax
 autocmd FileType python setlocal foldmethod=indent
-nnoremap <silent><leader>ff za<CR>:echo 'Toggle Current Fold...'<CR>
-nnoremap <silent><leader>cf zM<CR>:echo 'Close All Folds ...'<CR>
-nnoremap <silent><leader>of zR<CR>:echo 'Open All Folds ...'<CR>
+map <silent><leader>ff za<CR>:echo 'Toggle Current Fold...'<CR>
+map <silent><leader>cf zM<CR>:echo 'Close All Folds ...'<CR>
+map <silent><leader>of zR<CR>:echo 'Open All Folds ...'<CR>
 
 " Tabe (Window) Setting ------------------------------------------------------
 " Tabe (Window) operations
@@ -353,8 +360,8 @@ autocmd BufWritePre *.py call RemoveTrailingWhitespace()
 nmap <leader>rm :call RemoveTrailingWhitespace()<CR>:echo "Remove Tail Whitespaces"<CR>
 
 " Function - Foldcolumn display ----------------------------------------------
-noremap <F7> :set foldcolumn=6<CR>:echo 'Foldcolumn ON'<CR>
-noremap <leader><F7> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
+map <F7> :set foldcolumn=6<CR>:echo 'Foldcolumn ON'<CR>
+map <leader><F7> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 
 " Terminal Mode - Open terminal in vim buffer --------------------------------
 " -- Enter insert mode to use terminal command line
@@ -362,6 +369,11 @@ noremap <leader><F7> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 
 " Set customized terminal shell and keymapping
 if using_vim8
+    " Map key to go back from terminal mode to normal mode
+    " Do not use Esc (which conflicts with fzf window)
+    tmap <leader><F10> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
+    tmap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
+    " Customized terminal and shell
     if using_customized_terminal
         " Set terminal shell inside vim
         set shell=/bin/fish
@@ -371,10 +383,6 @@ if using_vim8
         else
             map <F10> :below terminal<CR>
         endif
-        " Map key to go back from terminal mode to normal mode
-        " Do not use Esc (which conflicts with fzf window)
-        tnoremap <leader><F10> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
-        tnoremap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
     else
         if using_neovim
             map <F10> :term<CR>
@@ -489,18 +497,18 @@ Plug 'jiangmiao/auto-pairs'
 " [Vim extra functions] ------------------------------------------------------
 if using_extra_plug
     if using_neovim
-         "Vim smooth scroll
-        Plug 'yuttie/comfortable-motion.vim'
-         "Vim-cursorword
-        "Plug 'itchyny/vim-cursorword'
          "Override configs by directory [Time-consuming for initialization]
         "Plug 'arielrossanigo/dir-configs-override.vim'
          "Fancy startup page of vim [Not use in vim, too loadtime-consuming]
         Plug 'mhinz/vim-startify'
+         "Vim smooth scroll
+        Plug 'yuttie/comfortable-motion.vim'
+         "Vim-cursorword
+        "Plug 'itchyny/vim-cursorword'
         " Goyo (Distraction-free mode)
-        Plug 'junegunn/goyo.vim'
-        " Vim-wiki [Not use in vim]
-        Plug 'vimwiki/vimwiki'
+        "Plug 'junegunn/goyo.vim'
+        "" Vim-wiki [Not use in vim]
+        "Plug 'vimwiki/vimwiki'
     endif
     " History of yank
     Plug 'vim-scripts/YankRing.vim'
@@ -518,13 +526,15 @@ endif
 
 " [Functions for coding] -----------------------------------------------------
 if using_coding_tool_plug
-    " Languge packs [Not working on fomalhaut (vim=7.0)]
-    Plug 'sheerun/vim-polyglot'
-    " Multiple language syntax support [Not working on fomalhaut (vim=7.0)]
-    Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
+    if using_vim8
+        " Languge packs [Not working on fomalhaut (vim=7.0)]
+        Plug 'sheerun/vim-polyglot'
+        " Multiple language syntax support [Not working on fomalhaut (vim=7.0)]
+        Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
+    endif
     " Code formatter
     Plug 'sbdchd/neoformat', { 'on': 'Neoformat' }
-    " Syntax support (Improved syntastics)
+    "" Syntax support (Improved syntastics)
     "Plug 'neomake/neomake'
     " Paint paired bracket/quotation in different color
     Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle' }
@@ -541,11 +551,10 @@ if using_coding_tool_plug
 endif
 
 " [Tmux] ---------------------------------------------------------------------
-if using_vim8
-    "" Share focus between vim and tmux [Needed for clilpboard sharing]
-    " [Not working on Zeus]
+if using_vim8 && using_neovim
+    " Share focus between vim and tmux [Needed for clilpboard sharing]
     Plug 'tmux-plugins/vim-tmux-focus-events'
-    " Share clipboard between vim and tmux [Not working on Zeus]
+    " Share clipboard between vim and tmux
     Plug 'roxma/vim-tmux-clipboard'
 endif
 " Navigate seamlessly in vim and tmux
@@ -553,24 +562,22 @@ Plug 'christoomey/vim-tmux-navigator'
 
 " [Python coding] ------------------------------------------------------------
 if using_python_completion
-    " Python autocompletion [Not working on Zeus (lack of dependence)]
+    " Python autocompletion
     if using_neovim && vim_plug_just_installed
         Plug 'Shougo/deoplete.nvim', { 'do': ':autocmd VimEnter * UpdateRemotePlugins' }
     else
         Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
     endif
     " Yet Another Remote Plugin Framework for Neovim [needed for deoplete.nvim]
-    " [Not working on Zeus (lack of dependence)]
     Plug 'roxma/nvim-yarp', { 'for': 'python' }
     " Help communicate beteen vim and neovim [needed for deoplete.nvim]
-    " [Not working on Zeus (lack of dependence)]
     Plug 'roxma/vim-hug-neovim-rpc', { 'for': 'python' }
-    " Python autocompletion [Not working on Zeus (lack of dependence)]
+    " Python autocompletion
     Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
-    " Completion from other opened files [Not working on Zeus (lack of dependence)]
+    " Completion from other opened files
     Plug 'Shougo/context_filetype.vim', { 'for': 'python' }
-    " Just to add the python go-to-definition and similar features, autocompletion
-    " from this plugin is disabled [Not working on Zeus (lack of dependence)]
+    " Just to add go-to-definition and similar features, autocompletion from
+    " this plugin is disabled
     Plug 'davidhalter/jedi-vim', { 'for': 'python' }
 endif
 " More python syntax highlight
@@ -616,20 +623,20 @@ endif
 " Edit them as you wish.
 
 " Tab Key Setting [Must be added after vim-plug] -----------------------------
-set expandtab        " expand tab to spaces
-set tabstop=4        " numbers of space that tab in the file counts
-set shiftwidth=4     " number of space of auto-indent length
-set softtabstop=-1   " numbers of space that tab while editing
-                     " negative value -> adopt shiftwidth value
+set expandtab       " expand tab to spaces
+set tabstop=4       " numbers of space that tab in the file counts
+set shiftwidth=4    " number of space of auto-indent length
+set softtabstop=-1  " numbers of space that tab while editing
+                    " negative value -> adopt shiftwidth value
 " PEP8 recommendation for tab settings
 autocmd FileType python setlocal et ts=4 sw=4 sts=4
 " Makefile not support expand tabs to spaces
 autocmd FileType make setlocal noet
 "Tab key in all modes
-nnoremap <Tab> >>
-nnoremap <S-Tab> <<
-vnoremap <Tab> >gv
-vnoremap <S-Tab> <gv
+nmap <Tab> >>
+nmap <S-Tab> <<
+vmap <Tab> >gv
+vmap <S-Tab> <gv
 
 " Lightline ------------------------------------------------------------------
 if using_customized_theme
@@ -720,22 +727,22 @@ map <leader>tl :TaskList<CR>
 " Rainbow parentheses --------------------------------------------------------
 " Don;t enable when start up
 let g:rainbow_active = 0
-nnoremap <leader>rb :RainbowToggle<CR>
+nmap <leader>rb :RainbowToggle<CR>
 
 " Comfortable motion ---------------------------------------------------------
 if using_neovim && using_extra_plug
     " Disable default key mapping
     let g:comfortable_motion_no_default_key_mappings = 1
     " motion with keyboard and mousewheel
-    nnoremap <silent><c-d> :call comfortable_motion#flick(100)<cr>
-    nnoremap <silent><c-u> :call comfortable_motion#flick(-100)<cr>
-    nnoremap <silent><c-f> :call comfortable_motion#flick(200)<cr>
-    nnoremap <silent><c-b> :call comfortable_motion#flick(-200)<cr>
+    nmap <silent><c-d> :call comfortable_motion#flick(100)<cr>
+    nmap <silent><c-u> :call comfortable_motion#flick(-100)<cr>
+    nmap <silent><c-f> :call comfortable_motion#flick(200)<cr>
+    nmap <silent><c-b> :call comfortable_motion#flick(-200)<cr>
 endif
 
 " Ale (Syntax check) ---------------------------------------------------------
 let g:ale_enabled = 0
-nnoremap <leader>al :ALEToggle<CR>
+nmap <leader>al :ALEToggle<CR>
 
 " Python Syntax --------------------------------------------------------------
 let g:python_highlight_all = 1
@@ -831,10 +838,10 @@ imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-l> <plug>(fzf-complete-line)
 " Path completion with custom source command
-inoremap <expr> <c-x><c-f> fzf#vim#complete#path('fd')
-inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
+imap <expr> <c-x><c-f> fzf#vim#complete#path('fd')
+imap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
 " Word completion with custom spec with popup layout option
-inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
+imap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
 
 " Easymotion -----------------------------------------------------------------
 " Move up and down not back to start of line
@@ -858,7 +865,7 @@ let g:multi_cursor_use_default_mapping = 0
 let g:multi_cursor_start_word_key      = '<C-n>'
 let g:multi_cursor_select_all_word_key = '<C-m>'
 let g:multi_cursor_next_key            = '<C-n>'
-let g:multi_cursor_prev_key            = '<C->'
+let g:multi_cursor_prev_key            = '<C-p>'
 let g:multi_cursor_skip_key            = '<C-o>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
@@ -870,8 +877,8 @@ let g:choosewin_overlay_enable = 1
 " Vim maximizer --------------------------------------------------------------
 " Default mapping is <F3> (Disabled now)
 let g:maximizer_set_default_mapping = 0
-nnoremap <silent><leader>z :MaximizerToggle<CR>
-vnoremap <silent><leader>z :MaximizerToggle<CR>gv
+nmap <silent><leader>z :MaximizerToggle<CR>
+vmap <silent><leader>z :MaximizerToggle<CR>gv
 
 " Signify --------------------------------------------------------------------
 " This first setting decides in which order try to guess your current vcs
@@ -900,16 +907,26 @@ map <leader>` :AcpEnable<CR>:echo 'Enable Auto-Pop Suggestion'<CR>
 " Popup window selection -----------------------------------------------------
 " Previous/next suggestion
 " [Double quotation matters here, do not change to single quotation]
-inoremap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
-inoremap <expr><tab>   pumvisible() ? "\<c-n>" : "\<tab>"
-inoremap <expr><C-k>   pumvisible() ? "\<c-p>" : "\<C-k>"
-inoremap <expr><C-j>   pumvisible() ? "\<c-n>" : "\<C-j>"
-inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+imap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
+imap <expr><tab>   pumvisible() ? "\<c-n>" : "\<tab>"
+imap <expr><C-k>   pumvisible() ? "\<c-p>" : "\<C-k>"
+imap <expr><C-j>   pumvisible() ? "\<c-n>" : "\<C-j>"
+imap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+imap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+
+" Neomake --------------------------------------------------------------------
+"" Run linter on write
+"autocmd! BufWritePost * Neomake
+"" Check code as python3 by default
+"let g:neomake_python_python_maker = neomake#makers#ft#python#python()
+"let g:neomake_python_flake8_maker = neomake#makers#ft#python#flake8()
+"let g:neomake_python_python_maker.exe = 'python3 -m py_compile'
+"let g:neomake_python_flake8_maker.exe = 'python3 -m flake8'
+"" Disable error messages inside the buffer, next to the problematic line
+"let g:neomake_virtualtext_current_error = 0
 
 " Deoplete -------------------------------------------------------------------
 if using_python_completion
-    " [Not working on Zeus (lack of dependence)]
     " Pynvim is needed [Installation: pip3 install --user pynvim]
     " Needed so deoplete can auto select the first suggestion
     set completeopt+=noinsert
@@ -931,7 +948,6 @@ endif
 " Jedi-vim -------------------------------------------------------------------
 " All these mappings work only for python code
 if using_python_completion
-    " [Not working on Zeus (lack of dependence)]
     " jedi is needed [Installation: pip3 install --user jedi]
     " Disable autocompletion (using deoplete instead)
     let g:jedi#completions_enabled = 0
@@ -940,7 +956,7 @@ if using_python_completion
     " Go to definition
     let g:jedi#goto_command = '<leader>jd'
     " Find ocurrences
-    let g:jedi#usages_command = '<leader>jo'
+    let g:jedi#usages_command = '<leader>jn'
     " Find assignments
     let g:jedi#goto_assignments_command = '<leader>ja'
     " Go to definition in new tab
@@ -981,8 +997,8 @@ endif
 " Here adopt default vim-textwidth 78 as maximum line length
 highlight OverLength ctermbg=red ctermfg=white guibg=#ff0000 guifg=#ffffff
 highlight UnlimitLength ctermbg=NONE guibg=NONE
-nnoremap <leader>wo :match OverLength /\%79v.\+/<CR>:echo '78 char-bound ON'<CR>
-nnoremap <leader>wf :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
+nmap <leader>wo :match OverLength /\%79v.\+/<CR>:echo '78 char-bound ON'<CR>
+nmap <leader>wf :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
 
 " Vim-LaTex viewer -----------------------------------------------------------
 if using_gui_software
@@ -997,7 +1013,7 @@ endif
 " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
 if using_gui_software
     let $VIMBROWSER='google-chrome'
-    let $OPENBROWSER='nnoremap <F3> :!'. $VIMBROWSER .' %:p &<CR>'
+    let $OPENBROWSER='nmap <F3> :!'. $VIMBROWSER .' %:p &<CR>'
     augroup OpenMdFile
         autocmd!
         autocmd BufEnter *.md echom 'Press F3 to Open .md File'
