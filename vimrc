@@ -2,7 +2,7 @@
 " ============================================================================
 " Fisa-vim-config
 " http://fisadev.github.io/fisa-vim-config/
-" Modified version: 8.2  by Kuan-Hsien Wu, Sheng-Jun Lin
+" Modified [Vim]/[Neovim] version:[8.2]/[v0.4.4] by Kuan-Hsien Wu, Sheng-Jun Lin
 " ============================================================================
 " This vim configuration is for both vim and neovim
 
@@ -35,9 +35,9 @@
 " Note:
 " Vim-Plugin Support ---------------------------------------------------------
 " -- If curl is installed, vim-plug (vim-plugin manger) should automatically
+" Vim-inspector -------------------------------------------------------------- for normal mode - the word under the cursor
 "    run all installaion at your first time loading vim.
 " -- If vim-plug somehow not working automatically or if you want mannual
-"
 "    installation, in vim command mode, type :PlugInstall
 
 " Note:
@@ -57,19 +57,22 @@
 
 " Note:
 " Neoformat (Formatter) ------------------------------------------------------
-" Call multi-language code formatter [formatter need to be installed ]
-" For code formatter support: https://github.com/sbdchd/neoformat
-" Example: python code formatter
-" -- pip install yapf                  # Install formatter
-" -- In vim, :Neoformat! python yapf   # Format with yapf formatter
+" -- Call multi-language code formatter [formatter need to be installed]
+" -- For code formatter support: https://github.com/sbdchd/Neoformat
+"    -- Example: python code formatter
+"       -- # Install formatter with terminal  : pip install yapf
+"       -- # Use formatter in vim command line: :Neoformat! python yapf
 
 " Note:
 " Python-completion and tmux-yank-clipboard on ZEUS --------------------------
-" Use neovim and everything is fine
-" Warning:
-" neovim support of Fedora repo is for Fedora 25 and higher version
-" For now, Seb uses AppImage directly from neovim website
-"
+" -- Use neovim and everything is fine, but notice that neovim support of
+"    Fedora repo is for Fedora 25 and higher version. For now, Seb used
+"    AppImage directly from neovim website
+" -- Python-completion dependence
+"    -- jedi-Vim: pip install jedi
+"    -- deoplete: pip install pynvim
+"    -- ipdb    : pip install ipdb
+
 " ============================================================================
 " Vim and Neovim settings
 " ============================================================================
@@ -212,12 +215,12 @@ set wildmode=list:full    " Show all available input options
 set ruler                 " Show cursor position in statusline
 set cursorline            " Show vertical line
 set cursorcolumn          " show horizontal line (laggy in neovim)
+map <leader>sb :set scrollbind!<CR>:echo 'Toggle Scroll Bind'<CR>
 
 " Search settings ------------------------------------------------------------
 set incsearch
 set hlsearch
-map <leader>/ :set nohlsearch<CR>:echo 'Disable Search Highlight'<CR>
-map <leader>? :set hlsearch<CR>:echo 'Enable Search Highlight'<CR>
+map <leader>/ :set nohlsearch!<CR>:echo 'Toggle Search Highlight'<CR>
 
 " Line number settings -------------------------------------------------------
 set number
@@ -490,6 +493,8 @@ Plug 'tpope/vim-surround'
 " Enable . (repeat) motion for external plugin commands
 Plug 'tpope/vim-repeat'
 " Vim window maximizer
+Plug 'szw/vim-maximizer'
+" Window pane selector
 Plug 't9md/vim-choosewin'
 " Auto-pair for quotations and brackets
 Plug 'jiangmiao/auto-pairs'
@@ -497,17 +502,15 @@ Plug 'jiangmiao/auto-pairs'
 " [Vim extra functions] ------------------------------------------------------
 if using_extra_plug
     if using_neovim
-         "Override configs by directory [Time-consuming for initialization]
+        "Override configs by directory [Time-consuming for initialization]
         "Plug 'arielrossanigo/dir-configs-override.vim'
          "Fancy startup page of vim [Not use in vim, too loadtime-consuming]
         Plug 'mhinz/vim-startify'
          "Vim smooth scroll
         Plug 'yuttie/comfortable-motion.vim'
-         "Vim-cursorword
-        "Plug 'itchyny/vim-cursorword'
         " Goyo (Distraction-free mode)
-        "Plug 'junegunn/goyo.vim'
-        "" Vim-wiki [Not use in vim]
+        Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
+        " Vim-wiki [Not use in vim]
         "Plug 'vimwiki/vimwiki'
     endif
     " History of yank
@@ -531,6 +534,8 @@ if using_coding_tool_plug
         Plug 'sheerun/vim-polyglot'
         " Multiple language syntax support [Not working on fomalhaut (vim=7.0)]
         Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
+        "" Multiple language inspector [Too complicated]
+        "Plug 'puremourning/vimspector'
     endif
     " Code formatter
     Plug 'sbdchd/neoformat', { 'on': 'Neoformat' }
@@ -551,7 +556,7 @@ if using_coding_tool_plug
 endif
 
 " [Tmux] ---------------------------------------------------------------------
-if using_vim8 && using_neovim
+if using_neovim
     " Share focus between vim and tmux [Needed for clilpboard sharing]
     Plug 'tmux-plugins/vim-tmux-focus-events'
     " Share clipboard between vim and tmux
@@ -814,10 +819,10 @@ nmap <leader>bl :execute ":BLines " . expand('<cword>')<CR>
 nmap <leader>bT :BTags<CR>
 nmap <leader>bt :execute ":BTag " . expand('<cword>')<CR>
 " All files (Global system)
-"nmap <leader>gL :Lines<CR>
-"nmap <leader>gl :execute ":Lines " . expand('<cword>')<CR>
-"nmap <leader>gT :Tags<CR>
-"nmap <leader>gt :execute ":Tag " . expand('<cword>')<CR>
+nmap <leader>gL :Lines<CR>
+nmap <leader>gl :execute ":Lines " . expand('<cword>')<CR>
+nmap <leader>gT :Tags<CR>
+nmap <leader>gt :execute ":Tag " . expand('<cword>')<CR>
 " File search
 nmap <leader>fs :Files<space>
 nmap <leader>lc :Locate<space>
