@@ -76,28 +76,28 @@
 " Vim and Neovim settings
 " ============================================================================
 " Select vim-plug to load, set guicolor (real color) support, and etc.
+" Assign 0 to disable plug option
 
 " Enable/Disable Vim-plug ----------------------------------------------------
 " Use vim or neovim (Auto-detect)
 let using_neovim = has('nvim')
 let using_vim = !using_neovim
-" Vim >= 8.0 (Assign 0 to disable)
 " Disable this for remote machine that vim <= 8.0 (e.g. Fomalhaut)
 let using_vim8 = 1
-" Vim >= 8.0 can call termininal inside vim (But very time-consuming)
-let using_customized_terminal = 0
-" Customize vim theme (Assing 0 to disable)
+" Customize vim theme (Include colortheme and statusline)
 let using_customized_theme = 1
-" Fancy symbols (Assign 0 to disable) [Mainly affect to Nertree and Lightline]
+" Fancy symbols (Mainly affect to nerdtree and lightline)
 let using_fancy_symbols = 1
-" Extra vim-plug (Assing 0 to disable)
+" Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
 let using_extra_plug = 1
-" Coding tools vim-plug (Assing 0 to disable)
+" Coding tools vim-plug (Include syntax support, git function, and etc.)
 let using_coding_tool_plug = 1
-" Python Completion (Assing 0 to disable)
+" Python Completion (Use deoplete and jedi, neovim is recommended to be used)
 let using_python_completion = 1
 " Support of externaml gui software (e.g. Okular, Google-chrome, and etc.)
 let using_gui_software = 1
+" Vim >= 8.0 can call termininal inside vim (But very time-consuming)
+let using_customized_terminal = 0
 
 " TERM GUI color -------------------------------------------------------------
 " Require terminal realcolor (transparent not working on remote terminal)
@@ -210,13 +210,15 @@ set wildmode=list:full    " Show all available input options
 set ruler                 " Show cursor position in statusline
 set cursorline            " Show vertical line
 set cursorcolumn          " Show horizontal line (laggy in neovim)
-" Command must be execute when focus on left/up (primary) pane
-map <leader>sb :set cursorbind!<CR>:echo 'Toggle Cursor Bind'<CR>
+" Synchronize cursor between files
+" -- Command must be executed in pane that has shortest lines
+" -- If line number are the same, execute command in topleft pane
+map <leader>cbd :set cursorbind!<CR>:echo 'Toggle Cursor Bind'<CR>
 
 " Display settings -----------------------------------------------------------
-set scrolloff=3                   " Keep cursor 3 lines away from bottom
-set display+=lastline             " Show line as much as possible
-set title                         " Let vim change terminal title
+set scrolloff=3           " Keep cursor 3 lines away from bottom
+set display+=lastline     " Show line as much as possible
+set title                 " Let vim change terminal title
 
 " Search settings ------------------------------------------------------------
 set incsearch
@@ -645,8 +647,8 @@ vmap <S-Tab> <gv
 " ============================================================================
 " Part 2 - Vim-theme settings (Plugins settings and mappings)
 " ============================================================================
-" Vim-theme settings, edit them as you wish. As for colorscheme, it at the end
-" of this plug settings section
+" Vim-theme settings, edit them as you wish.
+" As for colorscheme, it at the end of this plug settings section
 
 " Lightline ------------------------------------------------------------------
 if using_customized_theme
@@ -1044,7 +1046,7 @@ if using_customized_theme
     hi Normal guibg=NONE ctermbg=NONE
 endif
 
-" Comment  highlight ---------------------------------------------------------
+" Comment highlight ----------------------------------------------------------
 "map <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
 map <F8> :hi Comment ctermfg=10 guifg=#5fff5f<CR>:echo 'Hi-Comment ON'<CR>
 map <leader><F8> :hi Comment ctermfg=245 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'<CR>
@@ -1060,4 +1062,4 @@ nmap <leader>wf :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
 " End of Vim configuration, automatically reload current config after saving
 " ============================================================================
 " Automated run vim configuration file just after saving ---------------------
-autocmd BufWritePost $MYVIMRC source $MYVIMRC
+"autocmd BufWritePost $MYVIMRC source $MYVIMRC
