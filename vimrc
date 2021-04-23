@@ -8,34 +8,33 @@
 
 " Note:
 " Vim / Neovim configuration file --------------------------------------------
-" Vim configuration file
-" -- Store in ~/.vimrc
-" Neovim configuration file
-" -- Store in ~/.config/nvim/init.vim
+" -- Vim configuration file
+"   -- Store in ~/.vimrc
+" -- Neovim configuration file
+"   -- Store in ~/.config/nvim/init.vim
 
 " Note:
-" Backup of old vim-powerline installation [Not use anymore, use lightline now]
-" Powerline-status -----------------------------------------------------------
-" " (1) sudo intall vim-powerline (Fedora)
-" " (2) sudo apt-get install powerline (Ubuntu)
-" " (3) activate manually
-" "   -- python3 from powerline.vim import setup as powerline_setup
-" "   -- python3 powerline_setup()
-" "   -- python3 del powerline_setup
+" Old Powerline-status support [Not use anymore, use lightline now] ----------
+" -- Powerline-status Installation (Choose one of the following)
+"    (1) sudo intall vim-powerline (Fedora)
+"    (2) sudo apt-get install powerline (Ubuntu)
+"    (3) activate manually
+"        -- python3 from powerline.vim import setup as powerline_setup
+"        -- python3 powerline_setup()
+"        -- python3 del powerline_setup
 
 " Note:
-" For special character support
-" NERDFont Installation ------------------------------------------------------
-" " (1) mkdir -p ~/.local/share/fonts
-" " (2) cd ~/.local/share/fonts && curl -fLo \
-"       "Droid Sans Mono for Powerline Nerd Font Complete.otf" \
-"       https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/\
-"       DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
+" For special character support ----------------------------------------------
+" -- NERDFont Installation (Step by step)
+"    (1) mkdir -p ~/.local/share/fonts
+"    (2) cd ~/.local/share/fonts && curl -fLo \
+"        "Droid Sans Mono for Powerline Nerd Font Complete.otf" \
+"        https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/\
+"        DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 
 " Note:
 " Vim-Plugin Support ---------------------------------------------------------
 " -- If curl is installed, vim-plug (vim-plugin manger) should automatically
-" Vim-inspector -------------------------------------------------------------- for normal mode - the word under the cursor
 "    run all installaion at your first time loading vim.
 " -- If vim-plug somehow not working automatically or if you want mannual
 "    installation, in vim command mode, type :PlugInstall
@@ -76,8 +75,9 @@
 " ============================================================================
 " Vim and Neovim settings
 " ============================================================================
-" Enable/Disable Vim-plug
+" Select vim-plug to load, set guicolor (real color) support, and etc.
 
+" Enable/Disable Vim-plug ----------------------------------------------------
 " Use vim or neovim (Auto-detect)
 let using_neovim = has('nvim')
 let using_vim = !using_neovim
@@ -88,8 +88,7 @@ let using_vim8 = 1
 let using_customized_terminal = 0
 " Customize vim theme (Assing 0 to disable)
 let using_customized_theme = 1
-" Fancy symbols (Assign 0 to disable)
-" Mainly affect to Nertree and Lightline
+" Fancy symbols (Assign 0 to disable) [Mainly affect to Nertree and Lightline]
 let using_fancy_symbols = 1
 " Extra vim-plug (Assing 0 to disable)
 let using_extra_plug = 1
@@ -99,6 +98,16 @@ let using_coding_tool_plug = 1
 let using_python_completion = 1
 " Support of externaml gui software (e.g. Okular, Google-chrome, and etc.)
 let using_gui_software = 1
+
+" TERM GUI color -------------------------------------------------------------
+" Require terminal realcolor (transparent not working on remote terminal)
+if has('termguicolors')
+    set termguicolors
+endif
+" 256 term color support in vim TUI
+if !has('gui_running')
+    set t_Co=256
+endif
 
 " ============================================================================
 " Vim built-in function settings and Vim hotkeys settings
@@ -112,7 +121,6 @@ let mapleader = ' '
 " - Use Ctrl+v to escape
 imap ii <Esc>
 imap kj <Esc>
-imap jk <Esc>
 
 " Beginning/End, PageUp/PageDown ---------------------------------------------
 map <leader>b 0
@@ -123,20 +131,16 @@ map <leader>e $
 " - ZZ (Quit and save if there's change in file)
 " - :f <new-filename> (Save current file with new filename)
 map <leader>q  :q<CR>
-map <leader>qa :qa<CR>
 map <leader>Q  :q!<CR>
-map <leader>Qa :qa!<CR>
-map <leader>w  :w<CR>
+map <leader>ww :w<CR>
 map <leader>wq :wq<CR>
-map <leader>Wq :wa<CR>:q<CR>
-map <leader>WQ :wa<CR>:qa<CR>
 " Overwrite (Not working for now, use plug-in suda.vim instead)
 "command! Sudow execute 'w !sudo -S tee % > /dev/null'
 
 " Shell command --------------------------------------------------------------
 " -- :r !date (Insert timestamp)
 " -- :K (Manpage for current selected word)
-map <leader>m :Man<space>
+map <leader>pwd :pwd<CR>
 
 " Vim built-in setting -------------------------------------------------------
 filetype on
@@ -150,11 +154,10 @@ nmap <silent><leader>sv :mkview<CR>:echo 'Setting Saved ...'<CR>
 nmap <silent><leader>ld :loadview<CR>:echo 'Setting Loaded ...'<CR>
 
 " Vim split window (pane) control --------------------------------------------
-" Split pane - more natural split opening
+" Split pane - More natural split opening
 set splitbelow
 set splitright
-" Split pane navigation
-" [Also integrate with tmux now, check vim-tmux-navigator]
+" Split pane navigation [Also integrate with tmux, check vim-tmux-navigator]
 nmap <silent><leader>; <C-W><C-W>
 nmap <silent><leader>h :wincmd h<CR>
 nmap <silent><leader>j :wincmd j<CR>
@@ -170,20 +173,17 @@ nmap <silent><leader>J :wincmd J<CR>
 nmap <silent><leader>K :wincmd K<CR>
 nmap <silent><leader>L :wincmd L<CR>
 " Split pane resize
-nmap <silent><leader>. :vertical resize +5<CR>
-nmap <silent><leader>, :vertical resize -5<CR>
-nmap <silent><leader>> :vertical resize +20<CR>
-nmap <silent><leader>< :vertical resize -20<CR>
-nmap <silent><leader>- :resize +5<CR>
-nmap <silent><leader>= :resize -5<CR>
-nmap <silent><leader>_ :resize +20<CR>
-nmap <silent><leader>+ :resize -20<CR>
+nmap <silent>= :resize +5<CR>
+nmap <silent>- :resize -5<CR>
+nmap <silent>+ :vertical resize +5<CR>
+nmap <silent>_ :vertical resize -5<CR>
+" Redraw pane equally
 nmap <silent><leader>== :wincmd =<CR>
 nmap <silent><leader>++ :wincmd =<CR>
 " Split pane action
 nmap <silent><leader>wt :wincmd T<CR>
 nmap <silent><leader>wc :wincmd c<CR>
-nmap <leader>wn :wincmd n<CR>
+nmap <silent><leader>wn :wincmd n<CR>
 nmap <leader>wx :split<space>
 nmap <leader>wv :vsplit<space>
 nmap <leader>wX :split<CR>
@@ -202,11 +202,6 @@ set clipboard=unnamedplus " Shared system clipboard, gvim must be installed for 
 set nowrap                " Line wrap for small monitor or display window
 map <leader>wp :set wrap!<CR>:echo 'Toggle Line Wrap'<CR>
 
-" Comment  highlight ---------------------------------------------------------
-"map <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
-map <F8> :hi Comment ctermfg=10 guifg=#5fff5f<CR>:echo 'Hi-Comment ON'<CR>
-map <leader><F8> :hi Comment ctermfg=245 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'<CR>
-
 " Wild menu settings ---------------------------------------------------------
 set wildmenu              " Show memu options
 set wildmode=list:full    " Show all available input options
@@ -214,8 +209,14 @@ set wildmode=list:full    " Show all available input options
 " Cursor settings ------------------------------------------------------------
 set ruler                 " Show cursor position in statusline
 set cursorline            " Show vertical line
-set cursorcolumn          " show horizontal line (laggy in neovim)
-map <leader>sb :set scrollbind!<CR>:echo 'Toggle Scroll Bind'<CR>
+set cursorcolumn          " Show horizontal line (laggy in neovim)
+" Command must be execute when focus on left/up (primary) pane
+map <leader>sb :set cursorbind!<CR>:echo 'Toggle Cursor Bind'<CR>
+
+" Display settings -----------------------------------------------------------
+set scrolloff=3                   " Keep cursor 3 lines away from bottom
+set display+=lastline             " Show line as much as possible
+set title                         " Let vim change terminal title
 
 " Search settings ------------------------------------------------------------
 set incsearch
@@ -229,10 +230,8 @@ imap <F5> <Esc>:set number!<CR>:echo 'Toggle Line Number'<CR>i
 imap <F6> <Esc>:set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>i
 map <F5> :set number!<CR>:echo 'Toggle Line Number'<CR>
 map <F6> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
-map <leader><F5> :set number!<CR>:echo 'Toggle Line Number'<CR>
-map <leader><F6> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
 
-" Fold Setting ---------------------------------------------------------------
+" Fold settings --------------------------------------------------------------
 set nofoldenable
 set foldmethod=syntax
 autocmd FileType python setlocal foldmethod=indent
@@ -240,28 +239,26 @@ map <silent><leader>ff za<CR>:echo 'Toggle Current Fold...'<CR>
 map <silent><leader>cf zM<CR>:echo 'Close All Folds ...'<CR>
 map <silent><leader>of zR<CR>:echo 'Open All Folds ...'<CR>
 
-" Tabe (Window) Setting ------------------------------------------------------
-" Tabe (Window) operations
+" Tabe (window) settings -----------------------------------------------------
+" Tabe (window) operations
 map <leader>ts :tabs<CR>
 map <leader>tt :tabnew<space>
 map <leader>td :tabclose<space>
 map <silent><leader>tdd :tabclose<CR>:echo 'CLOSE CURRENT TAB ...'<CR>
-" Tabe (Window) navigation
-map <tab>p :tabprevious<CR>:echo 'PREVIOUS TAB'<CR>
+" Tabe (window) navigation
+map <tab>p :tabprevious<CR>:echo 'PREV TAB'<CR>
 map <tab>n :tabnext<CR>:echo 'NEXT TAB'<CR>
-map <silent><C-Left>  :tabprevious<CR>:echo 'PREVIOUS TAB ...'<CR>
+map <silent><C-Left>  :tabprevious<CR>:echo 'PREV TAB ...'<CR>
 map <silent><C-Right> :tabnext<CR>:echo 'NEXT TAB ...'<CR>
 map <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB ...'<CR>
-map <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREVIOUS TAB ...'<CR>
+map <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREV TAB ...'<CR>
 " Tabe (Window) swap
 map <silent><A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 map <silent><A-Right> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
 
-" Buffer Setting -------------------------------------------------------------
+" Buffer settings ------------------------------------------------------------
 " -- Reference: https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
 " -- Useful command: ':e#' or 'Ctrl-^' to edit between two buffers
-" -- A buffer becomes hidden when it is abandoned
-set hidden
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()
 function! <SID>BufcloseCloseIt()
@@ -279,6 +276,8 @@ function! <SID>BufcloseCloseIt()
         execute("bdelete! ".l:currentBufNum)
     endif
 endfunction
+" A buffer not becomes hidden (send to background) when it is abandoned
+set nohidden
 " Buffer key mappings
 map <silent><leader>ls :ls<CR>
 map <silent><leader>bs :buffers<CR>
@@ -288,21 +287,19 @@ map <leader>ba :badd<space>
 map <leader>bd :bdelete<space>
 map <silent><leader>dd :bdelete<CR>:echo 'DELETE CURRENT BUFFER [PRESS CTRL+O TO RECOVER]'<CR>
 map <silent><leader>bdd :bdelete<CR>:echo 'DELETE CURRENT BUFFER ...'<CR>
-map <silent><leader><F1> <Esc>:bp<CR>:echo 'PREVIOUS BUFFER ...'<CR>
+map <silent><leader><F1> <Esc>:bp<CR>:echo 'PREV BUFFER ...'<CR>
 map <silent><F1> <Esc>:bn<CR>:echo 'NEXT BUFFER ...'<CR>
 
-" Marks Setting --------------------------------------------------------------
+" Marks settings -------------------------------------------------------------
+map <leader>ma :marks<CR>
 map <leader>md :delmarks<space>
 
-" Registers Setting ----------------------------------------------------------
+" Registers settings ---------------------------------------------------------
 " Show registers in vim
 map <leader>re :registers<CR>
 
-" Display --------------------------------------------------------------------
-" When scrolling, keep cursor N lines away from screen border
-set scrolloff=3                   " Keep cursor 3 lines away from bottom
-set display+=lastline             " Show line as much as possible
-set title                         " Let vim change terminal title
+" Abbreviation settings ------------------------------------------------------
+map <leader>ab :abbreviate<CR>
 
 " Better backup, swap and undos storage --------------------------------------
 if using_neovim
@@ -341,7 +338,7 @@ else
     endif
 endif
 
-" No system bell -------------------------------------------------------------
+" Function - No system bell -------------------------------------------------
 set visualbell    " ┐
 set noerrorbells  " │ Disable beeping and window flashing
 set t_vb=         " ┘ https://vim.wikia.com/wiki/Disable_beeping
@@ -359,7 +356,9 @@ function! RemoveTrailingWhitespace()
     endif
 endfunction
 " Remove trailing whitespace for python codes
-autocmd BufWritePre *.py call RemoveTrailingWhitespace()
+autocmd BufWritePre * call RemoveTrailingWhitespace()
+" Remove trailing whitespace for editing files
+"autocmd BufWritePre *.py call RemoveTrailingWhitespace()
 nmap <leader>rm :call RemoveTrailingWhitespace()<CR>:echo "Remove Tail Whitespaces"<CR>
 
 " Function - Foldcolumn display ----------------------------------------------
@@ -369,7 +368,6 @@ map <leader><F7> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 " Terminal Mode - Open terminal in vim buffer --------------------------------
 " -- Enter insert mode to use terminal command line
 " -- In terminal buffer, <C-\><C-n> back to normal mode
-
 " Set customized terminal shell and keymapping
 if using_vim8
     " Map key to go back from terminal mode to normal mode
@@ -395,10 +393,10 @@ if using_vim8
     endif
 endif
 
-" Ability to add python breakpoints ------------------------------------------
-" # ipdb must be installed first
-" -- In termianl: run 'pip install ipdb'
-autocmd FileType python map <silent> <leader>\b Oimport ipdb; ipdb.set_trace()<Esc>
+" Function - Hex editor ------------------------------------------------------
+" From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
+map <leader>ho :%! xxd<CR>:echo 'Hex editor on: TF to binary data'<CR>
+map <leader>hf :%! xxd -r<CR>:echo 'Hex editor off: TF to original data'<CR>
 
 " ============================================================================
 " Vim-plug initialization (Get vim-plug by curl)
@@ -466,7 +464,6 @@ endif
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 " File browser [Support netrw (vim built-in file browser) functions]
-"Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdtree'
 if using_fancy_symbols
     " Nerdtree and other vim-plug powerline symbols support
@@ -510,8 +507,8 @@ if using_extra_plug
         Plug 'yuttie/comfortable-motion.vim'
         " Goyo (Distraction-free mode)
         Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
-        " Vim-wiki [Not use in vim]
-        "Plug 'vimwiki/vimwiki'
+        " Vim-wiki (Note-taking)
+        Plug 'vimwiki/vimwiki'
     endif
     " History of yank
     Plug 'vim-scripts/YankRing.vim'
@@ -522,9 +519,8 @@ if using_extra_plug
     " Pending tasks list
     Plug 'fisadev/FixedTaskList.vim', { 'on': 'TaskList' }
     " Paint css colors with the real color
+    " [Integrated in 'gko/vim-coloresque', but laggy with cursorcolumn]
     Plug 'lilydjwg/colorizer'
-    " Paint css colors with the real color (laggy with cursorcolumn)
-    "Plug 'gko/vim-coloresque'
 endif
 
 " [Functions for coding] -----------------------------------------------------
@@ -534,13 +530,13 @@ if using_coding_tool_plug
         Plug 'sheerun/vim-polyglot'
         " Multiple language syntax support [Not working on fomalhaut (vim=7.0)]
         Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
-        "" Multiple language inspector [Too complicated]
+        "" Syntax support (Improved syntastics, here just use ale instead)
+        "Plug 'neomake/neomake'
+        "" Multiple language inspector [Powerful but too complicated]
         "Plug 'puremourning/vimspector'
     endif
     " Code formatter
     Plug 'sbdchd/neoformat', { 'on': 'Neoformat' }
-    "" Syntax support (Improved syntastics)
-    "Plug 'neomake/neomake'
     " Paint paired bracket/quotation in different color
     Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle' }
     " Indent line guide [Color column]
@@ -549,7 +545,7 @@ if using_coding_tool_plug
     Plug 'michaeljsmith/vim-indent-object'
      "Multiple cursor with incsearch support
     Plug 'terryma/vim-multiple-cursors'
-    " Git integration
+    " Git integration (Git functions in vim command line)
     Plug 'tpope/vim-fugitive', { 'on': 'Git' }
     " Git/mercurial/others diff icons on the side of the file lines
     Plug 'mhinz/vim-signify', { 'on': 'SignifyToggle' }
@@ -623,25 +619,34 @@ if vim_plug_just_installed
 endif
 
 " ============================================================================
-" Plugins settings and mappings
+" Part 1 - Common settings (Plugins settings and mappings)
 " ============================================================================
 " Edit them as you wish.
 
-" Tab Key Setting [Must be added after vim-plug] -----------------------------
+" Tab key settings [Must be added after vim-plug] ----------------------------
 set expandtab       " expand tab to spaces
 set tabstop=4       " numbers of space that tab in the file counts
 set shiftwidth=4    " number of space of auto-indent length
 set softtabstop=-1  " numbers of space that tab while editing
                     " negative value -> adopt shiftwidth value
+
+" Filetype-dependent tab key settings ----------------------------------------
 " PEP8 recommendation for tab settings
 autocmd FileType python setlocal et ts=4 sw=4 sts=4
 " Makefile not support expand tabs to spaces
 autocmd FileType make setlocal noet
-"Tab key in all modes
+
+" Tab key action in all modes ------------------------------------------------
 nmap <Tab> >>
 nmap <S-Tab> <<
 vmap <Tab> >gv
 vmap <S-Tab> <gv
+
+" ============================================================================
+" Part 2 - Vim-theme settings (Plugins settings and mappings)
+" ============================================================================
+" Vim-theme settings, edit them as you wish. As for colorscheme, it at the end
+" of this plug settings section
 
 " Lightline ------------------------------------------------------------------
 if using_customized_theme
@@ -702,109 +707,15 @@ set showtabline=2 " Always display the tabline, even if there is only one tab
 set cmdheight=1   " Size of command line height
 set showcmd       " This line must be added AFTER statusline plugin
 
-" Tagbar ---------------------------------------------------------------------
-" autofocus on tagbar open
-let g:tagbar_autofocus = 1
-let g:tagbar_map_showproto = 'd'
-" toggle tagbar display
-map <silent><F4> :TagbarToggle<CR>
-map <silent><leader><F4> :TagbarToggle<CR>
-
-" NERDTree -------------------------------------------------------------------
-" Disable vim built-in netrw
-let loaded_netrwPlugin = 1
-" Toggle nerdtree display
-map <silent><F3> :NERDTreeToggle<CR>
-map <silent><leader><F3> :NERDTreeToggle<CR>
-" Open nerdtree with the current file selected
-map <silent><leader>nt :NERDTreeFind<CR>
-map <leader>pwd :pwd<CR>
-" Don;t show these file types
-let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
-let g:NERDTreeMouseMode = 3
-let g:NERDTreeDirArrows = ''
-let g:NERDTreeDirArrowExpandable = "\u00a0"
-let g:NERDTreeDirArrowCollapsible = "\u00a0"
-
-" Tasklist -------------------------------------------------------------------
-map <leader>tl :TaskList<CR>
-
-" Rainbow parentheses --------------------------------------------------------
-" Don;t enable when start up
-let g:rainbow_active = 0
-nmap <leader>rb :RainbowToggle<CR>
-
-" Comfortable motion ---------------------------------------------------------
-if using_neovim && using_extra_plug
-    " Disable default key mapping
-    let g:comfortable_motion_no_default_key_mappings = 1
-    " motion with keyboard and mousewheel
-    nmap <silent><c-d> :call comfortable_motion#flick(100)<cr>
-    nmap <silent><c-u> :call comfortable_motion#flick(-100)<cr>
-    nmap <silent><c-f> :call comfortable_motion#flick(200)<cr>
-    nmap <silent><c-b> :call comfortable_motion#flick(-200)<cr>
-endif
-
-" Ale (Syntax check) ---------------------------------------------------------
-let g:ale_enabled = 0
-nmap <leader>al :ALEToggle<CR>
-
-" Python Syntax --------------------------------------------------------------
-let g:python_highlight_all = 1
-
-" Fortran --------------------------------------------------------------------
-" Ensure correct highlighting for
-" Fortran free-form source code and turn syntax highlighting on
-let fortran_free_source = 1
-let fortran_do_enddo = 1
-
-" LargeFile ------------------------------------------------------------------
-" File unit: MB
-let g:LargeFile = 10
-
-" Indent Guides --------------------------------------------------------------
-let g:indent_guides_enable_on_vim_startup = 0
-let g:indent_guides_start_level = 1
-let g:indent_guides_guide_size = 4
-let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg='#24242d' ctermbg=194
-map <leader>ig :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
-
-" YankRing -------------------------------------------------------------------
-if using_neovim
-    let g:yankring_history_dir = '~/.config/nvim/'
-    " Fix for yankring and neovim problem when system has non-text things
-    " copied in clipboard
-    let g:yankring_clipboard_monitor = 0
-else
-    let g:yankring_history_dir = '~/.vim/dirs/'
-endif
-nmap <leader>yt :YRToggle<CR>
-nmap <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
-nmap <leader>yc :YRClear<CR>:echo 'Clear Yank History'<CR>
-
-" Auto-pairs -----------------------------------------------------------------
-let g:AutoPairsShortcutToggle = '<F9>'
-
-" Surround -------------------------------------------------------------------
-" Disable default surround mappings
-let g:surround_no_mappings = 1
-" d: delete, c: change, y:yield
-nmap ds <Plug>Dsurround
-nmap cs <Plug>Csurround
-nmap cS <Plug>CSurround
-nmap ys <Plug>Ysurround
-nmap yS <Plug>YSurround
-nmap yss <Plug>Yssurround
-nmap ySs <Plug>YSsurround
-nmap ySS <Plug>YSsurround
+" ============================================================================
+" Part 3 - File/Code browsing settings (Plugins settings and mappings)
+" ============================================================================
+" File/Code browing settings, edit them as you wish.
 
 " fzf.vim --------------------------------------------------------------------
 " Caution:
 "   - ripgrep must be installed if Rg function is needed
 "   - if syntax highlight is needed, please install bat from command line
-
 " This is the default extra key bindings
 let g:fzf_action = {
             \ 'ctrl-t': 'tab split',
@@ -833,7 +744,7 @@ nmap <leader>h: :History:<CR>
 nmap <leader>h/ :History/<CR>
 nmap <leader>mk :Marks<CR>
 nmap <leader>bf :Buffers<CR>
-nmap <leader>ds :Windows<CR>
+nmap <leader>wd :Windows<CR>
 nmap <leader>ft :Filetypes<CR>
 nmap <leader>cd :Commands<CR>
 nmap <leader>nm :Maps<CR>
@@ -847,6 +758,99 @@ imap <expr> <c-x><c-f> fzf#vim#complete#path('fd')
 imap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
 " Word completion with custom spec with popup layout option
 imap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
+
+" NERDTree -------------------------------------------------------------------
+" Disable vim built-in netrw
+let loaded_netrwPlugin = 1
+" Toggle nerdtree display
+map <silent><F3> :NERDTreeToggle<CR>
+" Open nerdtree with the current file selected
+map <silent><leader><F3> :NERDTreeFind<CR>
+" Don;t show these file types
+let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
+let g:NERDTreeMouseMode = 3
+let g:NERDTreeDirArrows = ''
+let g:NERDTreeDirArrowExpandable = "\u00a0"
+let g:NERDTreeDirArrowCollapsible = "\u00a0"
+
+" Tagbar ---------------------------------------------------------------------
+" autofocus on tagbar open
+let g:tagbar_autofocus = 1
+let g:tagbar_map_showproto = 'd'
+" toggle tagbar display
+map <silent><F4> :TagbarToggle<CR>
+
+" ============================================================================
+" Part 4 - Vim useful functions settings (Plugins settings and mappings)
+" ============================================================================
+" Vim useful functions settings, edit them as you wish.
+
+" LargeFile ------------------------------------------------------------------
+" File unit: MB
+let g:LargeFile = 10
+
+" Vim-man --------------------------------------------------------------------
+map <leader>m :Man<space>
+
+" Vim-surround ---------------------------------------------------------------
+" Disable default surround mappings
+let g:surround_no_mappings = 1
+" d: delete, c: change, y:yield
+nmap ds <Plug>Dsurround
+nmap cs <Plug>Csurround
+nmap cS <Plug>CSurround
+nmap ys <Plug>Ysurround
+nmap yS <Plug>YSurround
+nmap yss <Plug>Yssurround
+nmap ySs <Plug>YSsurround
+nmap ySS <Plug>YSsurround
+
+" Vim maximizer --------------------------------------------------------------
+ " [Default mapping is <F3> (Disabled now)]
+let g:maximizer_set_default_mapping = 0
+nmap <silent><leader>z :MaximizerToggle<CR>
+vmap <silent><leader>z :MaximizerToggle<CR>gv
+
+" Window-chooser (choosewin)--------------------------------------------------
+nmap <leader><Enter> <Plug>(choosewin)
+" Show big letters
+let g:choosewin_overlay_enable = 1
+
+" Auto-pairs -----------------------------------------------------------------
+let g:AutoPairsShortcutToggle = '<F9>'
+
+" ============================================================================
+" Part 5 - Vim extra functions settings (Plugins settings and mappings)
+" ============================================================================
+" Vim extra functions settings, edit them as you wish.
+
+" Comfortable motion ---------------------------------------------------------
+if using_neovim && using_extra_plug
+    " Disable default key mapping
+    let g:comfortable_motion_no_default_key_mappings = 1
+    " Enable motion with keyboard and mousewheel
+    nmap <silent><c-d> :call comfortable_motion#flick(100)<cr>
+    nmap <silent><c-u> :call comfortable_motion#flick(-100)<cr>
+    nmap <silent><c-f> :call comfortable_motion#flick(200)<cr>
+    nmap <silent><c-b> :call comfortable_motion#flick(-200)<cr>
+endif
+
+" Vim-Wiki -------------------------------------------------------------------
+let g:vimwiki_list = [{'path': '~/Documents/vimwiki/',
+                      \ 'syntax': 'markdown', 'ext': '.md'}]
+
+" YankRing -------------------------------------------------------------------
+if using_neovim
+    let g:yankring_history_dir = '~/.config/nvim/'
+    " Fix for yankring and neovim problem when system has non-text things
+    " copied in clipboard
+    let g:yankring_clipboard_monitor = 0
+else
+    let g:yankring_history_dir = '~/.vim/dirs/'
+endif
+nmap <leader>yt :YRToggle<CR>
+nmap <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
+nmap <leader>yc :YRClear<CR>:echo 'Clear Yank History'<CR>
 
 " Easymotion -----------------------------------------------------------------
 " Move up and down not back to start of line
@@ -864,42 +868,6 @@ map <leader><leader>l <Plug>(easymotion-lineforward)
 map <leader><leader>h <Plug>(easymotion-linebackward)
 map <leader><leader>1 <Plug>(easymotion-overwin-f)
 map <leader><leader>2 <Plug>(easymotion-overwin-f2)
-
-" Multiple-cursors -----------------------------------------------------------
-let g:multi_cursor_use_default_mapping = 0
-let g:multi_cursor_start_word_key      = '<C-n>'
-let g:multi_cursor_select_all_word_key = '<C-m>'
-let g:multi_cursor_next_key            = '<C-n>'
-let g:multi_cursor_prev_key            = '<C-p>'
-let g:multi_cursor_skip_key            = '<C-o>'
-let g:multi_cursor_quit_key            = '<Esc>'
-
-" Window-chooser -------------------------------------------------------------
-nmap  <leader><Enter> <Plug>(choosewin)
-" Show big letters
-let g:choosewin_overlay_enable = 1
-
-" Vim maximizer --------------------------------------------------------------
-" Default mapping is <F3> (Disabled now)
-let g:maximizer_set_default_mapping = 0
-nmap <silent><leader>z :MaximizerToggle<CR>
-vmap <silent><leader>z :MaximizerToggle<CR>gv
-
-" Signify --------------------------------------------------------------------
-" This first setting decides in which order try to guess your current vcs
-" UPDATE it to reflect your preferences, it will speed up opening files
-let g:signify_vcs_list = ['git', 'hg']
-" Mappings to jump to changed blocks
-nmap <leader>st :SignifyToggle<CR>
-nmap <leader>sn <plug>(signify-next-hunk)
-nmap <leader>sp <plug>(signify-prev-hunk)
-" Nicer colors
-highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
-highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
-highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
-highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
-highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
-highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
 " AutoComplPop ---------------------------------------------------------------
 " Enable/disable autopop
@@ -919,16 +887,61 @@ imap <expr><C-j>   pumvisible() ? "\<c-n>" : "\<C-j>"
 imap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
 imap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
-" Neomake --------------------------------------------------------------------
-"" Run linter on write
-"autocmd! BufWritePost * Neomake
-"" Check code as python3 by default
-"let g:neomake_python_python_maker = neomake#makers#ft#python#python()
-"let g:neomake_python_flake8_maker = neomake#makers#ft#python#flake8()
-"let g:neomake_python_python_maker.exe = 'python3 -m py_compile'
-"let g:neomake_python_flake8_maker.exe = 'python3 -m flake8'
-"" Disable error messages inside the buffer, next to the problematic line
-"let g:neomake_virtualtext_current_error = 0
+" Tasklist -------------------------------------------------------------------
+map <leader>tl :TaskList<CR>
+
+" ============================================================================
+" Part 6 - Vim coding tools settings (Plugins settings and mappings)
+" ============================================================================
+" Vim coding tools settings, edit them as you wish.
+
+" Ale (syntax check) ---------------------------------------------------------
+let g:ale_enabled = 0
+nmap <leader>al :ALEToggle<CR>
+
+" Rainbow parentheses --------------------------------------------------------
+" Don;t enable when start up
+let g:rainbow_active = 0
+nmap <leader>rb :RainbowToggle<CR>
+
+" Indent guides --------------------------------------------------------------
+let g:indent_guides_enable_on_vim_startup = 0
+let g:indent_guides_start_level = 1
+let g:indent_guides_guide_size = 4
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg='#24242d' ctermbg=194
+map <leader>ig :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
+
+" Multiple-cursors -----------------------------------------------------------
+let g:multi_cursor_use_default_mapping = 0
+let g:multi_cursor_start_word_key      = '<C-n>'
+let g:multi_cursor_select_all_word_key = '<C-n>a'
+let g:multi_cursor_next_key            = '<C-n>'
+let g:multi_cursor_prev_key            = '<C-p>'
+let g:multi_cursor_skip_key            = '<C-o>'
+let g:multi_cursor_quit_key            = '<Esc>'
+
+" Signify --------------------------------------------------------------------
+" This first setting decides in which order try to guess your current vcs
+" UPDATE it to reflect your preferences, it will speed up opening files
+let g:signify_vcs_list = ['git', 'hg']
+" Mappings to jump to changed blocks
+nmap <leader>st :SignifyToggle<CR>
+nmap <leader>sn <plug>(signify-next-hunk)
+nmap <leader>sp <plug>(signify-prev-hunk)
+" Nicer colors
+highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
+highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
+highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
+highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
+highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
+highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
+
+" ============================================================================
+" Part 7 - Python coding tools settings (Plugins settings and mappings)
+" ============================================================================
+" Python coding tools settings, edit them as you wish.
 
 " Deoplete -------------------------------------------------------------------
 if using_python_completion
@@ -970,11 +983,54 @@ if using_python_completion
     nmap <leader>jM :Pyimport<space>
 endif
 
-" Vim-Wiki -------------------------------------------------------------------
-let g:vimwiki_list = [{'path': '~/Documents/vimwiki/',
-                      \ 'syntax': 'markdown', 'ext': '.md'}]
+" Python syntax --------------------------------------------------------------
+let g:python_highlight_all = 1
 
-" Colorscheme ----------------------------------------------------------------
+" Python debug (add python breakpoints) --------------------------------------
+" [ipdb must be installed first]
+" -- Installaion in termianl: run 'pip install ipdb'
+autocmd FileType python map <silent><leader>\b Oimport ipdb; ipdb.set_trace()<Esc>
+
+" ============================================================================
+" Part 8 - Other language coding tools settings (Plugins settings and mappings)
+" ============================================================================
+" Other language support settings, edit them as you wish.
+" Language support: Fortran, LaTex, Html, Markdown
+
+" Fortran --------------------------------------------------------------------
+" Ensure correct highlighting for
+" Fortran free-form source code and turn syntax highlighting on
+let fortran_free_source = 1
+let fortran_do_enddo = 1
+
+" LaTex ----------------------------------------------------------------------
+autocmd FileType tex setlocal spell
+autocmd FileType tex setl updatetime=10000 " Unit: milisecond
+" Latex realtime viewer with gui pdf file manager
+if using_gui_software
+    let g:livepreview_previwer = 'okular'
+    let g:livepreview_engine = 'pdflatex'
+    autocmd FileType tex map <F3> :LLPStartPreview<CR>
+endif
+
+" Markdown -------------------------------------------------------------------
+" From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
+if using_gui_software
+    let $VIMBROWSER='google-chrome'
+    let $OPENBROWSER='nmap <F3> :!'. $VIMBROWSER .' %:p &<CR>'
+    augroup OpenMdFile
+        autocmd!
+        autocmd BufEnter *.md echom 'Press F3 to Open .md File'
+        autocmd BufEnter *.md exe $OPENBROWSER
+    augroup END
+endif
+
+" ============================================================================
+" Part 9 - Colorscheme and other color settings (Plugins settings and mappings)
+" ============================================================================
+" Set colorscheme (syntax highlight), color assignment, and etc.
+
+" Vim colorscheme ------------------------------------------------------------
 if using_customized_theme
     "colorscheme gruvbox
     colorscheme vim-monokai-tasty
@@ -988,51 +1044,20 @@ if using_customized_theme
     hi Normal guibg=NONE ctermbg=NONE
 endif
 
-" TERM GUI color -------------------------------------------------------------
-" Require terminal realcolor (transparent not working on remote terminal)
-if has('termguicolors')
-    set termguicolors
-endif
-" 256 term color support in vim TUI
-if !has('gui_running')
-    set t_Co=256
-endif
+" Comment  highlight ---------------------------------------------------------
+"map <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
+map <F8> :hi Comment ctermfg=10 guifg=#5fff5f<CR>:echo 'Hi-Comment ON'<CR>
+map <leader><F8> :hi Comment ctermfg=245 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'<CR>
 
-" Function - Line length warnings [ Must be added after color setup ] --------
+" Function - Line length warnings [Must be added after color setup] ----------
 " Here adopt default vim-textwidth 78 as maximum line length
 highlight OverLength ctermbg=red ctermfg=white guibg=#ff0000 guifg=#ffffff
 highlight UnlimitLength ctermbg=NONE guibg=NONE
 nmap <leader>wo :match OverLength /\%79v.\+/<CR>:echo '78 char-bound ON'<CR>
 nmap <leader>wf :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
 
-" Vim-LaTex viewer -----------------------------------------------------------
-if using_gui_software
-    let g:livepreview_previwer = 'okular'
-    let g:livepreview_engine = 'pdflatex'
-    autocmd FileType tex setlocal spell
-    autocmd FileType tex setl updatetime=10000 " Unit: milisecond
-    autocmd FileType tex map <F3> :LLPStartPreview<CR>
-endif
-
-" Function - Markdown viewer -------------------------------------------------
-" From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
-if using_gui_software
-    let $VIMBROWSER='google-chrome'
-    let $OPENBROWSER='nmap <F3> :!'. $VIMBROWSER .' %:p &<CR>'
-    augroup OpenMdFile
-        autocmd!
-        autocmd BufEnter *.md echom 'Press F3 to Open .md File'
-        autocmd BufEnter *.md exe $OPENBROWSER
-    augroup END
-endif
-
-" Function - Hex editor ------------------------------------------------------
-" From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
-map <leader>ho :%! xxd<CR>:echo 'Hex editor on: TF to binary data'<CR>
-map <leader>hf :%! xxd -r<CR>:echo 'Hex editor off: TF to original data'<CR>
-
 " ============================================================================
 " End of Vim configuration, automatically reload current config after saving
 " ============================================================================
 " Automated run vim configuration file just after saving ---------------------
-"autocmd BufWritePost $MYVIMRC source $MYVIMRC
+autocmd BufWritePost $MYVIMRC source $MYVIMRC
