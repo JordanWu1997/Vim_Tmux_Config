@@ -9,9 +9,9 @@
 " Note:
 " Vim / Neovim configuration file --------------------------------------------
 " -- Vim configuration file
-"   -- Store in ~/.vimrc
+"    -- Store in ~/.vimrc
 " -- Neovim configuration file
-"   -- Store in ~/.config/nvim/init.vim
+"    -- Store in ~/.config/nvim/init.vim
 
 " Note:
 " Old Powerline-status support [Not use anymore, use lightline now] ----------
@@ -31,6 +31,7 @@
 "        "Droid Sans Mono for Powerline Nerd Font Complete.otf" \
 "        https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/\
 "        DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
+"    (3) set terminal font to "DroidSansMono Nerd Font"
 
 " Note:
 " Vim-Plugin Support ---------------------------------------------------------
@@ -48,11 +49,12 @@
 " Note:
 " Leaderkey Delay Solution ---------------------------------------------------
 " -- In the following configuration, I use space as leaderkey, however, it
-"    will encounter delay problem in insert mode (Need wait for a little bit
-"    time to enter space character). There are two solutions: One is to set
-"    leaderkey to other key than space; The other one (Recommended) is to
-"    remap all keymaps that start with space in insert mode (which you can
-"    search in vim by command :imap)
+"    will encounter delay problem in insert mode (Need wait for a while to
+"    insert space character) since vim always waits to see if you want to
+"    press more keys to execute some function mapped in insert mode.
+" -- For now, there are two solutions: One is to set leaderkey to other key
+"    than space; The other one (RECOMMENDED) is to remap all keymaps that
+"    start with space in INSERTMODE (which can be found by vim command :imap)
 
 " Note:
 " Neoformat (Formatter) ------------------------------------------------------
@@ -86,7 +88,7 @@ let using_vim = !using_neovim
 let using_vim8 = 1
 " Customize vim theme (Include colortheme and statusline)
 let using_customized_theme = 1
-" Fancy symbols (Mainly affect to nerdtree and lightline)
+" Fancy symbols (Mainly affect nerdtree and lightline)
 let using_fancy_symbols = 1
 " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
 let using_extra_plug = 1
@@ -123,7 +125,6 @@ imap ii <Esc>
 imap kj <Esc>
 
 " Beginning/End, PageUp/PageDown ---------------------------------------------
-map <leader>b 0
 map <leader>s ^
 map <leader>e $
 
@@ -140,7 +141,7 @@ map <leader>wq :wq<CR>
 " Shell command --------------------------------------------------------------
 " -- :r !date (Insert timestamp)
 " -- :K (Manpage for current selected word)
-map <leader>pwd :pwd<CR>
+" map <leader>pwd :pwd<CR>
 
 " Vim built-in setting -------------------------------------------------------
 filetype on
@@ -179,15 +180,14 @@ nmap <silent>+ :vertical resize +5<CR>
 nmap <silent>_ :vertical resize -5<CR>
 " Redraw pane equally
 nmap <silent><leader>== :wincmd =<CR>
-nmap <silent><leader>++ :wincmd =<CR>
 " Split pane action
 nmap <silent><leader>wt :wincmd T<CR>
 nmap <silent><leader>wc :wincmd c<CR>
 nmap <silent><leader>wn :wincmd n<CR>
+nmap <silent><leader>wX :split<CR>:echo 'Split Current File'<CR>
+nmap <silent><leader>wV :vsplit<CR>: echo 'Vsplit Current File'<CR>
 nmap <leader>wx :split<space>
 nmap <leader>wv :vsplit<space>
-nmap <leader>wX :split<CR>
-nmap <leader>wV :vsplit<CR>
 
 " Vim settings ---------------------------------------------------------------
 set nocompatible          " Not compatible with traditional vi
@@ -211,9 +211,8 @@ set ruler                 " Show cursor position in statusline
 set cursorline            " Show vertical line
 set cursorcolumn          " Show horizontal line (laggy in neovim)
 " Synchronize cursor between files
-" -- Command must be executed in pane that has shortest lines
-" -- If line number are the same, execute command in topleft pane
-map <leader>cbd :set cursorbind!<CR>:echo 'Toggle Cursor Bind'<CR>
+" Must be execute in all files that you want to synchronize cursors
+map <leader>cs :set cursorbind!<CR>:echo 'Toggle Cursor Lock'<CR>
 
 " Display settings -----------------------------------------------------------
 set scrolloff=3           " Keep cursor 3 lines away from bottom
@@ -248,8 +247,6 @@ map <leader>tt :tabnew<space>
 map <leader>td :tabclose<space>
 map <silent><leader>tdd :tabclose<CR>:echo 'CLOSE CURRENT TAB ...'<CR>
 " Tabe (window) navigation
-map <tab>p :tabprevious<CR>:echo 'PREV TAB'<CR>
-map <tab>n :tabnext<CR>:echo 'NEXT TAB'<CR>
 map <silent><C-Left>  :tabprevious<CR>:echo 'PREV TAB ...'<CR>
 map <silent><C-Right> :tabnext<CR>:echo 'NEXT TAB ...'<CR>
 map <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB ...'<CR>
@@ -280,20 +277,24 @@ function! <SID>BufcloseCloseIt()
 endfunction
 " A buffer not becomes hidden (send to background) when it is abandoned
 set nohidden
-" Buffer key mappings
+" List all buffers and status
 map <silent><leader>ls :ls<CR>
-map <silent><leader>bs :buffers<CR>
+" Load buffer
 map <leader>b :b<space>
+" Add buffer in foreground
 map <leader>bb :edit<space>
+" Add buffer in background
 map <leader>ba :badd<space>
+" Delete buffer
 map <leader>bd :bdelete<space>
 map <silent><leader>dd :bdelete<CR>:echo 'DELETE CURRENT BUFFER [PRESS CTRL+O TO RECOVER]'<CR>
 map <silent><leader>bdd :bdelete<CR>:echo 'DELETE CURRENT BUFFER ...'<CR>
+" Navigate through buffers
 map <silent><leader><F1> <Esc>:bp<CR>:echo 'PREV BUFFER ...'<CR>
 map <silent><F1> <Esc>:bn<CR>:echo 'NEXT BUFFER ...'<CR>
 
 " Marks settings -------------------------------------------------------------
-map <leader>ma :marks<CR>
+map <leader>mK :marks<CR>
 map <leader>md :delmarks<space>
 
 " Registers settings ---------------------------------------------------------
@@ -340,12 +341,12 @@ else
     endif
 endif
 
-" Function - No system bell -------------------------------------------------
+" Function - No system bell --------------------------------------------------
 set visualbell    " ┐
 set noerrorbells  " │ Disable beeping and window flashing
 set t_vb=         " ┘ https://vim.wikia.com/wiki/Disable_beeping
 
-" Function - Autoremove whitespace in end of line ---------------------------
+" Function - Autoremove whitespace in end of line ----------------------------
 " - Remove trailing whitespace when writing a buffer, but not for diff files.
 " - From Vigil <vim5632@rainslide.net>
 function! RemoveTrailingWhitespace()
@@ -357,19 +358,30 @@ function! RemoveTrailingWhitespace()
         call cursor(b:curline, b:curcol)
     endif
 endfunction
-" Remove trailing whitespace for python codes
-autocmd BufWritePre * call RemoveTrailingWhitespace()
 " Remove trailing whitespace for editing files
+autocmd BufWritePre * call RemoveTrailingWhitespace()
+" Remove trailing whitespace for python codes
 "autocmd BufWritePre *.py call RemoveTrailingWhitespace()
-nmap <leader>rm :call RemoveTrailingWhitespace()<CR>:echo "Remove Tail Whitespaces"<CR>
+" nmap <leader>rm :call RemoveTrailingWhitespace()<CR>:echo "Remove Tail Whitespaces"<CR>
 
 " Function - Foldcolumn display ----------------------------------------------
 map <F7> :set foldcolumn=6<CR>:echo 'Foldcolumn ON'<CR>
 map <leader><F7> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 
-" Terminal Mode - Open terminal in vim buffer --------------------------------
+" Function - Hex editor ------------------------------------------------------
+" From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
+map <leader>ho :%! xxd<CR>:echo 'Hex editor on: TF to binary data'<CR>
+map <leader>hf :%! xxd -r<CR>:echo 'Hex editor off: TF to original data'<CR>
+
+" ============================================================================
+" Customized terminal mode (Only support for vim >= 8.0)
+" ============================================================================
+" Vim support built-in terminal, deafult use system $SHELL
+
+" Terminal mode - open terminal in vim buffer --------------------------------
 " -- Enter insert mode to use terminal command line
 " -- In terminal buffer, <C-\><C-n> back to normal mode
+
 " Set customized terminal shell and keymapping
 if using_vim8
     " Map key to go back from terminal mode to normal mode
@@ -394,11 +406,6 @@ if using_vim8
         endif
     endif
 endif
-
-" Function - Hex editor ------------------------------------------------------
-" From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
-map <leader>ho :%! xxd<CR>:echo 'Hex editor on: TF to binary data'<CR>
-map <leader>hf :%! xxd -r<CR>:echo 'Hex editor off: TF to original data'<CR>
 
 " ============================================================================
 " Vim-plug initialization (Get vim-plug by curl)
@@ -471,7 +478,7 @@ if using_fancy_symbols
     " Nerdtree and other vim-plug powerline symbols support
     Plug 'ryanoasis/vim-devicons'
     " More highlight in nertree (make nerdtree laggy in large filetree)
-    "Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+    " Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 endif
 "Class/module browser
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
@@ -479,7 +486,7 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 " [Vim useful functions] -----------------------------------------------------
 " Sudo write/read files in vim
 Plug 'lambdalisue/suda.vim'
-"Vim settings for opening large files
+" Vim settings for opening large files
 Plug 'vim-scripts/LargeFile'
 " System Man usage
 Plug 'vim-utils/vim-man', { 'on': 'Man' }
@@ -533,9 +540,9 @@ if using_coding_tool_plug
         " Multiple language syntax support [Not working on fomalhaut (vim=7.0)]
         Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
         "" Syntax support (Improved syntastics, here just use ale instead)
-        "Plug 'neomake/neomake'
+        " Plug 'neomake/neomake'
         "" Multiple language inspector [Powerful but too complicated]
-        "Plug 'puremourning/vimspector'
+        " Plug 'puremourning/vimspector'
     endif
     " Code formatter
     Plug 'sbdchd/neoformat', { 'on': 'Neoformat' }
@@ -751,23 +758,20 @@ nmap <leader>ft :Filetypes<CR>
 nmap <leader>cd :Commands<CR>
 nmap <leader>nm :Maps<CR>
 nmap <leader>ht :Helptags<CR>
-" Insert mode completion
-imap <c-x><c-k> <plug>(fzf-complete-word)
-imap <c-x><c-f> <plug>(fzf-complete-path)
+" Line completion with current file
 imap <c-x><c-l> <plug>(fzf-complete-line)
-" Path completion with custom source command
-imap <expr> <c-x><c-f> fzf#vim#complete#path('fd')
-imap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
-" Word completion with custom spec with popup layout option
-imap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
+" Word completion with dictionary
+imap <c-x><c-k> <plug>(fzf-complete-word)
+" Path completion with path
+imap <c-x><c-f> <plug>(fzf-complete-path)
 
 " NERDTree -------------------------------------------------------------------
 " Disable vim built-in netrw
 let loaded_netrwPlugin = 1
-" Toggle nerdtree display
-map <silent><F3> :NERDTreeToggle<CR>
 " Open nerdtree with the current file selected
-map <silent><leader><F3> :NERDTreeFind<CR>
+map <silent><F3> :NERDTreeFind<CR>
+" Toggle nerdtree display
+map <silent><leader><F3> :NERDTreeToggle<CR>
 " Don;t show these file types
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 let g:NERDTreeMouseMode = 3
@@ -780,7 +784,7 @@ let g:NERDTreeDirArrowCollapsible = "\u00a0"
 let g:tagbar_autofocus = 1
 let g:tagbar_map_showproto = 'd'
 " toggle tagbar display
-map <silent><F4> :TagbarToggle<CR>
+map <silent><leader><F4> :TagbarToggle<CR>
 
 " ============================================================================
 " Part 4 - Vim useful functions settings (Plugins settings and mappings)
@@ -793,6 +797,23 @@ let g:LargeFile = 10
 
 " Vim-man --------------------------------------------------------------------
 map <leader>m :Man<space>
+
+" Nerdcommenter --------------------------------------------------------------
+" Create default mappings
+let g:NERDCreateDefaultMappings = 0
+" Add spaces after comment delimiters by default
+ let g:NERDSpaceDelims = 1
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+" Enable NERDCommenterToggle to check all selected lines is commented or not
+let g:NERDToggleCheckAllLines = 1
+" Commenter mapping
+map <silent><leader>ct :call NERDComment('n', 'Toggle')<CR>
+map <silent><leader>cc :call NERDComment('n', 'Comment')<CR>
+map <silent><leader>cu :call NERDComment('n', 'Uncomment')<CR>
+map <silent><leader>cy :call NERDComment('n', 'Yank')<CR>
 
 " Vim-surround ---------------------------------------------------------------
 " Disable default surround mappings
@@ -842,6 +863,8 @@ let g:vimwiki_list = [{'path': '~/Documents/vimwiki/',
                       \ 'syntax': 'markdown', 'ext': '.md'}]
 
 " YankRing -------------------------------------------------------------------
+" Yankring automatically remap built-in command key mapping
+" -- e.g. "X[x]", "D[d]", "Y[y]", "P[p]", ".", "@", and etc.
 if using_neovim
     let g:yankring_history_dir = '~/.config/nvim/'
     " Fix for yankring and neovim problem when system has non-text things
@@ -850,7 +873,6 @@ if using_neovim
 else
     let g:yankring_history_dir = '~/.vim/dirs/'
 endif
-nmap <leader>yt :YRToggle<CR>
 nmap <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
 nmap <leader>yc :YRClear<CR>:echo 'Clear Yank History'<CR>
 
@@ -1012,17 +1034,17 @@ autocmd FileType tex setl updatetime=10000 " Unit: milisecond
 if using_gui_software
     let g:livepreview_previwer = 'okular'
     let g:livepreview_engine = 'pdflatex'
-    autocmd FileType tex map <F3> :LLPStartPreview<CR>
+    autocmd FileType tex map <F4> :LLPStartPreview<CR>
 endif
 
 " Markdown -------------------------------------------------------------------
 " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
 if using_gui_software
     let $VIMBROWSER='google-chrome'
-    let $OPENBROWSER='nmap <F3> :!'. $VIMBROWSER .' %:p &<CR>'
+    let $OPENBROWSER='nmap <F4> :!'. $VIMBROWSER .' %:p &<CR>'
     augroup OpenMdFile
         autocmd!
-        autocmd BufEnter *.md echom 'Press F3 to Open .md File'
+        autocmd BufEnter *.md echom 'Press F4 to Open .md File'
         autocmd BufEnter *.md exe $OPENBROWSER
     augroup END
 endif
