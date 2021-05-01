@@ -138,10 +138,11 @@ map <leader>wq :wq<CR>
 " Overwrite (Not working for now, use plug-in suda.vim instead)
 "command! Sudow execute 'w !sudo -S tee % > /dev/null'
 
-" Shell command --------------------------------------------------------------
+" External command -----------------------------------------------------------
+" -- K (Manpage for current selected word)
 " -- :r !date (Insert timestamp)
-" -- :K (Manpage for current selected word)
-" map <leader>pwd :pwd<CR>
+" -- :!dir (Show current directory file)
+" -- :!del FILENAME (Delete FILENAME)
 
 " Vim built-in setting -------------------------------------------------------
 filetype on
@@ -204,7 +205,7 @@ map <leader>wp :set wrap!<CR>:echo 'Toggle Line Wrap'<CR>
 
 " Wild menu settings ---------------------------------------------------------
 set wildmenu              " Show memu options
-set wildmode=list:full    " Show all available input options
+set wildmode=list:full    " Show all available input options (or use Ctrl-D)
 
 " Cursor settings ------------------------------------------------------------
 set ruler                 " Show cursor position in statusline
@@ -212,7 +213,7 @@ set cursorline            " Show vertical line
 set cursorcolumn          " Show horizontal line (laggy in neovim)
 " Synchronize cursor between files
 " Must be execute in all files that you want to synchronize cursors
-map <leader>cs :set cursorbind!<CR>:echo 'Toggle Cursor Lock'<CR>
+map <F9> :set cursorbind!<CR>:echo 'Toggle Cursor Lock'<CR>
 
 " Display settings -----------------------------------------------------------
 set scrolloff=3           " Keep cursor 3 lines away from bottom
@@ -227,10 +228,10 @@ map <leader>/ :set nohlsearch!<CR>:echo 'Toggle Search Highlight'<CR>
 " Line number settings -------------------------------------------------------
 set number
 set relativenumber
-imap <F5> <Esc>:set number!<CR>:echo 'Toggle Line Number'<CR>i
-imap <F6> <Esc>:set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>i
-map <F5> :set number!<CR>:echo 'Toggle Line Number'<CR>
-map <F6> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
+imap <leader><F5> <Esc>:set number!<CR>:echo 'Toggle Line Number'<CR>i
+imap <F5> <Esc>:set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>i
+map <leader><F5> :set number!<CR>:echo 'Toggle Line Number'<CR>
+map <F5> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
 
 " Fold settings --------------------------------------------------------------
 set nofoldenable
@@ -300,6 +301,8 @@ map <leader>md :delmarks<space>
 " Registers settings ---------------------------------------------------------
 " Show registers in vim
 map <leader>re :registers<CR>
+" Command that wipe out all registers
+command! WipeReg for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
 
 " Abbreviation settings ------------------------------------------------------
 map <leader>ab :abbreviate<CR>
@@ -365,8 +368,8 @@ autocmd BufWritePre * call RemoveTrailingWhitespace()
 " nmap <leader>rm :call RemoveTrailingWhitespace()<CR>:echo "Remove Tail Whitespaces"<CR>
 
 " Function - Foldcolumn display ----------------------------------------------
-map <F7> :set foldcolumn=6<CR>:echo 'Foldcolumn ON'<CR>
-map <leader><F7> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
+map <F6> :set foldcolumn=6<CR>:echo 'Foldcolumn ON'<CR>
+map <leader><F6> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 
 " Function - Hex editor ------------------------------------------------------
 " From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
@@ -508,19 +511,21 @@ Plug 'jiangmiao/auto-pairs'
 " [Vim extra functions] ------------------------------------------------------
 if using_extra_plug
     if using_neovim
-        "Override configs by directory [Time-consuming for initialization]
+        " Override configs by directory [Time-consuming for initialization]
         "Plug 'arielrossanigo/dir-configs-override.vim'
-         "Fancy startup page of vim [Not use in vim, too loadtime-consuming]
+        " Fancy startup page of vim [Not use in vim, too loadtime-consuming]
         Plug 'mhinz/vim-startify'
-         "Vim smooth scroll
+        " Vim smooth scroll
         Plug 'yuttie/comfortable-motion.vim'
         " Goyo (Distraction-free mode)
         Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
         " Vim-wiki (Note-taking)
-        Plug 'vimwiki/vimwiki'
+        Plug 'vimwiki/vimwiki', { 'on': 'VimwikiUISelect' }
     endif
     " History of yank
     Plug 'vim-scripts/YankRing.vim'
+    " Register investigator
+    Plug 'junegunn/vim-peekaboo'
     " Easymotion (Key-mapping moving in vim)
     Plug 'easymotion/vim-easymotion'
     " Auto popup completion options from vim
@@ -608,9 +613,9 @@ Plug 'mattn/emmet-vim', { 'for': 'html' }
 Plug 'alvan/vim-closetag', { 'for': 'html' }
 
 " [Latex] --------------------------------------------------------------------
-" Latex compiler support
+" Latex compiler link support (complier need to be installed externally)
 Plug 'vim-latex/vim-latex', { 'for': 'tex' }
-" Real time Tex -> Pdf file preview
+" Real time Tex -> Pdf file preview (pdf reader is needed)
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 
 " Tell vim-plug we finished declaring plugins, so it can load them
@@ -796,15 +801,16 @@ map <silent><leader><F4> :TagbarToggle<CR>
 let g:LargeFile = 10
 
 " Vim-man --------------------------------------------------------------------
-map <leader>m :Man<space>
+map <leader>m :execute ":Man " . expand('<cword>')<CR>
+map <leader>M :Man<space>
 
 " Nerdcommenter --------------------------------------------------------------
 " Create default mappings
 let g:NERDCreateDefaultMappings = 0
 " Add spaces after comment delimiters by default
- let g:NERDSpaceDelims = 1
+let g:NERDSpaceDelims = 0
 " Use compact syntax for prettified multi-line comments
-let g:NERDCompactSexyComs = 1
+ let g:NERDCompactSexyComs = 1
 " Enable trimming of trailing whitespace when uncommenting
 let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not
@@ -817,7 +823,7 @@ map <silent><leader>cy :call NERDComment('n', 'Yank')<CR>
 
 " Vim-surround ---------------------------------------------------------------
 " Disable default surround mappings
-let g:surround_no_mappings = 1
+"let g:surround_no_mappings = 1
 " d: delete, c: change, y:yield
 nmap ds <Plug>Dsurround
 nmap cs <Plug>Csurround
@@ -840,7 +846,7 @@ nmap <leader><Enter> <Plug>(choosewin)
 let g:choosewin_overlay_enable = 1
 
 " Auto-pairs -----------------------------------------------------------------
-let g:AutoPairsShortcutToggle = '<F9>'
+let g:AutoPairsShortcutToggle = '<leader><F9>'
 
 " ============================================================================
 " Part 5 - Vim extra functions settings (Plugins settings and mappings)
@@ -859,8 +865,11 @@ if using_neovim && using_extra_plug
 endif
 
 " Vim-Wiki -------------------------------------------------------------------
-let g:vimwiki_list = [{'path': '~/Documents/vimwiki/',
+" Set markdown as default language
+let g:vimwiki_list = [{'path': '~/Documents/VIMWIKI/',
                       \ 'syntax': 'markdown', 'ext': '.md'}]
+" Open vim-wiki selector
+nmap <leader>vw :VimwikiUISelect<CR>
 
 " YankRing -------------------------------------------------------------------
 " Yankring automatically remap built-in command key mapping
@@ -875,6 +884,10 @@ else
 endif
 nmap <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
 nmap <leader>yc :YRClear<CR>:echo 'Clear Yank History'<CR>
+
+" Peekaboo -------------------------------------------------------------------
+" Set leader as prefix for ('"' and '@') to peek registers in vim
+let g:peekaboo_prefix='<leader>'
 
 " Easymotion -----------------------------------------------------------------
 " Move up and down not back to start of line
@@ -991,19 +1004,21 @@ endif
 " All these mappings work only for python code
 if using_python_completion
     " jedi is needed [Installation: pip3 install --user jedi]
+    " jedi-vim remaps K to open python documents
     " Disable autocompletion (using deoplete instead)
     let g:jedi#completions_enabled = 0
     " Use split instead of buffer
     let g:jedi#use_splits_not_buffers = "bottom"
-    " Go to definition
-    let g:jedi#goto_command = '<leader>jd'
     " Find ocurrences
     let g:jedi#usages_command = '<leader>jn'
     " Find assignments
     let g:jedi#goto_assignments_command = '<leader>ja'
-    " Go to definition in new tab
+    " Go to definition (in split pane)
+    let g:jedi#goto_command = '<leader>jd'
+    " Go to definition (in new tab)
     nmap <leader>jD :call jedi#goto()<CR>
-    " Open python module
+    " Open python module [show __init__.py]
+    nmap <leader>jm :execute ":Pyimport " . expand('<cword>')<CR>
     nmap <leader>jM :Pyimport<space>
 endif
 
@@ -1044,7 +1059,7 @@ if using_gui_software
     let $OPENBROWSER='nmap <F4> :!'. $VIMBROWSER .' %:p &<CR>'
     augroup OpenMdFile
         autocmd!
-        autocmd BufEnter *.md echom 'Press F4 to Open .md File'
+        autocmd BufEnter *.md echom ' [Press F4 to Open .md File]'
         autocmd BufEnter *.md exe $OPENBROWSER
     augroup END
 endif
@@ -1068,17 +1083,17 @@ if using_customized_theme
     hi Normal guibg=NONE ctermbg=NONE
 endif
 
-" Comment highlight ----------------------------------------------------------
-"map <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
-map <F8> :hi Comment ctermfg=10 guifg=#5fff5f<CR>:echo 'Hi-Comment ON'<CR>
-map <leader><F8> :hi Comment ctermfg=245 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'<CR>
-
 " Function - Line length warnings [Must be added after color setup] ----------
 " Here adopt default vim-textwidth 78 as maximum line length
 highlight OverLength ctermbg=red ctermfg=white guibg=#ff0000 guifg=#ffffff
 highlight UnlimitLength ctermbg=NONE guibg=NONE
-nmap <leader>wo :match OverLength /\%79v.\+/<CR>:echo '78 char-bound ON'<CR>
-nmap <leader>wf :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
+nmap <F7> :match OverLength /\%79v.\+/<CR>:echo '78 char-bound ON'<CR>
+nmap <leader><F7> :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
+
+" Function - Comment highlight -----------------------------------------------
+"map <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
+map <F8> :hi Comment ctermfg=10 guifg=#5fff5f<CR>:echo 'Hi-Comment ON'<CR>
+map <leader><F8> :hi Comment ctermfg=245 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'<CR>
 
 " ============================================================================
 " End of Vim configuration, automatically reload current config after saving
