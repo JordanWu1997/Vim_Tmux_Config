@@ -213,7 +213,7 @@ set cursorline            " Show vertical line
 set cursorcolumn          " Show horizontal line (laggy in neovim)
 " Synchronize cursor between files
 " Must be execute in all files that you want to synchronize cursors
-map <F9> :set cursorbind!<CR>:echo 'Toggle Cursor Lock'<CR>
+map <leader><F9> :set cursorbind!<CR>:echo 'Toggle Cursor Lock'<CR>
 
 " Display settings -----------------------------------------------------------
 set scrolloff=3           " Keep cursor 3 lines away from bottom
@@ -846,7 +846,7 @@ nmap <leader><Enter> <Plug>(choosewin)
 let g:choosewin_overlay_enable = 1
 
 " Auto-pairs -----------------------------------------------------------------
-let g:AutoPairsShortcutToggle = '<leader><F9>'
+let g:AutoPairsShortcutToggle = '<F9>'
 
 " ============================================================================
 " Part 5 - Vim extra functions settings (Plugins settings and mappings)
