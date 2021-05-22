@@ -228,8 +228,6 @@ map <leader>/ :set nohlsearch!<CR>:echo 'Toggle Search Highlight'<CR>
 " Line number settings -------------------------------------------------------
 set number
 set relativenumber
-imap <leader><F5> <Esc>:set number!<CR>:echo 'Toggle Line Number'<CR>i
-imap <F5> <Esc>:set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>i
 map <leader><F5> :set number!<CR>:echo 'Toggle Line Number'<CR>
 map <F5> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
 
@@ -247,7 +245,7 @@ map <leader>ts :tabs<CR>
 map <leader>tt :tabnew<space>
 map <leader>td :tabclose<space>
 map <silent><leader>tdd :tabclose<CR>:echo 'CLOSE CURRENT TAB ...'<CR>
-" Tabe (window) navigation
+" Tabe (window) navigation (C-Left/Right will be overwrited in TMUX session)
 map <silent><C-Left>  :tabprevious<CR>:echo 'PREV TAB ...'<CR>
 map <silent><C-Right> :tabnext<CR>:echo 'NEXT TAB ...'<CR>
 map <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB ...'<CR>
@@ -365,7 +363,7 @@ endfunction
 autocmd BufWritePre * call RemoveTrailingWhitespace()
 " Remove trailing whitespace for python codes
 "autocmd BufWritePre *.py call RemoveTrailingWhitespace()
-" nmap <leader>rm :call RemoveTrailingWhitespace()<CR>:echo "Remove Tail Whitespaces"<CR>
+nmap <leader>rm :call RemoveTrailingWhitespace()<CR>:echo "Remove Tail Whitespaces"<CR>
 
 " Function - Foldcolumn display ----------------------------------------------
 map <F6> :set foldcolumn=6<CR>:echo 'Foldcolumn ON'<CR>
@@ -1049,17 +1047,19 @@ autocmd FileType tex setl updatetime=10000 " Unit: milisecond
 if using_gui_software
     let g:livepreview_previwer = 'okular'
     let g:livepreview_engine = 'pdflatex'
+    autocmd BufEnter *.tex echom '[Press F4 to Preview .tex File]'
     autocmd FileType tex map <F4> :LLPStartPreview<CR>
 endif
 
 " Markdown -------------------------------------------------------------------
 " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
+" Google-chrome extension is needed for markdown viewer
 if using_gui_software
     let $VIMBROWSER='google-chrome'
     let $OPENBROWSER='nmap <F4> :!'. $VIMBROWSER .' %:p &<CR>'
     augroup OpenMdFile
         autocmd!
-        autocmd BufEnter *.md echom ' [Press F4 to Open .md File]'
+        autocmd BufEnter *.md echom '[Press F4 to Open .md File]'
         autocmd BufEnter *.md exe $OPENBROWSER
     augroup END
 endif

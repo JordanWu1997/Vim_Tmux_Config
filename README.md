@@ -1,9 +1,9 @@
 # Vim_Tmux_Config
 Backup for my vim and tmux configuration
 
-## Preparation
+## Preparation (Dependence)
 
-## First time usage
+## First Time Usage
 
 ## Insert Mode Hotkeys
 
