@@ -361,8 +361,6 @@ function! RemoveTrailingWhitespace()
 endfunction
 " Remove trailing whitespace for editing files
 autocmd BufWritePre * call RemoveTrailingWhitespace()
-" Remove trailing whitespace for python codes
-"autocmd BufWritePre *.py call RemoveTrailingWhitespace()
 nmap <leader>rm :call RemoveTrailingWhitespace()<CR>:echo "Remove Tail Whitespaces"<CR>
 
 " Function - Foldcolumn display ----------------------------------------------
@@ -509,7 +507,7 @@ Plug 'jiangmiao/auto-pairs'
 " [Vim extra functions] ------------------------------------------------------
 if using_extra_plug
     if using_neovim
-        " Override configs by directory [Time-consuming for initialization]
+        "" Override configs by directory [Time-consuming for initialization]
         "Plug 'arielrossanigo/dir-configs-override.vim'
         " Fancy startup page of vim [Not use in vim, too loadtime-consuming]
         Plug 'mhinz/vim-startify'
