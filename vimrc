@@ -5,14 +5,12 @@
 " Modified [Vim]/[Neovim] version:[8.2]/[v0.4.4] by Kuan-Hsien Wu, Sheng-Jun Lin
 " ============================================================================
 " This vim configuration is for both vim and neovim
-
 " Note:
 " Vim / Neovim configuration file --------------------------------------------
 " -- Vim configuration file
 "    -- Store in ~/.vimrc
 " -- Neovim configuration file
 "    -- Store in ~/.config/nvim/init.vim
-
 " Note:
 " Old Powerline-status support [Not use anymore, use lightline now] ----------
 " -- Powerline-status Installation (Choose one of the following)
@@ -74,6 +72,13 @@
 "    -- deoplete: pip install pynvim
 "    -- ipdb    : pip install ipdb
 
+" Note:
+" Wal.vim (autotheme color palette support)
+" -- Wal.vim cannot be automatically import to lightline.Vim. For now, I just
+" link wal.vim mannually to lightline by below command:
+"   ln -s ~/.config/nvim/plugged/wal.vim/autoload/lightline/colorscheme/wal.vim \
+"   ~/.config/nvim/plugged/lightline.vim/autoload/lightline
+
 " ============================================================================
 " Vim and Neovim settings
 " ============================================================================
@@ -90,6 +95,8 @@ let using_vim8 = 1
 let using_customized_theme = 1
 " Fancy symbols (Mainly affect nerdtree and lightline)
 let using_fancy_symbols = 1
+" Wal theme support (Pywal theme support, check pywal)
+let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
 " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
 let using_extra_plug = 1
 " Coding tools vim-plug (Include syntax support, git function, and etc.)
@@ -103,7 +110,7 @@ let using_customized_terminal = 0
 
 " TERM GUI color -------------------------------------------------------------
 " Require terminal realcolor (transparent not working on remote terminal)
-if has('termguicolors')
+if has('termguicolors') && !using_wal_theme
     set termguicolors
 endif
 " 256 term color support in vim TUI
@@ -465,7 +472,7 @@ if using_customized_theme
     Plug 'itchyny/lightline.vim'
     " Lightline bufferline
     Plug 'mengelbrecht/lightline-bufferline'
-    " Wal (Autocolorcheme based on wallpaper)
+    " Wal (Autocolorcheme based on wallpaper) [Only work with Cterm color]
     Plug 'dylanaraps/wal.vim'
 endif
 
@@ -633,7 +640,6 @@ endif
 " ============================================================================
 " Part 1 - Common settings (Plugins settings and mappings)
 " ============================================================================
-" Edit them as you wish.
 
 " Tab key settings [Must be added after vim-plug] ----------------------------
 set expandtab       " expand tab to spaces
@@ -662,34 +668,47 @@ vmap <S-Tab> <gv
 
 " Lightline ------------------------------------------------------------------
 if using_customized_theme
-    if using_fancy_symbols
+    if using_wal_theme
         let g:lightline = {
-            \ 'colorscheme': 'deus',
+            \ 'colorscheme': 'wal',
             \ 'active': {
             \   'left': [ [ 'mode', 'paste' ],
             \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
             \ },
             \ 'component_function': {
             \   'gitbranch': 'FugitiveHead'
-            \ },
-            \ 'separator': {
-            \   'left': "", "right": ""
-            \ },
-            \ 'subseparator': {
-            \   'left': '/', 'right': '/'
             \ },
             \ }
     else
-        let g:lightline = {
-            \ 'colorscheme': 'deus',
-            \ 'active': {
-            \   'left': [ [ 'mode', 'paste' ],
-            \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-            \ },
-            \ 'component_function': {
-            \   'gitbranch': 'FugitiveHead'
-            \ },
-            \ }
+        if using_fancy_symbols
+            let g:lightline = {
+                \ 'colorscheme': 'deus',
+                \ 'active': {
+                \   'left': [ [ 'mode', 'paste' ],
+                \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+                \ },
+                \ 'component_function': {
+                \   'gitbranch': 'FugitiveHead'
+                \ },
+                \ 'separator': {
+                \   'left': "", "right": ""
+                \ },
+                \ 'subseparator': {
+                \   'left': '/', 'right': '/'
+                \ },
+                \ }
+        else
+            let g:lightline = {
+                \ 'colorscheme': 'deus',
+                \ 'active': {
+                \   'left': [ [ 'mode', 'paste' ],
+                \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+                \ },
+                \ 'component_function': {
+                \   'gitbranch': 'FugitiveHead'
+                \ },
+                \ }
+        endif
     endif
 endif
 
@@ -960,9 +979,7 @@ let g:multi_cursor_quit_key            = '<Esc>'
 " Signify --------------------------------------------------------------------
 " This first setting decides in which order try to guess your current vcs
 " UPDATE it to reflect your preferences, it will speed up opening files
-let g:signify_vcs_list = ['git', 'hg']
-" Mappings to jump to changed blocks
-nmap <leader>st :SignifyToggle<CR>
+let g:signify_vcs_list = ['git', 'hg'] " Mappings to jump to changed blocks nmap <leader>st :SignifyToggle<CR>
 nmap <leader>sn <plug>(signify-next-hunk)
 nmap <leader>sp <plug>(signify-prev-hunk)
 " Nicer colors
@@ -1071,28 +1088,28 @@ endif
 
 " Vim colorscheme ------------------------------------------------------------
 if using_customized_theme
-
     " Use wal theme is there is one
-    let $wal_dir = $HOME.'/.cache/wal'
-    if isdirectory($wal_dir)
+    if using_wal_theme
         colorscheme wal
     else
         colorscheme vim-monokai-tasty
-        "colorscheme wal
     endif
     " Use either 'koehler' or 'elflord' for 'fortran' syntax support
     autocmd FileType fortran colorscheme koehler
     " Common Background Setting (Transparent Background)
-    " hi command must be entered after colorscheme
     set bg=dark
-    hi LineNr cterm=bold ctermfg=DarkGrey ctermbg=NONE gui=bold guifg=#808080 guibg=NONE
-    hi CursorLineNr cterm=bold ctermfg=Green ctermbg=NONE gui=bold guifg=#00ff00 guibg=NONE
-    hi Normal guibg=NONE ctermbg=NONE
+    " Color setup (hi command must be entered after colorscheme)
+    hi Normal                                   ctermbg=NONE                        guibg=NONE
+    hi LineNr       cterm=bold ctermfg=DarkGrey ctermbg=NONE gui=bold guifg=#808080 guibg=NONE
+    hi CursorLineNr cterm=bold ctermfg=Green    ctermbg=NONE gui=bold guifg=#00ff00 guibg=NONE
+    hi Pmenu        cterm=bold ctermfg=DarkGrey ctermbg=NONE gui=bold guifg=#808080 guibg=NONE
+    hi CursorColumn cterm=none ctermfg=none     ctermbg=236
+    hi CursorLine   cterm=none ctermfg=none     ctermbg=236
 endif
 
 " Function - Line length warnings [Must be added after color setup] ----------
 " Here adopt default vim-textwidth 78 as maximum line length
-highlight OverLength ctermbg=red ctermfg=white guibg=#ff0000 guifg=#ffffff
+highlight OverLength    ctermbg=red  ctermfg=white guibg=#ff0000 guifg=#ffffff
 highlight UnlimitLength ctermbg=NONE guibg=NONE
 nmap <F7> :match OverLength /\%79v.\+/<CR>:echo '78 char-bound ON'<CR>
 nmap <leader><F7> :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
@@ -1106,4 +1123,4 @@ map <leader><F8> :hi Comment ctermfg=245 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'
 " End of Vim configuration, automatically reload current config after saving
 " ============================================================================
 " Automated run vim configuration file just after saving ---------------------
-"autocmd BufWritePost $MYVIMRC source $MYVIMRC
+"autocmd BufWritePost $MYVIMRC source $MYVIMRC"
