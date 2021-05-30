@@ -589,7 +589,7 @@ if using_python_completion
     Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
     " Completion from other opened files
     Plug 'Shougo/context_filetype.vim', { 'for': 'python' }
-    " Just to add go-to-definition and similar features, autocompletion from
+    " Just to add go-to-definition and similar features, autocompeletion from
     " this plugin is disabled
     Plug 'davidhalter/jedi-vim', { 'for': 'python' }
 endif
@@ -1071,11 +1071,14 @@ endif
 
 " Vim colorscheme ------------------------------------------------------------
 if using_customized_theme
+
     " Use wal theme is there is one
-    if isdirectory("~/cache/wal")
-        colorscheme vim-monokai-tasty
-    else
+    let $wal_dir = $HOME.'/.cache/wal'
+    if isdirectory($wal_dir)
         colorscheme wal
+    else
+        colorscheme vim-monokai-tasty
+        "colorscheme wal
     endif
     " Use either 'koehler' or 'elflord' for 'fortran' syntax support
     autocmd FileType fortran colorscheme koehler
