@@ -465,6 +465,8 @@ if using_customized_theme
     Plug 'itchyny/lightline.vim'
     " Lightline bufferline
     Plug 'mengelbrecht/lightline-bufferline'
+    " Wal (Autocolorcheme based on wallpaper)
+    Plug 'dylanaraps/wal.vim'
 endif
 
 " [File/Code Browsing] -------------------------------------------------------
@@ -1069,8 +1071,12 @@ endif
 
 " Vim colorscheme ------------------------------------------------------------
 if using_customized_theme
-    "colorscheme gruvbox
-    colorscheme vim-monokai-tasty
+    " Use wal theme is there is one
+    if isdirectory("~/cache/wal")
+        colorscheme vim-monokai-tasty
+    else
+        colorscheme wal
+    endif
     " Use either 'koehler' or 'elflord' for 'fortran' syntax support
     autocmd FileType fortran colorscheme koehler
     " Common Background Setting (Transparent Background)
