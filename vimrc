@@ -11,6 +11,7 @@
 "    -- Store in ~/.vimrc
 " -- Neovim configuration file
 "    -- Store in ~/.config/nvim/init.vim
+
 " Note:
 " Old Powerline-status support [Not use anymore, use lightline now] ----------
 " -- Powerline-status Installation (Choose one of the following)
@@ -465,9 +466,9 @@ endif
 " [Vim theme] ----------------------------------------------------------------
 if using_customized_theme
     " Color themes (Monokair - high contrast)
-    Plug 'patstockwell/vim-monokai-tasty'
+    "Plug 'patstockwell/vim-monokai-tasty'
     " Color themes (Gruvbox - low contrast)
-    Plug 'morhetz/gruvbox'
+    "Plug 'morhetz/gruvbox'
     " Lightline (status line)
     Plug 'itchyny/lightline.vim'
     " Lightline bufferline
@@ -494,7 +495,7 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 " [Vim useful functions] -----------------------------------------------------
 " Sudo write/read files in vim
 Plug 'lambdalisue/suda.vim'
-" Vim settings for opening large files
+"" Vim settings for opening large files
 Plug 'vim-scripts/LargeFile'
 " System Man usage
 Plug 'vim-utils/vim-man', { 'on': 'Man' }
@@ -522,10 +523,10 @@ if using_extra_plug
         Plug 'mhinz/vim-startify'
         " Vim smooth scroll
         Plug 'yuttie/comfortable-motion.vim'
-        " Goyo (Distraction-free mode)
-        Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
-        " Vim-wiki (Note-taking)
-        Plug 'vimwiki/vimwiki', { 'on': 'VimwikiUISelect' }
+        "" Goyo (Distraction-free mode)
+        "Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
+        "" Vim-wiki (Note-taking)
+        "Plug 'vimwiki/vimwiki', { 'on': 'VimwikiUISelect' }
     endif
     " History of yank
     Plug 'vim-scripts/YankRing.vim'
@@ -610,8 +611,6 @@ Plug 'fisadev/vim-isort', { 'on': 'Isort', 'for': 'python' }
 Plug 'tomedunn/vim.fortran', { 'for': 'fortran' }
 
 " [HTML coding] --------------------------------------------------------------
-" Highlight matching html tags
-Plug 'valloric/MatchTagAlways', { 'for': 'html' }
 " Generate html in a simple way
 Plug 'mattn/emmet-vim', { 'for': 'html' }
 " Generate closetag for HTML
@@ -882,11 +881,11 @@ if using_neovim && using_extra_plug
 endif
 
 " Vim-Wiki -------------------------------------------------------------------
-" Set markdown as default language
-let g:vimwiki_list = [{'path': '~/Documents/VIMWIKI/',
-                      \ 'syntax': 'markdown', 'ext': '.md'}]
-" Open vim-wiki selector
-nmap <leader>vw :VimwikiUISelect<CR>
+"" Set markdown as default language
+"let g:vimwiki_list = [{'path': '~/Documents/VIMWIKI/',
+                      "\ 'syntax': 'markdown', 'ext': '.md'}]
+"" Open vim-wiki selector
+"nmap <leader>vw :VimwikiUISelect<CR>
 
 " YankRing -------------------------------------------------------------------
 " Yankring automatically remap built-in command key mapping
@@ -979,7 +978,9 @@ let g:multi_cursor_quit_key            = '<Esc>'
 " Signify --------------------------------------------------------------------
 " This first setting decides in which order try to guess your current vcs
 " UPDATE it to reflect your preferences, it will speed up opening files
-let g:signify_vcs_list = ['git', 'hg'] " Mappings to jump to changed blocks nmap <leader>st :SignifyToggle<CR>
+let g:signify_vcs_list = ['git', 'hg']
+" Mappings to jump to changed blocks
+nmap <leader>st :SignifyToggle<CR>
 nmap <leader>sn <plug>(signify-next-hunk)
 nmap <leader>sp <plug>(signify-prev-hunk)
 " Nicer colors
