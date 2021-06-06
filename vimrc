@@ -44,6 +44,7 @@
 " -- In Fedora, vim is complied without clipboard and python3/dyn features,
 " -- For those feature support, you can try either recomplie vim from source
 "    codes or [Recommended] just install gvim (gui-vim) from Fedora instead.
+"    Also, xclip MUST be installed [dnf install xclip]
 
 " Note:
 " Leaderkey Delay Solution ---------------------------------------------------
@@ -90,7 +91,7 @@
 " Use vim or neovim (Auto-detect)
 let using_neovim = has('nvim')
 let using_vim = !using_neovim
-" Disable this for remote machine that vim <= 8.0 (e.g. Fomalhaut)
+" Check vim version for remote machine that vim <= 8.0 (e.g. Fomalhaut)
 let using_vim8 = 1
 " Customize vim theme (Include colortheme and statusline)
 let using_customized_theme = 1
@@ -569,6 +570,10 @@ if using_coding_tool_plug
     Plug 'tpope/vim-fugitive', { 'on': 'Git' }
     " Git/mercurial/others diff icons on the side of the file lines
     Plug 'mhinz/vim-signify', { 'on': 'SignifyToggle' }
+    " File Minimap (Need neovim Ver. >= 0.5)
+    if has('nvim-0.5')
+        Plug 'wfxr/minimap.vim', {'do': ':!cargo install --locked code-minimap'}
+    endif
 endif
 
 " [Tmux] ---------------------------------------------------------------------
@@ -990,6 +995,14 @@ highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
 highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
 highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
 highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
+
+" Minimap --------------------------------------------------------------------
+if has('nvim-0.5')
+    let g:minimap_width = 10
+    let g:minimap_auto_start = 0
+    let g:minimap_auto_start_win_enter = 0
+    nmap <leader><F9> :MinimapToggle<CR>
+endif
 
 " ============================================================================
 " Part 7 - Python coding tools settings (Plugins settings and mappings)
