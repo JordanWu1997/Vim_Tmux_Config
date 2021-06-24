@@ -98,6 +98,7 @@ let using_customized_theme = 1
 " Fancy symbols (Mainly affect nerdtree and lightline)
 let using_fancy_symbols = 1
 " Wal theme support (Pywal theme support, check pywal)
+"let using_wal_theme = 0
 let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
 " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
 let using_extra_plug = 1
@@ -467,7 +468,7 @@ endif
 " [Vim theme] ----------------------------------------------------------------
 if using_customized_theme
     " Color themes (Monokair - high contrast)
-    "Plug 'patstockwell/vim-monokai-tasty'
+    Plug 'patstockwell/vim-monokai-tasty'
     " Color themes (Gruvbox - low contrast)
     "Plug 'morhetz/gruvbox'
     " Lightline (status line)
@@ -1104,21 +1105,26 @@ endif
 if using_customized_theme
     " Use wal theme is there is one
     if using_wal_theme
+        "source $HOME/.cache/wal/colors-wal.vim
         colorscheme wal
+        nmap <leader>c :colorscheme vim-monokai-tasty<CR>
+        nmap <leader>C :colorscheme wal<CR>
     else
         colorscheme vim-monokai-tasty
+        nmap <leader>c :colorscheme default<CR>
+        nmap <leader>C :colorscheme vim-monokai-tasty<CR>
     endif
     " Use either 'koehler' or 'elflord' for 'fortran' syntax support
     autocmd FileType fortran colorscheme koehler
     " Common Background Setting (Transparent Background)
     set bg=dark
     " Color setup (hi command must be entered after colorscheme)
-    hi Normal                                   ctermbg=NONE                        guibg=NONE
-    hi LineNr       cterm=bold ctermfg=DarkGrey ctermbg=NONE gui=bold guifg=#808080 guibg=NONE
-    hi CursorLineNr cterm=bold ctermfg=Green    ctermbg=NONE gui=bold guifg=#00ff00 guibg=NONE
-    hi Pmenu        cterm=bold ctermfg=DarkGrey ctermbg=NONE gui=bold guifg=#808080 guibg=NONE
-    hi CursorColumn cterm=none ctermfg=none     ctermbg=236
-    hi CursorLine   cterm=none ctermfg=none     ctermbg=236
+    hi Normal                               ctermbg=NONE                        guibg=NONE
+    hi LineNr       cterm=bold ctermfg=8    ctermbg=NONE gui=bold guifg=#808080 guibg=NONE
+    hi CursorLineNr cterm=bold ctermfg=10   ctermbg=NONE gui=bold guifg=#00ff00 guibg=NONE
+    hi Pmenu        cterm=bold ctermfg=8    ctermbg=NONE gui=bold guifg=#808080 guibg=NONE
+    hi CursorColumn cterm=none ctermfg=none ctermbg=233
+    hi CursorLine   cterm=none ctermfg=none ctermbg=233
 endif
 
 " Function - Line length warnings [Must be added after color setup] ----------
@@ -1129,9 +1135,8 @@ nmap <F7> :match OverLength /\%79v.\+/<CR>:echo '78 char-bound ON'<CR>
 nmap <leader><F7> :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
 
 " Function - Comment highlight -----------------------------------------------
-"map <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
-map <F8> :hi Comment ctermfg=10 guifg=#5fff5f<CR>:echo 'Hi-Comment ON'<CR>
-map <leader><F8> :hi Comment ctermfg=245 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'<CR>
+map <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
+map <leader><F8> :hi Comment ctermfg=8 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'<CR>
 
 " ============================================================================
 " End of Vim configuration, automatically reload current config after saving
