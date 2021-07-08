@@ -175,10 +175,10 @@ nmap <silent><leader>h :wincmd h<CR>
 nmap <silent><leader>j :wincmd j<CR>
 nmap <silent><leader>k :wincmd k<CR>
 nmap <silent><leader>l :wincmd l<CR>
-nmap <silent><leader><Left>  :wincmd h<CR>
-nmap <silent><leader><Down>  :wincmd j<CR>
-nmap <silent><leader><Up>    :wincmd k<CR>
-nmap <silent><leader><Right> :wincmd l<CR>
+"nmap <silent><leader><Left>  :wincmd h<CR>
+"nmap <silent><leader><Down>  :wincmd j<CR>
+"nmap <silent><leader><Up>    :wincmd k<CR>
+"nmap <silent><leader><Right> :wincmd l<CR>
 " Split pane location swap
 nmap <silent><leader>H :wincmd H<CR>
 nmap <silent><leader>J :wincmd J<CR>
@@ -247,7 +247,7 @@ set foldmethod=syntax
 autocmd FileType python setlocal foldmethod=indent
 map <silent><leader>ff za<CR>:echo 'Toggle Current Fold...'<CR>
 map <silent><leader>cf zM<CR>:echo 'Close All Folds ...'<CR>
-map <silent><leader>of zR<CR>:echo 'Open All Folds ...'<CR>
+map <silent><leader>sf zR<CR>:echo 'Show All Folds ...'<CR>
 
 " Tabe (window) settings -----------------------------------------------------
 " Tabe (window) operations
@@ -255,11 +255,12 @@ map <leader>ts :tabs<CR>
 map <leader>tt :tabnew<space>
 map <leader>td :tabclose<space>
 map <silent><leader>tdd :tabclose<CR>:echo 'CLOSE CURRENT TAB ...'<CR>
+" Tabe (window) navigation
+map <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB ...'<CR>
+map <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREV TAB ...'<CR>
 " Tabe (window) navigation (C-Left/Right will be overwrited in TMUX session)
 map <silent><C-Left>  :tabprevious<CR>:echo 'PREV TAB ...'<CR>
 map <silent><C-Right> :tabnext<CR>:echo 'NEXT TAB ...'<CR>
-map <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB ...'<CR>
-map <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREV TAB ...'<CR>
 " Tabe (Window) swap
 map <silent><A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 map <silent><A-Right> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
@@ -524,7 +525,7 @@ if using_extra_plug
         " Fancy startup page of vim [Not use in vim, too loadtime-consuming]
         Plug 'mhinz/vim-startify'
         " Vim smooth scroll
-        Plug 'yuttie/comfortable-motion.vim'
+        "Plug 'yuttie/comfortable-motion.vim'
         "" Goyo (Distraction-free mode)
         "Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
         "" Vim-wiki (Note-taking)
@@ -876,15 +877,15 @@ let g:AutoPairsShortcutToggle = '<F9>'
 " Vim extra functions settings, edit them as you wish.
 
 " Comfortable motion ---------------------------------------------------------
-if using_neovim && using_extra_plug
-    " Disable default key mapping
-    let g:comfortable_motion_no_default_key_mappings = 1
-    " Enable motion with keyboard and mousewheel
-    nmap <silent><c-d> :call comfortable_motion#flick(100)<cr>
-    nmap <silent><c-u> :call comfortable_motion#flick(-100)<cr>
-    nmap <silent><c-f> :call comfortable_motion#flick(200)<cr>
-    nmap <silent><c-b> :call comfortable_motion#flick(-200)<cr>
-endif
+"if using_neovim && using_extra_plug
+    "" Disable default key mapping
+    "let g:comfortable_motion_no_default_key_mappings = 1
+    "" Enable motion with keyboard and mousewheel
+    "nmap <silent><c-d> :call comfortable_motion#flick(100)<cr>
+    "nmap <silent><c-u> :call comfortable_motion#flick(-100)<cr>
+    "nmap <silent><c-f> :call comfortable_motion#flick(200)<cr>
+    "nmap <silent><c-b> :call comfortable_motion#flick(-200)<cr>
+"endif
 
 " Vim-Wiki -------------------------------------------------------------------
 "" Set markdown as default language
@@ -1087,7 +1088,7 @@ endif
 " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
 " Google-chrome extension is needed for markdown viewer
 if using_gui_software
-    let $VIMBROWSER='google-chrome'
+    let $VIMBROWSER='brave-browser'
     let $OPENBROWSER='nmap <F4> :!'. $VIMBROWSER .' %:p &<CR>'
     augroup OpenMdFile
         autocmd!
