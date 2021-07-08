@@ -13,19 +13,19 @@ Table of Contents
          * [1. Copy configuration file](#1-copy-configuration-file)
          * [2. First time startup (Vim/Gvim/Neovim)](#2-first-time-startup-vimgvimneovim)
       * [Plugins](#plugins)
-         * [Plugin loading time](#plugin-loading-time)
-         * [Plugin usage configuration (for more details, check sections in vimrc)](#plugin-usage-configuration-for-more-details-check-sections-in-vimrc)
+         * [1. Plugin loading time](#1-plugin-loading-time)
+         * [2. Plugin usage configuration (for more details, check sections in vimrc)](#2-plugin-usage-configuration-for-more-details-check-sections-in-vimrc)
       * [Keymapping - Customized Keymapping Rule](#keymapping---customized-keymapping-rule)
       * [Keymapping Sheet 1 - Fn Key Keymapping](#keymapping-sheet-1---fn-key-keymapping)
-         * [Function Key Keymapping](#function-key-keymapping)
+         * [1. Function Key Keymapping](#1-function-key-keymapping)
       * [Keymapping Sheet 2 - Built-in Function Keymapping](#keymapping-sheet-2---built-in-function-keymapping)
          * [1. Split/Window keymapping](#1-splitwindow-keymapping)
          * [2.Code Folding Keymapping](#2code-folding-keymapping)
          * [3.Miscellaneous Function Keymapping](#3miscellaneous-function-keymapping)
       * [Keymapping Sheet 3 - Plug-in Function Keymapping](#keymapping-sheet-3---plug-in-function-keymapping)
-         * [File/Code Browsing Keymapping](#filecode-browsing-keymapping)
-         * [Python Coding Keymapping](#python-coding-keymapping)
-         * [Miscellaneous Function Keymapping](#miscellaneous-function-keymapping)
+         * [1. File/Code Browsing Keymapping](#1-filecode-browsing-keymapping)
+         * [2. Python Coding Keymapping](#2-python-coding-keymapping)
+         * [3. Miscellaneous Function Keymapping](#3-miscellaneous-function-keymapping)
       * [Reference for VIM setup](#reference-for-vim-setup)
 
 ## Part 1 - Vim/Gvim/Neovim
@@ -108,7 +108,7 @@ Table of Contents
             ```
 
 ### Plugins
-#### Plugin loading time
+#### 1. Plugin loading time
 - Enable too much plugins may slow down your vim. you can check your loading time with following command
 - For managing plugins enable/disable, see next section (Plugin usage configuration)
 ```
@@ -118,7 +118,7 @@ vim --startuptime test.txt
 nvim --startuptime test.txt
 ```
 
-#### Plugin usage configuration (for more details, check sections in vimrc)
+#### 2. Plugin usage configuration (for more details, check sections in vimrc)
 - Plugin usage can be configured in the first section of vimrc
 ```
 " ============================================================================
@@ -192,7 +192,7 @@ let using_customized_terminal = 0
 
 ### Keymapping Sheet 1 - Fn Key Keymapping
 
-#### Function Key Keymapping
+#### 1. Function Key Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Descrption                            | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N/V      | ([LK])+[F1]                 | (Previous)/Next Buffer        | Switch between buffers                |
@@ -257,7 +257,7 @@ let using_customized_terminal = 0
 
 ### Keymapping Sheet 3 - Plug-in Function Keymapping
 
-#### File/Code Browsing Keymapping
+#### 1. File/Code Browsing Keymapping
 - Note: Fzf is needed for file browsing
 | VIM-Mode | Keymapping                  | Function                      | Descrption                            | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
@@ -272,7 +272,7 @@ let using_customized_terminal = 0
 | N        | [LK]+[n]+[m]                | Show all normal mode mapping  | Show all normal mode mapping          |
 | N        | [LK]+[h]+[t]                | Show all helptag in vim-help  | Show all helptag in vim-help          |
 
-#### Python Coding Keymapping
+#### 2. Python Coding Keymapping
 - Note: Jedi is needed for python code analysis (Check https://github.com/davidhalter/jedi)
 - Note: All below functions only work in .py files
 | VIM-Mode | Keymapping                  | Function                      | Descrption                            | Note |
@@ -284,7 +284,7 @@ let using_customized_terminal = 0
 | N/V      | [LK]+[j]+[m]                | Show input module init.py     | Show input module init.py             |
 | N/V      | [LK]+[j]+[Shift]+[m]        | Show current word init.py     | Show current word init.py             |
 
-#### Miscellaneous Function Keymapping
+#### 3. Miscellaneous Function Keymapping
 - Note: "let_using_extra_plug = 1" must be set in vimrc
 | VIM-Mode | Keymapping                  | Function                      | Descrption                            | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
