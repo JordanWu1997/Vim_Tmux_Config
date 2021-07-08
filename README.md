@@ -237,11 +237,6 @@ let using_customized_terminal = 0
 | N/V      | [LK]+[s]+[f]                | Show all foldings             | Show all foldings                     | Here s for (s)how
 | N/V      | [LK]+[c]+[f]                | Close all foldings            | Close all foldings                    | Here c for (c)lose
 
-
-
-    Shift+k
-    ii
-    kj
 #### 3.Miscellaneous Function Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Descrption                            | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
@@ -259,6 +254,7 @@ let using_customized_terminal = 0
 
 #### 1. File/Code Browsing Keymapping
 - Note: Fzf is needed for file browsing
+
 | VIM-Mode | Keymapping                  | Function                      | Descrption                            | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N/V      | [F3]                        | Nerdtree Current Files        | Show current file location            |
@@ -275,6 +271,7 @@ let using_customized_terminal = 0
 #### 2. Python Coding Keymapping
 - Note: Jedi is needed for python code analysis (Check https://github.com/davidhalter/jedi)
 - Note: All below functions only work in .py files
+
 | VIM-Mode | Keymapping                  | Function                      | Descrption                            | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N/V      | [Shift]+[k]                 | Search current word in doc    | Search current word in python doc     |
@@ -286,6 +283,7 @@ let using_customized_terminal = 0
 
 #### 3. Miscellaneous Function Keymapping
 - Note: "let_using_extra_plug = 1" must be set in vimrc
+
 | VIM-Mode | Keymapping                  | Function                      | Descrption                            | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N/V      | [LK]+[Return]               | Select vim pane               | Select vim pane in tabs and splits    |
