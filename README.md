@@ -206,8 +206,7 @@ let using_customized_terminal = 0
 | N/V      | ([LK])+[F7]                 | (OFF)/ON show line border     | Off/On hightlight 79th character      | VIM recommends at most 78 characters for one line |
 | N/V      | ([LK])+[F8]                 | (OFF)/ON highlight comment    | Off/On hightlight code comment        | Assign brighter color to comment to hightlight it |
 | N/V      | [F9]                        | Toggle autopair               | On/Off autopair quotation             |
-| N/V      | [LK]+[F9]                   | Toogle synchronized cursor    | Toggle synchronized cursor for splits | For neovim version < 0.5 |
-| N/V      | [LK]+[F9]                   | Toggle code minimap scrollbar | Toggle code minimap scrollbar         | For neovim version >= 0.5, and minicode is installed |
+| N/V      | [LK]+[F9]                   | Toogle synchronized cursor    | Toggle synchronized cursor for splits | Need to execute in every pane that wants to synchronize | |
 | N/V      | ([LK])+[F10]                | Open terminal                 | Open terminal in vim buffer           | Need vim version >= 8.0 |
 
 ### Keymapping Sheet 2 - Built-in Function Keymapping
@@ -287,6 +286,7 @@ let using_customized_terminal = 0
 | VIM-Mode | Keymapping                  | Function                      | Descrption                            | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N/V      | [LK]+[Return]               | Select vim pane               | Select vim pane in tabs and splits    |
+| N/V      | [LK]+[m]+[m]                | Toggle code minimap scrollbar | Toggle code minimap scrollbar         | For neovim version >= 0.5, and minicode is installed |
 
 ### Reference for VIM setup
 - http://fisadev.github.io/fisa-vim-config/

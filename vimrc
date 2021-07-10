@@ -1000,10 +1000,12 @@ highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
 " Minimap --------------------------------------------------------------------
 if has('nvim-0.5')
-    let g:minimap_width = 10
+    let g:minimap_width = 5
     let g:minimap_auto_start = 0
     let g:minimap_auto_start_win_enter = 0
-    nmap <leader><F9> :MinimapToggle<CR>
+    let g:minimap_git_colors = 0
+    let g:minimap_highlight_search = 0
+    nmap <leader>mm :MinimapToggle<CR>
 endif
 
 " ============================================================================
