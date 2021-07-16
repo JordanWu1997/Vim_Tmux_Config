@@ -63,7 +63,11 @@
 "    -- Example: python code formatter
 "       -- # Install formatter with terminal  : pip install yapf
 "       -- # Use formatter in vim command line: :Neoformat! python yapf
-
+"       -- Recommendation  usage set (in order):
+"           (1) :Neoformat isort   # Sort import module
+"           (2) :Neoformat pyment  # Add description of function/class
+"           (3) :Neoformat yasf    # Format to PEP8 standard
+"
 " Note:
 " Python-completion and tmux-yank-clipboard on ZEUS --------------------------
 " -- Use neovim and everything is fine, but notice that neovim support of
@@ -98,8 +102,8 @@ let using_customized_theme = 1
 " Fancy symbols (Mainly affect nerdtree and lightline)
 let using_fancy_symbols = 1
 " Wal theme support (Pywal theme support, check pywal)
-"let using_wal_theme = 0
-let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
+let using_wal_theme = 0
+"let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
 " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
 let using_extra_plug = 1
 " Coding tools vim-plug (Include syntax support, git function, and etc.)
@@ -108,11 +112,8 @@ let using_coding_tool_plug = 1
 let using_python_completion = 1
 " Support of externaml gui software (e.g. Okular, Google-chrome, and etc.)
 let using_gui_software = 1
-" Vim >= 8.0 can call termininal inside vim (But very time-consuming)
-let using_customized_terminal = 0
 
 " TERM GUI color -------------------------------------------------------------
-" Require terminal realcolor (transparent not working on remote terminal)
 if has('termguicolors') && !using_wal_theme
     set termguicolors
 endif
@@ -134,15 +135,11 @@ let mapleader = ' '
 imap ii <Esc>
 imap kj <Esc>
 
-" Beginning/End, PageUp/PageDown ---------------------------------------------
-map <leader>s ^
-map <leader>e $
-
 " Save/Load file hotkey ------------------------------------------------------
 " - ZZ (Quit and save if there's change in file)
 " - :f <new-filename> (Save current file with new filename)
 map <leader>q  :q<CR>
-map <leader>Q  :q!<CR>
+map <leader>Q  :qall<CR>
 map <leader>ww :w<CR>
 map <leader>wq :wq<CR>
 " Overwrite (Not working for now, use plug-in suda.vim instead)
@@ -162,43 +159,42 @@ filetype on
 "syntax enable
 
 " Vim window/pane/fold configuration -----------------------------------------
-nmap <silent><leader>sv :mkview<CR>:echo 'Setting Saved ...'<CR>
-nmap <silent><leader>ld :loadview<CR>:echo 'Setting Loaded ...'<CR>
+map <silent><F10> :mkview<CR>:echo 'Current Layout Setting Saved ...'<CR>
+map <silent><leader><F10> :loadview<CR>:echo 'Layout Setting Loaded ...'<CR>
 
 " Vim split window (pane) control --------------------------------------------
 " Split pane - More natural split opening
 set splitbelow
 set splitright
-" Split pane navigation [Also integrate with tmux, check vim-tmux-navigator]
-nmap <silent><leader>; <C-W><C-W>
-nmap <silent><leader>h :wincmd h<CR>
-nmap <silent><leader>j :wincmd j<CR>
-nmap <silent><leader>k :wincmd k<CR>
-nmap <silent><leader>l :wincmd l<CR>
-"nmap <silent><leader><Left>  :wincmd h<CR>
-"nmap <silent><leader><Down>  :wincmd j<CR>
-"nmap <silent><leader><Up>    :wincmd k<CR>
-"nmap <silent><leader><Right> :wincmd l<CR>
+" Split pane navigation [Now integrate with tmux, check vim-tmux-navigator]
+nmap <silent><leader>w; <C-W><C-W>
+nmap <silent><leader>wh :wincmd h<CR>
+nmap <silent><leader>wj :wincmd j<CR>
+nmap <silent><leader>wk :wincmd k<CR>
+nmap <silent><leader>wl :wincmd l<CR>
 " Split pane location swap
-nmap <silent><leader>H :wincmd H<CR>
-nmap <silent><leader>J :wincmd J<CR>
-nmap <silent><leader>K :wincmd K<CR>
-nmap <silent><leader>L :wincmd L<CR>
+nmap <silent><leader>wH :wincmd H<CR>
+nmap <silent><leader>wJ :wincmd J<CR>
+nmap <silent><leader>wK :wincmd K<CR>
+nmap <silent><leader>wL :wincmd L<CR>
 " Split pane resize
 nmap <silent>= :resize +5<CR>
 nmap <silent>- :resize -5<CR>
 nmap <silent>+ :vertical resize +5<CR>
 nmap <silent>_ :vertical resize -5<CR>
 " Redraw pane equally
-nmap <silent><leader>== :wincmd =<CR>
-" Split pane action
+nmap <silent><leader>w= :wincmd =<CR>
+" Move current split to new tab
 nmap <silent><leader>wt :wincmd T<CR>
+" Close current split
 nmap <silent><leader>wc :wincmd c<CR>
+" Create new empty split
 nmap <silent><leader>wn :wincmd n<CR>
-nmap <silent><leader>wX :split<CR>:echo 'Split Current File'<CR>
-nmap <silent><leader>wV :vsplit<CR>: echo 'Vsplit Current File'<CR>
-nmap <leader>wx :split<space>
-nmap <leader>wv :vsplit<space>
+" Split pane action
+nmap <silent><leader>w- :split<CR>:echo 'Split Current File'<CR>
+nmap <silent><leader>w\ :vsplit<CR>: echo 'Vsplit Current File'<CR>
+nmap <leader>w_ :split<space>
+nmap <leader>w\| :vsplit<space>
 
 " Vim settings ---------------------------------------------------------------
 set nocompatible          " Not compatible with traditional vi
@@ -223,7 +219,8 @@ set cursorline            " Show vertical line
 set cursorcolumn          " Show horizontal line (laggy in neovim)
 " Synchronize cursor between files
 " Must be execute in all files that you want to synchronize cursors
-map <leader><F9> :set cursorbind!<CR>:echo 'Toggle Cursor Lock'<CR>
+map <F9> :set cursorbind<CR>:echo 'Synchronized Cursor On'<CR>
+map <leader><F9> :set nocursorbind<CR>:echo 'Synchronized Cursor Off'<CR>
 
 " Display settings -----------------------------------------------------------
 set scrolloff=3           " Keep cursor 3 lines away from bottom
@@ -243,7 +240,7 @@ map <F5> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
 
 " Fold settings --------------------------------------------------------------
 set nofoldenable
-set foldmethod=syntax
+set foldmethod=indent
 autocmd FileType python setlocal foldmethod=indent
 map <silent><leader>ff za<CR>:echo 'Toggle Current Fold...'<CR>
 map <silent><leader>cf zM<CR>:echo 'Close All Folds ...'<CR>
@@ -288,7 +285,7 @@ endfunction
 " A buffer not becomes hidden (send to background) when it is abandoned
 set nohidden
 " List all buffers and status
-map <silent><leader>ls :ls<CR>
+"map <silent><leader>ls :ls<CR>
 " Load buffer
 map <leader>b :b<space>
 " Add buffer in foreground
@@ -304,7 +301,7 @@ map <silent><leader><F1> <Esc>:bp<CR>:echo 'PREV BUFFER ...'<CR>
 map <silent><F1> <Esc>:bn<CR>:echo 'NEXT BUFFER ...'<CR>
 
 " Marks settings -------------------------------------------------------------
-map <leader>mK :marks<CR>
+map <leader>mk :marks<CR>
 map <leader>md :delmarks<space>
 
 " Registers settings ---------------------------------------------------------
@@ -372,7 +369,7 @@ function! RemoveTrailingWhitespace()
 endfunction
 " Remove trailing whitespace for editing files
 autocmd BufWritePre * call RemoveTrailingWhitespace()
-nmap <leader>rm :call RemoveTrailingWhitespace()<CR>:echo "Remove Tail Whitespaces"<CR>
+map <leader>rm :call RemoveTrailingWhitespace()<CR>:echo "Remove Tail Whitespaces"<CR>
 
 " Function - Foldcolumn display ----------------------------------------------
 map <F6> :set foldcolumn=6<CR>:echo 'Foldcolumn ON'<CR>
@@ -380,8 +377,8 @@ map <leader><F6> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 
 " Function - Hex editor ------------------------------------------------------
 " From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
-map <leader>ho :%! xxd<CR>:echo 'Hex editor on: TF to binary data'<CR>
-map <leader>hf :%! xxd -r<CR>:echo 'Hex editor off: TF to original data'<CR>
+"map <leader>ho :%! xxd<CR>:echo 'Hex editor on: TF to binary data'<CR>
+"map <leader>hf :%! xxd -r<CR>:echo 'Hex editor off: TF to original data'<CR>
 
 " ============================================================================
 " Customized terminal mode (Only support for vim >= 8.0)
@@ -396,24 +393,17 @@ map <leader>hf :%! xxd -r<CR>:echo 'Hex editor off: TF to original data'<CR>
 if using_vim8
     " Map key to go back from terminal mode to normal mode
     " Do not use Esc (which conflicts with fzf window)
-    tmap <leader><F10> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
+    tmap <leader><F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
+    tmap ii <C-\><C-n>:echo 'Back to Normal Mode'<CR>
     tmap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
-    " Customized terminal and shell
-    if using_customized_terminal
-        " Set terminal shell inside vim
-        set shell=/bin/fish
-        " Open terminal buffer
-        if using_neovim
-            map <F10> :split<CR>:resize -5<CR>:term<CR>:echo 'Open Terminal'<CR>
-        else
-            map <F10> :below terminal<CR>
-        endif
+    tmap <C-h> <C-\><C-n><C-w>h
+    tmap <C-j> <C-\><C-n><C-w>j
+    tmap <C-k> <C-\><C-n><C-w>k
+    tmap <C-l> <C-\><C-n><C-w>l
+    if using_neovim
+        map <F12> :term<CR>
     else
-        if using_neovim
-            map <F10> :term<CR>
-        else
-            map <F10> :terminal<CR>
-        endif
+        map <F12> :terminal<CR>
     endif
 endif
 
@@ -471,7 +461,7 @@ if using_customized_theme
     " Color themes (Monokair - high contrast)
     Plug 'patstockwell/vim-monokai-tasty'
     " Color themes (Gruvbox - low contrast)
-    "Plug 'morhetz/gruvbox'
+    Plug 'morhetz/gruvbox'
     " Lightline (status line)
     Plug 'itchyny/lightline.vim'
     " Lightline bufferline
@@ -514,7 +504,7 @@ Plug 'tpope/vim-repeat'
 Plug 'szw/vim-maximizer'
 " Window pane selector
 Plug 't9md/vim-choosewin'
-" Auto-pair for quotations and brackets
+" Autopair for quotations and brackets
 Plug 'jiangmiao/auto-pairs'
 
 " [Vim extra functions] ------------------------------------------------------
@@ -525,7 +515,7 @@ if using_extra_plug
         " Fancy startup page of vim [Not use in vim, too loadtime-consuming]
         Plug 'mhinz/vim-startify'
         " Vim smooth scroll
-        "Plug 'yuttie/comfortable-motion.vim'
+        Plug 'yuttie/comfortable-motion.vim'
         "" Goyo (Distraction-free mode)
         "Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
         "" Vim-wiki (Note-taking)
@@ -542,7 +532,7 @@ if using_extra_plug
     " Pending tasks list
     Plug 'fisadev/FixedTaskList.vim', { 'on': 'TaskList' }
     " Paint css colors with the real color
-    " [Integrated in 'gko/vim-coloresque', but laggy with cursorcolumn]
+    " [Integrated in 'gko/vim-coloresque' which is laggy with cursorcolumn]
     Plug 'lilydjwg/colorizer'
 endif
 
@@ -571,7 +561,8 @@ if using_coding_tool_plug
     " Git integration (Git functions in vim command line)
     Plug 'tpope/vim-fugitive', { 'on': 'Git' }
     " Git/mercurial/others diff icons on the side of the file lines
-    Plug 'mhinz/vim-signify', { 'on': 'SignifyToggle' }
+    "Plug 'mhinz/vim-signify', { 'on': 'SignifyToggle' }
+    Plug 'mhinz/vim-signify'
     " File Minimap (Need neovim Ver. >= 0.5)
     if has('nvim-0.5')
         Plug 'wfxr/minimap.vim', {'do': ':!cargo install --locked code-minimap'}
@@ -610,8 +601,8 @@ if using_python_completion
 endif
 " More python syntax highlight
 Plug 'vim-python/python-syntax', { 'for': 'python' }
-" Sort python import (Integrate with neoformat)
-Plug 'fisadev/vim-isort', { 'on': 'Isort', 'for': 'python' }
+" Sort python import (Integrate with neoformat now [Neovim only])
+"Plug 'fisadev/vim-isort', { 'on': 'Isort', 'for': 'python' }
 
 " [Fortran coding] -----------------------------------------------------------
 " Fortran syntax support
@@ -756,7 +747,7 @@ set showcmd       " This line must be added AFTER statusline plugin
 " This is the default extra key bindings
 let g:fzf_action = {
             \ 'ctrl-t': 'tab split',
-            \ 'ctrl-x': 'split',
+            \ 'ctrl-s': 'split',
             \ 'ctrl-v': 'vsplit' }
 " Default fzf layout (Floating in the center of window)
 " - down / up / left / right
@@ -772,26 +763,26 @@ nmap <leader>gl :execute ":Lines " . expand('<cword>')<CR>
 nmap <leader>gT :Tags<CR>
 nmap <leader>gt :execute ":Tag " . expand('<cword>')<CR>
 " File search
-nmap <leader>fs :Files<space>
-nmap <leader>lc :Locate<space>
-nmap <leader>rg :Rg<space>
+nmap <leader>ffs :Files<space>
+nmap <leader>flc :Locate<space>
+nmap <leader>frg :Rg<space>
 " fzf key mapping
-nmap <leader>hs :History<CR>
-nmap <leader>h: :History:<CR>
-nmap <leader>h/ :History/<CR>
-nmap <leader>mk :Marks<CR>
-nmap <leader>bf :Buffers<CR>
-nmap <leader>wd :Windows<CR>
-nmap <leader>ft :Filetypes<CR>
-nmap <leader>cd :Commands<CR>
-nmap <leader>nm :Maps<CR>
-nmap <leader>ht :Helptags<CR>
-" Line completion with current file
-imap <c-x><c-l> <plug>(fzf-complete-line)
-" Word completion with dictionary
-imap <c-x><c-k> <plug>(fzf-complete-word)
-" Path completion with path
-imap <c-x><c-f> <plug>(fzf-complete-path)
+nmap <leader>fhs :History<CR>
+nmap <leader>fh: :History:<CR>
+nmap <leader>fh/ :History/<CR>
+nmap <leader>fmk :Marks<CR>
+nmap <leader>fbf :Buffers<CR>
+nmap <leader>fwd :Windows<CR>
+nmap <leader>fft :Filetypes<CR>
+nmap <leader>fcd :Commands<CR>
+nmap <leader>fmp :Maps<CR>
+nmap <leader>fht :Helptags<CR>
+" Line completion with current file [Use AutoComplPop instead]
+"imap <c-x><c-l> <plug>(fzf-complete-line)
+"" Word completion with dictionary
+"imap <c-x><c-k> <plug>(fzf-complete-word)
+"" Path completion with path
+"imap <c-x><c-f> <plug>(fzf-complete-path)
 
 " NERDTree -------------------------------------------------------------------
 " Disable vim built-in netrw
@@ -864,12 +855,14 @@ nmap <silent><leader>z :MaximizerToggle<CR>
 vmap <silent><leader>z :MaximizerToggle<CR>gv
 
 " Window-chooser (choosewin)--------------------------------------------------
-nmap <leader><Enter> <Plug>(choosewin)
+map <leader><Enter> <Plug>(choosewin)
 " Show big letters
 let g:choosewin_overlay_enable = 1
 
-" Auto-pairs -----------------------------------------------------------------
-let g:AutoPairsShortcutToggle = '<F9>'
+" Autopairs -----------------------------------------------------------------
+let g:AutoPairsShortcutToggle = '<M-p>'
+let g:AutoPairsShortcutJump = '<M-j>'
+let g:AutoPairsShortcutFastWrap = '<M-w>'
 
 " ============================================================================
 " Part 5 - Vim extra functions settings (Plugins settings and mappings)
@@ -877,15 +870,13 @@ let g:AutoPairsShortcutToggle = '<F9>'
 " Vim extra functions settings, edit them as you wish.
 
 " Comfortable motion ---------------------------------------------------------
-"if using_neovim && using_extra_plug
-    "" Disable default key mapping
-    "let g:comfortable_motion_no_default_key_mappings = 1
-    "" Enable motion with keyboard and mousewheel
-    "nmap <silent><c-d> :call comfortable_motion#flick(100)<cr>
-    "nmap <silent><c-u> :call comfortable_motion#flick(-100)<cr>
-    "nmap <silent><c-f> :call comfortable_motion#flick(200)<cr>
-    "nmap <silent><c-b> :call comfortable_motion#flick(-200)<cr>
-"endif
+if using_neovim && using_extra_plug
+    " Disable default key mapping
+    let g:comfortable_motion_no_default_key_mappings = 1
+    " Enable motion with keyboard and mousewheel
+    nmap <silent><C-f> :call comfortable_motion#flick(200)<CR>
+    nmap <silent><C-b> :call comfortable_motion#flick(-200)<CR>
+endif
 
 " Vim-Wiki -------------------------------------------------------------------
 "" Set markdown as default language
@@ -905,8 +896,8 @@ if using_neovim
 else
     let g:yankring_history_dir = '~/.vim/dirs/'
 endif
-nmap <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
-nmap <leader>yc :YRClear<CR>:echo 'Clear Yank History'<CR>
+map <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
+map <leader>yc :YRClear<CR>:echo 'Clear Yank History'<CR>
 
 " Peekaboo -------------------------------------------------------------------
 " Set leader as prefix for ('"' and '@') to peek registers in vim
@@ -922,12 +913,12 @@ let g:EasyMotion_smartcase = 1
 " Keep cursor column
 let g:EasyMotion_startofline = 0
 " JK motions: Line motions
-map <leader><leader>j <Plug>(easymotion-j)
-map <leader><leader>k <Plug>(easymotion-k)
-map <leader><leader>l <Plug>(easymotion-lineforward)
-map <leader><leader>h <Plug>(easymotion-linebackward)
-map <leader><leader>1 <Plug>(easymotion-overwin-f)
-map <leader><leader>2 <Plug>(easymotion-overwin-f2)
+map <leader>j <Plug>(easymotion-j)
+map <leader>k <Plug>(easymotion-k)
+map <leader>l <Plug>(easymotion-lineforward)
+map <leader>h <Plug>(easymotion-linebackward)
+map <leader>1 <Plug>(easymotion-overwin-f)
+map <leader>2 <Plug>(easymotion-overwin-f2)
 
 " AutoComplPop ---------------------------------------------------------------
 " Enable/disable autopop
@@ -957,12 +948,12 @@ map <leader>tl :TaskList<CR>
 
 " Ale (syntax check) ---------------------------------------------------------
 let g:ale_enabled = 0
-nmap <leader>al :ALEToggle<CR>
+map <leader>al :ALEToggle<CR>
 
 " Rainbow parentheses --------------------------------------------------------
 " Don;t enable when start up
 let g:rainbow_active = 0
-nmap <leader>rb :RainbowToggle<CR>
+map <leader>rb :RainbowToggle<CR>
 
 " Indent guides --------------------------------------------------------------
 let g:indent_guides_enable_on_vim_startup = 0
@@ -987,9 +978,9 @@ let g:multi_cursor_quit_key            = '<Esc>'
 " UPDATE it to reflect your preferences, it will speed up opening files
 let g:signify_vcs_list = ['git', 'hg']
 " Mappings to jump to changed blocks
-nmap <leader>st :SignifyToggle<CR>
-nmap <leader>sn <plug>(signify-next-hunk)
-nmap <leader>sp <plug>(signify-prev-hunk)
+map <leader>sy :SignifyToggle<CR>
+map <leader>sn <plug>(signify-next-hunk)
+map <leader>sp <plug>(signify-prev-hunk)
 " Nicer colors
 highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
 highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
@@ -1005,7 +996,7 @@ if has('nvim-0.5')
     let g:minimap_auto_start_win_enter = 0
     let g:minimap_git_colors = 0
     let g:minimap_highlight_search = 0
-    nmap <leader>mm :MinimapToggle<CR>
+    map <leader>mm :MinimapToggle<CR>
 endif
 
 " ============================================================================
@@ -1034,7 +1025,7 @@ if using_python_completion
 endif
 
 " Jedi-vim -------------------------------------------------------------------
-" All these mappings work only for python code
+" All these mappings work only for python code [All should start with 'p']
 if using_python_completion
     " jedi is needed [Installation: pip3 install --user jedi]
     " jedi-vim remaps K to open python documents
@@ -1043,16 +1034,16 @@ if using_python_completion
     " Use split instead of buffer
     let g:jedi#use_splits_not_buffers = "bottom"
     " Find ocurrences
-    let g:jedi#usages_command = '<leader>jn'
+    let g:jedi#usages_command = '<leader>pn'
     " Find assignments
-    let g:jedi#goto_assignments_command = '<leader>ja'
+    let g:jedi#goto_assignments_command = '<leader>pa'
     " Go to definition (in split pane)
-    let g:jedi#goto_command = '<leader>jd'
+    let g:jedi#goto_command = '<leader>pd'
     " Go to definition (in new tab)
-    nmap <leader>jD :call jedi#goto()<CR>
+    map <leader>pD :call jedi#goto()<CR>
     " Open python module [show __init__.py]
-    nmap <leader>jm :execute ":Pyimport " . expand('<cword>')<CR>
-    nmap <leader>jM :Pyimport<space>
+    map <leader>pm :execute ":Pyimport " . expand('<cword>')<CR>
+    map <leader>pM :Pyimport<space>
 endif
 
 " Python syntax --------------------------------------------------------------
@@ -1091,7 +1082,7 @@ endif
 " Google-chrome extension is needed for markdown viewer
 if using_gui_software
     let $VIMBROWSER='brave-browser'
-    let $OPENBROWSER='nmap <F4> :!'. $VIMBROWSER .' %:p &<CR>'
+    let $OPENBROWSER='map <F4> :!'. $VIMBROWSER .' %:p &<CR>'
     augroup OpenMdFile
         autocmd!
         autocmd BufEnter *.md echom '[Press F4 to Open .md File]'
@@ -1105,21 +1096,24 @@ endif
 " Set colorscheme (syntax highlight), color assignment, and etc.
 
 " Vim colorscheme ------------------------------------------------------------
+" Colorschmeme shortcut
+nmap <leader>csd :colorscheme default<CR>
+nmap <leader>csg :colorscheme gruvbox<CR>
+nmap <leader>csv :colorscheme vim-monokai-tasty<CR>
+nmap <leader>csw :colorscheme wal<CR>
+" Use either 'koehler' or 'elflord' for 'fortran' syntax support
+autocmd FileType fortran colorscheme koehler
+" Customized colorscheme settings
 if using_customized_theme
-    " Use wal theme is there is one
     if using_wal_theme
+        " Option 1 - Direct read Xcolor from wal
         "source $HOME/.cache/wal/colors-wal.vim
+        " Option 2 - Use wal vim plugin
         colorscheme wal
-        nmap <leader>c :colorscheme vim-monokai-tasty<CR>
-        nmap <leader>C :colorscheme wal<CR>
     else
         colorscheme vim-monokai-tasty
-        nmap <leader>c :colorscheme default<CR>
-        nmap <leader>C :colorscheme vim-monokai-tasty<CR>
     endif
-    " Use either 'koehler' or 'elflord' for 'fortran' syntax support
-    autocmd FileType fortran colorscheme koehler
-    " Common Background Setting (Transparent Background)
+    " Common background setting (transparent background)
     set bg=dark
     " Color setup (hi command must be entered after colorscheme)
     hi Normal                               ctermbg=NONE                        guibg=NONE
@@ -1134,8 +1128,8 @@ endif
 " Here adopt default vim-textwidth 78 as maximum line length
 highlight OverLength    ctermbg=red  ctermfg=white guibg=#ff0000 guifg=#ffffff
 highlight UnlimitLength ctermbg=NONE guibg=NONE
-nmap <F7> :match OverLength /\%79v.\+/<CR>:echo '78 char-bound ON'<CR>
-nmap <leader><F7> :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
+map <F7> :match OverLength /\%79v.\+/<CR>:echo '78 char-bound ON'<CR>
+map <leader><F7> :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
 
 " Function - Comment highlight -----------------------------------------------
 map <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
