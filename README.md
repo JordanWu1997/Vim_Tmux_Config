@@ -317,6 +317,7 @@ nvim --startuptime test.txt
 
 #### 3. Miscellaneous Function Keymapping
 - Useful tool (Note: startup by default)
+
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N/V      | [LK]+[c]+[c/y]              | Comment (and copy) current line | Comment (and copy) current line     | NerdCommenter |
@@ -327,12 +328,16 @@ nvim --startuptime test.txt
 | N/V      | [c]+[Shift]+[s]+[']+["]     | Change quotation/bracket      | From 'word' to "word"                 | vim-surrounder |
 | N/V      | [Alt]+[p]                   | Toggle auto-pair              | On/Off auto-pair quotation/bracket    | auto-pairs |
 | N/V      | [Alt]+[j]                   | Jump to next pairs            | Jump to next paired quotation/bracket | auto-pairs |
+
 - Extra plug (Note: "let using_extra_plug = 1" must be set in vimrc)
+
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N        | [Ctrl]+[f/b]                | Move down/up physically       | Move down/up physically               | comfortable-motion.vim |
 | N/V      | [LK]+[h/j/k/l]              | Quick move in four direction  | Quick move in four direction          | vim-easymotion |
+
 - Coding tool (Note: "let using_coding_tool_plug = 1" must be set in vimrc)
+
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N/V      | [LK]+[m]+[m]                | Toggle code minimap scrollbar | Toggle code minimap scrollbar         | For neovim version >= 0.5, and minicode is installed |
