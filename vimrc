@@ -167,7 +167,7 @@ map <silent><leader><F10> :loadview<CR>:echo 'Layout Setting Loaded ...'<CR>
 set splitbelow
 set splitright
 " Split pane navigation [Now integrate with tmux, check vim-tmux-navigator]
-nmap <silent><leader>w; <C-W><C-W>
+nmap <silent><leader>w; <C-w><C-w>
 nmap <silent><leader>wh :wincmd h<CR>
 nmap <silent><leader>wj :wincmd j<CR>
 nmap <silent><leader>wk :wincmd k<CR>
@@ -177,6 +177,7 @@ nmap <silent><leader>wH :wincmd H<CR>
 nmap <silent><leader>wJ :wincmd J<CR>
 nmap <silent><leader>wK :wincmd K<CR>
 nmap <silent><leader>wL :wincmd L<CR>
+" TODO Add Ctrl+H/J/K/L (Which is already mapped by vim)
 " Split pane resize
 nmap <silent>= :resize +5<CR>
 nmap <silent>- :resize -5<CR>
@@ -389,7 +390,7 @@ map <leader><F6> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 " -- Enter insert mode to use terminal command line
 " -- In terminal buffer, <C-\><C-n> back to normal mode
 
-" Set customized terminal shell and keymapping
+" Set customized terminal mode keymapping
 if using_vim8
     " Map key to go back from terminal mode to normal mode
     " Do not use Esc (which conflicts with fzf window)
@@ -516,8 +517,8 @@ if using_extra_plug
         Plug 'mhinz/vim-startify'
         " Vim smooth scroll
         Plug 'yuttie/comfortable-motion.vim'
-        "" Goyo (Distraction-free mode)
-        "Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
+        " Goyo (Distraction-free mode)
+        Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
         "" Vim-wiki (Note-taking)
         "Plug 'vimwiki/vimwiki', { 'on': 'VimwikiUISelect' }
     endif
@@ -848,7 +849,7 @@ nmap yss <Plug>Yssurround
 nmap ySs <Plug>YSsurround
 nmap ySS <Plug>YSsurround
 
-" Vim maximizer --------------------------------------------------------------
+" Vim-maximizer --------------------------------------------------------------
  " [Default mapping is <F3> (Disabled now)]
 let g:maximizer_set_default_mapping = 0
 nmap <silent><leader>z :MaximizerToggle<CR>

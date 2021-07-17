@@ -5,6 +5,7 @@ Table of Contents
 =================
 
 * [Vim_Tmux_Config](#vim_tmux_config)
+* [Table of Contents](#table-of-contents)
    * [Part 1 - Vim/Gvim/Neovim](#part-1---vimgvimneovim)
       * [Preparation (Dependence)](#preparation-dependence)
          * [1. Common Requirement](#1-common-requirement)
@@ -27,6 +28,18 @@ Table of Contents
          * [2. Python Coding Keymapping](#2-python-coding-keymapping)
          * [3. Miscellaneous Function Keymapping](#3-miscellaneous-function-keymapping)
       * [Reference for VIM setup](#reference-for-vim-setup)
+   * [Part 2 - Tmux](#part-2---tmux)
+      * [Preparation (Dependence)](#preparation-dependence-1)
+         * [1. Common Requirement](#1-common-requirement-1)
+         * [2. Requirement for Tmux](#2-requirement-for-tmux)
+      * [First Time Usage](#first-time-usage-1)
+         * [1. Copy configuration file](#1-copy-configuration-file-1)
+         * [2. First time startup (Tmux)](#2-first-time-startup-tmux)
+      * [Plugins](#plugins-1)
+         * [Installed plugins](#installed-plugins)
+      * [Major difference between customized and original](#major-difference-between-customized-and-original)
+      * [Keymapping Sheet](#keymapping-sheet)
+      * [Reference for TMUX setup](#reference-for-tmux-setup)
 
 ## Part 1 - Vim/Gvim/Neovim
 
@@ -135,6 +148,7 @@ nvim --startuptime test.txt
         - [Plug-in] vim-tmux-focus-events, vim-tmux-clipboard (for tmux-vim interaction)
         - [Plug-in] deoplete.nvim (for python code completion)
         - [Plug-in] minimap (minimap scrollbar), also required neovim version > 0.5
+        - [Plug-in] goyo (distraction-free edtior)
     ```vim
     " Use vim or neovim (Auto-detect)
     let using_neovim = has('nvim')
@@ -163,10 +177,11 @@ nvim --startuptime test.txt
     "let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
     ```
 - Extra vim-plug
-    - Extra plug for productivity (enhance vim-built in function)
+    - Extra plug for productivity (or enhance vim-built in function)
     - Including
         - [Plug-in] vim-startify (start page for empty buffer)
         - [Plug-in] comfortable-motion (physical movement)
+        - [Plug-in] goyo (distraction-free edtior)
         - [Plug-in] yankring (clipboard history)
         - [Plug-in] vim-peekaboo (vim register manager)
         - [Plug-in] vim-easymotion (physical movement)
@@ -356,3 +371,90 @@ nvim --startuptime test.txt
 - http://nadypan.blogspot.com/2014/01/vim-fold.html
 - https://github.com/yangyangwithgnu/use_vim_as_ide
 - https://factorpad.com/tech/vim-cheat-sheet.html#structure
+
+## Part 2 - Tmux
+
+### Preparation (Dependence)
+
+#### 1. Common Requirement
+- __Git__ [for tmux plugin manager setup]
+    ```bash
+    # For Fedora
+    dnf install git
+    ```
+- __Powerline__ [for statusline powerline support]
+    ```bash
+    # For Fedora
+    dnf install powerline
+    dnf install tmux-powerline
+    ```
+
+#### 2. Requirement for Tmux
+    - verion >= __2.0__
+        ```bash
+        # Check tmux version
+        tmux -V
+        ```
+
+### First Time Usage
+
+#### 1. Copy configuration file
+- __Tmux__
+    1. copy "tmux.conf" to $HOME (current user's home)
+    2. rename "tmux.conf" to .tmux.conf
+    ```bash
+    cp tmux.conf $HOME/.tmux.conf
+    ```
+#### 2. First time startup (Tmux)
+- At first time startup, we need to install tmux plugin manager, load configuration file and install plugins
+    1. Tmux plugin manager (TPM) installation
+    ```bash
+    # In terminal
+    git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+    ```
+    2. Load configuration file
+    ```bash
+    # Open tmux in terminal
+    tmux
+    # In tmux, press ctrl+b to enter command mode
+    # In command mode
+    source-file ~/.tmux.conf
+    ```
+    3. Install plugins
+        - Press "Ctrl+Space", then "I"
+        - Plugin manager should start installation automatically
+
+### Plugins
+
+#### Installed plugins
+- [Plug-in] tmux-resurrect (save tmux layout, and restore after restart tmux)
+- [Plug-in] tmux-continuum (save program running in tmux, and restore after restart tmux)
+- [Plug-in] vim-tmux-navigator (move between vim and tmux pane seamlessly)
+- [Plug-in] tmux-yank (share tmux clipboard with system clipboard)
+
+### Major difference between customized and original
+- Bindkey is remapped from "Ctrl+b" to "Ctrl+space"
+- Command related to pane and split is remapped to my vim-like keymapping to keep things consistent
+- Add new powerline theme to make press of bindkey more eye-catching
+- Add clipboard sharing between vim and system
+
+### Keymapping Sheet
+| TMUX-Mode  | Add-on key                  | Function                      | Description                           | Note |
+| :-------:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
+| Normal     | [BK]+[r]                    | Reload tmux configuration     | Reload tmux configuration             | .tmux.conf file |
+| Normal     | [BK]+[d]                    | Reattach remote/local display | Reattach remote/local display         | Run script to make sure display connection is the same for both remote and local machine |
+| Normal     | [BK]+[s]                    | Show all tmux sessions        | Show all tmux sessions                |
+| Normal     | [BK]+[_]                    | Split window vertically       | Split window vertically               |
+| Normal     | [BK]+[|]                    | Split window horizontally     | Split window horizontally             |
+| Normal     | [BK]+[q]                    | Move to pane (number)         | Move to pane (number)                 | Pane number shows on pane |
+| Normal     | [Ctrl]+[h/j/k/l]            | Move to pane (L/D/U/R)        | Move to pane (L/D/U/R)                | Also work with vim pane |
+| Normal     | [BK]+[h/j/k/l]              | Move to pane (L/D/U/R)        | Move to pane (L/D/U/R)                |
+| Normal     | [BK]+[H/J/K/L]              | Swap pane to (L/D/U/R)        | Swap pane to (L/D/U/R)                |
+| Normal     | [BK]+[[]+[Space]            | Enter copy mode and select    | Enter copy mode and select            |
+| Copy       | [BK]+[]]                    | Copy selected contents        | Copy selected contents                | Copy to shared clipboard (with system and vim) |
+| Normal     | [BK]+[<\/>]                 | Inc/Dec horizontal pane size  | Inc/Dec horizontal pane size          |
+| Normal     | [BK]+[-/+]                  | Inc/Dec vertical pane size    | Inc/Dec vertical pane size            |
+| Normal     | [Ctrl]+[L/R]                | Move to (L/R) window          | Move to (L/R) window                  |
+| Normal     | [Shift]+[L/R]               | Swap to (L/R) window          | Swap to (L/R) window                  |
+
+### Reference for TMUX setup
