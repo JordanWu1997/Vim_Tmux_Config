@@ -9,37 +9,37 @@ Table of Contents
    * [Part 1 - Vim/Gvim/Neovim](#part-1---vimgvimneovim)
       * [Preparation (Dependence)](#preparation-dependence)
          * [1. Common Requirement](#1-common-requirement)
-         * [2. Requirement for diverse vim](#2-requirement-for-diverse-vim)
+         * [2. Requirement for Diverse Vim](#2-requirement-for-diverse-vim)
       * [First Time Usage](#first-time-usage)
-         * [1. Copy configuration file](#1-copy-configuration-file)
-         * [2. First time startup (Vim/Gvim/Neovim)](#2-first-time-startup-vimgvimneovim)
+         * [1. Copy Configuration File](#1-copy-configuration-file)
+         * [2. First Time Startup (Vim/Gvim/Neovim)](#2-first-time-startup-vimgvimneovim)
       * [Plugins](#plugins)
-         * [1. Plugin loading time](#1-plugin-loading-time)
-         * [2. Plugin usage configuration (for more details, check sections in vimrc)](#2-plugin-usage-configuration-for-more-details-check-sections-in-vimrc)
+         * [1. Plugin Loading Time](#1-plugin-loading-time)
+         * [2. Plugin Usage Configuration (for more details, check sections in vimrc)](#2-plugin-usage-configuration-for-more-details-check-sections-in-vimrc)
       * [Keymapping - Customized Keymapping Rule](#keymapping---customized-keymapping-rule)
       * [Keymapping Sheet 1 - Fn Key Keymapping](#keymapping-sheet-1---fn-key-keymapping)
          * [1. Function Key Keymapping](#1-function-key-keymapping)
       * [Keymapping Sheet 2 - Built-in Function Keymapping](#keymapping-sheet-2---built-in-function-keymapping)
-         * [1. Split/Window keymapping](#1-splitwindow-keymapping)
-         * [2.Code Folding Keymapping](#2code-folding-keymapping)
-         * [3.Miscellaneous Function Keymapping](#3miscellaneous-function-keymapping)
+         * [1. Split/Window Keymapping](#1-splitwindow-keymapping)
+         * [2. Code Folding Keymapping](#2-code-folding-keymapping)
+         * [3. Miscellaneous Function Keymapping](#3-miscellaneous-function-keymapping)
       * [Keymapping Sheet 3 - Plug-in Function Keymapping](#keymapping-sheet-3---plug-in-function-keymapping)
          * [1. File/Code Browsing Keymapping](#1-filecode-browsing-keymapping)
          * [2. Python Coding Keymapping](#2-python-coding-keymapping)
-         * [3. Miscellaneous Function Keymapping](#3-miscellaneous-function-keymapping)
-      * [Reference for VIM setup](#reference-for-vim-setup)
+         * [3. Miscellaneous Function Keymapping](#3-miscellaneous-function-keymapping-1)
+      * [Reference for VIM Setup](#reference-for-vim-setup)
    * [Part 2 - Tmux](#part-2---tmux)
       * [Preparation (Dependence)](#preparation-dependence-1)
          * [1. Common Requirement](#1-common-requirement-1)
          * [2. Requirement for Tmux](#2-requirement-for-tmux)
       * [First Time Usage](#first-time-usage-1)
-         * [1. Copy configuration file](#1-copy-configuration-file-1)
-         * [2. First time startup (Tmux)](#2-first-time-startup-tmux)
+         * [1. Copy Configuration File](#1-copy-configuration-file-1)
+         * [2. First Time Startup (Tmux)](#2-first-time-startup-tmux)
       * [Plugins](#plugins-1)
-         * [Installed plugins](#installed-plugins)
-      * [Major difference between customized and original](#major-difference-between-customized-and-original)
+         * [Installed Plugins](#installed-plugins)
+      * [Major Difference Between Customized and Original](#major-difference-between-customized-and-original)
       * [Keymapping Sheet](#keymapping-sheet)
-      * [Reference for TMUX setup](#reference-for-tmux-setup)
+      * [Reference for TMUX Setup](#reference-for-tmux-setup)
 
 ## Part 1 - Vim/Gvim/Neovim
 
@@ -62,7 +62,7 @@ Table of Contents
     dnf install okular
     ```
 
-#### 2. Requirement for diverse vim
+#### 2. Requirement for Diverse Vim
 - __Vim__
     - version >= __7.0__
     - clipboard option is on (+clipboard) [for sharing system clipboard]
@@ -88,7 +88,7 @@ Table of Contents
 
 ### First Time Usage
 
-#### 1. Copy configuration file
+#### 1. Copy Configuration File
 - __Vim/Gvim__
     1. copy "vimrc" to $HOME (current user's home)
     2. rename "vimrc" to ".vimrc"
@@ -103,7 +103,7 @@ Table of Contents
     cp vimrc $HOME/nvim/init.vim
     ```
 
-#### 2. First time startup (Vim/Gvim/Neovim)
+#### 2. First Time Startup (Vim/Gvim/Neovim)
 - Following installation should start automatically at the first time startup
     1. vim-plug (plug manager) installation via __curl__
         - If not working, try manually install vim-plug (also within this repository)
@@ -121,7 +121,7 @@ Table of Contents
             ```
 
 ### Plugins
-#### 1. Plugin loading time
+#### 1. Plugin Loading Time
 - Enable too much plugins may slow down your vim. you can check your loading time with following command
 - For managing plugins enable/disable, see next section (Plugin usage configuration)
 ```bash
@@ -131,7 +131,7 @@ vim --startuptime test.txt
 nvim --startuptime test.txt
 ```
 
-#### 2. Plugin usage configuration (for more details, check sections in vimrc)
+#### 2. Plugin Usage Configuration (for more details, check sections in vimrc)
 - Plugin usage can be configured in the first section of vimrc
     ```vim
     " ============================================================================
@@ -262,7 +262,7 @@ nvim --startuptime test.txt
 
 ### Keymapping Sheet 2 - Built-in Function Keymapping
 
-#### 1. Split/Window keymapping
+#### 1. Split/Window Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N/V      | [LK]+[w]+[-/\]              | Add new split Horiz/Vertical  | Add new split Horizontal/Vertial      |
@@ -278,7 +278,7 @@ nvim --startuptime test.txt
 | N/V      | [_]/[+]                     | Inc/Dec split width           | +5/-5 columns split width             | Just add [Shift] to [-]/[=] |
 | N/V      | [LK]+[w]+[=]                | Resplit splits equally        | Resplit splits equally                | Here =(equal sign) for equally split
 
-#### 2.Code Folding Keymapping
+#### 2. Code Folding Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N        | ([LK])+[F10]                | Load/Save layout and folding  | Load/Save current split and code folding |
@@ -286,7 +286,7 @@ nvim --startuptime test.txt
 | N/V      | [LK]+[s]+[f]                | Show all foldings             | Show all foldings                     | Here s for (s)how
 | N/V      | [LK]+[c]+[f]                | Close all foldings            | Close all foldings                    | Here c for (c)lose
 
-#### 3.Miscellaneous Function Keymapping
+#### 3. Miscellaneous Function Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | I        | [i]+[i]/[k]+[j]             | Esc (escape form insert mode) | Esc (escape form insert mode)         | If your word contains "ii", try [i] + "[Ctrl]+[v]" + [i]
@@ -358,7 +358,7 @@ nvim --startuptime test.txt
 | N/V      | [LK]+[m]+[m]                | Toggle code minimap scrollbar | Toggle code minimap scrollbar         | For neovim version >= 0.5, and minicode is installed |
 | N/V      | [Ctrl]+[n](+[n]+[n]+...+[n] | Multiple cursor for selected  | Multiple cursor for currently selected word | Press N to next word; Use I/A to insert word; Use Esc to exit |
 
-### Reference for VIM setup
+### Reference for VIM Setup
 - http://fisadev.github.io/fisa-vim-config/
 - https://github.com/ryanoasis/nerd-fonts/
 - https://github.com/sbdchd/Neoformat
@@ -398,14 +398,14 @@ tmux -V
 
 ### First Time Usage
 
-#### 1. Copy configuration file
+#### 1. Copy Configuration File
 - __Tmux__
     1. copy "tmux.conf" to $HOME (current user's home)
     2. rename "tmux.conf" to .tmux.conf
     ```bash
     cp tmux.conf $HOME/.tmux.conf
     ```
-#### 2. First time startup (Tmux)
+#### 2. First Time Startup (Tmux)
 - At first time startup, we need to install tmux plugin manager, load configuration file and install plugins
     1. Tmux plugin manager (TPM) installation
     ```bash
@@ -426,13 +426,13 @@ tmux -V
 
 ### Plugins
 
-#### Installed plugins
+#### Installed Plugins
 - [Plug-in] tmux-resurrect (save tmux layout, and restore after restart tmux)
 - [Plug-in] tmux-continuum (save program running in tmux, and restore after restart tmux)
 - [Plug-in] vim-tmux-navigator (move between vim and tmux pane seamlessly)
 - [Plug-in] tmux-yank (share tmux clipboard with system clipboard)
 
-### Major difference between customized and original
+### Major Difference Between Customized and Original
 - Bindkey is remapped from "Ctrl+b" to "Ctrl+space"
 - Command related to pane and split is remapped to my vim-like keymapping to keep things consistent
 - Add new powerline theme to make press of bindkey more eye-catching
@@ -457,4 +457,9 @@ tmux -V
 | Normal     | [Ctrl]+[L/R]                | Move to (L/R) window          | Move to (L/R) window                  |
 | Normal     | [Shift]+[L/R]               | Swap to (L/R) window          | Swap to (L/R) window                  |
 
-### Reference for TMUX setup
+### Reference for TMUX Setup
+- https://github.com/powerline/powerline
+- https://github.com/erikw/tmux-powerline
+- https://github.com/tmux-plugins/tmux-resurrect
+- https://github.com/tmux-plugins/tmux-sidebar
+- https://github.com/tmux-plugins/tmux-yank
