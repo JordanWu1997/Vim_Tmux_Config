@@ -444,8 +444,8 @@ tmux -V
 | Normal     | [BK]+[r]                    | Reload tmux configuration     | Reload tmux configuration             | .tmux.conf file |
 | Normal     | [BK]+[d]                    | Reattach remote/local display | Reattach remote/local display         | Run script to make sure display connection is the same for both remote and local machine |
 | Normal     | [BK]+[s]                    | Show all tmux sessions        | Show all tmux sessions                |
-| Normal     | [BK]+[_]                    | Split window vertically       | Split window vertically               |
-| Normal     | [BK]+[|]                    | Split window horizontally     | Split window horizontally             |
+| Normal     | [BK]+[_]                    | Split window vertically       | Split window vertically               | Default key is [LK]+["] |
+| Normal     | [BK]+[|]                    | Split window horizontally     | Split window horizontally             | Default key is [LK]+[%] |
 | Normal     | [BK]+[q]                    | Move to pane (number)         | Move to pane (number)                 | Pane number shows on pane |
 | Normal     | [Ctrl]+[h/j/k/l]            | Move to pane (L/D/U/R)        | Move to pane (L/D/U/R)                | Also work with vim pane |
 | Normal     | [BK]+[h/j/k/l]              | Move to pane (L/D/U/R)        | Move to pane (L/D/U/R)                |
@@ -463,3 +463,6 @@ tmux -V
 - https://github.com/tmux-plugins/tmux-resurrect
 - https://github.com/tmux-plugins/tmux-sidebar
 - https://github.com/tmux-plugins/tmux-yank
+- https://github.com/g6ai/dotfiles/tree/master/tmux
+- https://danielmiessler.com/study/tmux/
+- https://leimao.github.io/blog/Tmux-Tutorial/
