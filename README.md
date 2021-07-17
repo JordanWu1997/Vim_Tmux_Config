@@ -378,23 +378,23 @@ nvim --startuptime test.txt
 
 #### 1. Common Requirement
 - __Git__ [for tmux plugin manager setup]
-    ```bash
-    # For Fedora
-    dnf install git
-    ```
+```bash
+# For Fedora
+dnf install git
+```
 - __Powerline__ [for statusline powerline support]
-    ```bash
-    # For Fedora
-    dnf install powerline
-    dnf install tmux-powerline
-    ```
+```bash
+# For Fedora
+dnf install powerline
+dnf install tmux-powerline
+```
 
 #### 2. Requirement for Tmux
-    - verion >= __2.0__
-        ```bash
-        # Check tmux version
-        tmux -V
-        ```
+- verion >= __2.0__
+```bash
+# Check tmux version
+tmux -V
+```
 
 ### First Time Usage
 
