@@ -287,8 +287,8 @@ endfunction
 set nohidden
 " List all buffers and status
 "map <silent><leader>ls :ls<CR>
-" Load buffer
-map <leader>b :b<space>
+"" Load buffer
+"map <leader>b :b<space>
 " Add buffer in foreground
 map <leader>bb :edit<space>
 " Add buffer in background
@@ -560,7 +560,8 @@ if using_coding_tool_plug
      "Multiple cursor with incsearch support
     Plug 'terryma/vim-multiple-cursors'
     " Git integration (Git functions in vim command line)
-    Plug 'tpope/vim-fugitive', { 'on': 'Git' }
+    "Plug 'tpope/vim-fugitive', { 'on': 'Git' }
+    Plug 'tpope/vim-fugitive'
     " Git diff/change line indicator (light and minimalist)
     "Plug 'mhinz/vim-signify'
     " GitGutter (enhanced signify), also with git integration
@@ -984,13 +985,20 @@ if using_coding_tool_plug
     let g:multi_cursor_select_all_word_key = '<C-n>a'
     let g:multi_cursor_next_key            = '<C-n>'
     let g:multi_cursor_prev_key            = '<C-p>'
-        let g:multi_cursor_skip_key            = '<C-o>'
+    let g:multi_cursor_skip_key            = '<C-o>'
     let g:multi_cursor_quit_key            = '<Esc>'
 endif
 
 " Vim-fugitive ---------------------------------------------------------------
 if using_coding_tool_plug
     map <leader>g :Git<space>
+    map <leader>gd :Git diff %<CR>
+    map <leader>gD :Git diff<CR>
+    map <leader>gs :Git status<CR>
+    map <leader>ga :Git add %<CR>
+    map <leader>gA :Git add --all<CR>
+    map <leader>gc :Git commit % -m<space>
+    map <leader>gC :Git commit -m<space>
 endif
 
 " Signify --------------------------------------------------------------------
@@ -1030,18 +1038,18 @@ if using_coding_tool_plug
     highlight GitGutterChange guifg=#bbbb00 ctermfg=3
     highlight GitGutterDelete guifg=#ff2222 ctermfg=1
     " GitGutter toggle
-    map <leader>gg :GitGutterToggle<CR>
-    map <leader>gb :GitGutterBufferToggle<CR>
+    map <leader>gg :GitGutterToggle<CR>:echo 'Toggle GitGutter'<CR>
+    map <leader>gb :GitGutterBufferToggle<CR>:echo 'Toggle GitGutter Buffer'<CR>
     " GitGutter highlight toggle
-    map <leader>ghs :GitGutterSignsToggle<CR>
-    map <leader>ghl :GitGutterLineHighlightsToggle<CR>
-    map <leader>ghn :GitGutterLineNrHighlightsToggle<CR>
+    map <leader>ghs :GitGutterSignsToggle<CR>:echo 'Toggle GitGutter Sign Highlight'<CR>
+    map <leader>ghl :GitGutterLineHighlightsToggle<CR>:echo 'Toggle GitGutter Line Highlight'<CR>
+    map <leader>ghn :GitGutterLineNrHighlightsToggle<CR>:echo 'Toggle GitGutter Line Number Highlight'<CR>
     " GitGutter hunk move/action/git
     map <leader>gn <Plug>(GitGutterNextHunk)
     map <leader>gN <Plug>(GitGutterPrevHunk)
     map <leader>gp <Plug>(GitGutterPreviewHunk)
-    map <leader>gs <Plug>(GitGutterStageHunk)
-    map <leader>gu <Plug>(GitGutterUndoHunk)
+    map <leader>gS <Plug>(GitGutterStageHunk)
+    map <leader>gU <Plug>(GitGutterUndoHunk)
 endif
 
 " Minimap --------------------------------------------------------------------
