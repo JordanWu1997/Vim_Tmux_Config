@@ -360,10 +360,14 @@ nvim --startuptime test.txt
 | N/V      | [Ctrl]+[p](+[p]+[p]+...+[p] | Cancel selected multiple cursor | Cancel selected multiple cursor     |
 | N/V      | [LK]+[g]+[g]                | Toggle GitGutter              | On/Off GitGutter                      |
 | N/V      | [LK]+[g]+[h]+[s/l/n]        | Toggle GItGutter highlight    | Toggle GItGutter highlight symbol/line/line number |
-| N/V      | [LK]+([Shift])+[n]          | (Prev)/Next git hunk          | Move to (Prev)/Next git hunk          | Hunk means changed block |
-| N/V      | [LK]+[g]+[p]                | Hunk preview (before changed) | Hunk preview (before changed)         |
-| N/V      | [LK]+[g]+[s]                | Stage current hunk            | Stage current hunk                    |
-| N/V      | [LK]+[g]+[u]                | Restore current hunk          | Restore current hunk                  |
+| N/V      | [LK]+[n]                    | Next git hunk                 | Move to next git hunk                 | Hunk means changed block |
+| N/V      | [LK]+[N]                    | Previous git hunk             | Move to previous git hunk             | Hunk means changed block |
+| N/V      | [LK]+[g]+[p]                | Hunk preview (before changed) | Hunk preview (before changed)         | Here v for (v)iew |
+| N/V      | [LK]+[g]+[Shift]+[s]        | Stage current hunk            | Stage current hunk                    | Here s for (s)tage |
+| N/V      | [LK]+[g]+[Shift]+[u]        | Restore current hunk          | Restore current hunk                  | Like vim undo |
+| N/V      | [LK]+[g]+([Shift])+[d]      | Git diff (all unstaged files) | Git diff (all unstaged files)         |                              |
+| N/V      | [LK]+[g]+([Shift])+[a]      | Git add (all unstaged files)  | Git add (all unstaged files)          |                              |
+| N/V      | [LK]+[g]+([Shift])+[c]      | Git commit -m (all unstaged files) | Git commit -m (all unstaged files) |                              |
 
 ### Reference for VIM Setup
 - http://fisadev.github.io/fisa-vim-config/
