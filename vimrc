@@ -1050,6 +1050,16 @@ if using_coding_tool_plug
     map <leader>gp <Plug>(GitGutterPreviewHunk)
     map <leader>gS <Plug>(GitGutterStageHunk)
     map <leader>gU <Plug>(GitGutterUndoHunk)
+    " Cycle through hunks in current buffer
+    function! GitGutterNextHunkCycle()
+      let line = line('.')
+      silent! GitGutterNextHunk
+      if line('.') == line
+        1
+        GitGutterNextHunk
+      endif
+    endfunction
+    map <silent><leader><Tab> :call GitGutterNextHunkCycle()<CR>
 endif
 
 " Minimap --------------------------------------------------------------------
