@@ -561,9 +561,10 @@ if using_coding_tool_plug
     Plug 'terryma/vim-multiple-cursors'
     " Git integration (Git functions in vim command line)
     Plug 'tpope/vim-fugitive', { 'on': 'Git' }
-    " Git/mercurial/others diff icons on the side of the file lines
-    "Plug 'mhinz/vim-signify', { 'on': 'SignifyToggle' }
-    Plug 'mhinz/vim-signify'
+    " Git diff/change line indicator (light and minimalist)
+    "Plug 'mhinz/vim-signify'
+    " GitGutter (enhanced signify), also with git integration
+    Plug 'airblade/vim-gitgutter'
     " File Minimap (Need neovim Ver. >= 0.5)
     if has('nvim-0.5')
         Plug 'wfxr/minimap.vim', {'do': ':!cargo install --locked code-minimap'}
@@ -879,68 +880,73 @@ if using_neovim && using_extra_plug
     nmap <silent><C-b> :call comfortable_motion#flick(-200)<CR>
 endif
 
-" Vim-Wiki -------------------------------------------------------------------
-"" Set markdown as default language
-"let g:vimwiki_list = [{'path': '~/Documents/VIMWIKI/',
-                      "\ 'syntax': 'markdown', 'ext': '.md'}]
-"" Open vim-wiki selector
-"nmap <leader>vw :VimwikiUISelect<CR>
-
 " YankRing -------------------------------------------------------------------
 " Yankring automatically remap built-in command key mapping
 " -- e.g. "X[x]", "D[d]", "Y[y]", "P[p]", ".", "@", and etc.
-if using_neovim
-    let g:yankring_history_dir = '~/.config/nvim/'
-    " Fix for yankring and neovim problem when system has non-text things
-    " copied in clipboard
-    let g:yankring_clipboard_monitor = 0
-else
-    let g:yankring_history_dir = '~/.vim/dirs/'
+if using_extra_plug
+    if using_neovim
+        let g:yankring_history_dir = '~/.config/nvim/'
+        " Fix for yankring and neovim problem when system has non-text things
+        " copied in clipboard
+        let g:yankring_clipboard_monitor = 0
+    else
+        let g:yankring_history_dir = '~/.vim/dirs/'
+    endif
+    map <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
+    map <leader>yc :YRClear<CR>:echo 'Clear Yank History'<CR>
 endif
-map <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
-map <leader>yc :YRClear<CR>:echo 'Clear Yank History'<CR>
 
 " Peekaboo -------------------------------------------------------------------
 " Set leader as prefix for ('"' and '@') to peek registers in vim
-let g:peekaboo_prefix='<leader>'
+if using_extra_plug
+    let g:peekaboo_prefix='<leader>'
+endif
 
 " Easymotion -----------------------------------------------------------------
-" Move up and down not back to start of line
-set nostartofline
-" Disable default mappings
-let g:EasyMotion_do_mapping = 0
-" Turn on case-insensitive feature
-let g:EasyMotion_smartcase = 1
-" Keep cursor column
-let g:EasyMotion_startofline = 0
-" JK motions: Line motions
-map <leader>j <Plug>(easymotion-j)
-map <leader>k <Plug>(easymotion-k)
-map <leader>l <Plug>(easymotion-lineforward)
-map <leader>h <Plug>(easymotion-linebackward)
-map <leader>1 <Plug>(easymotion-overwin-f)
-map <leader>2 <Plug>(easymotion-overwin-f2)
+if using_extra_plug
+    " Move up and down not back to start of line
+    set nostartofline
+    " Disable default mappings
+    let g:EasyMotion_do_mapping = 0
+    " Turn on case-insensitive feature
+    let g:EasyMotion_smartcase = 1
+    " Keep cursor column
+    let g:EasyMotion_startofline = 0
+    " JK motions: Line motions
+    map <leader>j <Plug>(easymotion-j)
+    map <leader>k <Plug>(easymotion-k)
+    map <leader>l <Plug>(easymotion-lineforward)
+    map <leader>h <Plug>(easymotion-linebackward)
+    map <leader>1 <Plug>(easymotion-overwin-f)
+    map <leader>2 <Plug>(easymotion-overwin-f2)
+endif
 
 " AutoComplPop ---------------------------------------------------------------
 " Enable/disable autopop
-if using_python_completion
-    autocmd FileType python let g:acp_enableAtStartup = 0
+if using_extra_plug
+    if using_python_completion
+        autocmd FileType python let g:acp_enableAtStartup = 0
+    endif
+    map <leader>~ :AcpDisable<CR>:echo 'Disable Auto-Pop Suggestion'<CR>
+    map <leader>` :AcpEnable<CR>:echo 'Enable Auto-Pop Suggestion'<CR>
 endif
-map <leader>~ :AcpDisable<CR>:echo 'Disable Auto-Pop Suggestion'<CR>
-map <leader>` :AcpEnable<CR>:echo 'Enable Auto-Pop Suggestion'<CR>
 
 " Popup window selection -----------------------------------------------------
 " Previous/next suggestion
 " [Double quotation matters here, do not change to single quotation]
-imap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
-imap <expr><tab>   pumvisible() ? "\<c-n>" : "\<tab>"
-imap <expr><C-k>   pumvisible() ? "\<c-p>" : "\<C-k>"
-imap <expr><C-j>   pumvisible() ? "\<c-n>" : "\<C-j>"
-imap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-imap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+if using_extra_plug
+    imap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
+    imap <expr><tab>   pumvisible() ? "\<c-n>" : "\<tab>"
+    imap <expr><C-k>   pumvisible() ? "\<c-p>" : "\<C-k>"
+    imap <expr><C-j>   pumvisible() ? "\<c-n>" : "\<C-j>"
+    imap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+    imap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+endif
 
 " Tasklist -------------------------------------------------------------------
-map <leader>tl :TaskList<CR>
+if using_extra_plug
+    map <leader>tl :TaskList<CR>
+endif
 
 " ============================================================================
 " Part 6 - Vim coding tools settings (Plugins settings and mappings)
@@ -948,50 +954,98 @@ map <leader>tl :TaskList<CR>
 " Vim coding tools settings, edit them as you wish.
 
 " Ale (syntax check) ---------------------------------------------------------
-let g:ale_enabled = 0
-map <leader>al :ALEToggle<CR>
+if using_coding_tool_plug
+    let g:ale_enabled = 0
+    map <leader>al :ALEToggle<CR>
+endif
 
 " Rainbow parentheses --------------------------------------------------------
-" Don;t enable when start up
-let g:rainbow_active = 0
-map <leader>rb :RainbowToggle<CR>
+if using_coding_tool_plug
+    " Don;t enable when start up
+    let g:rainbow_active = 0
+    map <leader>rb :RainbowToggle<CR>
+endif
 
 " Indent guides --------------------------------------------------------------
-let g:indent_guides_enable_on_vim_startup = 0
-let g:indent_guides_start_level = 1
-let g:indent_guides_guide_size = 4
-let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg='#24242d' ctermbg=194
-map <leader>ig :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
+if using_coding_tool_plug
+    let g:indent_guides_enable_on_vim_startup = 0
+    let g:indent_guides_start_level = 1
+    let g:indent_guides_guide_size = 4
+    let g:indent_guides_auto_colors = 0
+    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
+    autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg='#24242d' ctermbg=194
+    map <leader>ig :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
+endif
 
 " Multiple-cursors -----------------------------------------------------------
-let g:multi_cursor_use_default_mapping = 0
-let g:multi_cursor_start_word_key      = '<C-n>'
-let g:multi_cursor_select_all_word_key = '<C-n>a'
-let g:multi_cursor_next_key            = '<C-n>'
-let g:multi_cursor_prev_key            = '<C-p>'
-let g:multi_cursor_skip_key            = '<C-o>'
-let g:multi_cursor_quit_key            = '<Esc>'
+if using_coding_tool_plug
+    let g:multi_cursor_use_default_mapping = 0
+    let g:multi_cursor_start_word_key      = '<C-n>'
+    let g:multi_cursor_select_all_word_key = '<C-n>a'
+    let g:multi_cursor_next_key            = '<C-n>'
+    let g:multi_cursor_prev_key            = '<C-p>'
+        let g:multi_cursor_skip_key            = '<C-o>'
+    let g:multi_cursor_quit_key            = '<Esc>'
+endif
+
+" Vim-fugitive ---------------------------------------------------------------
+if using_coding_tool_plug
+    map <leader>g :Git<space>
+endif
 
 " Signify --------------------------------------------------------------------
-" This first setting decides in which order try to guess your current vcs
-" UPDATE it to reflect your preferences, it will speed up opening files
-let g:signify_vcs_list = ['git', 'hg']
-" Mappings to jump to changed blocks
-map <leader>sy :SignifyToggle<CR>
-map <leader>sn <plug>(signify-next-hunk)
-map <leader>sp <plug>(signify-prev-hunk)
-" Nicer colors
-highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
-highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
-highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
-highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
-highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
-highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
+"if using_coding_tool_plug
+    "" This first setting decides in which order try to guess your current vcs
+    "" UPDATE it to reflect your preferences, it will speed up opening files
+    "let g:signify_vcs_list = ['git', 'hg']
+    "" Mappings to jump to changed blocks
+    "map <leader>sy :SignifyToggle<CR>
+    "map <leader>sn <plug>(signify-next-hunk)
+    "map <leader>sp <plug>(signify-prev-hunk)
+        "" Nicer colors
+    "highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
+    "highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
+    "highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
+    "highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
+    "highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
+    "highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
+"endif
+
+" GitGutter ------------------------------------------------------------------
+if using_coding_tool_plug
+    "Disable all gitgutter key mappings
+    let g:gitgutter_map_keys = 0
+    " Enable gitgutter at start
+    let g:gitgutter_enabled = 1
+    " Enable gitgutter sign highlight at start
+    let g:gitgutter_signs = 1
+    " Disable gitgutter line highlight at start
+    let g:gitgutter_highlight_lines = 0
+    " Disable gitgutter line number highlight at start
+    let g:gitgutter_highlight_linenrs = 0
+    " Show number of hunk when move between hunks
+    let g:gitgutter_show_msg_on_hunk_jumping = 1
+    " Assign color to GitGutter group
+    highlight GitGutterAdd    guifg=#009900 ctermfg=2
+    highlight GitGutterChange guifg=#bbbb00 ctermfg=3
+    highlight GitGutterDelete guifg=#ff2222 ctermfg=1
+    " GitGutter toggle
+    map <leader>gg :GitGutterToggle<CR>
+    map <leader>gb :GitGutterBufferToggle<CR>
+    " GitGutter highlight toggle
+    map <leader>ghs :GitGutterSignsToggle<CR>
+    map <leader>ghl :GitGutterLineHighlightsToggle<CR>
+    map <leader>ghn :GitGutterLineNrHighlightsToggle<CR>
+    " GitGutter hunk move/action/git
+    map <leader>gn <Plug>(GitGutterNextHunk)
+    map <leader>gN <Plug>(GitGutterPrevHunk)
+    map <leader>gp <Plug>(GitGutterPreviewHunk)
+    map <leader>gs <Plug>(GitGutterStageHunk)
+    map <leader>gu <Plug>(GitGutterUndoHunk)
+endif
 
 " Minimap --------------------------------------------------------------------
-if has('nvim-0.5')
+if has('nvim-0.5') && using_coding_tool_plug
     let g:minimap_width = 5
     let g:minimap_auto_start = 0
     let g:minimap_auto_start_win_enter = 0
@@ -1048,12 +1102,16 @@ if using_python_completion
 endif
 
 " Python syntax --------------------------------------------------------------
-let g:python_highlight_all = 1
+if using_python_completion
+    let g:python_highlight_all = 1
+endif
 
 " Python debug (add python breakpoints) --------------------------------------
 " [ipdb must be installed first]
 " -- Installaion in termianl: run 'pip install ipdb'
-autocmd FileType python map <silent><leader>\b Oimport ipdb; ipdb.set_trace()<Esc>
+if using_python_completion
+    autocmd FileType python map <silent><leader>\b Oimport ipdb; ipdb.set_trace()<Esc>
+endif
 
 " ============================================================================
 " Part 8 - Other language coding tools settings (Plugins settings and mappings)
