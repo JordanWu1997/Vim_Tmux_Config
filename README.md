@@ -355,8 +355,15 @@ nvim --startuptime test.txt
 
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
-| N/V      | [LK]+[m]+[m]                | Toggle code minimap scrollbar | Toggle code minimap scrollbar         | For neovim version >= 0.5, and minicode is installed |
+| N/V      | [LK]+[m]+[m]                | Toggle code minimap scrollbar | On/Off code minimap scrollbar         | For neovim version >= 0.5, and minicode is installed |
 | N/V      | [Ctrl]+[n](+[n]+[n]+...+[n] | Multiple cursor for selected  | Multiple cursor for currently selected word | Press N to next word; Use I/A to insert word; Use Esc to exit |
+| N/V      | [Ctrl]+[p](+[p]+[p]+...+[p] | Cancel selected multiple cursor | Cancel selected multiple cursor     |
+| N/V      | [LK]+[g]+[g]                | Toggle GitGutter              | On/Off GitGutter                      |
+| N/V      | [LK]+[g]+[h]+[s/l/n]        | Toggle GItGutter highlight    | Toggle GItGutter highlight symbol/line/line number |
+| N/V      | [LK]+([Shift])+[n]          | (Prev)/Next git hunk          | Move to (Prev)/Next git hunk          | Hunk means changed block |
+| N/V      | [LK]+[g]+[p]                | Hunk preview (before changed) | Hunk preview (before changed)         |
+| N/V      | [LK]+[g]+[s]                | Stage current hunk            | Stage current hunk                    |
+| N/V      | [LK]+[g]+[u]                | Restore current hunk          | Restore current hunk                  |
 
 ### Reference for VIM Setup
 - http://fisadev.github.io/fisa-vim-config/
