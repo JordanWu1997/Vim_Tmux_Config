@@ -203,7 +203,7 @@ nvim --startuptime test.txt
         - [Plug-in] vim-indent-object (add indent object to vim)
         - [Plug-in] vim-multiple-cursors (multiple cursors)
         - [Plug-in] vim-fugitive (git toolbox)
-        - [Plug-in] vim-signify (git diff highlight)
+        - [Plug-in] vim-gitgutter (git diff highlight)
         - [Plug-in] minimap (minimap scrollbar)
     ```vim
     " Coding tools vim-plug (Include syntax support, git function, and etc.)
@@ -359,16 +359,18 @@ nvim --startuptime test.txt
 | N/V      | [Ctrl]+[n](+[n]+[n]+...+[n] | Multiple cursor for selected  | Multiple cursor for currently selected word | Press N to next word; Use I/A to insert word; Use Esc to exit |
 | N/V      | [Ctrl]+[p](+[p]+[p]+...+[p] | Cancel selected multiple cursor | Cancel selected multiple cursor     |
 | N/V      | [LK]+[g]+[g]                | Toggle GitGutter              | On/Off GitGutter                      |
-| N/V      | [LK]+[g]+[h]+[s/l/n]        | Toggle GItGutter highlight    | Toggle GItGutter highlight symbol/line/line number |
+| N/V      | [LK]+[g]+[h]+[s/l/n]        | Toggle GitGutter highlight    | Toggle GitGutter highlight symbol/line/line number |
 | N/V      | [LK]+[Tab]                  | Cycle all git hunks           | Cycle all git hunks                   | Hunk means changed block |
 | N/V      | [LK]+[g]+[n]                | Next git hunk                 | Move to next git hunk                 |
 | N/V      | [LK]+[g]+[N]                | Previous git hunk             | Move to previous git hunk             |
 | N/V      | [LK]+[g]+[p]                | Hunk preview (before changed) | Hunk preview (before changed)         | Here p for (p)review |
+| N/V      | [LK]+[g]+[Shift]+[f]        | Fold all unchanged lines      | Fold all unchanged lines              |
 | N/V      | [LK]+[g]+[Shift]+[s]        | Stage current hunk            | Stage current hunk                    | Here s for (s)tage |
 | N/V      | [LK]+[g]+[Shift]+[u]        | Restore current hunk          | Restore current hunk                  | Like vim undo |
-| N/V      | [LK]+[g]+([Shift])+[d]      | Git diff (all unstaged files) | Git diff (all unstaged files)         |                              |
-| N/V      | [LK]+[g]+([Shift])+[a]      | Git add (all unstaged files)  | Git add (all unstaged files)          |                              |
-| N/V      | [LK]+[g]+([Shift])+[c]      | Git commit -m (all unstaged files) | Git commit -m (all unstaged files) |                              |
+| N/V      | [LK]+[g]+([Shift])+[d]      | Git diff (all unstaged files) | Git diff (all unstaged files)         |
+| N/V      | [LK]+[g]+([Shift])+[a]      | Git add (all unstaged files)  | Git add (all unstaged files)          |
+| N/V      | [LK]+[g]+([Shift])+[c]      | Git commit -m (all unstaged files) | Git commit -m (all unstaged files) |
+| N/V      | [LK]+[g]+[Shift]+[b]        | Git blame current file        | Git blame current file                |
 
 ### Reference for VIM Setup
 - http://fisadev.github.io/fisa-vim-config/

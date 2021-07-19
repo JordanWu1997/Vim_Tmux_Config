@@ -685,10 +685,13 @@ if using_customized_theme
                 \ 'colorscheme': 'deus',
                 \ 'active': {
                 \   'left': [ [ 'mode', 'paste' ],
-                \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+                \             [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
+                \ },
+                \ 'inactive': {
+                \   'left': [ [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
                 \ },
                 \ 'component_function': {
-                \   'gitbranch': 'FugitiveHead'
+                \   'gitbranch': 'FugitiveHead',
                 \ },
                 \ 'separator': {
                 \   'left': "", "right": ""
@@ -702,7 +705,10 @@ if using_customized_theme
                 \ 'colorscheme': 'deus',
                 \ 'active': {
                 \   'left': [ [ 'mode', 'paste' ],
-                \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+                \             [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
+                \ },
+                \ 'inactive': {
+                \   'left': [ [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
                 \ },
                 \ 'component_function': {
                 \   'gitbranch': 'FugitiveHead'
@@ -999,6 +1005,7 @@ if using_coding_tool_plug
     map <leader>gA :Git add --all<CR>
     map <leader>gc :Git commit % -m<space>
     map <leader>gC :Git commit -m<space>
+    map <leader>gB :Git blame<CR>
 endif
 
 " Signify --------------------------------------------------------------------
@@ -1033,6 +1040,10 @@ if using_coding_tool_plug
     let g:gitgutter_highlight_linenrs = 0
     " Show number of hunk when move between hunks
     let g:gitgutter_show_msg_on_hunk_jumping = 1
+    " Show gitgutter prewview in split pane
+    let g:gitgutter_preview_win_floating = 0
+    " Use Esc key to quit preview pane
+    let g:gitgutter_close_preview_on_escape = 1
     " Assign color to GitGutter group
     highlight GitGutterAdd    guifg=#009900 ctermfg=2
     highlight GitGutterChange guifg=#bbbb00 ctermfg=3
@@ -1048,6 +1059,7 @@ if using_coding_tool_plug
     map <leader>gn <Plug>(GitGutterNextHunk)
     map <leader>gN <Plug>(GitGutterPrevHunk)
     map <leader>gp <Plug>(GitGutterPreviewHunk)
+    map <leader>gF :GitGutterFold<CR>
     map <leader>gS <Plug>(GitGutterStageHunk)
     map <leader>gU <Plug>(GitGutterUndoHunk)
     " Cycle through hunks in current buffer
