@@ -994,7 +994,8 @@ endif
 if using_coding_tool_plug
     let g:indentLine_char_list = ['|', '¦', '┆', '┊']
     let g:indentLine_showFirstIndentLevel = 1
-    let g:indentLine_fileTypeExclude = ['text']
+    let g:indentLine_fileTypeExclude = ['text', 'markdown', 'latex']
+    let g:indentLine_bufTypeExclude = ['help', 'terminal']
 endif
 
 " Indent guides --------------------------------------------------------------
@@ -1124,7 +1125,9 @@ if using_python_completion
     " (displays documentation related to the selected completion option)
     " Disabled by default because preview makes the window flicker
     set completeopt-=preview
-    " Use deoplete.
+    " Python that uses to install jedi
+    let g:python3_host_prog = '/home/jordankhwu/anaconda3/bin/python'
+    " Enable deoplete at startup
     let g:deoplete#enable_at_startup = 1
     autocmd FileType python call deoplete#custom#option({
     \   'ignore_case': v:true,

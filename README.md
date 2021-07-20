@@ -10,6 +10,7 @@ Table of Contents
       * [Preparation (Dependence)](#preparation-dependence)
          * [1. Common Requirement](#1-common-requirement)
          * [2. Requirement for Diverse Vim](#2-requirement-for-diverse-vim)
+         * [3. Requirement for Python Completion](#3-requirement-for-python-completion)
       * [First Time Usage](#first-time-usage)
          * [1. Copy Configuration File](#1-copy-configuration-file)
          * [2. First Time Startup (Vim/Gvim/Neovim)](#2-first-time-startup-vimgvimneovim)
@@ -84,6 +85,23 @@ Table of Contents
     ```bash
     # Check nvim version and other options
     nvim --version
+    ```
+#### 3. Requirement for Python Completion
+
+- __jedi__ for jedi [python code analyzer]
+    ```bash
+    # Python3
+    pip install jedi
+    ```
+- __pyenv__ for deoplete [python code analyzer]
+    ```bash
+    # Python3
+    pip install pyenv
+    ```
+- __ipdb__ for ipdb [python breakpoint maker]
+    ```bash
+    # Python3
+    pip install ipdb
     ```
 
 ### First Time Usage
@@ -362,7 +380,7 @@ nvim --startuptime test.txt
 | N/V      | [Alt]+[o](+[o]+[o]+...+[o]  | Omit selected multiple cursor | Omit selected multiple cursor     |
 | N/V      | [LK]+[g]+[g]                | Toggle GitGutter              | On/Off GitGutter                      |
 | N/V      | [LK]+[g]+[h]+[s/l/n]        | Toggle GitGutter highlight    | Toggle GitGutter highlight symbol/line/line number |
-| N/V      | [LK]+[Tab]                  | Cycle all git hunks           | Cycle all git hunks                   | Hunk means changed block |
+| N/V      | [LK]+([Shift])+[Tab]        | Cycle (Prev)/Next git hunks   | Cycle (Prev)/Next git hunks           | Hunk means changed block |
 | N/V      | [LK]+[g]+[n]                | Next git hunk                 | Move to next git hunk                 |
 | N/V      | [LK]+[g]+[p/N]              | Previous git hunk             | Move to previous git hunk             |
 | N/V      | [LK]+[g]+[s]                | Hunk preview (before changed) | Hunk preview (before changed)         | Here s for (s)how_preview |
