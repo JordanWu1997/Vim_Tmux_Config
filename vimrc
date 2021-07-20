@@ -244,8 +244,8 @@ set nofoldenable
 set foldmethod=indent
 autocmd FileType python setlocal foldmethod=indent
 map <silent><leader>ff za<CR>:echo 'Toggle Current Fold...'<CR>
-map <silent><leader>cf zM<CR>:echo 'Close All Folds ...'<CR>
-map <silent><leader>sf zR<CR>:echo 'Show All Folds ...'<CR>
+map <silent><leader>fc zM<CR>:echo 'Close All Folds ...'<CR>
+map <silent><leader>fs zR<CR>:echo 'Show All Folds ...'<CR>
 
 " Tabe (window) settings -----------------------------------------------------
 " Tabe (window) operations
@@ -285,10 +285,6 @@ function! <SID>BufcloseCloseIt()
 endfunction
 " A buffer not becomes hidden (send to background) when it is abandoned
 set nohidden
-" List all buffers and status
-"map <silent><leader>ls :ls<CR>
-"" Load buffer
-"map <leader>b :b<space>
 " Add buffer in foreground
 map <leader>bb :edit<space>
 " Add buffer in background
@@ -378,8 +374,8 @@ map <leader><F6> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 
 " Function - Hex editor ------------------------------------------------------
 " From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
-"map <leader>ho :%! xxd<CR>:echo 'Hex editor on: TF to binary data'<CR>
-"map <leader>hf :%! xxd -r<CR>:echo 'Hex editor off: TF to original data'<CR>
+map <leader>eho :%! xxd<CR>:echo 'Hex editor on: TF to binary data'<CR>
+map <leader>ehf :%! xxd -r<CR>:echo 'Hex editor off: TF to original data'<CR>
 
 " ============================================================================
 " Customized terminal mode (Only support for vim >= 8.0)
@@ -542,7 +538,7 @@ if using_coding_tool_plug
     if using_vim8
         " Languge packs [Not working on fomalhaut (vim=7.0)]
         Plug 'sheerun/vim-polyglot'
-        " Multiple language syntax support [Not working on fomalhaut (vim=7.0)]
+        " Multiple language syntax and lint support [Not working on fomalhaut (vim=7.0)]
         Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
         "" Syntax support (Improved syntastics, here just use ale instead)
         " Plug 'neomake/neomake'
@@ -553,7 +549,9 @@ if using_coding_tool_plug
     Plug 'sbdchd/neoformat', { 'on': 'Neoformat' }
     " Paint paired bracket/quotation in different color
     Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle' }
-    " Indent line guide [Color column]
+    " Indentline (symbol)
+    Plug 'yggdroot/indentLine'
+    " Indent line guide (color column)
     Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
     " Indent text object (i for indent as w for word)
     Plug 'michaeljsmith/vim-indent-object'
@@ -784,7 +782,7 @@ nmap <leader>fbf :Buffers<CR>
 nmap <leader>fwd :Windows<CR>
 nmap <leader>fft :Filetypes<CR>
 nmap <leader>fcd :Commands<CR>
-nmap <leader>fmp :Maps<CR>
+nmap <leader>fnm :Maps<CR>
 nmap <leader>fht :Helptags<CR>
 " Line completion with current file [Use AutoComplPop instead]
 "imap <c-x><c-l> <plug>(fzf-complete-line)
@@ -833,7 +831,7 @@ let g:NERDCreateDefaultMappings = 0
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 0
 " Use compact syntax for prettified multi-line comments
- let g:NERDCompactSexyComs = 1
+let g:NERDCompactSexyComs = 1
 " Enable trimming of trailing whitespace when uncommenting
 let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not
@@ -869,7 +867,7 @@ map <leader><Enter> <Plug>(choosewin)
 let g:choosewin_overlay_enable = 1
 
 " Autopairs -----------------------------------------------------------------
-let g:AutoPairsShortcutToggle = '<M-p>'
+let g:AutoPairsShortcutToggle = '<M-a>'
 let g:AutoPairsShortcutJump = '<M-j>'
 let g:AutoPairsShortcutFastWrap = '<M-w>'
 
@@ -887,9 +885,12 @@ if using_neovim && using_extra_plug
     nmap <silent><C-b> :call comfortable_motion#flick(-200)<CR>
 endif
 
+" Goyo -----------------------------------------------------------------------
+if using_neovim && using_extra_plug
+    map <leader>gy :Goyo<CR>
+endif
+
 " YankRing -------------------------------------------------------------------
-" Yankring automatically remap built-in command key mapping
-" -- e.g. "X[x]", "D[d]", "Y[y]", "P[p]", ".", "@", and etc.
 if using_extra_plug
     if using_neovim
         let g:yankring_history_dir = '~/.config/nvim/'
@@ -899,6 +900,22 @@ if using_extra_plug
     else
         let g:yankring_history_dir = '~/.vim/dirs/'
     endif
+    " Yankring automatically remap built-in command key mapping (disabled)
+    " -- e.g. "X[x]", "D[d]", "Y[y]", "P[p]", ".", "@", and etc.
+    " -- Here disable most of yankring default keymappings except yank replacing
+    let g:yankring_paste_using_g = 0
+    let g:yankring_n_keys = ' '
+    let g:yankring_o_keys = ' '
+    let g:yankring_zap_keys = ' '
+    let yankring_v_key = ' '
+    let g:yankring_del_v_key = ' '
+    let g:yankring_paste_n_bkey = ' '
+    let g:yankring_paste_n_akey = ' '
+    let g:yankring_paste_v_key = ' '
+    " Enable yankring replace
+    let g:yankring_replace_n_pkey = '<C-P>'
+    let g:yankring_replace_n_nkey = '<C-N>'
+    " Yankring history
     map <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
     map <leader>yc :YRClear<CR>:echo 'Clear Yank History'<CR>
 endif
@@ -973,6 +990,13 @@ if using_coding_tool_plug
     map <leader>rb :RainbowToggle<CR>
 endif
 
+" Indentline -----------------------------------------------------------------
+if using_coding_tool_plug
+    let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+    let g:indentLine_showFirstIndentLevel = 1
+    let g:indentLine_fileTypeExclude = ['text']
+endif
+
 " Indent guides --------------------------------------------------------------
 if using_coding_tool_plug
     let g:indent_guides_enable_on_vim_startup = 0
@@ -987,11 +1011,11 @@ endif
 " Multiple-cursors -----------------------------------------------------------
 if using_coding_tool_plug
     let g:multi_cursor_use_default_mapping = 0
-    let g:multi_cursor_start_word_key      = '<C-n>'
-    let g:multi_cursor_select_all_word_key = '<C-n>a'
-    let g:multi_cursor_next_key            = '<C-n>'
-    let g:multi_cursor_prev_key            = '<C-p>'
-    let g:multi_cursor_skip_key            = '<C-o>'
+    let g:multi_cursor_start_word_key      = '<M-n>'
+    let g:multi_cursor_select_all_word_key = '<M-n>a'
+    let g:multi_cursor_next_key            = '<M-n>'
+    let g:multi_cursor_prev_key            = '<M-p>'
+    let g:multi_cursor_skip_key            = '<M-o>'
     let g:multi_cursor_quit_key            = '<Esc>'
 endif
 
@@ -1017,7 +1041,7 @@ endif
     "map <leader>sy :SignifyToggle<CR>
     "map <leader>sn <plug>(signify-next-hunk)
     "map <leader>sp <plug>(signify-prev-hunk)
-        "" Nicer colors
+    "" Nicer colors
     "highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
     "highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
     "highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
@@ -1058,7 +1082,8 @@ if using_coding_tool_plug
     " GitGutter hunk move/action/git
     map <leader>gn <Plug>(GitGutterNextHunk)
     map <leader>gN <Plug>(GitGutterPrevHunk)
-    map <leader>gp <Plug>(GitGutterPreviewHunk)
+    map <leader>gp <Plug>(GitGutterPrevHunk)
+    map <leader>gs <Plug>(GitGutterPreviewHunk)
     map <leader>gF :GitGutterFold<CR>
     map <leader>gS <Plug>(GitGutterStageHunk)
     map <leader>gU <Plug>(GitGutterUndoHunk)
@@ -1072,6 +1097,7 @@ if using_coding_tool_plug
       endif
     endfunction
     map <silent><leader><Tab> :call GitGutterNextHunkCycle()<CR>
+    map <silent><leader><S-Tab> <Plug>(GitGutterPrevHunk)
 endif
 
 " Minimap --------------------------------------------------------------------

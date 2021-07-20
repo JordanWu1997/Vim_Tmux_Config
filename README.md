@@ -283,8 +283,8 @@ nvim --startuptime test.txt
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N        | ([LK])+[F10]                | Load/Save layout and folding  | Load/Save current split and code folding |
 | N/V      | [LK]+[f]+[f]                | Toggle current folding        | Show/Close current folding            | Here f for (f)old
-| N/V      | [LK]+[s]+[f]                | Show all foldings             | Show all foldings                     | Here s for (s)how
-| N/V      | [LK]+[c]+[f]                | Close all foldings            | Close all foldings                    | Here c for (c)lose
+| N/V      | [LK]+[f]+[s]                | Show all foldings             | Show all foldings                     | Here s for (s)how
+| N/V      | [LK]+[f]+[c]                | Close all foldings            | Close all foldings                    | Here c for (c)lose
 
 #### 3. Miscellaneous Function Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
@@ -341,7 +341,7 @@ nvim --startuptime test.txt
 | N/V      | [y]+[Shift]+[s]+[w]+["]     | Add wrapped quotation/bracket | From word to "word"                   | vim-surrounder |
 | N/V      | [d]+[Shift]+[s]+[w]+["]     | Del wrapped quotation/bracket | From "word" to word                   | vim-surrounder |
 | N/V      | [c]+[Shift]+[s]+[']+["]     | Change quotation/bracket      | From 'word' to "word"                 | vim-surrounder |
-| N/V      | [Alt]+[p]                   | Toggle auto-pair              | On/Off auto-pair quotation/bracket    | auto-pairs |
+| N/V      | [Alt]+[a]                   | Toggle auto-pair              | On/Off auto-pair quotation/bracket    | auto-pairs |
 | N/V      | [Alt]+[j]                   | Jump to next pairs            | Jump to next paired quotation/bracket | auto-pairs |
 
 - Extra plug (Note: "let using_extra_plug = 1" must be set in vimrc)
@@ -350,20 +350,22 @@ nvim --startuptime test.txt
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N        | [Ctrl]+[f/b]                | Move down/up physically       | Move down/up physically               | comfortable-motion.vim |
 | N/V      | [LK]+[h/j/k/l]              | Quick move in four direction  | Quick move in four direction          | vim-easymotion |
+| N/V      | [Ctrl]+[n/p]                | Paste next/prev clipped item  | Paste next/prev clipped item          | yankring |
 
 - Coding tool (Note: "let using_coding_tool_plug = 1" must be set in vimrc)
 
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N/V      | [LK]+[m]+[m]                | Toggle code minimap scrollbar | On/Off code minimap scrollbar         | For neovim version >= 0.5, and minicode is installed |
-| N/V      | [Ctrl]+[n](+[n]+[n]+...+[n] | Multiple cursor for selected  | Multiple cursor for currently selected word | Press N to next word; Use I/A to insert word; Use Esc to exit |
-| N/V      | [Ctrl]+[p](+[p]+[p]+...+[p] | Cancel selected multiple cursor | Cancel selected multiple cursor     |
+| N/V      | [Alt]+[n](+[n]+[n]+...+[n]  | Multiple cursor for selected  | Multiple cursor for currently selected word | Press N to next word; Use I/A to insert word; Use Esc to exit |
+| N/V      | [Alt]+[p](+[p]+[p]+...+[p]  | Cancel selected multiple cursor | Cancel selected multiple cursor     |
+| N/V      | [Alt]+[o](+[o]+[o]+...+[o]  | Omit selected multiple cursor | Omit selected multiple cursor     |
 | N/V      | [LK]+[g]+[g]                | Toggle GitGutter              | On/Off GitGutter                      |
 | N/V      | [LK]+[g]+[h]+[s/l/n]        | Toggle GitGutter highlight    | Toggle GitGutter highlight symbol/line/line number |
 | N/V      | [LK]+[Tab]                  | Cycle all git hunks           | Cycle all git hunks                   | Hunk means changed block |
 | N/V      | [LK]+[g]+[n]                | Next git hunk                 | Move to next git hunk                 |
-| N/V      | [LK]+[g]+[N]                | Previous git hunk             | Move to previous git hunk             |
-| N/V      | [LK]+[g]+[p]                | Hunk preview (before changed) | Hunk preview (before changed)         | Here p for (p)review |
+| N/V      | [LK]+[g]+[p/N]              | Previous git hunk             | Move to previous git hunk             |
+| N/V      | [LK]+[g]+[s]                | Hunk preview (before changed) | Hunk preview (before changed)         | Here s for (s)how_preview |
 | N/V      | [LK]+[g]+[Shift]+[f]        | Fold all unchanged lines      | Fold all unchanged lines              |
 | N/V      | [LK]+[g]+[Shift]+[s]        | Stage current hunk            | Stage current hunk                    | Here s for (s)tage |
 | N/V      | [LK]+[g]+[Shift]+[u]        | Restore current hunk          | Restore current hunk                  | Like vim undo |
