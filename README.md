@@ -93,10 +93,10 @@ Table of Contents
     # Python3
     pip install jedi
     ```
-- __pyenv__ for deoplete [python code analyzer]
+- __pynvim__ for deoplete neovim plugin usage [python code analyzer]
     ```bash
     # Python3
-    pip install pyenv
+    pip install pynvim
     ```
 - __ipdb__ for ipdb [python breakpoint maker]
     ```bash
