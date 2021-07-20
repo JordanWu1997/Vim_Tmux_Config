@@ -110,6 +110,7 @@ let using_extra_plug = 1
 let using_coding_tool_plug = 1
 " Python Completion (Use deoplete and jedi, neovim is recommended to be used)
 let using_python_completion = 1
+let python_for_completion = '/home/jordankhwu/anaconda3/bin/python'
 " Support of externaml gui software (e.g. Okular, Google-chrome, and etc.)
 let using_gui_software = 1
 
@@ -903,11 +904,13 @@ if using_extra_plug
     " Yankring automatically remap built-in command key mapping (disabled)
     " -- e.g. "X[x]", "D[d]", "Y[y]", "P[p]", ".", "@", and etc.
     " -- Here disable most of yankring default keymappings except yank replacing
+    let g:yankring_window_auto_close = 1
+    let g:yankring_record_insert = 0
     let g:yankring_paste_using_g = 0
     let g:yankring_n_keys = ' '
     let g:yankring_o_keys = ' '
     let g:yankring_zap_keys = ' '
-    let yankring_v_key = ' '
+    let g:yankring_v_key = ' '
     let g:yankring_del_v_key = ' '
     let g:yankring_paste_n_bkey = ' '
     let g:yankring_paste_n_akey = ' '
@@ -1126,7 +1129,7 @@ if using_python_completion
     " Disabled by default because preview makes the window flicker
     set completeopt-=preview
     " Python that uses to install jedi
-    let g:python3_host_prog = '/home/jordankhwu/anaconda3/bin/python'
+    let g:python3_host_prog = python_for_completion
     " Enable deoplete at startup
     let g:deoplete#enable_at_startup = 1
     autocmd FileType python call deoplete#custom#option({

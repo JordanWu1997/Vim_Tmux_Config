@@ -229,6 +229,7 @@ nvim --startuptime test.txt
     ```
 - Python completion vim-plug
     - Tools for python completion
+    - Requirements must be satisfied (check python completion preparation at the first session)
     - Including
         - [Plug-in] nvim-yarp (yet another remote plugin framework for neovim)
         - [Plug-in] vim-hug-neovim-rpc (plugin bridge from neovim to vim)
@@ -238,6 +239,8 @@ nvim --startuptime test.txt
     ```vim
     " Python Completion (Use deoplete and jedi, neovim is recommended to be used)
     let using_python_completion = 1
+    " Python that used for jedi and pynvim installation, change '_..._ ' to your python
+    let python_for_completion = '_python_for_jedi_pynvim_installation_'
     ```
 - GUI support
     - Functions for external GUI software
