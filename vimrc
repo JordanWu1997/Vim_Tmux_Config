@@ -131,6 +131,8 @@ imap ii <Esc>
 imap kj <Esc>
 
 " Map normal mode key --------------------------------------------------------
+" -- zz (Center current cursor column)
+" -- gt/gT (Next/Prev Tab)
 
 " Save/Load file hotkey ------------------------------------------------------
 " -- ZZ (Quit and save if there's change in file)
@@ -149,7 +151,7 @@ map <leader>wq :wq<CR>
 " -- :!del FILENAME (Delete FILENAME)
 
 " Vim built-in setting -------------------------------------------------------
-filetype on
+filetype off
 " Following settings are automatically executed by VIM-plug
 "filetype plugin on
 "filetype indent on
@@ -214,7 +216,7 @@ set wildmode=list:full    " Show all available input options (or use Ctrl-D)
 " Cursor settings ------------------------------------------------------------
 set ruler                 " Show cursor position in statusline
 set cursorline            " Show vertical line
-"set cursorcolumn          " Show horizontal line (laggy in neovim)
+set cursorcolumn          " Show horizontal line (laggy in neovim sometimes)
 " Toggle cursor line/column indicator (horizontal/vertical)
 map <leader>ch :set cursorline!<CR>:echo 'Toggle Cursor Line [Horizontal]'<CR>
 map <leader>cv :set cursorcolumn!<CR>:echo 'Toggle Cursor Column [Vertical]'<CR>
@@ -388,6 +390,8 @@ map <leader>ehf :%! xxd -r<CR>:echo 'Hex editor off: TF to original data'<CR>
 
 " Set customized terminal mode keymapping
 if using_vim8
+    " Map key to enter terminal mode
+    map <F12> :terminal<CR>
     " Map key to go back from terminal mode to normal mode
     " Do not use Esc (which conflicts with fzf window)
     tmap <leader><F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
@@ -397,11 +401,6 @@ if using_vim8
     tmap <C-j> <C-\><C-n><C-w>j
     tmap <C-k> <C-\><C-n><C-w>k
     tmap <C-l> <C-\><C-n><C-w>l
-    if using_neovim
-        map <F12> :term<CR>
-    else
-        map <F12> :terminal<CR>
-    endif
 endif
 
 " ============================================================================
@@ -455,16 +454,18 @@ endif
 
 " [Vim theme] ----------------------------------------------------------------
 if using_customized_theme
-    " Color themes (Monokair - high contrast)
-    Plug 'patstockwell/vim-monokai-tasty'
-    " Color themes (Gruvbox - low contrast)
-    Plug 'morhetz/gruvbox'
+    " Wal (Autocolorcheme based on wallpaper) [Only work with Cterm color]
+    Plug 'dylanaraps/wal.vim', { 'on': 'colorscheme wal' }
+    " Color theme (Monokai - high contrast)
+    Plug 'patstockwell/vim-monokai-tasty', { 'on': 'colorscheme vim-monokai-tasty' }
+    " Color theme (Gruvbox - low contrast)
+    Plug 'morhetz/gruvbox', { 'on': 'colorscheme gruvbox' }
+    " Color theme (Srcery - low contrast)
+    Plug 'srcery-colors/srcery-vim', { 'on': 'colorscheme srcery' }
     " Lightline (status line)
     Plug 'itchyny/lightline.vim'
     " Lightline bufferline
     Plug 'mengelbrecht/lightline-bufferline'
-    " Wal (Autocolorcheme based on wallpaper) [Only work with Cterm color]
-    Plug 'dylanaraps/wal.vim'
 endif
 
 " [File/Code Browsing] -------------------------------------------------------
@@ -484,7 +485,7 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 
 " [Vim useful functions] -----------------------------------------------------
 " Sudo write/read files in vim
-Plug 'lambdalisue/suda.vim'
+Plug 'lambdalisue/suda.vim', { 'on': 'SudaWrite' }
 "" Vim settings for opening large files
 Plug 'vim-scripts/LargeFile'
 " System Man usage
@@ -498,7 +499,8 @@ Plug 'tpope/vim-surround'
 " Enable . (repeat) motion for external plugin commands
 Plug 'tpope/vim-repeat'
 " Vim window maximizer
-Plug 'szw/vim-maximizer'
+Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle' }
+nmap <silent><leader>z :MaximizerToggle<CR>
 " Window pane selector
 Plug 't9md/vim-choosewin'
 " Autopair for quotations and brackets
@@ -558,10 +560,9 @@ if using_coding_tool_plug
      "Multiple cursor with incsearch support
     Plug 'terryma/vim-multiple-cursors'
     " Git integration (Git functions in vim command line)
-    "Plug 'tpope/vim-fugitive', { 'on': 'Git' }
     Plug 'tpope/vim-fugitive'
     " Git diff/change line indicator (light and minimalist)
-    "Plug 'mhinz/vim-signify'
+    Plug 'mhinz/vim-signify', { 'on': 'SignifyToggle' }
     " GitGutter (enhanced signify), also with git integration
     Plug 'airblade/vim-gitgutter'
     " File Minimap (Need neovim Ver. >= 0.5)
@@ -620,6 +621,10 @@ Plug 'alvan/vim-closetag', { 'for': 'html' }
 Plug 'vim-latex/vim-latex', { 'for': 'tex' }
 " Real time Tex -> Pdf file preview (pdf reader is needed)
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
+
+" [I3 syntax highlight] ------------------------------------------------------
+" I3 configuration syntax highlight
+Plug 'PotatoesMaster/i3-vim-syntax', { 'for': 'i3'}
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
@@ -793,22 +798,33 @@ nmap <leader>fht :Helptags<CR>
 
 " NERDTree -------------------------------------------------------------------
 " Disable vim built-in netrw
+let g:NERDTreeWinSize=38
 let loaded_netrwPlugin = 1
-" Open nerdtree with the current file selected
-map <silent><F3> :NERDTreeFind<CR>
-" Toggle nerdtree display
-map <silent><leader><F3> :NERDTreeToggle<CR>
+let NERDTreeShowLineNumbers=1
+let NERDTreeShowHidden=1
+let NERDTreeMinimalUI = 1
 " Don;t show these file types
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 let g:NERDTreeMouseMode = 3
 let g:NERDTreeDirArrows = ''
-let g:NERDTreeDirArrowExpandable = "\u00a0"
-let g:NERDTreeDirArrowCollapsible = "\u00a0"
+" Set nerdtree dir arrow symbols
+if using_fancy_symbols
+    let g:NERDTreeDirArrowExpandable = '►'
+    let g:NERDTreeDirArrowCollapsible = '▼'
+else
+    let g:NERDTreeDirArrowExpandable = "\u00a0"
+    let g:NERDTreeDirArrowCollapsible = "\u00a0"
+endif
+" Open nerdtree with the current file selected
+map <silent><F3> :NERDTreeFind<CR>
+" Toggle nerdtree display
+map <silent><leader><F3> :NERDTreeToggle<CR>
 
 " Tagbar ---------------------------------------------------------------------
 " autofocus on tagbar open
 let g:tagbar_autofocus = 1
 let g:tagbar_map_showproto = 'd'
+let g:tagbar_width = 38
 " toggle tagbar display
 map <silent><leader><F4> :TagbarToggle<CR>
 
@@ -1092,12 +1108,12 @@ if using_coding_tool_plug
     map <leader>gU <Plug>(GitGutterUndoHunk)
     " Cycle through hunks in current buffer
     function! GitGutterNextHunkCycle()
-      let line = line('.')
-      GitGutterNextHunk
-      if line('.') == line
-        1
+        let line = line('.')
         GitGutterNextHunk
-      endif
+        if line('.') == line
+            1
+            GitGutterNextHunk
+        endif
     endfunction
     map <silent><leader><Tab> :call GitGutterNextHunkCycle()<CR>
     map <silent><leader><S-Tab> <Plug>(GitGutterPrevHunk)
@@ -1216,44 +1232,57 @@ endif
 " Set colorscheme (syntax highlight), color assignment, and etc.
 
 " Vim colorscheme ------------------------------------------------------------
-" Colorschmeme shortcut
-nmap <leader>csd :colorscheme default<CR>
-nmap <leader>csg :colorscheme gruvbox<CR>
-nmap <leader>csv :colorscheme vim-monokai-tasty<CR>
-nmap <leader>csw :colorscheme wal<CR>
+" Customized color palette
+function! CustomizedColorPalette()
+    " Common background setting (dark background)
+    set bg=dark
+    " Color setup (hi command must be added after colorscheme)
+    highlight Normal        cterm=none   ctermfg=none ctermbg=none gui=none   guifg=none    guibg=none
+    highlight LineNr        cterm=bold   ctermfg=8    ctermbg=none gui=bold   guifg=#808080 guibg=none
+    highlight CursorLineNr  cterm=bold   ctermfg=10   ctermbg=none gui=bold   guifg=#00ff00 guibg=none
+    highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=none gui=bold   guifg=#808080 guibg=none
+    highlight CursorColumn  cterm=none   ctermfg=none ctermbg=233  gui=none   guifg=none    guibg=#444444
+    highlight CursorLine    cterm=none   ctermfg=none ctermbg=233  gui=none   guifg=none    guibg=#444444
+    highlight Comment       cterm=italic ctermfg=8    ctermbg=none gui=italic guifg=#8a8a8a guibg=none
+    highlight OverLength    cterm=bold   ctermfg=15   ctermfg=9    gui=bold   guifg=#ffffff guibg=#ff0000
+    highlight UnlimitLength cterm=none   ctermfg=none ctermbg=none gui=none   guifg=none    guibg=none
+    highlight FoldColumn    cterm=none   ctermfg=none ctermbg=233  gui=none   guifg=none    guibg=none
+    highlight SignColumn    cterm=none   ctermfg=none ctermfg=233  gui=none   guifg=none    guibg=none
+endfunction
+
+" Vim colorscheme ------------------------------------------------------------
+" Fortran syntax highlight
 " Use either 'koehler' or 'elflord' for 'fortran' syntax support
 autocmd FileType fortran colorscheme koehler
+autocmd FileType fortran call CustomizedColorPalette()
 " Customized colorscheme settings
 if using_customized_theme
     if using_wal_theme
         " Option 1 - Direct read Xcolor from wal
         "source $HOME/.cache/wal/colors-wal.vim
-        " Option 2 - Use wal vim plugin
+        " Option 2 - Use wal vim plugin [Recommended]
         colorscheme wal
     else
         colorscheme vim-monokai-tasty
     endif
-    " Common background setting (transparent background)
-    set bg=dark
-    " Color setup (hi command must be entered after colorscheme)
-    hi Normal                               ctermbg=NONE                        guibg=NONE
-    hi LineNr       cterm=bold ctermfg=8    ctermbg=NONE gui=bold guifg=#808080 guibg=NONE
-    hi CursorLineNr cterm=bold ctermfg=10   ctermbg=NONE gui=bold guifg=#00ff00 guibg=NONE
-    hi Pmenu        cterm=bold ctermfg=8    ctermbg=NONE gui=bold guifg=#808080 guibg=NONE
-    hi CursorColumn cterm=none ctermfg=none ctermbg=233
-    hi CursorLine   cterm=none ctermfg=none ctermbg=233
+    " Call customized color palette
+    call CustomizedColorPalette()
 endif
+" Colorschmeme shortcut
+nmap <leader>csd :colorscheme default<CR>:set termguicolors<CR>:call CustomizedColorPalette()<CR>
+nmap <leader>csg :colorscheme gruvbox<CR>:set termguicolors<CR>:call CustomizedColorPalette()<CR>
+nmap <leader>csv :colorscheme vim-monokai-tasty<CR>:set termguicolors<CR>:call CustomizedColorPalette()<CR>
+nmap <leader>css :colorscheme srcery<CR>:set termguicolors<CR>:call CustomizedColorPalette()<CR>
+nmap <leader>csw :colorscheme wal<CR>:set notermguicolors<CR>:call CustomizedColorPalette()<CR>
 
 " Function - Line length warnings [Must be added after color setup] ----------
 " Here adopt default vim-textwidth 78 as maximum line length
-highlight OverLength    ctermbg=red  ctermfg=white guibg=#ff0000 guifg=#ffffff
-highlight UnlimitLength ctermbg=NONE guibg=NONE
 map <F7> :match OverLength /\%79v.\+/<CR>:echo '78 char-bound ON'<CR>
 map <leader><F7> :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
 
 " Function - Comment highlight -----------------------------------------------
-map <F8> :hi Comment ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
-map <leader><F8> :hi Comment ctermfg=8 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'<CR>
+map <F8> :hi Comment cterm=italic ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
+map <leader><F8> :hi Comment cterm=italic ctermfg=8 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'<CR>
 
 " ============================================================================
 " End of Vim configuration, automatically reload current config after saving
