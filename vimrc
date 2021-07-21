@@ -5,6 +5,7 @@
 " Modified [Vim]/[Neovim] version:[8.2]/[v0.4.4] by Kuan-Hsien Wu, Sheng-Jun Lin
 " ============================================================================
 " This vim configuration is for both vim and neovim
+
 " Note:
 " Vim / Neovim configuration file --------------------------------------------
 " -- Vim configuration file
@@ -67,7 +68,7 @@
 "           (1) :Neoformat isort   # Sort import module
 "           (2) :Neoformat pyment  # Add description of function/class
 "           (3) :Neoformat yasf    # Format to PEP8 standard
-"
+
 " Note:
 " Python-completion and tmux-yank-clipboard on ZEUS --------------------------
 " -- Use neovim and everything is fine, but notice that neovim support of
@@ -77,13 +78,6 @@
 "    -- jedi-Vim: pip install jedi
 "    -- deoplete: pip install pynvim
 "    -- ipdb    : pip install ipdb
-
-" Note:
-" Wal.vim (autotheme color palette support)
-" -- Wal.vim cannot be automatically import to lightline.Vim. For now, I just
-" link wal.vim mannually to lightline by below command:
-"   ln -s ~/.config/nvim/plugged/wal.vim/autoload/lightline/colorscheme/wal.vim \
-"   ~/.config/nvim/plugged/lightline.vim/autoload/lightline
 
 " ============================================================================
 " Vim and Neovim settings
@@ -132,13 +126,15 @@ endif
 let mapleader = ' '
 
 " Map insert mode Esc key ----------------------------------------------------
-" - Use Ctrl+v to escape
+" -- Use Ctrl+v to escape for 'ii' word (e.g. ascii)
 imap ii <Esc>
 imap kj <Esc>
 
+" Map normal mode key --------------------------------------------------------
+
 " Save/Load file hotkey ------------------------------------------------------
-" - ZZ (Quit and save if there's change in file)
-" - :f <new-filename> (Save current file with new filename)
+" -- ZZ (Quit and save if there's change in file)
+" -- :f <new-filename> (Save current file with new filename)
 map <leader>q  :q<CR>
 map <leader>Q  :qall<CR>
 map <leader>ww :w<CR>
@@ -218,7 +214,10 @@ set wildmode=list:full    " Show all available input options (or use Ctrl-D)
 " Cursor settings ------------------------------------------------------------
 set ruler                 " Show cursor position in statusline
 set cursorline            " Show vertical line
-set cursorcolumn          " Show horizontal line (laggy in neovim)
+"set cursorcolumn          " Show horizontal line (laggy in neovim)
+" Toggle cursor line/column indicator (horizontal/vertical)
+map <leader>ch :set cursorline!<CR>:echo 'Toggle Cursor Line [Horizontal]'<CR>
+map <leader>cv :set cursorcolumn!<CR>:echo 'Toggle Cursor Column [Vertical]'<CR>
 " Synchronize cursor between files
 " Must be execute in all files that you want to synchronize cursors
 map <F9> :set cursorbind<CR>:echo 'Synchronized Cursor On'<CR>
@@ -654,9 +653,9 @@ autocmd FileType python setlocal et ts=4 sw=4 sts=4
 autocmd FileType make setlocal noet
 
 " Tab key action in all modes ------------------------------------------------
-nmap <Tab> >>
+nmap <Tab><Tab> >>
 nmap <S-Tab> <<
-vmap <Tab> >gv
+vmap <Tab><Tab> >gv
 vmap <S-Tab> <gv
 
 " ============================================================================
@@ -1037,22 +1036,22 @@ if using_coding_tool_plug
 endif
 
 " Signify --------------------------------------------------------------------
-"if using_coding_tool_plug
-    "" This first setting decides in which order try to guess your current vcs
-    "" UPDATE it to reflect your preferences, it will speed up opening files
-    "let g:signify_vcs_list = ['git', 'hg']
-    "" Mappings to jump to changed blocks
-    "map <leader>sy :SignifyToggle<CR>
-    "map <leader>sn <plug>(signify-next-hunk)
-    "map <leader>sp <plug>(signify-prev-hunk)
-    "" Nicer colors
-    "highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
-    "highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
-    "highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
-    "highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
-    "highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
-    "highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
-"endif
+if using_coding_tool_plug
+    " This first setting decides in which order try to guess your current vcs
+    " UPDATE it to reflect your preferences, it will speed up opening files
+    let g:signify_vcs_list = ['git', 'hg']
+    " Mappings to jump to changed blocks
+    map <leader>sy :SignifyToggle<CR>
+    map <leader>sn <plug>(signify-next-hunk)
+    map <leader>sp <plug>(signify-prev-hunk)
+    " Nicer colors
+    highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
+    highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
+    highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
+    highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
+    highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
+    highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
+endif
 
 " GitGutter ------------------------------------------------------------------
 if using_coding_tool_plug
@@ -1094,7 +1093,7 @@ if using_coding_tool_plug
     " Cycle through hunks in current buffer
     function! GitGutterNextHunkCycle()
       let line = line('.')
-      silent! GitGutterNextHunk
+      GitGutterNextHunk
       if line('.') == line
         1
         GitGutterNextHunk

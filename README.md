@@ -319,6 +319,7 @@ nvim --startuptime test.txt
 | N/V      | [LK]+[m]+[Shift]+[k]        | Show all vim marks            | Show all vim marks                    | [LK]+[m]+[k] shows marks using fzf instead vim built-in
 | N/V      | [LK]+[r]+[e]                | Show all vim regiesters       | Show all vim registers                | Here re for (re)gister
 | N/V      | [LK]+[a]+[b]                | Show all vim abbreviates      | Show all vim abbreviates              | Here ab for (ab)reviation
+| N/V      | [LK]+[c]+[h/v]              | Toggle Horiz/Verti cursor     | On/Off Horiz/Verti cursor             |
 
 ### Keymapping Sheet 3 - Plug-in Function Keymapping
 
