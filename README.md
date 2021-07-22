@@ -412,6 +412,8 @@ nvim --startuptime test.txt
 - http://nadypan.blogspot.com/2014/01/vim-fold.html
 - https://github.com/yangyangwithgnu/use_vim_as_ide
 - https://factorpad.com/tech/vim-cheat-sheet.html#structure
+- https://github.com/wsdjeg/vim-galore-zh_cn
+- https://github.com/mhinz/vim-galore
 
 ## Part 2 - Tmux
 

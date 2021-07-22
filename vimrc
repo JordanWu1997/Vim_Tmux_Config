@@ -80,7 +80,7 @@
 "    -- ipdb    : pip install ipdb
 
 " ============================================================================
-" Vim and Neovim settings
+" Vim and Neovim settings (***MUST-READ SESSION***)
 " ============================================================================
 " Select vim-plug to load, set guicolor (real color) support, and etc.
 " Assign 0 to disable plug option
@@ -104,8 +104,9 @@ let using_extra_plug = 1
 let using_coding_tool_plug = 1
 " Python Completion (Use deoplete and jedi, neovim is recommended to be used)
 let using_python_completion = 1
+" Python that used to install jedi, pynvim python packages for completion
 let python_for_completion = '/home/jordankhwu/anaconda3/bin/python'
-" Support of externaml gui software (e.g. Okular, Google-chrome, and etc.)
+" Support of external gui software (e.g. Okular, Google-chrome, and etc.)
 let using_gui_software = 1
 
 " TERM GUI color -------------------------------------------------------------
@@ -125,18 +126,26 @@ endif
 " Set leaderkey --------------------------------------------------------------
 let mapleader = ' '
 
-" Map insert mode Esc key ----------------------------------------------------
-" -- Use Ctrl+v to escape for 'ii' word (e.g. ascii)
+" Map insert mode key ----------------------------------------------------
+" Note:
+" -- Ctrl+r+(register) (Paste register)
+
+" -- Map Esc key to ii, kj
+"    -- Use Ctrl+v to escape for 'ii' word (e.g. ascii)
 imap ii <Esc>
 imap kj <Esc>
 
 " Map normal mode key --------------------------------------------------------
+" Note:
 " -- zz (Center current cursor column)
 " -- gt/gT (Next/Prev Tab)
+" -- Ctrl+(i/o) (Go to Next/Prev cursor location)
 
 " Save/Load file hotkey ------------------------------------------------------
+" Note:
 " -- ZZ (Quit and save if there's change in file)
 " -- :f <new-filename> (Save current file with new filename)
+
 map <leader>q  :q<CR>
 map <leader>Q  :qall<CR>
 map <leader>ww :w<CR>
@@ -145,7 +154,8 @@ map <leader>wq :wq<CR>
 "command! Sudow execute 'w !sudo -S tee % > /dev/null'
 
 " External command -----------------------------------------------------------
-" -- K (Manpage for current selected word)
+" Note:
+" -- K (Vim helppage for current selected word)
 " -- :r !date (Insert timestamp)
 " -- :!dir (Show current directory file)
 " -- :!del FILENAME (Delete FILENAME)
@@ -221,7 +231,7 @@ set cursorcolumn          " Show horizontal line (laggy in neovim sometimes)
 map <leader>ch :set cursorline!<CR>:echo 'Toggle Cursor Line [Horizontal]'<CR>
 map <leader>cv :set cursorcolumn!<CR>:echo 'Toggle Cursor Column [Vertical]'<CR>
 " Synchronize cursor between files
-" Must be execute in all files that you want to synchronize cursors
+" Must be executed in all files that you want to synchronize cursors
 map <F9> :set cursorbind<CR>:echo 'Synchronized Cursor On'<CR>
 map <leader><F9> :set nocursorbind<CR>:echo 'Synchronized Cursor Off'<CR>
 
@@ -300,11 +310,24 @@ map <silent><leader><F1> <Esc>:bp<CR>:echo 'PREV BUFFER ...'<CR>
 map <silent><F1> <Esc>:bn<CR>:echo 'NEXT BUFFER ...'<CR>
 
 " Marks settings -------------------------------------------------------------
+" Note:
+" -- Mark should start with ' (single quotation) or ` (grave symbol)
+"    -- '' : Last cursor location
+"    -- '" : Last cursor location when buffer closed
+"    -- '. : Last modification
+
 map <leader>mk :marks<CR>
 map <leader>md :delmarks<space>
 
 " Registers settings ---------------------------------------------------------
-" Show registers in vim
+" Note:
+" -- Register should start with " (double quotation)
+"    -- ": : Last command
+"    -- ". : Last text
+"    -- "% : Current filename
+"    -- "/ : Last search
+
+" Show registers in vim [Also check peekaboo plugin]
 map <leader>re :registers<CR>
 " Command that wipe out all registers
 command! WipeReg for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
@@ -480,8 +503,8 @@ if using_fancy_symbols
     " More highlight in nertree (make nerdtree laggy in large filetree)
     " Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 endif
-"Class/module browser
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+"Class/module browser [Update to latest]
+Plug 'preservim/tagbar', { 'on': 'TagbarToggle' }
 
 " [Vim useful functions] -----------------------------------------------------
 " Sudo write/read files in vim
@@ -798,10 +821,10 @@ nmap <leader>fht :Helptags<CR>
 
 " NERDTree -------------------------------------------------------------------
 " Disable vim built-in netrw
-let g:NERDTreeWinSize=38
 let loaded_netrwPlugin = 1
-let NERDTreeShowLineNumbers=1
-let NERDTreeShowHidden=1
+let NERDTreeWinSize = min([38, winwidth(0) / 5])
+let NERDTreeShowLineNumbers = 1
+let NERDTreeShowHidden= 0
 let NERDTreeMinimalUI = 1
 " Don;t show these file types
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
@@ -824,7 +847,7 @@ map <silent><leader><F3> :NERDTreeToggle<CR>
 " autofocus on tagbar open
 let g:tagbar_autofocus = 1
 let g:tagbar_map_showproto = 'd'
-let g:tagbar_width = 38
+let g:tagbar_width = min([38, winwidth(0) / 5])
 " toggle tagbar display
 map <silent><leader><F4> :TagbarToggle<CR>
 
@@ -885,7 +908,7 @@ let g:choosewin_overlay_enable = 1
 " Autopairs -----------------------------------------------------------------
 let g:AutoPairsShortcutToggle = '<M-a>'
 let g:AutoPairsShortcutJump = '<M-j>'
-let g:AutoPairsShortcutFastWrap = '<M-w>'
+"let g:AutoPairsShortcutFastWrap = '<M-w>'
 
 " ============================================================================
 " Part 5 - Vim extra functions settings (Plugins settings and mappings)
@@ -1238,6 +1261,7 @@ function! CustomizedColorPalette()
     " Common background setting (dark background)
     set bg=dark
     " Color setup (hi command must be added after colorscheme)
+    " Comment out Normal for non-transparent background
     highlight Normal        cterm=none   ctermfg=none ctermbg=none gui=none   guifg=none    guibg=none
     highlight LineNr        cterm=bold   ctermfg=8    ctermbg=none gui=bold   guifg=#808080 guibg=none
     highlight CursorLineNr  cterm=bold   ctermfg=10   ctermbg=none gui=bold   guifg=#00ff00 guibg=none
@@ -1264,6 +1288,9 @@ if using_customized_theme
         " Option 2 - Use wal vim plugin [Recommended]
         colorscheme wal
     else
+        "colorscheme default
+        "colorscheme gruvbox
+        "colorscheme srcery
         colorscheme vim-monokai-tasty
     endif
     " Call customized color palette
