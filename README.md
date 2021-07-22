@@ -217,6 +217,7 @@ nvim --startuptime test.txt
         - [Plug-in] ale (multi-lanaguage syntax highlight)
         - [Plug-in] neoformat (code prettifier)
         - [Plug-in] rainbow (pair bracket highlight)
+        - [Plug-in] indentLine (indent line indicator)
         - [Plug-in] vim-indent-guides (indent highlight)
         - [Plug-in] vim-indent-object (add indent object to vim)
         - [Plug-in] vim-multiple-cursors (multiple cursors)
@@ -365,6 +366,8 @@ nvim --startuptime test.txt
 | N/V      | [c]+[Shift]+[s]+[']+["]     | Change quotation/bracket      | From 'word' to "word"                 | vim-surrounder |
 | N/V      | [Alt]+[a]                   | Toggle auto-pair              | On/Off auto-pair quotation/bracket    | auto-pairs |
 | N/V      | [Alt]+[j]                   | Jump to next pairs            | Jump to next paired quotation/bracket | auto-pairs |
+| N/V      | [LK]+[i]+[g]                | Toggle indent highlight (line)  | On/Off indent highlight (line)      |
+| N/V      | [LK]+[i]+[Shift]+[g]        | Toggle indent highlight (block) | On/Off indent highlight (block)     |
 
 - Extra plug (Note: "let using_extra_plug = 1" must be set in vimrc)
 
@@ -379,9 +382,9 @@ nvim --startuptime test.txt
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N/V      | [LK]+[m]+[m]                | Toggle code minimap scrollbar | On/Off code minimap scrollbar         | For neovim version >= 0.5, and minicode is installed |
-| N/V      | [Alt]+[n](+[n]+[n]+...+[n]  | Multiple cursor for selected  | Multiple cursor for currently selected word | Press N to next word; Use I/A to insert word; Use Esc to exit |
-| N/V      | [Alt]+[p](+[p]+[p]+...+[p]  | Cancel selected multiple cursor | Cancel selected multiple cursor     |
-| N/V      | [Alt]+[o](+[o]+[o]+...+[o]  | Omit selected multiple cursor | Omit selected multiple cursor     |
+| N/V      | [Alt]+[n] (+[n]+[n]+...+[n] | Multiple cursor for selected  | Multiple cursor for currently selected word | Press N to next word; Use I/A to insert word; Use Esc to exit |
+| N/V      | [Alt]+[p] (+[p]+[p]+...+[p] | Cancel selected multiple cursor | Cancel selected multiple cursor     |
+| N/V      | [Alt]+[o] (+[o]+[o]+...+[o] | Omit selected multiple cursor | Omit selected multiple cursor     |
 | N/V      | [LK]+[g]+[g]                | Toggle GitGutter              | On/Off GitGutter                      |
 | N/V      | [LK]+[g]+[h]+[s/l/n]        | Toggle GitGutter highlight    | Toggle GitGutter highlight symbol/line/line number |
 | N/V      | [LK]+([Shift])+[Tab]        | Cycle (Prev)/Next git hunks   | Cycle (Prev)/Next git hunks           | Hunk means changed block |

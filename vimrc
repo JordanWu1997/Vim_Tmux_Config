@@ -1014,6 +1014,7 @@ if using_coding_tool_plug
     let g:indentLine_showFirstIndentLevel = 1
     let g:indentLine_fileTypeExclude = ['text', 'markdown', 'latex']
     let g:indentLine_bufTypeExclude = ['help', 'terminal']
+    map <leader>ig :IndentLinesToggle<CR>:echo 'Toggle Indentline Guides'<CR>
 endif
 
 " Indent guides --------------------------------------------------------------
@@ -1024,7 +1025,7 @@ if using_coding_tool_plug
     let g:indent_guides_auto_colors = 0
     autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
     autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg='#24242d' ctermbg=194
-    map <leader>ig :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
+    map <leader>iG :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
 endif
 
 " Multiple-cursors -----------------------------------------------------------
