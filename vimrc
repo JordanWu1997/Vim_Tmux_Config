@@ -13,6 +13,12 @@
 " -- Neovim configuration file
 "    -- Store in ~/.config/nvim/init.vim
 
+" ============================================================================
+" Vim and Neovim configuration notes
+" ============================================================================
+" Followings are problems, recommended solutions, and plugin-function support
+" note for configuration
+
 " Note:
 " Old Powerline-status support [Not use anymore, use lightline now] ----------
 " -- Powerline-status Installation (Choose one of the following)
@@ -62,12 +68,17 @@
 " -- Call multi-language code formatter [formatter need to be installed]
 " -- For code formatter support: https://github.com/sbdchd/Neoformat
 "    -- Example: python code formatter
-"       -- # Install formatter with terminal  : pip install yapf
-"       -- # Use formatter in vim command line: :Neoformat! python yapf
-"       -- Recommendation  usage set (in order):
-"           (1) :Neoformat isort   # Sort import module
-"           (2) :Neoformat pyment  # Add description of function/class
-"           (3) :Neoformat yasf    # Format to PEP8 standard
+"       -- Install formatter with terminal:
+"           -- (1) pip install isort
+"           -- (2) pip install pyment
+"           -- (3) pip install yapf
+"       -- Use formatter in vim command line:
+"           -- Usage :Neoformat! [lanaguage] [formatter]
+"           --  e.g. :Neoformat!   python       yapf
+"       -- Recommended PYTHON usage set (in order):
+"           -- (1) :Neoformat isort   # Sort import module
+"           -- (2) :Neoformat pyment  # Add description of function/class
+"           -- (3) :Neoformat yasf    # Format to PEP8 standard
 
 " Note:
 " Python-completion and tmux-yank-clipboard on ZEUS --------------------------
@@ -129,6 +140,7 @@ let mapleader = ' '
 " Map insert mode key ----------------------------------------------------
 " Note:
 " -- Ctrl+r+(register) (Paste register)
+" -- Ctrl+n/p (Autocompletion next/prev candidate)
 
 " -- Map Esc key to ii, kj
 "    -- Use Ctrl+v to escape for 'ii' word (e.g. ascii)
@@ -143,13 +155,13 @@ imap kj <Esc>
 
 " Save/Load file hotkey ------------------------------------------------------
 " Note:
-" -- ZZ (Quit and save if there's change in file)
+" -- ZZ (Quit and save if there's change in file without comfirmation)
 " -- :f <new-filename> (Save current file with new filename)
 
-map <leader>q  :q<CR>
-map <leader>Q  :qall<CR>
-map <leader>ww :w<CR>
-map <leader>wq :wq<CR>
+noremap <leader>q  :q<CR>
+noremap <leader>Q  :qall<CR>
+noremap <leader>ww :w<CR>
+noremap <leader>wq :wq<CR>
 " Overwrite (Not working for now, use plug-in suda.vim instead)
 "command! Sudow execute 'w !sudo -S tee % > /dev/null'
 
@@ -168,43 +180,43 @@ filetype off
 "syntax enable
 
 " Vim window/pane/fold configuration -----------------------------------------
-map <silent><F10> :mkview<CR>:echo 'Current Layout Setting Saved ...'<CR>
-map <silent><leader><F10> :loadview<CR>:echo 'Layout Setting Loaded ...'<CR>
+noremap <silent><F10> :mkview<CR>:echo 'Current Layout Setting Saved ...'<CR>
+noremap <silent><leader><F10> :loadview<CR>:echo 'Layout Setting Loaded ...'<CR>
 
 " Vim split window (pane) control --------------------------------------------
 " Split pane - More natural split opening
 set splitbelow
 set splitright
 " Split pane navigation [Now integrate with tmux, check vim-tmux-navigator]
-nmap <silent><leader>w; <C-w><C-w>
-nmap <silent><leader>wh :wincmd h<CR>
-nmap <silent><leader>wj :wincmd j<CR>
-nmap <silent><leader>wk :wincmd k<CR>
-nmap <silent><leader>wl :wincmd l<CR>
+nnoremap <silent><leader>w; <C-w><C-w>
+nnoremap <silent><leader>wh :wincmd h<CR>
+nnoremap <silent><leader>wj :wincmd j<CR>
+nnoremap <silent><leader>wk :wincmd k<CR>
+nnoremap <silent><leader>wl :wincmd l<CR>
 " Split pane location swap
-nmap <silent><leader>wH :wincmd H<CR>
-nmap <silent><leader>wJ :wincmd J<CR>
-nmap <silent><leader>wK :wincmd K<CR>
-nmap <silent><leader>wL :wincmd L<CR>
+nnoremap <silent><leader>wH :wincmd H<CR>
+nnoremap <silent><leader>wJ :wincmd J<CR>
+nnoremap <silent><leader>wK :wincmd K<CR>
+nnoremap <silent><leader>wL :wincmd L<CR>
 " TODO Add Ctrl+H/J/K/L (Which is already mapped by vim)
 " Split pane resize
-nmap <silent>= :resize +5<CR>
-nmap <silent>- :resize -5<CR>
-nmap <silent>+ :vertical resize +5<CR>
-nmap <silent>_ :vertical resize -5<CR>
+nnoremap <silent>= :resize +5<CR>
+nnoremap <silent>- :resize -5<CR>
+nnoremap <silent>+ :vertical resize +5<CR>
+nnoremap <silent>_ :vertical resize -5<CR>
 " Redraw pane equally
-nmap <silent><leader>w= :wincmd =<CR>
+nnoremap <silent><leader>w= :wincmd =<CR>
 " Move current split to new tab
-nmap <silent><leader>wt :wincmd T<CR>
+nnoremap <silent><leader>wt :wincmd T<CR>
 " Close current split
-nmap <silent><leader>wc :wincmd c<CR>
+nnoremap <silent><leader>wc :wincmd c<CR>
 " Create new empty split
-nmap <silent><leader>wn :wincmd n<CR>
+nnoremap <silent><leader>wn :wincmd n<CR>
 " Split pane action
-nmap <silent><leader>w- :split<CR>:echo 'Split Current File'<CR>
-nmap <silent><leader>w\ :vsplit<CR>: echo 'Vsplit Current File'<CR>
-nmap <leader>w_ :split<space>
-nmap <leader>w\| :vsplit<space>
+nnoremap <silent><leader>w- :split<CR>:echo 'Split Current File'<CR>
+nnoremap <silent><leader>w\ :vsplit<CR>: echo 'Vsplit Current File'<CR>
+nnoremap <leader>w_ :split<space>
+nnoremap <leader>w\| :vsplit<space>
 
 " Vim settings ---------------------------------------------------------------
 set nocompatible          " Not compatible with traditional vi
@@ -217,7 +229,7 @@ set clipboard=unnamedplus " Shared system clipboard, gvim must be installed for 
 
 " Line wrap ------------------------------------------------------------------
 set nowrap                " Line wrap for small monitor or display window
-map <leader>wp :set wrap!<CR>:echo 'Toggle Line Wrap'<CR>
+noremap <leader>wp :set wrap!<CR>:echo 'Toggle Line Wrap'<CR>
 
 " Wild menu settings ---------------------------------------------------------
 set wildmenu              " Show memu options
@@ -228,12 +240,12 @@ set ruler                 " Show cursor position in statusline
 set cursorline            " Show vertical line
 set cursorcolumn          " Show horizontal line (laggy in neovim sometimes)
 " Toggle cursor line/column indicator (horizontal/vertical)
-map <leader>ch :set cursorline!<CR>:echo 'Toggle Cursor Line [Horizontal]'<CR>
-map <leader>cv :set cursorcolumn!<CR>:echo 'Toggle Cursor Column [Vertical]'<CR>
+noremap <leader>ch :set cursorline!<CR>:echo 'Toggle Cursor Line [Horizontal]'<CR>
+noremap <leader>cv :set cursorcolumn!<CR>:echo 'Toggle Cursor Column [Vertical]'<CR>
 " Synchronize cursor between files
 " Must be executed in all files that you want to synchronize cursors
-map <F9> :set cursorbind<CR>:echo 'Synchronized Cursor On'<CR>
-map <leader><F9> :set nocursorbind<CR>:echo 'Synchronized Cursor Off'<CR>
+noremap <F9> :set cursorbind<CR>:echo 'Synchronized Cursor On'<CR>
+noremap <leader><F9> :set nocursorbind<CR>:echo 'Synchronized Cursor Off'<CR>
 
 " Display settings -----------------------------------------------------------
 set scrolloff=3           " Keep cursor 3 lines away from bottom
@@ -243,37 +255,37 @@ set title                 " Let vim change terminal title
 " Search settings ------------------------------------------------------------
 set incsearch
 set hlsearch
-map <leader>/ :set nohlsearch!<CR>:echo 'Toggle Search Highlight'<CR>
+noremap <leader>/ :set nohlsearch!<CR>:echo 'Toggle Search Highlight'<CR>
 
 " Line number settings -------------------------------------------------------
 set number
 set relativenumber
-map <leader><F5> :set number!<CR>:echo 'Toggle Line Number'<CR>
-map <F5> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
+noremap <leader><F5> :set number!<CR>:echo 'Toggle Line Number'<CR>
+noremap <F5> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
 
 " Fold settings --------------------------------------------------------------
 set nofoldenable
 set foldmethod=indent
 autocmd FileType python setlocal foldmethod=indent
-map <silent><leader>ff za<CR>:echo 'Toggle Current Fold...'<CR>
-map <silent><leader>fc zM<CR>:echo 'Close All Folds ...'<CR>
-map <silent><leader>fs zR<CR>:echo 'Show All Folds ...'<CR>
+noremap <silent><leader>ff za<CR>:echo 'Toggle Current Fold...'<CR>
+noremap <silent><leader>fc zM<CR>:echo 'Close All Folds ...'<CR>
+noremap <silent><leader>fs zR<CR>:echo 'Show All Folds ...'<CR>
 
 " Tabe (window) settings -----------------------------------------------------
 " Tabe (window) operations
-map <leader>ts :tabs<CR>
-map <leader>tt :tabnew<space>
-map <leader>td :tabclose<space>
-map <silent><leader>tdd :tabclose<CR>:echo 'CLOSE CURRENT TAB ...'<CR>
+noremap <leader>ts :tabs<CR>
+noremap <leader>tt :tabnew<space>
+noremap <leader>td :tabclose<space>
+noremap <silent><leader>tdd :tabclose<CR>:echo 'CLOSE CURRENT TAB ...'<CR>
 " Tabe (window) navigation
-map <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB ...'<CR>
-map <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREV TAB ...'<CR>
+noremap <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB ...'<CR>
+noremap <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREV TAB ...'<CR>
 " Tabe (window) navigation (C-Left/Right will be overwrited in TMUX session)
-map <silent><C-Left>  :tabprevious<CR>:echo 'PREV TAB ...'<CR>
-map <silent><C-Right> :tabnext<CR>:echo 'NEXT TAB ...'<CR>
+noremap <silent><C-Left>  :tabprevious<CR>:echo 'PREV TAB ...'<CR>
+noremap <silent><C-Right> :tabnext<CR>:echo 'NEXT TAB ...'<CR>
 " Tabe (Window) swap
-map <silent><A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
-map <silent><A-Right> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
+noremap <silent><A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
+noremap <silent><A-Right> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
 
 " Buffer settings ------------------------------------------------------------
 " -- Reference: https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
@@ -298,16 +310,17 @@ endfunction
 " A buffer not becomes hidden (send to background) when it is abandoned
 set nohidden
 " Add buffer in foreground
-map <leader>bb :edit<space>
+noremap <leader>bb :edit<space>
 " Add buffer in background
-map <leader>ba :badd<space>
+noremap <leader>ba :badd<space>
 " Delete buffer
-map <leader>bd :bdelete<space>
-map <silent><leader>dd :bdelete<CR>:echo 'DELETE CURRENT BUFFER [PRESS CTRL+O TO RECOVER]'<CR>
-map <silent><leader>bdd :bdelete<CR>:echo 'DELETE CURRENT BUFFER ...'<CR>
+noremap <leader>bd :bdelete<space>
+noremap <silent><leader>dd :bdelete<CR>:echo 'DELETE CURRENT BUFFER
+            \ [PRESS CTRL+O TO RECOVER]'<CR>
+noremap <silent><leader>bdd :bdelete<CR>:echo 'DELETE CURRENT BUFFER ...'<CR>
 " Navigate through buffers
-map <silent><leader><F1> <Esc>:bp<CR>:echo 'PREV BUFFER ...'<CR>
-map <silent><F1> <Esc>:bn<CR>:echo 'NEXT BUFFER ...'<CR>
+noremap <silent><leader><F1> <Esc>:bp<CR>:echo 'PREV BUFFER ...'<CR>
+noremap <silent><F1> <Esc>:bn<CR>:echo 'NEXT BUFFER ...'<CR>
 
 " Marks settings -------------------------------------------------------------
 " Note:
@@ -316,8 +329,8 @@ map <silent><F1> <Esc>:bn<CR>:echo 'NEXT BUFFER ...'<CR>
 "    -- '" : Last cursor location when buffer closed
 "    -- '. : Last modification
 
-map <leader>mk :marks<CR>
-map <leader>md :delmarks<space>
+noremap <leader>mk :marks<CR>
+noremap <leader>md :delmarks<space>
 
 " Registers settings ---------------------------------------------------------
 " Note:
@@ -328,12 +341,13 @@ map <leader>md :delmarks<space>
 "    -- "/ : Last search
 
 " Show registers in vim [Also check peekaboo plugin]
-map <leader>re :registers<CR>
+noremap <leader>re :registers<CR>
 " Command that wipe out all registers
-command! WipeReg for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
+command! WipeReg for i in range(34,122) |
+            \ silent! call setreg(nr2char(i), []) | endfor
 
 " Abbreviation settings ------------------------------------------------------
-map <leader>ab :abbreviate<CR>
+noremap <leader>ab :abbreviate<CR>
 
 " Better backup, swap and undos storage --------------------------------------
 if using_neovim
@@ -391,16 +405,17 @@ function! RemoveTrailingWhitespace()
 endfunction
 " Remove trailing whitespace for editing files
 autocmd BufWritePre * call RemoveTrailingWhitespace()
-map <leader>rm :call RemoveTrailingWhitespace()<CR>:echo "Remove Tail Whitespaces"<CR>
+noremap <leader>rm :call RemoveTrailingWhitespace()<CR>
+            \:echo "Remove Tail Whitespaces"<CR>
 
 " Function - Foldcolumn display ----------------------------------------------
-map <F6> :set foldcolumn=6<CR>:echo 'Foldcolumn ON'<CR>
-map <leader><F6> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
+noremap <F6> :set foldcolumn=6<CR>:echo 'Foldcolumn ON'<CR>
+noremap <leader><F6> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 
 " Function - Hex editor ------------------------------------------------------
 " From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
-map <leader>eho :%! xxd<CR>:echo 'Hex editor on: TF to binary data'<CR>
-map <leader>ehf :%! xxd -r<CR>:echo 'Hex editor off: TF to original data'<CR>
+noremap <leader>eho :%! xxd<CR>:echo 'Hex editor on: TF to binary data'<CR>
+noremap <leader>ehf :%! xxd -r<CR>:echo 'Hex editor off: TF to original data'<CR>
 
 " ============================================================================
 " Customized terminal mode (Only support for vim >= 8.0)
@@ -414,16 +429,16 @@ map <leader>ehf :%! xxd -r<CR>:echo 'Hex editor off: TF to original data'<CR>
 " Set customized terminal mode keymapping
 if using_vim8
     " Map key to enter terminal mode
-    map <F12> :terminal<CR>
+    noremap <F12> :terminal<CR>
     " Map key to go back from terminal mode to normal mode
     " Do not use Esc (which conflicts with fzf window)
-    tmap <leader><F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
-    tmap ii <C-\><C-n>:echo 'Back to Normal Mode'<CR>
-    tmap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
-    tmap <C-h> <C-\><C-n><C-w>h
-    tmap <C-j> <C-\><C-n><C-w>j
-    tmap <C-k> <C-\><C-n><C-w>k
-    tmap <C-l> <C-\><C-n><C-w>l
+    tnoremap <leader><F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
+    tnoremap ii <C-\><C-n>:echo 'Back to Normal Mode'<CR>
+    tnoremap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
+    tnoremap <C-h> <C-\><C-n><C-w>h
+    tnoremap <C-j> <C-\><C-n><C-w>j
+    tnoremap <C-k> <C-\><C-n><C-w>k
+    tnoremap <C-l> <C-\><C-n><C-w>l
 endif
 
 " ============================================================================
@@ -446,10 +461,14 @@ if !filereadable(vim_plug_path)
     echo ''
     if using_neovim
         silent !mkdir -p ~/.config/nvim/autoload
-        silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+                    \ 'https://raw.githubusercontent.com/junegunn/
+                    \vim-plug/master/plug.vim'
     else
         silent !mkdir -p ~/.vim/autoload
-        silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+                    \ 'https://raw.githubusercontent.com/junegunn/
+                    \vim-plug/master/plug.vim'
     endif
     let vim_plug_just_installed = 1
 endif
@@ -523,7 +542,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 " Vim window maximizer
 Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle' }
-nmap <silent><leader>z :MaximizerToggle<CR>
+nnoremap <silent><leader>z :MaximizerToggle<CR>
 " Window pane selector
 Plug 't9md/vim-choosewin'
 " Autopair for quotations and brackets
@@ -626,8 +645,6 @@ if using_python_completion
 endif
 " More python syntax highlight
 Plug 'vim-python/python-syntax', { 'for': 'python' }
-" Sort python import (Integrate with neoformat now [Neovim only])
-"Plug 'fisadev/vim-isort', { 'on': 'Isort', 'for': 'python' }
 
 " [Fortran coding] -----------------------------------------------------------
 " Fortran syntax support
@@ -681,10 +698,10 @@ autocmd FileType python setlocal et ts=4 sw=4 sts=4
 autocmd FileType make setlocal noet
 
 " Tab key action in all modes ------------------------------------------------
-nmap <Tab><Tab> >>
-nmap <S-Tab> <<
-vmap <Tab><Tab> >gv
-vmap <S-Tab> <gv
+nnoremap <Tab><Tab> >>
+nnoremap <S-Tab> <<
+vnoremap <Tab><Tab> >gv
+vnoremap <S-Tab> <gv
 
 " ============================================================================
 " Part 2 - Vim-theme settings (Plugins settings and mappings)
@@ -699,7 +716,7 @@ if using_customized_theme
             \ 'colorscheme': 'wal',
             \ 'active': {
             \   'left': [ [ 'mode', 'paste' ],
-            \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+            \             [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
             \ },
             \ 'component_function': {
             \   'gitbranch': 'FugitiveHead'
@@ -761,6 +778,17 @@ if using_customized_theme
     let s:palette.inactive.middle = s:palette.normal.middle
     let s:palette.tabline.middle = s:palette.normal.middle
     let s:palette.replace.middle = s:palette.normal.middle
+    " Toggle lightline, statusline
+    noremap <leader>sl :call lightline#disable()<CR>:set showmode<CR>
+                \:set showtabline=2<CR>:set laststatus=2<CR>
+                \:echo "LIGHTLINE OFF"<CR>
+    noremap <leader>sL :call lightline#enable()<CR>:set noshowmode<CR>
+                \:set showtabline=2<CR>:set laststatus=2<CR>
+                \:echo "LIGHTLINE ON"<CR>
+    " Disable statusline (including lightline)
+    noremap <leader>SL :call lightline#disable()<CR>:set showmode<CR>
+                \:set showtabline=0<CR>:set laststatus=0<CR>
+                \:echo "STATUSLINE OFF"<CR>
 endif
 
 " Status line ----------------------------------------------------------------
@@ -788,36 +816,36 @@ let g:fzf_action = {
 " - down / up / left / right
 let g:fzf_layout = { 'down': '~40%' }
 " Buffer (Local vim)
-nmap <leader>bL :BLines<CR>
-nmap <leader>bl :execute ":BLines " . expand('<cword>')<CR>
-nmap <leader>bT :BTags<CR>
-nmap <leader>bt :execute ":BTag " . expand('<cword>')<CR>
+nnoremap <leader>bL :BLines<CR>
+nnoremap <leader>bl :execute ":BLines " . expand('<cword>')<CR>
+nnoremap <leader>bT :BTags<CR>
+nnoremap <leader>bt :execute ":BTag " . expand('<cword>')<CR>
 " All files (Global system)
-nmap <leader>gL :Lines<CR>
-nmap <leader>gl :execute ":Lines " . expand('<cword>')<CR>
-nmap <leader>gT :Tags<CR>
-nmap <leader>gt :execute ":Tag " . expand('<cword>')<CR>
+nnoremap <leader>gL :Lines<CR>
+nnoremap <leader>gl :execute ":Lines " . expand('<cword>')<CR>
+nnoremap <leader>gT :Tags<CR>
+nnoremap <leader>gt :execute ":Tag " . expand('<cword>')<CR>
 " File search
-nmap <leader>ffs :Files<space>
-nmap <leader>flc :Locate<space>
-nmap <leader>frg :Rg<space>
+nnoremap <leader>ffs :Files<space>
+nnoremap <leader>flc :Locate<space>
+nnoremap <leader>frg :Rg<space>
 " fzf key mapping
-nmap <leader>fhs :History<CR>
-nmap <leader>fh: :History:<CR>
-nmap <leader>fh/ :History/<CR>
-nmap <leader>fmk :Marks<CR>
-nmap <leader>fbf :Buffers<CR>
-nmap <leader>fwd :Windows<CR>
-nmap <leader>fft :Filetypes<CR>
-nmap <leader>fcd :Commands<CR>
-nmap <leader>fnm :Maps<CR>
-nmap <leader>fht :Helptags<CR>
-" Line completion with current file [Use AutoComplPop instead]
-"imap <c-x><c-l> <plug>(fzf-complete-line)
-"" Word completion with dictionary
-"imap <c-x><c-k> <plug>(fzf-complete-word)
-"" Path completion with path
-"imap <c-x><c-f> <plug>(fzf-complete-path)
+nnoremap <leader>fhs :History<CR>
+nnoremap <leader>fh: :History:<CR>
+nnoremap <leader>fh/ :History/<CR>
+nnoremap <leader>fmk :Marks<CR>
+nnoremap <leader>fbf :Buffers<CR>
+nnoremap <leader>fwd :Windows<CR>
+nnoremap <leader>fft :Filetypes<CR>
+nnoremap <leader>fcd :Commands<CR>
+nnoremap <leader>fnm :Maps<CR>
+nnoremap <leader>fht :Helptags<CR>
+" Line completion with current file
+inoremap <c-x><c-l> <plug>(fzf-complete-line)
+" Word completion with dictionary
+inoremap <c-x><c-k> <plug>(fzf-complete-word)
+" Path completion with path
+inoremap <c-x><c-f> <plug>(fzf-complete-path)
 
 " NERDTree -------------------------------------------------------------------
 " Disable vim built-in netrw
@@ -839,17 +867,17 @@ else
     let g:NERDTreeDirArrowCollapsible = "\u00a0"
 endif
 " Open nerdtree with the current file selected
-map <silent><F3> :NERDTreeFind<CR>
+noremap <silent><F3> :NERDTreeFind<CR>
 " Toggle nerdtree display
-map <silent><leader><F3> :NERDTreeToggle<CR>
+noremap <silent><leader><F3> :NERDTreeToggle<CR>
 
 " Tagbar ---------------------------------------------------------------------
-" autofocus on tagbar open
+" Autofocus on tagbar open
 let g:tagbar_autofocus = 1
 let g:tagbar_map_showproto = 'd'
 let g:tagbar_width = min([38, winwidth(0) / 5])
-" toggle tagbar display
-map <silent><leader><F4> :TagbarToggle<CR>
+" Toggle tagbar display
+noremap <silent><leader><F4> :TagbarToggle<CR>
 
 " ============================================================================
 " Part 4 - Vim useful functions settings (Plugins settings and mappings)
@@ -861,8 +889,9 @@ map <silent><leader><F4> :TagbarToggle<CR>
 let g:LargeFile = 10
 
 " Vim-man --------------------------------------------------------------------
-map <leader>m :execute ":Man " . expand('<cword>')<CR>
-map <leader>M :Man<space>
+" Open offline manual in system
+noremap <leader>m :execute ":Man " . expand('<cword>')<CR>
+noremap <leader>M :Man<space>
 
 " Nerdcommenter --------------------------------------------------------------
 " Create default mappings
@@ -876,32 +905,32 @@ let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not
 let g:NERDToggleCheckAllLines = 1
 " Commenter mapping
-map <silent><leader>ct :call NERDComment('n', 'Toggle')<CR>
-map <silent><leader>cc :call NERDComment('n', 'Comment')<CR>
-map <silent><leader>cu :call NERDComment('n', 'Uncomment')<CR>
-map <silent><leader>cy :call NERDComment('n', 'Yank')<CR>
+noremap <silent><leader>ct :call NERDComment('n', 'Toggle')<CR>
+noremap <silent><leader>cc :call NERDComment('n', 'Comment')<CR>
+noremap <silent><leader>cu :call NERDComment('n', 'Uncomment')<CR>
+noremap <silent><leader>cy :call NERDComment('n', 'Yank')<CR>
 
 " Vim-surround ---------------------------------------------------------------
 " Disable default surround mappings
-"let g:surround_no_mappings = 1
+let g:surround_no_mappings = 1
 " d: delete, c: change, y:yield
-nmap ds <Plug>Dsurround
-nmap cs <Plug>Csurround
-nmap cS <Plug>CSurround
-nmap ys <Plug>Ysurround
-nmap yS <Plug>YSurround
-nmap yss <Plug>Yssurround
-nmap ySs <Plug>YSsurround
-nmap ySS <Plug>YSsurround
+nnoremap ds <Plug>Dsurround
+nnoremap cs <Plug>Csurround
+nnoremap cS <Plug>CSurround
+nnoremap ys <Plug>Ysurround
+nnoremap yS <Plug>YSurround
+nnoremap yss <Plug>Yssurround
+nnoremap ySs <Plug>YSsurround
+nnoremap ySS <Plug>YSsurround
 
 " Vim-maximizer --------------------------------------------------------------
- " [Default mapping is <F3> (Disabled now)]
+" Default mapping is <F3> (Disabled now)
 let g:maximizer_set_default_mapping = 0
-nmap <silent><leader>z :MaximizerToggle<CR>
-vmap <silent><leader>z :MaximizerToggle<CR>gv
+nnoremap <silent><leader>z :MaximizerToggle<CR>
+vnoremap <silent><leader>z :MaximizerToggle<CR>gv
 
 " Window-chooser (choosewin)--------------------------------------------------
-map <leader><Enter> <Plug>(choosewin)
+noremap <leader><Enter> <Plug>(choosewin)
 " Show big letters
 let g:choosewin_overlay_enable = 1
 
@@ -920,13 +949,13 @@ if using_neovim && using_extra_plug
     " Disable default key mapping
     let g:comfortable_motion_no_default_key_mappings = 1
     " Enable motion with keyboard and mousewheel
-    nmap <silent><C-f> :call comfortable_motion#flick(200)<CR>
-    nmap <silent><C-b> :call comfortable_motion#flick(-200)<CR>
+    nnoremap <silent><C-f> :call comfortable_motion#flick(100)<CR>
+    nnoremap <silent><C-b> :call comfortable_motion#flick(-100)<CR>
 endif
 
 " Goyo -----------------------------------------------------------------------
 if using_neovim && using_extra_plug
-    map <leader>gy :Goyo<CR>
+    noremap <leader>gy :Goyo<CR>
 endif
 
 " YankRing -------------------------------------------------------------------
@@ -941,7 +970,7 @@ if using_extra_plug
     endif
     " Yankring automatically remap built-in command key mapping (disabled)
     " -- e.g. "X[x]", "D[d]", "Y[y]", "P[p]", ".", "@", and etc.
-    " -- Here disable most of yankring default keymappings except yank replacing
+    " -- Here disable most of default keymappings except yank replacing
     let g:yankring_window_auto_close = 1
     let g:yankring_record_insert = 0
     let g:yankring_paste_using_g = 0
@@ -954,15 +983,16 @@ if using_extra_plug
     let g:yankring_paste_n_akey = ' '
     let g:yankring_paste_v_key = ' '
     " Enable yankring replace
-    let g:yankring_replace_n_pkey = '<C-P>'
+    let g:yankring_replace_n_pkey = '<C-n>'
     let g:yankring_replace_n_nkey = '<C-N>'
     " Yankring history
-    map <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
-    map <leader>yc :YRClear<CR>:echo 'Clear Yank History'<CR>
+    noremap <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
+    noremap <leader>yc :YRClear<CR>:echo 'Clear Yank History'<CR>
 endif
 
 " Peekaboo -------------------------------------------------------------------
 " Set leader as prefix for ('"' and '@') to peek registers in vim
+" Use space to expand Peekaboo split
 if using_extra_plug
     let g:peekaboo_prefix='<leader>'
 endif
@@ -978,12 +1008,12 @@ if using_extra_plug
     " Keep cursor column
     let g:EasyMotion_startofline = 0
     " JK motions: Line motions
-    map <leader>j <Plug>(easymotion-j)
-    map <leader>k <Plug>(easymotion-k)
-    map <leader>l <Plug>(easymotion-lineforward)
-    map <leader>h <Plug>(easymotion-linebackward)
-    map <leader>1 <Plug>(easymotion-overwin-f)
-    map <leader>2 <Plug>(easymotion-overwin-f2)
+    noremap <leader>j <Plug>(easymotion-j)
+    noremap <leader>k <Plug>(easymotion-k)
+    noremap <leader>l <Plug>(easymotion-lineforward)
+    noremap <leader>h <Plug>(easymotion-linebackward)
+    noremap <leader>1 <Plug>(easymotion-overwin-f)
+    noremap <leader>2 <Plug>(easymotion-overwin-f2)
 endif
 
 " AutoComplPop ---------------------------------------------------------------
@@ -992,25 +1022,25 @@ if using_extra_plug
     if using_python_completion
         autocmd FileType python let g:acp_enableAtStartup = 0
     endif
-    map <leader>~ :AcpDisable<CR>:echo 'Disable Auto-Pop Suggestion'<CR>
-    map <leader>` :AcpEnable<CR>:echo 'Enable Auto-Pop Suggestion'<CR>
+    noremap <leader>~ :AcpDisable<CR>:echo 'Disable Auto-Pop Suggestion'<CR>
+    noremap <leader>` :AcpEnable<CR>:echo 'Enable Auto-Pop Suggestion'<CR>
 endif
 
 " Popup window selection -----------------------------------------------------
 " Previous/next suggestion
 " [Double quotation matters here, do not change to single quotation]
 if using_extra_plug
-    imap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
-    imap <expr><tab>   pumvisible() ? "\<c-n>" : "\<tab>"
-    imap <expr><C-k>   pumvisible() ? "\<c-p>" : "\<C-k>"
-    imap <expr><C-j>   pumvisible() ? "\<c-n>" : "\<C-j>"
-    imap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-    imap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+    inoremap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
+    inoremap <expr><tab>   pumvisible() ? "\<c-n>" : "\<tab>"
+    inoremap <expr><C-k>   pumvisible() ? "\<c-p>" : "\<C-k>"
+    inoremap <expr><C-j>   pumvisible() ? "\<c-n>" : "\<C-j>"
+    inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+    inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 endif
 
 " Tasklist -------------------------------------------------------------------
 if using_extra_plug
-    map <leader>tl :TaskList<CR>
+    noremap <leader>tl :TaskList<CR>
 endif
 
 " ============================================================================
@@ -1021,14 +1051,14 @@ endif
 " Ale (syntax check) ---------------------------------------------------------
 if using_coding_tool_plug
     let g:ale_enabled = 0
-    map <leader>al :ALEToggle<CR>
+    noremap <leader>al :ALEToggle<CR>
 endif
 
 " Rainbow parentheses --------------------------------------------------------
 if using_coding_tool_plug
     " Don;t enable when start up
     let g:rainbow_active = 0
-    map <leader>rb :RainbowToggle<CR>
+    noremap <leader>rb :RainbowToggle<CR>
 endif
 
 " Indentline -----------------------------------------------------------------
@@ -1037,7 +1067,8 @@ if using_coding_tool_plug
     let g:indentLine_showFirstIndentLevel = 1
     let g:indentLine_fileTypeExclude = ['text', 'markdown', 'latex']
     let g:indentLine_bufTypeExclude = ['help', 'terminal']
-    map <leader>ig :IndentLinesToggle<CR>:echo 'Toggle Indentline Guides'<CR>
+    "map <leader>ig :IndentLinesToggle<CR>:echo 'Toggle Indentline Guides'<CR>
+    noremap <F11> :IndentLinesToggle<CR>:echo 'Toggle Indentline Guides'<CR>
 endif
 
 " Indent guides --------------------------------------------------------------
@@ -1046,9 +1077,12 @@ if using_coding_tool_plug
     let g:indent_guides_start_level = 1
     let g:indent_guides_guide_size = 4
     let g:indent_guides_auto_colors = 0
-    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
-    autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg='#24242d' ctermbg=194
-    map <leader>iG :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
+    autocmd VimEnter,Colorscheme *
+                \ :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
+    autocmd VimEnter,Colorscheme *
+                \ :hi IndentGuidesEven guibg='#24242d' ctermbg=194
+    "map <leader>iG :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
+    noremap <leader><F11> :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
 endif
 
 " Multiple-cursors -----------------------------------------------------------
@@ -1064,15 +1098,15 @@ endif
 
 " Vim-fugitive ---------------------------------------------------------------
 if using_coding_tool_plug
-    map <leader>g :Git<space>
-    map <leader>gd :Git diff %<CR>
-    map <leader>gD :Git diff<CR>
-    map <leader>gs :Git status<CR>
-    map <leader>ga :Git add %<CR>
-    map <leader>gA :Git add --all<CR>
-    map <leader>gc :Git commit % -m<space>
-    map <leader>gC :Git commit -m<space>
-    map <leader>gB :Git blame<CR>
+    noremap <leader>g :Git<space>
+    noremap <leader>gd :Git diff %<CR>
+    noremap <leader>gD :Git diff<CR>
+    noremap <leader>gs :Git status<CR>
+    noremap <leader>ga :Git add %<CR>
+    noremap <leader>gA :Git add --all<CR>
+    noremap <leader>gc :Git commit % -m<space>
+    noremap <leader>gC :Git commit -m<space>
+    noremap <leader>gB :Git blame<CR>
 endif
 
 " Signify --------------------------------------------------------------------
@@ -1081,16 +1115,16 @@ if using_coding_tool_plug
     " UPDATE it to reflect your preferences, it will speed up opening files
     let g:signify_vcs_list = ['git', 'hg']
     " Mappings to jump to changed blocks
-    map <leader>sy :SignifyToggle<CR>
-    map <leader>sn <plug>(signify-next-hunk)
-    map <leader>sp <plug>(signify-prev-hunk)
-    " Nicer colors
-    highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
-    highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
-    highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
-    highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
-    highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
-    highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
+    noremap <leader>sy :SignifyToggle<CR>
+    noremap <leader>sn <plug>(signify-next-hunk)
+    noremap <leader>sp <plug>(signify-prev-hunk)
+    " Nicer colors for Signify group
+    highlight DiffAdd           cterm=bold  ctermfg=119 ctermbg=none gui=bold guifg=#87ff5f guibg=none
+    highlight DiffDelete        cterm=bold  ctermfg=167 ctermbg=none gui=bold guifg=#d75f5f guibg=none
+    highlight DiffChange        cterm=bold  ctermfg=227 ctermbg=none gui=bold guifg=#ffff5f guibg=none
+    highlight SignifySignAdd    cterm=bold  ctermfg=119 ctermbg=237  gui=bold guifg=#87ff5f guibg=none
+    highlight SignifySignDelete cterm=bold  ctermfg=167 ctermbg=237  gui=bold guifg=#d75f5f guibg=none
+    highlight SignifySignChange cterm=bold  ctermfg=227 ctermbg=237  gui=bold guifg=#ffff5f guibg=none
 endif
 
 " GitGutter ------------------------------------------------------------------
@@ -1112,24 +1146,28 @@ if using_coding_tool_plug
     " Use Esc key to quit preview pane
     let g:gitgutter_close_preview_on_escape = 1
     " Assign color to GitGutter group
-    highlight GitGutterAdd    guifg=#009900 ctermfg=2
-    highlight GitGutterChange guifg=#bbbb00 ctermfg=3
-    highlight GitGutterDelete guifg=#ff2222 ctermfg=1
+    highlight GitGutterAdd    cterm=bold ctermfg=2 ctermbg=none gui=bold guifg=#009900 guibg=none
+    highlight GitGutterChange cterm=bold ctermfg=3 ctermbg=none gui=bold guifg=#bbbb00 guibg=none
+    highlight GitGutterDelete cterm=bold ctermfg=1 ctermbg=none gui=bold guifg=#ff2222 guibg=none
     " GitGutter toggle
-    map <leader>gg :GitGutterToggle<CR>:echo 'Toggle GitGutter'<CR>
-    map <leader>gb :GitGutterBufferToggle<CR>:echo 'Toggle GitGutter Buffer'<CR>
+    noremap <leader>gg :GitGutterToggle<CR>:echo 'Toggle GitGutter'<CR>
+    noremap <leader>gb :GitGutterBufferToggle<CR>
+                \:echo 'Toggle GitGutter Buffer'<CR>
     " GitGutter highlight toggle
-    map <leader>ghs :GitGutterSignsToggle<CR>:echo 'Toggle GitGutter Sign Highlight'<CR>
-    map <leader>ghl :GitGutterLineHighlightsToggle<CR>:echo 'Toggle GitGutter Line Highlight'<CR>
-    map <leader>ghn :GitGutterLineNrHighlightsToggle<CR>:echo 'Toggle GitGutter Line Number Highlight'<CR>
+    noremap <leader>ghs :GitGutterSignsToggle<CR>
+                \:echo 'Toggle GitGutter Sign Highlight'<CR>
+    noremap <leader>ghl :GitGutterLineHighlightsToggle<CR>
+                \:echo 'Toggle GitGutter Line Highlight'<CR>
+    noremap <leader>ghn :GitGutterLineNrHighlightsToggle<CR>
+                \:echo 'Toggle GitGutter Line Number Highlight'<CR>
     " GitGutter hunk move/action/git
-    map <leader>gn <Plug>(GitGutterNextHunk)
-    map <leader>gN <Plug>(GitGutterPrevHunk)
-    map <leader>gp <Plug>(GitGutterPrevHunk)
-    map <leader>gs <Plug>(GitGutterPreviewHunk)
-    map <leader>gF :GitGutterFold<CR>
-    map <leader>gS <Plug>(GitGutterStageHunk)
-    map <leader>gU <Plug>(GitGutterUndoHunk)
+    noremap <leader>gn <Plug>(GitGutterNextHunk)
+    noremap <leader>gN <Plug>(GitGutterPrevHunk)
+    noremap <leader>gp <Plug>(GitGutterPrevHunk)
+    noremap <leader>gs <Plug>(GitGutterPreviewHunk)
+    noremap <leader>gF :GitGutterFold<CR>
+    noremap <leader>gS <Plug>(GitGutterStageHunk)
+    noremap <leader>gU <Plug>(GitGutterUndoHunk)
     " Cycle through hunks in current buffer
     function! GitGutterNextHunkCycle()
         let line = line('.')
@@ -1139,8 +1177,8 @@ if using_coding_tool_plug
             GitGutterNextHunk
         endif
     endfunction
-    map <silent><leader><Tab> :call GitGutterNextHunkCycle()<CR>
-    map <silent><leader><S-Tab> <Plug>(GitGutterPrevHunk)
+    noremap <silent><leader><Tab> :call GitGutterNextHunkCycle()<CR>
+    noremap <silent><leader><S-Tab> <Plug>(GitGutterPrevHunk)
 endif
 
 " Minimap --------------------------------------------------------------------
@@ -1150,7 +1188,7 @@ if has('nvim-0.5') && using_coding_tool_plug
     let g:minimap_auto_start_win_enter = 0
     let g:minimap_git_colors = 0
     let g:minimap_highlight_search = 0
-    map <leader>mm :MinimapToggle<CR>
+    noremap <leader>mm :MinimapToggle<CR>
 endif
 
 " ============================================================================
@@ -1196,10 +1234,10 @@ if using_python_completion
     " Go to definition (in split pane)
     let g:jedi#goto_command = '<leader>pd'
     " Go to definition (in new tab)
-    map <leader>pD :call jedi#goto()<CR>
+    noremap <leader>pD :call jedi#goto()<CR>
     " Open python module [show __init__.py]
-    map <leader>pm :execute ":Pyimport " . expand('<cword>')<CR>
-    map <leader>pM :Pyimport<space>
+    noremap <leader>pm :execute ":Pyimport " . expand('<cword>')<CR>
+    noremap <leader>pM :Pyimport<space>
 endif
 
 " Python syntax --------------------------------------------------------------
@@ -1211,7 +1249,8 @@ endif
 " [ipdb must be installed first]
 " -- Installaion in termianl: run 'pip install ipdb'
 if using_python_completion
-    autocmd FileType python map <silent><leader>\b Oimport ipdb; ipdb.set_trace()<Esc>
+    autocmd FileType python
+                \ noremap <silent><leader>\b Oimport ipdb; ipdb.set_trace()<Esc>
 endif
 
 " ============================================================================
@@ -1227,6 +1266,7 @@ let fortran_free_source = 1
 let fortran_do_enddo = 1
 
 " LaTex ----------------------------------------------------------------------
+" Set spell check for LaTex files
 autocmd FileType tex setlocal spell
 autocmd FileType tex setl updatetime=10000 " Unit: milisecond
 " Latex realtime viewer with gui pdf file manager
@@ -1234,7 +1274,7 @@ if using_gui_software
     let g:livepreview_previwer = 'okular'
     let g:livepreview_engine = 'pdflatex'
     autocmd BufEnter *.tex echom '[Press F4 to Preview .tex File]'
-    autocmd FileType tex map <F4> :LLPStartPreview<CR>
+    autocmd FileType tex noremap <F4> :LLPStartPreview<CR>
 endif
 
 " Markdown -------------------------------------------------------------------
@@ -1242,7 +1282,7 @@ endif
 " Google-chrome extension is needed for markdown viewer
 if using_gui_software
     let $VIMBROWSER='brave-browser'
-    let $OPENBROWSER='map <F4> :!'. $VIMBROWSER .' %:p &<CR>'
+    let $OPENBROWSER='noremap <F4> :!'. $VIMBROWSER .' %:p &<CR>'
     augroup OpenMdFile
         autocmd!
         autocmd BufEnter *.md echom '[Press F4 to Open .md File]'
@@ -1297,23 +1337,32 @@ if using_customized_theme
     call CustomizedColorPalette()
 endif
 " Colorschmeme shortcut
-nmap <leader>csd :colorscheme default<CR>:set termguicolors<CR>:call CustomizedColorPalette()<CR>
-nmap <leader>csg :colorscheme gruvbox<CR>:set termguicolors<CR>:call CustomizedColorPalette()<CR>
-nmap <leader>csv :colorscheme vim-monokai-tasty<CR>:set termguicolors<CR>:call CustomizedColorPalette()<CR>
-nmap <leader>css :colorscheme srcery<CR>:set termguicolors<CR>:call CustomizedColorPalette()<CR>
-nmap <leader>csw :colorscheme wal<CR>:set notermguicolors<CR>:call CustomizedColorPalette()<CR>
+nnoremap <leader>csd :colorscheme default<CR>:set termguicolors<CR>
+            \:call CustomizedColorPalette()<CR>
+nnoremap <leader>csg :colorscheme gruvbox<CR>:set termguicolors<CR>
+            \:call CustomizedColorPalette()<CR>
+nnoremap <leader>csv :colorscheme vim-monokai-tasty<CR>:set termguicolors<CR>
+            \:call CustomizedColorPalette()<CR>
+nnoremap <leader>css :colorscheme srcery<CR>:set termguicolors<CR>
+            \:call CustomizedColorPalette()<CR>
+nnoremap <leader>csw :colorscheme wal<CR>:set notermguicolors<CR>
+            \:call CustomizedColorPalette()<CR>
 
 " Function - Line length warnings [Must be added after color setup] ----------
 " Here adopt default vim-textwidth 78 as maximum line length
-map <F7> :match OverLength /\%79v.\+/<CR>:echo '78 char-bound ON'<CR>
-map <leader><F7> :match UnlimitLength /\%79v.\+/<CR>:echo '78 char-bound OFF'<CR>
+noremap <F7> :match OverLength /\%79v.\+/<CR>
+            \:echo '78 char-bound ON'<CR>
+noremap <leader><F7> :match UnlimitLength /\%79v.\+/<CR>
+            \:echo '78 char-bound OFF'<CR>
 
 " Function - Comment highlight -----------------------------------------------
-map <F8> :hi Comment cterm=italic ctermfg=14 guifg=#00ffff<CR>:echo 'Hi-Comment ON'<CR>
-map <leader><F8> :hi Comment cterm=italic ctermfg=8 guifg=#8a8a8a<CR>:echo 'Hi-Comment OFF'<CR>
+noremap <F8> :hi Comment cterm=italic ctermfg=14 guifg=#00ffff<CR>
+            \:echo 'Hi-Comment ON'<CR>
+noremap <leader><F8> :hi Comment cterm=italic ctermfg=8 guifg=#8a8a8a<CR>
+            \:echo 'Hi-Comment OFF'<CR>
 
 " ============================================================================
 " End of Vim configuration, automatically reload current config after saving
 " ============================================================================
 " Automated run vim configuration file just after saving ---------------------
-"autocmd BufWritePost $MYVIMRC source $MYVIMRC"
+"autocmd BufWritePost $MYVIMRC source $MYVIMRC

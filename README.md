@@ -280,6 +280,8 @@ nvim --startuptime test.txt
 | N/V      | ([LK])+[F8]                 | (OFF)/ON highlight comment    | Off/On hightlight code comment        | Assign brighter color to comment to hightlight it |
 | N/V      | ([LK])+[F9]                 | (OFF)/ON synchronized cursor  | Off/On synchronized cursor            | Need to execute in every pane that wants to synchronize |
 | N/V      | ([LK])+[F10]                | (Load)/Save vim layout        | Load/Save vim layout                  | Including pane split, folds, and etc. |
+| N/V      | [F11]                       | Toggle indent highlight (line)  | On/Off indent highlight (line)      |
+| N/V      | [LK]+[F11]                  | Toggle indent highlight (block) | On/Off indent highlight (block)     |
 | N/V      | ([LK])+[F12]                | (Exit)/Enter terminal mode    | Exit/Enter terminal mode              |
 
 ### Keymapping Sheet 2 - Built-in Function Keymapping
@@ -366,8 +368,6 @@ nvim --startuptime test.txt
 | N/V      | [c]+[Shift]+[s]+[']+["]     | Change quotation/bracket      | From 'word' to "word"                 | vim-surrounder |
 | N/V      | [Alt]+[a]                   | Toggle auto-pair              | On/Off auto-pair quotation/bracket    | auto-pairs |
 | N/V      | [Alt]+[j]                   | Jump to next pairs            | Jump to next paired quotation/bracket | auto-pairs |
-| N/V      | [LK]+[i]+[g]                | Toggle indent highlight (line)  | On/Off indent highlight (line)      |
-| N/V      | [LK]+[i]+[Shift]+[g]        | Toggle indent highlight (block) | On/Off indent highlight (block)     |
 
 - Extra plug (Note: "let using_extra_plug = 1" must be set in vimrc)
 
