@@ -94,9 +94,10 @@
 " Vim and Neovim settings (***MUST-READ SESSION***)
 " ============================================================================
 " Select vim-plug to load, set guicolor (real color) support, and etc.
-" Assign 0 to disable plug option
 
 " Enable/Disable Vim-plug ----------------------------------------------------
+" Assign 1/0 to enable/disable plug option
+
 " Use vim or neovim (Auto-detect)
 let using_neovim = has('nvim')
 let using_vim = !using_neovim
@@ -121,6 +122,9 @@ let python_for_completion = '/home/jordankhwu/anaconda3/bin/python'
 let using_gui_software = 1
 
 " TERM GUI color -------------------------------------------------------------
+" Ctermcolors only support max 256 color
+" Termguicolors can support html color code
+
 if has('termguicolors') && !using_wal_theme
     set termguicolors
 endif
@@ -341,7 +345,7 @@ noremap <leader>md :delmarks<space>
 "    -- "/ : Last search
 
 " Show registers in vim [Also check peekaboo plugin]
-noremap <leader>re :registers<CR>
+noremap <leader>rg :registers<CR>
 " Command that wipe out all registers
 command! WipeReg for i in range(34,122) |
             \ silent! call setreg(nr2char(i), []) | endfor
@@ -542,7 +546,6 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 " Vim window maximizer
 Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle' }
-nnoremap <silent><leader>z :MaximizerToggle<CR>
 " Window pane selector
 Plug 't9md/vim-choosewin'
 " Autopair for quotations and brackets
@@ -841,11 +844,11 @@ nnoremap <leader>fcd :Commands<CR>
 nnoremap <leader>fnm :Maps<CR>
 nnoremap <leader>fht :Helptags<CR>
 " Line completion with current file
-inoremap <c-x><c-l> <plug>(fzf-complete-line)
+imap <c-x><c-l> <plug>(fzf-complete-line)
 " Word completion with dictionary
-inoremap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-k> <plug>(fzf-complete-word)
 " Path completion with path
-inoremap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-f> <plug>(fzf-complete-path)
 
 " NERDTree -------------------------------------------------------------------
 " Disable vim built-in netrw
@@ -914,14 +917,14 @@ noremap <silent><leader>cy :call NERDComment('n', 'Yank')<CR>
 " Disable default surround mappings
 let g:surround_no_mappings = 1
 " d: delete, c: change, y:yield
-nnoremap ds <Plug>Dsurround
-nnoremap cs <Plug>Csurround
-nnoremap cS <Plug>CSurround
-nnoremap ys <Plug>Ysurround
-nnoremap yS <Plug>YSurround
-nnoremap yss <Plug>Yssurround
-nnoremap ySs <Plug>YSsurround
-nnoremap ySS <Plug>YSsurround
+nmap ds <Plug>Dsurround
+nmap cs <Plug>Csurround
+nmap cS <Plug>CSurround
+nmap ys <Plug>Ysurround
+nmap yS <Plug>YSurround
+nmap yss <Plug>Yssurround
+nmap ySs <Plug>YSsurround
+nmap ySS <Plug>YSsurround
 
 " Vim-maximizer --------------------------------------------------------------
 " Default mapping is <F3> (Disabled now)
@@ -930,7 +933,7 @@ nnoremap <silent><leader>z :MaximizerToggle<CR>
 vnoremap <silent><leader>z :MaximizerToggle<CR>gv
 
 " Window-chooser (choosewin)--------------------------------------------------
-noremap <leader><Enter> <Plug>(choosewin)
+nmap <leader><Enter> <Plug>(choosewin)
 " Show big letters
 let g:choosewin_overlay_enable = 1
 
@@ -1008,12 +1011,12 @@ if using_extra_plug
     " Keep cursor column
     let g:EasyMotion_startofline = 0
     " JK motions: Line motions
-    noremap <leader>j <Plug>(easymotion-j)
-    noremap <leader>k <Plug>(easymotion-k)
-    noremap <leader>l <Plug>(easymotion-lineforward)
-    noremap <leader>h <Plug>(easymotion-linebackward)
-    noremap <leader>1 <Plug>(easymotion-overwin-f)
-    noremap <leader>2 <Plug>(easymotion-overwin-f2)
+    nmap <leader>j <Plug>(easymotion-j)
+    nmap <leader>k <Plug>(easymotion-k)
+    nmap <leader>l <Plug>(easymotion-lineforward)
+    nmap <leader>h <Plug>(easymotion-linebackward)
+    nmap <leader>1 <Plug>(easymotion-overwin-f)
+    nmap <leader>2 <Plug>(easymotion-overwin-f2)
 endif
 
 " AutoComplPop ---------------------------------------------------------------
@@ -1115,9 +1118,9 @@ if using_coding_tool_plug
     " UPDATE it to reflect your preferences, it will speed up opening files
     let g:signify_vcs_list = ['git', 'hg']
     " Mappings to jump to changed blocks
-    noremap <leader>sy :SignifyToggle<CR>
-    noremap <leader>sn <plug>(signify-next-hunk)
-    noremap <leader>sp <plug>(signify-prev-hunk)
+    nmap <leader>sy :SignifyToggle<CR>
+    nmap <leader>sn <plug>(signify-next-hunk)
+    nmap <leader>sp <plug>(signify-prev-hunk)
     " Nicer colors for Signify group
     highlight DiffAdd           cterm=bold  ctermfg=119 ctermbg=none gui=bold guifg=#87ff5f guibg=none
     highlight DiffDelete        cterm=bold  ctermfg=167 ctermbg=none gui=bold guifg=#d75f5f guibg=none
@@ -1161,13 +1164,13 @@ if using_coding_tool_plug
     noremap <leader>ghn :GitGutterLineNrHighlightsToggle<CR>
                 \:echo 'Toggle GitGutter Line Number Highlight'<CR>
     " GitGutter hunk move/action/git
-    noremap <leader>gn <Plug>(GitGutterNextHunk)
-    noremap <leader>gN <Plug>(GitGutterPrevHunk)
-    noremap <leader>gp <Plug>(GitGutterPrevHunk)
-    noremap <leader>gs <Plug>(GitGutterPreviewHunk)
-    noremap <leader>gF :GitGutterFold<CR>
-    noremap <leader>gS <Plug>(GitGutterStageHunk)
-    noremap <leader>gU <Plug>(GitGutterUndoHunk)
+    nmap <leader>gn <Plug>(GitGutterNextHunk)
+    nmap <leader>gN <Plug>(GitGutterPrevHunk)
+    nmap <leader>gp <Plug>(GitGutterPrevHunk)
+    nmap <leader>gs <Plug>(GitGutterPreviewHunk)
+    nmap <leader>gF :GitGutterFold<CR>
+    nmap <leader>gS <Plug>(GitGutterStageHunk)
+    nmap <leader>gU <Plug>(GitGutterUndoHunk)
     " Cycle through hunks in current buffer
     function! GitGutterNextHunkCycle()
         let line = line('.')
@@ -1177,8 +1180,8 @@ if using_coding_tool_plug
             GitGutterNextHunk
         endif
     endfunction
-    noremap <silent><leader><Tab> :call GitGutterNextHunkCycle()<CR>
-    noremap <silent><leader><S-Tab> <Plug>(GitGutterPrevHunk)
+    nmap <silent><leader><Tab> :call GitGutterNextHunkCycle()<CR>
+    nmap <silent><leader><S-Tab> <Plug>(GitGutterPrevHunk)
 endif
 
 " Minimap --------------------------------------------------------------------
