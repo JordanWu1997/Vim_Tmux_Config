@@ -986,8 +986,8 @@ if using_extra_plug
     let g:yankring_paste_n_akey = ' '
     let g:yankring_paste_v_key = ' '
     " Enable yankring replace
-    let g:yankring_replace_n_pkey = '<C-n>'
-    let g:yankring_replace_n_nkey = '<C-N>'
+    let g:yankring_replace_n_pkey = '<C-p>'
+    let g:yankring_replace_n_nkey = '<C-n>'
     " Yankring history
     noremap <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
     noremap <leader>yc :YRClear<CR>:echo 'Clear Yank History'<CR>
@@ -1037,8 +1037,8 @@ if using_extra_plug
     inoremap <expr><tab>   pumvisible() ? "\<c-n>" : "\<tab>"
     inoremap <expr><C-k>   pumvisible() ? "\<c-p>" : "\<C-k>"
     inoremap <expr><C-j>   pumvisible() ? "\<c-n>" : "\<C-j>"
-    inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
     inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+    inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
 endif
 
 " Tasklist -------------------------------------------------------------------
