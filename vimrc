@@ -162,8 +162,8 @@ imap kj <Esc>
 " -- ZZ (Quit and save if there's change in file without comfirmation)
 " -- :f <new-filename> (Save current file with new filename)
 
-noremap <leader>q  :q<CR>
-noremap <leader>Q  :qall<CR>
+noremap <leader>q :q<CR>
+noremap <leader>Q :qall<CR>
 noremap <leader>ww :w<CR>
 noremap <leader>wq :wq<CR>
 " Overwrite (Not working for now, use plug-in suda.vim instead)
@@ -285,7 +285,7 @@ noremap <silent><leader>tdd :tabclose<CR>:echo 'CLOSE CURRENT TAB ...'<CR>
 noremap <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB ...'<CR>
 noremap <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREV TAB ...'<CR>
 " Tabe (window) navigation (C-Left/Right will be overwrited in TMUX session)
-noremap <silent><C-Left>  :tabprevious<CR>:echo 'PREV TAB ...'<CR>
+noremap <silent><C-Left> :tabprevious<CR>:echo 'PREV TAB ...'<CR>
 noremap <silent><C-Right> :tabnext<CR>:echo 'NEXT TAB ...'<CR>
 " Tabe (Window) swap
 noremap <silent><A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
@@ -766,13 +766,23 @@ endif
 
 " Lightline tabline ----------------------------------------------------------
 if using_customized_theme
-    let g:lightline#bufferline#show_number  = 0
+    let g:lightline.enable = {
+                \'statusline': 1,
+                \'tabline': 1
+                \}
+    let g:lightline.tabline = {
+                \'left': [ ['tabs'] ],
+                \'right': [ ['buffers'] ]
+                \}
+    let g:lightline.component_expand = {
+                \'buffers': 'lightline#bufferline#buffers'
+                \}
+    let g:lightline.component_type = {
+                \'buffers': 'tabsel'
+                \}
+    let g:lightline#bufferline#show_number = 0
     let g:lightline#bufferline#shorten_path = 0
-    let g:lightline#bufferline#unnamed      = '[No Name]'
-    let g:lightline.tabline          = { 'left': [ ['tabs'] ],
-                                        \ 'right': [ ['buffers'] ] }
-    let g:lightline.component_expand = { 'buffers': 'lightline#bufferline#buffers' }
-    let g:lightline.component_type   = { 'buffers': 'tabsel' }
+    let g:lightline#bufferline#unnamed = '[No Name]'
     " Central bar transparency
     let s:palette = g:lightline#colorscheme#{g:lightline.colorscheme}#palette
     let s:palette.normal.middle = [ [ 'NONE', 'NONE', 'NONE', 'NONE' ] ]
@@ -855,7 +865,7 @@ imap <c-x><c-f> <plug>(fzf-complete-path)
 let loaded_netrwPlugin = 1
 let NERDTreeWinSize = min([38, winwidth(0) / 5])
 let NERDTreeShowLineNumbers = 1
-let NERDTreeShowHidden= 0
+let NERDTreeShowHidden = 0
 let NERDTreeMinimalUI = 1
 " Don;t show these file types
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
@@ -997,7 +1007,7 @@ endif
 " Set leader as prefix for ('"' and '@') to peek registers in vim
 " Use space to expand Peekaboo split
 if using_extra_plug
-    let g:peekaboo_prefix='<leader>'
+    let g:peekaboo_prefix = '<leader>'
 endif
 
 " Easymotion -----------------------------------------------------------------
@@ -1253,7 +1263,8 @@ endif
 " -- Installaion in termianl: run 'pip install ipdb'
 if using_python_completion
     autocmd FileType python
-                \ noremap <silent><leader>\b Oimport ipdb; ipdb.set_trace()<Esc>
+                \ noremap <silent><leader>\b Oimport ipdb;
+                \ ipdb.set_trace()<Esc>
 endif
 
 " ============================================================================
