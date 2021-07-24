@@ -263,9 +263,9 @@ noremap <leader>/ :set nohlsearch!<CR>:echo 'Toggle Search Highlight'<CR>
 
 " Line number settings -------------------------------------------------------
 set number
-set relativenumber
-noremap <leader><F5> :set number!<CR>:echo 'Toggle Line Number'<CR>
-noremap <F5> :set relativenumber!<CR>:echo 'Toggle Rel Line Number'<CR>
+set norelativenumber
+noremap <leader><F5> :set number!<CR>:echo 'Toggle ABS Line Number'<CR>
+noremap <F5> :set relativenumber!<CR>:echo 'Toggle REL Line Number'<CR>
 
 " Fold settings --------------------------------------------------------------
 set nofoldenable
