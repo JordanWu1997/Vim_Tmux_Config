@@ -1122,12 +1122,12 @@ if using_coding_tool_plug
     nmap <leader>sn <plug>(signify-next-hunk)
     nmap <leader>sp <plug>(signify-prev-hunk)
     " Nicer colors for Signify group
-    highlight DiffAdd           cterm=bold  ctermfg=119 ctermbg=none gui=bold guifg=#87ff5f guibg=none
-    highlight DiffDelete        cterm=bold  ctermfg=167 ctermbg=none gui=bold guifg=#d75f5f guibg=none
-    highlight DiffChange        cterm=bold  ctermfg=227 ctermbg=none gui=bold guifg=#ffff5f guibg=none
-    highlight SignifySignAdd    cterm=bold  ctermfg=119 ctermbg=237  gui=bold guifg=#87ff5f guibg=none
-    highlight SignifySignDelete cterm=bold  ctermfg=167 ctermbg=237  gui=bold guifg=#d75f5f guibg=none
-    highlight SignifySignChange cterm=bold  ctermfg=227 ctermbg=237  gui=bold guifg=#ffff5f guibg=none
+    highlight DiffAdd           cterm=bold  ctermfg=119 ctermbg=NONE gui=bold guifg=#87ff5f guibg=NONE
+    highlight DiffDelete        cterm=bold  ctermfg=167 ctermbg=NONE gui=bold guifg=#d75f5f guibg=NONE
+    highlight DiffChange        cterm=bold  ctermfg=227 ctermbg=NONE gui=bold guifg=#ffff5f guibg=NONE
+    highlight SignifySignAdd    cterm=bold  ctermfg=119 ctermbg=237  gui=bold guifg=#87ff5f guibg=NONE
+    highlight SignifySignDelete cterm=bold  ctermfg=167 ctermbg=237  gui=bold guifg=#d75f5f guibg=NONE
+    highlight SignifySignChange cterm=bold  ctermfg=227 ctermbg=237  gui=bold guifg=#ffff5f guibg=NONE
 endif
 
 " GitGutter ------------------------------------------------------------------
@@ -1149,9 +1149,9 @@ if using_coding_tool_plug
     " Use Esc key to quit preview pane
     let g:gitgutter_close_preview_on_escape = 1
     " Assign color to GitGutter group
-    highlight GitGutterAdd    cterm=bold ctermfg=2 ctermbg=none gui=bold guifg=#009900 guibg=none
-    highlight GitGutterChange cterm=bold ctermfg=3 ctermbg=none gui=bold guifg=#bbbb00 guibg=none
-    highlight GitGutterDelete cterm=bold ctermfg=1 ctermbg=none gui=bold guifg=#ff2222 guibg=none
+    highlight GitGutterAdd    cterm=bold ctermfg=2 ctermbg=NONE gui=bold guifg=#009900 guibg=NONE
+    highlight GitGutterChange cterm=bold ctermfg=3 ctermbg=NONE gui=bold guifg=#bbbb00 guibg=NONE
+    highlight GitGutterDelete cterm=bold ctermfg=1 ctermbg=NONE gui=bold guifg=#ff2222 guibg=NONE
     " GitGutter toggle
     noremap <leader>gg :GitGutterToggle<CR>:echo 'Toggle GitGutter'<CR>
     noremap <leader>gb :GitGutterBufferToggle<CR>
@@ -1305,17 +1305,17 @@ function! CustomizedColorPalette()
     set bg=dark
     " Color setup (hi command must be added after colorscheme)
     " Comment out Normal for non-transparent background
-    highlight Normal        cterm=none   ctermfg=none ctermbg=none gui=none   guifg=none    guibg=none
-    highlight LineNr        cterm=bold   ctermfg=8    ctermbg=none gui=bold   guifg=#808080 guibg=none
-    highlight CursorLineNr  cterm=bold   ctermfg=10   ctermbg=none gui=bold   guifg=#00ff00 guibg=none
-    highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=none gui=bold   guifg=#808080 guibg=none
-    highlight CursorColumn  cterm=none   ctermfg=none ctermbg=233  gui=none   guifg=none    guibg=#444444
-    highlight CursorLine    cterm=none   ctermfg=none ctermbg=233  gui=none   guifg=none    guibg=#444444
-    highlight Comment       cterm=italic ctermfg=8    ctermbg=none gui=italic guifg=#8a8a8a guibg=none
+    highlight Normal        cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
+    highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
+    highlight CursorLineNr  cterm=bold   ctermfg=10   ctermbg=NONE gui=bold   guifg=#00ff00 guibg=NONE
+    highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
+    highlight CursorColumn  cterm=NONE   ctermfg=NONE ctermbg=233  gui=NONE   guifg=NONE    guibg=#444444
+    highlight CursorLine    cterm=NONE   ctermfg=NONE ctermbg=233  gui=NONE   guifg=NONE    guibg=#444444
+    highlight Comment       cterm=italic ctermfg=8    ctermbg=NONE gui=italic guifg=#8a8a8a guibg=NONE
     highlight OverLength    cterm=bold   ctermfg=15   ctermfg=9    gui=bold   guifg=#ffffff guibg=#ff0000
-    highlight UnlimitLength cterm=none   ctermfg=none ctermbg=none gui=none   guifg=none    guibg=none
-    highlight FoldColumn    cterm=none   ctermfg=none ctermbg=233  gui=none   guifg=none    guibg=none
-    highlight SignColumn    cterm=none   ctermfg=none ctermfg=233  gui=none   guifg=none    guibg=none
+    highlight UnlimitLength cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
+    highlight FoldColumn    cterm=NONE   ctermfg=NONE ctermbg=233  gui=NONE   guifg=NONE    guibg=NONE
+    highlight SignColumn    cterm=NONE   ctermfg=NONE ctermfg=233  gui=NONE   guifg=NONE    guibg=NONE
 endfunction
 
 " Vim colorscheme ------------------------------------------------------------
