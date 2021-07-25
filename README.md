@@ -289,18 +289,14 @@ nvim --startuptime test.txt
 #### 1. Split/Window Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
-| N/V      | [LK]+[w]+[-/\\]             | Add new split Horiz/Vertical  | Add new split Horizontal/Vertial      |
-| N/V      | [LK]+[w]+[Shift]+[-/\\]     | Add current split Horiz/Verti | Add current split Horizontal/Vertial  | Duplicate original split, just add [Shift] to [-]/[\]| |
-| N/V      | [LK]+[w]+[t]                | Move current split to new tab | Move current split to new tab         | Here t for (t)ab
-| N/V      | [LK]+[w]+[n]                | Add new empty spli            | Add new empty split                   | Here n for (n)ew
-| N/V      | [LK]+[w]+[c]                | Close current split           | Close current split                   | Here c for (c)lose
-| N/V      | [LK]+[w]+[;]                | Cycle exist split             | Cycle exist split                     |
+| N/V      | [Ctrl]+[w]+[-/\\]           | Add new split Horiz/Vertical  | Add new split Horizontal/Vertial      |
+| N/V      | [Ctrl]+[w]+[Shift]+[-/\\]   | Add current split Horiz/Verti | Add current split Horizontal/Vertial  | Duplicate original split, just add [Shift] to [-]/[\]| |
 | N/V      | [Ctrl]+[h/j/k/l]            | Move between vim splits       | Move between splits (L/D/U/R)         | With plugin, you can even move between TMUX pane and VIM splits |
-| N/V      | [LK]+[w]+[h/j/k/l]          | Move between vim splits       | Move between splits (L/D/U/R)         |
-| N/V      | [LK]+[w]+[Shift]+[h/j/k/l]  | Move current split (L/D/U/R)  | Move current split (L/D/U/R)          |
+| N/V      | [Ctrl]+[w]+[h/j/k/l]        | Move between vim splits       | Move between splits (L/D/U/R)         |
+| N/V      | [Ctrl]+[w]+[Shift]+[h/j/k/l] | Move current split (L/D/U/R)  | Move current split (L/D/U/R)          |
 | N/V      | [-/=]                       | Inc/Dec split height          | +5/-5 rows split height               |
 | N/V      | [Shift]+[-/=]               | Inc/Dec split width           | +5/-5 columns split width             | Just add [Shift] to [-]/[=] |
-| N/V      | [LK]+[w]+[=]                | Resplit splits equally        | Resplit splits equally                | Here =(equal sign) for equally split
+| N/V      | [Ctrl]+[w]+[=]              | Resplit splits equally        | Resplit splits equally                | Here =(equal sign) for equally split
 
 #### 2. Code Folding Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
@@ -368,6 +364,7 @@ nvim --startuptime test.txt
 | N/V      | [c]+[Shift]+[s]+[']+["]     | Change quotation/bracket      | From 'word' to "word"                 | vim-surrounder |
 | N/V      | [Alt]+[a]                   | Toggle auto-pair              | On/Off auto-pair quotation/bracket    | auto-pairs |
 | N/V      | [Alt]+[j]                   | Jump to next pairs            | Jump to next paired quotation/bracket | auto-pairs |
+| N/V      | [Alt]+[w]                   | Auto-pair fastwrap            | Auto-pair fastwrap current pairs      | Example: ()test -> (test) |
 
 - Extra plug (Note: "let using_extra_plug = 1" must be set in vimrc)
 

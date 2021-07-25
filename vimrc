@@ -189,48 +189,34 @@ noremap <leader>wq :wq<CR>
 " Vim built-in setting -------------------------------------------------------
 filetype off
 " Following settings are automatically executed by VIM-plug
-"filetype plugin on
-"filetype indent on
-"syntax enable
+" -- filetype plugin on
+" -- filetype indent on
+" -- syntax enable
 
 " Vim window/pane/fold configuration -----------------------------------------
 noremap <silent><F10> :mkview<CR>:echo 'Current Layout Setting Saved ...'<CR>
 noremap <silent><leader><F10> :loadview<CR>:echo 'Layout Setting Loaded ...'<CR>
 
 " Vim split window (pane) control --------------------------------------------
+" Split pane navigation [Now integrate with tmux, check vim-tmux-navigator]
+" -- <C-w>h/j/k/l: Move to L/D/U/R pane
+" -- <C-w>H/J/K/L: Move pane to L/D/U/R
 " Split pane - More natural split opening
 set splitbelow
 set splitright
-" Split pane navigation [Now integrate with tmux, check vim-tmux-navigator]
-nnoremap <silent><leader>w; <C-w><C-w>
-nnoremap <silent><leader>wh :wincmd h<CR>
-nnoremap <silent><leader>wj :wincmd j<CR>
-nnoremap <silent><leader>wk :wincmd k<CR>
-nnoremap <silent><leader>wl :wincmd l<CR>
-" Split pane location swap
-nnoremap <silent><leader>wH :wincmd H<CR>
-nnoremap <silent><leader>wJ :wincmd J<CR>
-nnoremap <silent><leader>wK :wincmd K<CR>
-nnoremap <silent><leader>wL :wincmd L<CR>
-" TODO Add Ctrl+H/J/K/L (Which is already mapped by vim)
-" Split pane resize
+" Split pane action
+" -- <C-w>T: Move current pane to new tabe
+" -- <C-w>n: Add new empty pane
+" -- <C-w>c: Close current pane
+nnoremap <silent><C-w>- :split<CR>:echo 'Split Current File'<CR>
+nnoremap <silent><C-w>\ :vsplit<CR>: echo 'Vsplit Current File'<CR>
+nnoremap <C-w>_ :split<space>
+nnoremap <C-w>\| :vsplit<space>
+" Split pane size
 nnoremap <silent>= :resize +5<CR>
 nnoremap <silent>- :resize -5<CR>
 nnoremap <silent>+ :vertical resize +5<CR>
 nnoremap <silent>_ :vertical resize -5<CR>
-" Redraw pane equally
-nnoremap <silent><leader>w= :wincmd =<CR>
-" Move current split to new tab
-nnoremap <silent><leader>wt :wincmd T<CR>
-" Close current split
-nnoremap <silent><leader>wc :wincmd c<CR>
-" Create new empty split
-nnoremap <silent><leader>wn :wincmd n<CR>
-" Split pane action
-nnoremap <silent><leader>w- :split<CR>:echo 'Split Current File'<CR>
-nnoremap <silent><leader>w\ :vsplit<CR>: echo 'Vsplit Current File'<CR>
-nnoremap <leader>w_ :split<space>
-nnoremap <leader>w\| :vsplit<space>
 
 " Vim settings ---------------------------------------------------------------
 set nocompatible          " Not compatible with traditional vi
@@ -294,12 +280,9 @@ noremap <silent><leader>tdd :tabclose<CR>:echo 'CLOSE CURRENT TAB ...'<CR>
 " Tabe (window) navigation
 noremap <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB ...'<CR>
 noremap <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREV TAB ...'<CR>
-" Tabe (window) navigation (C-Left/Right will be overwrited in TMUX session)
-noremap <silent><C-Left> :tabprevious<CR>:echo 'PREV TAB ...'<CR>
-noremap <silent><C-Right> :tabnext<CR>:echo 'NEXT TAB ...'<CR>
 " Tabe (Window) swap
-noremap <silent><A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
-noremap <silent><A-Right> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
+noremap <silent><S-F2> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
+noremap <silent><leader><S-F2> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 
 " Buffer settings ------------------------------------------------------------
 " -- Reference: https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
@@ -453,6 +436,8 @@ if using_vim8
     tnoremap <C-j> <C-\><C-n><C-w>j
     tnoremap <C-k> <C-\><C-n><C-w>k
     tnoremap <C-l> <C-\><C-n><C-w>l
+    " Disable vertical column indicator in terminal mode
+    autocmd TermOpen * setlocal nocursorcolumn
 endif
 
 " ============================================================================
@@ -863,12 +848,12 @@ nnoremap <leader>fft :Filetypes<CR>
 nnoremap <leader>fcd :Commands<CR>
 nnoremap <leader>fnm :Maps<CR>
 nnoremap <leader>fht :Helptags<CR>
-" Line completion with current file
-imap <c-x><c-l> <plug>(fzf-complete-line)
-" Word completion with dictionary
-imap <c-x><c-k> <plug>(fzf-complete-word)
-" Path completion with path
-imap <c-x><c-f> <plug>(fzf-complete-path)
+"" Line completion with current file
+"imap <c-x><c-l> <plug>(fzf-complete-line)
+"" Word completion with dictionary
+"imap <c-x><c-k> <plug>(fzf-complete-word)
+"" Path completion with path
+"imap <c-x><c-f> <plug>(fzf-complete-path)
 
 " NERDTree -------------------------------------------------------------------
 " Disable vim built-in netrw
@@ -928,7 +913,6 @@ let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not
 let g:NERDToggleCheckAllLines = 1
 " Commenter mapping
-noremap <silent><leader>ct :call NERDComment('n', 'Toggle')<CR>
 noremap <silent><leader>cc :call NERDComment('n', 'Comment')<CR>
 noremap <silent><leader>cu :call NERDComment('n', 'Uncomment')<CR>
 noremap <silent><leader>cy :call NERDComment('n', 'Yank')<CR>
@@ -953,14 +937,16 @@ nnoremap <silent><leader>z :MaximizerToggle<CR>
 vnoremap <silent><leader>z :MaximizerToggle<CR>gv
 
 " Window-chooser (choosewin)--------------------------------------------------
-nmap <leader><Enter> <Plug>(choosewin)
-" Show big letters
+" Show big overlay letters
 let g:choosewin_overlay_enable = 1
-
+nmap <leader><Enter> <Plug>(choosewin)
 " Autopairs -----------------------------------------------------------------
+" Insert, visual, normal mode
 let g:AutoPairsShortcutToggle = '<M-a>'
 let g:AutoPairsShortcutJump = '<M-j>'
-"let g:AutoPairsShortcutFastWrap = '<M-w>'
+" Insert mode only
+" Wrap current word with pair e.g. ()test -> (test)
+let g:AutoPairsShortcutFastWrap = '<M-w>'
 
 " ============================================================================
 " Part 5 - Vim extra functions settings (Plugins settings and mappings)
@@ -1090,7 +1076,6 @@ if using_coding_tool_plug
     let g:indentLine_showFirstIndentLevel = 1
     let g:indentLine_fileTypeExclude = ['text', 'markdown', 'latex']
     let g:indentLine_bufTypeExclude = ['help', 'terminal']
-    "map <leader>ig :IndentLinesToggle<CR>:echo 'Toggle Indentline Guides'<CR>
     noremap <F11> :IndentLinesToggle<CR>:echo 'Toggle Indentline Guides'<CR>
 endif
 
@@ -1104,7 +1089,6 @@ if using_coding_tool_plug
                 \ :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
     autocmd VimEnter,Colorscheme *
                 \ :hi IndentGuidesEven guibg='#24242d' ctermbg=194
-    "map <leader>iG :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
     noremap <leader><F11> :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
 endif
 
