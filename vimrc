@@ -17,7 +17,7 @@
 " Vim and Neovim configuration notes
 " ============================================================================
 " Followings are problems, recommended solutions, and plugin-function support
-" note for configuration
+" notes for configuration
 
 " Note:
 " Old Powerline-status support [Not use anymore, use lightline now] ----------
@@ -141,7 +141,7 @@ endif
 " Set leaderkey --------------------------------------------------------------
 let mapleader = ' '
 
-" Map insert mode key ----------------------------------------------------
+" Map insert mode key --------------------------------------------------------
 " Note:
 " -- Ctrl+r+(register) (Paste register)
 " -- Ctrl+n/p (Autocompletion next/prev candidate)
@@ -151,11 +151,20 @@ let mapleader = ' '
 imap ii <Esc>
 imap kj <Esc>
 
-" Map normal mode key --------------------------------------------------------
+" Map normal/visual mode key -------------------------------------------------
 " Note:
 " -- zz (Center current cursor column)
-" -- gt/gT (Next/Prev Tab)
-" -- Ctrl+(i/o) (Go to Next/Prev cursor location)
+" -- Ctrl+(i/o) (Go to Next/Prev cursor location, works even between files)
+" -- gt/gT (Goto Next/Prev tab)
+" -- gj/gk/gl/gh (Move in visual lines instead of real lines in WRAP text)
+" -- guu/gUU/g~~ (Set lowercase/uppercase/toggle for whole line)
+" -- :g/PATTERN/ACTION (In entire file, for matching PATTERN, do ACTION)
+
+" Umap ex mode for preventing typo
+map q: <Nop>
+" Umap command history for prevent typo
+" Use :<C-f> to open command history instead
+nnoremap Q <nop>
 
 " Save/Load file hotkey ------------------------------------------------------
 " Note:
@@ -173,6 +182,7 @@ noremap <leader>wq :wq<CR>
 " Note:
 " -- K (Vim helppage for current selected word)
 " -- :r !date (Insert timestamp)
+" -- :r !seq [START] [INCREMENT] LAST (Insert number sequence)
 " -- :!dir (Show current directory file)
 " -- :!del FILENAME (Delete FILENAME)
 
