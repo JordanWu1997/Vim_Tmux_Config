@@ -108,8 +108,7 @@ let using_customized_theme = 1
 " Fancy symbols (Mainly affect nerdtree and lightline)
 let using_fancy_symbols = 1
 " Wal theme support (Pywal theme support, check pywal)
-let using_wal_theme = 0
-"let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
+let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
 " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
 let using_extra_plug = 1
 " Coding tools vim-plug (Include syntax support, git function, and etc.)
@@ -187,11 +186,11 @@ noremap <leader>wq :wq<CR>
 " -- :!del FILENAME (Delete FILENAME)
 
 " Vim built-in setting -------------------------------------------------------
-filetype off
 " Following settings are automatically executed by VIM-plug
 " -- filetype plugin on
 " -- filetype indent on
 " -- syntax enable
+filetype off
 
 " Vim window/pane/fold configuration -----------------------------------------
 noremap <silent><F10> :mkview<CR>:echo 'Current Layout Setting Saved ...'<CR>
@@ -1323,10 +1322,10 @@ function! CustomizedColorPalette()
     highlight CursorColumn  cterm=NONE   ctermfg=NONE ctermbg=233  gui=NONE   guifg=NONE    guibg=#444444
     highlight CursorLine    cterm=NONE   ctermfg=NONE ctermbg=233  gui=NONE   guifg=NONE    guibg=#444444
     highlight Comment       cterm=italic ctermfg=8    ctermbg=NONE gui=italic guifg=#8a8a8a guibg=NONE
-    highlight OverLength    cterm=bold   ctermfg=15   ctermfg=9    gui=bold   guifg=#ffffff guibg=#ff0000
+    highlight OverLength    cterm=bold   ctermfg=15   ctermbg=9    gui=bold   guifg=#ffffff guibg=#ff0000
     highlight UnlimitLength cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
     highlight FoldColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
-    highlight SignColumn    cterm=NONE   ctermfg=NONE ctermfg=NONE gui=NONE   guifg=NONE    guibg=NONE
+    highlight SignColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
 endfunction
 
 " Vim colorscheme ------------------------------------------------------------
@@ -1349,6 +1348,10 @@ if using_customized_theme
     endif
     " Call customized color palette
     call CustomizedColorPalette()
+    " Cursor line number highlight for wal theme
+    if using_wal_theme
+        highlight CursorLineNr cterm=bold ctermfg =10 ctermbg=NONE
+    endif
 endif
 " Colorschmeme shortcut
 nnoremap <leader>csd :colorscheme default<CR>:set termguicolors<CR>
@@ -1361,6 +1364,7 @@ nnoremap <leader>css :colorscheme srcery<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
 nnoremap <leader>csw :colorscheme wal<CR>:set notermguicolors<CR>
             \:call CustomizedColorPalette()<CR>
+            \:highlight CursorLineNr cterm=bold ctermfg =10 ctermbg=NONE<CR>
 
 " Function - Line length warnings [Must be added after color setup] ----------
 " Here adopt default vim-textwidth 78 as maximum line length
