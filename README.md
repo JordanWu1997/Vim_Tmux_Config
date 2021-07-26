@@ -302,9 +302,9 @@ nvim --startuptime test.txt
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N        | ([LK])+[F10]                | Load/Save layout and folding  | Load/Save current split and code folding |
-| N/V      | [LK]+[f]+[f]                | Toggle current folding        | Show/Close current folding            | Here f for (f)old
-| N/V      | [LK]+[f]+[s]                | Show all foldings             | Show all foldings                     | Here s for (s)how
-| N/V      | [LK]+[f]+[c]                | Close all foldings            | Close all foldings                    | Here c for (c)lose
+| N/V      | [z]+[a]                     | Toggle current folding        | Show/Close current folding            |
+| N/V      | [z]+[Shift]+[r]             | Show all foldings             | Show all foldings                     |
+| N/V      | [z]+[Shift]+[m]             | Close all foldings            | Close all foldings                    |
 
 #### 3. Miscellaneous Function Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
@@ -315,7 +315,7 @@ nvim --startuptime test.txt
 | N/V      | [Alt]+[Left/Right]          | Change current tab order      | Change current tab to prev/next       |
 | N/V      | [LK]+[w]+[p]                | Toggle line wrap              | On/Off line wrap                      | Here wp for (w)ra(p)
 | N/V      | [LK]+([Shift])+[/]          | Toggle search highlight       | On/Off search highlight               |
-| N/V      | [LK]+[m]+[Shift]+[k]        | Show all vim marks            | Show all vim marks                    | [LK]+[m]+[k] shows marks using fzf instead vim built-in
+| N/V      | [LK]+[m]+[k]                | Show all vim marks            | Show all vim marks                    | [LK]+[m]+[k] shows marks using fzf instead vim built-in
 | N/V      | [LK]+[r]+[g]                | Show all vim regiesters       | Show all vim registers                | Here re for (re)gister
 | N/V      | [LK]+[a]+[b]                | Show all vim abbreviates      | Show all vim abbreviates              | Here ab for (ab)reviation
 | N/V      | [LK]+[c]+[h/v]              | Toggle Horiz/Verti cursor     | On/Off Horiz/Verti cursor             |
@@ -348,8 +348,8 @@ nvim --startuptime test.txt
 | N/V      | [LK]+[p]+[n]                | Find current word occurences  | Find current word occurences          | Here p for (p)ython |
 | N/V      | [LK]+[p]+[a]                | Find current word assignment  | Find current word assignment          |
 | N/V      | [LK]+[p]+[d]                | Show current word definition  | Show current word definition          |
-| N/V      | [LK]+[p]+[m]                | Show input module init.py     | Show input module init.py             |
-| N/V      | [LK]+[p]+[Shift]+[m]        | Show current word init.py     | Show current word init.py             |
+| N/V      | [LK]+[p]+[m]                | Show current word init.py     | Show current word init.py             |
+| N/V      | [LK]+[p]+[Shift]+[m]        | Show input module init.py     | Show input module init.py             |
 
 #### 3. Miscellaneous Function Keymapping
 - Useful tool (Note: startup by default)
@@ -357,6 +357,7 @@ nvim --startuptime test.txt
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N/V      | [LK]+[c]+[c/y]              | Comment (and copy) current line | Comment (and copy) current line     | NerdCommenter |
+| N/V      | [LK]+[c]+[u]                | Uncomment current line        | UnComment current line                | NerdCommenter |
 | N/V      | [LK]+[Return]               | Select vim pane               | Select vim pane in tabs and splits    | vim-choosewin
 | N/V      | [LK]+[z]                    | Toggle maximize current split | On/Off maximize current split         | vim-maximizer |
 | N/V      | [y]+[Shift]+[s]+[w]+["]     | Add wrapped quotation/bracket | From word to "word"                   | vim-surrounder |

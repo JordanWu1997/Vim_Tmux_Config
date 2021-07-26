@@ -160,9 +160,9 @@ imap kj <Esc>
 " -- guu/gUU/g~~ (Set lowercase/uppercase/toggle for whole line)
 " -- :g/PATTERN/ACTION (In entire file, for matching PATTERN, do ACTION)
 
-" Umap ex mode for preventing typo
+" Umap ex mode to prevent typo
 map q: <Nop>
-" Umap command history for prevent typo
+" Umap command history to prevent typo
 " Use :<C-f> to open command history instead
 nnoremap Q <nop>
 
@@ -213,10 +213,10 @@ nnoremap <silent><C-w>\ :vsplit<CR>: echo 'Vsplit Current File'<CR>
 nnoremap <C-w>_ :split<space>
 nnoremap <C-w>\| :vsplit<space>
 " Split pane size
-nnoremap <silent>= :resize +5<CR>
-nnoremap <silent>- :resize -5<CR>
-nnoremap <silent>+ :vertical resize +5<CR>
-nnoremap <silent>_ :vertical resize -5<CR>
+nnoremap <silent>= :resize +1<CR>
+nnoremap <silent>- :resize -1<CR>
+nnoremap <silent>+ :vertical resize +1<CR>
+nnoremap <silent>_ :vertical resize -1<CR>
 
 " Vim settings ---------------------------------------------------------------
 set nocompatible          " Not compatible with traditional vi
@@ -264,19 +264,22 @@ noremap <leader><F5> :set number!<CR>:echo 'Toggle ABS Line Number'<CR>
 noremap <F5> :set relativenumber!<CR>:echo 'Toggle REL Line Number'<CR>
 
 " Fold settings --------------------------------------------------------------
+" -- za: Toggle current fold
+" -- zM: Close all folds
+" -- zR: Restore all folds
 set nofoldenable
 set foldmethod=indent
+set foldcolumn=4
 autocmd FileType python setlocal foldmethod=indent
-noremap <silent><leader>ff za<CR>:echo 'Toggle Current Fold...'<CR>
-noremap <silent><leader>fc zM<CR>:echo 'Close All Folds ...'<CR>
-noremap <silent><leader>fs zR<CR>:echo 'Show All Folds ...'<CR>
+noremap <F6> :set foldcolumn=4<CR>:echo 'Foldcolumn ON'<CR>
+noremap <leader><F6> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
 
 " Tabe (window) settings -----------------------------------------------------
 " Tabe (window) operations
 noremap <leader>ts :tabs<CR>
 noremap <leader>tt :tabnew<space>
 noremap <leader>td :tabclose<space>
-noremap <silent><leader>tdd :tabclose<CR>:echo 'CLOSE CURRENT TAB ...'<CR>
+noremap <leader>tdd :tabclose<CR>
 " Tabe (window) navigation
 noremap <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB ...'<CR>
 noremap <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREV TAB ...'<CR>
@@ -312,9 +315,10 @@ noremap <leader>bb :edit<space>
 noremap <leader>ba :badd<space>
 " Delete buffer
 noremap <leader>bd :bdelete<space>
-noremap <silent><leader>dd :bdelete<CR>:echo 'DELETE CURRENT BUFFER
+noremap <leader>dd :bdelete<CR>:echo 'DELETE CURRENT BUFFER
             \ [PRESS CTRL+O TO RECOVER]'<CR>
-noremap <silent><leader>bdd :bdelete<CR>:echo 'DELETE CURRENT BUFFER ...'<CR>
+noremap <leader>bdd :bdelete<CR>'DELETE CURRENT BUFFER
+            \ [PRESS CTRL+O TO RECOVER]'<CR>
 " Navigate through buffers
 noremap <silent><leader><F1> <Esc>:bp<CR>:echo 'PREV BUFFER ...'<CR>
 noremap <silent><F1> <Esc>:bn<CR>:echo 'NEXT BUFFER ...'<CR>
@@ -344,6 +348,9 @@ command! WipeReg for i in range(34,122) |
             \ silent! call setreg(nr2char(i), []) | endfor
 
 " Abbreviation settings ------------------------------------------------------
+" Note:
+" -- :abbclear : Clear abbreviation
+
 noremap <leader>ab :abbreviate<CR>
 
 " Better backup, swap and undos storage --------------------------------------
@@ -405,10 +412,6 @@ autocmd BufWritePre * call RemoveTrailingWhitespace()
 noremap <leader>rm :call RemoveTrailingWhitespace()<CR>
             \:echo "Remove Tail Whitespaces"<CR>
 
-" Function - Foldcolumn display ----------------------------------------------
-noremap <F6> :set foldcolumn=6<CR>:echo 'Foldcolumn ON'<CR>
-noremap <leader><F6> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
-
 " Function - Hex editor ------------------------------------------------------
 " From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
 noremap <leader>eho :%! xxd<CR>:echo 'Hex editor on: TF to binary data'<CR>
@@ -426,7 +429,11 @@ noremap <leader>ehf :%! xxd -r<CR>:echo 'Hex editor off: TF to original data'<CR
 " Set customized terminal mode keymapping
 if using_vim8
     " Map key to enter terminal mode
-    noremap <F12> :terminal<CR>
+    if using_neovim
+        noremap <F12> :split<CR>:resize 10<CR>:terminal<CR>i
+    else
+        noremap <F12> :terminal<CR>
+    endif
     " Map key to go back from terminal mode to normal mode
     " Do not use Esc (which conflicts with fzf window)
     tnoremap <leader><F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
@@ -436,8 +443,12 @@ if using_vim8
     tnoremap <C-j> <C-\><C-n><C-w>j
     tnoremap <C-k> <C-\><C-n><C-w>k
     tnoremap <C-l> <C-\><C-n><C-w>l
-    " Disable vertical column indicator in terminal mode
-    autocmd TermOpen * setlocal nocursorcolumn
+    " Auto start command when entering terminal mode
+    autocmd TermOpen * setlocal
+                \ nocursorcolumn nocursorline nonumber laststatus=0
+    " Auto start command when leaving terminal mode
+    autocmd TermClose * setlocal
+                \ cursorcolumn cursorline number laststatus=2
 endif
 
 " ============================================================================
@@ -602,7 +613,7 @@ if using_coding_tool_plug
     " Git integration (Git functions in vim command line)
     Plug 'tpope/vim-fugitive'
     " Git diff/change line indicator (light and minimalist)
-    Plug 'mhinz/vim-signify', { 'on': 'SignifyToggle' }
+    "Plug 'mhinz/vim-signify', { 'on': 'SignifyToggle' }
     " GitGutter (enhanced signify), also with git integration
     Plug 'airblade/vim-gitgutter'
     " File Minimap (Need neovim Ver. >= 0.5)
@@ -622,8 +633,10 @@ endif
 Plug 'christoomey/vim-tmux-navigator'
 
 " [Python coding] ------------------------------------------------------------
+" More python syntax highlight
+Plug 'vim-python/python-syntax', { 'for': 'python' }
 if using_python_completion
-    " Python autocompletion
+    " Front end of completion (python and etc.)
     if using_neovim && vim_plug_just_installed
         Plug 'Shougo/deoplete.nvim', { 'do': ':autocmd VimEnter * UpdateRemotePlugins' }
     else
@@ -641,8 +654,6 @@ if using_python_completion
     " this plugin is disabled
     Plug 'davidhalter/jedi-vim', { 'for': 'python' }
 endif
-" More python syntax highlight
-Plug 'vim-python/python-syntax', { 'for': 'python' }
 
 " [Fortran coding] -----------------------------------------------------------
 " Fortran syntax support
@@ -848,18 +859,12 @@ nnoremap <leader>fft :Filetypes<CR>
 nnoremap <leader>fcd :Commands<CR>
 nnoremap <leader>fnm :Maps<CR>
 nnoremap <leader>fht :Helptags<CR>
-"" Line completion with current file
-"imap <c-x><c-l> <plug>(fzf-complete-line)
-"" Word completion with dictionary
-"imap <c-x><c-k> <plug>(fzf-complete-word)
-"" Path completion with path
-"imap <c-x><c-f> <plug>(fzf-complete-path)
 
 " NERDTree -------------------------------------------------------------------
 " Disable vim built-in netrw
 let loaded_netrwPlugin = 1
 let NERDTreeWinSize = min([38, winwidth(0) / 5])
-let NERDTreeShowLineNumbers = 1
+let NERDTreeShowLineNumbers = 0
 let NERDTreeShowHidden = 0
 let NERDTreeMinimalUI = 1
 " Don;t show these file types
@@ -894,7 +899,7 @@ noremap <silent><leader><F4> :TagbarToggle<CR>
 
 " LargeFile ------------------------------------------------------------------
 " File unit: MB
-let g:LargeFile = 10
+let g:LargeFile = 1
 
 " Vim-man --------------------------------------------------------------------
 " Open offline manual in system
@@ -1117,22 +1122,22 @@ if using_coding_tool_plug
 endif
 
 " Signify --------------------------------------------------------------------
-if using_coding_tool_plug
-    " This first setting decides in which order try to guess your current vcs
-    " UPDATE it to reflect your preferences, it will speed up opening files
-    let g:signify_vcs_list = ['git', 'hg']
-    " Mappings to jump to changed blocks
-    nmap <leader>sy :SignifyToggle<CR>
-    nmap <leader>sn <plug>(signify-next-hunk)
-    nmap <leader>sp <plug>(signify-prev-hunk)
-    " Nicer colors for Signify group
-    highlight DiffAdd           cterm=bold  ctermfg=119 ctermbg=NONE gui=bold guifg=#87ff5f guibg=NONE
-    highlight DiffDelete        cterm=bold  ctermfg=167 ctermbg=NONE gui=bold guifg=#d75f5f guibg=NONE
-    highlight DiffChange        cterm=bold  ctermfg=227 ctermbg=NONE gui=bold guifg=#ffff5f guibg=NONE
-    highlight SignifySignAdd    cterm=bold  ctermfg=119 ctermbg=237  gui=bold guifg=#87ff5f guibg=NONE
-    highlight SignifySignDelete cterm=bold  ctermfg=167 ctermbg=237  gui=bold guifg=#d75f5f guibg=NONE
-    highlight SignifySignChange cterm=bold  ctermfg=227 ctermbg=237  gui=bold guifg=#ffff5f guibg=NONE
-endif
+"if using_coding_tool_plug
+    "" This first setting decides in which order try to guess your current vcs
+    "" UPDATE it to reflect your preferences, it will speed up opening files
+    "let g:signify_vcs_list = ['git', 'hg']
+    "" Mappings to jump to changed blocks
+    "nmap <leader>sy :SignifyToggle<CR>
+    "nmap <leader>sn <plug>(signify-next-hunk)
+    "nmap <leader>sp <plug>(signify-prev-hunk)
+    "" Nicer colors for Signify group
+    "highlight DiffAdd           cterm=bold  ctermfg=119 ctermbg=NONE gui=bold guifg=#87ff5f guibg=NONE
+    "highlight DiffDelete        cterm=bold  ctermfg=167 ctermbg=NONE gui=bold guifg=#d75f5f guibg=NONE
+    "highlight DiffChange        cterm=bold  ctermfg=227 ctermbg=NONE gui=bold guifg=#ffff5f guibg=NONE
+    "highlight SignifySignAdd    cterm=bold  ctermfg=119 ctermbg=237  gui=bold guifg=#87ff5f guibg=NONE
+    "highlight SignifySignDelete cterm=bold  ctermfg=167 ctermbg=237  gui=bold guifg=#d75f5f guibg=NONE
+    "highlight SignifySignChange cterm=bold  ctermfg=227 ctermbg=237  gui=bold guifg=#ffff5f guibg=NONE
+"endif
 
 " GitGutter ------------------------------------------------------------------
 if using_coding_tool_plug
@@ -1204,6 +1209,7 @@ endif
 " Python coding tools settings, edit them as you wish.
 
 " Deoplete -------------------------------------------------------------------
+" Front end for python completion
 if using_python_completion
     " Pynvim is needed [Installation: pip3 install --user pynvim]
     " Needed so deoplete can auto select the first suggestion
@@ -1312,15 +1318,15 @@ function! CustomizedColorPalette()
     " Comment out Normal for non-transparent background
     highlight Normal        cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
     highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
-    highlight CursorLineNr  cterm=bold   ctermfg=10   ctermbg=NONE gui=bold   guifg=#00ff00 guibg=NONE
+    highlight CursorLineNr  cterm=bold                ctermbg=NONE gui=bold                 guibg=NONE
     highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
     highlight CursorColumn  cterm=NONE   ctermfg=NONE ctermbg=233  gui=NONE   guifg=NONE    guibg=#444444
     highlight CursorLine    cterm=NONE   ctermfg=NONE ctermbg=233  gui=NONE   guifg=NONE    guibg=#444444
     highlight Comment       cterm=italic ctermfg=8    ctermbg=NONE gui=italic guifg=#8a8a8a guibg=NONE
     highlight OverLength    cterm=bold   ctermfg=15   ctermfg=9    gui=bold   guifg=#ffffff guibg=#ff0000
     highlight UnlimitLength cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
-    highlight FoldColumn    cterm=NONE   ctermfg=NONE ctermbg=233  gui=NONE   guifg=NONE    guibg=NONE
-    highlight SignColumn    cterm=NONE   ctermfg=NONE ctermfg=233  gui=NONE   guifg=NONE    guibg=NONE
+    highlight FoldColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
+    highlight SignColumn    cterm=NONE   ctermfg=NONE ctermfg=NONE gui=NONE   guifg=NONE    guibg=NONE
 endfunction
 
 " Vim colorscheme ------------------------------------------------------------
