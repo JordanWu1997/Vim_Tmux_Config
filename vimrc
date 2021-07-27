@@ -722,60 +722,64 @@ vnoremap <S-Tab> <gv
 " Vim-theme settings, edit them as you wish.
 " As for colorscheme, it at the end of this plug settings section
 
-" Lightline ------------------------------------------------------------------
-if using_customized_theme
-    if using_wal_theme
-        let g:lightline = {
-            \ 'colorscheme': 'wal',
-            \ 'active': {
-            \   'left': [ [ 'mode', 'paste' ],
-            \             [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
-            \ },
-            \ 'component_function': {
-            \   'gitbranch': 'FugitiveHead'
-            \ },
-            \ }
-    else
-        if using_fancy_symbols
-            let g:lightline = {
-                \ 'colorscheme': 'deus',
-                \ 'active': {
-                \   'left': [ [ 'mode', 'paste' ],
-                \             [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
-                \ },
-                \ 'inactive': {
-                \   'left': [ [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
-                \ },
-                \ 'component_function': {
-                \   'gitbranch': 'FugitiveHead',
-                \ },
-                \ 'separator': {
-                \   'left': "", "right": ""
-                \ },
-                \ 'subseparator': {
-                \   'left': '/', 'right': '/'
-                \ },
-                \ }
-        else
-            let g:lightline = {
-                \ 'colorscheme': 'deus',
-                \ 'active': {
-                \   'left': [ [ 'mode', 'paste' ],
-                \             [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
-                \ },
-                \ 'inactive': {
-                \   'left': [ [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
-                \ },
-                \ 'component_function': {
-                \   'gitbranch': 'FugitiveHead'
-                \ },
-                \ }
-        endif
-    endif
-endif
+" Lightline statusline/tabline options ---------------------------------------
+" Lighlight wal color with no fancy symbols
+" -- wal color does not work well with fancy symbols
+function! LightlineWalNoFancySymbols()
+    let g:lightline = {
+        \ 'colorscheme': 'wal',
+        \ 'active': {
+        \   'left': [ [ 'mode', 'paste' ],
+        \             [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
+        \ },
+        \ 'component_function': {
+        \   'gitbranch': 'FugitiveHead'
+        \ },
+        \ }
+endfunction
 
-" Lightline tabline ----------------------------------------------------------
-if using_customized_theme
+" Lightline with fancy symbols
+function! LightlineFancySymbols()
+    let g:lightline = {
+        \ 'colorscheme': 'deus',
+        \ 'active': {
+        \   'left': [ [ 'mode', 'paste' ],
+        \             [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
+        \ },
+        \ 'inactive': {
+        \   'left': [ [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
+        \ },
+        \ 'component_function': {
+        \   'gitbranch': 'fugitivehead',
+        \ },
+        \ 'separator': {
+        \   'left': "", "right": ""
+        \ },
+        \ 'subseparator': {
+        \   'left': '/', 'right': '/'
+        \ },
+        \ }
+endfunction
+
+" Lightline with no fancy symbols
+function! LightlineNoFancySymbols()
+    let g:lightline = {
+        \ 'colorscheme': 'deus',
+        \ 'active': {
+        \   'left': [ [ 'mode', 'paste' ],
+        \             [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
+        \ },
+        \ 'inactive': {
+        \   'left': [ [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
+        \ },
+        \ 'component_function': {
+        \   'gitbranch': 'FugitiveHead'
+        \ },
+        \ }
+endfunction
+
+" Lightline common setup
+function! LightlineCommon()
     let g:lightline.enable = {
                 \'statusline': 1,
                 \'tabline': 1
@@ -801,7 +805,22 @@ if using_customized_theme
     let s:palette.inactive.middle = s:palette.normal.middle
     let s:palette.tabline.middle = s:palette.normal.middle
     let s:palette.replace.middle = s:palette.normal.middle
-    " Toggle lightline, statusline
+endfunction
+
+" Conditional lightline status/tab line --------------------------------------
+if using_customized_theme
+    if using_wal_theme
+        call LightlineWalNoFancySymbols()
+    else
+        if using_fancy_symbols
+            "call LightlineFancySymbols()
+        else
+           call LightlineNoFancySymbols()
+        endif
+    endif
+    " Common lightline settings
+    call LightlineCommon()
+    " Toggle lightline, status/tab line
     noremap <leader>sl :call lightline#disable()<CR>:set showmode<CR>
                 \:set showtabline=2<CR>:set laststatus=2<CR>
                 \:echo "LIGHTLINE OFF"<CR>
@@ -814,7 +833,24 @@ if using_customized_theme
                 \:echo "STATUSLINE OFF"<CR>
 endif
 
-" Status line ----------------------------------------------------------------
+" Function - Reload lightline ------------------------------------------------
+" - Reload lightline without close editing files
+" - From https://github.com/itchyny/lightline.vim/issues/241
+command! LightlineReload call LightlineReload()
+function! LightlineReload()
+    call lightline#init()
+    call lightline#colorscheme()
+    call lightline#update()
+endfunction
+" Reload lightline status/tab line setup
+command! LightlineWalNoFancySymbolsReload call LightlineWalNoFancySymbols()
+            \ | call LightlineCommon() | call LightlineReload()
+command! LightlineFancySymbolsReload call LightlineFancySymbols()
+            \ | call LightlineCommon() | call LightlineReload()
+command! LightlineNoFancySymbolsReload call LightlineNoFancySymbols()
+            \ | call LightlineCommon() | call LightlineReload()
+
+" Status/Tab line ------------------------------------------------------------
 set noshowmode    " No vim-built-in mode statusline
 set laststatus=2  " Always display the statusline in all windows
 set showtabline=2 " Always display the tabline, even if there is only one tab
@@ -1367,15 +1403,20 @@ endif
 " Colorschmeme shortcut
 nnoremap <leader>csd :colorscheme default<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
+            \:LightlineFancySymbolsReload<CR>:echo "default colorscheme"<CR>
 nnoremap <leader>csg :colorscheme gruvbox<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
+            \:LightlineFancySymbolsReload<CR>:echo "gruvbox colorscheme"<CR>
 nnoremap <leader>csv :colorscheme vim-monokai-tasty<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
+            \:LightlineFancySymbolsReload<CR>echo "monokai colorscheme"<CR>
 nnoremap <leader>css :colorscheme srcery<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
+            \:LightlineFancySymbolsReload<CR>:echo "srcery colorscheme"<CR>
 nnoremap <leader>csw :colorscheme wal<CR>:set notermguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:highlight CursorLineNr cterm=bold ctermfg =10 ctermbg=NONE<CR>
+            \:highlight CursorLineNr cterm=bold ctermfg=10 ctermbg=NONE<CR>
+            \:LightlineWalNoFancySymbolsReload<CR>:echo "wal colorscheme"<CR>
 
 " Function - Line length warnings [Must be added after color setup] ----------
 " Here adopt default vim-textwidth 78 as maximum line length
