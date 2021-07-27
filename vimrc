@@ -813,9 +813,9 @@ if using_customized_theme
         call LightlineWalNoFancySymbols()
     else
         if using_fancy_symbols
-            "call LightlineFancySymbols()
+            call LightlineFancySymbols()
         else
-           call LightlineNoFancySymbols()
+            call LightlineNoFancySymbols()
         endif
     endif
     " Common lightline settings
