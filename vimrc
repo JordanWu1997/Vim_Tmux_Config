@@ -89,6 +89,9 @@
 "    -- jedi-Vim: pip install jedi
 "    -- deoplete: pip install pynvim
 "    -- ipdb    : pip install ipdb
+"    -- ipython : pip install ipython (version >= 7.2)
+" -- Python packages already installed in somewhere else
+"    -- Use: pip install (--user) --ignore_installed <PACKAGE_NAME>
 
 " ============================================================================
 " Vim and Neovim settings (***MUST-READ SESSION***)
@@ -237,7 +240,7 @@ set wildmode=list:full    " Show all available input options (or use Ctrl-D)
 " Cursor settings ------------------------------------------------------------
 set ruler                 " Show cursor position in statusline
 set cursorline            " Show vertical line
-set cursorcolumn          " Show horizontal line (laggy in neovim sometimes)
+set nocursorcolumn        " Show horizontal line (laggy sometimes)
 " Toggle cursor line/column indicator (horizontal/vertical)
 noremap <leader>ch :set cursorline!<CR>:echo 'Toggle Cursor Line [Horizontal]'<CR>
 noremap <leader>cv :set cursorcolumn!<CR>:echo 'Toggle Cursor Column [Vertical]'<CR>
@@ -433,6 +436,8 @@ if using_vim8
     else
         noremap <F12> :terminal<CR>
     endif
+    " Map key for resize pane
+    nnoremap <leader>0 :resize 10 <CR>
     " Map key to go back from terminal mode to normal mode
     " Do not use Esc (which conflicts with fzf window)
     tnoremap <leader><F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
@@ -442,7 +447,7 @@ if using_vim8
     tnoremap <C-j> <C-\><C-n><C-w>j
     tnoremap <C-k> <C-\><C-n><C-w>k
     tnoremap <C-l> <C-\><C-n><C-w>l
-    " Auto start command when entering terminal mode
+    " Auto start command when starting terminal mode
     autocmd TermOpen * setlocal
                 \ nocursorcolumn nocursorline nonumber laststatus=0
     " Auto start command when leaving terminal mode
@@ -865,7 +870,12 @@ let loaded_netrwPlugin = 1
 let NERDTreeWinSize = min([38, winwidth(0) / 5])
 let NERDTreeShowLineNumbers = 0
 let NERDTreeShowHidden = 0
-let NERDTreeMinimalUI = 1
+" Fancy symbols for NERDTree
+if using_fancy_symbols
+    let NERDTreeMinimalUI = 1
+else
+    let NERDTreeMinimalUI = 0
+endif
 " Don;t show these file types
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 let g:NERDTreeMouseMode = 3
@@ -1341,6 +1351,7 @@ if using_customized_theme
         " Option 2 - Use wal vim plugin [Recommended]
         colorscheme wal
     else
+        " Current available themes
         "colorscheme default
         "colorscheme gruvbox
         "colorscheme srcery
