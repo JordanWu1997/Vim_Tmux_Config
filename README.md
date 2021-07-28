@@ -360,9 +360,9 @@ nvim --startuptime test.txt
 | N/V      | [LK]+[c]+[u]                | Uncomment current line        | UnComment current line                | NerdCommenter |
 | N/V      | [LK]+[Return]               | Select vim pane               | Select vim pane in tabs and splits    | vim-choosewin
 | N/V      | [LK]+[z]                    | Toggle maximize current split | On/Off maximize current split         | vim-maximizer |
-| N/V      | [y]+[Shift]+[s]+[w]+["]     | Add wrapped quotation/bracket | From word to "word"                   | vim-surrounder |
-| N/V      | [d]+[Shift]+[s]+[w]+["]     | Del wrapped quotation/bracket | From "word" to word                   | vim-surrounder |
-| N/V      | [c]+[Shift]+[s]+[']+["]     | Change quotation/bracket      | From 'word' to "word"                 | vim-surrounder |
+| N/V      | [y]+[s]+[a]+[w]+["]         | Add wrapped quotation/bracket | From word to "word"                   | vim-surrounder |
+| N/V      | [d]+[s]+[a]+[w]+["]         | Del wrapped quotation/bracket | From "word" to word                   | vim-surrounder |
+| N/V      | [c]+[s]+[']+["]             | Change quotation/bracket      | From 'word' to "word"                 | vim-surrounder |
 | N/V      | [Alt]+[a]                   | Toggle auto-pair              | On/Off auto-pair quotation/bracket    | auto-pairs |
 | N/V      | [Alt]+[j]                   | Jump to next pairs            | Jump to next paired quotation/bracket | auto-pairs |
 | N/V      | [Alt]+[w]                   | Auto-pair fastwrap            | Auto-pair fastwrap current pairs      | Example: ()test -> (test) |
@@ -482,6 +482,7 @@ tmux -V
 ### Keymapping Sheet
 | TMUX-Mode  | Add-on key                  | Function                      | Description                           | Note |
 | :-------:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
+| Normal     | [BK]+[?]                    | Show all tmux keymapping      | Show all tmux keymapping              |
 | Normal     | [BK]+[r]                    | Reload tmux configuration     | Reload tmux configuration             | .tmux.conf file |
 | Normal     | [BK]+[d]                    | Reattach remote/local display | Reattach remote/local display         | Run script to make sure display connection is the same for both remote and local machine |
 | Normal     | [BK]+[s]                    | Show all tmux sessions        | Show all tmux sessions                |

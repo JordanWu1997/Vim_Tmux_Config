@@ -527,9 +527,12 @@ if using_customized_theme
 endif
 
 " [File/Code Browsing] -------------------------------------------------------
-" Code and files fuzzy finder
+" Code and files fuzzy finder and previewer (main progroam)
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
+" Code and files fuzzy finder and previewer (vim plugin)
 Plug 'junegunn/fzf.vim'
+" Enhanced previewer for fzf (fuzzy finder)
+Plug 'chengzeyi/fzf-preview.vim'
 " File browser [Support netrw (vim built-in file browser) functions]
 Plug 'scrooloose/nerdtree'
 if using_fancy_symbols
@@ -868,7 +871,9 @@ set showcmd       " This line must be added AFTER statusline plugin
 " Caution:
 "   - ripgrep must be installed if Rg function is needed
 "   - if syntax highlight is needed, please install bat from command line
-" This is the default extra key bindings
+" Add prefix FZF to all fzf commands
+let g:fzf_command_prefix = 'FZF'
+" Default fzf action keymapping
 let g:fzf_action = {
             \ 'ctrl-t': 'tab split',
             \ 'ctrl-s': 'split',
@@ -876,30 +881,30 @@ let g:fzf_action = {
 " Default fzf layout (Floating in the center of window)
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.7 } }
 " Buffer (Local vim)
-nnoremap <leader>bL :BLines<CR>
-nnoremap <leader>bl :execute ":BLines " . expand('<cword>')<CR>
-nnoremap <leader>bT :BTags<CR>
-nnoremap <leader>bt :execute ":BTag " . expand('<cword>')<CR>
+nnoremap <leader>fbL :FZFBLines<CR>
+nnoremap <leader>fbl :execute ":FZFBLines " . expand('<cword>')<CR>
+nnoremap <leader>fbT :FZFBTags<CR>
+nnoremap <leader>fbt :execute ":FZFBTag " . expand('<cword>')<CR>
 " All files (Global system)
-nnoremap <leader>gL :Lines<CR>
-nnoremap <leader>gl :execute ":Lines " . expand('<cword>')<CR>
-nnoremap <leader>gT :Tags<CR>
-nnoremap <leader>gt :execute ":Tag " . expand('<cword>')<CR>
+nnoremap <leader>fgL :FZFLines<CR>
+nnoremap <leader>fgl :execute ":FZFLines " . expand('<cword>')<CR>
+nnoremap <leader>fgT :FZFTags<CR>
+nnoremap <leader>fgt :execute ":FZFTag " . expand('<cword>')<CR>
 " File search
-nnoremap <leader>ffs :Files<space>
-nnoremap <leader>flc :Locate<space>
-nnoremap <leader>frg :Rg<space>
+nnoremap <leader>ffs :FZFFiles<space>
+nnoremap <leader>flc :FZFLocate<space>
+nnoremap <leader>frg :FZFRg<space>
 " fzf key mapping
-nnoremap <leader>fhs :History<CR>
-nnoremap <leader>fh: :History:<CR>
-nnoremap <leader>fh/ :History/<CR>
-nnoremap <leader>fmk :Marks<CR>
-nnoremap <leader>fbf :Buffers<CR>
-nnoremap <leader>fwd :Windows<CR>
-nnoremap <leader>fft :Filetypes<CR>
-nnoremap <leader>fcd :Commands<CR>
-nnoremap <leader>fnm :Maps<CR>
-nnoremap <leader>fht :Helptags<CR>
+nnoremap <leader>fhs :FZFHistory<CR>
+nnoremap <leader>fh: :FZFHistory:<CR>
+nnoremap <leader>fh/ :FZFHistory/<CR>
+nnoremap <leader>fmk :FZFMarks<CR>
+nnoremap <leader>fbf :FZFBuffers<CR>
+nnoremap <leader>fwd :FZFWindows<CR>
+nnoremap <leader>fft :FZFFiletypes<CR>
+nnoremap <leader>fcd :FZFCommands<CR>
+nnoremap <leader>fnm :FZFMaps<CR>
+nnoremap <leader>fht :FZFHelptags<CR>
 
 " NERDTree -------------------------------------------------------------------
 " Disable vim built-in netrw
@@ -969,17 +974,17 @@ noremap <silent><leader>cu :call NERDComment('n', 'Uncomment')<CR>
 noremap <silent><leader>cy :call NERDComment('n', 'Yank')<CR>
 
 " Vim-surround ---------------------------------------------------------------
-" Disable default surround mappings
-let g:surround_no_mappings = 1
-" d: delete, c: change, y:yield
-nmap ds <Plug>Dsurround
-nmap cs <Plug>Csurround
-nmap cS <Plug>CSurround
-nmap ys <Plug>Ysurround
-nmap yS <Plug>YSurround
-nmap yss <Plug>Yssurround
-nmap ySs <Plug>YSsurround
-nmap ySS <Plug>YSsurround
+" Surround current word or sentence with brackets or html tags
+" -- Support surrounding: (), {}, [], "", ''
+" -- Difference between left/right bracket
+"    -- ysaw{ : test -> { test }
+"    -- ysaw} : test -> {test}
+" -- Grammar in vim-surround (vim-like)
+"    -- Prep. a: around
+"    -- Noun, w: word, s: sentence, t: tag
+"    -- Verb. d: delete, c: change, y:yield
+" -- Visual mode
+"    -- use S to trigger vim-surround
 
 " Vim-maximizer --------------------------------------------------------------
 " Default mapping is <F3> (Disabled now)
