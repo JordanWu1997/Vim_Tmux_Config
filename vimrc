@@ -222,6 +222,8 @@ nnoremap <silent>_ :vertical resize -1<CR>
 
 " Vim settings ---------------------------------------------------------------
 set nocompatible          " Not compatible with traditional vi
+"set notimeout            " No timeout for entering command or keybinding
+set timeoutlen=2000       " Timeout for entering combined key (milisecond)
 set confirm               " Ask for confirmation before leaving vim
 set ignorecase            " Close case sensitive
 "set smartcase            " Case sensitive if search contains uppercase letter
@@ -836,13 +838,13 @@ endif
 " Function - Reload lightline ------------------------------------------------
 " - Reload lightline without close editing files
 " - From https://github.com/itchyny/lightline.vim/issues/241
-command! LightlineReload call LightlineReload()
 function! LightlineReload()
     call lightline#init()
     call lightline#colorscheme()
     call lightline#update()
 endfunction
-" Reload lightline status/tab line setup
+
+" Reload lightline status/tab line setup -------------------------------------
 command! LightlineWalNoFancySymbolsReload call LightlineWalNoFancySymbols()
             \ | call LightlineCommon() | call LightlineReload()
 command! LightlineFancySymbolsReload call LightlineFancySymbols()
@@ -872,8 +874,7 @@ let g:fzf_action = {
             \ 'ctrl-s': 'split',
             \ 'ctrl-v': 'vsplit' }
 " Default fzf layout (Floating in the center of window)
-" - down / up / left / right
-let g:fzf_layout = { 'down': '~40%' }
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.7 } }
 " Buffer (Local vim)
 nnoremap <leader>bL :BLines<CR>
 nnoremap <leader>bl :execute ":BLines " . expand('<cword>')<CR>
@@ -1409,7 +1410,7 @@ nnoremap <leader>csg :colorscheme gruvbox<CR>:set termguicolors<CR>
             \:LightlineFancySymbolsReload<CR>:echo "gruvbox colorscheme"<CR>
 nnoremap <leader>csv :colorscheme vim-monokai-tasty<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:LightlineFancySymbolsReload<CR>echo "monokai colorscheme"<CR>
+            \:LightlineFancySymbolsReload<CR>:echo "monokai colorscheme"<CR>
 nnoremap <leader>css :colorscheme srcery<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
             \:LightlineFancySymbolsReload<CR>:echo "srcery colorscheme"<CR>
