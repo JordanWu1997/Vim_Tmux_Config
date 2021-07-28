@@ -111,7 +111,8 @@ let using_customized_theme = 1
 " Fancy symbols (Mainly affect nerdtree and lightline)
 let using_fancy_symbols = 1
 " Wal theme support (Pywal theme support, check pywal)
-let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
+let using_wal_theme = 1
+"let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
 " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
 let using_extra_plug = 1
 " Coding tools vim-plug (Include syntax support, git function, and etc.)
@@ -869,8 +870,12 @@ set showcmd       " This line must be added AFTER statusline plugin
 
 " fzf.vim --------------------------------------------------------------------
 " Caution:
-"   - ripgrep must be installed if Rg function is needed
-"   - if syntax highlight is needed, please install bat from command line
+" -- (1) ripgrep must be installed if Rg function is needed
+" -- (2) for fish shell, syntax is slightly different from bash script. Script
+"        of fzf_preview modification is needed. Try change $(...) to (...),
+"        && to ;and, and || to ;or within below script. Check the following
+"        $HOME/.config/nvim/plugged/fzf-preview.vim/plugin/fzf-preview.vim
+"
 " Add prefix FZF to all fzf commands
 let g:fzf_command_prefix = 'FZF'
 " Default fzf action keymapping
