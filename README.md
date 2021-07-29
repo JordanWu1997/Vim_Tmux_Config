@@ -92,6 +92,11 @@ Table of Contents
     ```
 #### 3. Requirement for Python Completion
 
+- __ipython__ (version >= __7.20__) [python console]
+    ```bash
+    # Python3
+    pip install ipython
+    ```
 - __jedi__ for jedi [python code analyzer]
     ```bash
     # Python3
@@ -306,9 +311,9 @@ nvim --startuptime test.txt
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N        | ([LK])+[F10]                | Load/Save layout and folding  | Load/Save current split and code folding |
-| N/V      | [z]+[a]                     | Toggle current folding        | Show/Close current folding            |
-| N/V      | [z]+[Shift]+[r]             | Show all foldings             | Show all foldings                     |
-| N/V      | [z]+[Shift]+[m]             | Close all foldings            | Close all foldings                    |
+| N/V      | [z]+[k/j]                   | Goto Prev/Next folding        | Goto Prev/Next folding                | Vim built-in |
+| N/V      | [z]+[o/c]                   | Open/Close current folding    | Open/Close current folding            | Vim built-in |
+| N/V      | [z]+[Shift]+[r/m]           | Show/Close all foldings       | Show/Close all foldings               | Vim built-in |
 
 #### 3. Miscellaneous Function Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
@@ -316,7 +321,6 @@ nvim --startuptime test.txt
 | I        | [i]+[i]/[k]+[j]             | Esc (escape form insert mode) | Esc (escape form insert mode)         | If your word contains "ii", try [i] + "[Ctrl]+[v]" + [i]
 | N/V      | [Shift]+[k]                 | Search current word in mannual| Search current word in mannual        |
 | N/V      | [LK]+[d]+[d]                | Close current buffer          | Close current buffer                  | Here d for (d)eletion
-| N/V      | [Alt]+[Left/Right]          | Change current tab order      | Change current tab to prev/next       |
 | N/V      | [LK]+[w]+[p]                | Toggle line wrap              | On/Off line wrap                      | Here wp for (w)ra(p)
 | N/V      | [LK]+([Shift])+[/]          | Toggle search highlight       | On/Off search highlight               |
 | N/V      | [LK]+[m]+[k]                | Show all vim marks            | Show all vim marks                    | [LK]+[m]+[k] shows marks using fzf instead vim built-in

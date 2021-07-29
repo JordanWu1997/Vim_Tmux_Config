@@ -128,6 +128,7 @@ let using_gui_software = 1
 " Ctermcolors only support max 256 color
 " Termguicolors can support html color code
 
+" wal colortheme does not work well with termguicolors
 if has('termguicolors') && !using_wal_theme
     set termguicolors
 endif
@@ -206,6 +207,8 @@ noremap <silent><leader><F10> :loadview<CR>:echo 'Layout Setting Loaded ...'<CR>
 " Split pane navigation [Now integrate with tmux, check vim-tmux-navigator]
 " -- <C-w>h/j/k/l: Move to L/D/U/R pane
 " -- <C-w>H/J/K/L: Move pane to L/D/U/R
+" Split pane - Split border style
+set fillchars+=vert:\ "
 " Split pane - More natural split opening
 set splitbelow
 set splitright
@@ -278,7 +281,7 @@ noremap <F5> :set relativenumber!<CR>:echo 'Toggle REL Line Number'<CR>
 " -- zM/zR/zi: Maximize/Remove/Invert all folds
 " -- zj/zk: Jump to next/prev fold
 
-set foldenable
+set nofoldenable
 set foldmethod=syntax
 set foldcolumn=4
 set foldlevel=0
@@ -1379,7 +1382,7 @@ function! CustomizedColorPalette()
     " Common background setting (dark background)
     set bg=dark
     " Color setup (hi command must be added after colorscheme)
-    " Comment out Normal for non-transparent background
+    " Uncomment Normal for transparent background
     "highlight Normal        cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
     highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
     highlight CursorLineNr  cterm=bold                ctermbg=NONE gui=bold                 guibg=NONE
@@ -1436,6 +1439,8 @@ nnoremap <leader>csw :colorscheme wal<CR>:set notermguicolors<CR>
             \:call CustomizedColorPalette()<CR>
             \:highlight CursorLineNr cterm=bold ctermfg=10 ctermbg=NONE<CR>
             \:LightlineWalNoFancySymbolsReload<CR>:echo "wal colorscheme"<CR>
+nnoremap <leader>cst :highlight Normal cterm=NONE ctermfg=NONE ctermbg=NONE
+            \ gui=NONE guifg=NONE guibg=NONE<CR>:echo "transparent BG"<CR>
 
 " Function - Line length warnings [Must be added after color setup] ----------
 " Here adopt default vim-textwidth 78 as maximum line length
