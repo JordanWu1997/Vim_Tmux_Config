@@ -6,6 +6,7 @@ Table of Contents
 
 * [Vim_Tmux_Config](#vim_tmux_config)
 * [Table of Contents](#table-of-contents)
+   * [Demo Current Customization](#demo-current-customization)
    * [Part 1 - Vim/Gvim/Neovim](#part-1---vimgvimneovim)
       * [Preparation (Dependence)](#preparation-dependence)
          * [1. Common Requirement](#1-common-requirement)
@@ -41,6 +42,9 @@ Table of Contents
       * [Major Difference Between Customized and Original](#major-difference-between-customized-and-original)
       * [Keymapping Sheet](#keymapping-sheet)
       * [Reference for TMUX Setup](#reference-for-tmux-setup)
+
+## Demo Current Customization
+![alt text](./demo/NEOVIM_DEMO_01.png "Title")
 
 ## Part 1 - Vim/Gvim/Neovim
 

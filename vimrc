@@ -2,7 +2,8 @@
 " ============================================================================
 " Fisa-vim-config
 " http://fisadev.github.io/fisa-vim-config/
-" Modified [Vim]/[Neovim] version:[8.2]/[v0.4.4] by Kuan-Hsien Wu, Sheng-Jun Lin
+" Modified [Vim]/[Neovim] version:[8.2]/[v0.4.4]
+" by Kuan-Hsien Wu, Sheng-Jun Lin
 " ============================================================================
 " This vim configuration is for both vim and neovim
 
@@ -110,16 +111,15 @@ let using_vim8 = 1
 let using_customized_theme = 1
 " Fancy symbols (Mainly affect nerdtree and lightline)
 let using_fancy_symbols = 1
-" Wal theme support (Pywal theme support, check pywal)
-let using_wal_theme = 1
-"let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
+" Wal theme support (Xresources colortheme support, check pywal)
+let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
 " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
 let using_extra_plug = 1
 " Coding tools vim-plug (Include syntax support, git function, and etc.)
 let using_coding_tool_plug = 1
 " Python Completion (Use deoplete and jedi, neovim is recommended to be used)
 let using_python_completion = 1
-" Python that used to install jedi, pynvim python packages for completion
+" Python that used to install jedi, pynvim and python packages for completion
 let python_for_completion = '/home/jordankhwu/anaconda3/bin/python'
 " Support of external gui software (e.g. Okular, Google-chrome, and etc.)
 let using_gui_software = 1
@@ -148,20 +148,22 @@ let mapleader = ' '
 " Note:
 " -- Ctrl+r+(register) (Paste register)
 " -- Ctrl+n/p (Autocompletion next/prev candidate)
+" -- Ctrl+d/t (Unindent/Indent current line)
 
-" -- Map Esc key to ii, kj
-"    -- Use Ctrl+v to escape for 'ii' word (e.g. ascii)
+" Map Esc key to ii, kj
+" -- Use Ctrl+v to escape for 'ii' word (e.g. ascii)
 imap ii <Esc>
 imap kj <Esc>
 
 " Map normal/visual mode key -------------------------------------------------
 " Note:
-" -- zz (Center current cursor column)
-" -- Ctrl+(i/o) (Go to Next/Prev cursor location, works even between files)
-" -- gt/gT (Goto Next/Prev tab)
-" -- gj/gk/gl/gh (Move in visual lines instead of real lines in WRAP text)
-" -- guu/gUU/g~~ (Set lowercase/uppercase/toggle for whole line)
-" -- :g/PATTERN/ACTION (In entire file, for matching PATTERN, do ACTION)
+" -- zt/zz/zb/zh/zl: Scroll window top/center/bottom/left/right
+" -- Ctrl+(i/o): Go to Next/Prev cursor location, works even between files
+" -- gj/gk/gl/gh: Move in visual lines instead of real lines in WRAP text
+" -- guu/gUU/g~~: Set lowercase/uppercase/toggle for whole line
+" -- :g/PATTERN/ACTION: In entire file, for matching PATTERN, do ACTION
+" -- gt/gT: Goto Next/Prev tab
+" -- g;/g,: Goto older/newer change
 
 " Umap ex mode to prevent typo
 map q: <Nop>
@@ -224,7 +226,7 @@ nnoremap <silent>_ :vertical resize -1<CR>
 " Vim settings ---------------------------------------------------------------
 set nocompatible          " Not compatible with traditional vi
 "set notimeout            " No timeout for entering command or keybinding
-set timeoutlen=2000       " Timeout for entering combined key (milisecond)
+set timeoutlen=2500       " Timeout for entering combined key (milisecond)
 set confirm               " Ask for confirmation before leaving vim
 set ignorecase            " Close case sensitive
 "set smartcase            " Case sensitive if search contains uppercase letter
@@ -269,12 +271,18 @@ noremap <leader><F5> :set number!<CR>:echo 'Toggle ABS Line Number'<CR>
 noremap <F5> :set relativenumber!<CR>:echo 'Toggle REL Line Number'<CR>
 
 " Fold settings --------------------------------------------------------------
-" -- za: Toggle current fold
-" -- zM: Close all folds
-" -- zR: Restore all folds
-set nofoldenable
-set foldmethod=indent
+" Note:
+" -- zc/zo: Close/Open current fold
+" -- zC/zO: Close/Open current fold recusively
+" -- zm/zr: More/Reduce fold level
+" -- zM/zR/zi: Maximize/Remove/Invert all folds
+" -- zj/zk: Jump to next/prev fold
+
+set foldenable
+set foldmethod=syntax
 set foldcolumn=4
+set foldlevel=0
+autocmd FileType vim setlocal foldmethod=indent
 autocmd FileType python setlocal foldmethod=indent
 noremap <F6> :set foldcolumn=4<CR>:echo 'Foldcolumn ON'<CR>
 noremap <leader><F6> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
@@ -717,9 +725,9 @@ autocmd FileType python setlocal et ts=4 sw=4 sts=4
 autocmd FileType make setlocal noet
 
 " Tab key action in all modes ------------------------------------------------
-nnoremap <Tab><Tab> >>
+nnoremap <Tab> >>
 nnoremap <S-Tab> <<
-vnoremap <Tab><Tab> >gv
+vnoremap <Tab> >gv
 vnoremap <S-Tab> <gv
 
 " ============================================================================
@@ -1372,7 +1380,7 @@ function! CustomizedColorPalette()
     set bg=dark
     " Color setup (hi command must be added after colorscheme)
     " Comment out Normal for non-transparent background
-    highlight Normal        cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
+    "highlight Normal        cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
     highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
     highlight CursorLineNr  cterm=bold                ctermbg=NONE gui=bold                 guibg=NONE
     highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
