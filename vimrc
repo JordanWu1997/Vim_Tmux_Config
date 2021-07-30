@@ -155,6 +155,13 @@ let mapleader = ' '
 " -- Use Ctrl+v to escape for 'ii' word (e.g. ascii)
 imap ii <Esc>
 imap kj <Esc>
+" Add break point for text-writing undo
+" e.g. w/o bp: test,test,test --undo->
+" e.g. w/i bp: test,test,test --undo-> test,test,
+inoremap , ,<C-g>u
+inoremap . .<C-g>u
+inoremap ? ?<C-g>u
+inoremap ! !<C-g>u
 
 " Map normal/visual mode key -------------------------------------------------
 " Note:
@@ -171,6 +178,14 @@ map q: <Nop>
 " Umap command history to prevent typo
 " Use :<C-f> to open command history instead
 nnoremap Q <nop>
+" Make Y yank to the end of line instead of whole line just like D do
+nnoremap Y y$
+" Move selection block up/down in visual mode
+vnoremap K :m '<-2<CR>gv=gv
+vnoremap J :m '>+1<CR>gv=gv
+"" Ctrl+c Copy, Ctrl+p Paste in vim; Use Ctrl+q for block selection
+"vnoremap <C-c> y
+"nnoremap <C-v> p
 
 " Save/Load file hotkey ------------------------------------------------------
 " Note:
@@ -200,8 +215,8 @@ noremap <leader>wq :wq<CR>
 filetype off
 
 " Vim window/pane/fold configuration -----------------------------------------
-noremap <silent><F10> :mkview<CR>:echo 'Current Layout Setting Saved ...'<CR>
-noremap <silent><leader><F10> :loadview<CR>:echo 'Layout Setting Loaded ...'<CR>
+noremap <silent><F10> :mkview<CR>
+noremap <silent><leader><F10> :loadview<CR>
 
 " Vim split window (pane) control --------------------------------------------
 " Split pane navigation [Now integrate with tmux, check vim-tmux-navigator]
@@ -216,8 +231,8 @@ set splitright
 " -- <C-w>T: Move current pane to new tabe
 " -- <C-w>n: Add new empty pane
 " -- <C-w>c: Close current pane
-nnoremap <silent><C-w>- :split<CR>:echo 'Split Current File'<CR>
-nnoremap <silent><C-w>\ :vsplit<CR>: echo 'Vsplit Current File'<CR>
+nnoremap <silent><C-w>- :split<CR>
+nnoremap <silent><C-w>\ :vsplit<CR>
 nnoremap <C-w>_ :split<space>
 nnoremap <C-w>\| :vsplit<space>
 " Split pane size
@@ -239,7 +254,7 @@ set clipboard=unnamedplus " Shared system clipboard, gvim must be installed for 
 
 " Line wrap ------------------------------------------------------------------
 set nowrap                " Line wrap for small monitor or display window
-noremap <leader>wp :set wrap!<CR>:echo 'Toggle Line Wrap'<CR>
+noremap <leader>wp :set wrap!<CR>
 
 " Wild menu settings ---------------------------------------------------------
 set wildmenu              " Show memu options
@@ -250,8 +265,10 @@ set ruler                 " Show cursor position in statusline
 set cursorline            " Show vertical line
 set nocursorcolumn        " Show horizontal line (laggy sometimes)
 " Toggle cursor line/column indicator (horizontal/vertical)
-noremap <leader>ch :set cursorline!<CR>:echo 'Toggle Cursor Line [Horizontal]'<CR>
-noremap <leader>cv :set cursorcolumn!<CR>:echo 'Toggle Cursor Column [Vertical]'<CR>
+noremap <leader>ch :set cursorline!<CR>
+            \:echo 'Toggle Cursor Line [Horizontal]'<CR>
+noremap <leader>cv :set cursorcolumn!<CR>
+            \:echo 'Toggle Cursor Column [Vertical]'<CR>
 " Synchronize cursor between files
 " Must be executed in all files that you want to synchronize cursors
 noremap <F9> :set cursorbind<CR>:echo 'Synchronized Cursor On'<CR>
@@ -265,13 +282,13 @@ set title                 " Let vim change terminal title
 " Search settings ------------------------------------------------------------
 set incsearch
 set hlsearch
-noremap <leader>/ :set nohlsearch!<CR>:echo 'Toggle Search Highlight'<CR>
+noremap <leader>/ :set nohlsearch!<CR>
 
 " Line number settings -------------------------------------------------------
 set number
 set norelativenumber
-noremap <leader><F5> :set number!<CR>:echo 'Toggle ABS Line Number'<CR>
-noremap <F5> :set relativenumber!<CR>:echo 'Toggle REL Line Number'<CR>
+noremap <leader><F5> :set number!<CR>
+noremap <F5> :set relativenumber!<CR>
 
 " Fold settings --------------------------------------------------------------
 " Note:
@@ -287,8 +304,8 @@ set foldcolumn=4
 set foldlevel=0
 autocmd FileType vim setlocal foldmethod=indent
 autocmd FileType python setlocal foldmethod=indent
-noremap <F6> :set foldcolumn=4<CR>:echo 'Foldcolumn ON'<CR>
-noremap <leader><F6> :set foldcolumn=0<CR>:echo 'Foldcolumn OFF'<CR>
+noremap <F6> :set foldcolumn=4<CR>
+noremap <leader><F6> :set foldcolumn=0<CR>
 
 " Tabe (window) settings -----------------------------------------------------
 " Tabe (window) operations
@@ -297,8 +314,8 @@ noremap <leader>tt :tabnew<space>
 noremap <leader>td :tabclose<space>
 noremap <leader>tdd :tabclose<CR>
 " Tabe (window) navigation
-noremap <silent><F2> <Esc>:tabnext<CR>:echo 'NEXT TAB ...'<CR>
-noremap <silent><leader><F2> <Esc>:tabprevious<CR>:echo 'PREV TAB ...'<CR>
+noremap <silent><F2> <Esc>:tabnext<CR>
+noremap <silent><leader><F2> <Esc>:tabprevious<CR>
 " Tabe (Window) swap
 noremap <silent><S-F2> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
 noremap <silent><leader><S-F2> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
@@ -336,8 +353,8 @@ noremap <leader>dd :bdelete<CR>:echo 'DELETE CURRENT BUFFER
 noremap <leader>bdd :bdelete<CR>'DELETE CURRENT BUFFER
             \ [PRESS CTRL+O TO RECOVER]'<CR>
 " Navigate through buffers
-noremap <silent><leader><F1> <Esc>:bp<CR>:echo 'PREV BUFFER ...'<CR>
-noremap <silent><F1> <Esc>:bn<CR>:echo 'NEXT BUFFER ...'<CR>
+noremap <silent><leader><F1> <Esc>:bprev<CR>
+noremap <silent><F1> <Esc>:bnext<CR>
 
 " Marks settings -------------------------------------------------------------
 " Note:
@@ -1072,8 +1089,8 @@ if using_extra_plug
     let g:yankring_replace_n_pkey = '<C-p>'
     let g:yankring_replace_n_nkey = '<C-n>'
     " Yankring history
-    noremap <leader>ys :YRShow<CR>:echo 'Show Yank History'<CR>
-    noremap <leader>yc :YRClear<CR>:echo 'Clear Yank History'<CR>
+    noremap <leader>ys :YRShow<CR>
+    noremap <leader>yc :YRClear<CR>
 endif
 
 " Peekaboo -------------------------------------------------------------------
@@ -1108,8 +1125,8 @@ if using_extra_plug
     if using_python_completion
         autocmd FileType python let g:acp_enableAtStartup = 0
     endif
-    noremap <leader>~ :AcpDisable<CR>:echo 'Disable Auto-Pop Suggestion'<CR>
-    noremap <leader>` :AcpEnable<CR>:echo 'Enable Auto-Pop Suggestion'<CR>
+    noremap <leader>~ :AcpDisable<CR>
+    noremap <leader>` :AcpEnable<CR>
 endif
 
 " Popup window selection -----------------------------------------------------
@@ -1153,7 +1170,7 @@ if using_coding_tool_plug
     let g:indentLine_showFirstIndentLevel = 1
     let g:indentLine_fileTypeExclude = ['text', 'markdown', 'latex']
     let g:indentLine_bufTypeExclude = ['help', 'terminal']
-    noremap <F11> :IndentLinesToggle<CR>:echo 'Toggle Indentline Guides'<CR>
+    noremap <F11> :IndentLinesToggle<CR>
 endif
 
 " Indent guides --------------------------------------------------------------
@@ -1166,7 +1183,7 @@ if using_coding_tool_plug
                 \ :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
     autocmd VimEnter,Colorscheme *
                 \ :hi IndentGuidesEven guibg='#24242d' ctermbg=194
-    noremap <leader><F11> :IndentGuidesToggle<CR>:echo 'Toggle Indent Guides'<CR>
+    noremap <leader><F11> :IndentGuidesToggle<CR>
 endif
 
 " Multiple-cursors -----------------------------------------------------------
@@ -1234,16 +1251,12 @@ if using_coding_tool_plug
     highlight GitGutterChange cterm=bold ctermfg=3 ctermbg=NONE gui=bold guifg=#bbbb00 guibg=NONE
     highlight GitGutterDelete cterm=bold ctermfg=1 ctermbg=NONE gui=bold guifg=#ff2222 guibg=NONE
     " GitGutter toggle
-    noremap <leader>gg :GitGutterToggle<CR>:echo 'Toggle GitGutter'<CR>
+    noremap <leader>gg :GitGutterToggle<CR>
     noremap <leader>gb :GitGutterBufferToggle<CR>
-                \:echo 'Toggle GitGutter Buffer'<CR>
     " GitGutter highlight toggle
     noremap <leader>ghs :GitGutterSignsToggle<CR>
-                \:echo 'Toggle GitGutter Sign Highlight'<CR>
     noremap <leader>ghl :GitGutterLineHighlightsToggle<CR>
-                \:echo 'Toggle GitGutter Line Highlight'<CR>
     noremap <leader>ghn :GitGutterLineNrHighlightsToggle<CR>
-                \:echo 'Toggle GitGutter Line Number Highlight'<CR>
     " GitGutter hunk move/action/git
     nmap <leader>gn <Plug>(GitGutterNextHunk)
     nmap <leader>gN <Plug>(GitGutterPrevHunk)
