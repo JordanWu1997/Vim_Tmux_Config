@@ -196,8 +196,6 @@ noremap <leader>q :q<CR>
 noremap <leader>Q :qall<CR>
 noremap <leader>ww :w<CR>
 noremap <leader>wq :wq<CR>
-" Overwrite (Not working for now, use plug-in suda.vim instead)
-"command! Sudow execute 'w !sudo -S tee % > /dev/null'
 
 " External command -----------------------------------------------------------
 " Note:
@@ -206,6 +204,9 @@ noremap <leader>wq :wq<CR>
 " -- :r !seq [START] [INCREMENT] LAST (Insert number sequence)
 " -- :!dir (Show current directory file)
 " -- :!del FILENAME (Delete FILENAME)
+
+" Add number sequence
+nnoremap <leader>sq :r !seq<space>
 
 " Vim built-in setting -------------------------------------------------------
 " Following settings are automatically executed by VIM-plug
