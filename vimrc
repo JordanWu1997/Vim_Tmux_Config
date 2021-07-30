@@ -453,7 +453,7 @@ if using_vim8
     " Map key for resize pane
     nnoremap <leader>0 :resize 10 <CR>
     " Map key to go back from terminal mode to normal mode
-    " Do not use Esc (which conflicts with fzf window)
+    " Do not use Esc (which conflicts with fzf window) but <C-\><C-n>
     tnoremap <leader><F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
     tnoremap ii <C-\><C-n>:echo 'Back to Normal Mode'<CR>
     tnoremap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
@@ -956,6 +956,11 @@ noremap <silent><leader><F3> :NERDTreeToggle<CR>
 let g:tagbar_autofocus = 1
 let g:tagbar_map_showproto = 'd'
 let g:tagbar_width = min([38, winwidth(0) / 5])
+" Map tagbar shortcut same as vim fold
+let g:tagbar_map_closeallfolds = 'zM'
+let g:tagbar_map_openallfolds = 'zR'
+let g:tagbar_map_closefold = 'zc'
+let g:tagbar_map_openfold = 'zo'
 " Toggle tagbar display
 noremap <silent><leader><F4> :TagbarToggle<CR>
 
@@ -1307,14 +1312,16 @@ if using_python_completion
     let g:jedi#completions_enabled = 0
     " Use split instead of buffer
     let g:jedi#use_splits_not_buffers = "bottom"
-    " Find ocurrences
-    let g:jedi#usages_command = '<leader>pn'
-    " Find assignments
-    let g:jedi#goto_assignments_command = '<leader>pa'
-    " Go to definition (in split pane)
+    " Goto variable definition
     let g:jedi#goto_command = '<leader>pd'
-    " Go to definition (in new tab)
-    noremap <leader>pD :call jedi#goto()<CR>
+    " Find all usages of variable name
+    let g:jedi#usages_command = '<leader>pn'
+    " Rename variable name
+    let g:jedi#rename_command = '<leader>pr'
+    " Goto stubs
+    let g:jedi#goto_stubs_command = '<leader>ps'
+    " Find variable assignments (Goto function)
+    let g:jedi#goto_assignments_command = '<leader>pa'
     " Open python module [show __init__.py]
     noremap <leader>pm :execute ":Pyimport " . expand('<cword>')<CR>
     noremap <leader>pM :Pyimport<space>
@@ -1330,7 +1337,7 @@ endif
 " -- Installaion in termianl: run 'pip install ipdb'
 if using_python_completion
     autocmd FileType python
-                \ noremap <silent><leader>\b Oimport ipdb;
+                \ noremap <silent><leader>pb Oimport ipdb;
                 \ ipdb.set_trace()<Esc>
 endif
 
@@ -1440,7 +1447,8 @@ nnoremap <leader>csw :colorscheme wal<CR>:set notermguicolors<CR>
             \:highlight CursorLineNr cterm=bold ctermfg=10 ctermbg=NONE<CR>
             \:LightlineWalNoFancySymbolsReload<CR>:echo "wal colorscheme"<CR>
 nnoremap <leader>cst :highlight Normal cterm=NONE ctermfg=NONE ctermbg=NONE
-            \ gui=NONE guifg=NONE guibg=NONE<CR>:echo "transparent BG"<CR>
+            \ gui=NONE guifg=NONE guibg=NONE<CR><CR>
+            \:echo "transparent background"<CR>
 
 " Function - Line length warnings [Must be added after color setup] ----------
 " Here adopt default vim-textwidth 78 as maximum line length
