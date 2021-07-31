@@ -112,7 +112,8 @@ let using_customized_theme = 1
 " Fancy symbols (Mainly affect nerdtree and lightline)
 let using_fancy_symbols = 1
 " Wal theme support (Xresources colortheme support, check pywal)
-let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
+let using_wal_theme = 0
+"let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
 " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
 let using_extra_plug = 1
 " Coding tools vim-plug (Include syntax support, git function, and etc.)
@@ -192,21 +193,26 @@ vnoremap J :m '>+1<CR>gv=gv
 " -- ZZ (Quit and save if there's change in file without comfirmation)
 " -- :f <new-filename> (Save current file with new filename)
 
-noremap <leader>q :q<CR>
 noremap <leader>Q :qall<CR>
+noremap <leader>q :q<CR>
 noremap <leader>ww :w<CR>
 noremap <leader>wq :wq<CR>
 
 " External command -----------------------------------------------------------
 " Note:
-" -- K (Vim helppage for current selected word)
 " -- :r !date (Insert timestamp)
 " -- :r !seq [START] [INCREMENT] LAST (Insert number sequence)
 " -- :!dir (Show current directory file)
 " -- :!del FILENAME (Delete FILENAME)
+" -- :!column --table (Columnate selected context in visual mode)
+" -- :!sort (Sort selected context in visual mode alphabetically)
 
 " Add number sequence
-nnoremap <leader>sq :r !seq<space>
+nnoremap <leader>esq :r !seq<space>
+" Add timestamp
+nnoremap <leader>ets :r !date<CR>
+" Sort selected context alphabetically
+vnoremap <leader>est :!sort<CR>
 
 " Vim built-in setting -------------------------------------------------------
 " Following settings are automatically executed by VIM-plug
@@ -746,10 +752,11 @@ autocmd FileType python setlocal et ts=4 sw=4 sts=4
 autocmd FileType make setlocal noet
 
 " Tab key action in all modes ------------------------------------------------
-nnoremap <Tab> >>
-nnoremap <S-Tab> <<
-vnoremap <Tab> >gv
-vnoremap <S-Tab> <gv
+" Conflict with Ctrl+i vim built-in jump function
+"nnoremap <Tab><Tab> >>
+"nnoremap <S-Tab> <<
+"vnoremap <Tab><Tab> >gv
+"vnoremap <S-Tab> <gv
 
 " ============================================================================
 " Part 2 - Vim-theme settings (Plugins settings and mappings)
@@ -992,6 +999,9 @@ noremap <silent><leader><F4> :TagbarToggle<CR>
 let g:LargeFile = 1
 
 " Vim-man --------------------------------------------------------------------
+" Note:
+" -- K (Vim helppage for current selected word)
+
 " Open offline manual in system
 noremap <leader>m :execute ":Man " . expand('<cword>')<CR>
 noremap <leader>M :Man<space>
@@ -1281,7 +1291,7 @@ endif
 
 " Minimap --------------------------------------------------------------------
 if has('nvim-0.5') && using_coding_tool_plug
-    let g:minimap_width = 5
+    let g:minimap_width = 10
     let g:minimap_auto_start = 0
     let g:minimap_auto_start_win_enter = 0
     let g:minimap_git_colors = 0
@@ -1404,17 +1414,17 @@ function! CustomizedColorPalette()
     set bg=dark
     " Color setup (hi command must be added after colorscheme)
     " Uncomment Normal for transparent background
-    "highlight Normal        cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
-    highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
-    highlight CursorLineNr  cterm=bold                ctermbg=NONE gui=bold                 guibg=NONE
-    highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
+    highlight Comment       cterm=italic ctermfg=8    ctermbg=NONE gui=italic guifg=#8a8a8a guibg=NONE
     highlight CursorColumn  cterm=NONE   ctermfg=NONE ctermbg=233  gui=NONE   guifg=NONE    guibg=#444444
     highlight CursorLine    cterm=NONE   ctermfg=NONE ctermbg=233  gui=NONE   guifg=NONE    guibg=#444444
-    highlight Comment       cterm=italic ctermfg=8    ctermbg=NONE gui=italic guifg=#8a8a8a guibg=NONE
-    highlight OverLength    cterm=bold   ctermfg=15   ctermbg=9    gui=bold   guifg=#ffffff guibg=#ff0000
-    highlight UnlimitLength cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
+    highlight CursorLineNr  cterm=bold                ctermbg=NONE gui=bold                 guibg=NONE
     highlight FoldColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
+    highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
+    "highlight Normal        cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
+    highlight OverLength    cterm=bold   ctermfg=15   ctermbg=9    gui=bold   guifg=#ffffff guibg=#ff0000
+    "highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
     highlight SignColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
+    highlight UnlimitLength cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
 endfunction
 
 " Vim colorscheme ------------------------------------------------------------
