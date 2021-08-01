@@ -287,10 +287,10 @@ nvim --startuptime test.txt
 | N/V      | ([LK])+[F6]                 | (OFF)/ON foldcolumn           | Off/On foldcolumn                     | For easier code fold visualization |
 | N/V      | ([LK])+[F7]                 | (OFF)/ON show line border     | Off/On hightlight 79th character      | VIM recommends at most 78 characters for one line |
 | N/V      | ([LK])+[F8]                 | (OFF)/ON highlight comment    | Off/On hightlight code comment        | Assign brighter color to comment to hightlight it |
-| N/V      | ([LK])+[F9]                 | (OFF)/ON synchronized cursor  | Off/On synchronized cursor            | Need to execute in every pane that wants to synchronize |
+| N/V      | [F9]                        | Toggle indent highlight (line)  | On/Off indent highlight (line)      |
+| N/V      | [LK]+[F9]                   | Toggle indent highlight (block) | On/Off indent highlight (block)     |
 | N/V      | ([LK])+[F10]                | (Load)/Save vim layout        | Load/Save vim layout                  | Including pane split, folds, and etc. |
-| N/V      | [F11]                       | Toggle indent highlight (line)  | On/Off indent highlight (line)      |
-| N/V      | [LK]+[F11]                  | Toggle indent highlight (block) | On/Off indent highlight (block)     |
+| N/V      | ([LK])+[F11]                | (OFF)/ON synchronized cursor  | Off/On synchronized cursor            | Need to execute in every pane that wants to synchronize |
 | N/V      | ([LK])+[F12]                | (Exit)/Enter terminal mode    | Exit/Enter terminal mode              |
 
 ### Keymapping Sheet 2 - Built-in Function Keymapping
@@ -302,7 +302,7 @@ nvim --startuptime test.txt
 | N/V      | [Ctrl]+[w]+[Shift]+[-/\\]   | Add current split Horiz/Verti | Add current split Horizontal/Vertial  | Duplicate original split, just add [Shift] to [-]/[\]| |
 | N/V      | [Ctrl]+[h/j/k/l]            | Move between vim splits       | Move between splits (L/D/U/R)         | With plugin, you can even move between TMUX pane and VIM splits |
 | N/V      | [Ctrl]+[w]+[h/j/k/l]        | Move between vim splits       | Move between splits (L/D/U/R)         |
-| N/V      | [Ctrl]+[w]+[Shift]+[h/j/k/l] | Move current split (L/D/U/R)  | Move current split (L/D/U/R)          |
+| N/V      | [Ctrl]+[w]+[Shift]+[h/j/k/l] | Move current split (L/D/U/R) | Move current split (L/D/U/R)          |
 | N/V      | [-/=]                       | Inc/Dec split height          | +5/-5 rows split height               |
 | N/V      | [Shift]+[-/=]               | Inc/Dec split width           | +5/-5 columns split width             | Just add [Shift] to [-]/[=] |
 | N/V      | [Ctrl]+[w]+[=]              | Resplit splits equally        | Resplit splits equally                | Here =(equal sign) for equally split
@@ -314,6 +314,7 @@ nvim --startuptime test.txt
 | N/V      | [z]+[k/j]                   | Goto Prev/Next folding        | Goto Prev/Next folding                | Vim built-in |
 | N/V      | [z]+[o/c]                   | Open/Close current folding    | Open/Close current folding            | Vim built-in |
 | N/V      | [z]+[Shift]+[r/m]           | Show/Close all foldings       | Show/Close all foldings               | Vim built-in |
+| V        | [Shift]+[k/j]               | Move selection block up/down  | Move selection block up/down          |
 
 #### 3. Miscellaneous Function Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |

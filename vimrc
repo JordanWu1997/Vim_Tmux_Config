@@ -184,14 +184,12 @@ nnoremap Y y$
 " Move selection block up/down in visual mode
 vnoremap K :m '<-2<CR>gv=gv
 vnoremap J :m '>+1<CR>gv=gv
-"" Ctrl+c Copy, Ctrl+p Paste in vim; Use Ctrl+q for block selection
-"vnoremap <C-c> y
-"nnoremap <C-v> p
 
 " Save/Load file hotkey ------------------------------------------------------
 " Note:
 " -- ZZ (Quit and save if there's change in file without comfirmation)
 " -- :f <new-filename> (Save current file with new filename)
+" -- :earlier Nf (Undo to last N file save/write)
 
 noremap <leader>Q :qall<CR>
 noremap <leader>q :q<CR>
@@ -257,7 +255,7 @@ set ignorecase            " Close case sensitive
 "set smartcase            " Case sensitive if search contains uppercase letter
 set modifiable            " Make editing buffer modifable
 set encoding=utf-8        " Unicode display
-set clipboard=unnamedplus " Shared system clipboard, gvim must be installed for vim
+set clipboard=unnamedplus " Shared system clipboard
 
 " Line wrap ------------------------------------------------------------------
 set nowrap                " Line wrap for small monitor or display window
@@ -278,8 +276,8 @@ noremap <leader>cv :set cursorcolumn!<CR>
             \:echo 'Toggle Cursor Column [Vertical]'<CR>
 " Synchronize cursor between files
 " Must be executed in all files that you want to synchronize cursors
-noremap <F9> :set cursorbind<CR>:echo 'Synchronized Cursor On'<CR>
-noremap <leader><F9> :set nocursorbind<CR>:echo 'Synchronized Cursor Off'<CR>
+noremap <F11> :set cursorbind<CR>:echo 'Synchronized Cursor On'<CR>
+noremap <leader><F11> :set nocursorbind<CR>:echo 'Synchronized Cursor Off'<CR>
 
 " Display settings -----------------------------------------------------------
 set scrolloff=3           " Keep cursor 3 lines away from bottom
@@ -324,8 +322,10 @@ noremap <leader>tdd :tabclose<CR>
 noremap <silent><F2> <Esc>:tabnext<CR>
 noremap <silent><leader><F2> <Esc>:tabprevious<CR>
 " Tabe (Window) swap
-noremap <silent><S-F2> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
-noremap <silent><leader><S-F2> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
+noremap <silent><S-F2>
+            \ :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
+noremap <silent><leader><S-F2>
+            \ :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 
 " Buffer settings ------------------------------------------------------------
 " -- Reference: https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
@@ -395,10 +395,14 @@ noremap <leader>ab :abbreviate<CR>
 
 " Better backup, swap and undos storage --------------------------------------
 if using_neovim
-    set directory=~/.config/nvim/dirs/tmp     " Directory to place swap files in
-    set backup                                " Make backup files
-    set backupdir=~/.config/nvim/dirs/backups " Where to put backup files
-    set undofile                              " Persistent undos - undo after re-opening
+    " Directory to place swap files
+    set directory=~/.config/nvim/dirs/tmp
+    " Make backup files
+    set backup
+    " Where to put backup files
+    set backupdir=~/.config/nvim/dirs/backups
+    " Persistent undos - undo after re-opening
+    set undofile
     set undodir=~/.config/nvim/dirs/undos
     set viminfo+=n~/.config/nvim/dirs/viminfo
     " Create needed directories if they don't exist
@@ -412,10 +416,14 @@ if using_neovim
         call mkdir(&undodir, 'p')
     endif
 else
-    set directory=~/.vim/dirs/tmp     " Directory to place swap files in
-    set backup                        " Make backup files
-    set backupdir=~/.vim/dirs/backups " Where to put backup files
-    set undofile                      " Persistent undos - undo after re-opening
+    " Directory to place swap files in
+    set directory=~/.vim/dirs/tmp
+    " Make backup files
+    set backup
+    " Where to put backup files
+    set backupdir=~/.vim/dirs/backups
+    " Persistent undos - undo after re-opening
+    set undofile
     set undodir=~/.vim/dirs/undos
     set viminfo+=n~/.vim/dirs/viminfo
     " Create needed directories if they don't exist
@@ -454,8 +462,10 @@ noremap <leader>rm :call RemoveTrailingWhitespace()<CR>
 
 " Function - Hex editor ------------------------------------------------------
 " From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
-noremap <leader>eho :%! xxd<CR>:echo 'Hex editor on: TF to binary data'<CR>
-noremap <leader>ehf :%! xxd -r<CR>:echo 'Hex editor off: TF to original data'<CR>
+noremap <leader>eho :%! xxd<CR>
+            \:echo 'Hex editor on: TF to binary data'<CR>
+noremap <leader>ehf :%! xxd -r<CR>
+            \:echo 'Hex editor off: TF to original data'<CR>
 
 " ============================================================================
 " Customized terminal mode (Only support for vim >= 8.0)
@@ -551,7 +561,8 @@ if using_customized_theme
     " Wal (Autocolorcheme based on wallpaper) [Only work with Cterm color]
     Plug 'dylanaraps/wal.vim', { 'on': 'colorscheme wal' }
     " Color theme (Monokai - high contrast)
-    Plug 'patstockwell/vim-monokai-tasty', { 'on': 'colorscheme vim-monokai-tasty' }
+    Plug 'patstockwell/vim-monokai-tasty',
+                \{ 'on': 'colorscheme vim-monokai-tasty' }
     " Color theme (Gruvbox - low contrast)
     Plug 'morhetz/gruvbox', { 'on': 'colorscheme gruvbox' }
     " Color theme (Srcery - low contrast)
@@ -636,7 +647,7 @@ if using_coding_tool_plug
     if using_vim8
         " Languge packs [Not working on fomalhaut (vim=7.0)]
         Plug 'sheerun/vim-polyglot'
-        " Multiple language syntax and lint support [Not working on fomalhaut (vim=7.0)]
+        " Multiple language syntax and lint support [Not working on vim < 8.0]
         Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
         "" Syntax support (Improved syntastics, here just use ale instead)
         " Plug 'neomake/neomake'
@@ -648,33 +659,31 @@ if using_coding_tool_plug
     " Paint paired bracket/quotation in different color
     Plug 'luochen1990/rainbow', { 'on': 'RainbowToggle' }
     " Indentline (symbol)
-    Plug 'yggdroot/indentLine'
+    Plug 'yggdroot/indentLine', { 'on': 'IndentLinesToggle'}
     " Indent line guide (color column)
     Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
     " Indent text object (i for indent as w for word)
     Plug 'michaeljsmith/vim-indent-object'
-     "Multiple cursor with incsearch support
+    "Multiple cursor with incsearch support
     Plug 'terryma/vim-multiple-cursors'
     " Git integration (Git functions in vim command line)
     Plug 'tpope/vim-fugitive'
-    " Git diff/change line indicator (light and minimalist)
-    "Plug 'mhinz/vim-signify', { 'on': 'SignifyToggle' }
     " GitGutter (enhanced signify), also with git integration
     Plug 'airblade/vim-gitgutter'
     " File Minimap (Need neovim Ver. >= 0.5)
     if has('nvim-0.5')
-        Plug 'wfxr/minimap.vim', {'do': ':!cargo install --locked code-minimap'}
+        Plug 'wfxr/minimap.vim',
+                    \ {'do': ':!cargo install --locked code-minimap'}
     endif
 endif
 
 " [Tmux] ---------------------------------------------------------------------
-if using_neovim
-    " Share focus between vim and tmux [Needed for clilpboard sharing]
-    Plug 'tmux-plugins/vim-tmux-focus-events'
-    " Share clipboard between vim and tmux
-    Plug 'roxma/vim-tmux-clipboard'
-endif
-" Navigate seamlessly in vim and tmux
+" Clipboard sharing [No need if already using xclip for tmux clipboard]
+" Share focus between vim and tmux for clilpboard sharing
+"Plug 'tmux-plugins/vim-tmux-focus-events'
+" Share clipboard between vim and tmux
+"Plug 'roxma/vim-tmux-clipboard'
+" Navigate seamlessly in vim and tmux (Ctrl+h/j/k/l)
 Plug 'christoomey/vim-tmux-navigator'
 
 " [Python coding] ------------------------------------------------------------
@@ -683,11 +692,12 @@ Plug 'vim-python/python-syntax', { 'for': 'python' }
 if using_python_completion
     " Front end of completion (python and etc.)
     if using_neovim && vim_plug_just_installed
-        Plug 'Shougo/deoplete.nvim', { 'do': ':autocmd VimEnter * UpdateRemotePlugins' }
+        Plug 'Shougo/deoplete.nvim',
+                    \ { 'do': ':autocmd VimEnter * UpdateRemotePlugins' }
     else
         Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
     endif
-    " Yet Another Remote Plugin Framework for Neovim [needed for deoplete.nvim]
+    " Yet Another Remote Plugin Framework for Neovim [needed for deoplete]
     Plug 'roxma/nvim-yarp', { 'for': 'python' }
     " Help communicate beteen vim and neovim [needed for deoplete.nvim]
     Plug 'roxma/vim-hug-neovim-rpc', { 'for': 'python' }
@@ -907,7 +917,7 @@ set showcmd       " This line must be added AFTER statusline plugin
 " fzf.vim --------------------------------------------------------------------
 " Caution:
 " -- (1) ripgrep must be installed if Rg function is needed
-" -- (2) for fish shell, syntax is slightly different from bash script. Script
+" -- (2) For fish shell, syntax is slightly different from bash script. Script
 "        of fzf_preview modification is needed. Try change $(...) to (...),
 "        && to ;and, and || to ;or within below script. Check the following
 "        $HOME/.config/nvim/plugged/fzf-preview.vim/plugin/fzf-preview.vim
@@ -1038,6 +1048,7 @@ noremap <silent><leader>cy :call NERDComment('n', 'Yank')<CR>
 " Vim-maximizer --------------------------------------------------------------
 " Default mapping is <F3> (Disabled now)
 let g:maximizer_set_default_mapping = 0
+" Keymapping consistent with TMUX window maximization
 nnoremap <silent><leader>z :MaximizerToggle<CR>
 vnoremap <silent><leader>z :MaximizerToggle<CR>gv
 
@@ -1181,7 +1192,7 @@ if using_coding_tool_plug
     let g:indentLine_showFirstIndentLevel = 1
     let g:indentLine_fileTypeExclude = ['text', 'markdown', 'latex']
     let g:indentLine_bufTypeExclude = ['help', 'terminal']
-    noremap <F11> :IndentLinesToggle<CR>
+    noremap <F9> :IndentLinesToggle<CR>
 endif
 
 " Indent guides --------------------------------------------------------------
@@ -1194,7 +1205,7 @@ if using_coding_tool_plug
                 \ :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
     autocmd VimEnter,Colorscheme *
                 \ :hi IndentGuidesEven guibg='#24242d' ctermbg=194
-    noremap <leader><F11> :IndentGuidesToggle<CR>
+    noremap <leader><F9> :IndentGuidesToggle<CR>
 endif
 
 " Multiple-cursors -----------------------------------------------------------
@@ -1220,24 +1231,6 @@ if using_coding_tool_plug
     noremap <leader>gC :Git commit -m<space>
     noremap <leader>gB :Git blame<CR>
 endif
-
-" Signify --------------------------------------------------------------------
-"if using_coding_tool_plug
-    "" This first setting decides in which order try to guess your current vcs
-    "" UPDATE it to reflect your preferences, it will speed up opening files
-    "let g:signify_vcs_list = ['git', 'hg']
-    "" Mappings to jump to changed blocks
-    "nmap <leader>sy :SignifyToggle<CR>
-    "nmap <leader>sn <plug>(signify-next-hunk)
-    "nmap <leader>sp <plug>(signify-prev-hunk)
-    "" Nicer colors for Signify group
-    "highlight DiffAdd           cterm=bold  ctermfg=119 ctermbg=NONE gui=bold guifg=#87ff5f guibg=NONE
-    "highlight DiffDelete        cterm=bold  ctermfg=167 ctermbg=NONE gui=bold guifg=#d75f5f guibg=NONE
-    "highlight DiffChange        cterm=bold  ctermfg=227 ctermbg=NONE gui=bold guifg=#ffff5f guibg=NONE
-    "highlight SignifySignAdd    cterm=bold  ctermfg=119 ctermbg=237  gui=bold guifg=#87ff5f guibg=NONE
-    "highlight SignifySignDelete cterm=bold  ctermfg=167 ctermbg=237  gui=bold guifg=#d75f5f guibg=NONE
-    "highlight SignifySignChange cterm=bold  ctermfg=227 ctermbg=237  gui=bold guifg=#ffff5f guibg=NONE
-"endif
 
 " GitGutter ------------------------------------------------------------------
 if using_coding_tool_plug
@@ -1291,7 +1284,7 @@ endif
 
 " Minimap --------------------------------------------------------------------
 if has('nvim-0.5') && using_coding_tool_plug
-    let g:minimap_width = 10
+    let g:minimap_width = min([15, winwidth(0) / 8])
     let g:minimap_auto_start = 0
     let g:minimap_auto_start_win_enter = 0
     let g:minimap_git_colors = 0
@@ -1366,7 +1359,7 @@ if using_python_completion
 endif
 
 " ============================================================================
-" Part 8 - Other language coding tools settings (Plugins settings and mappings)
+" Part 8 - Other language coding tools settings (Plugin settings and mappings)
 " ============================================================================
 " Other language support settings, edit them as you wish.
 " Language support: Fortran, LaTex, Html, Markdown
@@ -1403,7 +1396,7 @@ if using_gui_software
 endif
 
 " ============================================================================
-" Part 9 - Colorscheme and other color settings (Plugins settings and mappings)
+" Part 9 - Colorscheme and other color settings (Plugin settings and mappings)
 " ============================================================================
 " Set colorscheme (syntax highlight), color assignment, and etc.
 
@@ -1441,9 +1434,6 @@ if using_customized_theme
         colorscheme wal
     else
         " Current available themes
-        "colorscheme default
-        "colorscheme gruvbox
-        "colorscheme srcery
         colorscheme vim-monokai-tasty
     endif
     " Call customized color palette
