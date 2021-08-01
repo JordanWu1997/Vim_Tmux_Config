@@ -112,8 +112,7 @@ let using_customized_theme = 1
 " Fancy symbols (Mainly affect nerdtree and lightline)
 let using_fancy_symbols = 1
 " Wal theme support (Xresources colortheme support, check pywal)
-let using_wal_theme = 0
-"let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
+let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
 " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
 let using_extra_plug = 1
 " Coding tools vim-plug (Include syntax support, git function, and etc.)
@@ -567,6 +566,8 @@ if using_customized_theme
     Plug 'morhetz/gruvbox', { 'on': 'colorscheme gruvbox' }
     " Color theme (Srcery - low contrast)
     Plug 'srcery-colors/srcery-vim', { 'on': 'colorscheme srcery' }
+    " Color theme (Nord - cold color lower contrast)
+    Plug 'arcticicestudio/nord-vim', { 'on': 'colorscheme nord' }
     " Lightline (status line)
     Plug 'itchyny/lightline.vim'
     " Lightline bufferline
@@ -1406,7 +1407,6 @@ function! CustomizedColorPalette()
     " Common background setting (dark background)
     set bg=dark
     " Color setup (hi command must be added after colorscheme)
-    " Uncomment Normal for transparent background
     highlight Comment       cterm=italic ctermfg=8    ctermbg=NONE gui=italic guifg=#8a8a8a guibg=NONE
     highlight CursorColumn  cterm=NONE   ctermfg=NONE ctermbg=233  gui=NONE   guifg=NONE    guibg=#444444
     highlight CursorLine    cterm=NONE   ctermfg=NONE ctermbg=233  gui=NONE   guifg=NONE    guibg=#444444
@@ -1415,7 +1415,7 @@ function! CustomizedColorPalette()
     highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
     "highlight Normal        cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
     highlight OverLength    cterm=bold   ctermfg=15   ctermbg=9    gui=bold   guifg=#ffffff guibg=#ff0000
-    "highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
+    highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
     highlight SignColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
     highlight UnlimitLength cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
 endfunction
@@ -1434,13 +1434,17 @@ if using_customized_theme
         colorscheme wal
     else
         " Current available themes
-        colorscheme vim-monokai-tasty
+        colorscheme srcery
     endif
     " Call customized color palette
     call CustomizedColorPalette()
+    " Comment Normal for non-transparent background
+    highlight Normal
+                \ cterm=NONE ctermfg=NONE ctermbg=NONE
+                \ gui=NONE guifg=NONE guibg=NONE
     " Cursor line number highlight for wal theme
     if using_wal_theme
-        highlight CursorLineNr cterm=bold ctermfg =10 ctermbg=NONE
+        highlight CursorLineNr cterm=bold ctermfg=10 ctermbg=NONE
     endif
 endif
 " Colorschmeme shortcut
@@ -1456,6 +1460,9 @@ nnoremap <leader>csv :colorscheme vim-monokai-tasty<CR>:set termguicolors<CR>
 nnoremap <leader>css :colorscheme srcery<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
             \:LightlineFancySymbolsReload<CR>:echo "srcery colorscheme"<CR>
+nnoremap <leader>csn :colorscheme nord<CR>:set termguicolors<CR>
+            \:call CustomizedColorPalette()<CR>
+            \:LightlineFancySymbolsReload<CR>:echo "nord colorscheme"<CR>
 nnoremap <leader>csw :colorscheme wal<CR>:set notermguicolors<CR>
             \:call CustomizedColorPalette()<CR>
             \:highlight CursorLineNr cterm=bold ctermfg=10 ctermbg=NONE<CR>
