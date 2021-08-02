@@ -143,6 +143,7 @@ endif
 " All parameter settings and hotkey mappings
 
 " Set leaderkey --------------------------------------------------------------
+" Default leadkey '\'
 let mapleader = ' '
 
 " Map insert mode key --------------------------------------------------------
@@ -163,15 +164,17 @@ inoremap . .<C-g>u
 inoremap ? ?<C-g>u
 inoremap ! !<C-g>u
 
-" Map normal/visual mode key -------------------------------------------------
+" Map normal/visual/opterator-pending mode key -------------------------------
 " Note:
 " -- zt/zz/zb/zh/zl: Scroll window top/center/bottom/left/right
-" -- Ctrl+(i/o): Go to Next/Prev cursor location, works even between files
+" -- Ctrl+(i/o): Jump to Next/Prev cursor location, works even between files
+" -- :jumps: show all jump history
+" -- g;/g,: Goto Older/Newer change
+" -- :changes: Show all change history
 " -- gj/gk/gl/gh: Move in visual lines instead of real lines in WRAP text
 " -- guu/gUU/g~~: Set lowercase/uppercase/toggle for whole line
 " -- :g/PATTERN/ACTION: In entire file, for matching PATTERN, do ACTION
 " -- gt/gT: Goto Next/Prev tab
-" -- g;/g,: Goto older/newer change
 
 " Umap ex mode to prevent typo
 map q: <Nop>
@@ -183,6 +186,13 @@ nnoremap Y y$
 " Move selection block up/down in visual mode
 vnoremap K :m '<-2<CR>gv=gv
 vnoremap J :m '>+1<CR>gv=gv
+" Show jump list and change list
+map <leader><C-o> :jumps<CR>
+map <leader>g; :changes<CR>
+map <leader>g, :changes<CR>
+" Make n/N always searches Forwards/Backwards
+nnoremap <expr> n  'Nn'[v:searchforward]
+nnoremap <expr> N  'nN'[v:searchforward]
 
 " Save/Load file hotkey ------------------------------------------------------
 " Note:
@@ -212,7 +222,7 @@ nnoremap <leader>ets :r !date<CR>
 vnoremap <leader>est :!sort<CR>
 
 " Vim built-in setting -------------------------------------------------------
-" Following settings are automatically executed by VIM-plug
+" Following settings are later automatically executed by VIM-plug
 " -- filetype plugin on
 " -- filetype indent on
 " -- syntax enable
@@ -246,7 +256,7 @@ nnoremap <silent>+ :vertical resize +1<CR>
 nnoremap <silent>_ :vertical resize -1<CR>
 
 " Vim settings ---------------------------------------------------------------
-set nocompatible          " Not compatible with traditional vi
+set nocompatible          " Not compatible with vi [No need for neovim]
 "set notimeout            " No timeout for entering command or keybinding
 set timeoutlen=2500       " Timeout for entering combined key (milisecond)
 set confirm               " Ask for confirmation before leaving vim
@@ -255,6 +265,9 @@ set ignorecase            " Close case sensitive
 set modifiable            " Make editing buffer modifable
 set encoding=utf-8        " Unicode display
 set clipboard=unnamedplus " Shared system clipboard
+set tildeop               " Make ~ operator like gu, gU, and etc."
+set ttyfast               " Faster redrawing. [Removed in neovim]
+set nolazyredraw          " Not only redraw when necessary.
 
 " Line wrap ------------------------------------------------------------------
 set nowrap                " Line wrap for small monitor or display window
@@ -613,6 +626,8 @@ Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle' }
 Plug 't9md/vim-choosewin'
 " Autopair for quotations and brackets
 Plug 'jiangmiao/auto-pairs'
+" Speed up Vim by updating folds only when called-for
+Plug 'Konfekt/FastFold'
 
 " [Vim extra functions] ------------------------------------------------------
 if using_extra_plug
@@ -670,7 +685,7 @@ if using_coding_tool_plug
     " Git integration (Git functions in vim command line)
     Plug 'tpope/vim-fugitive'
     " GitGutter (enhanced signify), also with git integration
-    Plug 'airblade/vim-gitgutter'
+    Plug 'airblade/vim-gitgutter', { 'on': 'GitGutterToggle' }
     " File Minimap (Need neovim Ver. >= 0.5)
     if has('nvim-0.5')
         Plug 'wfxr/minimap.vim',
@@ -735,7 +750,7 @@ Plug 'PotatoesMaster/i3-vim-syntax', { 'for': 'i3'}
 call plug#end()
 
 " Check vim startup time and loaded plugins
-" vim --startuptime timeCost.txt timeCost.txt
+" vim --startuptime /tmp/startup.log [file_to_test] +q && vim /tmp/startup.log
 
 " ============================================================================
 " Install plugins the first time vim runs
@@ -1057,6 +1072,7 @@ vnoremap <silent><leader>z :MaximizerToggle<CR>gv
 " Show big overlay letters
 let g:choosewin_overlay_enable = 1
 nmap <leader><Enter> <Plug>(choosewin)
+
 " Autopairs -----------------------------------------------------------------
 " Insert, visual, normal mode
 let g:AutoPairsShortcutToggle = '<M-a>'
@@ -1064,6 +1080,10 @@ let g:AutoPairsShortcutJump = '<M-j>'
 " Insert mode only
 " Wrap current word with pair e.g. ()test -> (test)
 let g:AutoPairsShortcutFastWrap = '<M-w>'
+
+" Fastfold -------------------------------------------------------------------
+" Manually update
+nmap zuz <Plug>(FastFoldUpdate)
 
 " ============================================================================
 " Part 5 - Vim extra functions settings (Plugins settings and mappings)
@@ -1209,6 +1229,14 @@ if using_coding_tool_plug
     noremap <leader><F9> :IndentGuidesToggle<CR>
 endif
 
+" Indent object --------------------------------------------------------------
+" Indent text object (i for indent as w for word)
+" Key bindings from https://github.com/michaeljsmith/vim-indent-object
+" -- <count>ai	An Indentation level and line above.
+" -- <count>ii	Inner Indentation level (no line above).
+" -- <count>aI	An Indentation level and lines above/below.
+" -- <count>iI	Inner Indentation level (no lines above/below).
+
 " Multiple-cursors -----------------------------------------------------------
 if using_coding_tool_plug
     let g:multi_cursor_use_default_mapping = 0
@@ -1238,7 +1266,7 @@ if using_coding_tool_plug
     "Disable all gitgutter key mappings
     let g:gitgutter_map_keys = 0
     " Enable gitgutter at start
-    let g:gitgutter_enabled = 1
+    let g:gitgutter_enabled = 0
     " Enable gitgutter sign highlight at start
     let g:gitgutter_signs = 1
     " Disable gitgutter line highlight at start

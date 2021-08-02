@@ -153,9 +153,9 @@ Table of Contents
 - For managing plugins enable/disable, see next section (Plugin usage configuration)
 ```bash
 # For vim/gvim
-vim --startuptime test.txt
+" vim --startuptime /tmp/startup.log [file_to_test] +q && vim /tmp/startup.log
 # For neovim
-nvim --startuptime test.txt
+" vim --startuptime /tmp/startup.log [file_to_test] +q && vim /tmp/startup.log
 ```
 
 #### 2. Plugin Usage Configuration (for more details, check sections in vimrc)
@@ -328,6 +328,8 @@ nvim --startuptime test.txt
 | N/V      | [LK]+[r]+[g]                | Show all vim regiesters       | Show all vim registers                | Here re for (re)gister
 | N/V      | [LK]+[a]+[b]                | Show all vim abbreviates      | Show all vim abbreviates              | Here ab for (ab)reviation
 | N/V      | [LK]+[c]+[h/v]              | Toggle Horiz/Verti cursor     | On/Off Horiz/Verti cursor             |
+| N/V      | [LK]+[Ctrl]+[o]             | Show all cursor jump          | Show all cursor jump                  | [Ctrl]+[o/i] jump backwards/forwards |
+| N/V      | [LK]+[g]+[;/,]              | Show all file change          | Show all file change                  |
 
 ### Keymapping Sheet 3 - Plug-in Function Keymapping
 
