@@ -403,6 +403,7 @@ command! WipeReg for i in range(34,122) |
 " Note:
 " -- :abbclear : Clear abbreviation
 
+" Show abbreviate in vim
 noremap <leader>ab :abbreviate<CR>
 
 " Better backup, swap and undos storage --------------------------------------

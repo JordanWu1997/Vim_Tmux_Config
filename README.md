@@ -394,7 +394,7 @@ Table of Contents
 | N/V      | [Alt]+[n] (+[n]+[n]+...+[n] | Multiple cursor for selected  | Multiple cursor for currently selected word | Press N to next word; Use I/A to insert word; Use Esc to exit |
 | N/V      | [Alt]+[p] (+[p]+[p]+...+[p] | Cancel selected multiple cursor | Cancel selected multiple cursor     |
 | N/V      | [Alt]+[o] (+[o]+[o]+...+[o] | Omit selected multiple cursor | Omit selected multiple cursor     |
-| N/V      | [LK]+[g]+[g]                | Toggle GitGutter              | On/Off GitGutter                      |
+| N/V      | [LK]+[g]+[g]                | Toggle GitGutter              | On/Off GitGutter                      | Disabled at startup |
 | N/V      | [LK]+[g]+[h]+[s/l/n]        | Toggle GitGutter highlight    | Toggle GitGutter highlight symbol/line/line number |
 | N/V      | [LK]+([Shift])+[Tab]        | Cycle (Prev)/Next git hunks   | Cycle (Prev)/Next git hunks           | Hunk means changed block |
 | N/V      | [LK]+[g]+[n]                | Next git hunk                 | Move to next git hunk                 |
