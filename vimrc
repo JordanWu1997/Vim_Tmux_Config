@@ -109,10 +109,10 @@ let using_vim = !using_neovim
 let using_vim8 = 1
 " Customize vim theme (Include colortheme and statusline)
 let using_customized_theme = 1
-" Fancy symbols (Mainly affect nerdtree and lightline)
+" Fancy symbols (Mainly affect lightline)
 let using_fancy_symbols = 1
 " Wal theme support (Xresources colortheme support, check pywal)
-let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
+let using_wal_theme = 0 "isdirectory('/home/jordankhwu/.cache/wal')
 " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
 let using_extra_plug = 1
 " Coding tools vim-plug (Include syntax support, git function, and etc.)
@@ -190,9 +190,6 @@ vnoremap J :m '>+1<CR>gv=gv
 map <leader><C-o> :jumps<CR>
 map <leader>g; :changes<CR>
 map <leader>g, :changes<CR>
-" Make n/N always searches Forwards/Backwards
-nnoremap <expr> n  'Nn'[v:searchforward]
-nnoremap <expr> N  'nN'[v:searchforward]
 
 " Save/Load file hotkey ------------------------------------------------------
 " Note:
@@ -229,8 +226,8 @@ vnoremap <leader>est :!sort<CR>
 filetype off
 
 " Vim window/pane/fold configuration -----------------------------------------
-noremap <silent><F10> :mkview<CR>
-noremap <silent><leader><F10> :loadview<CR>
+noremap <F10> :mkview<CR>
+noremap <leader><F10> :loadview<CR>
 
 " Vim split window (pane) control --------------------------------------------
 " Split pane navigation [Now integrate with tmux, check vim-tmux-navigator]
@@ -315,14 +312,25 @@ noremap <F5> :set relativenumber!<CR>
 " -- zM/zR/zi: Maximize/Remove/Invert all folds
 " -- zj/zk: Jump to next/prev fold
 
-set nofoldenable
 set foldmethod=syntax
 set foldcolumn=4
 set foldlevel=0
 autocmd FileType vim setlocal foldmethod=indent
 autocmd FileType python setlocal foldmethod=indent
-noremap <F6> :set foldcolumn=4<CR>
-noremap <leader><F6> :set foldcolumn=0<CR>
+" Default value (disabled at startup)
+set nofoldenable
+" Toggle foldcolumn
+function! FoldColumnToggle()
+    if &foldcolumn
+        setlocal foldcolumn=0
+        echo 'foldcolumn=0'
+    else
+        setlocal foldcolumn=4
+        echo 'foldcolumn=4'
+    endif
+endfunction
+" Toggle foldcolumn
+nnoremap <silent><F6> :call FoldColumnToggle()<CR>
 
 " Tabe (window) settings -----------------------------------------------------
 " Tabe (window) operations
@@ -479,6 +487,43 @@ noremap <leader>eho :%! xxd<CR>
             \:echo 'Hex editor on: TF to binary data'<CR>
 noremap <leader>ehf :%! xxd -r<CR>
             \:echo 'Hex editor off: TF to original data'<CR>
+
+" Function - Line length warnings --------------------------------------------
+" Here adopt default vim-textwidth 78 as maximum line length
+" Default value (disabled at startup)
+let g:overlength_warning_is_open = 0
+" Toggle overlength function
+function! OverlengthToggle()
+    if g:overlength_warning_is_open
+        match UnlimitLength /\%79v.\+/
+        echo '78 char-bound OFF'
+        let g:overlength_warning_is_open = 0
+    else
+        match OverLength /\%79v.\+/
+        echo '78 char-bound ON'
+        let g:overlength_warning_is_open = 1
+    endif
+endfunction
+" Toggle overlength
+nnoremap <silent><F7> :call OverlengthToggle()<CR>
+
+" Function - Comment highlight -----------------------------------------------
+" Default value (disabled at startup)
+let g:comment_highlight_is_open = 0
+" Toggle comment highlight function
+function! CommentHighlightToggle()
+    if g:comment_highlight_is_open
+        hi Comment cterm=italic ctermfg=8 guifg=#8a8a8a
+        echo 'Hi-Comment OFF'
+        let g:comment_highlight_is_open = 0
+    else
+        hi Comment cterm=italic ctermfg=14 guifg=#00ffff
+        echo 'Hi-Comment ON'
+        let g:comment_highlight_is_open = 1
+    endif
+endfunction
+" Toggle comment highlight
+nnoremap <F8> :call CommentHighlightToggle()<CR>
 
 " ============================================================================
 " Customized terminal mode (Only support for vim >= 8.0)
@@ -654,9 +699,8 @@ if using_extra_plug
     Plug 'vim-scripts/AutoComplPop'
     " Pending tasks list
     Plug 'fisadev/FixedTaskList.vim', { 'on': 'TaskList' }
-    " Paint css colors with the real color
-    " [Integrated in 'gko/vim-coloresque' which is laggy with cursorcolumn]
-    Plug 'lilydjwg/colorizer'
+    " Paint hex colors in color code background color
+    Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 endif
 
 " [Functions for coding] -----------------------------------------------------
@@ -792,59 +836,44 @@ autocmd FileType make setlocal noet
 " As for colorscheme, it at the end of this plug settings section
 
 " Lightline statusline/tabline options ---------------------------------------
-" Lighlight wal color with no fancy symbols
-" -- wal color does not work well with fancy symbols
-function! LightlineWalNoFancySymbols()
-    let g:lightline = {
-        \ 'colorscheme': 'wal',
-        \ 'active': {
-        \   'left': [ [ 'mode', 'paste' ],
-        \             [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
-        \ },
-        \ 'component_function': {
-        \   'gitbranch': 'FugitiveHead'
-        \ },
-        \ }
-endfunction
-
-" Lightline with fancy symbols
-function! LightlineFancySymbols()
-    let g:lightline = {
-        \ 'colorscheme': 'deus',
-        \ 'active': {
-        \   'left': [ [ 'mode', 'paste' ],
-        \             [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
-        \ },
-        \ 'inactive': {
-        \   'left': [ [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
-        \ },
-        \ 'component_function': {
-        \   'gitbranch': 'fugitivehead',
-        \ },
-        \ 'separator': {
-        \   'left': "", "right": ""
-        \ },
-        \ 'subseparator': {
-        \   'left': '/', 'right': '/'
-        \ },
-        \ }
-endfunction
-
-" Lightline with no fancy symbols
-function! LightlineNoFancySymbols()
-    let g:lightline = {
-        \ 'colorscheme': 'deus',
-        \ 'active': {
-        \   'left': [ [ 'mode', 'paste' ],
-        \             [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
-        \ },
-        \ 'inactive': {
-        \   'left': [ [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
-        \ },
-        \ 'component_function': {
-        \   'gitbranch': 'FugitiveHead'
-        \ },
-        \ }
+function! LightlineStyles(theme, fancy)
+    " Lightline with fancy symbols
+    if a:fancy
+        let g:lightline = {
+            \ 'colorscheme': a:theme,
+            \ 'active': {
+            \   'left': [ [ 'mode', 'paste' ],
+            \             [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
+            \ },
+            \ 'inactive': {
+            \   'left': [ [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
+            \ },
+            \ 'component_function': {
+            \   'gitbranch': 'fugitivehead',
+            \ },
+            \ 'separator': {
+            \   'left': "", "right": ""
+            \ },
+            \ 'subseparator': {
+            \   'left': '/', 'right': '/'
+            \ },
+            \ }
+    else
+        " Lightline with no fancy symbols
+        let g:lightline = {
+            \ 'colorscheme': a:theme,
+            \ 'active': {
+            \   'left': [ [ 'mode', 'paste' ],
+            \             [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
+            \ },
+            \ 'inactive': {
+            \   'left': [ [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
+            \ },
+            \ 'component_function': {
+            \   'gitbranch': 'FugitiveHead'
+            \ },
+            \ }
+    endif
 endfunction
 
 " Lightline common setup
@@ -878,17 +907,6 @@ endfunction
 
 " Conditional lightline status/tab line --------------------------------------
 if using_customized_theme
-    if using_wal_theme
-        call LightlineWalNoFancySymbols()
-    else
-        if using_fancy_symbols
-            call LightlineFancySymbols()
-        else
-            call LightlineNoFancySymbols()
-        endif
-    endif
-    " Common lightline settings
-    call LightlineCommon()
     " Toggle lightline, status/tab line
     noremap <leader>sl :call lightline#disable()<CR>:set showmode<CR>
                 \:set showtabline=2<CR>:set laststatus=2<CR>
@@ -912,12 +930,7 @@ function! LightlineReload()
 endfunction
 
 " Reload lightline status/tab line setup -------------------------------------
-command! LightlineWalNoFancySymbolsReload call LightlineWalNoFancySymbols()
-            \ | call LightlineCommon() | call LightlineReload()
-command! LightlineFancySymbolsReload call LightlineFancySymbols()
-            \ | call LightlineCommon() | call LightlineReload()
-command! LightlineNoFancySymbolsReload call LightlineNoFancySymbols()
-            \ | call LightlineCommon() | call LightlineReload()
+command! LightlineReload call LightlineCommon() | call LightlineReload()
 
 " Status/Tab line ------------------------------------------------------------
 set noshowmode    " No vim-built-in mode statusline
@@ -980,24 +993,15 @@ let loaded_netrwPlugin = 1
 let NERDTreeWinSize = min([38, winwidth(0) / 5])
 let NERDTreeShowLineNumbers = 0
 let NERDTreeShowHidden = 0
-" Fancy symbols for NERDTree
-if using_fancy_symbols
-    let NERDTreeMinimalUI = 1
-else
-    let NERDTreeMinimalUI = 0
-endif
+" Disable bookmark label in nerdtree
+let NERDTreeMinimalUI = 0
 " Don;t show these file types
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 let g:NERDTreeMouseMode = 3
 let g:NERDTreeDirArrows = ''
 " Set nerdtree dir arrow symbols
-if using_fancy_symbols
-    let g:NERDTreeDirArrowExpandable = '►'
-    let g:NERDTreeDirArrowCollapsible = '▼'
-else
-    let g:NERDTreeDirArrowExpandable = "\u00a0"
-    let g:NERDTreeDirArrowCollapsible = "\u00a0"
-endif
+let g:NERDTreeDirArrowExpandable = '►'
+let g:NERDTreeDirArrowCollapsible = '▼'
 " Open nerdtree with the current file selected
 noremap <silent><F3> :NERDTreeFind<CR>
 " Toggle nerdtree display
@@ -1189,6 +1193,12 @@ endif
 if using_extra_plug
     noremap <leader>tl :TaskList<CR>
 endif
+
+" Hexokinase -----------------------------------------------------------------
+" Set highlighter for hexokinase
+let g:Hexokinase_highlighters = [ 'backgroundfull' ]
+" All possible values for hexokinase pattern
+let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla,colour_names'
 
 " ============================================================================
 " Part 6 - Vim coding tools settings (Plugins settings and mappings)
@@ -1461,13 +1471,19 @@ if using_customized_theme
         "source $HOME/.cache/wal/colors-wal.vim
         " Option 2 - Use wal vim plugin [Recommended]
         colorscheme wal
+        " Lightline style
+        call LightlineStyles('wal', 0)
     else
         " Current available themes
-        colorscheme srcery
+        colorscheme nord
+        " Lightline style
+        call LightlineStyles('nord', using_fancy_symbols)
     endif
     " Call customized color palette
     call CustomizedColorPalette()
-    " Comment Normal for non-transparent background
+    " Call common lightline settings
+    call LightlineCommon()
+    " Comment below Normal for non-transparent background
     highlight Normal
                 \ cterm=NONE ctermfg=NONE ctermbg=NONE
                 \ gui=NONE guifg=NONE guibg=NONE
@@ -1479,39 +1495,33 @@ endif
 " Colorschmeme shortcut
 nnoremap <leader>csd :colorscheme default<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:LightlineFancySymbolsReload<CR>:echo "default colorscheme"<CR>
+            \:call LightlineStyles('powerlineish', using_fancy_symbols)<CR>
+            \:LightlineReload<CR>:echo "default colorscheme"<CR>
 nnoremap <leader>csg :colorscheme gruvbox<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:LightlineFancySymbolsReload<CR>:echo "gruvbox colorscheme"<CR>
+            \:call LightlineStyles('powerlineish', using_fancy_symbols)<CR>
+            \:call CustomizedColorPalette()<CR>
+            \:LightlineReload<CR>:echo "gruvbox colorscheme"<CR>
 nnoremap <leader>csv :colorscheme vim-monokai-tasty<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:LightlineFancySymbolsReload<CR>:echo "monokai colorscheme"<CR>
+            \:call LightlineStyles('deus', using_fancy_symbols)<CR>
+            \:LightlineReload<CR>:echo "monokai colorscheme"<CR>
 nnoremap <leader>css :colorscheme srcery<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:LightlineFancySymbolsReload<CR>:echo "srcery colorscheme"<CR>
+            \:call LightlineStyles('srcery_drk', using_fancy_symbols)<CR>
+            \:LightlineReload<CR>:echo "srcery colorscheme"<CR>
 nnoremap <leader>csn :colorscheme nord<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:LightlineFancySymbolsReload<CR>:echo "nord colorscheme"<CR>
+            \:call LightlineStyles('nord', using_fancy_symbols)<CR>
+            \:LightlineReload<CR>:echo "nord colorscheme"<CR>
 nnoremap <leader>csw :colorscheme wal<CR>:set notermguicolors<CR>
             \:call CustomizedColorPalette()<CR>
+            \:call LightlineStyles('wal', 0)<CR>
             \:highlight CursorLineNr cterm=bold ctermfg=10 ctermbg=NONE<CR>
-            \:LightlineWalNoFancySymbolsReload<CR>:echo "wal colorscheme"<CR>
+            \:LightlineReload<CR>:echo "wal colorscheme"<CR>
 nnoremap <leader>cst :highlight Normal cterm=NONE ctermfg=NONE ctermbg=NONE
             \ gui=NONE guifg=NONE guibg=NONE<CR><CR>
             \:echo "transparent background"<CR>
-
-" Function - Line length warnings [Must be added after color setup] ----------
-" Here adopt default vim-textwidth 78 as maximum line length
-noremap <F7> :match OverLength /\%79v.\+/<CR>
-            \:echo '78 char-bound ON'<CR>
-noremap <leader><F7> :match UnlimitLength /\%79v.\+/<CR>
-            \:echo '78 char-bound OFF'<CR>
-
-" Function - Comment highlight -----------------------------------------------
-noremap <F8> :hi Comment cterm=italic ctermfg=14 guifg=#00ffff<CR>
-            \:echo 'Hi-Comment ON'<CR>
-noremap <leader><F8> :hi Comment cterm=italic ctermfg=8 guifg=#8a8a8a<CR>
-            \:echo 'Hi-Comment OFF'<CR>
 
 " ============================================================================
 " End of Vim configuration, automatically reload current config after saving

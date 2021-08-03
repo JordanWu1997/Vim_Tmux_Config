@@ -197,7 +197,7 @@ Table of Contents
     ```vim
     " Customize vim theme (Include colortheme and statusline)
     let using_customized_theme = 1
-    " Fancy symbols (Mainly affect nerdtree and lightline)
+    " Fancy symbols (Mainly affect lightline)
     let using_fancy_symbols = 1
     " Wal theme support (Pywal theme support, check pywal [Default NO])
     let using_wal_theme = 0
@@ -214,7 +214,7 @@ Table of Contents
         - [Plug-in] vim-easymotion (physical movement)
         - [Plug-in] autocomplpop (auto completion popup)
         - [Plug-in] fixedtasklist (find TODO tag in vim)
-        - [Plug-in] colorizer (CSS color support)
+        - [Plug-in] vim-hexokinase (hex colorcode color highlight support)
     ```vim
     " Extra vim-plug (Include easymotion, yankring, autocomplpop, and etc.)
     let using_extra_plug = 1
@@ -284,9 +284,9 @@ Table of Contents
 | N/V      | [F4]                        | Markdown/Latex previewer      | Open external Viewer                  | Only for .md or .tex file |
 | N/V      | [LK]+[F4]                   | Toggle Tagbar                 | On/Off Tagbar plugin                  |
 | N/V      | ([LK])+[F5]                 | Toggle (Rel)/Abs linenumber   | On/Off rel/abs linenumber             |
-| N/V      | ([LK])+[F6]                 | (OFF)/ON foldcolumn           | Off/On foldcolumn                     | For easier code fold visualization |
-| N/V      | ([LK])+[F7]                 | (OFF)/ON show line border     | Off/On hightlight 79th character      | VIM recommends at most 78 characters for one line |
-| N/V      | ([LK])+[F8]                 | (OFF)/ON highlight comment    | Off/On hightlight code comment        | Assign brighter color to comment to hightlight it |
+| N/V      | [F6]                        | Toggle foldcolumn             | On/Off foldcolumn                     | For easier code fold visualization |
+| N/V      | [F7]                        | Toggle show line border       | On/Off hightlight 79th character      | VIM recommends at most 78 characters for one line |
+| N/V      | [F8]                        | Toggle highlight comment      | On/Off hightlight code comment        | Assign brighter color to comment to hightlight it |
 | N/V      | [F9]                        | Toggle indent highlight (line)  | On/Off indent highlight (line)      |
 | N/V      | [LK]+[F9]                   | Toggle indent highlight (block) | On/Off indent highlight (block)     |
 | N/V      | ([LK])+[F10]                | (Load)/Save vim layout        | Load/Save vim layout                  | Including pane split, folds, and etc. |
@@ -374,9 +374,9 @@ Table of Contents
 | N/V      | [y]+[s]+[a]+[w]+["]         | Add wrapped quotation/bracket | From word to "word"                   | vim-surrounder |
 | N/V      | [d]+[s]+[a]+[w]+["]         | Del wrapped quotation/bracket | From "word" to word                   | vim-surrounder |
 | N/V      | [c]+[s]+[']+["]             | Change quotation/bracket      | From 'word' to "word"                 | vim-surrounder |
-| N/V      | [Alt]+[a]                   | Toggle auto-pair              | On/Off auto-pair quotation/bracket    | auto-pairs |
-| N/V      | [Alt]+[j]                   | Jump to next pairs            | Jump to next paired quotation/bracket | auto-pairs |
-| N/V      | [Alt]+[w]                   | Auto-pair fastwrap            | Auto-pair fastwrap current pairs      | Example: ()test -> (test) |
+| N/V/I    | [Alt]+[a]                   | Toggle auto-pair              | On/Off auto-pair quotation/bracket    | auto-pairs |
+| N/V/I    | [Alt]+[j]                   | Jump to next pairs            | Jump to next paired quotation/bracket | auto-pairs |
+| I        | [Alt]+[w]                   | Auto-pair fastwrap            | Auto-pair fastwrap current pairs      | Example: ()test -> (test) |
 
 - Extra plug (Note: "let using_extra_plug = 1" must be set in vimrc)
 
@@ -423,6 +423,8 @@ Table of Contents
 - https://factorpad.com/tech/vim-cheat-sheet.html#structure
 - https://github.com/wsdjeg/vim-galore-zh_cn
 - https://github.com/mhinz/vim-galore
+- https://ahuigo.github.io/b/vim/vim-var#/
+- https://learnvimscriptthehardway.stevelosh.com/chapters/24.html
 
 ## Part 2 - Tmux
 
