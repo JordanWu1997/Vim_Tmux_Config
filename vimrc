@@ -109,7 +109,7 @@ let using_vim = !using_neovim
 let using_vim8 = 1
 " Customize vim theme (Include colortheme and statusline)
 let using_customized_theme = 1
-" Fancy symbols (Mainly affect lightline)
+" Fancy symbols (Mainly affect lightline and nerdtree icon)
 let using_fancy_symbols = 1
 " Wal theme support (Xresources colortheme support, check pywal)
 let using_wal_theme = 0 "isdirectory('/home/jordankhwu/.cache/wal')
@@ -128,7 +128,7 @@ let using_gui_software = 1
 " Ctermcolors only support max 256 color
 " Termguicolors can support html color code
 
-" wal colortheme does not work well with termguicolors
+" Wal colortheme does not work well with termguicolors
 if has('termguicolors') && !using_wal_theme
     set termguicolors
 endif
@@ -226,7 +226,9 @@ vnoremap <leader>est :!sort<CR>
 filetype off
 
 " Vim window/pane/fold configuration -----------------------------------------
+" Save current file layout
 noremap <F10> :mkview<CR>
+" Load current file previous layout
 noremap <leader><F10> :loadview<CR>
 
 " Vim split window (pane) control --------------------------------------------
@@ -253,7 +255,10 @@ nnoremap <silent>+ :vertical resize +1<CR>
 nnoremap <silent>_ :vertical resize -1<CR>
 
 " Vim settings ---------------------------------------------------------------
-set nocompatible          " Not compatible with vi [No need for neovim]
+if using_vim
+    set nocompatible      " Not compatible with vi [No need for neovim]
+    set ttyfast           " Faster redrawing. [Removed in neovim]
+endif
 "set notimeout            " No timeout for entering command or keybinding
 set timeoutlen=2500       " Timeout for entering combined key (milisecond)
 set confirm               " Ask for confirmation before leaving vim
@@ -263,7 +268,6 @@ set modifiable            " Make editing buffer modifable
 set encoding=utf-8        " Unicode display
 set clipboard=unnamedplus " Shared system clipboard
 set tildeop               " Make ~ operator like gu, gU, and etc."
-set ttyfast               " Faster redrawing. [Removed in neovim]
 set nolazyredraw          " Not only redraw when necessary.
 
 " Line wrap ------------------------------------------------------------------
@@ -312,6 +316,7 @@ noremap <F5> :set relativenumber!<CR>
 " -- zM/zR/zi: Maximize/Remove/Invert all folds
 " -- zj/zk: Jump to next/prev fold
 
+" Fold settings
 set foldmethod=syntax
 set foldcolumn=4
 set foldlevel=0
@@ -513,7 +518,7 @@ let g:comment_highlight_is_open = 0
 " Toggle comment highlight function
 function! CommentHighlightToggle()
     if g:comment_highlight_is_open
-        hi Comment cterm=italic ctermfg=8 guifg=#8a8a8a
+        hi Comment cterm=italic ctermfg=8  guifg=#8a8a8a
         echo 'Hi-Comment OFF'
         let g:comment_highlight_is_open = 0
     else
@@ -822,13 +827,6 @@ autocmd FileType python setlocal et ts=4 sw=4 sts=4
 " Makefile not support expand tabs to spaces
 autocmd FileType make setlocal noet
 
-" Tab key action in all modes ------------------------------------------------
-" Conflict with Ctrl+i vim built-in jump function
-"nnoremap <Tab><Tab> >>
-"nnoremap <S-Tab> <<
-"vnoremap <Tab><Tab> >gv
-"vnoremap <S-Tab> <gv
-
 " ============================================================================
 " Part 2 - Vim-theme settings (Plugins settings and mappings)
 " ============================================================================
@@ -836,73 +834,71 @@ autocmd FileType make setlocal noet
 " As for colorscheme, it at the end of this plug settings section
 
 " Lightline statusline/tabline options ---------------------------------------
-function! LightlineStyles(theme, fancy)
-    " Lightline with fancy symbols
-    if a:fancy
-        let g:lightline = {
-            \ 'colorscheme': a:theme,
-            \ 'active': {
-            \   'left': [ [ 'mode', 'paste' ],
-            \             [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
-            \ },
-            \ 'inactive': {
-            \   'left': [ [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
-            \ },
-            \ 'component_function': {
-            \   'gitbranch': 'fugitivehead',
-            \ },
-            \ 'separator': {
-            \   'left': "", "right": ""
-            \ },
-            \ 'subseparator': {
-            \   'left': '/', 'right': '/'
-            \ },
-            \ }
-    else
-        " Lightline with no fancy symbols
-        let g:lightline = {
-            \ 'colorscheme': a:theme,
-            \ 'active': {
-            \   'left': [ [ 'mode', 'paste' ],
-            \             [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
-            \ },
-            \ 'inactive': {
-            \   'left': [ [ 'gitbranch', 'readonly', 'filename', 'modified' ], ]
-            \ },
-            \ 'component_function': {
-            \   'gitbranch': 'FugitiveHead'
-            \ },
-            \ }
-    endif
-endfunction
+" Lightline style setup
+function! LightlineStyle(theme, fancy, central_opaque)
 
-" Lightline common setup
-function! LightlineCommon()
-    let g:lightline.enable = {
-                \'statusline': 1,
-                \'tabline': 1
-                \}
+    " Part 1 - Lightline setup -----------------------------------------------
+    " Initialize g:lightline variable
+    let g:lightline = { 'colorscheme': a:theme }
+    " Specify g:lightline dictionary objects
+    let g:lightline.enable = { 'statusline': 1, 'tabline': 1 }
+
+    " Part 2 - Statusline setup ----------------------------------------------
+    " Active statusline
+    let g:lightline.active = {
+        \ 'left': [ [ 'mode', 'paste' ],
+		\           [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+		\ 'right': [ [ 'lineinfo' ],
+		\            [ 'percent' ],
+		\            [ 'fileformat', 'fileencoding', 'filetype' ] ] }
+    " Inactive statusline
+    let g:lightline.inactive = {
+        \ 'left': [ [ 'filename' ] ],
+        \ 'right': [ [ 'lineinfo' ],
+        \            [ 'percent' ] ] }
+    " Statusline componet function
+    let g:lightline.component_function = { 'gitbranch': 'FugitiveHead', }
+    " Fancy symbol for statusline separator
+    if a:fancy
+        let g:lightline.separator = { 'left': "", "right": "" }
+        let g:lightline.subseparator = { 'left': '/', 'right': '/' }
+    endif
+
+    " Part 3 - Tabline setup (bufferline plugin) -----------------------------
+    " Tabline
     let g:lightline.tabline = {
-                \'left': [ ['tabs'] ],
-                \'right': [ ['buffers'] ]
-                \}
+        \ 'left': [ ['buffers'] ],
+        \ 'right': [ ['tabs'] ] }
+    " Tabline component
+    let g:lightline.component_type = { 'buffers': 'tabsel' }
     let g:lightline.component_expand = {
-                \'buffers': 'lightline#bufferline#buffers'
-                \}
-    let g:lightline.component_type = {
-                \'buffers': 'tabsel'
-                \}
+        \ 'buffers': 'lightline#bufferline#buffers' }
+    " Tabline (bufferline plugin)
     let g:lightline#bufferline#show_number = 0
-    let g:lightline#bufferline#shorten_path = 0
+    let g:lightline#bufferline#shorten_path = 1
     let g:lightline#bufferline#unnamed = '[No Name]'
-    " Central bar transparency
-    let s:palette = g:lightline#colorscheme#{g:lightline.colorscheme}#palette
-    let s:palette.normal.middle = [ [ 'NONE', 'NONE', 'NONE', 'NONE' ] ]
-    let s:palette.visual.middle = s:palette.normal.middle
-    let s:palette.insert.middle = s:palette.normal.middle
-    let s:palette.inactive.middle = s:palette.normal.middle
-    let s:palette.tabline.middle = s:palette.normal.middle
-    let s:palette.replace.middle = s:palette.normal.middle
+    let g:lightline#bufferline#filter_by_tabpage = 1
+    " Fancy character for tabline (bufferline)
+    if a:fancy
+        let g:lightline#bufferline#enable_devicons = 1
+        let g:lightline#bufferline#enable_nerdfont = 1
+        let g:lightline#bufferline#unicode_symbols = 1
+    endif
+
+    " Part 4 - Miscellaneous setup -------------------------------------------
+    " Miscellaneous varaibles
+    let g:nord_uniform_status_lines = 0
+    " Central bar opaque option
+    if !a:central_opaque
+        let s:palette = g:lightline#colorscheme
+                    \#{g:lightline.colorscheme}#palette
+        let s:palette.normal.middle = [ [ 'NONE', 'NONE', 'NONE', 'NONE' ] ]
+        let s:palette.visual.middle = s:palette.normal.middle
+        let s:palette.insert.middle = s:palette.normal.middle
+        let s:palette.inactive.middle = s:palette.normal.middle
+        let s:palette.tabline.middle = s:palette.normal.middle
+        let s:palette.replace.middle = s:palette.normal.middle
+    endif
 endfunction
 
 " Conditional lightline status/tab line --------------------------------------
@@ -929,15 +925,34 @@ function! LightlineReload()
     call lightline#update()
 endfunction
 
-" Reload lightline status/tab line setup -------------------------------------
-command! LightlineReload call LightlineCommon() | call LightlineReload()
-
 " Status/Tab line ------------------------------------------------------------
 set noshowmode    " No vim-built-in mode statusline
 set laststatus=2  " Always display the statusline in all windows
 set showtabline=2 " Always display the tabline, even if there is only one tab
 set cmdheight=1   " Size of command line height
 set showcmd       " This line must be added AFTER statusline plugin
+
+" Keymapping for bufferline --------------------------------------------------
+" Goto buffers
+nmap <Leader>1 <Plug>lightline#bufferline#go(1)
+nmap <Leader>2 <Plug>lightline#bufferline#go(2)
+nmap <Leader>3 <Plug>lightline#bufferline#go(3)
+nmap <Leader>4 <Plug>lightline#bufferline#go(4)
+nmap <Leader>5 <Plug>lightline#bufferline#go(5)
+nmap <Leader>6 <Plug>lightline#bufferline#go(6)
+nmap <Leader>7 <Plug>lightline#bufferline#go(7)
+nmap <Leader>8 <Plug>lightline#bufferline#go(8)
+nmap <Leader>9 <Plug>lightline#bufferline#go(9)
+" Close buffers
+nmap <Leader>c1 <Plug>lightline#bufferline#delete(1)
+nmap <Leader>c2 <Plug>lightline#bufferline#delete(2)
+nmap <Leader>c3 <Plug>lightline#bufferline#delete(3)
+nmap <Leader>c4 <Plug>lightline#bufferline#delete(4)
+nmap <Leader>c5 <Plug>lightline#bufferline#delete(5)
+nmap <Leader>c6 <Plug>lightline#bufferline#delete(6)
+nmap <Leader>c7 <Plug>lightline#bufferline#delete(7)
+nmap <Leader>c8 <Plug>lightline#bufferline#delete(8)
+nmap <Leader>c9 <Plug>lightline#bufferline#delete(9)
 
 " ============================================================================
 " Part 3 - File/Code browsing settings (Plugins settings and mappings)
@@ -1158,13 +1173,11 @@ if using_extra_plug
     let g:EasyMotion_smartcase = 1
     " Keep cursor column
     let g:EasyMotion_startofline = 0
-    " JK motions: Line motions
+    " Motions
     nmap <leader>j <Plug>(easymotion-j)
     nmap <leader>k <Plug>(easymotion-k)
     nmap <leader>l <Plug>(easymotion-lineforward)
     nmap <leader>h <Plug>(easymotion-linebackward)
-    nmap <leader>1 <Plug>(easymotion-overwin-f)
-    nmap <leader>2 <Plug>(easymotion-overwin-f2)
 endif
 
 " AutoComplPop ---------------------------------------------------------------
@@ -1472,17 +1485,15 @@ if using_customized_theme
         " Option 2 - Use wal vim plugin [Recommended]
         colorscheme wal
         " Lightline style
-        call LightlineStyles('wal', 0)
+        call LightlineStyle('wal', 0, 0)
     else
         " Current available themes
         colorscheme nord
         " Lightline style
-        call LightlineStyles('nord', using_fancy_symbols)
+        call LightlineStyle('nord', using_fancy_symbols, 1)
     endif
     " Call customized color palette
     call CustomizedColorPalette()
-    " Call common lightline settings
-    call LightlineCommon()
     " Comment below Normal for non-transparent background
     highlight Normal
                 \ cterm=NONE ctermfg=NONE ctermbg=NONE
@@ -1495,30 +1506,31 @@ endif
 " Colorschmeme shortcut
 nnoremap <leader>csd :colorscheme default<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:call LightlineStyles('powerlineish', using_fancy_symbols)<CR>
-            \:LightlineReload<CR>:echo "default colorscheme"<CR>
+            \:call LightlineStyle('powerlineish', using_fancy_symbols, 0)<CR>
+            \:call LightlineReload()<CR>:echo "default colorscheme"<CR>
 nnoremap <leader>csg :colorscheme gruvbox<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:call LightlineStyles('powerlineish', using_fancy_symbols)<CR>
+            \:call LightlineStyle('deus', using_fancy_symbols, 0)<CR>
             \:call CustomizedColorPalette()<CR>
-            \:LightlineReload<CR>:echo "gruvbox colorscheme"<CR>
+            \:call LightlineReload()<CR>:echo "gruvbox colorscheme"<CR>
 nnoremap <leader>csv :colorscheme vim-monokai-tasty<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:call LightlineStyles('deus', using_fancy_symbols)<CR>
-            \:LightlineReload<CR>:echo "monokai colorscheme"<CR>
+            \:call LightlineStyle('deus', using_fancy_symbols, 0)<CR>
+            \:call LightlineReload()<CR>:echo "monokai colorscheme"<CR>
 nnoremap <leader>css :colorscheme srcery<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:call LightlineStyles('srcery_drk', using_fancy_symbols)<CR>
-            \:LightlineReload<CR>:echo "srcery colorscheme"<CR>
+            \:call LightlineStyle('srcery_drk', using_fancy_symbols, 1)<CR>
+            \:call LightlineReload()<CR>:echo "srcery colorscheme"<CR>
 nnoremap <leader>csn :colorscheme nord<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:call LightlineStyles('nord', using_fancy_symbols)<CR>
-            \:LightlineReload<CR>:echo "nord colorscheme"<CR>
+            \:call LightlineStyle('nord', using_fancy_symbols, 1)<CR>
+            \:call LightlineReload()<CR>:echo "nord colorscheme"<CR>
 nnoremap <leader>csw :colorscheme wal<CR>:set notermguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:call LightlineStyles('wal', 0)<CR>
+            \:call LightlineStyle('wal', 0, 0)<CR>
             \:highlight CursorLineNr cterm=bold ctermfg=10 ctermbg=NONE<CR>
-            \:LightlineReload<CR>:echo "wal colorscheme"<CR>
+            \:call LightlineReload()<CR>:echo "wal colorscheme"<CR>
+" Transparent background shortcut
 nnoremap <leader>cst :highlight Normal cterm=NONE ctermfg=NONE ctermbg=NONE
             \ gui=NONE guifg=NONE guibg=NONE<CR><CR>
             \:echo "transparent background"<CR>
