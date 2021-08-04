@@ -112,7 +112,7 @@ let using_customized_theme = 1
 " Fancy symbols (Mainly affect lightline and nerdtree icon)
 let using_fancy_symbols = 1
 " Wal theme support (Xresources colortheme support, check pywal)
-let using_wal_theme = 0 "isdirectory('/home/jordankhwu/.cache/wal')
+let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
 " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
 let using_extra_plug = 1
 " Coding tools vim-plug (Include syntax support, git function, and etc.)
@@ -1053,8 +1053,9 @@ noremap <leader>m :execute ":Man " . expand('<cword>')<CR>
 noremap <leader>M :Man<space>
 
 " Nerdcommenter --------------------------------------------------------------
+" -- Common prefix: <leader>c
 " Create default mappings
-let g:NERDCreateDefaultMappings = 0
+let g:NERDCreateDefaultMappings = 1
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 0
 " Use compact syntax for prettified multi-line comments
@@ -1063,10 +1064,6 @@ let g:NERDCompactSexyComs = 1
 let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not
 let g:NERDToggleCheckAllLines = 1
-" Commenter mapping
-noremap <silent><leader>cc :call NERDComment('n', 'Comment')<CR>
-noremap <silent><leader>cu :call NERDComment('n', 'Uncomment')<CR>
-noremap <silent><leader>cy :call NERDComment('n', 'Yank')<CR>
 
 " Vim-surround ---------------------------------------------------------------
 " Surround current word or sentence with brackets or html tags
@@ -1460,8 +1457,8 @@ function! CustomizedColorPalette()
     set bg=dark
     " Color setup (hi command must be added after colorscheme)
     highlight Comment       cterm=italic ctermfg=8    ctermbg=NONE gui=italic guifg=#8a8a8a guibg=NONE
-    highlight CursorColumn  cterm=NONE   ctermfg=NONE ctermbg=233  gui=NONE   guifg=NONE    guibg=#444444
-    highlight CursorLine    cterm=NONE   ctermfg=NONE ctermbg=233  gui=NONE   guifg=NONE    guibg=#444444
+    highlight CursorColumn  cterm=NONE   ctermfg=NONE ctermbg=234  gui=NONE   guifg=NONE    guibg=#444444
+    highlight CursorLine    cterm=NONE   ctermfg=NONE ctermbg=234  gui=NONE   guifg=NONE    guibg=#444444
     highlight CursorLineNr  cterm=bold                ctermbg=NONE gui=bold                 guibg=NONE
     highlight FoldColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
     highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
@@ -1473,10 +1470,6 @@ function! CustomizedColorPalette()
 endfunction
 
 " Vim colorscheme ------------------------------------------------------------
-" Fortran syntax highlight
-" Use either 'koehler' or 'elflord' for 'fortran' syntax support
-autocmd FileType fortran colorscheme koehler
-autocmd FileType fortran call CustomizedColorPalette()
 " Customized colorscheme settings
 if using_customized_theme
     if using_wal_theme
@@ -1485,7 +1478,7 @@ if using_customized_theme
         " Option 2 - Use wal vim plugin [Recommended]
         colorscheme wal
         " Lightline style
-        call LightlineStyle('wal', 0, 0)
+        call LightlineStyle('seoul256', 1, 1)
     else
         " Current available themes
         colorscheme nord
@@ -1527,7 +1520,7 @@ nnoremap <leader>csn :colorscheme nord<CR>:set termguicolors<CR>
             \:call LightlineReload()<CR>:echo "nord colorscheme"<CR>
 nnoremap <leader>csw :colorscheme wal<CR>:set notermguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:call LightlineStyle('wal', 0, 0)<CR>
+            \:call LightlineStyle('seoul256', 1, 1)<CR>
             \:highlight CursorLineNr cterm=bold ctermfg=10 ctermbg=NONE<CR>
             \:call LightlineReload()<CR>:echo "wal colorscheme"<CR>
 " Transparent background shortcut
