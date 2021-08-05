@@ -259,11 +259,11 @@ if using_vim
     set nocompatible      " Not compatible with vi [No need for neovim]
     set ttyfast           " Faster redrawing. [Removed in neovim]
 endif
-"set notimeout            " No timeout for entering command or keybinding
+set exrc                  " Search vimrc file in current directory
 set timeoutlen=2500       " Timeout for entering combined key (milisecond)
 set confirm               " Ask for confirmation before leaving vim
-set ignorecase            " Close case sensitive
-"set smartcase            " Case sensitive if search contains uppercase letter
+set ignorecase            " Close case sensitive [Needed for smartcase]
+set smartcase             " Case sensitive if search contains uppercase letter
 set modifiable            " Make editing buffer modifable
 set encoding=utf-8        " Unicode display
 set clipboard=unnamedplus " Shared system clipboard
@@ -303,8 +303,8 @@ set hlsearch
 noremap <leader>/ :set nohlsearch!<CR>
 
 " Line number settings -------------------------------------------------------
+set relativenumber
 set number
-set norelativenumber
 noremap <leader><F5> :set number!<CR>
 noremap <F5> :set relativenumber!<CR>
 
@@ -353,27 +353,6 @@ noremap <silent><leader><S-F2>
             \ :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 
 " Buffer settings ------------------------------------------------------------
-" -- Reference: https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
-" -- Useful command: ':e#' or 'Ctrl-^' to edit between two buffers
-" Don't close window, when deleting a buffer
-command! Bclose call <SID>BufcloseCloseIt()
-function! <SID>BufcloseCloseIt()
-    let l:currentBufNum = bufnr("%")
-    let l:alternateBufNum = bufnr("#")
-    if buflisted(l:alternateBufNum)
-        buffer #
-    else
-        bnext
-    endif
-    if bufnr("%") == l:currentBufNum
-        new
-    endif
-    if buflisted(l:currentBufNum)
-        execute("bdelete! ".l:currentBufNum)
-    endif
-endfunction
-" A buffer not becomes hidden (send to background) when it is abandoned
-set nohidden
 " Add buffer in foreground
 noremap <leader>bb :edit<space>
 " Add buffer in background
@@ -385,8 +364,8 @@ noremap <leader>dd :bdelete<CR>:echo 'DELETE CURRENT BUFFER
 noremap <leader>bdd :bdelete<CR>'DELETE CURRENT BUFFER
             \ [PRESS CTRL+O TO RECOVER]'<CR>
 " Navigate through buffers
-noremap <silent><leader><F1> <Esc>:bprev<CR>
-noremap <silent><F1> <Esc>:bnext<CR>
+noremap <silent><leader><F1> :bprev<CR>
+noremap <silent><F1> :bnext<CR>
 
 " Marks settings -------------------------------------------------------------
 " Note:
@@ -501,16 +480,33 @@ let g:overlength_warning_is_open = 0
 function! OverlengthToggle()
     if g:overlength_warning_is_open
         match UnlimitLength /\%79v.\+/
-        echo '78 char-bound OFF'
+        echo 'Over 78 character line highlight OFF'
         let g:overlength_warning_is_open = 0
     else
         match OverLength /\%79v.\+/
-        echo '78 char-bound ON'
+        echo 'OVer 78 character line highlight ON'
         let g:overlength_warning_is_open = 1
     endif
 endfunction
 " Toggle overlength
-nnoremap <silent><F7> :call OverlengthToggle()<CR>
+nnoremap <silent><leader><F7> :call OverlengthToggle()<CR>
+
+" Function - Line length colorcolumn warnings --------------------------------
+let g:overlength_column_is_open = 0
+" Toggle overlength function
+function! OverlengthColumnToggle()
+    if g:overlength_column_is_open
+        set colorcolumn=
+        echo '79th character colorcolumn OFF'
+        let g:overlength_column_is_open = 0
+    else
+        set colorcolumn=79
+        echo '79th character colorcolumn ON'
+        let g:overlength_column_is_open = 1
+    endif
+endfunction
+" Toggle overlength color column
+nnoremap <silent><F7> :call OverlengthColumnToggle()<CR>
 
 " Function - Comment highlight -----------------------------------------------
 " Default value (disabled at startup)
@@ -684,7 +680,7 @@ Plug 'Konfekt/FastFold'
 if using_extra_plug
     if using_neovim
         "" Override configs by directory [Time-consuming for initialization]
-        "Plug 'arielrossanigo/dir-configs-override.vim'
+        "Plug arielrossanigo/dir-configs-override.vim'
         " Fancy startup page of vim [Not use in vim, too loadtime-consuming]
         Plug 'mhinz/vim-startify'
         " Vim smooth scroll
@@ -944,15 +940,15 @@ nmap <Leader>7 <Plug>lightline#bufferline#go(7)
 nmap <Leader>8 <Plug>lightline#bufferline#go(8)
 nmap <Leader>9 <Plug>lightline#bufferline#go(9)
 " Close buffers
-nmap <Leader>c1 <Plug>lightline#bufferline#delete(1)
-nmap <Leader>c2 <Plug>lightline#bufferline#delete(2)
-nmap <Leader>c3 <Plug>lightline#bufferline#delete(3)
-nmap <Leader>c4 <Plug>lightline#bufferline#delete(4)
-nmap <Leader>c5 <Plug>lightline#bufferline#delete(5)
-nmap <Leader>c6 <Plug>lightline#bufferline#delete(6)
-nmap <Leader>c7 <Plug>lightline#bufferline#delete(7)
-nmap <Leader>c8 <Plug>lightline#bufferline#delete(8)
-nmap <Leader>c9 <Plug>lightline#bufferline#delete(9)
+nmap <Leader>d1 <Plug>lightline#bufferline#delete(1)
+nmap <Leader>d2 <Plug>lightline#bufferline#delete(2)
+nmap <Leader>d3 <Plug>lightline#bufferline#delete(3)
+nmap <Leader>d4 <Plug>lightline#bufferline#delete(4)
+nmap <Leader>d5 <Plug>lightline#bufferline#delete(5)
+nmap <Leader>d6 <Plug>lightline#bufferline#delete(6)
+nmap <Leader>d7 <Plug>lightline#bufferline#delete(7)
+nmap <Leader>d8 <Plug>lightline#bufferline#delete(8)
+nmap <Leader>d9 <Plug>lightline#bufferline#delete(9)
 
 " ============================================================================
 " Part 3 - File/Code browsing settings (Plugins settings and mappings)
@@ -1005,7 +1001,7 @@ nnoremap <leader>fht :FZFHelptags<CR>
 " NERDTree -------------------------------------------------------------------
 " Disable vim built-in netrw
 let loaded_netrwPlugin = 1
-let NERDTreeWinSize = min([38, winwidth(0) / 5])
+let NERDTreeWinSize = min([40, winwidth(0) / 5])
 let NERDTreeShowLineNumbers = 0
 let NERDTreeShowHidden = 0
 " Disable bookmark label in nerdtree
@@ -1026,7 +1022,7 @@ noremap <silent><leader><F3> :NERDTreeToggle<CR>
 " Autofocus on tagbar open
 let g:tagbar_autofocus = 1
 let g:tagbar_map_showproto = 'd'
-let g:tagbar_width = min([38, winwidth(0) / 5])
+let g:tagbar_width = min([40, winwidth(0) / 5])
 " Map tagbar shortcut same as vim fold
 let g:tagbar_map_closeallfolds = 'zM'
 let g:tagbar_map_openallfolds = 'zR'
@@ -1098,10 +1094,6 @@ let g:AutoPairsShortcutJump = '<M-j>'
 " Wrap current word with pair e.g. ()test -> (test)
 let g:AutoPairsShortcutFastWrap = '<M-w>'
 
-" Fastfold -------------------------------------------------------------------
-" Manually update
-nmap zuz <Plug>(FastFoldUpdate)
-
 " ============================================================================
 " Part 5 - Vim extra functions settings (Plugins settings and mappings)
 " ============================================================================
@@ -1114,11 +1106,6 @@ if using_neovim && using_extra_plug
     " Enable motion with keyboard and mousewheel
     nnoremap <silent><C-f> :call comfortable_motion#flick(100)<CR>
     nnoremap <silent><C-b> :call comfortable_motion#flick(-100)<CR>
-endif
-
-" Goyo -----------------------------------------------------------------------
-if using_neovim && using_extra_plug
-    noremap <leader>gy :Goyo<CR>
 endif
 
 " YankRing -------------------------------------------------------------------
@@ -1178,23 +1165,38 @@ if using_extra_plug
 endif
 
 " AutoComplPop ---------------------------------------------------------------
-" Enable/disable autopop
 if using_extra_plug
+    " Toggle autocomplpop function
+    let g:AutoCompPop_is_open = 1
+    function! AutoCompPopToggle()
+        if g:AutoCompPop_is_open
+            AcpDisable
+            echo 'Disable AutoCompletionPop'
+            let g:AutoCompPop_is_open = 0
+        else
+            AcpEnable
+            echo 'Enable AutoCompletionPop'
+            let g:AutoCompPop_is_open = 1
+        endif
+    endfunction
+    " Disable autocomplpop for python file [use deoplete instead]
     if using_python_completion
+        let g:acp_enableAtStartup = 1
         autocmd FileType python let g:acp_enableAtStartup = 0
     endif
-    noremap <leader>~ :AcpDisable<CR>
-    noremap <leader>` :AcpEnable<CR>
+    " Toggle autocomplpop
+    noremap <leader>` :call AutoCompPopToggle()<CR>
+    autocmd FileType python unmap <leader>`
 endif
 
 " Popup window selection -----------------------------------------------------
 " Previous/next suggestion
 " [Double quotation matters here, do not change to single quotation]
 if using_extra_plug
-    inoremap <expr><S-tab> pumvisible() ? "\<c-p>" : "\<S-tab>"
-    inoremap <expr><tab>   pumvisible() ? "\<c-n>" : "\<tab>"
-    inoremap <expr><C-k>   pumvisible() ? "\<c-p>" : "\<C-k>"
-    inoremap <expr><C-j>   pumvisible() ? "\<c-n>" : "\<C-j>"
+    inoremap <expr><S-tab> pumvisible() ? "\<C-p>" : "\<S-tab>"
+    inoremap <expr><tab>   pumvisible() ? "\<C-n>" : "\<tab>"
+    inoremap <expr><C-k>   pumvisible() ? "\<C-p>" : "\<C-k>"
+    inoremap <expr><C-j>   pumvisible() ? "\<C-n>" : "\<C-j>"
     inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
     inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
 endif
@@ -1274,7 +1276,7 @@ if using_coding_tool_plug
     noremap <leader>g :Git<space>
     noremap <leader>gd :Git diff %<CR>
     noremap <leader>gD :Git diff<CR>
-    noremap <leader>gs :Git status<CR>
+    noremap <leader>gs :G<CR>
     noremap <leader>ga :Git add %<CR>
     noremap <leader>gA :Git add --all<CR>
     noremap <leader>gc :Git commit % -m<space>
@@ -1315,7 +1317,7 @@ if using_coding_tool_plug
     nmap <leader>gn <Plug>(GitGutterNextHunk)
     nmap <leader>gN <Plug>(GitGutterPrevHunk)
     nmap <leader>gp <Plug>(GitGutterPrevHunk)
-    nmap <leader>gs <Plug>(GitGutterPreviewHunk)
+    nmap <leader>gP <Plug>(GitGutterPreviewHunk)
     nmap <leader>gF :GitGutterFold<CR>
     nmap <leader>gS <Plug>(GitGutterStageHunk)
     nmap <leader>gU <Plug>(GitGutterUndoHunk)
@@ -1334,7 +1336,7 @@ endif
 
 " Minimap --------------------------------------------------------------------
 if has('nvim-0.5') && using_coding_tool_plug
-    let g:minimap_width = min([15, winwidth(0) / 8])
+    let g:minimap_width = min([10, winwidth(0) / 8])
     let g:minimap_auto_start = 0
     let g:minimap_auto_start_win_enter = 0
     let g:minimap_git_colors = 0

@@ -286,6 +286,7 @@ Table of Contents
 | N/V      | ([LK])+[F5]                 | Toggle (Rel)/Abs linenumber   | On/Off rel/abs linenumber             |
 | N/V      | [F6]                        | Toggle foldcolumn             | On/Off foldcolumn                     | For easier code fold visualization |
 | N/V      | [F7]                        | Toggle show line border       | On/Off hightlight 79th character      | VIM recommends at most 78 characters for one line |
+| N/V      | [LK]+[F7]                   | Toggle show line border       | On/Off hightlight 79th column         | VIM recommends at most 78 characters for one line |
 | N/V      | [F8]                        | Toggle highlight comment      | On/Off hightlight code comment        | Assign brighter color to comment to hightlight it |
 | N/V      | [F9]                        | Toggle indent highlight (line)  | On/Off indent highlight (line)      |
 | N/V      | [LK]+[F9]                   | Toggle indent highlight (block) | On/Off indent highlight (block)     |
