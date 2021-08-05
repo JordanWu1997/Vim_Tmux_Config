@@ -142,6 +142,13 @@ endif
 " ============================================================================
 " All parameter settings and hotkey mappings
 
+" Vim built-in filetype setting ----------------------------------------------
+" Following settings are later automatically executed by VIM-plug
+" -- filetype plugin on
+" -- filetype indent on
+" -- syntax enable
+filetype off
+
 " Set leaderkey --------------------------------------------------------------
 " Default leadkey '\'
 let mapleader = ' '
@@ -176,8 +183,9 @@ inoremap ! !<C-g>u
 " -- :g/PATTERN/ACTION: In entire file, for matching PATTERN, do ACTION
 " -- gt/gT: Goto Next/Prev tab
 
-" Umap ex mode to prevent typo
-map q: <Nop>
+" Umap ex mode [old school mode] to prevent typo
+noremap q: <Nop>
+noremap gQ <Nop>
 " Umap command history to prevent typo
 " Use :<C-f> to open command history instead
 nnoremap Q <nop>
@@ -187,9 +195,12 @@ nnoremap Y y$
 vnoremap K :m '<-2<CR>gv=gv
 vnoremap J :m '>+1<CR>gv=gv
 " Show jump list and change list
-map <leader><C-o> :jumps<CR>
-map <leader>g; :changes<CR>
-map <leader>g, :changes<CR>
+noremap <leader><C-o> :jumps<CR>
+noremap <leader>g; :changes<CR>
+noremap <leader>g, :changes<CR>
+" Jump to next/prev paragraph ({/} for vim built-in function)
+map <M-Down> <S-}>
+map <M-Up> <S-{>
 
 " Save/Load file hotkey ------------------------------------------------------
 " Note:
@@ -217,13 +228,6 @@ nnoremap <leader>esq :r !seq<space>
 nnoremap <leader>ets :r !date<CR>
 " Sort selected context alphabetically
 vnoremap <leader>est :!sort<CR>
-
-" Vim built-in setting -------------------------------------------------------
-" Following settings are later automatically executed by VIM-plug
-" -- filetype plugin on
-" -- filetype indent on
-" -- syntax enable
-filetype off
 
 " Vim window/pane/fold configuration -----------------------------------------
 " Save current file layout
@@ -462,8 +466,6 @@ function! RemoveTrailingWhitespace()
 endfunction
 " Remove trailing whitespace for editing files
 autocmd BufWritePre * call RemoveTrailingWhitespace()
-noremap <leader>rm :call RemoveTrailingWhitespace()<CR>
-            \:echo "Remove Tail Whitespaces"<CR>
 
 " Function - Hex editor ------------------------------------------------------
 " From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
@@ -471,6 +473,23 @@ noremap <leader>eho :%! xxd<CR>
             \:echo 'Hex editor on: TF to binary data'<CR>
 noremap <leader>ehf :%! xxd -r<CR>
             \:echo 'Hex editor off: TF to original data'<CR>
+
+" Function - Line length colorcolumn warnings --------------------------------
+let g:overlength_column_is_open = 0
+" Toggle overlength function
+function! OverlengthColumnToggle()
+    if g:overlength_column_is_open
+        set colorcolumn=
+        echo '79th character colorcolumn OFF'
+        let g:overlength_column_is_open = 0
+    else
+        set colorcolumn=79
+        echo '79th character colorcolumn ON'
+        let g:overlength_column_is_open = 1
+    endif
+endfunction
+" Toggle overlength color column
+nnoremap <silent><F7> :call OverlengthColumnToggle()<CR>
 
 " Function - Line length warnings --------------------------------------------
 " Here adopt default vim-textwidth 78 as maximum line length
@@ -490,23 +509,6 @@ function! OverlengthToggle()
 endfunction
 " Toggle overlength
 nnoremap <silent><leader><F7> :call OverlengthToggle()<CR>
-
-" Function - Line length colorcolumn warnings --------------------------------
-let g:overlength_column_is_open = 0
-" Toggle overlength function
-function! OverlengthColumnToggle()
-    if g:overlength_column_is_open
-        set colorcolumn=
-        echo '79th character colorcolumn OFF'
-        let g:overlength_column_is_open = 0
-    else
-        set colorcolumn=79
-        echo '79th character colorcolumn ON'
-        let g:overlength_column_is_open = 1
-    endif
-endfunction
-" Toggle overlength color column
-nnoremap <silent><F7> :call OverlengthColumnToggle()<CR>
 
 " Function - Comment highlight -----------------------------------------------
 " Default value (disabled at startup)
@@ -529,7 +531,7 @@ nnoremap <F8> :call CommentHighlightToggle()<CR>
 " ============================================================================
 " Customized terminal mode (Only support for vim >= 8.0)
 " ============================================================================
-" Vim support built-in terminal, deafult use system $SHELL
+" Vim support built-in terminal, by default use system $SHELL
 
 " Terminal mode - open terminal in vim buffer --------------------------------
 " -- Enter insert mode to use terminal command line
@@ -635,6 +637,8 @@ if using_customized_theme
 endif
 
 " [File/Code Browsing] -------------------------------------------------------
+" Code class/module/tag browser [Update to latest]
+Plug 'preservim/tagbar', { 'on': 'TagbarToggle' }
 " Code and files fuzzy finder and previewer (main progroam)
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
 " Code and files fuzzy finder and previewer (vim plugin)
@@ -649,8 +653,6 @@ if using_fancy_symbols
     " More highlight in nertree (make nerdtree laggy in large filetree)
     " Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 endif
-"Class/module browser [Update to latest]
-Plug 'preservim/tagbar', { 'on': 'TagbarToggle' }
 
 " [Vim useful functions] -----------------------------------------------------
 " Sudo write/read files in vim
@@ -683,10 +685,10 @@ if using_extra_plug
         "Plug arielrossanigo/dir-configs-override.vim'
         " Fancy startup page of vim [Not use in vim, too loadtime-consuming]
         Plug 'mhinz/vim-startify'
-        " Vim smooth scroll
-        Plug 'yuttie/comfortable-motion.vim'
-        " Goyo (Distraction-free mode)
-        Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
+        "" Vim smooth scroll
+        "Plug 'yuttie/comfortable-motion.vim'
+        "" Goyo (Distraction-free mode)
+        "Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
         "" Vim-wiki (Note-taking)
         "Plug 'vimwiki/vimwiki', { 'on': 'VimwikiUISelect' }
     endif
@@ -1100,13 +1102,13 @@ let g:AutoPairsShortcutFastWrap = '<M-w>'
 " Vim extra functions settings, edit them as you wish.
 
 " Comfortable motion ---------------------------------------------------------
-if using_neovim && using_extra_plug
-    " Disable default key mapping
-    let g:comfortable_motion_no_default_key_mappings = 1
-    " Enable motion with keyboard and mousewheel
-    nnoremap <silent><C-f> :call comfortable_motion#flick(100)<CR>
-    nnoremap <silent><C-b> :call comfortable_motion#flick(-100)<CR>
-endif
+"if using_neovim && using_extra_plug
+    "" Disable default key mapping
+    "let g:comfortable_motion_no_default_key_mappings = 1
+    "" Enable motion with keyboard and mousewheel
+    "nnoremap <silent><C-f> :call comfortable_motion#flick(100)<CR>
+    "nnoremap <silent><C-b> :call comfortable_motion#flick(-100)<CR>
+"endif
 
 " YankRing -------------------------------------------------------------------
 if using_extra_plug
@@ -1272,16 +1274,19 @@ if using_coding_tool_plug
 endif
 
 " Vim-fugitive ---------------------------------------------------------------
+" -- :G Summary for current git repository
 if using_coding_tool_plug
     noremap <leader>g :Git<space>
     noremap <leader>gd :Git diff %<CR>
     noremap <leader>gD :Git diff<CR>
     noremap <leader>gs :G<CR>
+    noremap <leader>gl :GcLog<CR>
     noremap <leader>ga :Git add %<CR>
     noremap <leader>gA :Git add --all<CR>
-    noremap <leader>gc :Git commit % -m<space>
+    noremap <leader>gc :Git commit<CR>
     noremap <leader>gC :Git commit -m<space>
     noremap <leader>gB :Git blame<CR>
+    noremap <leader>gR :Git reset<space>
 endif
 
 " GitGutter ------------------------------------------------------------------
@@ -1313,6 +1318,8 @@ if using_coding_tool_plug
     noremap <leader>ghs :GitGutterSignsToggle<CR>
     noremap <leader>ghl :GitGutterLineHighlightsToggle<CR>
     noremap <leader>ghn :GitGutterLineNrHighlightsToggle<CR>
+    noremap <leader>gha :GitGutterSignsEnable<CR>
+                \:GitGutterLineHighlightsEnable<CR>
     " GitGutter hunk move/action/git
     nmap <leader>gn <Plug>(GitGutterNextHunk)
     nmap <leader>gN <Plug>(GitGutterPrevHunk)

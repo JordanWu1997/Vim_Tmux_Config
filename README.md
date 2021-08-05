@@ -399,14 +399,15 @@ Table of Contents
 | N/V      | [LK]+[g]+[h]+[s/l/n]        | Toggle GitGutter highlight    | Toggle GitGutter highlight symbol/line/line number |
 | N/V      | [LK]+([Shift])+[Tab]        | Cycle (Prev)/Next git hunks   | Cycle (Prev)/Next git hunks           | Hunk means changed block |
 | N/V      | [LK]+[g]+[n]                | Next git hunk                 | Move to next git hunk                 |
-| N/V      | [LK]+[g]+[p/N]              | Previous git hunk             | Move to previous git hunk             |
-| N/V      | [LK]+[g]+[s]                | Hunk preview (before changed) | Hunk preview (before changed)         | Here s for (s)how_preview |
+| N/V      | [LK]+[g]+[p]                | Previous git hunk             | Move to previous git hunk             |
+| N/V      | [LK]+[g]+[Shift]+[p]        | Hunk preview (before changed) | Hunk preview (before changed)         | Here s for (s)how_preview |
 | N/V      | [LK]+[g]+[Shift]+[f]        | Fold all unchanged lines      | Fold all unchanged lines              |
 | N/V      | [LK]+[g]+[Shift]+[s]        | Stage current hunk            | Stage current hunk                    | Here s for (s)tage |
 | N/V      | [LK]+[g]+[Shift]+[u]        | Restore current hunk          | Restore current hunk                  | Like vim undo |
+| N/V      | [LK]+[g]+[s]                | Status of git                 | Status of git
 | N/V      | [LK]+[g]+([Shift])+[d]      | Git diff (all unstaged files) | Git diff (all unstaged files)         |
 | N/V      | [LK]+[g]+([Shift])+[a]      | Git add (all unstaged files)  | Git add (all unstaged files)          |
-| N/V      | [LK]+[g]+([Shift])+[c]      | Git commit -m (all unstaged files) | Git commit -m (all unstaged files) |
+| N/V      | [LK]+[g]+([Shift])+[c]      | Git commit all staged files   | Git commit all staged files)          |
 | N/V      | [LK]+[g]+[Shift]+[b]        | Git blame current file        | Git blame current file                |
 
 ### Reference for VIM Setup
