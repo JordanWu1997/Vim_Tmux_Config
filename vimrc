@@ -556,12 +556,15 @@ if using_vim8
     tnoremap <C-j> <C-\><C-n><C-w>j
     tnoremap <C-k> <C-\><C-n><C-w>k
     tnoremap <C-l> <C-\><C-n><C-w>l
-    " Auto start command when starting terminal mode
-    autocmd TermOpen * setlocal
-                \ nocursorcolumn nocursorline nonumber laststatus=0
-    " Auto start command when leaving terminal mode
-    autocmd TermClose * setlocal
-                \ cursorcolumn cursorline number laststatus=2
+    " Terminal customization for neovim
+    if using_neovim
+        " Auto start command when starting terminal mode
+        autocmd TermOpen * setlocal
+                    \ nocursorcolumn nocursorline nonumber laststatus=0
+        " Auto start command when leaving terminal mode
+        autocmd TermClose * setlocal
+                    \ cursorcolumn cursorline number laststatus=2
+    endif
 endif
 
 " ============================================================================
@@ -623,7 +626,7 @@ if using_customized_theme
     Plug 'dylanaraps/wal.vim', { 'on': 'colorscheme wal' }
     " Color theme (Monokai - high contrast)
     Plug 'patstockwell/vim-monokai-tasty',
-                \{ 'on': 'colorscheme vim-monokai-tasty' }
+                \ { 'on': 'colorscheme vim-monokai-tasty' }
     " Color theme (Gruvbox - low contrast)
     Plug 'morhetz/gruvbox', { 'on': 'colorscheme gruvbox' }
     " Color theme (Srcery - low contrast)
@@ -667,7 +670,7 @@ Plug 'vim-scripts/IndexedSearch'
 Plug 'scrooloose/nerdcommenter'
 " Generate bracket/quotation in pair
 Plug 'tpope/vim-surround'
-" Enable . (repeat) motion for external plugin commands
+" Enable . (repeat) motion for commands (e.g. undo, redo, vim-surround)
 Plug 'tpope/vim-repeat'
 " Vim window maximizer
 Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle' }
@@ -680,18 +683,18 @@ Plug 'Konfekt/FastFold'
 
 " [Vim extra functions] ------------------------------------------------------
 if using_extra_plug
-    if using_neovim
+    "if using_neovim
         "" Override configs by directory [Time-consuming for initialization]
         "Plug arielrossanigo/dir-configs-override.vim'
-        " Fancy startup page of vim [Not use in vim, too loadtime-consuming]
-        Plug 'mhinz/vim-startify'
         "" Vim smooth scroll
         "Plug 'yuttie/comfortable-motion.vim'
         "" Goyo (Distraction-free mode)
         "Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
         "" Vim-wiki (Note-taking)
         "Plug 'vimwiki/vimwiki', { 'on': 'VimwikiUISelect' }
-    endif
+    "endif
+    " Fancy startup page of vim
+    Plug 'mhinz/vim-startify'
     " History of yank
     Plug 'vim-scripts/YankRing.vim'
     " Register investigator
@@ -735,10 +738,10 @@ if using_coding_tool_plug
     " GitGutter (enhanced signify), also with git integration
     Plug 'airblade/vim-gitgutter', { 'on': 'GitGutterToggle' }
     " File Minimap (Need neovim Ver. >= 0.5)
-    if has('nvim-0.5')
-        Plug 'wfxr/minimap.vim',
-                    \ {'do': ':!cargo install --locked code-minimap'}
-    endif
+    "if has('nvim-0.5')
+        "Plug 'wfxr/minimap.vim',
+                    "\ {'do': ':!cargo install --locked code-minimap'}
+    "endif
 endif
 
 " [Tmux] ---------------------------------------------------------------------
@@ -755,12 +758,12 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'vim-python/python-syntax', { 'for': 'python' }
 if using_python_completion
     " Front end of completion (python and etc.)
-    if using_neovim && vim_plug_just_installed
+    if vim_plug_just_installed
         Plug 'Shougo/deoplete.nvim',
-                    \ { 'do': ':autocmd VimEnter * UpdateRemotePlugins' }
-    else
-        Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
+                        \ { 'do': ':autocmd VimEnter * UpdateRemotePlugins' }
     endif
+    " Front end of completion (python and etc.)
+    Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
     " Yet Another Remote Plugin Framework for Neovim [needed for deoplete]
     Plug 'roxma/nvim-yarp', { 'for': 'python' }
     " Help communicate beteen vim and neovim [needed for deoplete.nvim]
@@ -1090,7 +1093,7 @@ nmap <leader><Enter> <Plug>(choosewin)
 
 " Autopairs -----------------------------------------------------------------
 " Insert, visual, normal mode
-let g:AutoPairsShortcutToggle = '<M-a>'
+let g:AutoPairsShortcutToggle = '<M-`>'
 let g:AutoPairsShortcutJump = '<M-j>'
 " Insert mode only
 " Wrap current word with pair e.g. ()test -> (test)
@@ -1173,11 +1176,11 @@ if using_extra_plug
     function! AutoCompPopToggle()
         if g:AutoCompPop_is_open
             AcpDisable
-            echo 'Disable AutoCompletionPop'
+            echo 'AutoCompletionPop disabled'
             let g:AutoCompPop_is_open = 0
         else
             AcpEnable
-            echo 'Enable AutoCompletionPop'
+            echo 'AutoCompletionPop enabled'
             let g:AutoCompPop_is_open = 1
         endif
     endfunction
@@ -1342,14 +1345,14 @@ if using_coding_tool_plug
 endif
 
 " Minimap --------------------------------------------------------------------
-if has('nvim-0.5') && using_coding_tool_plug
-    let g:minimap_width = min([10, winwidth(0) / 8])
-    let g:minimap_auto_start = 0
-    let g:minimap_auto_start_win_enter = 0
-    let g:minimap_git_colors = 0
-    let g:minimap_highlight_search = 0
-    noremap <leader>mm :MinimapToggle<CR>
-endif
+"if has('nvim-0.5') && using_coding_tool_plug
+    "let g:minimap_width = min([10, winwidth(0) / 8])
+    "let g:minimap_auto_start = 0
+    "let g:minimap_auto_start_win_enter = 0
+    "let g:minimap_git_colors = 0
+    "let g:minimap_highlight_search = 0
+    "noremap <leader>mm :MinimapToggle<CR>
+"endif
 
 " ============================================================================
 " Part 7 - Python coding tools settings (Plugins settings and mappings)

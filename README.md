@@ -375,9 +375,10 @@ Table of Contents
 | N/V      | [y]+[s]+[a]+[w]+["]         | Add wrapped quotation/bracket | From word to "word"                   | vim-surrounder |
 | N/V      | [d]+[s]+[a]+[w]+["]         | Del wrapped quotation/bracket | From "word" to word                   | vim-surrounder |
 | N/V      | [c]+[s]+[']+["]             | Change quotation/bracket      | From 'word' to "word"                 | vim-surrounder |
-| N/V/I    | [Alt]+[a]                   | Toggle auto-pair              | On/Off auto-pair quotation/bracket    | auto-pairs |
+| N/V/I    | [LK]+[\`]                   | Toggle auto-completion popup  | On/Off auto-completion popup          | autoomplpop |
+| N/V/I    | [Alt]+[\`]                  | Toggle auto-pair              | On/Off auto-pair quotation/bracket    | auto-pairs |
 | N/V/I    | [Alt]+[j]                   | Jump to next pairs            | Jump to next paired quotation/bracket | auto-pairs |
-| I        | [Alt]+[w]                   | Auto-pair fastwrap            | Auto-pair fastwrap current pairs      | Example: ()test -> (test) |
+| I        | [Alt]+[w]                   | Auto-pair fastwrap            | Auto-pair fastwrap current pairs      | Example: (\|)test -> (test) |
 
 - Extra plug (Note: "let using_extra_plug = 1" must be set in vimrc)
 
@@ -398,13 +399,12 @@ Table of Contents
 | N/V      | [LK]+[g]+[g]                | Toggle GitGutter              | On/Off GitGutter                      | Disabled at startup |
 | N/V      | [LK]+[g]+[h]+[s/l/n]        | Toggle GitGutter highlight    | Toggle GitGutter highlight symbol/line/line number |
 | N/V      | [LK]+([Shift])+[Tab]        | Cycle (Prev)/Next git hunks   | Cycle (Prev)/Next git hunks           | Hunk means changed block |
-| N/V      | [LK]+[g]+[n]                | Next git hunk                 | Move to next git hunk                 |
-| N/V      | [LK]+[g]+[p]                | Previous git hunk             | Move to previous git hunk             |
-| N/V      | [LK]+[g]+[Shift]+[p]        | Hunk preview (before changed) | Hunk preview (before changed)         | Here s for (s)how_preview |
+| N/V      | [LK]+[g]+[n/p]              | Next/Prev git hunk            | Move to Next/Prev git hunk            |
+| N/V      | [LK]+[g]+[Shift]+[p]        | Hunk preview (before changed) | Hunk preview (before changed)         | Here p for (p)review |
 | N/V      | [LK]+[g]+[Shift]+[f]        | Fold all unchanged lines      | Fold all unchanged lines              |
 | N/V      | [LK]+[g]+[Shift]+[s]        | Stage current hunk            | Stage current hunk                    | Here s for (s)tage |
 | N/V      | [LK]+[g]+[Shift]+[u]        | Restore current hunk          | Restore current hunk                  | Like vim undo |
-| N/V      | [LK]+[g]+[s]                | Status of git                 | Status of git
+| N/V      | [LK]+[g]+[s]                | Summary of current git repo   | Summary of current git repo           | Here s for (s)ummary
 | N/V      | [LK]+[g]+([Shift])+[d]      | Git diff (all unstaged files) | Git diff (all unstaged files)         |
 | N/V      | [LK]+[g]+([Shift])+[a]      | Git add (all unstaged files)  | Git add (all unstaged files)          |
 | N/V      | [LK]+[g]+([Shift])+[c]      | Git commit all staged files   | Git commit all staged files)          |
