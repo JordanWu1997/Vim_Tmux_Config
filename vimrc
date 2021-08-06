@@ -112,7 +112,8 @@ let using_customized_theme = 1
 " Fancy symbols (Mainly affect lightline and nerdtree icon)
 let using_fancy_symbols = 1
 " Wal theme support (Xresources colortheme support, check pywal)
-let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
+"let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
+let using_wal_theme = 0
 " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
 let using_extra_plug = 1
 " Coding tools vim-plug (Include syntax support, git function, and etc.)
@@ -120,6 +121,8 @@ let using_coding_tool_plug = 1
 " Python Completion (Use deoplete and jedi, neovim is recommended to be used)
 let using_python_completion = 1
 " Python that used to install jedi, pynvim and python packages for completion
+" Search python environment you are using [very time-consuming]
+"let python_for_completion = system('which python')
 let python_for_completion = '/home/jordankhwu/anaconda3/bin/python'
 " Support of external gui software (e.g. Okular, Google-chrome, and etc.)
 let using_gui_software = 1
@@ -198,7 +201,10 @@ vnoremap J :m '>+1<CR>gv=gv
 noremap <leader><C-o> :jumps<CR>
 noremap <leader>g; :changes<CR>
 noremap <leader>g, :changes<CR>
-" Jump to next/prev paragraph ({/} for vim built-in function)
+" Jump to prev/next sentence ((/) for vim built-in function)
+map <M-Left> <S-(>
+map <M-Right> <S-)>
+" Jump to prev/next paragraph ({/} for vim built-in function)
 map <M-Down> <S-}>
 map <M-Up> <S-{>
 
@@ -239,20 +245,25 @@ noremap <leader><F10> :loadview<CR>
 " Split pane navigation [Now integrate with tmux, check vim-tmux-navigator]
 " -- <C-w>h/j/k/l: Move to L/D/U/R pane
 " -- <C-w>H/J/K/L: Move pane to L/D/U/R
+" Map <C-w> to <space>w
+nnoremap <leader>w <C-w>
 " Split pane - Split border style
 set fillchars+=vert:\ "
 " Split pane - More natural split opening
 set splitbelow
 set splitright
-" Split pane action
+" Split pane action (built-in, extended)
 " -- <C-w>T: Move current pane to new tabe
 " -- <C-w>n: Add new empty pane
 " -- <C-w>c: Close current pane
-nnoremap <silent><C-w>- :split<CR>
-nnoremap <silent><C-w>\ :vsplit<CR>
-nnoremap <C-w>_ :split<space>
-nnoremap <C-w>\| :vsplit<space>
-" Split pane size
+" -- <C-w>s: Open current buffer in split
+" -- <C-w>v: Open current buffer in vsplit
+nmap <C-w>S :split<space>
+nmap <C-w>V :vsplit<space>
+" Split pane resize (built-in, extended)
+" -- <C-w>[+/-]: Increase/Decrease current pane height
+" -- <C-w>[>/<]: Increase/Decrease current pane width
+" -- <C-w>[_/|]: Maximize current pane horiz/verti
 nnoremap <silent>= :resize +1<CR>
 nnoremap <silent>- :resize -1<CR>
 nnoremap <silent>+ :vertical resize +1<CR>
@@ -285,7 +296,7 @@ set wildmode=list:full    " Show all available input options (or use Ctrl-D)
 " Cursor settings ------------------------------------------------------------
 set ruler                 " Show cursor position in statusline
 set cursorline            " Show vertical line
-set nocursorcolumn        " Show horizontal line (laggy sometimes)
+set cursorcolumn          " Show horizontal line (laggy sometimes)
 " Toggle cursor line/column indicator (horizontal/vertical)
 noremap <leader>ch :set cursorline!<CR>
             \:echo 'Toggle Cursor Line [Horizontal]'<CR>
@@ -633,6 +644,8 @@ if using_customized_theme
     Plug 'srcery-colors/srcery-vim', { 'on': 'colorscheme srcery' }
     " Color theme (Nord - cold color lower contrast)
     Plug 'arcticicestudio/nord-vim', { 'on': 'colorscheme nord' }
+    " Color theme (Oceanic - solorized-like theme)
+    Plug 'mhartington/oceanic-next', { 'on': 'colorscheme OceanicNext' }
     " Lightline (status line)
     Plug 'itchyny/lightline.vim'
     " Lightline bufferline
@@ -1490,12 +1503,12 @@ if using_customized_theme
         " Option 2 - Use wal vim plugin [Recommended]
         colorscheme wal
         " Lightline style
-        call LightlineStyle('seoul256', 1, 1)
+        call LightlineStyle('wal', 1, 1)
     else
         " Current available themes
-        colorscheme nord
+        colorscheme gruvbox
         " Lightline style
-        call LightlineStyle('nord', using_fancy_symbols, 1)
+        call LightlineStyle('gruvbox', using_fancy_symbols, 1)
     endif
     " Call customized color palette
     call CustomizedColorPalette()
@@ -1515,7 +1528,7 @@ nnoremap <leader>csd :colorscheme default<CR>:set termguicolors<CR>
             \:call LightlineReload()<CR>:echo "default colorscheme"<CR>
 nnoremap <leader>csg :colorscheme gruvbox<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:call LightlineStyle('deus', using_fancy_symbols, 0)<CR>
+            \:call LightlineStyle('gruvbox', using_fancy_symbols, 1)<CR>
             \:call CustomizedColorPalette()<CR>
             \:call LightlineReload()<CR>:echo "gruvbox colorscheme"<CR>
 nnoremap <leader>csv :colorscheme vim-monokai-tasty<CR>:set termguicolors<CR>
@@ -1530,9 +1543,13 @@ nnoremap <leader>csn :colorscheme nord<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
             \:call LightlineStyle('nord', using_fancy_symbols, 1)<CR>
             \:call LightlineReload()<CR>:echo "nord colorscheme"<CR>
+nnoremap <leader>cso :colorscheme OceanicNext<CR>:set termguicolors<CR>
+            \:call CustomizedColorPalette()<CR>
+            \:call LightlineStyle('oceanicnext', using_fancy_symbols, 1)<CR>
+            \:call LightlineReload()<CR>:echo "oceanicnext colorscheme"<CR>
 nnoremap <leader>csw :colorscheme wal<CR>:set notermguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:call LightlineStyle('seoul256', 1, 1)<CR>
+            \:call LightlineStyle('wal', 1, 1)<CR>
             \:highlight CursorLineNr cterm=bold ctermfg=10 ctermbg=NONE<CR>
             \:call LightlineReload()<CR>:echo "wal colorscheme"<CR>
 " Transparent background shortcut

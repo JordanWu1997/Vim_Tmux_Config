@@ -291,7 +291,7 @@ Table of Contents
 | N/V      | [F9]                        | Toggle indent highlight (line)  | On/Off indent highlight (line)      |
 | N/V      | [LK]+[F9]                   | Toggle indent highlight (block) | On/Off indent highlight (block)     |
 | N/V      | ([LK])+[F10]                | (Load)/Save vim layout        | Load/Save vim layout                  | Including pane split, folds, and etc. |
-| N/V      | ([LK])+[F11]                | (OFF)/ON synchronized cursor  | Off/On synchronized cursor            | Need to execute in every pane that wants to synchronize |
+| N/V      | ([LK])+[F11]                | (Off)/On synchronized cursor  | Off/On synchronized cursor            | Need to execute in every pane that wants to synchronize |
 | N/V      | ([LK])+[F12]                | (Exit)/Enter terminal mode    | Exit/Enter terminal mode              |
 
 ### Keymapping Sheet 2 - Built-in Function Keymapping
@@ -299,8 +299,8 @@ Table of Contents
 #### 1. Split/Window Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
-| N/V      | [Ctrl]+[w]+[-/\\]           | Add new split Horiz/Vertical  | Add new split Horizontal/Vertial      |
-| N/V      | [Ctrl]+[w]+[Shift]+[-/\\]   | Add current split Horiz/Verti | Add current split Horizontal/Vertial  | Duplicate original split, just add [Shift] to [-]/[\]| |
+| N/V      | [Ctrl]+[w]+[s/v]            | Add new split Horiz/Vertical  | Add new split Horizontal/Vertial      |
+| N/V      | [Ctrl]+[w]+[Shift]+[s/v]    | Add current split Horiz/Verti | Add current split Horizontal/Vertial  | Duplicate original split, just add [Shift] to [-]/[\]| |
 | N/V      | [Ctrl]+[h/j/k/l]            | Move between vim splits       | Move between splits (L/D/U/R)         | With plugin, you can even move between TMUX pane and VIM splits |
 | N/V      | [Ctrl]+[w]+[h/j/k/l]        | Move between vim splits       | Move between splits (L/D/U/R)         |
 | N/V      | [Ctrl]+[w]+[Shift]+[h/j/k/l] | Move current split (L/D/U/R) | Move current split (L/D/U/R)          |
@@ -324,7 +324,7 @@ Table of Contents
 | N/V      | [Shift]+[k]                 | Search current word in mannual| Search current word in mannual        |
 | N/V      | [LK]+[d]+[d]                | Close current buffer          | Close current buffer                  | Here d for (d)eletion
 | N/V      | [LK]+[w]+[p]                | Toggle line wrap              | On/Off line wrap                      | Here wp for (w)ra(p)
-| N/V      | [LK]+([Shift])+[/]          | Toggle search highlight       | On/Off search highlight               |
+| N/V      | [LK]+([Shift])+[/]          | (Off)/On search highlight     | Off/On search highlight               |
 | N/V      | [LK]+[m]+[k]                | Show all vim marks            | Show all vim marks                    | [LK]+[m]+[k] shows marks using fzf instead vim built-in
 | N/V      | [LK]+[r]+[g]                | Show all vim regiesters       | Show all vim registers                | Here re for (re)gister
 | N/V      | [LK]+[a]+[b]                | Show all vim abbreviates      | Show all vim abbreviates              | Here ab for (ab)reviation
