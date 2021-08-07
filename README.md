@@ -395,11 +395,12 @@ Table of Contents
 | N/V      | [LK]+[m]+[m]                | Toggle code minimap scrollbar | On/Off code minimap scrollbar         | For neovim version >= 0.5, and minicode is installed |
 | N/V      | [Alt]+[n] (+[n]+[n]+...+[n] | Multiple cursor for selected  | Multiple cursor for currently selected word | Press N to next word; Use I/A to insert word; Use Esc to exit |
 | N/V      | [Alt]+[p] (+[p]+[p]+...+[p] | Cancel selected multiple cursor | Cancel selected multiple cursor     |
-| N/V      | [Alt]+[o] (+[o]+[o]+...+[o] | Omit selected multiple cursor | Omit selected multiple cursor     |
+| N/V      | [Alt]+[o] (+[o]+[o]+...+[o] | Omit selected multiple cursor | Omit selected multiple cursor         |
+| N/V      | [LK]+[a]+[l]                | Toggle ALE                    | On/Off ALE                            | Enabled at startup |
+| N/V      | [LK]+[a]+[j/k]              | Goto Next/Prev ALE linter     | Goto Next/Prev ALE linter             |
 | N/V      | [LK]+[g]+[g]                | Toggle GitGutter              | On/Off GitGutter                      | Disabled at startup |
 | N/V      | [LK]+[g]+[h]+[s/l/n]        | Toggle GitGutter highlight    | Toggle GitGutter highlight symbol/line/line number |
-| N/V      | [LK]+([Shift])+[Tab]        | Cycle (Prev)/Next git hunks   | Cycle (Prev)/Next git hunks           | Hunk means changed block |
-| N/V      | [LK]+[g]+[n/p]              | Next/Prev git hunk            | Move to Next/Prev git hunk            |
+| N/V      | [LK]+[g]+[j/k]              | Goto Next/Prev git hunks      | Goto Next/Prev git hunks             | Hunk means changed block |
 | N/V      | [LK]+[g]+[Shift]+[p]        | Hunk preview (before changed) | Hunk preview (before changed)         | Here p for (p)review |
 | N/V      | [LK]+[g]+[Shift]+[f]        | Fold all unchanged lines      | Fold all unchanged lines              |
 | N/V      | [LK]+[g]+[Shift]+[s]        | Stage current hunk            | Stage current hunk                    | Here s for (s)tage |

@@ -162,7 +162,7 @@ let mapleader = ' '
 " -- Ctrl+n/p (Autocompletion next/prev candidate)
 " -- Ctrl+d/t (Unindent/Indent current line)
 
-" Map Esc key to ii, kj
+" Map exit insert mode (Esc/Ctrl+[) to ii, kj
 " -- Use Ctrl+v to escape for 'ii' word (e.g. ascii)
 imap ii <Esc>
 imap kj <Esc>
@@ -207,12 +207,18 @@ map <M-Right> <S-)>
 " Jump to prev/next paragraph ({/} for vim built-in function)
 map <M-Down> <S-}>
 map <M-Up> <S-{>
+" Add/Remove indent in normal/visual mode
+noremap <Tab> >>_
+nnoremap <S-Tab> <<_
+vnoremap <Tab> >gv
+vnoremap <S-Tab> <gv
 
 " Save/Load file hotkey ------------------------------------------------------
 " Note:
 " -- ZZ (Quit and save if there's change in file without comfirmation)
 " -- :f <new-filename> (Save current file with new filename)
-" -- :earlier Nf (Undo to last N file save/write)
+" -- :earlier Nf (Undo to last N file change)
+" -- :later Nf (Redo to N file change)
 
 noremap <leader>Q :qall<CR>
 noremap <leader>q :q<CR>
@@ -255,9 +261,8 @@ set splitright
 " Split pane action (built-in, extended)
 " -- <C-w>T: Move current pane to new tabe
 " -- <C-w>n: Add new empty pane
-" -- <C-w>c: Close current pane
-" -- <C-w>s: Open current buffer in split
-" -- <C-w>v: Open current buffer in vsplit
+" -- <C-w>q/c: Close current pane
+" -- <C-w>s/v: Open current buffer in split/vsplit
 nmap <C-w>S :split<space>
 nmap <C-w>V :vsplit<space>
 " Split pane resize (built-in, extended)
@@ -653,6 +658,12 @@ if using_customized_theme
 endif
 
 " [File/Code Browsing] -------------------------------------------------------
+if using_fancy_symbols
+    " Nerdtree and other vim-plug powerline symbols support
+    Plug 'ryanoasis/vim-devicons'
+    " More highlight in nertree (make nerdtree laggy in large filetree)
+    " Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+endif
 " Code class/module/tag browser [Update to latest]
 Plug 'preservim/tagbar', { 'on': 'TagbarToggle' }
 " Code and files fuzzy finder and previewer (main progroam)
@@ -663,12 +674,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'chengzeyi/fzf-preview.vim'
 " File browser [Support netrw (vim built-in file browser) functions]
 Plug 'scrooloose/nerdtree'
-if using_fancy_symbols
-    " Nerdtree and other vim-plug powerline symbols support
-    Plug 'ryanoasis/vim-devicons'
-    " More highlight in nertree (make nerdtree laggy in large filetree)
-    " Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-endif
 
 " [Vim useful functions] -----------------------------------------------------
 " Sudo write/read files in vim
@@ -696,16 +701,12 @@ Plug 'Konfekt/FastFold'
 
 " [Vim extra functions] ------------------------------------------------------
 if using_extra_plug
-    "if using_neovim
-        "" Override configs by directory [Time-consuming for initialization]
-        "Plug arielrossanigo/dir-configs-override.vim'
-        "" Vim smooth scroll
-        "Plug 'yuttie/comfortable-motion.vim'
-        "" Goyo (Distraction-free mode)
-        "Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
-        "" Vim-wiki (Note-taking)
-        "Plug 'vimwiki/vimwiki', { 'on': 'VimwikiUISelect' }
-    "endif
+    if using_neovim
+        " Vim smooth scroll
+        Plug 'yuttie/comfortable-motion.vim'
+        " Goyo (Distraction-free mode)
+        Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
+    endif
     " Fancy startup page of vim
     Plug 'mhinz/vim-startify'
     " History of yank
@@ -728,7 +729,8 @@ if using_coding_tool_plug
         " Languge packs [Not working on fomalhaut (vim=7.0)]
         Plug 'sheerun/vim-polyglot'
         " Multiple language syntax and lint support [Not working on vim < 8.0]
-        Plug 'dense-analysis/ale', { 'for': ['python', 'fortran', 'html'] }
+        Plug 'dense-analysis/ale',
+                    \ { 'for': ['python', 'fortran', 'html'] }
         "" Syntax support (Improved syntastics, here just use ale instead)
         " Plug 'neomake/neomake'
         "" Multiple language inspector [Powerful but too complicated]
@@ -861,10 +863,10 @@ function! LightlineStyle(theme, fancy, central_opaque)
     " Active statusline
     let g:lightline.active = {
         \ 'left': [ [ 'mode', 'paste' ],
-		\           [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
-		\ 'right': [ [ 'lineinfo' ],
-		\            [ 'percent' ],
-		\            [ 'fileformat', 'fileencoding', 'filetype' ] ] }
+        \           [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+        \ 'right': [ [ 'lineinfo' ],
+        \            [ 'percent' ],
+        \            [ 'fileformat', 'fileencoding', 'filetype' ] ] }
     " Inactive statusline
     let g:lightline.inactive = {
         \ 'left': [ [ 'filename' ] ],
@@ -944,7 +946,7 @@ set noshowmode    " No vim-built-in mode statusline
 set laststatus=2  " Always display the statusline in all windows
 set showtabline=2 " Always display the tabline, even if there is only one tab
 set cmdheight=1   " Size of command line height
-set showcmd       " This line must be added AFTER statusline plugin
+set showcmd       " This line must be added AFTER statusline option
 
 " Keymapping for bufferline --------------------------------------------------
 " Goto buffers
@@ -974,13 +976,9 @@ nmap <Leader>d9 <Plug>lightline#bufferline#delete(9)
 " File/Code browing settings, edit them as you wish.
 
 " fzf.vim --------------------------------------------------------------------
-" Caution:
-" -- (1) ripgrep must be installed if Rg function is needed
-" -- (2) For fish shell, syntax is slightly different from bash script. Script
-"        of fzf_preview modification is needed. Try change $(...) to (...),
-"        && to ;and, and || to ;or within below script. Check the following
-"        $HOME/.config/nvim/plugged/fzf-preview.vim/plugin/fzf-preview.vim
-"
+" Note:
+" -- ripgrep must be installed if Rg function is needed
+
 " Add prefix FZF to all fzf commands
 let g:fzf_command_prefix = 'FZF'
 " Default fzf action keymapping
@@ -1118,13 +1116,13 @@ let g:AutoPairsShortcutFastWrap = '<M-w>'
 " Vim extra functions settings, edit them as you wish.
 
 " Comfortable motion ---------------------------------------------------------
-"if using_neovim && using_extra_plug
+if using_neovim && using_extra_plug
     "" Disable default key mapping
-    "let g:comfortable_motion_no_default_key_mappings = 1
+    let g:comfortable_motion_no_default_key_mappings = 1
     "" Enable motion with keyboard and mousewheel
-    "nnoremap <silent><C-f> :call comfortable_motion#flick(100)<CR>
-    "nnoremap <silent><C-b> :call comfortable_motion#flick(-100)<CR>
-"endif
+    nnoremap <silent><C-f> :call comfortable_motion#flick(100)<CR>
+    nnoremap <silent><C-b> :call comfortable_motion#flick(-100)<CR>
+endif
 
 " YankRing -------------------------------------------------------------------
 if using_extra_plug
@@ -1137,7 +1135,7 @@ if using_extra_plug
         let g:yankring_history_dir = '~/.vim/dirs/'
     endif
     " Yankring automatically remap built-in command key mapping (disabled)
-    " -- e.g. "X[x]", "D[d]", "Y[y]", "P[p]", ".", "@", and etc.
+    " -- e.g. 'X[x]', 'D[d]', 'Y[y]', 'P[p]', '.', '@', and etc.
     " -- Here disable most of default keymappings except yank replacing
     let g:yankring_window_auto_close = 1
     let g:yankring_record_insert = 0
@@ -1155,7 +1153,7 @@ if using_extra_plug
     let g:yankring_replace_n_nkey = '<C-n>'
     " Yankring history
     noremap <leader>ys :YRShow<CR>
-    noremap <leader>yc :YRClear<CR>
+    noremap <leader>yC :YRClear<CR>
 endif
 
 " Peekaboo -------------------------------------------------------------------
@@ -1184,6 +1182,8 @@ endif
 
 " AutoComplPop ---------------------------------------------------------------
 if using_extra_plug
+    " Enable autocomplpop at startup
+    let g:acp_enableAtStartup = 1
     " Toggle autocomplpop function
     let g:AutoCompPop_is_open = 1
     function! AutoCompPopToggle()
@@ -1197,14 +1197,14 @@ if using_extra_plug
             let g:AutoCompPop_is_open = 1
         endif
     endfunction
-    " Disable autocomplpop for python file [use deoplete instead]
-    if using_python_completion
-        let g:acp_enableAtStartup = 1
-        autocmd FileType python let g:acp_enableAtStartup = 0
-    endif
     " Toggle autocomplpop
     noremap <leader>` :call AutoCompPopToggle()<CR>
+    " Unmap autocomplpop for python file [use deoplete instead]
     autocmd FileType python unmap <leader>`
+    " Disable autocomplpop for python file [use deoplete instead]
+    if using_python_completion
+        autocmd FileType python let g:acp_enableAtStartup = 0
+    endif
 endif
 
 " Popup window selection -----------------------------------------------------
@@ -1235,10 +1235,16 @@ let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla,colour_names'
 " ============================================================================
 " Vim coding tools settings, edit them as you wish.
 
-" Ale (syntax check) ---------------------------------------------------------
+" ALE (Asynchronous Lint Engine) ---------------------------------------------
+" -- For python, flake8, pylint or other linting engines must be installed
+"    -- pip install flake8
+"    -- pip install pylint
 if using_coding_tool_plug
-    let g:ale_enabled = 0
+    let g:ale_enabled = 1
     noremap <leader>al :ALEToggle<CR>
+    nmap <leader>ak <Plug>(ale_previous_wrap)zz
+    nmap <leader>aj <Plug>(ale_next_wrap)zz
+    nmap <leader>af :ALEInfo
 endif
 
 " Rainbow parentheses --------------------------------------------------------
@@ -1250,7 +1256,6 @@ endif
 
 " Indentline -----------------------------------------------------------------
 if using_coding_tool_plug
-    let g:indentLine_char_list = ['|', '¦', '┆', '┊']
     let g:indentLine_showFirstIndentLevel = 1
     let g:indentLine_fileTypeExclude = ['text', 'markdown', 'latex']
     let g:indentLine_bufTypeExclude = ['help', 'terminal']
@@ -1292,7 +1297,6 @@ endif
 " Vim-fugitive ---------------------------------------------------------------
 " -- :G Summary for current git repository
 if using_coding_tool_plug
-    noremap <leader>g :Git<space>
     noremap <leader>gd :Git diff %<CR>
     noremap <leader>gD :Git diff<CR>
     noremap <leader>gs :G<CR>
@@ -1337,24 +1341,13 @@ if using_coding_tool_plug
     noremap <leader>gha :GitGutterSignsEnable<CR>
                 \:GitGutterLineHighlightsEnable<CR>
     " GitGutter hunk move/action/git
-    nmap <leader>gn <Plug>(GitGutterNextHunk)
-    nmap <leader>gN <Plug>(GitGutterPrevHunk)
-    nmap <leader>gp <Plug>(GitGutterPrevHunk)
     nmap <leader>gP <Plug>(GitGutterPreviewHunk)
     nmap <leader>gF :GitGutterFold<CR>
     nmap <leader>gS <Plug>(GitGutterStageHunk)
     nmap <leader>gU <Plug>(GitGutterUndoHunk)
-    " Cycle through hunks in current buffer
-    function! GitGutterNextHunkCycle()
-        let line = line('.')
-        GitGutterNextHunk
-        if line('.') == line
-            1
-            GitGutterNextHunk
-        endif
-    endfunction
-    nmap <silent><leader><Tab> :call GitGutterNextHunkCycle()<CR>
-    nmap <silent><leader><S-Tab> <Plug>(GitGutterPrevHunk)
+    " Move through hunks in current buffer
+    nmap <silent><leader>gj <Plug>(GitGutterNextHunk)zz
+    nmap <silent><leader>gk <Plug>(GitGutterPrevHunk)zz
 endif
 
 " Minimap --------------------------------------------------------------------
