@@ -1440,8 +1440,9 @@ let fortran_do_enddo = 1
 
 " LaTex ----------------------------------------------------------------------
 " Set spell check for LaTex files
+" -- z= :Correct spell
 autocmd FileType tex setlocal spell
-autocmd FileType tex setl updatetime=10000 " Unit: milisecond
+autocmd FileType tex setlocal updatetime=10000 " Unit: milisecond
 " Latex realtime viewer with gui pdf file manager
 if using_gui_software
     let g:livepreview_previwer = 'okular'
@@ -1453,6 +1454,7 @@ endif
 " Markdown -------------------------------------------------------------------
 " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
 " Google-chrome extension is needed for markdown viewer
+autocmd FileType markdown setlocal spell
 if using_gui_software
     let $VIMBROWSER='brave-browser'
     let $OPENBROWSER='noremap <F4> :!'. $VIMBROWSER .' %:p &<CR>'
