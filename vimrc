@@ -201,12 +201,6 @@ vnoremap J :m '>+1<CR>gv=gv
 noremap <leader><C-o> :jumps<CR>
 noremap <leader>g; :changes<CR>
 noremap <leader>g, :changes<CR>
-" Jump to prev/next sentence ((/) for vim built-in function)
-map <M-Left> <S-(>
-map <M-Right> <S-)>
-" Jump to prev/next paragraph ({/} for vim built-in function)
-map <M-Down> <S-}>
-map <M-Up> <S-{>
 " Add/Remove indent in normal/visual mode
 noremap <Tab> >>_
 nnoremap <S-Tab> <<_
@@ -269,10 +263,10 @@ nmap <C-w>V :vsplit<space>
 " -- <C-w>[+/-]: Increase/Decrease current pane height
 " -- <C-w>[>/<]: Increase/Decrease current pane width
 " -- <C-w>[_/|]: Maximize current pane horiz/verti
-nnoremap <silent>= :resize +1<CR>
-nnoremap <silent>- :resize -1<CR>
-nnoremap <silent>+ :vertical resize +1<CR>
-nnoremap <silent>_ :vertical resize -1<CR>
+nnoremap <silent><leader>= :resize +10<CR>
+nnoremap <silent><leader>- :resize -10<CR>
+nnoremap <silent><leader>, :vertical resize +10<CR>
+nnoremap <silent><leader>. :vertical resize -10<CR>
 
 " Vim settings ---------------------------------------------------------------
 if using_vim
@@ -698,12 +692,14 @@ Plug 't9md/vim-choosewin'
 Plug 'jiangmiao/auto-pairs'
 " Speed up Vim by updating folds only when called-for
 Plug 'Konfekt/FastFold'
+" Disable continuous hjkl left/down/up/right for moving efficienty training
+Plug 'takac/vim-hardtime'
 
 " [Vim extra functions] ------------------------------------------------------
 if using_extra_plug
     if using_neovim
-        " Vim smooth scroll
-        Plug 'yuttie/comfortable-motion.vim'
+        "" Vim smooth scroll
+        "Plug 'yuttie/comfortable-motion.vim'
         " Goyo (Distraction-free mode)
         Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
     endif
@@ -1096,13 +1092,15 @@ let g:maximizer_set_default_mapping = 0
 " Keymapping consistent with TMUX window maximization
 nnoremap <silent><leader>z :MaximizerToggle<CR>
 vnoremap <silent><leader>z :MaximizerToggle<CR>gv
+nnoremap <silent><C-w>z :MaximizerToggle<CR>
+vnoremap <silent><C-w>z :MaximizerToggle<CR>gv
 
 " Window-chooser (choosewin)--------------------------------------------------
 " Show big overlay letters
 let g:choosewin_overlay_enable = 1
 nmap <leader><Enter> <Plug>(choosewin)
 
-" Autopairs -----------------------------------------------------------------
+" Auto-pairs -----------------------------------------------------------------
 " Insert, visual, normal mode
 let g:AutoPairsShortcutToggle = '<M-`>'
 let g:AutoPairsShortcutJump = '<M-j>'
@@ -1110,19 +1108,26 @@ let g:AutoPairsShortcutJump = '<M-j>'
 " Wrap current word with pair e.g. ()test -> (test)
 let g:AutoPairsShortcutFastWrap = '<M-w>'
 
+" Hardtime -------------------------------------------------------------------
+let g:hardtime_default_on = 1
+let g:list_of_normal_keys = ["h", "j", "k", "l", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+let g:list_of_visual_keys = ["h", "j", "k", "l", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+let g:list_of_insert_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+let g:list_of_disabled_keys = []
+
 " ============================================================================
 " Part 5 - Vim extra functions settings (Plugins settings and mappings)
 " ============================================================================
 " Vim extra functions settings, edit them as you wish.
 
 " Comfortable motion ---------------------------------------------------------
-if using_neovim && using_extra_plug
-    "" Disable default key mapping
-    let g:comfortable_motion_no_default_key_mappings = 1
-    "" Enable motion with keyboard and mousewheel
-    nnoremap <silent><C-f> :call comfortable_motion#flick(100)<CR>
-    nnoremap <silent><C-b> :call comfortable_motion#flick(-100)<CR>
-endif
+"if using_neovim && using_extra_plug
+    """ Disable default key mapping
+    "let g:comfortable_motion_no_default_key_mappings = 1
+    """ Enable motion with keyboard and mousewheel
+    "nnoremap <silent><C-f> :call comfortable_motion#flick(100)<CR>
+    "nnoremap <silent><C-b> :call comfortable_motion#flick(-100)<CR>
+"endif
 
 " YankRing -------------------------------------------------------------------
 if using_extra_plug
@@ -1149,8 +1154,8 @@ if using_extra_plug
     let g:yankring_paste_n_akey = ' '
     let g:yankring_paste_v_key = ' '
     " Enable yankring replace
-    let g:yankring_replace_n_pkey = '<C-p>'
-    let g:yankring_replace_n_nkey = '<C-n>'
+    let g:yankring_replace_n_pkey = 'yp'
+    let g:yankring_replace_n_nkey = 'yn'
     " Yankring history
     noremap <leader>ys :YRShow<CR>
     noremap <leader>yC :YRClear<CR>

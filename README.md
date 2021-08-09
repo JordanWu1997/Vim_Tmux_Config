@@ -304,9 +304,10 @@ Table of Contents
 | N/V      | [Ctrl]+[h/j/k/l]            | Move between vim splits       | Move between splits (L/D/U/R)         | With plugin, you can even move between TMUX pane and VIM splits |
 | N/V      | [Ctrl]+[w]+[h/j/k/l]        | Move between vim splits       | Move between splits (L/D/U/R)         |
 | N/V      | [Ctrl]+[w]+[Shift]+[h/j/k/l] | Move current split (L/D/U/R) | Move current split (L/D/U/R)          |
-| N/V      | [-/=]                       | Inc/Dec split height          | +5/-5 rows split height               |
-| N/V      | [Shift]+[-/=]               | Inc/Dec split width           | +5/-5 columns split width             | Just add [Shift] to [-]/[=] |
-| N/V      | [Ctrl]+[w]+[=]              | Resplit splits equally        | Resplit splits equally                | Here =(equal sign) for equally split
+| N/V      | [LK]+[-/=]                  | Inc/Dec split height          | +10/-10 rows split height             |
+| N/V      | [LK]+[,/.]                  | Inc/Dec split width           | +10/-10 columns split width           |
+| N/V      | [LK]+[0]                    | Resize current split to 10 rows| Resize current split to 10 rows      | For terminal pane resize |
+| N/V      | [Ctrl]+[w]+[=]              | Resplit splits equally        | Re-split splits equally               | Here =(equal sign) for equally split
 
 #### 2. Code Folding Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
@@ -372,6 +373,7 @@ Table of Contents
 | N/V      | [LK]+[c]+[u]                | Uncomment current line        | UnComment current line                | NerdCommenter |
 | N/V      | [LK]+[Return]               | Select vim pane               | Select vim pane in tabs and splits    | vim-choosewin
 | N/V      | [LK]+[z]                    | Toggle maximize current split | On/Off maximize current split         | vim-maximizer |
+| N/V      | [Ctrl]+[w]+[z]              | Toggle maximize current split | On/Off maximize current split         | vim-maximizer |
 | N/V      | [y]+[s]+[a]+[w]+["]         | Add wrapped quotation/bracket | From word to "word"                   | vim-surrounder |
 | N/V      | [d]+[s]+[a]+[w]+["]         | Del wrapped quotation/bracket | From "word" to word                   | vim-surrounder |
 | N/V      | [c]+[s]+[']+["]             | Change quotation/bracket      | From 'word' to "word"                 | vim-surrounder |
@@ -386,7 +388,7 @@ Table of Contents
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N        | [Ctrl]+[f/b]                | Move down/up physically       | Move down/up physically               | comfortable-motion.vim |
 | N/V      | [LK]+[h/j/k/l]              | Quick move in four direction  | Quick move in four direction          | vim-easymotion |
-| N/V      | [Ctrl]+[n/p]                | Paste next/prev clipped item  | Paste next/prev clipped item          | yankring |
+| N/V      | [y]+[n/p]                   | Paste next/prev clipped item  | Paste next/prev clipped item          | yankring |
 
 - Coding tool (Note: "let using_coding_tool_plug = 1" must be set in vimrc)
 
