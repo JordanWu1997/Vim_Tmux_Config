@@ -205,6 +205,8 @@ nnoremap Y y$
 " Move selection block up/down in visual mode
 vnoremap K :m '<-2<CR>gv=gv
 vnoremap J :m '>+1<CR>gv=gv
+" Tab is already mapped to <C-i> by vim
+noremap <S-Tab> <C-o>
 " Show jump list and change list
 noremap <leader><C-o> :jumps<CR>
 noremap <leader>g; :changes<CR>
@@ -248,8 +250,6 @@ noremap <leader><F10> :loadview<CR>
 " Split pane navigation [Now integrate with tmux, check vim-tmux-navigator]
 " -- <C-w>h/j/k/l: Move to L/D/U/R pane
 " -- <C-w>H/J/K/L: Move pane to L/D/U/R
-" Map <C-w> to <space>w
-nnoremap <leader>w <C-w>
 " Split pane - Split border style
 set fillchars+=vert:\ "
 " Split pane - More natural split opening
@@ -266,10 +266,10 @@ nmap <C-w>V :vsplit<space>
 " -- <C-w>[+/-]: Increase/Decrease current pane height
 " -- <C-w>[>/<]: Increase/Decrease current pane width
 " -- <C-w>[_/|]: Maximize current pane horiz/verti
-nnoremap <silent><leader>= :resize +10<CR>
-nnoremap <silent><leader>- :resize -10<CR>
-nnoremap <silent><leader>, :vertical resize +10<CR>
-nnoremap <silent><leader>. :vertical resize -10<CR>
+nnoremap <silent><leader>w= :resize +10<CR>
+nnoremap <silent><leader>w- :resize -10<CR>
+nnoremap <silent><leader>w, :vertical resize +10<CR>
+nnoremap <silent><leader>w. :vertical resize -10<CR>
 
 " Vim settings ---------------------------------------------------------------
 if using_vim
@@ -277,7 +277,7 @@ if using_vim
     set ttyfast           " Faster redrawing. [Removed in neovim]
 endif
 set exrc                  " Search vimrc file in current directory
-set timeoutlen=500        " Timeout for entering combined key (milisecond)
+set timeoutlen=300        " Timeout for entering combined key (milisecond)
 set confirm               " Ask for confirmation before leaving vim
 set ignorecase            " Close case sensitive [Needed for smartcase]
 set smartcase             " Case sensitive if search contains uppercase letter
@@ -335,7 +335,7 @@ noremap <F5> :set relativenumber!<CR>
 
 " Fold settings
 set foldmethod=syntax
-set foldcolumn=4
+set foldcolumn=0
 set foldlevel=0
 autocmd FileType vim setlocal foldmethod=indent
 autocmd FileType python setlocal foldmethod=indent
@@ -561,7 +561,7 @@ if using_vim8
         noremap <F12> :terminal<CR>
     endif
     " Map key for resize pane
-    nnoremap <leader>0 :resize 10 <CR>
+    nnoremap <leader>r0 :resize 10 <CR>
     " Map key to go back from terminal mode to normal mode
     " Do not use Esc (which conflicts with fzf window) but <C-\><C-n>
     tnoremap <leader><F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
@@ -697,6 +697,8 @@ Plug 't9md/vim-choosewin'
 Plug 'jiangmiao/auto-pairs'
 " Disable continuous hjkl left/down/up/right for moving efficienty training
 Plug 'takac/vim-hardtime'
+" Show vim keybindings (for now only leader key)
+Plug 'liuchengxu/vim-which-key'
 
 " [Vim extra functions] ------------------------------------------------------
 if using_extra_plug
@@ -951,25 +953,25 @@ set showcmd       " This line must be added AFTER statusline option
 
 " Keymapping for bufferline --------------------------------------------------
 " Goto buffers
-nmap <Leader>1 <Plug>lightline#bufferline#go(1)
-nmap <Leader>2 <Plug>lightline#bufferline#go(2)
-nmap <Leader>3 <Plug>lightline#bufferline#go(3)
-nmap <Leader>4 <Plug>lightline#bufferline#go(4)
-nmap <Leader>5 <Plug>lightline#bufferline#go(5)
-nmap <Leader>6 <Plug>lightline#bufferline#go(6)
-nmap <Leader>7 <Plug>lightline#bufferline#go(7)
-nmap <Leader>8 <Plug>lightline#bufferline#go(8)
-nmap <Leader>9 <Plug>lightline#bufferline#go(9)
+nmap <leader>g1 <Plug>lightline#bufferline#go(1)
+nmap <leader>g2 <Plug>lightline#bufferline#go(2)
+nmap <leader>g3 <Plug>lightline#bufferline#go(3)
+nmap <leader>g4 <Plug>lightline#bufferline#go(4)
+nmap <leader>g5 <Plug>lightline#bufferline#go(5)
+nmap <leader>g6 <Plug>lightline#bufferline#go(6)
+nmap <leader>g7 <Plug>lightline#bufferline#go(7)
+nmap <leader>g8 <Plug>lightline#bufferline#go(8)
+nmap <leader>g9 <Plug>lightline#bufferline#go(9)
 " Close buffers
-nmap <Leader>d1 <Plug>lightline#bufferline#delete(1)
-nmap <Leader>d2 <Plug>lightline#bufferline#delete(2)
-nmap <Leader>d3 <Plug>lightline#bufferline#delete(3)
-nmap <Leader>d4 <Plug>lightline#bufferline#delete(4)
-nmap <Leader>d5 <Plug>lightline#bufferline#delete(5)
-nmap <Leader>d6 <Plug>lightline#bufferline#delete(6)
-nmap <Leader>d7 <Plug>lightline#bufferline#delete(7)
-nmap <Leader>d8 <Plug>lightline#bufferline#delete(8)
-nmap <Leader>d9 <Plug>lightline#bufferline#delete(9)
+nmap <leader>d1 <Plug>lightline#bufferline#delete(1)
+nmap <leader>d2 <Plug>lightline#bufferline#delete(2)
+nmap <leader>d3 <Plug>lightline#bufferline#delete(3)
+nmap <leader>d4 <Plug>lightline#bufferline#delete(4)
+nmap <leader>d5 <Plug>lightline#bufferline#delete(5)
+nmap <leader>d6 <Plug>lightline#bufferline#delete(6)
+nmap <leader>d7 <Plug>lightline#bufferline#delete(7)
+nmap <leader>d8 <Plug>lightline#bufferline#delete(8)
+nmap <leader>d9 <Plug>lightline#bufferline#delete(9)
 
 " ============================================================================
 " Part 3 - File/Code browsing settings (Plugins settings and mappings)
@@ -979,6 +981,7 @@ nmap <Leader>d9 <Plug>lightline#bufferline#delete(9)
 " fzf.vim --------------------------------------------------------------------
 " Note:
 " -- ripgrep must be installed if Rg function is needed
+" -- the_silver_searcher must be installed if Ag function is needed
 
 " Add prefix FZF to all fzf commands
 let g:fzf_command_prefix = 'FZF'
@@ -987,8 +990,10 @@ let g:fzf_action = {
             \ 'ctrl-t': 'tab split',
             \ 'ctrl-s': 'split',
             \ 'ctrl-v': 'vsplit' }
-" Default fzf layout (Floating in the center of window)
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.7 } }
+" fzf layout (Floating in the center of window)
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
+" Preview window layout
+let g:fzf_preview_window = ['up:50%', 'ctrl-/']
 " Buffer (Local vim)
 nnoremap <leader>fbL :FZFBLines<CR>
 nnoremap <leader>fbl :execute ":FZFBLines " . expand('<cword>')<CR>
@@ -999,21 +1004,30 @@ nnoremap <leader>fgL :FZFLines<CR>
 nnoremap <leader>fgl :execute ":FZFLines " . expand('<cword>')<CR>
 nnoremap <leader>fgT :FZFTags<CR>
 nnoremap <leader>fgt :execute ":FZFTag " . expand('<cword>')<CR>
-" File search
-nnoremap <leader>ffs :FZFFiles<space>
+" File/Pattern search
+nnoremap <leader>ffs :FZFFiles<CR>
+nnoremap <leader>ffS :FZFFiles<space>
 nnoremap <leader>flc :FZFLocate<space>
-nnoremap <leader>frg :FZFRg<space>
-" fzf key mapping
+nnoremap <leader>frg :FZFRg<CR>
+nnoremap <leader>fag :FZFAg<CR>
+" Git command
+nnoremap <leader>fgf :FZFGFiles<CR>
+nnoremap <leader>fgs :FZFGFiles?<CR>
+nnoremap <leader>fgc :FZFBCommits<CR>
+nnoremap <leader>fgC :FZFCommits<CR>
+" History
 nnoremap <leader>fhs :FZFHistory<CR>
 nnoremap <leader>fh: :FZFHistory:<CR>
 nnoremap <leader>fh/ :FZFHistory/<CR>
-nnoremap <leader>fmk :FZFMarks<CR>
+" Buffers/Windows/Marks
 nnoremap <leader>fbf :FZFBuffers<CR>
 nnoremap <leader>fwd :FZFWindows<CR>
+nnoremap <leader>fmk :FZFMarks<CR>
+nnoremap <leader>fmp :FZFMaps<CR>
+" Miscellaneous
+nnoremap <leader>fht :FZFHelptags<CR>
 nnoremap <leader>fft :FZFFiletypes<CR>
 nnoremap <leader>fcd :FZFCommands<CR>
-nnoremap <leader>fnm :FZFMaps<CR>
-nnoremap <leader>fht :FZFHelptags<CR>
 
 " NERDTree -------------------------------------------------------------------
 " Disable vim built-in netrw
@@ -1062,13 +1076,13 @@ let g:LargeFile = 1
 " -- K (Vim helppage for current selected word)
 
 " Open offline manual in system
-noremap <leader>m :execute ":Man " . expand('<cword>')<CR>
-noremap <leader>M :Man<space>
+noremap <leader>mm :execute ":Man " . expand('<cword>')<CR>
+noremap <leader>mM :Man<space>
 
 " Nerdcommenter --------------------------------------------------------------
 " -- Common prefix: <leader>c
-" Create default mappings
-let g:NERDCreateDefaultMappings = 1
+" Disable default mappings
+let g:NERDCreateDefaultMappings = 0
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 0
 " Use compact syntax for prettified multi-line comments
@@ -1077,6 +1091,12 @@ let g:NERDCompactSexyComs = 1
 let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not
 let g:NERDToggleCheckAllLines = 1
+" Map manually for minimalism
+map <leader>c$ <Plug>NERDCommenterToEOL
+map <leader>cA <Plug>NERDCommenterAppend
+map <leader>ca <Plug>NERDCommenterAltDelims
+map <leader>cc <Plug>NERDCommenterComment
+map <leader>cu <Plug>NERDCommenterUncomment
 
 " Vim-surround ---------------------------------------------------------------
 " Surround current word or sentence with brackets or html tags
@@ -1113,6 +1133,21 @@ let g:AutoPairsShortcutJump = '<M-j>'
 " Wrap current word with pair e.g. ()test -> (test)
 let g:AutoPairsShortcutFastWrap = '<M-w>'
 
+" Vim-whichkey ---------------------------------------------------------------
+" Whichkey layout
+let g:which_key_floating_opts = { 'row': '200' }
+let g:which_key_sort_horizontal = 1
+let g:which_key_hspace = 5
+" Autohide statusline when whichkey is on
+autocmd! FileType which_key
+autocmd  FileType which_key set laststatus=0 noshowmode noruler
+  \ | autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+" Map space key to normal/visual mode
+vnoremap <silent><leader> :<C-u>WhichKeyVisual '<space>'<CR>
+nnoremap <silent><leader> :<C-u>WhichKey '<space>'<CR>
+" TODO: Map Ctrl key to normal/visual mode
+" TODO: Map Alt key to normal/visual mode
+
 " Hardtime -------------------------------------------------------------------
 let g:hardtime_default_on = 0
 let g:list_of_normal_keys = ["h", "j", "k", "l", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
@@ -1127,9 +1162,9 @@ let g:list_of_disabled_keys = []
 
 " Comfortable motion ---------------------------------------------------------
 "if using_neovim && using_extra_plug
-    """ Disable default key mapping
+    "" Disable default key mapping
     "let g:comfortable_motion_no_default_key_mappings = 1
-    """ Enable motion with keyboard and mousewheel
+    "" Enable motion with keyboard and mousewheel
     "nnoremap <silent><C-f> :call comfortable_motion#flick(100)<CR>
     "nnoremap <silent><C-b> :call comfortable_motion#flick(-100)<CR>
 "endif
@@ -1172,7 +1207,7 @@ endif
 " Peekaboo -------------------------------------------------------------------
 " Remap '"', '@' (Normal mode) and '<C-r>' (Insert mode) for register viewer
 if using_extra_plug
-    let g:peekaboo_window = "vert bo 40new"
+    let g:peekaboo_window = "vert bo 35new"
     let g:peekaboo_prefix = ''
     let g:peekaboo_compat = 1
 endif
@@ -1221,11 +1256,11 @@ if using_extra_plug
     function! AutoCompPopToggle()
         if g:AutoCompPop_is_open
             AcpDisable
-            echo 'AutoCompletionPop disabled'
+            echo 'AutoCompletionPop Disabled'
             let g:AutoCompPop_is_open = 0
         else
             AcpEnable
-            echo 'AutoCompletionPop enabled'
+            echo 'AutoCompletionPop Enabled'
             let g:AutoCompPop_is_open = 1
         endif
     endfunction
@@ -1274,9 +1309,9 @@ let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla,colour_names'
 if using_coding_tool_plug
     let g:ale_enabled = 1
     noremap <leader>al :ALEToggle<CR>
+    noremap <leader>ai :ALEInfo<CR>
     nmap <leader>ak <Plug>(ale_previous_wrap)zz
     nmap <leader>aj <Plug>(ale_next_wrap)zz
-    nmap <leader>af :ALEInfo
 endif
 
 " Rainbow parentheses --------------------------------------------------------
@@ -1389,7 +1424,7 @@ endif
     "let g:minimap_auto_start_win_enter = 0
     "let g:minimap_git_colors = 0
     "let g:minimap_highlight_search = 0
-    "noremap <leader>mm :MinimapToggle<CR>
+    "noremap <leader>mp :MinimapToggle<CR>
 "endif
 
 " ============================================================================

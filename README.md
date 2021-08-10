@@ -22,13 +22,14 @@ Table of Contents
       * [Keymapping Sheet 1 - Fn Key Keymapping](#keymapping-sheet-1---fn-key-keymapping)
          * [1. Function Key Keymapping](#1-function-key-keymapping)
       * [Keymapping Sheet 2 - Built-in Function Keymapping](#keymapping-sheet-2---built-in-function-keymapping)
-         * [1. Split/Window Keymapping](#1-splitwindow-keymapping)
-         * [2. Code Folding Keymapping](#2-code-folding-keymapping)
-         * [3. Miscellaneous Function Keymapping](#3-miscellaneous-function-keymapping)
+         * [1. Buffer/Tab Keymapping](#1-buffertab-keymapping)
+         * [2. Split/Window Keymapping](#2-splitwindow-keymapping)
+         * [3. Code Folding Keymapping](#3-code-folding-keymapping)
+         * [4. Miscellaneous Function Keymapping](#4-miscellaneous-function-keymapping)
       * [Keymapping Sheet 3 - Plug-in Function Keymapping](#keymapping-sheet-3---plug-in-function-keymapping)
          * [1. File/Code Browsing Keymapping](#1-filecode-browsing-keymapping)
          * [2. Python Coding Keymapping](#2-python-coding-keymapping)
-         * [3. Miscellaneous Function Keymapping](#3-miscellaneous-function-keymapping-1)
+         * [3. Miscellaneous Function Keymapping](#3-miscellaneous-function-keymapping)
       * [Reference for VIM Setup](#reference-for-vim-setup)
    * [Part 2 - Tmux](#part-2---tmux)
       * [Preparation (Dependence)](#preparation-dependence-1)
@@ -42,6 +43,8 @@ Table of Contents
       * [Major Difference Between Customized and Original](#major-difference-between-customized-and-original)
       * [Keymapping Sheet](#keymapping-sheet)
       * [Reference for TMUX Setup](#reference-for-tmux-setup)
+
+Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
 ## Demo Current Customization
 ![alt text](./demo/NEOVIM_DEMO_01.png "Title")
@@ -299,7 +302,16 @@ Table of Contents
 
 ### Keymapping Sheet 2 - Built-in Function Keymapping
 
-#### 1. Split/Window Keymapping
+#### 1. Buffer/Tab Keymapping
+| VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
+| :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
+| N/V      | [LK]+[b]+[b]                | Add new buffer                | Add new buffer                           |
+} N/V      | [LK]+[b]+[d]+[d]            | Close current buffer          | Close current buffer                     |
+| N/V      | [LK]+[t]+[t]                | Add new tab                   | Add new tab                           |
+} N/V      | [LK]+[t]+[d]+[d]            | Close current tab             | Close current tab                     |
+
+
+#### 2. Split/Window Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N/V      | [Ctrl]+[w]+[s/v]            | Add new split Horiz/Vertical  | Add new split Horizontal/Vertial      |
@@ -312,7 +324,7 @@ Table of Contents
 | N/V      | [LK]+[0]                    | Resize current split to 10 rows| Resize current split to 10 rows      | For terminal pane resize |
 | N/V      | [Ctrl]+[w]+[=]              | Resplit splits equally        | Re-split splits equally               | Here =(equal sign) for equally split
 
-#### 2. Code Folding Keymapping
+#### 3. Code Folding Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N        | ([LK])+[F10]                | Load/Save layout and folding  | Load/Save current split and code folding |
@@ -321,14 +333,14 @@ Table of Contents
 | N/V      | [z]+[Shift]+[r/m]           | Show/Close all foldings       | Show/Close all foldings               | Vim built-in |
 | V        | [Shift]+[k/j]               | Move selection block up/down  | Move selection block up/down          |
 
-#### 3. Miscellaneous Function Keymapping
+#### 4. Miscellaneous Function Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | I        | [i]+[i]/[k]+[j]             | Esc (escape form insert mode) | Esc (escape form insert mode)         | If your word contains "ii", try [i] + "[Ctrl]+[v]" + [i]
-| N/V      | [Shift]+[k]                 | Search current word in mannual| Search current word in mannual        |
+| N/V      | [Shift]+[k]                 | Search current word in manual | Search current word in manual         |
 | N/V      | [LK]+[d]+[d]                | Close current buffer          | Close current buffer                  | Here d for (d)eletion
 | N/V      | [LK]+[w]+[p]                | Toggle line wrap              | On/Off line wrap                      | Here wp for (w)ra(p)
-| N/V      | [LK]+([Shift])+[/]          | (Off)/On search highlight     | Off/On search highlight               |
+| N/V      | [LK]+[/]                    | Toggle search highlight       | On/Off search highlight               |
 | N/V      | [LK]+[m]+[k]                | Show all vim marks            | Show all vim marks                    | [LK]+[m]+[k] shows marks using fzf instead vim built-in
 | N/V      | [LK]+[r]+[g]                | Show all vim regiesters       | Show all vim registers                | Here re for (re)gister
 | N/V      | [LK]+[a]+[b]                | Show all vim abbreviates      | Show all vim abbreviates              | Here ab for (ab)reviation
@@ -398,7 +410,7 @@ Table of Contents
 
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
-| N/V      | [LK]+[m]+[m]                | Toggle code minimap scrollbar | On/Off code minimap scrollbar         | For neovim version >= 0.5, and minicode is installed |
+| N/V      | [LK]+[m]+[p]                | Toggle code minimap scrollbar | On/Off code minimap scrollbar         | For neovim version >= 0.5, and minicode is installed |
 | N/V      | [Alt]+[n] (+[n]+[n]+...+[n] | Multiple cursor for selected  | Multiple cursor for currently selected word | Press N to next word; Use I/A to insert word; Use Esc to exit |
 | N/V      | [Alt]+[p] (+[p]+[p]+...+[p] | Cancel selected multiple cursor | Cancel selected multiple cursor     |
 | N/V      | [Alt]+[o] (+[o]+[o]+...+[o] | Omit selected multiple cursor | Omit selected multiple cursor         |
