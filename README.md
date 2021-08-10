@@ -210,7 +210,8 @@ Table of Contents
         - [Plug-in] comfortable-motion (physical movement)
         - [Plug-in] goyo (distraction-free edtior)
         - [Plug-in] yankring (clipboard history)
-        - [Plug-in] vim-peekaboo (vim register manager)
+        - [Plug-in] vim-peekaboo (vim register viewer/manager)
+        - [Plug-in] vim-markbar (vim mark viewer/manager)
         - [Plug-in] vim-easymotion (physical movement)
         - [Plug-in] autocomplpop (auto completion popup)
         - [Plug-in] fixedtasklist (find TODO tag in vim)
@@ -251,6 +252,8 @@ Table of Contents
     let using_python_completion = 1
     " Python that used for jedi and pynvim installation, change '_..._ ' to your python
     let python_for_completion = '_python_for_jedi_pynvim_installation_'
+    " Search python environment you are using [very time-consuming]
+    "let python_for_completion = system('which python')
     ```
 - GUI support
     - Functions for external GUI software
@@ -388,6 +391,7 @@ Table of Contents
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N        | [Ctrl]+[f/b]                | Move down/up physically       | Move down/up physically               | comfortable-motion.vim |
 | N/V      | [LK]+[h/j/k/l]              | Quick move in four direction  | Quick move in four direction          | vim-easymotion |
+| N/V      | [LK]+[y]+[s]                | Show yank history             | Show yank history                     | yankring |
 | N/V      | [y]+[n/p]                   | Paste next/prev clipped item  | Paste next/prev clipped item          | yankring |
 
 - Coding tool (Note: "let using_coding_tool_plug = 1" must be set in vimrc)
@@ -415,6 +419,7 @@ Table of Contents
 
 ### Reference for VIM Setup
 - http://fisadev.github.io/fisa-vim-config/
+- http://www.viemu.com/a_vi_vim_graphical_cheat_sheet_tutorial.html
 - https://github.com/ryanoasis/nerd-fonts/
 - https://github.com/sbdchd/Neoformat
 - https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim

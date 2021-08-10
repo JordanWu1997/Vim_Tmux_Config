@@ -94,6 +94,14 @@
 " -- Python packages already installed in somewhere else
 "    -- Use: pip install (--user) --ignore_installed <PACKAGE_NAME>
 
+" Note:
+" Keyboard key repeat time settings ------------------------------------------
+" -- Speed up/down key repeat time for pressing key
+"    -- e.g jjjjjjjj, kkkkkkkkkk, wwwwwwwwwww
+" -- Use Xset to set key repeat
+"    --      xset [repeat rate] [start repeat time (ms)]  [repeat rate (/sec)]
+"    -- e.g. xset     r rate              300                     30
+
 " ============================================================================
 " Vim and Neovim settings (***MUST-READ SESSION***)
 " ============================================================================
@@ -201,11 +209,6 @@ vnoremap J :m '>+1<CR>gv=gv
 noremap <leader><C-o> :jumps<CR>
 noremap <leader>g; :changes<CR>
 noremap <leader>g, :changes<CR>
-" Add/Remove indent in normal/visual mode
-noremap <Tab> >>_
-nnoremap <S-Tab> <<_
-vnoremap <Tab> >gv
-vnoremap <S-Tab> <gv
 
 " Save/Load file hotkey ------------------------------------------------------
 " Note:
@@ -274,7 +277,7 @@ if using_vim
     set ttyfast           " Faster redrawing. [Removed in neovim]
 endif
 set exrc                  " Search vimrc file in current directory
-set timeoutlen=2500       " Timeout for entering combined key (milisecond)
+set timeoutlen=500        " Timeout for entering combined key (milisecond)
 set confirm               " Ask for confirmation before leaving vim
 set ignorecase            " Close case sensitive [Needed for smartcase]
 set smartcase             " Case sensitive if search contains uppercase letter
@@ -367,7 +370,7 @@ noremap <silent><leader><S-F2>
             \ :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 
 " Buffer settings ------------------------------------------------------------
-" Add buffer in foreground
+" Add buffer in foreground (:edit! to give up all changes)
 noremap <leader>bb :edit<space>
 " Add buffer in background
 noremap <leader>ba :badd<space>
@@ -388,8 +391,10 @@ noremap <silent><F1> :bnext<CR>
 "    -- '" : Last cursor location when buffer closed
 "    -- '. : Last modification
 
+" Show marks in vim [Also check markbar plugin]
 noremap <leader>mk :marks<CR>
 noremap <leader>md :delmarks<space>
+noremap <leader>mdd :delmarks!<CR>
 
 " Registers settings ---------------------------------------------------------
 " Note:
@@ -672,7 +677,7 @@ Plug 'scrooloose/nerdtree'
 " [Vim useful functions] -----------------------------------------------------
 " Sudo write/read files in vim
 Plug 'lambdalisue/suda.vim', { 'on': 'SudaWrite' }
-"" Vim settings for opening large files
+" Vim settings for opening large files
 Plug 'vim-scripts/LargeFile'
 " System Man usage
 Plug 'vim-utils/vim-man', { 'on': 'Man' }
@@ -682,7 +687,7 @@ Plug 'vim-scripts/IndexedSearch'
 Plug 'scrooloose/nerdcommenter'
 " Generate bracket/quotation in pair
 Plug 'tpope/vim-surround'
-" Enable . (repeat) motion for commands (e.g. undo, redo, vim-surround)
+" Enable . (repeat motion) for commands (e.g. undo, redo, vim-surround)
 Plug 'tpope/vim-repeat'
 " Vim window maximizer
 Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle' }
@@ -690,8 +695,6 @@ Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle' }
 Plug 't9md/vim-choosewin'
 " Autopair for quotations and brackets
 Plug 'jiangmiao/auto-pairs'
-" Speed up Vim by updating folds only when called-for
-Plug 'Konfekt/FastFold'
 " Disable continuous hjkl left/down/up/right for moving efficienty training
 Plug 'takac/vim-hardtime'
 
@@ -709,6 +712,8 @@ if using_extra_plug
     Plug 'vim-scripts/YankRing.vim'
     " Register investigator
     Plug 'junegunn/vim-peekaboo'
+    " Mark investigator
+    Plug 'Yilin-Yang/vim-markbar'
     " Easymotion (Key-mapping moving in vim)
     Plug 'easymotion/vim-easymotion'
     " Auto popup completion options from vim
@@ -732,6 +737,11 @@ if using_coding_tool_plug
         "" Multiple language inspector [Powerful but too complicated]
         " Plug 'puremourning/vimspector'
     endif
+    "" File Minimap (Need neovim Ver. >= 0.5)
+    "if has('nvim-0.5')
+        "Plug 'wfxr/minimap.vim',
+                    "\ {'do': ':!cargo install --locked code-minimap'}
+    "endif
     " Code formatter
     Plug 'sbdchd/neoformat', { 'on': 'Neoformat' }
     " Paint paired bracket/quotation in different color
@@ -748,11 +758,6 @@ if using_coding_tool_plug
     Plug 'tpope/vim-fugitive'
     " GitGutter (enhanced signify), also with git integration
     Plug 'airblade/vim-gitgutter', { 'on': 'GitGutterToggle' }
-    " File Minimap (Need neovim Ver. >= 0.5)
-    "if has('nvim-0.5')
-        "Plug 'wfxr/minimap.vim',
-                    "\ {'do': ':!cargo install --locked code-minimap'}
-    "endif
 endif
 
 " [Tmux] ---------------------------------------------------------------------
@@ -1109,7 +1114,7 @@ let g:AutoPairsShortcutJump = '<M-j>'
 let g:AutoPairsShortcutFastWrap = '<M-w>'
 
 " Hardtime -------------------------------------------------------------------
-let g:hardtime_default_on = 1
+let g:hardtime_default_on = 0
 let g:list_of_normal_keys = ["h", "j", "k", "l", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
 let g:list_of_visual_keys = ["h", "j", "k", "l", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
 let g:list_of_insert_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
@@ -1139,6 +1144,9 @@ if using_extra_plug
     else
         let g:yankring_history_dir = '~/.vim/dirs/'
     endif
+    " Yankring window settings
+    let g:yankring_window_height = 13
+    let g:yankring_window_auto_close = 1
     " Yankring automatically remap built-in command key mapping (disabled)
     " -- e.g. 'X[x]', 'D[d]', 'Y[y]', 'P[p]', '.', '@', and etc.
     " -- Here disable most of default keymappings except yank replacing
@@ -1162,10 +1170,29 @@ if using_extra_plug
 endif
 
 " Peekaboo -------------------------------------------------------------------
-" Set leader as prefix for ('"' and '@') to peek registers in vim
-" Use space to expand Peekaboo split
+" Remap '"', '@' (Normal mode) and '<C-r>' (Insert mode) for register viewer
 if using_extra_plug
-    let g:peekaboo_prefix = '<leader>'
+    let g:peekaboo_window = "vert bo 40new"
+    let g:peekaboo_prefix = ''
+    let g:peekaboo_compat = 1
+endif
+
+" Markbar --------------------------------------------------------------------
+" Remap ''', '`' (Normal mode) for mark viewer
+if using_extra_plug
+    " width of a vertical split markbar
+    let g:markbar_width = 40
+    " Ditto, but more granularly (any may be omitted)
+    let g:markbar_num_lines_context = {
+        \ 'peekaboo_around_local': 3,
+        \ 'peekaboo_around_file': 1,
+    \ }
+    " Leave peekaboo markbar enabled, but don't set default mappings
+    let g:markbar_set_default_peekaboo_mappings = v:false
+    " Peekaboo-like markbar (remap vim built-in ' key)
+    nmap ` <Plug>OpenMarkbarPeekabooApostrophe
+    " Peekaboo-like markbar (remap vim built-in ` key)
+    nmap ' <Plug>OpenMarkbarPeekabooBacktick
 endif
 
 " Easymotion -----------------------------------------------------------------
@@ -1524,7 +1551,7 @@ endif
 " Colorschmeme shortcut
 nnoremap <leader>csd :colorscheme default<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:call LightlineStyle('powerlineish', using_fancy_symbols, 0)<CR>
+            \:call LightlineStyle('default', using_fancy_symbols, 0)<CR>
             \:call LightlineReload()<CR>:echo "default colorscheme"<CR>
 nnoremap <leader>csg :colorscheme gruvbox<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
