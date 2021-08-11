@@ -290,7 +290,8 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N/V      | [F4]                        | Markdown/Latex previewer      | Open external Viewer                  | Only for .md or .tex file |
 | N/V      | [LK]+[F4]                   | Toggle Tagbar                 | On/Off Tagbar plugin                  |
 | N/V      | ([LK])+[F5]                 | Toggle (Rel)/Abs linenumber   | On/Off rel/abs linenumber             |
-| N/V      | [F6]                        | Toggle foldcolumn             | On/Off foldcolumn                     | For easier code fold visualization |
+| N/V      | [F6]                        | Toggle foldcolumn (short-4)   | On/Off foldcolumn (short-4)           | For easier code fold visualization |
+| N/V      | [LK]+[F6]                   | Toggle foldcolumn (long-8)    | On/Off foldcolumn (long-8)            | For easier code fold visualization |
 | N/V      | [F7]                        | Toggle show line border       | On/Off hightlight 79th character      | VIM recommends at most 78 characters for one line |
 | N/V      | [LK]+[F7]                   | Toggle show line border       | On/Off hightlight 79th column         | VIM recommends at most 78 characters for one line |
 | N/V      | [F8]                        | Toggle highlight comment      | On/Off hightlight code comment        | Assign brighter color to comment to hightlight it |
@@ -345,8 +346,8 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N/V      | [LK]+[r]+[g]                | Show all vim regiesters       | Show all vim registers                | Here re for (re)gister
 | N/V      | [LK]+[a]+[b]                | Show all vim abbreviates      | Show all vim abbreviates              | Here ab for (ab)reviation
 | N/V      | [LK]+[c]+[h/v]              | Toggle Horiz/Verti cursor     | On/Off Horiz/Verti cursor             |
-| N/V      | [LK]+[Ctrl]+[o]             | Show all cursor jump          | Show all cursor jump                  | [Ctrl]+[o/i] jump backwards/forwards |
-| N/V      | [LK]+[g]+[;/,]              | Show all file change          | Show all file change                  |
+| N/V      | [LK]+[g]+[o/i]              | Show all cursor jump          | Show all cursor jump                  | [Ctrl]+[o/i] jump backwards/forwards |
+| N/V      | [LK]+[g]+[;/,]              | Show all file change          | Show all file change                  | [g]+[;/,] goto earlier/later change |
 
 ### Keymapping Sheet 3 - Plug-in Function Keymapping
 

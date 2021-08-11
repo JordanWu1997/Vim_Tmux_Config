@@ -208,7 +208,8 @@ vnoremap J :m '>+1<CR>gv=gv
 " Tab is already mapped to <C-i> by vim
 noremap <S-Tab> <C-o>
 " Show jump list and change list
-noremap <leader><C-o> :jumps<CR>
+noremap <leader>go :jumps<CR>
+noremap <leader>gi :jumps<CR>
 noremap <leader>g; :changes<CR>
 noremap <leader>g, :changes<CR>
 
@@ -219,8 +220,8 @@ noremap <leader>g, :changes<CR>
 " -- :earlier Nf (Undo to last N file change)
 " -- :later Nf (Redo to N file change)
 
-noremap <leader>Q :qall<CR>
-noremap <leader>q :q<CR>
+noremap <leader>qQ :qall<CR>
+noremap <leader>qq :q<CR>
 noremap <leader>ww :w<CR>
 noremap <leader>wq :wq<CR>
 
@@ -291,6 +292,10 @@ set nolazyredraw          " Not only redraw when necessary.
 set nowrap                " Line wrap for small monitor or display window
 noremap <leader>wp :set wrap!<CR>
 
+" Spell check ----------------------------------------------------------------
+set nospell               " Vim built-in spell check
+noremap <leader>sp :set spell!<CR>
+
 " Wild menu settings ---------------------------------------------------------
 set wildmenu              " Show memu options
 set wildmode=list:full    " Show all available input options (or use Ctrl-D)
@@ -341,8 +346,8 @@ autocmd FileType vim setlocal foldmethod=indent
 autocmd FileType python setlocal foldmethod=indent
 " Default value (disabled at startup)
 set nofoldenable
-" Toggle foldcolumn
-function! FoldColumnToggle()
+" Toggle foldcolumn (4 column)
+function! FoldColumnToggleShort()
     if &foldcolumn
         setlocal foldcolumn=0
         echo 'foldcolumn=0'
@@ -351,8 +356,19 @@ function! FoldColumnToggle()
         echo 'foldcolumn=4'
     endif
 endfunction
-" Toggle foldcolumn
-nnoremap <silent><F6> :call FoldColumnToggle()<CR>
+" Toggle foldcolumn (8 column)
+function! FoldColumnToggleLong()
+    if &foldcolumn
+        setlocal foldcolumn=0
+        echo 'foldcolumn=0'
+    else
+        setlocal foldcolumn=8
+        echo 'foldcolumn=8'
+    endif
+endfunction
+" Toggle foldcolumn (short, long)
+nnoremap <silent><F6> :call FoldColumnToggleShort()<CR>
+nnoremap <silent><leader><F6> :call FoldColumnToggleLong()<CR>
 
 " Tabe (window) settings -----------------------------------------------------
 " Tabe (window) operations
@@ -370,8 +386,12 @@ noremap <silent><leader><S-F2>
             \ :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 
 " Buffer settings ------------------------------------------------------------
+" Show all buffers
+noremap <leader>bs :buffers<CR>
 " Add buffer in foreground (:edit! to give up all changes)
 noremap <leader>bb :edit<space>
+" Undo buffer to last save
+noremap <leader>bu :edit!<CR>
 " Add buffer in background
 noremap <leader>ba :badd<space>
 " Delete buffer
@@ -575,6 +595,9 @@ if using_vim8
     if using_neovim
         " Auto start command when starting terminal mode
         autocmd TermOpen * setlocal
+                    \ nocursorcolumn nocursorline nonumber laststatus=0
+        " Auto start command when entering terminal mode
+        autocmd TermEnter * setlocal
                     \ nocursorcolumn nocursorline nonumber laststatus=0
         " Auto start command when leaving terminal mode
         autocmd TermClose * setlocal
@@ -1021,13 +1044,13 @@ nnoremap <leader>fh: :FZFHistory:<CR>
 nnoremap <leader>fh/ :FZFHistory/<CR>
 " Buffers/Windows/Marks
 nnoremap <leader>fbf :FZFBuffers<CR>
-nnoremap <leader>fwd :FZFWindows<CR>
 nnoremap <leader>fmk :FZFMarks<CR>
 nnoremap <leader>fmp :FZFMaps<CR>
+nnoremap <leader>fwd :FZFWindows<CR>
 " Miscellaneous
-nnoremap <leader>fht :FZFHelptags<CR>
-nnoremap <leader>fft :FZFFiletypes<CR>
 nnoremap <leader>fcd :FZFCommands<CR>
+nnoremap <leader>fft :FZFFiletypes<CR>
+nnoremap <leader>fht :FZFHelptags<CR>
 
 " NERDTree -------------------------------------------------------------------
 " Disable vim built-in netrw
@@ -1374,6 +1397,8 @@ if using_coding_tool_plug
     noremap <leader>gC :Git commit -m<space>
     noremap <leader>gB :Git blame<CR>
     noremap <leader>gR :Git reset<space>
+    noremap <leader>gph :Git push<CR>
+    noremap <leader>gpl :Git pull<CR>
 endif
 
 " GitGutter ------------------------------------------------------------------
