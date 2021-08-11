@@ -303,7 +303,7 @@ set wildmode=list:full    " Show all available input options (or use Ctrl-D)
 " Cursor settings ------------------------------------------------------------
 set ruler                 " Show cursor position in statusline
 set cursorline            " Show vertical line
-set cursorcolumn          " Show horizontal line (laggy sometimes)
+set nocursorcolumn        " Show horizontal line (laggy sometimes)
 " Toggle cursor line/column indicator (horizontal/vertical)
 noremap <leader>ch :set cursorline!<CR>
             \:echo 'Toggle Cursor Line [Horizontal]'<CR>
@@ -798,6 +798,10 @@ Plug 'christoomey/vim-tmux-navigator'
 " More python syntax highlight
 Plug 'vim-python/python-syntax', { 'for': 'python' }
 if using_python_completion
+    " Help communicate beteen vim and neovim [needed for deoplete.nvim]
+    if using_vim
+        Plug 'roxma/vim-hug-neovim-rpc', { 'for': 'python' }
+    endif
     " Front end of completion (python and etc.)
     if vim_plug_just_installed
         Plug 'Shougo/deoplete.nvim',
@@ -807,8 +811,6 @@ if using_python_completion
     Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
     " Yet Another Remote Plugin Framework for Neovim [needed for deoplete]
     Plug 'roxma/nvim-yarp', { 'for': 'python' }
-    " Help communicate beteen vim and neovim [needed for deoplete.nvim]
-    Plug 'roxma/vim-hug-neovim-rpc', { 'for': 'python' }
     " Python autocompletion
     Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
     " Completion from other opened files
@@ -1289,8 +1291,6 @@ if using_extra_plug
     endfunction
     " Toggle autocomplpop
     noremap <leader>` :call AutoCompPopToggle()<CR>
-    " Unmap autocomplpop for python file [use deoplete instead]
-    autocmd FileType python unmap <leader>`
     " Disable autocomplpop for python file [use deoplete instead]
     if using_python_completion
         autocmd FileType python let g:acp_enableAtStartup = 0
