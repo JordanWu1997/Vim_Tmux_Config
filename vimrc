@@ -283,9 +283,9 @@ set confirm               " Ask for confirmation before leaving vim
 set ignorecase            " Close case sensitive [Needed for smartcase]
 set smartcase             " Case sensitive if search contains uppercase letter
 set modifiable            " Make editing buffer modifable
-set encoding=utf-8        " Unicode display
+set encoding=utf-8        " Unicode display support
 set clipboard=unnamedplus " Shared system clipboard
-set tildeop               " Make ~ operator like gu, gU, and etc."
+set tildeop               " Make ~ a operator like gu, gU, and etc."
 set nolazyredraw          " Not only redraw when necessary.
 
 " Line wrap ------------------------------------------------------------------
@@ -333,7 +333,7 @@ noremap <F5> :set relativenumber!<CR>
 " Fold settings --------------------------------------------------------------
 " Note:
 " -- zc/zo: Close/Open current fold
-" -- zC/zO: Close/Open current fold recusively
+" -- zC/zO: Close/Open current fold recursively
 " -- zm/zr: More/Reduce fold level
 " -- zM/zR/zi: Maximize/Remove/Invert all folds
 " -- zj/zk: Jump to next/prev fold
@@ -377,8 +377,8 @@ noremap <leader>tt :tabnew<space>
 noremap <leader>td :tabclose<space>
 noremap <leader>tdd :tabclose<CR>
 " Tabe (window) navigation
-noremap <silent><F2> <Esc>:tabnext<CR>
-noremap <silent><leader><F2> <Esc>:tabprevious<CR>
+noremap <silent><F2> :tabnext<CR>
+noremap <silent><leader><F2> :tabprevious<CR>
 " Tabe (Window) swap
 noremap <silent><S-F2>
             \ :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
@@ -388,7 +388,7 @@ noremap <silent><leader><S-F2>
 " Buffer settings ------------------------------------------------------------
 " Show all buffers
 noremap <leader>bs :buffers<CR>
-" Add buffer in foreground (:edit! to give up all changes)
+" Add buffer in foreground (use :edit! to give up all changes)
 noremap <leader>bb :edit<space>
 " Undo buffer to last save
 noremap <leader>bu :edit!<CR>
@@ -562,6 +562,7 @@ function! CommentHighlightToggle()
 endfunction
 " Toggle comment highlight
 nnoremap <F8> :call CommentHighlightToggle()<CR>
+nnoremap <leader><F8> :call CommentHighlightToggle()<CR>
 
 " ============================================================================
 " Customized terminal mode (Only support for vim >= 8.0)
@@ -684,7 +685,7 @@ if using_fancy_symbols
     " Nerdtree and other vim-plug powerline symbols support
     Plug 'ryanoasis/vim-devicons'
     " More highlight in nertree (make nerdtree laggy in large filetree)
-    " Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+    Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 endif
 " Code class/module/tag browser [Update to latest]
 Plug 'preservim/tagbar', { 'on': 'TagbarToggle' }
@@ -725,12 +726,8 @@ Plug 'liuchengxu/vim-which-key'
 
 " [Vim extra functions] ------------------------------------------------------
 if using_extra_plug
-    if using_neovim
-        "" Vim smooth scroll
-        "Plug 'yuttie/comfortable-motion.vim'
-        " Goyo (Distraction-free mode)
-        Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
-    endif
+    " Goyo (Distraction-free mode)
+    Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
     " Fancy startup page of vim
     Plug 'mhinz/vim-startify'
     " History of yank
@@ -948,16 +945,16 @@ endfunction
 " Conditional lightline status/tab line --------------------------------------
 if using_customized_theme
     " Toggle lightline, status/tab line
-    noremap <leader>sl :call lightline#disable()<CR>:set showmode<CR>
+    noremap <leader>sle :call lightline#enable()<CR>:set noshowmode<CR>
                 \:set showtabline=2<CR>:set laststatus=2<CR>
-                \:echo "LIGHTLINE OFF"<CR>
-    noremap <leader>sL :call lightline#enable()<CR>:set noshowmode<CR>
+                \:echo "LIGHTLINE ENABLED"<CR>
+    noremap <leader>sld :call lightline#disable()<CR>:set showmode<CR>
                 \:set showtabline=2<CR>:set laststatus=2<CR>
-                \:echo "LIGHTLINE ON"<CR>
+                \:echo "LIGHTLINE DISABLED"<CR>
     " Disable statusline (including lightline)
-    noremap <leader>SL :call lightline#disable()<CR>:set showmode<CR>
+    noremap <leader>ssd :call lightline#disable()<CR>:set showmode<CR>
                 \:set showtabline=0<CR>:set laststatus=0<CR>
-                \:echo "STATUSLINE OFF"<CR>
+                \:echo "STATUSLINE DISABLED"<CR>
 endif
 
 " Function - Reload lightline ------------------------------------------------
@@ -1163,10 +1160,6 @@ let g:AutoPairsShortcutFastWrap = '<M-w>'
 let g:which_key_floating_opts = { 'row': '200' }
 let g:which_key_sort_horizontal = 1
 let g:which_key_hspace = 5
-" Autohide statusline when whichkey is on
-autocmd! FileType which_key
-autocmd  FileType which_key set laststatus=0 noshowmode noruler
-  \ | autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 " Map space key to normal/visual mode
 vnoremap <silent><leader> :<C-u>WhichKeyVisual '<space>'<CR>
 nnoremap <silent><leader> :<C-u>WhichKey '<space>'<CR>
@@ -1193,6 +1186,9 @@ let g:list_of_disabled_keys = []
     "nnoremap <silent><C-f> :call comfortable_motion#flick(100)<CR>
     "nnoremap <silent><C-b> :call comfortable_motion#flick(-100)<CR>
 "endif
+
+" Goyo -----------------------------------------------------------------------
+noremap <silent><leader>gy :Goyo<CR>
 
 " YankRing -------------------------------------------------------------------
 if using_extra_plug
@@ -1389,7 +1385,7 @@ endif
 if using_coding_tool_plug
     noremap <leader>gd :Git diff %<CR>
     noremap <leader>gD :Git diff<CR>
-    noremap <leader>gs :G<CR>
+    noremap <leader>gs :Git<CR>
     noremap <leader>gl :GcLog<CR>
     noremap <leader>ga :Git add %<CR>
     noremap <leader>gA :Git add --all<CR>
@@ -1500,14 +1496,15 @@ if using_python_completion
     " Find variable assignments (Goto function)
     let g:jedi#goto_assignments_command = '<leader>pa'
     " Open python module [show __init__.py]
-    noremap <leader>pm :execute ":Pyimport " . expand('<cword>')<CR>
-    noremap <leader>pM :Pyimport<space>
+    autocmd FileType python
+                \noremap <leader>pm
+                \ :execute ":Pyimport " . expand('<cword>')<CR>
+    autocmd FileType python noremap <leader>pM :Pyimport<space>
 endif
 
 " Python syntax --------------------------------------------------------------
-if using_python_completion
-    let g:python_highlight_all = 1
-endif
+" Add more syntax highlight for python
+let g:python_highlight_all = 1
 
 " Python debug (add python breakpoints) --------------------------------------
 " [ipdb must be installed first]
