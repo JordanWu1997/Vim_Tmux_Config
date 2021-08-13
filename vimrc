@@ -167,8 +167,8 @@ let mapleader = ' '
 " Map insert mode key --------------------------------------------------------
 " Note:
 " -- Ctrl+r+(register) (Paste register)
-" -- Ctrl+n/p (Autocompletion next/prev candidate)
-" -- Ctrl+d/t (Unindent/Indent current line)
+" -- Ctrl+[n/p] (Autocompletion next/prev candidate)
+" -- Ctrl+[d/t] (Unindent/Indent current line)
 
 " Map exit insert mode (Esc/Ctrl+[) to ii, kj
 " -- Use Ctrl+v to escape for 'ii' word (e.g. ascii)
@@ -184,22 +184,22 @@ inoremap ! !<C-g>u
 
 " Map normal/visual/opterator-pending mode key -------------------------------
 " Note:
-" -- zt/zz/zb/zh/zl: Scroll window top/center/bottom/left/right
-" -- Ctrl+(i/o): Jump to Next/Prev cursor location, works even between files
+" -- z+[t/z/b/h/l]: Scroll window top/center/bottom/left/right
+" -- Ctrl+[i/o]: Jump to Next/Prev cursor location, works even between files
 " -- :jumps: show all jump history
-" -- g;/g,: Goto Older/Newer change
+" -- g+[;/,]: Goto Older/Newer change
 " -- :changes: Show all change history
-" -- gj/gk/gl/gh: Move in visual lines instead of real lines in WRAP text
-" -- guu/gUU/g~~: Set lowercase/uppercase/toggle for whole line
+" -- g+[j/k/l/h]: Move in visual lines instead of real lines in WRAP text
+" -- g+[uu/UU/~~]: Set lowercase/uppercase/toggle for whole line
 " -- :g/PATTERN/ACTION: In entire file, for matching PATTERN, do ACTION
-" -- gt/gT: Goto Next/Prev tab
+" -- g+[t/T]: Goto Next/Prev tab
 
 " Umap ex mode [old school mode] to prevent typo
 noremap q: <Nop>
 noremap gQ <Nop>
 " Umap command history to prevent typo
 " Use :<C-f> to open command history instead
-nnoremap Q <nop>
+nnoremap Q <Nop>
 " Make Y yank to the end of line instead of whole line just like D do
 nnoremap Y y$
 " Move selection block up/down in visual mode
@@ -249,8 +249,8 @@ noremap <leader><F10> :loadview<CR>
 
 " Vim split window (pane) control --------------------------------------------
 " Split pane navigation [Now integrate with tmux, check vim-tmux-navigator]
-" -- <C-w>h/j/k/l: Move to L/D/U/R pane
-" -- <C-w>H/J/K/L: Move pane to L/D/U/R
+" -- <C-w>[h/j/k/l]: Move to L/D/U/R pane
+" -- <C-w>[H/J/K/L]: Move pane to L/D/U/R
 " Split pane - Split border style
 set fillchars+=vert:\ "
 " Split pane - More natural split opening
@@ -259,8 +259,8 @@ set splitright
 " Split pane action (built-in, extended)
 " -- <C-w>T: Move current pane to new tabe
 " -- <C-w>n: Add new empty pane
-" -- <C-w>q/c: Close current pane
-" -- <C-w>s/v: Open current buffer in split/vsplit
+" -- <C-w>[q/c]: Close current pane
+" -- <C-w>[s/v]: Open current buffer in split/vsplit
 nmap <C-w>S :split<space>
 nmap <C-w>V :vsplit<space>
 " Split pane resize (built-in, extended)
@@ -332,11 +332,11 @@ noremap <F5> :set relativenumber!<CR>
 
 " Fold settings --------------------------------------------------------------
 " Note:
-" -- zc/zo: Close/Open current fold
-" -- zC/zO: Close/Open current fold recursively
-" -- zm/zr: More/Reduce fold level
-" -- zM/zR/zi: Maximize/Remove/Invert all folds
-" -- zj/zk: Jump to next/prev fold
+" -- z+[c/o]: Close/Open current fold
+" -- z+[C/O]: Close/Open current fold recursively
+" -- z+[m/r]: More/Reduce fold level
+" -- z+[M/R/i]: Maximize/Remove/Invert all folds
+" -- z+[j/k]: Jump to next/prev fold
 
 " Fold settings
 set foldmethod=syntax
@@ -755,9 +755,9 @@ if using_coding_tool_plug
         Plug 'dense-analysis/ale',
                     \ { 'for': ['python', 'fortran', 'html'] }
         "" Syntax support (Improved syntastics, here just use ale instead)
-        " Plug 'neomake/neomake'
+        "Plug 'neomake/neomake'
         "" Multiple language inspector [Powerful but too complicated]
-        " Plug 'puremourning/vimspector'
+        "Plug 'puremourning/vimspector'
     endif
     "" File Minimap (Need neovim Ver. >= 0.5)
     "if has('nvim-0.5')
@@ -1497,7 +1497,7 @@ if using_python_completion
     let g:jedi#goto_assignments_command = '<leader>pa'
     " Open python module [show __init__.py]
     autocmd FileType python
-                \noremap <leader>pm
+                \ noremap <leader>pm
                 \ :execute ":Pyimport " . expand('<cword>')<CR>
     autocmd FileType python noremap <leader>pM :Pyimport<space>
 endif
