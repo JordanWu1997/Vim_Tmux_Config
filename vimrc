@@ -100,7 +100,7 @@
 "    -- e.g jjjjjjjj, kkkkkkkkkk, wwwwwwwwwww
 " -- Use Xset to set key repeat
 "    --      xset [repeat rate] [start repeat time (ms)]  [repeat rate (/sec)]
-"    -- e.g. xset     r rate              300                     30
+"    -- e.g. xset     r rate              300                     40
 
 " ============================================================================
 " Vim and Neovim settings (***MUST-READ SESSION***)
@@ -280,12 +280,10 @@ endif
 set exrc                  " Search vimrc file in current directory
 set timeoutlen=300        " Timeout for entering combined key (milisecond)
 set confirm               " Ask for confirmation before leaving vim
-set ignorecase            " Close case sensitive [Needed for smartcase]
-set smartcase             " Case sensitive if search contains uppercase letter
-set modifiable            " Make editing buffer modifable
+set modifiable            " Make current buffer modifable
 set encoding=utf-8        " Unicode display support
 set clipboard=unnamedplus " Shared system clipboard
-set tildeop               " Make ~ a operator like gu, gU, and etc."
+set tildeop               " Make ~ a operator like gu, gU, and etc.
 set nolazyredraw          " Not only redraw when necessary.
 
 " Line wrap ------------------------------------------------------------------
@@ -320,13 +318,19 @@ set display+=lastline     " Show line as much as possible
 set title                 " Let vim change terminal title
 
 " Search settings ------------------------------------------------------------
-set incsearch
-set hlsearch
+" Note:
+" -- Ctrl+[t/g]: Goto prev/next matching result before start searching
+
+set incsearch             " Incremental search (character-by-charcter search)
+set hlsearch              " Highlight search result
+set ignorecase            " Close case sensitive [Needed for smartcase]
+set smartcase             " Case sensitive if search contains uppercase letter
 noremap <leader>/ :set nohlsearch!<CR>
 
 " Line number settings -------------------------------------------------------
-set relativenumber
-set number
+set norelativenumber      " Do not show relative line number
+set number                " Show absolute line number
+" Toggle line number
 noremap <leader><F5> :set number!<CR>
 noremap <F5> :set relativenumber!<CR>
 
