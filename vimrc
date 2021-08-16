@@ -705,8 +705,6 @@ Plug 'scrooloose/nerdtree'
 " [Vim useful functions] -----------------------------------------------------
 " Sudo write/read files in vim
 Plug 'lambdalisue/suda.vim', { 'on': 'SudaWrite' }
-" Vim settings for opening large files
-Plug 'vim-scripts/LargeFile'
 " System Man usage
 Plug 'vim-utils/vim-man', { 'on': 'Man' }
 " Search results counter
@@ -723,8 +721,6 @@ Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle' }
 Plug 't9md/vim-choosewin'
 " Autopair for quotations and brackets
 Plug 'jiangmiao/auto-pairs'
-" Disable continuous hjkl left/down/up/right for moving efficienty training
-Plug 'takac/vim-hardtime'
 " Show vim keybindings (for now only leader key)
 Plug 'liuchengxu/vim-which-key'
 
@@ -758,16 +754,7 @@ if using_coding_tool_plug
         " Multiple language syntax and lint support [Not working on vim < 8.0]
         Plug 'dense-analysis/ale',
                     \ { 'for': ['python', 'fortran', 'html'] }
-        "" Syntax support (Improved syntastics, here just use ale instead)
-        "Plug 'neomake/neomake'
-        "" Multiple language inspector [Powerful but too complicated]
-        "Plug 'puremourning/vimspector'
     endif
-    "" File Minimap (Need neovim Ver. >= 0.5)
-    "if has('nvim-0.5')
-        "Plug 'wfxr/minimap.vim',
-                    "\ {'do': ':!cargo install --locked code-minimap'}
-    "endif
     " Code formatter
     Plug 'sbdchd/neoformat', { 'on': 'Neoformat' }
     " Paint paired bracket/quotation in different color
@@ -814,7 +801,7 @@ if using_python_completion
     Plug 'roxma/nvim-yarp', { 'for': 'python' }
     " Python autocompletion
     Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
-    " Completion from other opened files
+    " Find fenced code blocks and their filetype
     Plug 'Shougo/context_filetype.vim', { 'for': 'python' }
     " Just to add go-to-definition and similar features, autocompeletion from
     " this plugin is disabled
@@ -1093,10 +1080,6 @@ noremap <silent><leader><F4> :TagbarToggle<CR>
 " ============================================================================
 " Vim useful functions settings, edit them as you wish.
 
-" LargeFile ------------------------------------------------------------------
-" File unit: MB
-let g:LargeFile = 1
-
 " Vim-man --------------------------------------------------------------------
 " Note:
 " -- K (Vim helppage for current selected word)
@@ -1167,29 +1150,11 @@ let g:which_key_hspace = 5
 " Map space key to normal/visual mode
 vnoremap <silent><leader> :<C-u>WhichKeyVisual '<space>'<CR>
 nnoremap <silent><leader> :<C-u>WhichKey '<space>'<CR>
-" TODO: Map Ctrl key to normal/visual mode
-" TODO: Map Alt key to normal/visual mode
-
-" Hardtime -------------------------------------------------------------------
-let g:hardtime_default_on = 0
-let g:list_of_normal_keys = ["h", "j", "k", "l", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
-let g:list_of_visual_keys = ["h", "j", "k", "l", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
-let g:list_of_insert_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
-let g:list_of_disabled_keys = []
 
 " ============================================================================
 " Part 5 - Vim extra functions settings (Plugins settings and mappings)
 " ============================================================================
 " Vim extra functions settings, edit them as you wish.
-
-" Comfortable motion ---------------------------------------------------------
-"if using_neovim && using_extra_plug
-    "" Disable default key mapping
-    "let g:comfortable_motion_no_default_key_mappings = 1
-    "" Enable motion with keyboard and mousewheel
-    "nnoremap <silent><C-f> :call comfortable_motion#flick(100)<CR>
-    "nnoremap <silent><C-b> :call comfortable_motion#flick(-100)<CR>
-"endif
 
 " Goyo -----------------------------------------------------------------------
 noremap <silent><leader>gy :Goyo<CR>
@@ -1330,7 +1295,7 @@ let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla,colour_names'
 "    -- pip install flake8
 "    -- pip install pylint
 if using_coding_tool_plug
-    let g:ale_enabled = 1
+    let g:ale_enabled = 0
     noremap <leader>al :ALEToggle<CR>
     noremap <leader>ai :ALEInfo<CR>
     nmap <leader>ak <Plug>(ale_previous_wrap)zz
@@ -1441,16 +1406,6 @@ if using_coding_tool_plug
     nmap <silent><leader>gj <Plug>(GitGutterNextHunk)zz
     nmap <silent><leader>gk <Plug>(GitGutterPrevHunk)zz
 endif
-
-" Minimap --------------------------------------------------------------------
-"if has('nvim-0.5') && using_coding_tool_plug
-    "let g:minimap_width = min([10, winwidth(0) / 8])
-    "let g:minimap_auto_start = 0
-    "let g:minimap_auto_start_win_enter = 0
-    "let g:minimap_git_colors = 0
-    "let g:minimap_highlight_search = 0
-    "noremap <leader>mp :MinimapToggle<CR>
-"endif
 
 " ============================================================================
 " Part 7 - Python coding tools settings (Plugins settings and mappings)

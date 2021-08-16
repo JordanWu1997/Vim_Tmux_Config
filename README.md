@@ -170,26 +170,20 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     " Select vim-plug to load, set guicolor (real color) support, and etc.
     " Assign 0 to disable plug option
     ```
-- Dectect using neovim or not (automatical detection)
-    - Neovim is better for loading tons of plugins, some plugins is disabled for vim
-    - Required for
-        - [Plug-in] vim-startify (start page for empty buffer)
-        - [Plug-in] comfortable-motion (physical movement)
-        - [Plug-in] vim-tmux-focus-events, vim-tmux-clipboard (for tmux-vim interaction)
-        - [Plug-in] deoplete.nvim (for python code completion)
-        - [Plug-in] minimap (minimap scrollbar), also required neovim version > 0.5
-        - [Plug-in] goyo (distraction-free edtior)
+- Detect using neovim or not (automatic detection)
+    - Neovim is better for loading tons of plugins
+    - Neovim config path is different from vim
     ```vim
     " Use vim or neovim (Auto-detect)
     let using_neovim = has('nvim')
     let using_vim = !using_neovim
     ```
 - Check if using vim 8.0 or higher
-    - If vim version is less than 8.0, some function is not vailable (e.g. terminal)
+    - If vim version is less than 8.0, some function is not available (e.g. terminal)
     - Required for
         - [Built-in] terminal mode
         - [Plug-in] vim-polyglot (multi-language support)
-        - [Plug-in] ale (multi-lanaguage syntax highlight)
+        - [Plug-in] ale (multi-languages syntax highlight)
     ```vim
     " Check vim version for remote machine that vim <= 8.0 (e.g. Fomalhaut)
     let using_vim8 = 1
@@ -210,14 +204,13 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     - Extra plug for productivity (or enhance vim-built in function)
     - Including
         - [Plug-in] vim-startify (start page for empty buffer)
-        - [Plug-in] comfortable-motion (physical movement)
-        - [Plug-in] goyo (distraction-free edtior)
+        - [Plug-in] goyo (distraction-free editor)
         - [Plug-in] yankring (clipboard history)
         - [Plug-in] vim-peekaboo (vim register viewer/manager)
         - [Plug-in] vim-markbar (vim mark viewer/manager)
         - [Plug-in] vim-easymotion (physical movement)
-        - [Plug-in] autocomplpop (auto completion popup)
-        - [Plug-in] fixedtasklist (find TODO tag in vim)
+        - [Plug-in] AutoComplPop (auto completion pop-up)
+        - [Plug-in] FixedTaskList (find TODO tag in vim)
         - [Plug-in] vim-hexokinase (hex colorcode color highlight support)
     ```vim
     " Extra vim-plug (Include easymotion, yankring, autocomplpop, and etc.)
@@ -227,7 +220,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     - Tools for coding, git, language syntax highlight
     - Including
         - [Plug-in] vim-polyglot (multi-language support)
-        - [Plug-in] ale (multi-lanaguage syntax highlight)
+        - [Plug-in] ale (multi-language syntax highlight)
         - [Plug-in] neoformat (code prettifier)
         - [Plug-in] rainbow (pair bracket highlight)
         - [Plug-in] indentLine (indent line indicator)
@@ -236,7 +229,6 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
         - [Plug-in] vim-multiple-cursors (multiple cursors)
         - [Plug-in] vim-fugitive (git toolbox)
         - [Plug-in] vim-gitgutter (git diff highlight)
-        - [Plug-in] minimap (minimap scrollbar)
     ```vim
     " Coding tools vim-plug (Include syntax support, git function, and etc.)
     let using_coding_tool_plug = 1
@@ -248,7 +240,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
         - [Plug-in] nvim-yarp (yet another remote plugin framework for neovim)
         - [Plug-in] vim-hug-neovim-rpc (plugin bridge from neovim to vim)
         - [Plug-in] deoplete-jedi (python completeion)
-        - [Plug-in] context_filetype.vim (completion from other opened files)
+        - [Plug-in] context_filetype.vim (find fenced code blocks and their filetypes)
         - [Plug-in] jedi-vim (definition and feature finder)
     ```vim
     " Python Completion (Use deoplete and jedi, neovim is recommended to be used)
@@ -365,7 +357,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N        | [LK]+[f]+[f]+[t]            | Select filetype for current   | Select filestype for current file     |
 | N        | [LK]+[f]+[c]+[d]            | Show all command in vim now　 | Show all command in vim now           |　
 | N        | [LK]+[f]+[n]+[m]            | Show all normal mode mapping  | Show all normal mode mapping          |
-| N        | [LK]+[f]+[h]+[t]            | Show all helptag in vim-help  | Show all helptag in vim-help          |
+| N        | [LK]+[f]+[h]+[t]            | Show all helptags in vim-help | Show all helptags in vim-help          |
 
 #### 2. Python Coding Keymapping
 - Note: Jedi is needed for python code analysis (Check https://github.com/davidhalter/jedi)
@@ -402,7 +394,6 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
-| N        | [Ctrl]+[f/b]                | Move down/up physically       | Move down/up physically               | comfortable-motion.vim |
 | N/V      | [LK]+[h/j/k/l]              | Quick move in four direction  | Quick move in four direction          | vim-easymotion |
 | N/V      | [LK]+[y]+[s]                | Show yank history             | Show yank history                     | yankring |
 | N/V      | [y]+[n/p]                   | Paste next/prev clipped item  | Paste next/prev clipped item          | yankring |
@@ -411,7 +402,6 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
-| N/V      | [LK]+[m]+[p]                | Toggle code minimap scrollbar | On/Off code minimap scrollbar         | For neovim version >= 0.5, and minicode is installed |
 | N/V      | [Alt]+[n] (+[n]+[n]+...+[n] | Multiple cursor for selected  | Multiple cursor for currently selected word | Press N to next word; Use I/A to insert word; Use Esc to exit |
 | N/V      | [Alt]+[p] (+[p]+[p]+...+[p] | Cancel selected multiple cursor | Cancel selected multiple cursor     |
 | N/V      | [Alt]+[o] (+[o]+[o]+...+[o] | Omit selected multiple cursor | Omit selected multiple cursor         |
