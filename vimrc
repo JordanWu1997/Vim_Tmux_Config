@@ -782,9 +782,9 @@ endif
 " Navigate seamlessly in vim and tmux (Ctrl+h/j/k/l)
 Plug 'christoomey/vim-tmux-navigator'
 
+" [Neovim / Vim] -------------------------------------------------------------
+
 " [Python coding] ------------------------------------------------------------
-" More python syntax highlight
-Plug 'vim-python/python-syntax', { 'for': 'python' }
 if using_python_completion
     " Help communicate beteen vim and neovim [needed for deoplete.nvim]
     if using_vim
@@ -807,6 +807,8 @@ if using_python_completion
     " this plugin is disabled
     Plug 'davidhalter/jedi-vim', { 'for': 'python' }
 endif
+" More python syntax highlight
+Plug 'vim-python/python-syntax', { 'for': 'python' }
 
 " [Fortran coding] -----------------------------------------------------------
 " Fortran syntax support
@@ -819,10 +821,12 @@ Plug 'mattn/emmet-vim', { 'for': 'html' }
 Plug 'alvan/vim-closetag', { 'for': 'html' }
 
 " [Latex] --------------------------------------------------------------------
+if using_gui_software
+    " Real time Tex -> Pdf file preview (pdf reader is needed)
+    Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
+endif
 " Latex compiler link support (complier need to be installed externally)
 Plug 'vim-latex/vim-latex', { 'for': 'tex' }
-" Real time Tex -> Pdf file preview (pdf reader is needed)
-Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 
 " [I3 syntax highlight] ------------------------------------------------------
 " I3 configuration syntax highlight
