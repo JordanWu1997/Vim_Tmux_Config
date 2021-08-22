@@ -113,7 +113,7 @@
 " Use vim or neovim (Auto-detect)
 let using_neovim = has('nvim')
 let using_vim = !using_neovim
-" Check vim version for remote machine that vim <= 8.0 (e.g. Fomalhaut)
+" Check if vim version >= 8.0 (also for neovim >= 0.5)
 let using_vim8 = 1
 " Customize vim theme (Include colortheme and statusline)
 let using_customized_theme = 1
@@ -195,11 +195,11 @@ inoremap ! !<C-g>u
 " -- g+[t/T]: Goto Next/Prev tab
 
 " Umap ex mode [old school mode] to prevent typo
-noremap q: <Nop>
-noremap gQ <Nop>
+noremap gQ <nop>
 " Umap command history to prevent typo
 " Use :<C-f> to open command history instead
-nnoremap Q <Nop>
+noremap q: <nop>
+noremap Q <nop>
 " Make Y yank to the end of line instead of whole line just like D do
 nnoremap Y y$
 " Move selection block up/down in visual mode
@@ -283,7 +283,7 @@ set confirm               " Ask for confirmation before leaving vim
 set modifiable            " Make current buffer modifable
 set encoding=utf-8        " Unicode display support
 set clipboard=unnamedplus " Shared system clipboard
-set tildeop               " Make ~ a operator like gu, gU, and etc.
+set notildeop             " Make ~ a operator like gu, gU, and etc.
 set nolazyredraw          " Not only redraw when necessary.
 
 " Line wrap ------------------------------------------------------------------
@@ -688,9 +688,11 @@ endif
 if using_fancy_symbols
     " Nerdtree and other vim-plug powerline symbols support
     Plug 'ryanoasis/vim-devicons'
-    " More highlight in nertree (make nerdtree laggy in large filetree)
+    " More highlight in nertree
     Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 endif
+" File browser [support netrw (vim built-in file browser) functions]
+Plug 'scrooloose/nerdtree'
 " Code class/module/tag browser [Update to latest]
 Plug 'preservim/tagbar', { 'on': 'TagbarToggle' }
 " Code and files fuzzy finder and previewer (main progroam)
@@ -699,8 +701,6 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 " Enhanced previewer for fzf (fuzzy finder)
 Plug 'chengzeyi/fzf-preview.vim'
-" File browser [Support netrw (vim built-in file browser) functions]
-Plug 'scrooloose/nerdtree'
 
 " [Vim useful functions] -----------------------------------------------------
 " Sudo write/read files in vim
@@ -749,9 +749,9 @@ endif
 " [Functions for coding] -----------------------------------------------------
 if using_coding_tool_plug
     if using_vim8
-        " Languge packs [Not working on fomalhaut (vim=7.0)]
+        " Additional languge packs
         Plug 'sheerun/vim-polyglot'
-        " Multiple language syntax and lint support [Not working on vim < 8.0]
+        " Multiple language syntax and lint support
         Plug 'dense-analysis/ale',
                     \ { 'for': ['python', 'fortran', 'html'] }
     endif
@@ -782,14 +782,18 @@ endif
 " Navigate seamlessly in vim and tmux (Ctrl+h/j/k/l)
 Plug 'christoomey/vim-tmux-navigator'
 
-" [Neovim / Vim] -------------------------------------------------------------
+" [Neovim/Vim] ---------------------------------------------------------------
+" Help communicate beteen vim and neovim [needed for deoplete.nvim]
+if using_vim
+    Plug 'roxma/vim-hug-neovim-rpc', { 'for': 'python' }
+endif
+" Yet Another Remote Plugin Framework for Neovim [needed for deoplete]
+Plug 'roxma/nvim-yarp', { 'for': 'python' }
+" Context filetype library
+Plug 'Shougo/context_filetype.vim', { 'for': 'python' }
 
 " [Python coding] ------------------------------------------------------------
 if using_python_completion
-    " Help communicate beteen vim and neovim [needed for deoplete.nvim]
-    if using_vim
-        Plug 'roxma/vim-hug-neovim-rpc', { 'for': 'python' }
-    endif
     " Front end of completion (python and etc.)
     if vim_plug_just_installed
         Plug 'Shougo/deoplete.nvim',
@@ -797,12 +801,8 @@ if using_python_completion
     endif
     " Front end of completion (python and etc.)
     Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
-    " Yet Another Remote Plugin Framework for Neovim [needed for deoplete]
-    Plug 'roxma/nvim-yarp', { 'for': 'python' }
     " Python autocompletion
     Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
-    " Find fenced code blocks and their filetype
-    Plug 'Shougo/context_filetype.vim', { 'for': 'python' }
     " Just to add go-to-definition and similar features, autocompeletion from
     " this plugin is disabled
     Plug 'davidhalter/jedi-vim', { 'for': 'python' }
@@ -822,11 +822,21 @@ Plug 'alvan/vim-closetag', { 'for': 'html' }
 
 " [Latex] --------------------------------------------------------------------
 if using_gui_software
-    " Real time Tex -> Pdf file preview (pdf reader is needed)
+    " Asynchronous Tex file -> Pdf file preview (pdf reader is needed)
     Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 endif
 " Latex compiler link support (complier need to be installed externally)
 Plug 'vim-latex/vim-latex', { 'for': 'tex' }
+
+" [Markdown] --------------------------------------------------------------------
+if using_gui_software
+    if using_vim8
+        " Synchronous markdown file previewer
+        Plug 'iamcco/markdown-preview.nvim',
+                    \ { 'do': { -> mkdp#util#install() },
+                    \ 'for': ['markdown', 'vim-plug']}
+    endif
+endif
 
 " [I3 syntax highlight] ------------------------------------------------------
 " I3 configuration syntax highlight
@@ -859,9 +869,10 @@ set softtabstop=-1  " numbers of space that tab while editing
 
 " Filetype-dependent tab key settings ----------------------------------------
 " PEP8 recommendation for tab settings
-autocmd FileType python setlocal et ts=4 sw=4 sts=4
+autocmd FileType python
+            \ setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=-1
 " Makefile not support expand tabs to spaces
-autocmd FileType make setlocal noet
+autocmd FileType make setlocal noexpandtab
 
 " ============================================================================
 " Part 2 - Vim-theme settings (Plugins settings and mappings)
@@ -1504,17 +1515,27 @@ if using_gui_software
 endif
 
 " Markdown -------------------------------------------------------------------
+" Set spell check for markdown files
+autocmd FileType markdown setlocal spell
+
+" Markdown previewer (no extra vim plugin needed)
 " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
 " Google-chrome extension is needed for markdown viewer
-autocmd FileType markdown setlocal spell
-if using_gui_software
+if using_gui_software && !using_vim8
     let $VIMBROWSER='brave-browser'
     let $OPENBROWSER='noremap <F4> :!'. $VIMBROWSER .' %:p &<CR>'
-    augroup OpenMdFile
-        autocmd!
-        autocmd BufEnter *.md echom '[Press F4 to Open .md File]'
-        autocmd BufEnter *.md exe $OPENBROWSER
-    augroup END
+    autocmd BufEnter *.md echom '[Press F4 to Open .md File]'
+    autocmd BufEnter *.md exe $OPENBROWSER
+endif
+
+" Synchronous markdown previewer (markdown-preview plugin)
+if using_gui_software && using_vim8
+    " Web browser used to preview
+    let g:mkdp_browser = 'brave-browser'
+    " Show url of markdown previewer
+    let g:mkdp_echo_preview_url = 1
+    autocmd BufEnter *.md echom '[Press F4 to Open .md File]'
+    autocmd BufEnter *.md nmap <F4> <Plug>MarkdownPreviewToggle<CR>
 endif
 
 " ============================================================================
