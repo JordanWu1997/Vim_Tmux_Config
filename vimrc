@@ -261,8 +261,8 @@ set splitright
 " -- <C-w>n: Add new empty pane
 " -- <C-w>[q/c]: Close current pane
 " -- <C-w>[s/v]: Open current buffer in split/vsplit
-nmap <C-w>S :split<space>
-nmap <C-w>V :vsplit<space>
+nnoremap <C-w>S :split<space>
+nnoremap <C-w>V :vsplit<space>
 " Split pane resize (built-in, extended)
 " -- <C-w>[+/-]: Increase/Decrease current pane height
 " -- <C-w>[>/<]: Increase/Decrease current pane width
@@ -291,6 +291,10 @@ set nowrap                " Line wrap for small monitor or display window
 noremap <leader>wp :set wrap!<CR>
 
 " Spell check ----------------------------------------------------------------
+" Note:
+" -- ]s: Jump to next misspelled word
+" -- [s: Jump to previous misspelled word
+
 set nospell               " Vim built-in spell check
 noremap <leader>sp :set spell!<CR>
 
@@ -330,7 +334,7 @@ noremap <leader>/ :set nohlsearch!<CR>
 " Line number settings -------------------------------------------------------
 set norelativenumber      " Do not show relative line number
 set number                " Show absolute line number
-" Toggle line number
+" Toggle absolute/relative line number
 noremap <leader><F5> :set number!<CR>
 noremap <F5> :set relativenumber!<CR>
 
