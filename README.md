@@ -308,13 +308,10 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N/V      | [Ctrl]+[w]+[s/v]            | Add new split Horiz/Vertical  | Add new split Horizontal/Vertial      |
-| N/V      | [Ctrl]+[w]+[Shift]+[s/v]    | Add current split Horiz/Verti | Add current split Horizontal/Vertial  | Duplicate original split, just add [Shift] to [-]/[\]| |
 | N/V      | [Ctrl]+[h/j/k/l]            | Move between vim splits       | Move between splits (L/D/U/R)         | With plugin, you can even move between TMUX pane and VIM splits |
 | N/V      | [Ctrl]+[w]+[h/j/k/l]        | Move between vim splits       | Move between splits (L/D/U/R)         |
 | N/V      | [Ctrl]+[w]+[Shift]+[h/j/k/l] | Move current split (L/D/U/R) | Move current split (L/D/U/R)          |
-| N/V      | [LK]+[-/=]                  | Inc/Dec split height          | +10/-10 rows split height             |
-| N/V      | [LK]+[,/.]                  | Inc/Dec split width           | +10/-10 columns split width           |
-| N/V      | [LK]+[0]                    | Resize current split to 10 rows| Resize current split to 10 rows      | For terminal pane resize |
+| N/V      | [LK]+[r]+[0]                | Resize current split to 10 rows| Resize current split to 10 rows      | For terminal pane resize |
 | N/V      | [Ctrl]+[w]+[=]              | Resplit splits equally        | Re-split splits equally               | Here =(equal sign) for equally split
 
 #### 3. Code Folding Keymapping
@@ -326,8 +323,6 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N/V      | [z]+[Shift]+[r/m]           | Show/Close all foldings       | Show/Close all foldings               | Vim built-in |
 | V        | [Shift]+[k/j]               | Move selection block up/down  | Move selection block up/down          |
 
-#### 4. Miscellaneous Function Keymapping
-| VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | I        | [i]+[i]/[k]+[j]             | Esc (escape form insert mode) | Esc (escape form insert mode)         | If your word contains "ii", try [i] + "[Ctrl]+[v]" + [i]
 | N/V      | [Shift]+[k]                 | Search current word in manual | Search current word in manual         |

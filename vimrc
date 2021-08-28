@@ -240,6 +240,8 @@ nnoremap <leader>esq :r !seq<space>
 nnoremap <leader>ets :r !date<CR>
 " Sort selected context alphabetically
 vnoremap <leader>est :!sort<CR>
+" Filter out unique word [Context should be sorted first]
+vnoremap <leader>euq :!uniq<CR>
 
 " Vim window/pane/fold configuration -----------------------------------------
 " Save current file layout
@@ -248,29 +250,25 @@ noremap <F10> :mkview<CR>
 noremap <leader><F10> :loadview<CR>
 
 " Vim split window (pane) control --------------------------------------------
-" Split pane navigation [Now integrate with tmux, check vim-tmux-navigator]
-" -- <C-w>[h/j/k/l]: Move to L/D/U/R pane
-" -- <C-w>[H/J/K/L]: Move pane to L/D/U/R
+" Note:
+" -- Split pane navigation [Now integrate with tmux, check vim-tmux-navigator]
+"    -- <C-w>[h/j/k/l]: Move to L/D/U/R pane
+"    -- <C-w>[H/J/K/L]: Move pane to L/D/U/R
+" -- Split pane action (built-in, extended)
+"    -- <C-w>T: Move current pane to new tabe
+"    -- <C-w>n: Add new empty pane
+"    -- <C-w>[q/c]: Close current pane
+"    -- <C-w>[s/v]: Open current buffer in split/vsplit
+" -- Split pane resize (built-in, extended)
+"    -- <C-w>[+/-]: Increase/Decrease current pane height
+"    -- <C-w>[>/<]: Increase/Decrease current pane width
+"    -- <C-w>[_/|]: Maximize current pane horiz/verti
+
 " Split pane - Split border style
 set fillchars+=vert:\ "
 " Split pane - More natural split opening
 set splitbelow
 set splitright
-" Split pane action (built-in, extended)
-" -- <C-w>T: Move current pane to new tabe
-" -- <C-w>n: Add new empty pane
-" -- <C-w>[q/c]: Close current pane
-" -- <C-w>[s/v]: Open current buffer in split/vsplit
-nnoremap <C-w>S :split<space>
-nnoremap <C-w>V :vsplit<space>
-" Split pane resize (built-in, extended)
-" -- <C-w>[+/-]: Increase/Decrease current pane height
-" -- <C-w>[>/<]: Increase/Decrease current pane width
-" -- <C-w>[_/|]: Maximize current pane horiz/verti
-nnoremap <silent><leader>w= :resize +10<CR>
-nnoremap <silent><leader>w- :resize -10<CR>
-nnoremap <silent><leader>w, :vertical resize +10<CR>
-nnoremap <silent><leader>w. :vertical resize -10<CR>
 
 " Vim settings ---------------------------------------------------------------
 if using_vim
@@ -283,7 +281,7 @@ set confirm               " Ask for confirmation before leaving vim
 set modifiable            " Make current buffer modifable
 set encoding=utf-8        " Unicode display support
 set clipboard=unnamedplus " Shared system clipboard
-set notildeop             " Make ~ a operator like gu, gU, and etc.
+set notildeop             " Not make ~ a operator like gu, gU, and etc.
 set nolazyredraw          " Not only redraw when necessary.
 
 " Line wrap ------------------------------------------------------------------
@@ -739,7 +737,9 @@ if using_extra_plug
     " Register investigator
     Plug 'junegunn/vim-peekaboo'
     " Mark investigator
-    Plug 'Yilin-Yang/vim-markbar'
+    Plug 'Yilin-Yang/vim-markbar', {
+                \ 'on': [ '<Plug>OpenMarkbarPeekabooApostrophe',
+                \ '<Plug>OpenMarkbarPeekabooBacktick' ] }
     " Easymotion (Key-mapping moving in vim)
     Plug 'easymotion/vim-easymotion'
     " Auto popup completion options from vim
@@ -791,10 +791,6 @@ Plug 'christoomey/vim-tmux-navigator'
 if using_vim
     Plug 'roxma/vim-hug-neovim-rpc', { 'for': 'python' }
 endif
-" Yet Another Remote Plugin Framework for Neovim [needed for deoplete]
-Plug 'roxma/nvim-yarp', { 'for': 'python' }
-" Context filetype library
-Plug 'Shougo/context_filetype.vim', { 'for': 'python' }
 
 " [Python coding] ------------------------------------------------------------
 if using_python_completion
@@ -803,6 +799,8 @@ if using_python_completion
         Plug 'Shougo/deoplete.nvim',
                         \ { 'do': ':autocmd VimEnter * UpdateRemotePlugins' }
     endif
+    " Yet Another Remote Plugin Framework for Neovim [needed for deoplete]
+    Plug 'roxma/nvim-yarp', { 'for': 'python' }
     " Front end of completion (python and etc.)
     Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
     " Python autocompletion
@@ -832,7 +830,7 @@ endif
 " Latex compiler link support (complier need to be installed externally)
 Plug 'vim-latex/vim-latex', { 'for': 'tex' }
 
-" [Markdown] --------------------------------------------------------------------
+" [Markdown] ------------------------------------------------------------------
 if using_gui_software
     if using_vim8
         " Synchronous markdown file previewer
@@ -864,7 +862,7 @@ endif
 " Part 1 - Common settings (Plugins settings and mappings)
 " ============================================================================
 
-" Tab key settings [Must be added after vim-plug] ----------------------------
+" Tab key settings [Must be added after vim-plug to prevent being overwrited]
 set expandtab       " expand tab to spaces
 set tabstop=4       " numbers of space that tab in the file counts
 set shiftwidth=4    " number of space of auto-indent length
@@ -962,7 +960,7 @@ if using_customized_theme
                 \:set showtabline=2<CR>:set laststatus=2<CR>
                 \:echo "LIGHTLINE DISABLED"<CR>
     " Disable statusline (including lightline)
-    noremap <leader>ssd :call lightline#disable()<CR>:set showmode<CR>
+    noremap <leader>slh :call lightline#disable()<CR>:set showmode<CR>
                 \:set showtabline=0<CR>:set laststatus=0<CR>
                 \:echo "STATUSLINE DISABLED"<CR>
 endif
@@ -1474,10 +1472,10 @@ if using_python_completion
     " Find variable assignments (Goto function)
     let g:jedi#goto_assignments_command = '<leader>pa'
     " Open python module [show __init__.py]
+    autocmd FileType python noremap <leader>pM :Pyimport<space>
     autocmd FileType python
                 \ noremap <leader>pm
                 \ :execute ":Pyimport " . expand('<cword>')<CR>
-    autocmd FileType python noremap <leader>pM :Pyimport<space>
 endif
 
 " Python syntax --------------------------------------------------------------
@@ -1485,7 +1483,7 @@ endif
 let g:python_highlight_all = 1
 
 " Python debug (add python breakpoints) --------------------------------------
-" [ipdb must be installed first]
+" -- ipdb must be installed first
 " -- Installaion in termianl: run 'pip install ipdb'
 if using_python_completion
     autocmd FileType python
@@ -1515,7 +1513,7 @@ if using_gui_software
     let g:livepreview_previwer = 'okular'
     let g:livepreview_engine = 'pdflatex'
     autocmd BufEnter *.tex echom '[Press F4 to Preview .tex File]'
-    autocmd FileType tex noremap <F4> :LLPStartPreview<CR>
+    autocmd BufEnter *.tex noremap <F4> :LLPStartPreview<CR>
 endif
 
 " Markdown -------------------------------------------------------------------
