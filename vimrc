@@ -1524,12 +1524,7 @@ autocmd FileType markdown setlocal spell
 " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
 " Google-chrome extension is needed for markdown viewer
 if USING_GUI_SOFTWARE && !USING_VIM8
-<<<<<<< HEAD
     let $OPENBROWSER = 'noremap <F4> :!'. $WEBBROWSER .' %:p &<CR>'
-=======
-    let $VIMBROWSER = $WEB_BROWSER
-    let $OPENBROWSER = 'noremap <F4> :!'. $VIMBROWSER .' %:p &<CR>'
->>>>>>> 541a4504b3c80e0c950e32de3a911b907befda4d
     autocmd BufEnter *.md echom '[Press F4 to Open .md File]'
     autocmd BufEnter *.md exe $OPENBROWSER
 endif
@@ -1537,11 +1532,7 @@ endif
 " Synchronous markdown previewer (markdown-preview plugin)
 if USING_GUI_SOFTWARE && USING_VIM8
     " Web browser used to preview
-<<<<<<< HEAD
     let g:mkdp_browser = $WEBBROWSER
-=======
-    let g:mkdp_browser = $WEB_BROWSER
->>>>>>> 541a4504b3c80e0c950e32de3a911b907befda4d
     " Show url of markdown previewer
     let g:mkdp_echo_preview_url = 1
     autocmd BufEnter *.md echom '[Press F4 to Open .md File]'
