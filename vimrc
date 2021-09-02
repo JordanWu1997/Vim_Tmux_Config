@@ -466,7 +466,7 @@ if using_neovim
         call mkdir(&undodir, 'p')
     endif
 else
-    " Directory to place swap files in
+    " Directory to place swap files
     set directory=~/.vim/dirs/tmp
     " Make backup files
     set backup
@@ -789,7 +789,7 @@ Plug 'christoomey/vim-tmux-navigator'
 " [Neovim/Vim] ---------------------------------------------------------------
 " Help communicate beteen vim and neovim [needed for deoplete.nvim]
 if using_vim
-    Plug 'roxma/vim-hug-neovim-rpc', { 'for': 'python' }
+    Plug 'roxma/vim-hug-neovim-rpc', { 'for': ['python'] }
 endif
 
 " [Python coding] ------------------------------------------------------------
@@ -884,7 +884,7 @@ autocmd FileType make setlocal noexpandtab
 
 " Lightline statusline/tabline options ---------------------------------------
 " Lightline style setup
-function! LightlineStyle(theme, fancy, central_opaque)
+function! LightlineStyle(theme, fancy, central_region_opaque)
 
     " Part 1 - Lightline setup -----------------------------------------------
     " Initialize g:lightline variable
@@ -938,7 +938,7 @@ function! LightlineStyle(theme, fancy, central_opaque)
     " Miscellaneous varaibles
     let g:nord_uniform_status_lines = 0
     " Central bar opaque option
-    if !a:central_opaque
+    if !a:central_region_opaque
         let s:palette = g:lightline#colorscheme
                     \#{g:lightline.colorscheme}#palette
         let s:palette.normal.middle = [ [ 'NONE', 'NONE', 'NONE', 'NONE' ] ]
