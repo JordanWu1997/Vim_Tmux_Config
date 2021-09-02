@@ -129,20 +129,11 @@ let USING_CODING_TOOL_PLUG = 1
 " Python Completion (Use deoplete and jedi, neovim is recommended to be used)
 let USING_PYTHON_COMPLETION = 1
 " Python that used to install jedi, pynvim and python packages for completion
-<<<<<<< HEAD
 let PYTHON_FOR_COMPLETION = '/home/jordankhwu/anaconda3/bin/python'
 " Support of external gui software (e.g. Okular, Google-chrome, and etc.)
 let USING_GUI_SOFTWARE = 1
 " Webbrowser for markdown preview
 let WEBBROWSER = 'brave-browser'
-=======
-" Search python environment you are using [very time-consuming]
-"let PYTHON_FOR_COMPLETION = system('which python')
-let PYTHON_FOR_COMPLETION = '/home/jordankhwu/anaconda3/bin/python'
-" Support of external gui software (e.g. Okular, Google-chrome, and etc.)
-let USING_GUI_SOFTWARE = 1
-let WEB_BROWSER = 'brave-browser'
->>>>>>> 541a4504b3c80e0c950e32de3a911b907befda4d
 
 " TERM GUI color -------------------------------------------------------------
 " Ctermcolors only support max 256 color
