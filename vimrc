@@ -111,36 +111,37 @@
 " Assign 1/0 to enable/disable plug option
 
 " Use vim or neovim (Auto-detect)
-let using_neovim = has('nvim')
-let using_vim = !using_neovim
+let USING_NEOVIM = has('nvim')
+let USING_VIM = !USING_NEOVIM
 " Check if vim version >= 8.0 (also for neovim >= 0.5)
-let using_vim8 = 1
+let USING_VIM8 = 1
 " Customize vim theme (Include colortheme and statusline)
-let using_customized_theme = 1
+let USING_CUSTOMIZED_THEME = 1
 " Fancy symbols (Mainly affect lightline and nerdtree icon)
-let using_fancy_symbols = 1
+let USING_FANCY_SYMBOLS = 1
 " Wal theme support (Xresources colortheme support, check pywal)
-"let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
-let using_wal_theme = 0
+"let USING_WAL_THEME = isdirectory('/home/jordankhwu/.cache/wal')
+let USING_WAL_THEME = 0
 " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
-let using_extra_plug = 1
+let USING_EXTRA_PLUG = 1
 " Coding tools vim-plug (Include syntax support, git function, and etc.)
-let using_coding_tool_plug = 1
+let USING_CODING_TOOL_PLUG = 1
 " Python Completion (Use deoplete and jedi, neovim is recommended to be used)
-let using_python_completion = 1
+let USING_PYTHON_COMPLETION = 1
 " Python that used to install jedi, pynvim and python packages for completion
 " Search python environment you are using [very time-consuming]
-"let python_for_completion = system('which python')
-let python_for_completion = '/home/jordankhwu/anaconda3/bin/python'
+"let PYTHON_FOR_COMPLETION = system('which python')
+let PYTHON_FOR_COMPLETION = '/home/jordankhwu/anaconda3/bin/python'
 " Support of external gui software (e.g. Okular, Google-chrome, and etc.)
-let using_gui_software = 1
+let USING_GUI_SOFTWARE = 1
+let WEB_BROWSER = 'brave-browser'
 
 " TERM GUI color -------------------------------------------------------------
 " Ctermcolors only support max 256 color
 " Termguicolors can support html color code
 
 " Wal colortheme does not work well with termguicolors
-if has('termguicolors') && !using_wal_theme
+if has('termguicolors') && !USING_WAL_THEME
     set termguicolors
 endif
 " 256 term color support in vim TUI
@@ -271,7 +272,7 @@ set splitbelow
 set splitright
 
 " Vim settings ---------------------------------------------------------------
-if using_vim
+if USING_VIM
     set nocompatible      " Not compatible with vi [No need for neovim]
     set ttyfast           " Faster redrawing. [Removed in neovim]
 endif
@@ -444,7 +445,7 @@ command! WipeReg for i in range(34,122) |
 noremap <leader>ab :abbreviate<CR>
 
 " Better backup, swap and undos storage --------------------------------------
-if using_neovim
+if USING_NEOVIM
     " Directory to place swap files
     set directory=~/.config/nvim/dirs/tmp
     " Make backup files
@@ -580,9 +581,9 @@ nnoremap <leader><F8> :call CommentHighlightToggle()<CR>
 " -- In terminal buffer, <C-\><C-n> back to normal mode
 
 " Set customized terminal mode keymapping
-if using_vim8
+if USING_VIM8
     " Map key to enter terminal mode
-    if using_neovim
+    if USING_NEOVIM
         noremap <F12> :split<CR>:resize 10<CR>:terminal<CR>i
     else
         noremap <F12> :terminal<CR>
@@ -599,7 +600,7 @@ if using_vim8
     tnoremap <C-k> <C-\><C-n><C-w>k
     tnoremap <C-l> <C-\><C-n><C-w>l
     " Terminal customization for neovim
-    if using_neovim
+    if USING_NEOVIM
         " Auto start command when starting terminal mode
         autocmd TermOpen * setlocal
                     \ nocursorcolumn nocursorline nonumber laststatus=0
@@ -620,7 +621,7 @@ endif
 
 " Setup Vim-Plug path for neovim or vim
 let vim_plug_just_installed = 0
-if using_neovim
+if USING_NEOVIM
     let vim_plug_path = expand('~/.config/nvim/autoload/plug.vim')
 else
     let vim_plug_path = expand('~/.vim/autoload/plug.vim')
@@ -630,7 +631,7 @@ endif
 if !filereadable(vim_plug_path)
     echo 'Installing Vim-plug...'
     echo ''
-    if using_neovim
+    if USING_NEOVIM
         silent !mkdir -p ~/.config/nvim/autoload
         silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
                     \ 'https://raw.githubusercontent.com/junegunn/
@@ -656,7 +657,7 @@ endif
 
 " This needs to be here, so vim-plug knows we are declaring the plugins we
 " want to use
-if using_neovim
+if USING_NEOVIM
     call plug#begin("~/.config/nvim/plugged")
 else
     call plug#begin("~/.vim/plugged")
@@ -666,7 +667,7 @@ endif
 " ****************************************************************************
 
 " [Vim theme] ----------------------------------------------------------------
-if using_customized_theme
+if USING_CUSTOMIZED_THEME
     " Wal (Autocolorcheme based on wallpaper) [Only work with Cterm color]
     Plug 'dylanaraps/wal.vim', { 'on': 'colorscheme wal' }
     " Color theme (Monokai - high contrast)
@@ -687,7 +688,7 @@ if using_customized_theme
 endif
 
 " [File/Code Browsing] -------------------------------------------------------
-if using_fancy_symbols
+if USING_FANCY_SYMBOLS
     " Nerdtree and other vim-plug powerline symbols support
     Plug 'ryanoasis/vim-devicons'
     " More highlight in nertree
@@ -727,7 +728,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'liuchengxu/vim-which-key'
 
 " [Vim extra functions] ------------------------------------------------------
-if using_extra_plug
+if USING_EXTRA_PLUG
     " Goyo (Distraction-free mode)
     Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
     " Fancy startup page of vim
@@ -751,8 +752,8 @@ if using_extra_plug
 endif
 
 " [Functions for coding] -----------------------------------------------------
-if using_coding_tool_plug
-    if using_vim8
+if USING_CODING_TOOL_PLUG
+    if USING_VIM8
         " Additional languge packs
         Plug 'sheerun/vim-polyglot'
         " Multiple language syntax and lint support
@@ -788,12 +789,12 @@ Plug 'christoomey/vim-tmux-navigator'
 
 " [Neovim/Vim] ---------------------------------------------------------------
 " Help communicate beteen vim and neovim [needed for deoplete.nvim]
-if using_vim
+if USING_VIM
     Plug 'roxma/vim-hug-neovim-rpc', { 'for': ['python'] }
 endif
 
 " [Python coding] ------------------------------------------------------------
-if using_python_completion
+if USING_PYTHON_COMPLETION
     " Front end of completion (python and etc.)
     if vim_plug_just_installed
         Plug 'Shougo/deoplete.nvim',
@@ -823,7 +824,7 @@ Plug 'mattn/emmet-vim', { 'for': 'html' }
 Plug 'alvan/vim-closetag', { 'for': 'html' }
 
 " [Latex] --------------------------------------------------------------------
-if using_gui_software
+if USING_GUI_SOFTWARE
     " Asynchronous Tex file -> Pdf file preview (pdf reader is needed)
     Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 endif
@@ -831,8 +832,8 @@ endif
 Plug 'vim-latex/vim-latex', { 'for': 'tex' }
 
 " [Markdown] ------------------------------------------------------------------
-if using_gui_software
-    if using_vim8
+if USING_GUI_SOFTWARE
+    if USING_VIM8
         " Synchronous markdown file previewer
         Plug 'iamcco/markdown-preview.nvim',
                     \ { 'do': { -> mkdp#util#install() },
@@ -951,7 +952,7 @@ function! LightlineStyle(theme, fancy, central_region_opaque)
 endfunction
 
 " Conditional lightline status/tab line --------------------------------------
-if using_customized_theme
+if USING_CUSTOMIZED_THEME
     " Toggle lightline, status/tab line
     noremap <leader>sle :call lightline#enable()<CR>:set noshowmode<CR>
                 \:set showtabline=2<CR>:set laststatus=2<CR>
@@ -1177,8 +1178,8 @@ nnoremap <silent><leader> :<C-u>WhichKey '<space>'<CR>
 noremap <silent><leader>gy :Goyo<CR>
 
 " YankRing -------------------------------------------------------------------
-if using_extra_plug
-    if using_neovim
+if USING_EXTRA_PLUG
+    if USING_NEOVIM
         let g:yankring_history_dir = '~/.config/nvim/'
         " Fix for yankring and neovim problem when system has non-text things
         " copied in clipboard
@@ -1213,7 +1214,7 @@ endif
 
 " Peekaboo -------------------------------------------------------------------
 " Remap '"', '@' (Normal mode) and '<C-r>' (Insert mode) for register viewer
-if using_extra_plug
+if USING_EXTRA_PLUG
     let g:peekaboo_window = "vert bo 35new"
     let g:peekaboo_prefix = ''
     let g:peekaboo_compat = 1
@@ -1221,7 +1222,7 @@ endif
 
 " Markbar --------------------------------------------------------------------
 " Remap ''', '`' (Normal mode) for mark viewer
-if using_extra_plug
+if USING_EXTRA_PLUG
     " width of a vertical split markbar
     let g:markbar_width = 40
     " Ditto, but more granularly (any may be omitted)
@@ -1238,7 +1239,7 @@ if using_extra_plug
 endif
 
 " Easymotion -----------------------------------------------------------------
-if using_extra_plug
+if USING_EXTRA_PLUG
     " Move up and down not back to start of line
     set nostartofline
     " Disable default mappings
@@ -1255,7 +1256,7 @@ if using_extra_plug
 endif
 
 " AutoComplPop ---------------------------------------------------------------
-if using_extra_plug
+if USING_EXTRA_PLUG
     " Enable autocomplpop at startup
     let g:acp_enableAtStartup = 1
     " Toggle autocomplpop function
@@ -1274,7 +1275,7 @@ if using_extra_plug
     " Toggle autocomplpop
     noremap <leader>` :call AutoCompPopToggle()<CR>
     " Disable autocomplpop for python file [use deoplete instead]
-    if using_python_completion
+    if USING_PYTHON_COMPLETION
         autocmd FileType python let g:acp_enableAtStartup = 0
     endif
 endif
@@ -1282,7 +1283,7 @@ endif
 " Popup window selection -----------------------------------------------------
 " Previous/next suggestion
 " [Double quotation matters here, do not change to single quotation]
-if using_extra_plug
+if USING_EXTRA_PLUG
     inoremap <expr><S-tab> pumvisible() ? "\<C-p>" : "\<S-tab>"
     inoremap <expr><tab>   pumvisible() ? "\<C-n>" : "\<tab>"
     inoremap <expr><C-k>   pumvisible() ? "\<C-p>" : "\<C-k>"
@@ -1292,7 +1293,7 @@ if using_extra_plug
 endif
 
 " Tasklist -------------------------------------------------------------------
-if using_extra_plug
+if USING_EXTRA_PLUG
     noremap <leader>tl :TaskList<CR>
 endif
 
@@ -1311,7 +1312,7 @@ let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla,colour_names'
 " -- For python, flake8, pylint or other linting engines must be installed
 "    -- pip install flake8
 "    -- pip install pylint
-if using_coding_tool_plug
+if USING_CODING_TOOL_PLUG
     let g:ale_enabled = 0
     noremap <leader>al :ALEToggle<CR>
     noremap <leader>ai :ALEInfo<CR>
@@ -1320,14 +1321,14 @@ if using_coding_tool_plug
 endif
 
 " Rainbow parentheses --------------------------------------------------------
-if using_coding_tool_plug
+if USING_CODING_TOOL_PLUG
     " Don;t enable when start up
     let g:rainbow_active = 0
     noremap <leader>rb :RainbowToggle<CR>
 endif
 
 " Indentline -----------------------------------------------------------------
-if using_coding_tool_plug
+if USING_CODING_TOOL_PLUG
     let g:indentLine_showFirstIndentLevel = 1
     let g:indentLine_fileTypeExclude = ['text', 'markdown', 'latex']
     let g:indentLine_bufTypeExclude = ['help', 'terminal']
@@ -1335,7 +1336,7 @@ if using_coding_tool_plug
 endif
 
 " Indent guides --------------------------------------------------------------
-if using_coding_tool_plug
+if USING_CODING_TOOL_PLUG
     let g:indent_guides_enable_on_vim_startup = 0
     let g:indent_guides_start_level = 1
     let g:indent_guides_guide_size = 4
@@ -1356,7 +1357,7 @@ endif
 " -- <count>iI	Inner Indentation level (no lines above/below).
 
 " Multiple-cursors -----------------------------------------------------------
-if using_coding_tool_plug
+if USING_CODING_TOOL_PLUG
     let g:multi_cursor_use_default_mapping = 0
     let g:multi_cursor_start_word_key      = '<M-n>'
     let g:multi_cursor_select_all_word_key = '<M-n>a'
@@ -1368,7 +1369,7 @@ endif
 
 " Vim-fugitive ---------------------------------------------------------------
 " -- :G Summary for current git repository
-if using_coding_tool_plug
+if USING_CODING_TOOL_PLUG
     noremap <leader>gd :Git diff %<CR>
     noremap <leader>gD :Git diff<CR>
     noremap <leader>gs :Git<CR>
@@ -1384,7 +1385,7 @@ if using_coding_tool_plug
 endif
 
 " GitGutter ------------------------------------------------------------------
-if using_coding_tool_plug
+if USING_CODING_TOOL_PLUG
     "Disable all gitgutter key mappings
     let g:gitgutter_map_keys = 0
     " Enable gitgutter at start
@@ -1431,7 +1432,7 @@ endif
 
 " Deoplete -------------------------------------------------------------------
 " Front end for python completion
-if using_python_completion
+if USING_PYTHON_COMPLETION
     " Pynvim is needed [Installation: pip3 install --user pynvim]
     " Needed so deoplete can auto select the first suggestion
     set completeopt+=noinsert
@@ -1440,7 +1441,7 @@ if using_python_completion
     " Disabled by default because preview makes the window flicker
     set completeopt-=preview
     " Python that uses to install jedi
-    let g:python3_host_prog = python_for_completion
+    let g:python3_host_prog = PYTHON_FOR_COMPLETION
     " Enable deoplete at startup
     let g:deoplete#enable_at_startup = 1
     autocmd FileType python call deoplete#custom#option({
@@ -1454,7 +1455,7 @@ endif
 
 " Jedi-vim -------------------------------------------------------------------
 " All these mappings work only for python code [All should start with 'p']
-if using_python_completion
+if USING_PYTHON_COMPLETION
     " jedi is needed [Installation: pip3 install --user jedi]
     " jedi-vim remaps K to open python documents
     " Disable autocompletion (using deoplete instead)
@@ -1485,7 +1486,7 @@ let g:python_highlight_all = 1
 " Python debug (add python breakpoints) --------------------------------------
 " -- ipdb must be installed first
 " -- Installaion in termianl: run 'pip install ipdb'
-if using_python_completion
+if USING_PYTHON_COMPLETION
     autocmd FileType python
                 \ noremap <silent><leader>pb Oimport ipdb;
                 \ ipdb.set_trace()<Esc>
@@ -1509,7 +1510,7 @@ let fortran_do_enddo = 1
 autocmd FileType tex setlocal spell
 autocmd FileType tex setlocal updatetime=10000 " Unit: milisecond
 " Latex realtime viewer with gui pdf file manager
-if using_gui_software
+if USING_GUI_SOFTWARE
     let g:livepreview_previwer = 'okular'
     let g:livepreview_engine = 'pdflatex'
     autocmd BufEnter *.tex echom '[Press F4 to Preview .tex File]'
@@ -1523,17 +1524,17 @@ autocmd FileType markdown setlocal spell
 " Markdown previewer (no extra vim plugin needed)
 " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
 " Google-chrome extension is needed for markdown viewer
-if using_gui_software && !using_vim8
-    let $VIMBROWSER='brave-browser'
-    let $OPENBROWSER='noremap <F4> :!'. $VIMBROWSER .' %:p &<CR>'
+if USING_GUI_SOFTWARE && !USING_VIM8
+    let $VIMBROWSER = $WEB_BROWSER
+    let $OPENBROWSER = 'noremap <F4> :!'. $VIMBROWSER .' %:p &<CR>'
     autocmd BufEnter *.md echom '[Press F4 to Open .md File]'
     autocmd BufEnter *.md exe $OPENBROWSER
 endif
 
 " Synchronous markdown previewer (markdown-preview plugin)
-if using_gui_software && using_vim8
+if USING_GUI_SOFTWARE && USING_VIM8
     " Web browser used to preview
-    let g:mkdp_browser = 'brave-browser'
+    let g:mkdp_browser = $WEB_BROWSER
     " Show url of markdown previewer
     let g:mkdp_echo_preview_url = 1
     autocmd BufEnter *.md echom '[Press F4 to Open .md File]'
@@ -1566,8 +1567,8 @@ endfunction
 
 " Vim colorscheme ------------------------------------------------------------
 " Customized colorscheme settings
-if using_customized_theme
-    if using_wal_theme
+if USING_CUSTOMIZED_THEME
+    if USING_WAL_THEME
         " Option 1 - Direct read Xcolor from wal
         "source $HOME/.cache/wal/colors-wal.vim
         " Option 2 - Use wal vim plugin [Recommended]
@@ -1578,7 +1579,7 @@ if using_customized_theme
         " Current available themes
         colorscheme gruvbox
         " Lightline style
-        call LightlineStyle('gruvbox', using_fancy_symbols, 1)
+        call LightlineStyle('gruvbox', USING_FANCY_SYMBOLS, 1)
     endif
     " Call customized color palette
     call CustomizedColorPalette()
@@ -1587,35 +1588,35 @@ if using_customized_theme
                 \ cterm=NONE ctermfg=NONE ctermbg=NONE
                 \ gui=NONE guifg=NONE guibg=NONE
     " Cursor line number highlight for wal theme
-    if using_wal_theme
+    if USING_WAL_THEME
         highlight CursorLineNr cterm=bold ctermfg=10 ctermbg=NONE
     endif
 endif
 " Colorschmeme shortcut
 nnoremap <leader>csd :colorscheme default<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:call LightlineStyle('default', using_fancy_symbols, 0)<CR>
+            \:call LightlineStyle('default', USING_FANCY_SYMBOLS, 0)<CR>
             \:call LightlineReload()<CR>:echo "default colorscheme"<CR>
 nnoremap <leader>csg :colorscheme gruvbox<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:call LightlineStyle('gruvbox', using_fancy_symbols, 1)<CR>
+            \:call LightlineStyle('gruvbox', USING_FANCY_SYMBOLS, 1)<CR>
             \:call CustomizedColorPalette()<CR>
             \:call LightlineReload()<CR>:echo "gruvbox colorscheme"<CR>
 nnoremap <leader>csv :colorscheme vim-monokai-tasty<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:call LightlineStyle('deus', using_fancy_symbols, 0)<CR>
+            \:call LightlineStyle('deus', USING_FANCY_SYMBOLS, 0)<CR>
             \:call LightlineReload()<CR>:echo "monokai colorscheme"<CR>
 nnoremap <leader>css :colorscheme srcery<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:call LightlineStyle('srcery_drk', using_fancy_symbols, 1)<CR>
+            \:call LightlineStyle('srcery_drk', USING_FANCY_SYMBOLS, 1)<CR>
             \:call LightlineReload()<CR>:echo "srcery colorscheme"<CR>
 nnoremap <leader>csn :colorscheme nord<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:call LightlineStyle('nord', using_fancy_symbols, 1)<CR>
+            \:call LightlineStyle('nord', USING_FANCY_SYMBOLS, 1)<CR>
             \:call LightlineReload()<CR>:echo "nord colorscheme"<CR>
 nnoremap <leader>cso :colorscheme OceanicNext<CR>:set termguicolors<CR>
             \:call CustomizedColorPalette()<CR>
-            \:call LightlineStyle('oceanicnext', using_fancy_symbols, 1)<CR>
+            \:call LightlineStyle('oceanicnext', USING_FANCY_SYMBOLS, 1)<CR>
             \:call LightlineReload()<CR>:echo "oceanicnext colorscheme"<CR>
 nnoremap <leader>csw :colorscheme wal<CR>:set notermguicolors<CR>
             \:call CustomizedColorPalette()<CR>
