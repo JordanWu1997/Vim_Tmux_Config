@@ -175,8 +175,8 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     - Neovim config path is different from vim
     ```vim
     " Use vim or neovim (Auto-detect)
-    let using_neovim = has('nvim')
-    let using_vim = !using_neovim
+    let USING_NEOVIM = has('nvim')
+    let USING_VIM = !USING_NEOVIM
     ```
 - Check if using vim 8.0 or higher
     - If vim version is less than 8.0, some function is not available (e.g. terminal)
@@ -185,20 +185,20 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
         - [Plug-in] vim-polyglot (multi-language support)
         - [Plug-in] ale (multi-languages syntax highlight)
     ```vim
-    " Check vim version for remote machine that vim <= 8.0 (e.g. Fomalhaut)
-    let using_vim8 = 1
+    " Check if vim version >= 8.0 (also for neovim >= 0.5)
+    let USING_VIM8 = 1
     ```
 - Customize vim colorscheme
     - For fancy symbol support, nerd font is needed (check https://github.com/ryanoasis/nerd-fonts)
     - For pywal theme support, pywal is needed (check https://github.com/dylanaraps/pywal), also remember to change the directory path to your $HOME/.cache/wal
     ```vim
     " Customize vim theme (Include colortheme and statusline)
-    let using_customized_theme = 1
-    " Fancy symbols (Mainly affect lightline)
-    let using_fancy_symbols = 1
-    " Wal theme support (Pywal theme support, check pywal [Default NO])
-    let using_wal_theme = 0
-    "let using_wal_theme = isdirectory('/home/jordankhwu/.cache/wal')
+    let USING_CUSTOMIZED_THEME = 1
+    " Fancy symbols (Mainly affect lightline and nerdtree icon)
+    let USING_FANCY_SYMBOLS = 1
+    " Wal theme support (Xresources colortheme support, check pywal)
+    "let USING_WAL_THEME = isdirectory('/home/jordankhwu/.cache/wal')
+    let USING_WAL_THEME = 0
     ```
 - Extra vim-plug
     - Extra plug for productivity (or enhance vim-built in function)
@@ -213,8 +213,8 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
         - [Plug-in] FixedTaskList (find TODO tag in vim)
         - [Plug-in] vim-hexokinase (hex colorcode color highlight support)
     ```vim
-    " Extra vim-plug (Include easymotion, yankring, autocomplpop, and etc.)
-    let using_extra_plug = 1
+    " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
+    let USING_EXTRA_PLUG = 1
     ```
 - Coding tool vim-plug
     - Tools for coding, git, language syntax highlight
@@ -231,7 +231,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
         - [Plug-in] vim-gitgutter (git diff highlight)
     ```vim
     " Coding tools vim-plug (Include syntax support, git function, and etc.)
-    let using_coding_tool_plug = 1
+    let USING_CODING_TOOL_PLUG = 1
     ```
 - Python completion vim-plug
     - Tools for python completion
@@ -240,15 +240,12 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
         - [Plug-in] nvim-yarp (yet another remote plugin framework for neovim)
         - [Plug-in] vim-hug-neovim-rpc (plugin bridge from neovim to vim)
         - [Plug-in] deoplete-jedi (python completeion)
-        - [Plug-in] context_filetype.vim (find fenced code blocks and their filetypes)
         - [Plug-in] jedi-vim (definition and feature finder)
     ```vim
     " Python Completion (Use deoplete and jedi, neovim is recommended to be used)
-    let using_python_completion = 1
-    " Python that used for jedi and pynvim installation, change '_..._ ' to your python
-    let python_for_completion = '_python_for_jedi_pynvim_installation_'
-    " Search python environment you are using [very time-consuming]
-    "let python_for_completion = system('which python')
+    let USING_PYTHON_COMPLETION = 1
+    " Python that used to install jedi, pynvim and python packages for completion
+    let PYTHON_FOR_COMPLETION = '/home/jordankhwu/anaconda3/bin/python'
     ```
 - GUI support
     - Functions for external GUI software
@@ -256,8 +253,10 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
         - Latex previewer
         - Markdown previewer
     ```vim
-    " Support of externaml gui software (e.g. Okular, Google-chrome, and etc.)
-    let using_gui_software = 1
+    " Support of external gui software (e.g. Okular, Google-chrome, and etc.)
+    let USING_GUI_SOFTWARE = 1
+    " Webbrowser for markdown preview
+    let WEBBROWSER = 'brave-browser'
     ```
 
 ### Keymapping - Customized Keymapping Rule
