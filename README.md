@@ -42,6 +42,9 @@ Table of Contents
          * [Installed Plugins](#installed-plugins)
       * [Major Difference Between Customized and Original](#major-difference-between-customized-and-original)
       * [Keymapping Sheet](#keymapping-sheet)
+         * [1. Session/Window/Pane Keymapping](#1-sessionwindowpane-keymapping)
+         * [2. Copy-mode Keymapping](#2-copy-mode-keymapping)
+         * [3. Miscellaneous Keymapping](#3-miscellaneous-keymapping)
       * [Reference for TMUX Setup](#reference-for-tmux-setup)
 
 Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
@@ -322,6 +325,8 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N/V      | [z]+[Shift]+[r/m]           | Show/Close all foldings       | Show/Close all foldings               | Vim built-in |
 | V        | [Shift]+[k/j]               | Move selection block up/down  | Move selection block up/down          |
 
+#### 4. Miscellaneous Function Keymapping
+| VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | I        | [i]+[i]/[k]+[j]             | Esc (escape form insert mode) | Esc (escape form insert mode)         | If your word contains "ii", try [i] + "[Ctrl]+[v]" + [i]
 | N/V      | [Shift]+[k]                 | Search current word in manual | Search current word in manual         |
@@ -488,10 +493,15 @@ tmux -V
 ### Plugins
 
 #### Installed Plugins
+- [Plug-in] tmux-sensible (user-friendly settings for tmux)
+- [Plug-in] tmux-prefix-highlight (prefix/mode indicator for statusline)
+- [Plug-in] tmux-sidebar (nerdtree-like filetree for tmux)
+- [Plug-in] tmux-sessionist (make create/kill session ability easier to use)
 - [Plug-in] tmux-resurrect (save tmux layout, and restore after restart tmux)
 - [Plug-in] tmux-continuum (save program running in tmux, and restore after restart tmux)
 - [Plug-in] vim-tmux-navigator (move between vim and tmux pane seamlessly)
 - [Plug-in] tmux-yank (share tmux clipboard with system clipboard)
+- [Plug-in] tmux-open (open tmux prompt context easily)
 
 ### Major Difference Between Customized and Original
 - Bindkey is remapped from "Ctrl+b" to "Ctrl+space"
@@ -500,24 +510,70 @@ tmux -V
 - Add clipboard sharing between vim and system
 
 ### Keymapping Sheet
-| TMUX-Mode  | Add-on key                  | Function                      | Description                           | Note |
+
+#### 1. Session/Window/Pane Keymapping
+- Session
+
+| TMUX-Mode  | Keymapping                  | Function                      | Description                           | Note |
 | :-------:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
-| Normal     | [BK]+[?]                    | Show all tmux keymapping      | Show all tmux keymapping              |
-| Normal     | [BK]+[r]                    | Reload tmux configuration     | Reload tmux configuration             | .tmux.conf file |
-| Normal     | [BK]+[d]                    | Reattach remote/local display | Reattach remote/local display         | Run script to make sure display connection is the same for both remote and local machine |
+| Normal     | [BK]+[Shift]+[4]            | Rename current session        | Rename current session                | $ |
 | Normal     | [BK]+[s]                    | Show all tmux sessions        | Show all tmux sessions                |
-| Normal     | [BK]+[_]                    | Split window vertically       | Split window vertically               | Default key is [LK]+["] |
-| Normal     | [BK]+[|]                    | Split window horizontally     | Split window horizontally             | Default key is [LK]+[%] |
-| Normal     | [BK]+[q]                    | Move to pane (number)         | Move to pane (number)                 | Pane number shows on pane |
-| Normal     | [Ctrl]+[h/j/k/l]            | Move to pane (L/D/U/R)        | Move to pane (L/D/U/R)                | Also work with vim pane |
-| Normal     | [BK]+[h/j/k/l]              | Move to pane (L/D/U/R)        | Move to pane (L/D/U/R)                |
-| Normal     | [BK]+[H/J/K/L]              | Swap pane to (L/D/U/R)        | Swap pane to (L/D/U/R)                |
-| Normal     | [BK]+[[]+[Space]            | Enter copy mode and select    | Enter copy mode and select            |
-| Copy       | [BK]+[]]                    | Copy selected contents        | Copy selected contents                | Copy to shared clipboard (with system and vim) |
-| Normal     | [BK]+[<\/>]                 | Inc/Dec horizontal pane size  | Inc/Dec horizontal pane size          |
-| Normal     | [BK]+[-/+]                  | Inc/Dec vertical pane size    | Inc/Dec vertical pane size            |
+| Normal     | [BK]+[Shift]+[c]            | Create new session            | Create new session                    | tmux-sessionist |
+| Normal     | [BK]+[Shift]+[x]            | Kill current session          | Kill current session                  | tmux-sessionist |
+
+- Window
+
+| TMUX-Mode  | Keymapping                  | Function                      | Description                           | Note |
+| :-------:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
+| Normal     | [BK]+[Number]               | Move to window (number)       | Move to window (number)               |
+| Normal     | [BK]+[Shift]+[4]            | Rename current window         | Rename current session                |
+| Normal     | [BK]+[w]                    | Show all windows              | Show all windows                      |
+| Normal     | [BK]+[c]                    | Create new window             | Create new window                     |
+| Normal     | [BK]+[x]                    | Kill current window           | Kill current window                   |
 | Normal     | [Ctrl]+[L/R]                | Move to (L/R) window          | Move to (L/R) window                  |
 | Normal     | [Shift]+[L/R]               | Swap to (L/R) window          | Swap to (L/R) window                  |
+
+- Pane
+
+| TMUX-Mode  | Keymapping                  | Function                      | Description                           | Note |
+| :-------:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
+| Normal     | [BK]+[Shift]+[-]            | Split pane vertically         | Split pane vertically                 | Default key is [LK]+[Shift]+['] (") |
+| Normal     | [BK]+[Shift]+[\]            | Split pane horizontally       | Split pane horizontally               | Default key is [LK]+[Shift]+[5] (%) |
+| Normal     | [BK]+[q/Enter]              | Move to pane (number)         | Move to pane (number)                 | Pane number shows on pane |
+| Normal     | [Ctrl]+[h/j/k/l]            | Move to pane (L/D/U/R)        | Move to pane (L/D/U/R)                | vim-tmux-navigator|
+| Normal     | [BK]+[h/j/k/l]              | Move to pane (L/D/U/R)        | Move to pane (L/D/U/R)                |
+| Normal     | [BK]+[Shift]+[h/j/k/l]      | Swap pane to (L/D/U/R)        | Swap pane to (L/D/U/R)                |
+| Normal     | [BK]+[Alt]+[h/j/k/l]        | Resize pane to (L/D/U/R)      | Resize pane to (L/D/U/R)              |
+| Normal     | [BK]+[Space]                | Toggle pane layout            | Toggle pane layout                    |
+
+#### 2. Copy-mode Keymapping
+
+| TMUX-Mode  | Keymapping                  | Function                      | Description                           | Note |
+| :-------:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
+| Normal     | [BK]+[[]                    | Enter copy mode               | Enter copy mode                       |
+| Normal     | [BK]+[]]                    | Paste selected contents       | Paste selected contents               |
+| Normal     | [BK]+[Shift]+[3]            | Show all buffer list          | Show all buffer list                  | # |
+| Normal     | [BK]+[=]                    | Paste from buffer list        | Paste from buffer list                |
+| Normal     | [BK]+[/]                    | Search and select pattern     | Search and select pattern             | tmux-copy-cat |
+| Copy       | [v/Space]                   | Start selection               | Start selection                       |
+| Copy       | [Ctrl]+[v]+[Space]          | Vim-like block selection      | Vim-like block selection              |
+| Copy       | [Shift]+[v]                 | Vim-like line selection       | Vim-like line selection               |
+| Copy       | [y]                         | Vim-like yank selected region | Vim-like yank selected region         |
+| Copy       | [q/Enter]                   | Quit copy mode                | Quit copy mode                        |
+
+#### 3. Miscellaneous Keymapping
+
+| TMUX-Mode  | Keymapping                  | Function                      | Description                           | Note |
+| :-------:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
+| Normal     | [BK]+[Shift]+[/]            | Show all tmux keymapping      | Show all tmux keymapping              |
+| Normal     | [BK]+[b]                    | Toggle tmux statusline        | Toggle tmux statusline                |
+| Normal     | [BK]+[r]                    | Reload tmux configuration     | Reload tmux configuration             | source .tmux.conf file |
+| Normal     | [BK]+[Ctrl]+[d]             | Reattach remote/local display | Reattach remote/local display         | Run script to make sure display connection is the same for both remote and local machine |
+| Normal     | [BK]+[F3]                   | Sidebar file-tree             | Sidebar file-tree                     | tmux-sidebar |
+| Normal     | [BK]+[Ctrl]+[s/r]           | Save/Load current session     | Save/Load current session             | tmux-resurrect |
+| Normal     | [BK]+[Ctrl]+[l]             | Clear terminal output         | Clear terminal output                 |
+| Copy       | [BK]+[o]                    | Open selected with system default | Open selected with system default | tmux-open |
+| Copy       | [BK]+[Ctrl]+[o]             | Open selected with $EDITOR    | Open selected with $EDITOR            | tmux-open |
 
 ### Reference for TMUX Setup
 - https://github.com/powerline/powerline
@@ -528,3 +584,10 @@ tmux -V
 - https://github.com/g6ai/dotfiles/tree/master/tmux
 - https://danielmiessler.com/study/tmux/
 - https://leimao.github.io/blog/Tmux-Tutorial/
+- https://github.com/rothgar/awesome-tmux
+- https://arcolinux.com/everything-you-need-to-know-about-tmux-status-bar/
+- https://b9532026.wordpress.com/2020/12/01/%E5%BC%B7%E5%8C%96tmux%E6%93%8D%E4%BD%9C/
+- https://github.com/tmux-plugins/tmux-prefix-highlight
+- https://tao-of-tmux.readthedocs.io/zh_CN/latest/manuscript/09-status-bar.html
+- https://gist.github.com/markandrewj/ead05ebc20f3968ec07e
+- https://github.com/tmux-plugins/tpm
