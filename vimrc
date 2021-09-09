@@ -67,6 +67,7 @@
 " Note:
 " Neoformat (Formatter) ------------------------------------------------------
 " -- Call multi-language code formatter [formatter need to be installed]
+" -- Also need to make sure that formatter is executable [e.g. pyment]
 " -- For code formatter support: https://github.com/sbdchd/Neoformat
 "    -- Example: python code formatter
 "       -- Install formatter with terminal:
@@ -79,8 +80,10 @@
 "       -- Recommended PYTHON usage set (in order):
 "           -- (1) :Neoformat isort   # Sort import module
 "           -- (2) :Neoformat pyment  # Add description of function/class
-"           -- (3) :Neoformat yasf    # Format to PEP8 standard
-
+"           -- (3) :Neoformat yapf    # Format to PEP8 standard
+"       -- Google format pyment not work with neoformat, instead in terminal
+"           -- (1) pyment -o google -w <python_program.py>
+"
 " Note:
 " Python-completion and tmux-yank-clipboard on ZEUS --------------------------
 " -- Use neovim and everything is fine, but notice that neovim support of
