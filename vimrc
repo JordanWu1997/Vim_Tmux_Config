@@ -220,6 +220,8 @@ noremap <leader>ds :diffsplit<space>
 noremap <leader>dg :diffget<CR>
 noremap <leader>dp :diffput<CR>
 noremap <leader>du :diffupdate<CR>
+noremap <leader>dj ]c
+noremap <leader>dk [c
 
 " Save/Load file hotkey ------------------------------------------------------
 " Note:
