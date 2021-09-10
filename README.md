@@ -302,11 +302,11 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N/V      | [LK]+[b]+[b]                | Add new buffer                | Add new buffer                        |
 | N/V      | [LK]+[b]+[d]+[d]            | Close current buffer          | Close current buffer                  |
-| N/V      | [LK]+[LK]+[j/k]             | Goto next/prev buffer         | Goto next/prev buffer                 |
+| N/V      | [LK]+[Shift]+[j/k]          | Goto next/prev buffer         | Goto next/prev buffer                 |
 | N/V      | [LK]+[t]+[t]                | Add new tab                   | Add new tab                           |
 | N/V      | [LK]+[t]+[d]+[d]            | Close current tab             | Close current tab                     |
-| N/V      | [LK]+[LK]+[l/h]             | Goto next/prev tab            | Goto next/prev tab                    |
-
+| N/V      | [LK]+[Shift]+[l/h]          | Goto next/prev tab            | Goto next/prev tab                    |
+| N/V      | [LK]+[Shift]+[./,]          | Move tab to next/prev         | Move tab to next/prev                 |
 
 #### 2. Split/Window Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |

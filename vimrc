@@ -83,7 +83,7 @@
 "           -- (3) :Neoformat yapf    # Format to PEP8 standard
 "       -- Google format pyment not work with neoformat, instead in terminal
 "           -- (1) pyment -o google -w <python_program.py>
-"
+
 " Note:
 " Python-completion and tmux-yank-clipboard on ZEUS --------------------------
 " -- Use neovim and everything is fine, but notice that neovim support of
@@ -215,6 +215,11 @@ noremap <leader>go :jumps<CR>
 noremap <leader>gi :jumps<CR>
 noremap <leader>g; :changes<CR>
 noremap <leader>g, :changes<CR>
+" Diff mode
+noremap <leader>ds :diffsplit<space>
+noremap <leader>dg :diffget<CR>
+noremap <leader>dp :diffput<CR>
+noremap <leader>du :diffupdate<CR>
 
 " Save/Load file hotkey ------------------------------------------------------
 " Note:
@@ -388,17 +393,16 @@ noremap <leader>tdd :tabclose<CR>
 " Tabe (window) navigation
 noremap <silent><F2> :tabnext<CR>
 noremap <silent><leader><F2> :tabprevious<CR>
-noremap <silent><leader><leader>l :tabnext<CR>
-noremap <silent><leader><leader>h :tabprevious<CR>
-
+noremap <silent><leader>L :tabnext<CR>
+noremap <silent><leader>H :tabprevious<CR>
 " Tabe (Window) swap
 noremap <silent><S-F2>
             \ :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
 noremap <silent><leader><S-F2>
             \ :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
-noremap <silent><leader><leader>L
+noremap <silent><leader>>
             \ :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
-noremap <silent><leader><leader>H
+noremap <silent><leader><
             \ :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 
 " Buffer settings ------------------------------------------------------------
@@ -419,8 +423,8 @@ noremap <leader>bdd :bdelete<CR>'DELETE CURRENT BUFFER
 " Navigate through buffers
 noremap <silent><leader><F1> :bprev<CR>
 noremap <silent><F1> :bnext<CR>
-noremap <silent><leader><leader>k :bprev<CR>
-noremap <silent><leader><leader>j :bnext<CR>
+noremap <silent><leader>K :bprev<CR>
+noremap <silent><leader>J :bnext<CR>
 
 " Marks settings -------------------------------------------------------------
 " Note:
