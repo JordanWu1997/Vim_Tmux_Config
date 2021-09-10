@@ -300,10 +300,12 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 #### 1. Buffer/Tab Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
-| N/V      | [LK]+[b]+[b]                | Add new buffer                | Add new buffer                           |
-} N/V      | [LK]+[b]+[d]+[d]            | Close current buffer          | Close current buffer                     |
+| N/V      | [LK]+[b]+[b]                | Add new buffer                | Add new buffer                        |
+| N/V      | [LK]+[b]+[d]+[d]            | Close current buffer          | Close current buffer                  |
+| N/V      | [LK]+[LK]+[j/k]             | Goto next/prev buffer         | Goto next/prev buffer                 |
 | N/V      | [LK]+[t]+[t]                | Add new tab                   | Add new tab                           |
-} N/V      | [LK]+[t]+[d]+[d]            | Close current tab             | Close current tab                     |
+| N/V      | [LK]+[t]+[d]+[d]            | Close current tab             | Close current tab                     |
+| N/V      | [LK]+[LK]+[l/h]             | Goto next/prev tab            | Goto next/prev tab                    |
 
 
 #### 2. Split/Window Keymapping
@@ -314,7 +316,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N/V      | [Ctrl]+[w]+[h/j/k/l]        | Move between vim splits       | Move between splits (L/D/U/R)         |
 | N/V      | [Ctrl]+[w]+[Shift]+[h/j/k/l] | Move current split (L/D/U/R) | Move current split (L/D/U/R)          |
 | N/V      | [LK]+[r]+[0]                | Resize current split to 10 rows| Resize current split to 10 rows      | For terminal pane resize |
-| N/V      | [Ctrl]+[w]+[=]              | Resplit splits equally        | Re-split splits equally               | Here =(equal sign) for equally split
+| N/V      | [Ctrl]+[w]+[=]              | Re-split splits equally       | Re-split splits equally               | Here =(equal sign) for equally split |
 
 #### 3. Code Folding Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
@@ -356,7 +358,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N        | [LK]+[f]+[f]+[t]            | Select filetype for current   | Select filestype for current file     |
 | N        | [LK]+[f]+[c]+[d]            | Show all command in vim now　 | Show all command in vim now           |　
 | N        | [LK]+[f]+[n]+[m]            | Show all normal mode mapping  | Show all normal mode mapping          |
-| N        | [LK]+[f]+[h]+[t]            | Show all helptags in vim-help | Show all helptags in vim-help          |
+| N        | [LK]+[f]+[h]+[t]            | Show all helptags in vim-help | Show all helptags in vim-help         |
 
 #### 2. Python Coding Keymapping
 - Note: Jedi is needed for python code analysis (Check https://github.com/davidhalter/jedi)
@@ -408,7 +410,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N/V      | [LK]+[a]+[j/k]              | Goto Next/Prev ALE linter     | Goto Next/Prev ALE linter             |
 | N/V      | [LK]+[g]+[g]                | Toggle GitGutter              | On/Off GitGutter                      | Disabled at startup |
 | N/V      | [LK]+[g]+[h]+[s/l/n]        | Toggle GitGutter highlight    | Toggle GitGutter highlight symbol/line/line number |
-| N/V      | [LK]+[g]+[j/k]              | Goto Next/Prev git hunks      | Goto Next/Prev git hunks             | Hunk means changed block |
+| N/V      | [LK]+[g]+[j/k]              | Goto Next/Prev git hunks      | Goto Next/Prev git hunks              | Hunk means changed block |
 | N/V      | [LK]+[g]+[Shift]+[p]        | Hunk preview (before changed) | Hunk preview (before changed)         | Here p for (p)review |
 | N/V      | [LK]+[g]+[Shift]+[f]        | Fold all unchanged lines      | Fold all unchanged lines              |
 | N/V      | [LK]+[g]+[Shift]+[s]        | Stage current hunk            | Stage current hunk                    | Here s for (s)tage |
@@ -520,6 +522,7 @@ tmux -V
 | Normal     | [BK]+[s]                    | Show all tmux sessions        | Show all tmux sessions                |
 | Normal     | [BK]+[Shift]+[c]            | Create new session            | Create new session                    | tmux-sessionist |
 | Normal     | [BK]+[Shift]+[x]            | Kill current session          | Kill current session                  | tmux-sessionist |
+| Normal     | [BK]+[Shift]+[(/)]          | Move to prev/next window      | Move to prev/next window              |
 
 - Window
 
@@ -530,8 +533,8 @@ tmux -V
 | Normal     | [BK]+[w]                    | Show all windows              | Show all windows                      |
 | Normal     | [BK]+[c]                    | Create new window             | Create new window                     |
 | Normal     | [BK]+[x]                    | Kill current window           | Kill current window                   |
-| Normal     | [Ctrl]+[L/R]                | Move to (L/R) window          | Move to (L/R) window                  |
-| Normal     | [Shift]+[L/R]               | Swap to (L/R) window          | Swap to (L/R) window                  |
+| Normal     | [BK]+[h/l]                  | Move to next/prev window      | Move to next/prev window              |
+| Normal     | [BK]+[Shift]+[h/l]          | Swap window to prev/next window | Swap window to prev/next window     |
 
 - Pane
 
@@ -542,9 +545,7 @@ tmux -V
 | Normal     | [BK]+[q/Enter]              | Move to pane (number)         | Move to pane (number)                 | Pane number shows on pane |
 | Normal     | [Ctrl]+[h/j/k/l]            | Move to pane (L/D/U/R)        | Move to pane (L/D/U/R)                | vim-tmux-navigator|
 | Normal     | [BK]+[j/k]                  | Move to next/prev pane        | Move to next/prev pane                |
-| Normal     | [BK]+[h/l]                  | Move to next/prev window      | Move to next/prev window              |
 | Normal     | [BK]+[Shift]+[j/k]          | Swap pane to prev/next pane   | Swap pane to prev/next pane           |
-| Normal     | [BK]+[Shift]+[h/l]          | Swap window to prev/next window | Swap window to prev/next window     |
 | Normal     | [BK]+[Space]                | Toggle pane layout            | Toggle pane layout                    |
 | Normal     | [BK]+[Ctrl]+[h/j/k/l]       | Resize pane to (L/D/U/R)      | Resize pane to (L/D/U/R)              |
 

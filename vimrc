@@ -388,10 +388,17 @@ noremap <leader>tdd :tabclose<CR>
 " Tabe (window) navigation
 noremap <silent><F2> :tabnext<CR>
 noremap <silent><leader><F2> :tabprevious<CR>
+noremap <silent><leader><leader>l :tabnext<CR>
+noremap <silent><leader><leader>h :tabprevious<CR>
+
 " Tabe (Window) swap
 noremap <silent><S-F2>
             \ :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
 noremap <silent><leader><S-F2>
+            \ :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
+noremap <silent><leader><leader>L
+            \ :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
+noremap <silent><leader><leader>H
             \ :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 
 " Buffer settings ------------------------------------------------------------
@@ -412,6 +419,8 @@ noremap <leader>bdd :bdelete<CR>'DELETE CURRENT BUFFER
 " Navigate through buffers
 noremap <silent><leader><F1> :bprev<CR>
 noremap <silent><F1> :bnext<CR>
+noremap <silent><leader><leader>k :bprev<CR>
+noremap <silent><leader><leader>j :bnext<CR>
 
 " Marks settings -------------------------------------------------------------
 " Note:
