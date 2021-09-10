@@ -498,16 +498,16 @@ tmux -V
 - [Plug-in] tmux-sidebar (nerdtree-like filetree for tmux)
 - [Plug-in] tmux-sessionist (make create/kill session ability easier to use)
 - [Plug-in] tmux-resurrect (save tmux layout, and restore after restart tmux)
-- [Plug-in] tmux-continuum (save program running in tmux, and restore after restart tmux)
+- [Plug-in] tmux-continuum (auto-save, auto-load for tmux-resurrect)
 - [Plug-in] vim-tmux-navigator (move between vim and tmux pane seamlessly)
 - [Plug-in] tmux-yank (share tmux clipboard with system clipboard)
-- [Plug-in] tmux-open (open tmux prompt context easily)
+- [Plug-in] tmux-open (open tmux context easily in tmux copy mode)
 
 ### Major Difference Between Customized and Original
-- Bindkey is remapped from "Ctrl+b" to "Ctrl+space"
+- Bindkey is remapped from "Ctrl+b" to "Ctrl+a", "Ctrl+Space"
 - Command related to pane and split is remapped to my vim-like keymapping to keep things consistent
-- Add new powerline theme to make press of bindkey more eye-catching
-- Add clipboard sharing between vim and system
+- Add new statusline theme to make press of bindkey more eye-catching
+- Add clipboard sharing between vim, system, and tmux
 
 ### Keymapping Sheet
 
@@ -541,10 +541,12 @@ tmux -V
 | Normal     | [BK]+[Shift]+[\]            | Split pane horizontally       | Split pane horizontally               | Default key is [LK]+[Shift]+[5] (%) |
 | Normal     | [BK]+[q/Enter]              | Move to pane (number)         | Move to pane (number)                 | Pane number shows on pane |
 | Normal     | [Ctrl]+[h/j/k/l]            | Move to pane (L/D/U/R)        | Move to pane (L/D/U/R)                | vim-tmux-navigator|
-| Normal     | [BK]+[h/j/k/l]              | Move to pane (L/D/U/R)        | Move to pane (L/D/U/R)                |
-| Normal     | [BK]+[Shift]+[h/j/k/l]      | Swap pane to (L/D/U/R)        | Swap pane to (L/D/U/R)                |
-| Normal     | [BK]+[Alt]+[h/j/k/l]        | Resize pane to (L/D/U/R)      | Resize pane to (L/D/U/R)              |
+| Normal     | [BK]+[j/k]                  | Move to next/prev pane        | Move to next/prev pane                |
+| Normal     | [BK]+[h/l]                  | Move to next/prev window      | Move to next/prev window              |
+| Normal     | [BK]+[Shift]+[j/k]          | Swap pane to prev/next pane   | Swap pane to prev/next pane           |
+| Normal     | [BK]+[Shift]+[h/l]          | Swap window to prev/next window | Swap window to prev/next window     |
 | Normal     | [BK]+[Space]                | Toggle pane layout            | Toggle pane layout                    |
+| Normal     | [BK]+[Ctrl]+[h/j/k/l]       | Resize pane to (L/D/U/R)      | Resize pane to (L/D/U/R)              |
 
 #### 2. Copy-mode Keymapping
 
@@ -567,11 +569,12 @@ tmux -V
 | :-------:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | Normal     | [BK]+[Shift]+[/]            | Show all tmux keymapping      | Show all tmux keymapping              |
 | Normal     | [BK]+[b]                    | Toggle tmux statusline        | Toggle tmux statusline                |
-| Normal     | [BK]+[r]                    | Reload tmux configuration     | Reload tmux configuration             | source .tmux.conf file |
+| Normal     | [BK]+[r]                    | Reload tmux configuration     | Reload tmux configuration             | Run source .tmux.conf file |
 | Normal     | [BK]+[Ctrl]+[d]             | Reattach remote/local display | Reattach remote/local display         | Run script to make sure display connection is the same for both remote and local machine |
 | Normal     | [BK]+[F3]                   | Sidebar file-tree             | Sidebar file-tree                     | tmux-sidebar |
 | Normal     | [BK]+[Ctrl]+[s/r]           | Save/Load current session     | Save/Load current session             | tmux-resurrect |
-| Normal     | [BK]+[Ctrl]+[l]             | Clear terminal output         | Clear terminal output                 |
+| Normal     | [BK]+[Ctrl]+[a]             | Clear terminal output         | Clear terminal output                 | Act like Ctrl-l in terminal |
+| Normal     | [BK]+[Alt]+[s]              | Toggle pane synchronization   | Toggle pane synchronization           | Synchronize input for all panes |
 | Copy       | [BK]+[o]                    | Open selected with system default | Open selected with system default | tmux-open |
 | Copy       | [BK]+[Ctrl]+[o]             | Open selected with $EDITOR    | Open selected with $EDITOR            | tmux-open |
 
