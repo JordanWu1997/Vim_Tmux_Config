@@ -300,10 +300,6 @@ set nowrap                " Line wrap for small monitor or display window
 noremap <leader>wp :set wrap!<CR>
 
 " Spell check ----------------------------------------------------------------
-" Note:
-" -- ]s: Jump to next misspelled word
-" -- [s: Jump to previous misspelled word
-
 set nospell               " Vim built-in spell check
 noremap <leader>sp :set spell!<CR>
 noremap <leader>sj ]s
