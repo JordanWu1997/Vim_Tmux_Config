@@ -215,8 +215,9 @@ noremap <leader>go :jumps<CR>
 noremap <leader>gi :jumps<CR>
 noremap <leader>g; :changes<CR>
 noremap <leader>g, :changes<CR>
-" Diff mode
+" Diff mode (vimdiff or nvim -d)
 noremap <leader>ds :diffsplit<space>
+noremap <leader>dv :vertical diffsplit<space>
 noremap <leader>dg :diffget<CR>
 noremap <leader>dp :diffput<CR>
 noremap <leader>du :diffupdate<CR>
@@ -237,7 +238,7 @@ noremap <leader>wq :wq<CR>
 
 " External command -----------------------------------------------------------
 " Note:
-" -- :r !date (Insert timestamp)
+" -- :r !date (Insert time stamp)
 " -- :r !seq [START] [INCREMENT] LAST (Insert number sequence)
 " -- :!dir (Show current directory file)
 " -- :!del FILENAME (Delete FILENAME)
@@ -246,7 +247,7 @@ noremap <leader>wq :wq<CR>
 
 " Add number sequence
 nnoremap <leader>esq :r !seq<space>
-" Add timestamp
+" Add time stamp
 nnoremap <leader>ets :r !date<CR>
 " Sort selected context alphabetically
 vnoremap <leader>est :!sort<CR>
@@ -305,6 +306,8 @@ noremap <leader>wp :set wrap!<CR>
 
 set nospell               " Vim built-in spell check
 noremap <leader>sp :set spell!<CR>
+noremap <leader>sj ]s
+noremap <leader>sk [s
 
 " Wild menu settings ---------------------------------------------------------
 set wildmenu              " Show memu options

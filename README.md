@@ -25,7 +25,8 @@ Table of Contents
          * [1. Buffer/Tab Keymapping](#1-buffertab-keymapping)
          * [2. Split/Window Keymapping](#2-splitwindow-keymapping)
          * [3. Code Folding Keymapping](#3-code-folding-keymapping)
-         * [4. Miscellaneous Function Keymapping](#4-miscellaneous-function-keymapping)
+         * [4. Diff Mode Keymapping](#4-diff-mode-keymapping)
+         * [5. Miscellaneous Function Keymapping](#5-miscellaneous-function-keymapping)
       * [Keymapping Sheet 3 - Plug-in Function Keymapping](#keymapping-sheet-3---plug-in-function-keymapping)
          * [1. File/Code Browsing Keymapping](#1-filecode-browsing-keymapping)
          * [2. Python Coding Keymapping](#2-python-coding-keymapping)
@@ -155,7 +156,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
 ### Plugins
 #### 1. Plugin Loading Time
-- Enable too much plugins may slow down your vim. you can check your loading time with following command
+- Enable too much plugins may slow down your vim. You can check your loading time with following command
 - For managing plugins enable/disable, see next section (Plugin usage configuration)
 ```bash
 # For vim/gvim
@@ -311,7 +312,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 #### 2. Split/Window Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
-| N/V      | [Ctrl]+[w]+[s/v]            | Add new split Horiz/Vertical  | Add new split Horizontal/Vertial      |
+| N/V      | [Ctrl]+[w]+[s/v]            | Add new split Horiz/Vertical  | Add new split Horizontal/Vertical     |
 | N/V      | [Ctrl]+[h/j/k/l]            | Move between vim splits       | Move between splits (L/D/U/R)         | With plugin, you can even move between TMUX pane and VIM splits |
 | N/V      | [Ctrl]+[w]+[h/j/k/l]        | Move between vim splits       | Move between splits (L/D/U/R)         |
 | N/V      | [Ctrl]+[w]+[Shift]+[h/j/k/l] | Move current split (L/D/U/R) | Move current split (L/D/U/R)          |
@@ -321,13 +322,22 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 #### 3. Code Folding Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
-| N        | ([LK])+[F10]                | Load/Save layout and folding  | Load/Save current split and code folding |
+| N/V      | ([LK])+[F10]                | Load/Save layout and folding  | Load/Save current split and code folding |
 | N/V      | [z]+[k/j]                   | Goto Prev/Next folding        | Goto Prev/Next folding                | Vim built-in |
 | N/V      | [z]+[o/c]                   | Open/Close current folding    | Open/Close current folding            | Vim built-in |
 | N/V      | [z]+[Shift]+[r/m]           | Show/Close all foldings       | Show/Close all foldings               | Vim built-in |
 | V        | [Shift]+[k/j]               | Move selection block up/down  | Move selection block up/down          |
 
-#### 4. Miscellaneous Function Keymapping
+#### 4. Diff Mode Keymapping
+| VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
+| :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
+| N/V      | [LK]+[d]+[s/v]              | Add diff split Horiz/Vertical | Add diff split Horiz/Vertical         |
+| N/V      | [Lk]+[d]+[j/k]              | Jump to next/prev diff        | Jump to next/prev diff                |
+| N/V      | [Lk]+[d]+[g]                | Get diff from neighbor pane   | Get diff from neighbor pane           | Recommend to use with visual mode selection |
+| N/V      | [Lk]+[d]+[p]                | Put diff to neighbor pane     | Put diff to neighbor pane             | Recommend to use with visual mode selection |
+| N/V      | [Lk]+[d]+[u]                | Update diff                   | Update diff                           |
+
+#### 5. Miscellaneous Function Keymapping
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | I        | [i]+[i]/[k]+[j]             | Esc (escape form insert mode) | Esc (escape form insert mode)         | If your word contains "ii", try [i] + "[Ctrl]+[v]" + [i]
@@ -354,7 +364,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N/V      | [LK]+[F4]                   | Toggle Tagbar                 | On/Off Tagbar plugin                  |
 | N        | [LK]+[f]+[f]+[s]            | List files under input dir    | List files under input dir            |
 | N        | [LK]+[f]+[l]+[c]            | Locate files matched input    | Locate files matched input name       | Use system locate command |
-| N        | [LK]+[f]+[r]+[g]            | Find files with input pattern | Find files matched input patterm      | Use system ripgrep command |
+| N        | [LK]+[f]+[r]+[g]            | Find files with input pattern | Find files matched input pattern      | Use system ripgrep command |
 | N        | [LK]+[f]+[f]+[t]            | Select filetype for current   | Select filestype for current file     |
 | N        | [LK]+[f]+[c]+[d]            | Show all command in vim now　 | Show all command in vim now           |　
 | N        | [LK]+[f]+[n]+[m]            | Show all normal mode mapping  | Show all normal mode mapping          |
@@ -367,7 +377,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N/V      | [Shift]+[k]                 | Search current word in doc    | Search current word in python doc     |
-| N/V      | [LK]+[p]+[n]                | Find current word occurences  | Find current word occurences          | Here p for (p)ython |
+| N/V      | [LK]+[p]+[n]                | Find current word occurrences  | Find current word occurrences          | Here p for (p)ython |
 | N/V      | [LK]+[p]+[a]                | Find current word assignment  | Find current word assignment          |
 | N/V      | [LK]+[p]+[d]                | Show current word definition  | Show current word definition          |
 | N/V      | [LK]+[p]+[m]                | Show current word init.py     | Show current word init.py             |
@@ -379,14 +389,14 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | VIM-Mode | Keymapping                  | Function                      | Description                           | Note |
 | :-----:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | N/V      | [LK]+[c]+[c/y]              | Comment (and copy) current line | Comment (and copy) current line     | NerdCommenter |
-| N/V      | [LK]+[c]+[u]                | Uncomment current line        | UnComment current line                | NerdCommenter |
+| N/V      | [LK]+[c]+[u]                | Uncomment current line        | Uncomment current line                | NerdCommenter |
 | N/V      | [LK]+[Return]               | Select vim pane               | Select vim pane in tabs and splits    | vim-choosewin
 | N/V      | [LK]+[z]                    | Toggle maximize current split | On/Off maximize current split         | vim-maximizer |
 | N/V      | [Ctrl]+[w]+[z]              | Toggle maximize current split | On/Off maximize current split         | vim-maximizer |
 | N/V      | [y]+[s]+[a]+[w]+["]         | Add wrapped quotation/bracket | From word to "word"                   | vim-surrounder |
 | N/V      | [d]+[s]+[a]+[w]+["]         | Del wrapped quotation/bracket | From "word" to word                   | vim-surrounder |
 | N/V      | [c]+[s]+[']+["]             | Change quotation/bracket      | From 'word' to "word"                 | vim-surrounder |
-| N/V/I    | [LK]+[\`]                   | Toggle auto-completion popup  | On/Off auto-completion popup          | autoomplpop |
+| N/V/I    | [LK]+[\`]                   | Toggle auto-completion pop-up | On/Off auto-completion pop-up         | autocomplpop |
 | N/V/I    | [Alt]+[\`]                  | Toggle auto-pair              | On/Off auto-pair quotation/bracket    | auto-pairs |
 | N/V/I    | [Alt]+[j]                   | Jump to next pairs            | Jump to next paired quotation/bracket | auto-pairs |
 | I        | [Alt]+[w]                   | Auto-pair fastwrap            | Auto-pair fastwrap current pairs      | Example: (\|)test -> (test) |
@@ -506,7 +516,7 @@ tmux -V
 - [Plug-in] tmux-open (open tmux context easily in tmux copy mode)
 
 ### Major Difference Between Customized and Original
-- Bindkey is remapped from "Ctrl+b" to "Ctrl+a", "Ctrl+Space"
+- Bindkey is remapped from "Ctrl+b" to "Ctrl+a" and "Ctrl+Space"
 - Command related to pane and split is remapped to my vim-like keymapping to keep things consistent
 - Add new statusline theme to make press of bindkey more eye-catching
 - Add clipboard sharing between vim, system, and tmux
@@ -574,7 +584,7 @@ tmux -V
 | Normal     | [BK]+[Ctrl]+[d]             | Reattach remote/local display | Reattach remote/local display         | Run script to make sure display connection is the same for both remote and local machine |
 | Normal     | [BK]+[F3]                   | Sidebar file-tree             | Sidebar file-tree                     | tmux-sidebar |
 | Normal     | [BK]+[Ctrl]+[s/r]           | Save/Load current session     | Save/Load current session             | tmux-resurrect |
-| Normal     | [BK]+[Ctrl]+[a]             | Clear terminal output         | Clear terminal output                 | Act like Ctrl-l in terminal |
+| Normal     | [BK]+[a]             | Clear terminal output         | Clear terminal output                 | Act like Ctrl-l in terminal |
 | Normal     | [BK]+[Alt]+[s]              | Toggle pane synchronization   | Toggle pane synchronization           | Synchronize input for all panes |
 | Copy       | [BK]+[o]                    | Open selected with system default | Open selected with system default | tmux-open |
 | Copy       | [BK]+[Ctrl]+[o]             | Open selected with $EDITOR    | Open selected with $EDITOR            | tmux-open |
