@@ -190,12 +190,13 @@ inoremap ! !<C-g>u
 " -- z+[t/z/b/h/l]: Scroll window top/center/bottom/left/right
 " -- Ctrl+[i/o]: Jump to Next/Prev cursor location, works even between files
 " -- :jumps: show all jump history
-" -- g+[;/,]: Goto Older/Newer change
+" -- g+[;/,]: Go to Older/Newer change
 " -- :changes: Show all change history
+" -- g+[-/+]: Go to Prev/Next text-states (Undo/Redo)
 " -- g+[j/k/l/h]: Move in visual lines instead of real lines in WRAP text
 " -- g+[uu/UU/~~]: Set lowercase/uppercase/toggle for whole line
 " -- :g/PATTERN/ACTION: In entire file, for matching PATTERN, do ACTION
-" -- g+[t/T]: Goto Next/Prev tab
+" -- g+[t/T]: Go to Next/Prev tab
 
 " Umap ex mode [old school mode] to prevent typo
 noremap gQ <nop>
