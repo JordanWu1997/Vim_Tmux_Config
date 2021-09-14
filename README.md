@@ -557,7 +557,7 @@ tmux -V
 | Normal     | [BK]+[j/k]                  | Move to next/prev pane        | Move to next/prev pane                |
 | Normal     | [BK]+[Shift]+[j/k]          | Swap pane to prev/next pane   | Swap pane to prev/next pane           |
 | Normal     | [BK]+[Space]                | Toggle pane layout            | Toggle pane layout                    |
-| Normal     | [BK]+[Ctrl]+[h/j/k/l]       | Resize pane to (L/D/U/R)      | Resize pane to (L/D/U/R)              |
+| Normal     | [Alt]+[h/j/k/l]             | Resize pane to (L/D/U/R)      | Resize pane to (L/D/U/R)              |
 
 #### 2. Copy-mode Keymapping
 
@@ -584,8 +584,12 @@ tmux -V
 | Normal     | [BK]+[Ctrl]+[d]             | Reattach remote/local display | Reattach remote/local display         | Run script to make sure display connection is the same for both remote and local machine |
 | Normal     | [BK]+[F3]                   | Sidebar file-tree             | Sidebar file-tree                     | tmux-sidebar |
 | Normal     | [BK]+[Ctrl]+[s/r]           | Save/Load current session     | Save/Load current session             | tmux-resurrect |
-| Normal     | [BK]+[a]             | Clear terminal output         | Clear terminal output                 | Act like Ctrl-l in terminal |
+| Normal     | [BK]+[a]                    | Clear terminal output         | Clear terminal output                 | Act like Ctrl-l in terminal |
+| Normal     | [BK]+[Ctrl]+[h]             | Send Ctrl+h to terminal       | Send Ctrl+h to terminal               | Ctrl+h is alternative backspace for fish shell |
+| Normal     | [BK]+[Ctrl]+[k]             | Send Ctrl+k to terminal       | Send Ctrl+k to terminal               | Ctrl+k is to delete to end of line for fish shell |
+| Normal     | [BK]+[Ctrl]+[l]             | Send Ctrl+l to terminal       | Send Ctrl+l to terminal               | Ctrl+l is to clean screen for fish shell |
 | Normal     | [BK]+[Alt]+[s]              | Toggle pane synchronization   | Toggle pane synchronization           | Synchronize input for all panes |
+| Normal     | [BK]+[Shift]+[m]            | Toggle mouse mode             | Toggle mouse mode                     |
 | Copy       | [BK]+[o]                    | Open selected with system default | Open selected with system default | tmux-open |
 | Copy       | [BK]+[Ctrl]+[o]             | Open selected with $EDITOR    | Open selected with $EDITOR            | tmux-open |
 

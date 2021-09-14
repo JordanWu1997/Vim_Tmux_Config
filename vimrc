@@ -295,6 +295,7 @@ set encoding=utf-8        " Unicode display support
 set clipboard=unnamedplus " Shared system clipboard
 set notildeop             " Not make ~ a operator like gu, gU, and etc.
 set nolazyredraw          " Not only redraw when necessary.
+set backspace=indent,eol,start " Backspace through everything
 
 " Line wrap ------------------------------------------------------------------
 set nowrap                " Line wrap for small monitor or display window
