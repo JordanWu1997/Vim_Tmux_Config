@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env fish
 
 # Source code:
 # -- https://github.com/g6ai/dotfiles/tree/master/tmux
@@ -9,7 +9,8 @@ tmux list-panes -s -F "#{session_name}:#{window_index}.#{pane_index} #{pane_curr
 while read pane_process
 do
   IFS=' ' read -ra pane_process <<< "$pane_process"
-  if [[ "${pane_process[1]}" == "bash" ]]; then
+  if [[ "${pane_process[1]}" == "fish" ]]; then
+    tmux send-keys -t ${pane_process[0]} "set DISPLAY $DISPLAY" Enter
     tmux send-keys -t ${pane_process[0]} "export DISPLAY=$DISPLAY" Enter
   elif [[ "${pane_process[1]}" == *"vim"* ]]; then
     tmux send-keys -t ${pane_process[0]} Escape
