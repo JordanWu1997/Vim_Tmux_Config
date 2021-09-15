@@ -581,7 +581,6 @@ tmux -V
 | Normal     | [BK]+[Shift]+[/]            | Show all tmux keymapping      | Show all tmux keymapping              |
 | Normal     | [BK]+[b]                    | Toggle tmux statusline        | Toggle tmux statusline                |
 | Normal     | [BK]+[r]                    | Reload tmux configuration     | Reload tmux configuration             | Run source .tmux.conf file |
-| Normal     | [BK]+[Ctrl]+[d]             | Reattach remote/local display | Reattach remote/local display         | Run script to make sure display connection is the same for both remote and local machine |
 | Normal     | [BK]+[F3]                   | Sidebar file-tree             | Sidebar file-tree                     | tmux-sidebar |
 | Normal     | [BK]+[Ctrl]+[s/r]           | Save/Load current session     | Save/Load current session             | tmux-resurrect |
 | Normal     | [BK]+[a]                    | Clear terminal output         | Clear terminal output                 | Act like Ctrl-l in terminal |

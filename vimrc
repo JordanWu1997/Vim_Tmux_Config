@@ -398,7 +398,7 @@ noremap <silent><F2> :tabnext<CR>
 noremap <silent><leader><F2> :tabprevious<CR>
 noremap <silent><leader>L :tabnext<CR>
 noremap <silent><leader>H :tabprevious<CR>
-" Tabe (Window) swap
+" Tabe (window) swap
 noremap <silent><S-F2>
             \ :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
 noremap <silent><leader><S-F2>
