@@ -267,7 +267,7 @@ noremap <leader><F10> :loadview<CR>
 "    -- <C-w>[h/j/k/l]: Move to L/D/U/R pane
 "    -- <C-w>[H/J/K/L]: Move pane to L/D/U/R
 " -- Split pane action (built-in, extended)
-"    -- <C-w>T: Move current pane to new tabe
+"    -- <C-w>T: Move current pane to new tab
 "    -- <C-w>n: Add new empty pane
 "    -- <C-w>[q/c]: Close current pane
 "    -- <C-w>[s/v]: Open current buffer in split/vsplit
@@ -387,18 +387,18 @@ endfunction
 nnoremap <silent><F6> :call FoldColumnToggleShort()<CR>
 nnoremap <silent><leader><F6> :call FoldColumnToggleLong()<CR>
 
-" Tabe (window) settings -----------------------------------------------------
-" Tabe (window) operations
+" Tab (window) settings ------------------------------------------------------
+" Tab (window) operations
 noremap <leader>ts :tabs<CR>
 noremap <leader>tt :tabnew<space>
 noremap <leader>td :tabclose<space>
 noremap <leader>tdd :tabclose<CR>
-" Tabe (window) navigation
+" Tab (window) navigation
 noremap <silent><F2> :tabnext<CR>
 noremap <silent><leader><F2> :tabprevious<CR>
 noremap <silent><leader>L :tabnext<CR>
 noremap <silent><leader>H :tabprevious<CR>
-" Tabe (window) swap
+" Tab (window) swap
 noremap <silent><S-F2>
             \ :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
 noremap <silent><leader><S-F2>

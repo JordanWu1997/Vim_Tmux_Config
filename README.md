@@ -531,18 +531,20 @@ tmux -V
 | Normal     | [BK]+[Shift]+[4]            | Rename current session        | Rename current session                | $ |
 | Normal     | [BK]+[s]                    | Show all tmux sessions        | Show all tmux sessions                |
 | Normal     | [BK]+[Shift]+[c]            | Create new session            | Create new session                    | tmux-sessionist |
-| Normal     | [BK]+[Shift]+[x]            | Kill current session          | Kill current session                  | tmux-sessionist |
-| Normal     | [BK]+[Shift]+[(/)]          | Move to prev/next window      | Move to prev/next window              |
+| Normal     | [BK]+[Shift]+[x/7]          | Kill current session          | Kill current session                  | tmux-sessionist |
+| Normal     | [BK]+[Shift]+[(/)]          | Move to prev/next session     | Move to prev/next session             |
+| Normal     | [BK]+[Shift]+[p/n]          | Move to prev/next session     | Move to prev/next session             |
 
 - Window
 
 | TMUX-Mode  | Keymapping                  | Function                      | Description                           | Note |
 | :-------:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | Normal     | [BK]+[Number]               | Move to window (number)       | Move to window (number)               |
-| Normal     | [BK]+[Shift]+[4]            | Rename current window         | Rename current session                |
+| Normal     | [BK]+[,]                    | Rename current window         | Rename current session                |
 | Normal     | [BK]+[w]                    | Show all windows              | Show all windows                      |
 | Normal     | [BK]+[c]                    | Create new window             | Create new window                     |
 | Normal     | [BK]+[x]                    | Kill current window           | Kill current window                   |
+| Normal     | [BK]+[p/n]                  | Move window to prev/next window | Move window to prev/next window     |
 | Normal     | [BK]+[h/l]                  | Move to next/prev window      | Move to next/prev window              |
 | Normal     | [BK]+[Shift]+[h/l]          | Swap window to prev/next window | Swap window to prev/next window     |
 
@@ -558,6 +560,7 @@ tmux -V
 | Normal     | [BK]+[Shift]+[j/k]          | Swap pane to prev/next pane   | Swap pane to prev/next pane           |
 | Normal     | [BK]+[Space]                | Toggle pane layout            | Toggle pane layout                    |
 | Normal     | [Alt]+[h/j/k/l]             | Resize pane to (L/D/U/R)      | Resize pane to (L/D/U/R)              |
+| Normal     | [BK]+[Ctrl/Alt]+[o]         | Rotate pane anti-clock/clock wisely  | Rotate pane anti-clock/clock wisely |
 
 #### 2. Copy-mode Keymapping
 
