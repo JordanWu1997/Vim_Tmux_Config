@@ -559,7 +559,7 @@ tmux -V
 | Normal     | [BK]+[j/k]                  | Move to next/prev pane        | Move to next/prev pane                |
 | Normal     | [BK]+[Shift]+[j/k]          | Swap pane to prev/next pane   | Swap pane to prev/next pane           |
 | Normal     | [BK]+[Space]                | Toggle pane layout            | Toggle pane layout                    |
-| Normal     | [Alt]+[h/j/k/l]             | Resize pane to (L/D/U/R)      | Resize pane to (L/D/U/R)              |
+| Normal     | [BK]+[Alt]+[h/j/k/l]        | Resize pane to (L/D/U/R)      | Resize pane to (L/D/U/R)              |
 | Normal     | [BK]+[Ctrl/Alt]+[o]         | Rotate pane anti-clock/clock wisely  | Rotate pane anti-clock/clock wisely |
 
 #### 2. Copy-mode Keymapping

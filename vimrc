@@ -1594,9 +1594,9 @@ if USING_CUSTOMIZED_THEME
         call LightlineStyle('wal', 1, 1)
     else
         " Current available themes
-        colorscheme gruvbox
+        colorscheme nord
         " Lightline style
-        call LightlineStyle('gruvbox', USING_FANCY_SYMBOLS, 1)
+        call LightlineStyle('nord', USING_FANCY_SYMBOLS, 1)
     endif
     " Call customized color palette
     call CustomizedColorPalette()
