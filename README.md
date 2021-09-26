@@ -582,7 +582,8 @@ tmux -V
 | TMUX-Mode  | Keymapping                  | Function                      | Description                           | Note |
 | :-------:  | :-------------------------: | :---------------------------: | :-----------------------------------: | :--: |
 | Normal     | [BK]+[Shift]+[/]            | Show all tmux keymapping      | Show all tmux keymapping              |
-| Normal     | [BK]+[b]                    | Toggle tmux statusline        | Toggle tmux statusline                |
+| Normal     | [BK]+[Shift]+[b]            | Toggle tmux statusline        | Toggle tmux statusline                |
+| Normal     | [BK]+[b]                    | Toggle tmux borderline        | Toggle tmux borderline                |
 | Normal     | [BK]+[r]                    | Reload tmux configuration     | Reload tmux configuration             | Run source .tmux.conf file |
 | Normal     | [BK]+[F3]                   | Sidebar file-tree             | Sidebar file-tree                     | tmux-sidebar |
 | Normal     | [BK]+[Alt]+[s/r]            | Save/Load current session     | Save/Load current session             | tmux-resurrect |
