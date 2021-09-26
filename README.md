@@ -585,12 +585,12 @@ tmux -V
 | Normal     | [BK]+[b]                    | Toggle tmux statusline        | Toggle tmux statusline                |
 | Normal     | [BK]+[r]                    | Reload tmux configuration     | Reload tmux configuration             | Run source .tmux.conf file |
 | Normal     | [BK]+[F3]                   | Sidebar file-tree             | Sidebar file-tree                     | tmux-sidebar |
-| Normal     | [BK]+[Ctrl]+[s/r]           | Save/Load current session     | Save/Load current session             | tmux-resurrect |
+| Normal     | [BK]+[Alt]+[s/r]            | Save/Load current session     | Save/Load current session             | tmux-resurrect |
 | Normal     | [BK]+[a]                    | Clear terminal output         | Clear terminal output                 | Act like Ctrl-l in terminal |
 | Normal     | [BK]+[Ctrl]+[h]             | Send Ctrl+h to terminal       | Send Ctrl+h to terminal               | Ctrl+h is alternative backspace for fish shell |
 | Normal     | [BK]+[Ctrl]+[k]             | Send Ctrl+k to terminal       | Send Ctrl+k to terminal               | Ctrl+k is to delete to end of line for fish shell |
 | Normal     | [BK]+[Ctrl]+[l]             | Send Ctrl+l to terminal       | Send Ctrl+l to terminal               | Ctrl+l is to clean screen for fish shell |
-| Normal     | [BK]+[Alt]+[s]              | Toggle pane synchronization   | Toggle pane synchronization           | Synchronize input for all panes |
+| Normal     | [BK]+[Ctrl]+[s]             | Toggle pane synchronization   | Toggle pane synchronization           | Synchronize input for all panes |
 | Normal     | [BK]+[Shift]+[m]            | Toggle mouse mode             | Toggle mouse mode                     |
 | Copy       | [BK]+[o]                    | Open selected with system default | Open selected with system default | tmux-open |
 | Copy       | [BK]+[Ctrl]+[o]             | Open selected with $EDITOR    | Open selected with $EDITOR            | tmux-open |
