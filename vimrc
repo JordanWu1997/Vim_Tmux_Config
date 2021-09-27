@@ -311,6 +311,11 @@ noremap <leader>sk [s
 set wildmenu              " Show memu options
 set wildmode=list:full    " Show all available input options (or use Ctrl-D)
 
+" Show tab and the space at the end of the line ------------------------------
+set nolist
+set listchars=eol:↵,tab:»·,trail:╳,extends:»,precedes:«
+noremap <leader>st :set list!<CR>
+
 " Cursor settings ------------------------------------------------------------
 set ruler                 " Show cursor position in statusline
 set cursorline            " Show vertical line

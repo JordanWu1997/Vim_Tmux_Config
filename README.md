@@ -344,6 +344,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N/V      | [Shift]+[k]                 | Search current word in manual | Search current word in manual         |
 | N/V      | [LK]+[d]+[d]                | Close current buffer          | Close current buffer                  | Here d for (d)eletion
 | N/V      | [LK]+[w]+[p]                | Toggle line wrap              | On/Off line wrap                      | Here wp for (w)ra(p)
+| N/V      | [LK]+[s]+[t]                | Toggle list (trailing chars)  | On/Off list (trailing characters)     | Here st for li(s)(t)
 | N/V      | [LK]+[/]                    | Toggle search highlight       | On/Off search highlight               |
 | N/V      | [LK]+[m]+[k]                | Show all vim marks            | Show all vim marks                    | [LK]+[m]+[k] shows marks using fzf instead vim built-in
 | N/V      | [LK]+[r]+[g]                | Show all vim regiesters       | Show all vim registers                | Here re for (re)gister
@@ -516,10 +517,10 @@ tmux -V
 - [Plug-in] tmux-open (open tmux context easily in tmux copy mode)
 
 ### Major Difference Between Customized and Original
-- Bindkey is remapped from "Ctrl+b" to "Ctrl+a" and "Ctrl+Space"
+- Bindkey is remapped from "Ctrl+b" to "Ctrl+a" (primary) and "Ctrl+Space" (secondary)
 - Command related to pane and split is remapped to my vim-like keymapping to keep things consistent
 - Add new statusline theme to make press of bindkey more eye-catching
-- Add clipboard sharing between vim, system, and tmux
+- Add clipboard sharing between vim, system, and tmux (through xclip)
 
 ### Keymapping Sheet
 
@@ -532,8 +533,8 @@ tmux -V
 | Normal     | [BK]+[s]                    | Show all tmux sessions        | Show all tmux sessions                |
 | Normal     | [BK]+[Shift]+[c]            | Create new session            | Create new session                    | tmux-sessionist |
 | Normal     | [BK]+[Shift]+[x/7]          | Kill current session          | Kill current session                  | tmux-sessionist |
-| Normal     | [BK]+[Shift]+[(/)]          | Move to prev/next session     | Move to prev/next session             |
-| Normal     | [BK]+[Shift]+[p/n]          | Move to prev/next session     | Move to prev/next session             |
+| Normal     | [BK]+[Shift]+[9/0]          | Move to prev/next session     | Move to prev/next session             |
+| Normal     | [BK]+[p/n]                  | Move to prev/next session     | Move to prev/next session             |
 
 - Window
 
@@ -544,7 +545,6 @@ tmux -V
 | Normal     | [BK]+[w]                    | Show all windows              | Show all windows                      |
 | Normal     | [BK]+[c]                    | Create new window             | Create new window                     |
 | Normal     | [BK]+[x]                    | Kill current window           | Kill current window                   |
-| Normal     | [BK]+[p/n]                  | Move window to prev/next window | Move window to prev/next window     |
 | Normal     | [BK]+[h/l]                  | Move to next/prev window      | Move to next/prev window              |
 | Normal     | [BK]+[Shift]+[h/l]          | Swap window to prev/next window | Swap window to prev/next window     |
 
