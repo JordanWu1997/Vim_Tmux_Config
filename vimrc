@@ -756,6 +756,8 @@ if USING_EXTRA_PLUG
     Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
     " Fancy startup page of vim
     Plug 'mhinz/vim-startify'
+    " Vim wiki for knowledge storage
+    Plug 'vimwiki/vimwiki'
     " History of yank
     Plug 'vim-scripts/YankRing.vim'
     " Register investigator
@@ -976,17 +978,21 @@ endfunction
 
 " Conditional lightline status/tab line --------------------------------------
 if USING_CUSTOMIZED_THEME
-    " Toggle lightline, status/tab line
-    noremap <leader>sle :call lightline#enable()<CR>:set noshowmode<CR>
+    " Toggle tabline
+    noremap <leader>slte :set showtabline=2<CR>:echo "TABLINE ENABLED"<CR>
+    noremap <leader>sltd :set showtabline=0<CR>:echo "TABLINE DISABLED"<CR>
+    " Toggle lightline
+    noremap <leader>slle :call lightline#enable()<CR>:set noshowmode<CR>
+                \:set laststatus=2<CR>:echo "LIGHTLINE ENABLED"<CR>
+    noremap <leader>slld :call lightline#disable()<CR>:set showmode<CR>
+                \:set laststatus=2<CR>:echo "LIGHTLINE DISABLED"<CR>
+    " Toggle statusline (including lightline) and tabline
+    noremap <leader>slae :call lightline#enable()<CR>:set showmode<CR>
                 \:set showtabline=2<CR>:set laststatus=2<CR>
-                \:echo "LIGHTLINE ENABLED"<CR>
-    noremap <leader>sld :call lightline#disable()<CR>:set showmode<CR>
-                \:set showtabline=2<CR>:set laststatus=2<CR>
-                \:echo "LIGHTLINE DISABLED"<CR>
-    " Disable statusline (including lightline)
-    noremap <leader>slh :call lightline#disable()<CR>:set showmode<CR>
+                \:echo "STATUSLINE/TABLINE DISABLED"<CR>
+    noremap <leader>slad :call lightline#disable()<CR>:set showmode<CR>
                 \:set showtabline=0<CR>:set laststatus=0<CR>
-                \:echo "STATUSLINE DISABLED"<CR>
+                \:echo "STATUSLINE/TABLINE DISABLED"<CR>
 endif
 
 " Function - Reload lightline ------------------------------------------------
@@ -1001,7 +1007,7 @@ endfunction
 " Status/Tab line ------------------------------------------------------------
 set noshowmode    " No vim-built-in mode statusline
 set laststatus=2  " Always display the statusline in all windows
-set showtabline=2 " Always display the tabline, even if there is only one tab
+set showtabline=0 " Always hide the tabline, even if there is only one tab
 set cmdheight=1   " Size of command line height
 set showcmd       " This line must be added AFTER statusline option
 
@@ -1197,8 +1203,25 @@ nnoremap <silent><leader> :<C-u>WhichKey '<space>'<CR>
 " ============================================================================
 " Vim extra functions settings, edit them as you wish.
 
+" Vimwiki --------------------------------------------------------------------
+if USING_EXTRA_PLUG
+    let g:vimwiki_list = [{'path': '~/Documents/KNOWLEDGE_BASE/',
+                          \ 'syntax': 'markdown', 'ext': '.md'}]
+    nmap <leader>vww <Plug>VimwikiIndex
+    nmap <leader>vws <Plug>VimwikiUISelect
+    nmap <leader>vwt <Plug>VimwikiTabIndex
+    nmap <leader>vw<leader>t <Plug>VimwikiTabMakeDiaryNote
+    nmap <leader>vwi <Plug>VimwikiDiaryIndex
+    nmap <leader>vw<leader>w <Plug>VimwikiMakeDiaryNote
+    nmap <leader>vw<leader>i <Plug>VimwikiDiaryGenerateLinks
+    nmap <leader>vw<leader>m <Plug>VimwikiMakeTomorrowDiaryNote
+    nmap <leader>vw<leader>y <Plug>VimwikiMakeYesterdayDiaryNote
+endif
+
 " Goyo -----------------------------------------------------------------------
-noremap <silent><leader>gy :Goyo<CR>
+if USING_EXTRA_PLUG
+    noremap <silent><leader>gy :Goyo<CR>
+endif
 
 " YankRing -------------------------------------------------------------------
 if USING_EXTRA_PLUG
