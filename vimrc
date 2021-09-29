@@ -1007,7 +1007,7 @@ endfunction
 " Status/Tab line ------------------------------------------------------------
 set noshowmode    " No vim-built-in mode statusline
 set laststatus=2  " Always display the statusline in all windows
-set showtabline=0 " Always hide the tabline, even if there is only one tab
+set showtabline=2 " Always show the tabline, even if there is only one tab
 set cmdheight=1   " Size of command line height
 set showcmd       " This line must be added AFTER statusline option
 
