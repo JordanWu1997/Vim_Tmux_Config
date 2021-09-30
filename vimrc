@@ -296,6 +296,7 @@ set clipboard=unnamedplus " Shared system clipboard
 set notildeop             " Not make ~ a operator like gu, gU, and etc.
 set nolazyredraw          " Not only redraw when necessary.
 set backspace=indent,eol,start " Backspace through everything
+set shell=/bin/bash       " Set default shell for vim/neovim
 
 " Line wrap ------------------------------------------------------------------
 set nowrap                " Line wrap for small monitor or display window
@@ -723,7 +724,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'preservim/tagbar', { 'on': 'TagbarToggle' }
 " Code and files fuzzy finder and previewer (main progroam)
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
-" Code and files fuzzy finder and previewer (vim plugin)
+" Code and files fuzzy finder and previewer for vim (vim plugin)
 Plug 'junegunn/fzf.vim'
 " Enhanced previewer for fzf (fuzzy finder)
 Plug 'chengzeyi/fzf-preview.vim'
@@ -1043,6 +1044,8 @@ nmap <leader>d9 <Plug>lightline#bufferline#delete(9)
 " -- ripgrep must be installed if Rg function is needed
 " -- the_silver_searcher must be installed if Ag function is needed
 
+" Fish is not fully compatible for fzf.vim, change to bash for convenience
+let $SHELL='/bin/bash'
 " Add prefix FZF to all fzf commands
 let g:fzf_command_prefix = 'FZF'
 " Default fzf action keymapping
@@ -1153,6 +1156,7 @@ map <leader>cA <Plug>NERDCommenterAppend
 map <leader>ca <Plug>NERDCommenterAltDelims
 map <leader>cc <Plug>NERDCommenterComment
 map <leader>cu <Plug>NERDCommenterUncomment
+map <leader>cy <Plug>NERDCommenterYank
 
 " Vim-surround ---------------------------------------------------------------
 " Surround current word or sentence with brackets or html tags
@@ -1207,15 +1211,25 @@ nnoremap <silent><leader> :<C-u>WhichKey '<space>'<CR>
 if USING_EXTRA_PLUG
     let g:vimwiki_list = [{'path': '~/Documents/KNOWLEDGE_BASE/',
                           \ 'syntax': 'markdown', 'ext': '.md'}]
-    nmap <leader>vww <Plug>VimwikiIndex
-    nmap <leader>vws <Plug>VimwikiUISelect
-    nmap <leader>vwt <Plug>VimwikiTabIndex
-    nmap <leader>vw<leader>t <Plug>VimwikiTabMakeDiaryNote
-    nmap <leader>vwi <Plug>VimwikiDiaryIndex
-    nmap <leader>vw<leader>w <Plug>VimwikiMakeDiaryNote
-    nmap <leader>vw<leader>i <Plug>VimwikiDiaryGenerateLinks
-    nmap <leader>vw<leader>m <Plug>VimwikiMakeTomorrowDiaryNote
-    nmap <leader>vw<leader>y <Plug>VimwikiMakeYesterdayDiaryNote
+    " Global mappings
+    nmap <leader>vw <Plug>VimwikiIndex
+    nmap <leader>vs <Plug>VimwikiUISelect
+    nmap <leader>vt <Plug>VimwikiTabIndex
+    nmap <leader>v<leader>t <Plug>VimwikiTabMakeDiaryNote
+    nmap <leader>vi <Plug>VimwikiDiaryIndex
+    nmap <leader>v<leader>w <Plug>VimwikiMakeDiaryNote
+    nmap <leader>v<leader>i <Plug>VimwikiDiaryGenerateLinks
+    nmap <leader>v<leader>m <Plug>VimwikiMakeTomorrowDiaryNote
+    nmap <leader>v<leader>y <Plug>VimwikiMakeYesterdayDiaryNote
+    " Disable all local mappings then remap needed ones
+    let g:vimwiki_key_mappings = { 'all_maps': 0, }
+    nmap <CR> <Plug>VimwikiFollowLink
+    nmap <Backspace> <Plug>VimwikiGoBackLink
+    nmap <leader>vn <Plug>VimwikiGoto
+    nmap <leader>vd <Plug>VimwikiDeleteFile
+    nmap <leader>vr <Plug>VimwikiRenameFile
+    nmap <leader>v= <Plug>VimwikiAddHeaderLevel
+    nmap <leader>v- <Plug>VimwikiRemoveHeaderLevel
 endif
 
 " Goyo -----------------------------------------------------------------------

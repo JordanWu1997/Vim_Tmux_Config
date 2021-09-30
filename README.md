@@ -193,8 +193,8 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     let USING_VIM8 = 1
     ```
 - Customize vim colorscheme
-    - For fancy symbol support, nerd font is needed (check https://github.com/ryanoasis/nerd-fonts)
-    - For pywal theme support, pywal is needed (check https://github.com/dylanaraps/pywal), also remember to change the directory path to your $HOME/.cache/wal
+    - For fancy symbol support, nerd font is needed (check https://github.com/ryanoasis/nerd-fonts )
+    - For pywal theme support, pywal is needed (check https://github.com/dylanaraps/pywal ), also remember to change the directory path to your $HOME/.cache/wal
     ```vim
     " Customize vim theme (Include colortheme and statusline)
     let USING_CUSTOMIZED_THEME = 1
@@ -372,7 +372,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N        | [LK]+[f]+[h]+[t] | Show all helptags in vim-help | Show all helptags in vim-help     |                            |
 
 #### 2. Python Coding Keymapping
-- Note: Jedi is needed for python code analysis (Check https://github.com/davidhalter/jedi)
+- Note: Jedi is needed for python code analysis (Check https://github.com/davidhalter/jedi )
 - Note: All below functions only work in .py files
 
 | VIM-Mode | Keymapping           | Function                      | Description                       | Note                |
@@ -401,8 +401,8 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N/V/I    | [Alt]+[\`]          | Toggle auto-pair                | On/Off auto-pair quotation/bracket    | auto-pairs                |
 | N/V/I    | [Alt]+[j]           | Jump to next pairs              | Jump to next paired quotation/bracket | auto-pairs                |
 | I        | [Alt]+[w]           | Auto-pair fastwrap              | Auto-pair fastwrap current pairs      | Example: ()test -> (test) |
-| N        | [LK]+[v]+[w]+[w]    | Open vimwiki index page         | Open vimwiki index page               | vimwiki                   |
-| N        | [LK]+[v]+[w]+[i]    | Open vimwiki diary index page   | Open vimwiki diary index page         | vimwiki                   |
+| N        | [LK]+[v]+[w]        | Open vimwiki index page         | Open vimwiki index page               | vimwiki                   |
+| N        | [LK]+[v]+[i]        | Open vimwiki diary index page   | Open vimwiki diary index page         | vimwiki                   |
 
 - Extra plug (Note: "let using_extra_plug = 1" must be set in vimrc)
 
