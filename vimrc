@@ -123,7 +123,6 @@ let USING_CUSTOMIZED_THEME = 1
 " Fancy symbols (Mainly affect lightline and nerdtree icon)
 let USING_FANCY_SYMBOLS = 1
 " Wal theme support (Xresources colortheme support, check pywal)
-"let USING_WAL_THEME = isdirectory('/home/jordankhwu/.cache/wal')
 let USING_WAL_THEME = 0
 " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
 let USING_EXTRA_PLUG = 1
@@ -132,11 +131,11 @@ let USING_CODING_TOOL_PLUG = 1
 " Python Completion (Use deoplete and jedi, neovim is recommended to be used)
 let USING_PYTHON_COMPLETION = 1
 " Python that used to install jedi, pynvim and python packages for completion
-let PYTHON_FOR_COMPLETION = '/home/jordankhwu/anaconda3/bin/python'
+let PYTHON_FOR_COMPLETION = $CONDA_PYTHON_EXE
 " Support of external gui software (e.g. Okular, Google-chrome, and etc.)
 let USING_GUI_SOFTWARE = 1
 " Webbrowser for markdown preview
-let WEBBROWSER = 'brave-browser'
+let WEBBROWSER = $BROWSER
 
 " TERM GUI color -------------------------------------------------------------
 " Ctermcolors only support max 256 color
@@ -1501,7 +1500,7 @@ if USING_PYTHON_COMPLETION
     " Disabled by default because preview makes the window flicker
     set completeopt-=preview
     " Python that uses to install jedi
-    let g:python3_host_prog = PYTHON_FOR_COMPLETION
+    let g:python3_host_prog = $PYTHON_FOR_COMPLETION
     " Enable deoplete at startup
     let g:deoplete#enable_at_startup = 1
     autocmd FileType python call deoplete#custom#option({
