@@ -1201,6 +1201,16 @@ let g:which_key_hspace = 5
 vnoremap <silent><leader> :<C-u>WhichKeyVisual '<space>'<CR>
 nnoremap <silent><leader> :<C-u>WhichKey '<space>'<CR>
 
+" Vim-Tmux-navigator ---------------------------------------------------------
+" Disable navigator when TMUX pane is zoomed
+let g:tmux_navigator_disable_when_zoomed = 1
+" Disable default keymappings
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent><C-h> :TmuxNavigateLeft<CR>
+nnoremap <silent><C-j> :TmuxNavigateDown<CR>
+nnoremap <silent><C-k> :TmuxNavigateUp<CR>
+nnoremap <silent><C-l> :TmuxNavigateRight<CR>
+
 " ============================================================================
 " Part 5 - Vim extra functions settings (Plugins settings and mappings)
 " ============================================================================
