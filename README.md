@@ -508,15 +508,16 @@ tmux -V
 ### Plugins
 
 #### Installed Plugins
-- [Plug-in] tmux-sensible (user-friendly settings for tmux)
 - [Plug-in] tmux-prefix-highlight (prefix/mode indicator for statusline)
 - [Plug-in] tmux-sidebar (nerdtree-like filetree for tmux)
 - [Plug-in] tmux-sessionist (make create/kill session ability easier to use)
 - [Plug-in] tmux-resurrect (save tmux layout, and restore after restart tmux)
 - [Plug-in] tmux-continuum (auto-save, auto-load for tmux-resurrect)
 - [Plug-in] vim-tmux-navigator (move between vim and tmux pane seamlessly)
+- [Plug-in] tmux-copycat (enhanced tmux search)
 - [Plug-in] tmux-yank (share tmux clipboard with system clipboard)
 - [Plug-in] tmux-open (open tmux context easily in tmux copy mode)
+- [Plug-in] tmux-logging (logging and screen capturing for tmux)
 
 ### Major Difference Between Customized and Original
 - Bindkey is remapped from "Ctrl+b" to "Ctrl+a" (primary) and "Ctrl+Space" (secondary)
@@ -564,20 +565,17 @@ tmux -V
 | Normal    | [BK]+[Alt]+[h/j/k/l] | Resize pane to (L/D/U/R)            | Resize pane to (L/D/U/R)            |                                     |
 | Normal    | [BK]+[Ctrl/Alt]+[o]  | Rotate pane anti-clock/clock wisely | Rotate pane anti-clock/clock wisely |                                     |
 
-#### 2. Copy-mode Keymapping
-
-| TMUX-Mode | Keymapping         | Function                      | Description                   | Note          |
-| :-------: | :----------------: | :---------------------------: | :---------------------------: | :-----------: |
-| Normal    | [BK]+[[]           | Enter copy mode               | Enter copy mode               |               |
-| Normal    | [BK]+[]]           | Paste selected contents       | Paste selected contents       |               |
-| Normal    | [BK]+[Shift]+[3]   | Show all buffer list          | Show all buffer list          | #             |
-| Normal    | [BK]+[=]           | Paste from buffer list        | Paste from buffer list        |               |
-| Normal    | [BK]+[/]           | Search and select pattern     | Search and select pattern     | tmux-copy-cat |
-| Copy      | [v/Space]          | Start selection               | Start selection               |               |
-| Copy      | [Ctrl]+[v]+[Space] | Vim-like block selection      | Vim-like block selection      |               |
-| Copy      | [Shift]+[v]        | Vim-like line selection       | Vim-like line selection       |               |
-| Copy      | [y]                | Vim-like yank selected region | Vim-like yank selected region |               |
-| Copy      | [q/Enter]          | Quit copy mode                | Quit copy mode                |               |
+#### 2. Copy-mode Keymapping | TMUX-Mode | Keymapping       | Function                      | Description                   | Note          | | :-------: | :--------------: | :---------------------------: | :---------------------------: | :-----------: |
+| Normal    | [BK]+[[]         | Enter copy mode               | Enter copy mode               |               |
+| Normal    | [BK]+[]]         | Paste selected contents       | Paste selected contents       |               |
+| Normal    | [BK]+[Shift]+[3] | Show all buffer list          | Show all buffer list          | #             |
+| Normal    | [BK]+[=]         | Paste from buffer list        | Paste from buffer list        |               |
+| Normal    | [BK]+[/]         | Search and select pattern     | Search and select pattern     | tmux-copy-cat |
+| Copy      | [v/Space]        | Start selection               | Start selection               |               |
+| Copy      | [Ctrl]+[v]       | Vim-like block selection      | Vim-like block selection      |               |
+| Copy      | [Shift]+[v]      | Vim-like line selection       | Vim-like line selection       |               |
+| Copy      | [y]              | Vim-like yank selected region | Vim-like yank selected region |               |
+| Copy      | [q/Enter]        | Quit copy mode                | Quit copy mode                |               |
 
 #### 3. Miscellaneous Keymapping
 
@@ -586,7 +584,7 @@ tmux -V
 | Normal    | [BK]+[Shift]+[/] | Show all tmux keymapping          | Show all tmux keymapping          |                                                   |
 | Normal    | [BK]+[Shift]+[b] | Toggle tmux statusline            | Toggle tmux statusline            |                                                   |
 | Normal    | [BK]+[b]         | Toggle tmux borderline            | Toggle tmux borderline            |                                                   |
-| Normal    | [BK]+[r]         | Reload tmux configuration         | Reload tmux configuration         | Run source .tmux.conf file                        |
+| Normal    | [BK]+[Shift]+[r] | Reload tmux configuration         | Reload tmux configuration         | Run source .tmux.conf file                        |
 | Normal    | [BK]+[F3]        | Sidebar file-tree                 | Sidebar file-tree                 | tmux-sidebar                                      |
 | Normal    | [BK]+[Alt]+[s/r] | Save/Load current session         | Save/Load current session         | tmux-resurrect                                    |
 | Normal    | [BK]+[a]         | Clear terminal output             | Clear terminal output             | Act like Ctrl-l in terminal                       |
@@ -604,6 +602,8 @@ tmux -V
 - https://github.com/tmux-plugins/tmux-resurrect
 - https://github.com/tmux-plugins/tmux-sidebar
 - https://github.com/tmux-plugins/tmux-yank
+- https://github.com/tmux-plugins/tmux-logging
+- https://github.com/tmux-plugins/tmux-copycat
 - https://github.com/g6ai/dotfiles/tree/master/tmux
 - https://danielmiessler.com/study/tmux/
 - https://leimao.github.io/blog/Tmux-Tutorial/

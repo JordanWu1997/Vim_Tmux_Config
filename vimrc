@@ -1510,7 +1510,7 @@ if USING_PYTHON_COMPLETION
     " Disabled by default because preview makes the window flicker
     set completeopt-=preview
     " Python that uses to install jedi
-    let g:python3_host_prog = $PYTHON_FOR_COMPLETION
+    let g:python3_host_prog = PYTHON_FOR_COMPLETION
     " Enable deoplete at startup
     let g:deoplete#enable_at_startup = 1
     autocmd FileType python call deoplete#custom#option({
