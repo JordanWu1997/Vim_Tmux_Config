@@ -538,16 +538,19 @@ tmux -V
 | Normal    | [BK]+[Shift]+[x/7] | Kill current session       | Kill current session      | tmux-sessionist / & |
 | Normal    | [BK]+[Shift]+[9/0] | Move to prev/next session  | Move to prev/next session | ( / )               |
 | Normal    | [BK]+[p/n]         | Move to prev/next session  | Move to prev/next session |                     |
+| Normal    | [BK]+[Backspace]   | Switch to last session     | Switch to last session    | tmux-sessionist     |
 
 - Window
 
 | TMUX-Mode | Keymapping         | Function                         | Description                     | Note |
 | :-------: | :----------------: | :------------------------------: | :-----------------------------: | :--: |
 | Normal    | [BK]+[Number]      | Move to window (number)          | Move to window (number)         |      |
+| Normal    | [BK]+[']           | Move to window index             | Move to window index            |      |
 | Normal    | [BK]+[,]           | Rename current window            | Rename current session          |      |
 | Normal    | [BK]+[w]           | Show all windows                 | Show all windows                |      |
 | Normal    | [BK]+[c]           | Create new window                | Create new window               |      |
 | Normal    | [BK]+[x]           | Kill current window              | Kill current window             |      |
+| Normal    | [BK]+[Tab]         | Switch to last window            | Switch to last window           |      |
 | Normal    | [BK]+[h/l]         | Move to next/prev window         | Move to next/prev window        |      |
 | Normal    | [BK]+[Shift]+[h/l] | Swap window to prev/next window  | Swap window to prev/next window |      |
 
@@ -565,7 +568,9 @@ tmux -V
 | Normal    | [BK]+[Alt]+[h/j/k/l] | Resize pane to (L/D/U/R)            | Resize pane to (L/D/U/R)            |                                     |
 | Normal    | [BK]+[Ctrl/Alt]+[o]  | Rotate pane anti-clock/clock wisely | Rotate pane anti-clock/clock wisely |                                     |
 
-#### 2. Copy-mode Keymapping | TMUX-Mode | Keymapping       | Function                      | Description                   | Note          | | :-------: | :--------------: | :---------------------------: | :---------------------------: | :-----------: |
+#### 2. Copy-mode Keymapping
+| TMUX-Mode | Keymapping       | Function                      | Description                   | Note          |
+| :-------: | :--------------: | :---------------------------: | :---------------------------: | :-----------: |
 | Normal    | [BK]+[[]         | Enter copy mode               | Enter copy mode               |               |
 | Normal    | [BK]+[]]         | Paste selected contents       | Paste selected contents       |               |
 | Normal    | [BK]+[Shift]+[3] | Show all buffer list          | Show all buffer list          | #             |
