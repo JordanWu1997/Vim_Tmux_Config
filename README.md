@@ -276,25 +276,25 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 ### Keymapping Sheet 1 - Fn Key Keymapping
 
 #### 1. Function Key Keymapping
-| VIM-Mode | Keymapping   | Function                        | Description                           | Note                                                    |
-| :------: | :----------: | :-----------------------------: | :-----------------------------------: | :-----------------------------------------------------: |
-| N/V      | ([LK])+[F1]  | (Previous)/Next Buffer          | Switch between buffers                |                                                         |
-| N/V      | ([LK])+[F2]  | (Previous)/Next Tab             | Switch between tabs                   |                                                         |
-| N/V      | [F3]         | Nerdtree current file           | Show current file location            |                                                         |
-| N/V      | [LK]+[F3]    | Toggle Nerdtree                 | On/Off NerdTree plugin                |                                                         |
-| N/V      | [F4]         | Markdown/Latex previewer        | Open external Viewer                  | Only for .md or .tex file                               |
-| N/V      | [LK]+[F4]    | Toggle Tagbar                   | On/Off Tagbar plugin                  |                                                         |
-| N/V      | ([LK])+[F5]  | Toggle (Rel)/Abs linenumber     | On/Off rel/abs linenumber             |                                                         |
-| N/V      | [F6]         | Toggle foldcolumn (short-4)     | On/Off foldcolumn (short-4)           | For easier code fold visualization                      |
-| N/V      | [LK]+[F6]    | Toggle foldcolumn (long-8)      | On/Off foldcolumn (long-8)            | For easier code fold visualization                      |
-| N/V      | [F7]         | Toggle show line border         | On/Off hightlight 79th character      | VIM recommends at most 78 characters for one line       |
-| N/V      | [LK]+[F7]    | Toggle show line border         | On/Off hightlight 79th column         | VIM recommends at most 78 characters for one line       |
-| N/V      | [F8]         | Toggle highlight comment        | On/Off hightlight code comment        | Assign brighter color to comment to hightlight it       |
-| N/V      | [F9]         | Toggle indent highlight (line)  | On/Off indent highlight (line)        |                                                         |
-| N/V      | [LK]+[F9]    | Toggle indent highlight (block) | On/Off indent highlight (block)       |                                                         |
-| N/V      | ([LK])+[F10] | (Load)/Save vim layout          | Load/Save vim layout                  | Including pane split, folds, and etc.                   |
-| N/V      | ([LK])+[F11] | (Off)/On synchronized cursor    | Off/On synchronized cursor            | Need to execute in every pane that wants to synchronize |
-| N/V      | ([LK])+[F12] | (Exit)/Enter terminal mode      | Exit/Enter terminal mode              |                                                         |
+| VIM-Mode | Keymapping      | Function                        | Description                           | Note                                                    |
+| :------: | :-------------: | :-----------------------------: | :-----------------------------------: | :-----------------------------------------------------: |
+| N/V      | ([Shift])+[F1]  | (Previous)/Next Buffer          | Switch between buffers                |                                                         |
+| N/V      | ([Shift])+[F2]  | (Previous)/Next Tab             | Switch between tabs                   |                                                         |
+| N/V      | [F3]            | Nerdtree current file           | Show current file location            |                                                         |
+| N/V      | [Shift]+[F3]    | Toggle Nerdtree                 | On/Off NerdTree plugin                |                                                         |
+| N/V      | [F4]            | Markdown/Latex previewer        | Open external Viewer                  | Only for .md or .tex file                               |
+| N/V      | [Shift]+[F4]    | Toggle Tagbar                   | On/Off Tagbar plugin                  |                                                         |
+| N/V      | ([Shift])+[F5]  | Toggle (Rel)/Abs linenumber     | On/Off rel/abs linenumber             |                                                         |
+| N/V      | [F6]            | Toggle foldcolumn (short-4)     | On/Off foldcolumn (short-4)           | For easier code fold visualization                      |
+| N/V      | [Shift]+[F6]    | Toggle foldcolumn (long-8)      | On/Off foldcolumn (long-8)            | For easier code fold visualization                      |
+| N/V      | [F7]            | Toggle show line border         | On/Off hightlight 79th character      | VIM recommends at most 78 characters for one line       |
+| N/V      | [Shift]+[F7]    | Toggle show line border         | On/Off hightlight 79th column         | VIM recommends at most 78 characters for one line       |
+| N/V      | [F8]            | Toggle highlight comment        | On/Off hightlight code comment        | Assign brighter color to comment to hightlight it       |
+| N/V      | [F9]            | Toggle indent highlight (line)  | On/Off indent highlight (line)        |                                                         |
+| N/V      | [Shift]+[F9]    | Toggle indent highlight (block) | On/Off indent highlight (block)       |                                                         |
+| N/V      | ([Shift])+[F10] | (Load)/Save vim layout          | Load/Save vim layout                  | Including pane split, folds, and etc.                   |
+| N/V      | ([Shift])+[F11] | (Off)/On synchronized cursor    | Off/On synchronized cursor            | Need to execute in every pane that wants to synchronize |
+| N/V      | ([Shift])+[F12] | (Exit)/Enter terminal mode      | Exit/Enter terminal mode              |                                                         |
 
 ### Keymapping Sheet 2 - Built-in Function Keymapping
 
@@ -310,23 +310,23 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N/V      | [LK]+[Shift]+[./,] | Move tab to next/prev  | Move tab to next/prev  |      |
 
 #### 2. Split/Window Keymapping
-| VIM-Mode | Keymapping                   | Function                          | Description                       | Note                                                            |
-| :------: | :--------------------------: | :-------------------------------: | :-------------------------------: | :-------------------------------------------------------------: |
-| N/V      | [Ctrl]+[w]+[s/v]             | Add new split Horizontal/Vertical | Add new split Horizontal/Vertical |                                                                 |
-| N/V      | [Ctrl]+[h/j/k/l]             | Move between vim splits           | Move between splits (L/D/U/R)     | With plugin, you can even move between TMUX pane and VIM splits |
-| N/V      | [Ctrl]+[w]+[h/j/k/l]         | Move between vim splits           | Move between splits (L/D/U/R)     |                                                                 |
-| N/V      | [Ctrl]+[w]+[Shift]+[h/j/k/l] | Move current split (L/D/U/R)      | Move current split (L/D/U/R)      |                                                                 |
-| N/V      | [LK]+[r]+[0]                 | Resize current split to 10 rows   | Resize current split to 10 rows   | For terminal pane resize                                        |
-| N/V      | [Ctrl]+[w]+[=]               | Re-split splits equally           | Re-split splits equally           | Here =(equal sign) for equally split                            |
+| VIM-Mode | Keymapping                   | Function                          | Description                        | Note                                                            |
+| :------: | :--------------------------: | :-------------------------------: | :--------------------------------: | :-------------------------------------------------------------: |
+| N/V      | [Ctrl]+[w]+[s/v]             | Add new split Horizontal/Vertical | Add new split Horizontal/Vertical  |                                                                 |
+| N/V      | [Ctrl]+[h/j/k/l]             | Move between vim splits           | Move between splits (L/D/U/R)      | With plugin, you can even move between TMUX pane and VIM splits |
+| N/V      | [Ctrl]+[w]+[h/j/k/l]         | Move between vim splits           | Move between splits (L/D/U/R)      |                                                                 |
+| N/V      | [Ctrl]+[w]+[Shift]+[h/j/k/l] | Move current split (L/D/U/R)      | Move current split (L/D/U/R)       |                                                                 |
+| N/V      | [Ctrl]+[w]+[=]               | Re-split splits equally           | Re-split splits equally            | Here =(equal sign) for equally split                            |
+| N/V      | [LK]+[r]+[1/2]               | Resize current split to 10/20rows | Resize current split to 10/20 rows | For terminal pane resize                                        |
 
 #### 3. Code Folding Keymapping
-| VIM-Mode | Keymapping         | Function                      | Description                              | Note         |
-| :------: | :----------------: | :---------------------------: | :--------------------------------------: | :----------: |
-| N/V      | ([LK])+[F10]       | Load/Save layout and folding  | Load/Save current split and code folding |              |
-| N/V      | [z]+[k/j]          | Go to Prev/Next folding       | Go to Prev/Next folding                  | Vim built-in |
-| N/V      | [z]+[o/c]          | Open/Close current folding    | Open/Close current folding               | Vim built-in |
-| N/V      | [z]+[Shift]+[r/m]  | Show/Close all foldings       | Show/Close all foldings                  | Vim built-in |
-| V        | [Shift]+[k/j]      | Move selection block up/down  | Move selection block up/down             |              |
+| VIM-Mode | Keymapping        | Function                     | Description                              | Note         |
+| :------: | :---------------: | :--------------------------: | :--------------------------------------: | :----------: |
+| N/V      | ([Shift])+[F10]   | Load/Save layout and folding | Load/Save current split and code folding |              |
+| N/V      | [z]+[k/j]         | Go to Prev/Next folding      | Go to Prev/Next folding                  | Vim built-in |
+| N/V      | [z]+[o/c]         | Open/Close current folding   | Open/Close current folding               | Vim built-in |
+| N/V      | [z]+[Shift]+[r/m] | Show/Close all foldings      | Show/Close all foldings                  | Vim built-in |
+| V        | [Shift]+[k/j]     | Move selection block up/down | Move selection block up/down             |              |
 
 #### 4. Diff Mode Keymapping
 | VIM-Mode | Keymapping     | Function                           | Description                        | Note                                        |
@@ -338,20 +338,20 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N/V      | [Lk]+[d]+[u]   | Update diff                        | Update diff                        |                                             |
 
 #### 5. Miscellaneous Function Keymapping
-| VIM-Mode | Keymapping      | Function                          | Description                           | Note                                                     |
-| :------: | :-------------: | :-------------------------------: | :-----------------------------------: | :------------------------------------------------------: |
-| I        | [i]+[i]/[k]+[j] | Esc (escape form insert mode)     | Esc (escape form insert mode)         | If your word contains "ii", try [i] + "[Ctrl]+[v]" + [i] |
-| N/V      | [Shift]+[k]     | Search current word in manual     | Search current word in manual         |                                                          |
-| N/V      | [LK]+[d]+[d]    | Close current buffer              | Close current buffer                  | Here d for (d)eletion                                    |
-| N/V      | [LK]+[w]+[p]    | Toggle line wrap                  | On/Off line wrap                      | Here wp for (w)ra(p)                                     |
-| N/V      | [LK]+[s]+[t]    | Toggle list (trailing chars)      | On/Off list (trailing characters)     | Here st for li(s)(t)                                     |
-| N/V      | [LK]+[/]        | Toggle search highlight           | On/Off search highlight               |                                                          |
-| N/V      | [LK]+[m]+[k]    | Show all vim marks                | Show all vim marks                    | This shows marks using fzf instead vim built-in          |
-| N/V      | [LK]+[r]+[g]    | Show all vim registers            | Show all vim registers                | Here re for (re)gister                                   |
-| N/V      | [LK]+[a]+[b]    | Show all vim abbreviates          | Show all vim abbreviates              | Here ab for (ab)reviation                                |
-| N/V      | [LK]+[c]+[h/v]  | Toggle Horizontal/Vertical cursor | On/Off Horizontal/Vertical cursor     |                                                          |
-| N/V      | [LK]+[g]+[o/i]  | Show all cursor jump              | Show all cursor jump                  | [Ctrl]+[o/i] jump backwards/forwards                     |
-| N/V      | [LK]+[g]+[;/,]  | Show all file change              | Show all file change                  | [g]+[;/,] goto earlier/later change                      |
+| VIM-Mode | Keymapping      | Function                          | Description                       | Note                                            |
+| :------: | :-------------: | :-------------------------------: | :-------------------------------: | :---------------------------------------------: |
+| I        | [k]+[j]         | Esc (escape form insert mode)     | Esc (escape form insert mode)     |                                                 |
+| N/V      | [Shift]+[k]     | Search current word in manual     | Search current word in manual     |                                                 |
+| N/V      | [LK]+[d]+[d]    | Close current buffer              | Close current buffer              | Here d for (d)eletion                           |
+| N/V      | [LK]+[w]+[p]    | Toggle line wrap                  | On/Off line wrap                  | Here wp for (w)ra(p)                            |
+| N/V      | [LK]+[s]+[t]    | Toggle list (trailing chars)      | On/Off list (trailing characters) | Here st for li(s)(t)                            |
+| N/V      | [LK]+[/]        | Toggle search highlight           | On/Off search highlight           |                                                 |
+| N/V      | [LK]+[m]+[k]    | Show all vim marks                | Show all vim marks                | This shows marks using fzf instead vim built-in |
+| N/V      | [LK]+[r]+[g]    | Show all vim registers            | Show all vim registers            | Here re for (re)gister                          |
+| N/V      | [LK]+[a]+[b]    | Show all vim abbreviates          | Show all vim abbreviates          | Here ab for (ab)reviation                       |
+| N/V      | [LK]+[c]+[h/v]  | Toggle Horizontal/Vertical cursor | On/Off Horizontal/Vertical cursor |                                                 |
+| N/V      | [LK]+[g]+[o/i]  | Show all cursor jump              | Show all cursor jump              | [g/Ctrl]+[o/i] jump backwards/forwards          |
+| N/V      | [LK]+[g]+[;/,]  | Show all file change              | Show all file change              | [g]+[;/,] goto earlier/later change             |
 
 ### Keymapping Sheet 3 - Plug-in Function Keymapping
 
@@ -361,8 +361,8 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | VIM-Mode | Keymapping       | Function                      | Description                       | Note                       |
 | :------: | :--------------: | :---------------------------: | :-------------------------------: | :------------------------: |
 | N/V      | [F3]             | Nerdtree Current Files        | Show current file location        |                            |
-| N/V      | [LK]+[F3]        | Toggle Nerdtree               | On/Off NerdTree plugin            |                            |
-| N/V      | [LK]+[F4]        | Toggle Tagbar                 | On/Off Tagbar plugin              |                            |
+| N/V      | [Shift]+[F3]     | Toggle Nerdtree               | On/Off NerdTree plugin            |                            |
+| N/V      | [Shift]+[F4]     | Toggle Tagbar                 | On/Off Tagbar plugin              |                            |
 | N        | [LK]+[f]+[f]+[s] | List files under input dir    | List files under input dir        |                            |
 | N        | [LK]+[f]+[l]+[c] | Locate files matched input    | Locate files matched input name   | Use system locate command  |
 | N        | [LK]+[f]+[r]+[g] | Find files with input pattern | Find files matched input pattern  | Use system ripgrep command |
@@ -538,7 +538,7 @@ tmux -V
 | Normal    | [BK]+[Shift]+[x/7] | Kill current session       | Kill current session      | tmux-sessionist / & |
 | Normal    | [BK]+[Shift]+[9/0] | Move to prev/next session  | Move to prev/next session | ( / )               |
 | Normal    | [BK]+[p/n]         | Move to prev/next session  | Move to prev/next session |                     |
-| Normal    | [BK]+[Backspace]   | Switch to last session     | Switch to last session    | tmux-sessionist     |
+| Normal    | [BK]+[`]           | Switch to last session     | Switch to last session    | tmux-sessionist     |
 
 - Window
 

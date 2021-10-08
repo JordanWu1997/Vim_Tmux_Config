@@ -71,18 +71,18 @@
 " -- For code formatter support: https://github.com/sbdchd/Neoformat
 "    -- Example: python code formatter
 "       -- Install formatter with terminal:
-"           -- (1) pip install isort
-"           -- (2) pip install pyment
-"           -- (3) pip install yapf
+"          -- (1) pip install isort
+"          -- (2) pip install pyment
+"          -- (3) pip install yapf
 "       -- Use formatter in vim command line:
-"           -- Usage :Neoformat! [lanaguage] [formatter]
-"           --  e.g. :Neoformat!   python       yapf
+"          -- Usage :Neoformat! [lanaguage] [formatter]
+"          --  e.g. :Neoformat!   python       yapf
 "       -- Recommended PYTHON usage set (in order):
-"           -- (1) :Neoformat isort   # Sort import module
-"           -- (2) :Neoformat pyment  # Add description of function/class
-"           -- (3) :Neoformat yapf    # Format to PEP8 standard
+"          -- (1) :Neoformat isort   # Sort import module
+"          -- (2) :Neoformat pyment  # Add description of function/class
+"          -- (3) :Neoformat yapf    # Format to PEP8 standard
 "       -- Google format pyment not work with neoformat, instead in terminal
-"           -- (1) pyment -o google -w <python_program.py>
+"          -- (1) pyment -o google -w <python_program.py>
 
 " Note:
 " Python-completion and tmux-yank-clipboard on ZEUS --------------------------
@@ -174,7 +174,7 @@ let mapleader = ' '
 
 " Map exit insert mode (Esc/Ctrl+[) to ii, kj
 " -- Use Ctrl+v to escape for 'ii' word (e.g. ascii)
-imap ii <Esc>
+"imap ii <Esc>
 imap kj <Esc>
 " Add break point for text-writing undo
 " e.g. w/o bp: test,test,test --undo->
@@ -209,7 +209,10 @@ nnoremap Y y$
 vnoremap K :m '<-2<CR>gv=gv
 vnoremap J :m '>+1<CR>gv=gv
 " Tab is already mapped to <C-i> by vim
+noremap <Tab> <C-i>
 noremap <S-Tab> <C-o>
+noremap gi <C-i>
+noremap go <C-o>
 " Show jump list and change list
 noremap <leader>go :jumps<CR>
 noremap <leader>gi :jumps<CR>
@@ -258,7 +261,7 @@ vnoremap <leader>euq :!uniq<CR>
 " Save current file layout
 noremap <F10> :mkview<CR>
 " Load current file previous layout
-noremap <leader><F10> :loadview<CR>
+noremap <S-F10> :loadview<CR>
 
 " Vim split window (pane) control --------------------------------------------
 " Note:
@@ -295,7 +298,7 @@ set clipboard=unnamedplus " Shared system clipboard
 set notildeop             " Not make ~ a operator like gu, gU, and etc.
 set nolazyredraw          " Not only redraw when necessary.
 set backspace=indent,eol,start " Backspace through everything
-set shell=/bin/bash       " Set default shell for vim/neovim
+"set shell=/bin/bash       " Set default shell for vim/neovim
 
 " Line wrap ------------------------------------------------------------------
 set nowrap                " Line wrap for small monitor or display window
@@ -328,7 +331,7 @@ noremap <leader>cv :set cursorcolumn!<CR>
 " Synchronize cursor between files
 " Must be executed in all files that you want to synchronize cursors
 noremap <F11> :set cursorbind<CR>:echo 'Synchronized Cursor On'<CR>
-noremap <leader><F11> :set nocursorbind<CR>:echo 'Synchronized Cursor Off'<CR>
+noremap <S-F11> :set nocursorbind<CR>:echo 'Synchronized Cursor Off'<CR>
 
 " Display settings -----------------------------------------------------------
 set scrolloff=3           " Keep cursor 3 lines away from bottom
@@ -349,7 +352,7 @@ noremap <leader>/ :set nohlsearch!<CR>
 set norelativenumber      " Do not show relative line number
 set number                " Show absolute line number
 " Toggle absolute/relative line number
-noremap <leader><F5> :set number!<CR>
+noremap <S-F5> :set number!<CR>
 noremap <F5> :set relativenumber!<CR>
 
 " Fold settings --------------------------------------------------------------
@@ -389,8 +392,8 @@ function! FoldColumnToggleLong()
     endif
 endfunction
 " Toggle foldcolumn (short, long)
-nnoremap <silent><F6> :call FoldColumnToggleShort()<CR>
-nnoremap <silent><leader><F6> :call FoldColumnToggleLong()<CR>
+nnoremap <F6> :call FoldColumnToggleShort()<CR>
+nnoremap <S-F6> :call FoldColumnToggleLong()<CR>
 
 " Tab (window) settings ------------------------------------------------------
 " Tab (window) operations
@@ -399,19 +402,13 @@ noremap <leader>tt :tabnew<space>
 noremap <leader>td :tabclose<space>
 noremap <leader>tdd :tabclose<CR>
 " Tab (window) navigation
-noremap <silent><F2> :tabnext<CR>
-noremap <silent><leader><F2> :tabprevious<CR>
-noremap <silent><leader>L :tabnext<CR>
-noremap <silent><leader>H :tabprevious<CR>
+noremap <F2> :tabnext<CR>
+noremap <S-F2> :tabprevious<CR>
+noremap <leader>L :tabnext<CR>
+noremap <leader>H :tabprevious<CR>
 " Tab (window) swap
-noremap <silent><S-F2>
-            \ :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
-noremap <silent><leader><S-F2>
-            \ :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
-noremap <silent><leader>>
-            \ :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
-noremap <silent><leader><
-            \ :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
+noremap <M->> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
+noremap <M-<> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 
 " Buffer settings ------------------------------------------------------------
 " Show all buffers
@@ -429,10 +426,10 @@ noremap <leader>dd :bdelete<CR>:echo 'DELETE CURRENT BUFFER
 noremap <leader>bdd :bdelete<CR>'DELETE CURRENT BUFFER
             \ [PRESS CTRL+O TO RECOVER]'<CR>
 " Navigate through buffers
-noremap <silent><leader><F1> :bprev<CR>
-noremap <silent><F1> :bnext<CR>
-noremap <silent><leader>K :bprev<CR>
-noremap <silent><leader>J :bnext<CR>
+noremap <S-F1> :bprev<CR>
+noremap <F1> :bnext<CR>
+noremap <leader>K :bprev<CR>
+noremap <leader>J :bnext<CR>
 
 " Marks settings -------------------------------------------------------------
 " Note:
@@ -554,7 +551,7 @@ function! OverlengthColumnToggle()
     endif
 endfunction
 " Toggle overlength color column
-nnoremap <silent><F7> :call OverlengthColumnToggle()<CR>
+nnoremap <F7> :call OverlengthColumnToggle()<CR>
 
 " Function - Line length warnings --------------------------------------------
 " Here adopt default vim-textwidth 78 as maximum line length
@@ -573,7 +570,7 @@ function! OverlengthToggle()
     endif
 endfunction
 " Toggle overlength
-nnoremap <silent><leader><F7> :call OverlengthToggle()<CR>
+nnoremap <S-F7> :call OverlengthToggle()<CR>
 
 " Function - Comment highlight -----------------------------------------------
 " Default value (disabled at startup)
@@ -592,7 +589,7 @@ function! CommentHighlightToggle()
 endfunction
 " Toggle comment highlight
 nnoremap <F8> :call CommentHighlightToggle()<CR>
-nnoremap <leader><F8> :call CommentHighlightToggle()<CR>
+nnoremap <S-F8> :call CommentHighlightToggle()<CR>
 
 " ============================================================================
 " Customized terminal mode (Only support for vim >= 8.0)
@@ -612,11 +609,11 @@ if USING_VIM8
         noremap <F12> :terminal<CR>
     endif
     " Map key for resize pane
-    nnoremap <leader>r0 :resize 10 <CR>
+    nnoremap <leader>r1 :resize 10 <CR>
+    nnoremap <leader>r2 :resize 20 <CR>
     " Map key to go back from terminal mode to normal mode
     " Do not use Esc (which conflicts with fzf window) but <C-\><C-n>
-    tnoremap <leader><F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
-    tnoremap ii <C-\><C-n>:echo 'Back to Normal Mode'<CR>
+    tnoremap <S-F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
     tnoremap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
     tnoremap <C-h> <C-\><C-n><C-w>h
     tnoremap <C-j> <C-\><C-n><C-w>j
@@ -1107,9 +1104,9 @@ let g:NERDTreeDirArrows = ''
 let g:NERDTreeDirArrowExpandable = '►'
 let g:NERDTreeDirArrowCollapsible = '▼'
 " Open nerdtree with the current file selected
-noremap <silent><F3> :NERDTreeFind<CR>
+noremap <F3> :NERDTreeFind<CR>
 " Toggle nerdtree display
-noremap <silent><leader><F3> :NERDTreeToggle<CR>
+noremap <S-F3> :NERDTreeToggle<CR>
 
 " Tagbar ---------------------------------------------------------------------
 " Autofocus on tagbar open
@@ -1122,7 +1119,7 @@ let g:tagbar_map_openallfolds = 'zR'
 let g:tagbar_map_closefold = 'zc'
 let g:tagbar_map_openfold = 'zo'
 " Toggle tagbar display
-noremap <silent><leader><F4> :TagbarToggle<CR>
+noremap <S-F4> :TagbarToggle<CR>
 
 " ============================================================================
 " Part 4 - Vim useful functions settings (Plugins settings and mappings)
@@ -1174,10 +1171,10 @@ map <leader>cy <Plug>NERDCommenterYank
 " Default mapping is <F3> (Disabled now)
 let g:maximizer_set_default_mapping = 0
 " Keymapping consistent with TMUX window maximization
-nnoremap <silent><leader>z :MaximizerToggle<CR>
-vnoremap <silent><leader>z :MaximizerToggle<CR>gv
-nnoremap <silent><C-w>z :MaximizerToggle<CR>
-vnoremap <silent><C-w>z :MaximizerToggle<CR>gv
+nnoremap <leader>z :MaximizerToggle<CR>
+vnoremap <leader>z :MaximizerToggle<CR>gv
+nnoremap <C-w>z :MaximizerToggle<CR>
+vnoremap <C-w>z :MaximizerToggle<CR>gv
 
 " Window-chooser (choosewin)--------------------------------------------------
 " Show big overlay letters
@@ -1206,10 +1203,10 @@ nnoremap <silent><leader> :<C-u>WhichKey '<space>'<CR>
 let g:tmux_navigator_disable_when_zoomed = 1
 " Disable default keymappings
 let g:tmux_navigator_no_mappings = 1
-nnoremap <silent><C-h> :TmuxNavigateLeft<CR>
-nnoremap <silent><C-j> :TmuxNavigateDown<CR>
-nnoremap <silent><C-k> :TmuxNavigateUp<CR>
-nnoremap <silent><C-l> :TmuxNavigateRight<CR>
+nnoremap <C-h> :TmuxNavigateLeft<CR>
+nnoremap <C-j> :TmuxNavigateDown<CR>
+nnoremap <C-k> :TmuxNavigateUp<CR>
+nnoremap <C-l> :TmuxNavigateRight<CR>
 
 " ============================================================================
 " Part 5 - Vim extra functions settings (Plugins settings and mappings)
@@ -1243,7 +1240,7 @@ endif
 
 " Goyo -----------------------------------------------------------------------
 if USING_EXTRA_PLUG
-    noremap <silent><leader>gy :Goyo<CR>
+    noremap <leader>gy :Goyo<CR>
 endif
 
 " YankRing -------------------------------------------------------------------
@@ -1414,7 +1411,7 @@ if USING_CODING_TOOL_PLUG
                 \ :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
     autocmd VimEnter,Colorscheme *
                 \ :hi IndentGuidesEven guibg='#24242d' ctermbg=194
-    noremap <leader><F9> :IndentGuidesToggle<CR>
+    noremap <S-F9> :IndentGuidesToggle<CR>
 endif
 
 " Indent object --------------------------------------------------------------
@@ -1490,8 +1487,8 @@ if USING_CODING_TOOL_PLUG
     nmap <leader>gS <Plug>(GitGutterStageHunk)
     nmap <leader>gU <Plug>(GitGutterUndoHunk)
     " Move through hunks in current buffer
-    nmap <silent><leader>gj <Plug>(GitGutterNextHunk)zz
-    nmap <silent><leader>gk <Plug>(GitGutterPrevHunk)zz
+    nmap <leader>gj <Plug>(GitGutterNextHunk)zz
+    nmap <leader>gk <Plug>(GitGutterPrevHunk)zz
 endif
 
 " ============================================================================
