@@ -261,7 +261,7 @@ vnoremap <leader>euq :!uniq<CR>
 " Save current file layout
 noremap <F10> :mkview<CR>
 " Load current file previous layout
-noremap <S-F10> :loadview<CR>
+noremap <leader><F10> :loadview<CR>
 
 " Vim split window (pane) control --------------------------------------------
 " Note:
@@ -330,8 +330,8 @@ noremap <leader>cv :set cursorcolumn!<CR>
             \:echo 'Toggle Cursor Column [Vertical]'<CR>
 " Synchronize cursor between files
 " Must be executed in all files that you want to synchronize cursors
-noremap <F11> :set cursorbind<CR>:echo 'Synchronized Cursor On'<CR>
-noremap <S-F11> :set nocursorbind<CR>:echo 'Synchronized Cursor Off'<CR>
+noremap <F11> :set cursorbind<CR>
+noremap <leader><F11> :set nocursorbind<CR>
 
 " Display settings -----------------------------------------------------------
 set scrolloff=3           " Keep cursor 3 lines away from bottom
@@ -352,7 +352,7 @@ noremap <leader>/ :set nohlsearch!<CR>
 set norelativenumber      " Do not show relative line number
 set number                " Show absolute line number
 " Toggle absolute/relative line number
-noremap <S-F5> :set number!<CR>
+noremap <leader><F5> :set number!<CR>
 noremap <F5> :set relativenumber!<CR>
 
 " Fold settings --------------------------------------------------------------
@@ -393,7 +393,7 @@ function! FoldColumnToggleLong()
 endfunction
 " Toggle foldcolumn (short, long)
 nnoremap <F6> :call FoldColumnToggleShort()<CR>
-nnoremap <S-F6> :call FoldColumnToggleLong()<CR>
+nnoremap <leader><F6> :call FoldColumnToggleLong()<CR>
 
 " Tab (window) settings ------------------------------------------------------
 " Tab (window) operations
@@ -403,7 +403,7 @@ noremap <leader>td :tabclose<space>
 noremap <leader>tdd :tabclose<CR>
 " Tab (window) navigation
 noremap <F2> :tabnext<CR>
-noremap <S-F2> :tabprevious<CR>
+noremap <leader><F2> :tabprevious<CR>
 noremap <leader>L :tabnext<CR>
 noremap <leader>H :tabprevious<CR>
 " Tab (window) swap
@@ -426,7 +426,7 @@ noremap <leader>dd :bdelete<CR>:echo 'DELETE CURRENT BUFFER
 noremap <leader>bdd :bdelete<CR>'DELETE CURRENT BUFFER
             \ [PRESS CTRL+O TO RECOVER]'<CR>
 " Navigate through buffers
-noremap <S-F1> :bprev<CR>
+noremap <leader><F1> :bprev<CR>
 noremap <F1> :bnext<CR>
 noremap <leader>K :bprev<CR>
 noremap <leader>J :bnext<CR>
@@ -570,7 +570,7 @@ function! OverlengthToggle()
     endif
 endfunction
 " Toggle overlength
-nnoremap <S-F7> :call OverlengthToggle()<CR>
+nnoremap <leader><F7> :call OverlengthToggle()<CR>
 
 " Function - Comment highlight -----------------------------------------------
 " Default value (disabled at startup)
@@ -589,7 +589,7 @@ function! CommentHighlightToggle()
 endfunction
 " Toggle comment highlight
 nnoremap <F8> :call CommentHighlightToggle()<CR>
-nnoremap <S-F8> :call CommentHighlightToggle()<CR>
+nnoremap <leader><F8> :call CommentHighlightToggle()<CR>
 
 " ============================================================================
 " Customized terminal mode (Only support for vim >= 8.0)
@@ -613,7 +613,7 @@ if USING_VIM8
     nnoremap <leader>r2 :resize 20 <CR>
     " Map key to go back from terminal mode to normal mode
     " Do not use Esc (which conflicts with fzf window) but <C-\><C-n>
-    tnoremap <S-F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
+    tnoremap <F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
     tnoremap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
     tnoremap <C-h> <C-\><C-n><C-w>h
     tnoremap <C-j> <C-\><C-n><C-w>j
@@ -1106,7 +1106,7 @@ let g:NERDTreeDirArrowCollapsible = '▼'
 " Open nerdtree with the current file selected
 noremap <F3> :NERDTreeFind<CR>
 " Toggle nerdtree display
-noremap <S-F3> :NERDTreeToggle<CR>
+noremap <leader><F3> :NERDTreeToggle<CR>
 
 " Tagbar ---------------------------------------------------------------------
 " Autofocus on tagbar open
@@ -1119,7 +1119,7 @@ let g:tagbar_map_openallfolds = 'zR'
 let g:tagbar_map_closefold = 'zc'
 let g:tagbar_map_openfold = 'zo'
 " Toggle tagbar display
-noremap <S-F4> :TagbarToggle<CR>
+noremap <leader><F4> :TagbarToggle<CR>
 
 " ============================================================================
 " Part 4 - Vim useful functions settings (Plugins settings and mappings)
@@ -1411,7 +1411,7 @@ if USING_CODING_TOOL_PLUG
                 \ :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
     autocmd VimEnter,Colorscheme *
                 \ :hi IndentGuidesEven guibg='#24242d' ctermbg=194
-    noremap <S-F9> :IndentGuidesToggle<CR>
+    noremap <leader><F9> :IndentGuidesToggle<CR>
 endif
 
 " Indent object --------------------------------------------------------------
