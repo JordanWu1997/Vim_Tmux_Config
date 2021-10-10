@@ -1,4 +1,4 @@
-" .vimrc
+" ~/.vimrc
 " ============================================================================
 " Fisa-vim-config
 " http://fisadev.github.io/fisa-vim-config/
@@ -102,8 +102,8 @@
 " -- Speed up/down key repeat time for pressing key
 "    -- e.g jjjjjjjj, kkkkkkkkkk, wwwwwwwwwww
 " -- Use Xset to set key repeat
-"    --      xset [repeat rate] [start repeat time (ms)]  [repeat rate (/sec)]
-"    -- e.g. xset     r rate              300                     40
+"    --      xset [repeat rate] [start repeat time (ms)] [repeat rate (/sec)]
+"    -- e.g. xset     r rate              300                    40
 
 " ============================================================================
 " Vim and Neovim settings (***MUST-READ SESSION***)
@@ -276,7 +276,7 @@ noremap <leader><F10> :loadview<CR>
 " -- Split pane resize (built-in, extended)
 "    -- <C-w>[+/-]: Increase/Decrease current pane height
 "    -- <C-w>[>/<]: Increase/Decrease current pane width
-"    -- <C-w>[_/|]: Maximize current pane horiz/verti
+"    -- <C-w>[_/|]: Maximize current pane horizontally/vertically
 
 " Split pane - Split border style
 set fillchars+=vert:\ "
