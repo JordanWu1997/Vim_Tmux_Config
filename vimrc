@@ -298,7 +298,7 @@ set clipboard=unnamedplus " Shared system clipboard
 set notildeop             " Not make ~ a operator like gu, gU, and etc.
 set nolazyredraw          " Not only redraw when necessary.
 set backspace=indent,eol,start " Backspace through everything
-"set shell=/bin/bash       " Set default shell for vim/neovim
+set shell=/bin/bash       " Set default shell for vim/neovim (for navigator)
 
 " Line wrap ------------------------------------------------------------------
 set nowrap                " Line wrap for small monitor or display window
@@ -515,8 +515,8 @@ set noerrorbells  " │ Disable beeping and window flashing
 set t_vb=         " ┘ https://vim.wikia.com/wiki/Disable_beeping
 
 " Function - Autoremove whitespace in end of line ----------------------------
-" - Remove trailing whitespace when writing a buffer, but not for diff files.
-" - From Vigil <vim5632@rainslide.net>
+" -- Remove trailing whitespace when writing a buffer, but not for diff files
+" -- From Vigil <vim5632@rainslide.net>
 function! RemoveTrailingWhitespace()
     if &ft != 'diff'
         let b:curcol = col('.')
@@ -530,7 +530,7 @@ endfunction
 autocmd BufWritePre * call RemoveTrailingWhitespace()
 
 " Function - Hex editor ------------------------------------------------------
-" From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
+" -- From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
 noremap <leader>eho :%! xxd<CR>
             \:echo 'Hex editor on: TF to binary data'<CR>
 noremap <leader>ehf :%! xxd -r<CR>
@@ -613,6 +613,7 @@ if USING_VIM8
     nnoremap <leader>r2 :resize 20 <CR>
     " Map key to go back from terminal mode to normal mode
     " Do not use Esc (which conflicts with fzf window) but <C-\><C-n>
+    tnoremap <leader><F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
     tnoremap <F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
     tnoremap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
     tnoremap <C-h> <C-\><C-n><C-w>h
@@ -993,8 +994,8 @@ if USING_CUSTOMIZED_THEME
 endif
 
 " Function - Reload lightline ------------------------------------------------
-" - Reload lightline without close editing files
-" - From https://github.com/itchyny/lightline.vim/issues/241
+" -- Reload lightline without close editing files
+" -- From https://github.com/itchyny/lightline.vim/issues/241
 function! LightlineReload()
     call lightline#init()
     call lightline#colorscheme()
@@ -1203,10 +1204,10 @@ nnoremap <silent><leader> :<C-u>WhichKey '<space>'<CR>
 let g:tmux_navigator_disable_when_zoomed = 1
 " Disable default keymappings
 let g:tmux_navigator_no_mappings = 1
-nnoremap <C-h> :TmuxNavigateLeft<CR>
-nnoremap <C-j> :TmuxNavigateDown<CR>
-nnoremap <C-k> :TmuxNavigateUp<CR>
-nnoremap <C-l> :TmuxNavigateRight<CR>
+nnoremap <silent><C-h> :TmuxNavigateLeft<CR>
+nnoremap <silent><C-j> :TmuxNavigateDown<CR>
+nnoremap <silent><C-k> :TmuxNavigateUp<CR>
+nnoremap <silent><C-l> :TmuxNavigateRight<CR>
 
 " ============================================================================
 " Part 5 - Vim extra functions settings (Plugins settings and mappings)
