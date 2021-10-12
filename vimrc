@@ -43,24 +43,24 @@
 " Note:
 " Vim-Plugin Support ---------------------------------------------------------
 " -- If curl is installed, vim-plug (vim-plugin manger) should automatically
-"    run all installaion at your first time loading vim.
-" -- If vim-plug somehow not working automatically or if you want mannual
+"    run all installation at your first time loading vim.
+" -- If vim-plug somehow not working automatically or if you want manual
 "    installation, in vim command mode, type :PlugInstall
 
 " Note:
 " Vim-Features Support -------------------------------------------------------
 " -- In Fedora, vim is complied without clipboard and python3/dyn features,
-" -- For those feature support, you can try either recomplie vim from source
+" -- For those feature support, you can try either recompile vim from source
 "    codes or [Recommended] just install gvim (gui-vim) from Fedora instead.
 "    Also, xclip MUST be installed [dnf install xclip]
 
 " Note:
-" Leaderkey Delay Solution ---------------------------------------------------
-" -- In the following configuration, I use space as leaderkey, however, it
+" Leader key Delay Solution --------------------------------------------------
+" -- In the following configuration, I use space as leader key, however, it
 "    will encounter delay problem in insert mode (Need wait for a while to
 "    insert space character) since vim always waits to see if you want to
 "    press more keys to execute some function mapped in insert mode.
-" -- For now, there are two solutions: One is to set leaderkey to other key
+" -- For now, there are two solutions: One is to set leader key to other key
 "    than space; The other one (RECOMMENDED) is to remap all keymaps that
 "    start with space in INSERTMODE (which can be found by vim command :imap)
 
@@ -78,9 +78,9 @@
 "          -- Usage :Neoformat! [lanaguage] [formatter]
 "          --  e.g. :Neoformat!   python       yapf
 "       -- Recommended PYTHON usage set (in order):
-"          -- (1) :Neoformat isort   # Sort import module
-"          -- (2) :Neoformat pyment  # Add description of function/class
-"          -- (3) :Neoformat yapf    # Format to PEP8 standard
+"          -- (1) :Neoformat isort  # Sort import module
+"          -- (2) :Neoformat pyment # Add description of function/class
+"          -- (3) :Neoformat yapf   # Format to PEP8 standard
 "       -- Google format pyment not work with neoformat, instead in terminal
 "          -- (1) pyment -o google -w <python_program.py>
 
@@ -134,7 +134,7 @@ let USING_PYTHON_COMPLETION = 1
 let PYTHON_FOR_COMPLETION = $CONDA_PYTHON_EXE
 " Support of external gui software (e.g. Okular, Google-chrome, and etc.)
 let USING_GUI_SOFTWARE = 1
-" Webbrowser for markdown preview
+" Web browser for markdown preview
 let WEBBROWSER = $BROWSER
 
 " TERM GUI color -------------------------------------------------------------
@@ -184,7 +184,7 @@ inoremap . .<C-g>u
 inoremap ? ?<C-g>u
 inoremap ! !<C-g>u
 
-" Map normal/visual/opterator-pending mode key -------------------------------
+" Map normal/visual/operator-pending mode key --------------------------------
 " Note:
 " -- z+[t/z/b/h/l]: Scroll window top/center/bottom/left/right
 " -- Ctrl+[i/o]: Jump to Next/Prev cursor location, works even between files
@@ -197,9 +197,9 @@ inoremap ! !<C-g>u
 " -- :g/PATTERN/ACTION: In entire file, for matching PATTERN, do ACTION
 " -- g+[t/T]: Go to Next/Prev tab
 
-" Umap ex mode [old school mode] to prevent typo
+" Unmap ex mode [old school mode] to prevent typo
 noremap gQ <nop>
-" Umap command history to prevent typo
+" Unmap command history to prevent typo
 " Use :<C-f> to open command history instead
 noremap q: <nop>
 noremap Q <nop>
@@ -229,7 +229,7 @@ noremap <leader>dk [c
 
 " Save/Load file hotkey ------------------------------------------------------
 " Note:
-" -- ZZ (Quit and save if there's change in file without comfirmation)
+" -- ZZ (Quit and save if there's change in file without confirmation)
 " -- :f <new-filename> (Save current file with new filename)
 " -- :earlier Nf (Undo to last N file change)
 " -- :later Nf (Redo to N file change)
@@ -245,7 +245,7 @@ noremap <leader>wq :wq<CR>
 " -- :r !seq [START] [INCREMENT] LAST (Insert number sequence)
 " -- :!dir (Show current directory file)
 " -- :!del FILENAME (Delete FILENAME)
-" -- :!column --table (Columnate selected context in visual mode)
+" -- :!column --table (Columnated selected context in visual mode)
 " -- :!sort (Sort selected context in visual mode alphabetically)
 
 " Add number sequence
@@ -290,15 +290,15 @@ if USING_VIM
     set ttyfast           " Faster redrawing. [Removed in neovim]
 endif
 set exrc                  " Search vimrc file in current directory
-set timeoutlen=300        " Timeout for entering combined key (milisecond)
+set timeoutlen=300        " Timeout for entering combined key (millisecond)
 set confirm               " Ask for confirmation before leaving vim
-set modifiable            " Make current buffer modifable
+set modifiable            " Make current buffer modifiable
 set encoding=utf-8        " Unicode display support
-set clipboard=unnamedplus " Shared system clipboard
 set notildeop             " Not make ~ a operator like gu, gU, and etc.
 set nolazyredraw          " Not only redraw when necessary.
-set backspace=indent,eol,start " Backspace through everything
 set shell=/bin/bash       " Set default shell for vim/neovim (for navigator)
+set backspace=indent,eol,start     " Backspace through everything
+set clipboard^=unnamed,unnamedplus " Shared system clipboard
 
 " Line wrap ------------------------------------------------------------------
 set nowrap                " Line wrap for small monitor or display window
@@ -311,7 +311,7 @@ noremap <leader>sj ]s
 noremap <leader>sk [s
 
 " Wild menu settings ---------------------------------------------------------
-set wildmenu              " Show memu options
+set wildmenu              " Show menu options
 set wildmode=list:full    " Show all available input options (or use Ctrl-D)
 
 " Show tab and the space at the end of the line ------------------------------
@@ -322,7 +322,7 @@ noremap <leader>st :set list!<CR>
 " Cursor settings ------------------------------------------------------------
 set ruler                 " Show cursor position in statusline
 set cursorline            " Show vertical line
-set nocursorcolumn        " Show horizontal line (laggy sometimes)
+set nocursorcolumn        " Show horizontal line (leggy sometimes)
 " Toggle cursor line/column indicator (horizontal/vertical)
 noremap <leader>ch :set cursorline!<CR>
             \:echo 'Toggle Cursor Line [Horizontal]'<CR>
@@ -342,7 +342,7 @@ set title                 " Let vim change terminal title
 " Note:
 " -- Ctrl+[t/g]: Goto prev/next matching result before start searching
 
-set incsearch             " Incremental search (character-by-charcter search)
+set incsearch             " Incremental search (character-by-character search)
 set hlsearch              " Highlight search result
 set ignorecase            " Close case sensitive [Needed for smartcase]
 set smartcase             " Case sensitive if search contains uppercase letter
@@ -464,7 +464,7 @@ command! WipeReg for i in range(34,122) |
 " Show abbreviate in vim
 noremap <leader>ab :abbreviate<CR>
 
-" Better backup, swap and undos storage --------------------------------------
+" Better backup, swap and undoes storage -------------------------------------
 if USING_NEOVIM
     " Directory to place swap files
     set directory=~/.config/nvim/dirs/tmp
@@ -472,7 +472,7 @@ if USING_NEOVIM
     set backup
     " Where to put backup files
     set backupdir=~/.config/nvim/dirs/backups
-    " Persistent undos - undo after re-opening
+    " Persistent undoes - undo after re-opening
     set undofile
     set undodir=~/.config/nvim/dirs/undos
     set viminfo+=n~/.config/nvim/dirs/viminfo
@@ -493,7 +493,7 @@ else
     set backup
     " Where to put backup files
     set backupdir=~/.vim/dirs/backups
-    " Persistent undos - undo after re-opening
+    " Persistent undoes - undo after re-opening
     set undofile
     set undodir=~/.vim/dirs/undos
     set viminfo+=n~/.vim/dirs/viminfo
@@ -565,7 +565,7 @@ function! OverlengthToggle()
         let g:overlength_warning_is_open = 0
     else
         match OverLength /\%79v.\+/
-        echo 'OVer 78 character line highlight ON'
+        echo 'Over 78 character line highlight ON'
         let g:overlength_warning_is_open = 1
     endif
 endfunction
@@ -719,7 +719,7 @@ endif
 Plug 'scrooloose/nerdtree'
 " Code class/module/tag browser [Update to latest]
 Plug 'preservim/tagbar', { 'on': 'TagbarToggle' }
-" Code and files fuzzy finder and previewer (main progroam)
+" Code and files fuzzy finder and previewer (main program)
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
 " Code and files fuzzy finder and previewer for vim (vim plugin)
 Plug 'junegunn/fzf.vim'
@@ -743,7 +743,7 @@ Plug 'tpope/vim-repeat'
 Plug 'szw/vim-maximizer', { 'on': 'MaximizerToggle' }
 " Window pane selector
 Plug 't9md/vim-choosewin'
-" Autopair for quotations and brackets
+" Auto pair for quotations and brackets
 Plug 'jiangmiao/auto-pairs'
 " Show vim keybindings (for now only leader key)
 Plug 'liuchengxu/vim-which-key'
@@ -766,7 +766,7 @@ if USING_EXTRA_PLUG
                 \ '<Plug>OpenMarkbarPeekabooBacktick' ] }
     " Easymotion (Key-mapping moving in vim)
     Plug 'easymotion/vim-easymotion'
-    " Auto popup completion options from vim
+    " Auto pop-up completion options from vim
     Plug 'vim-scripts/AutoComplPop'
     " Pending tasks list
     Plug 'fisadev/FixedTaskList.vim', { 'on': 'TaskList' }
@@ -777,7 +777,7 @@ endif
 " [Functions for coding] -----------------------------------------------------
 if USING_CODING_TOOL_PLUG
     if USING_VIM8
-        " Additional languge packs
+        " Additional language packs
         Plug 'sheerun/vim-polyglot'
         " Multiple language syntax and lint support
         Plug 'dense-analysis/ale',
@@ -803,7 +803,7 @@ endif
 
 " [Tmux] ---------------------------------------------------------------------
 " Clipboard sharing [No need if already using xclip for tmux clipboard]
-" Share focus between vim and tmux for clilpboard sharing
+" Share focus between vim and tmux for clipboard sharing
 "Plug 'tmux-plugins/vim-tmux-focus-events'
 " Share clipboard between vim and tmux
 "Plug 'roxma/vim-tmux-clipboard'
@@ -813,7 +813,7 @@ Plug 'christoomey/vim-tmux-navigator'
 " [Neovim/Vim] ---------------------------------------------------------------
 " Help communicate beteen vim and neovim [needed for deoplete.nvim]
 if USING_VIM
-    Plug 'roxma/vim-hug-neovim-rpc', { 'for': ['python'] }
+    Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
 " [Python coding] ------------------------------------------------------------
@@ -854,7 +854,7 @@ endif
 " Latex compiler link support (complier need to be installed externally)
 Plug 'vim-latex/vim-latex', { 'for': 'tex' }
 
-" [Markdown] ------------------------------------------------------------------
+" [Markdown] -----------------------------------------------------------------
 if USING_GUI_SOFTWARE
     if USING_VIM8
         " Synchronous markdown file previewer
@@ -929,7 +929,7 @@ function! LightlineStyle(theme, fancy, central_region_opaque)
         \ 'left': [ [ 'filename' ] ],
         \ 'right': [ [ 'lineinfo' ],
         \            [ 'percent' ] ] }
-    " Statusline componet function
+    " Statusline component function
     let g:lightline.component_function = { 'gitbranch': 'FugitiveHead', }
     " Fancy symbol for statusline separator
     if a:fancy
@@ -959,7 +959,7 @@ function! LightlineStyle(theme, fancy, central_region_opaque)
     endif
 
     " Part 4 - Miscellaneous setup -------------------------------------------
-    " Miscellaneous varaibles
+    " Miscellaneous variables
     let g:nord_uniform_status_lines = 0
     " Central bar opaque option
     if !a:central_region_opaque
@@ -1034,7 +1034,7 @@ nmap <leader>d9 <Plug>lightline#bufferline#delete(9)
 " ============================================================================
 " Part 3 - File/Code browsing settings (Plugins settings and mappings)
 " ============================================================================
-" File/Code browing settings, edit them as you wish.
+" File/Code browsing settings, edit them as you wish.
 
 " fzf.vim --------------------------------------------------------------------
 " Note:
@@ -1129,7 +1129,7 @@ noremap <leader><F4> :TagbarToggle<CR>
 
 " Vim-man --------------------------------------------------------------------
 " Note:
-" -- K (Vim helppage for current selected word)
+" -- K (Vim help page for current selected word)
 
 " Open offline manual in system
 noremap <leader>mm :execute ":Man " . expand('<cword>')<CR>
@@ -1347,7 +1347,7 @@ if USING_EXTRA_PLUG
     endif
 endif
 
-" Popup window selection -----------------------------------------------------
+" Pop-up window selection ----------------------------------------------------
 " Previous/next suggestion
 " [Double quotation matters here, do not change to single quotation]
 if USING_EXTRA_PLUG
@@ -1552,7 +1552,7 @@ let g:python_highlight_all = 1
 
 " Python debug (add python breakpoints) --------------------------------------
 " -- ipdb must be installed first
-" -- Installaion in termianl: run 'pip install ipdb'
+" -- Installation in terminal: run 'pip install ipdb'
 if USING_PYTHON_COMPLETION
     autocmd FileType python
                 \ noremap <silent><leader>pb Oimport ipdb;
@@ -1575,8 +1575,8 @@ let fortran_do_enddo = 1
 " Set spell check for LaTex files
 " -- z= :Correct spell
 autocmd FileType tex setlocal spell
-autocmd FileType tex setlocal updatetime=10000 " Unit: milisecond
-" Latex realtime viewer with gui pdf file manager
+autocmd FileType tex setlocal updatetime=10000 " Unit: millisecond
+" Latex real-time viewer with gui pdf file manager
 if USING_GUI_SOFTWARE
     let g:livepreview_previwer = 'okular'
     let g:livepreview_engine = 'pdflatex'
