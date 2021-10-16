@@ -562,6 +562,7 @@ tmux -V
 | Normal    | [BK]+[Shift]+[\]     | Split pane horizontally             | Split pane horizontally             | Default key is [LK]+[Shift]+[5] (%) |
 | Normal    | [BK]+[q/Enter]       | Move to pane (number)               | Move to pane (number)               | Pane number shows on pane           |
 | Normal    | [Ctrl]+[h/j/k/l]     | Move to pane (L/D/U/R)              | Move to pane (L/D/U/R)              | vim-tmux-navigator                  |
+| Normal    | [BK]+[;]             | Switch to last pane                 | Switch to last pane                 |                                     |
 | Normal    | [BK]+[j/k]           | Move to next/prev pane              | Move to next/prev pane              |                                     |
 | Normal    | [BK]+[Shift]+[j/k]   | Swap pane to prev/next pane         | Swap pane to prev/next pane         |                                     |
 | Normal    | [BK]+[Space]         | Toggle pane layout                  | Toggle pane layout                  |                                     |
