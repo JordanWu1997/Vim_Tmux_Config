@@ -284,11 +284,7 @@ set fillchars+=vert:\ "
 set splitbelow
 set splitright
 
-" Vim settings ---------------------------------------------------------------
-if USING_VIM
-    set nocompatible      " Not compatible with vi [No need for neovim]
-    set ttyfast           " Faster redrawing. [Removed in neovim]
-endif
+" General Vim settings -------------------------------------------------------
 set exrc                  " Search vimrc file in current directory
 set timeoutlen=300        " Timeout for entering combined key (millisecond)
 set confirm               " Ask for confirmation before leaving vim
@@ -299,6 +295,17 @@ set nolazyredraw          " Not only redraw when necessary.
 set shell=/bin/bash       " Set default shell for vim/neovim (for navigator)
 set backspace=indent,eol,start     " Backspace through everything
 set clipboard^=unnamed,unnamedplus " Shared system clipboard
+
+" Vim only settings ----------------------------------------------------------
+if USING_VIM
+    set nocompatible      " Not compatible with vi [No need for neovim]
+    set ttyfast           " Faster redrawing. [Removed in neovim]
+endif
+
+" Neovim only settings -------------------------------------------------------
+if USING_NEOVIM
+    set inccommand=nosplit " Enable incremental command without split pane
+endif
 
 " Line wrap ------------------------------------------------------------------
 set nowrap                " Line wrap for small monitor or display window
