@@ -41,21 +41,21 @@
 "    (3) set terminal font to "DroidSansMono Nerd Font"
 
 " Note:
-" Vim-Plugin Support ---------------------------------------------------------
+" Vim-Plugin support ---------------------------------------------------------
 " -- If curl is installed, vim-plug (vim-plugin manger) should automatically
 "    run all installation at your first time loading vim.
 " -- If vim-plug somehow not working automatically or if you want manual
 "    installation, in vim command mode, type :PlugInstall
 
 " Note:
-" Vim-Features Support -------------------------------------------------------
+" Vim-Features support -------------------------------------------------------
 " -- In Fedora, vim is complied without clipboard and python3/dyn features,
 " -- For those feature support, you can try either recompile vim from source
 "    codes or [Recommended] just install gvim (gui-vim) from Fedora instead.
 "    Also, xclip MUST be installed [dnf install xclip]
 
 " Note:
-" Leader key Delay Solution --------------------------------------------------
+" Leader key delay solution --------------------------------------------------
 " -- In the following configuration, I use space as leader key, however, it
 "    will encounter delay problem in insert mode (Need wait for a while to
 "    insert space character) since vim always waits to see if you want to
@@ -1650,9 +1650,9 @@ if USING_CUSTOMIZED_THEME
         call LightlineStyle('wal', 1, 1)
     else
         " Current available themes
-        colorscheme nord
+        colorscheme gruvbox
         " Lightline style
-        call LightlineStyle('nord', USING_FANCY_SYMBOLS, 1)
+        call LightlineStyle('gruvbox', USING_FANCY_SYMBOLS, 1)
     endif
     " Call customized color palette
     call CustomizedColorPalette()
