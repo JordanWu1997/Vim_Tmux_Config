@@ -1049,7 +1049,7 @@ nmap <leader>d9 <Plug>lightline#bufferline#delete(9)
 " -- the_silver_searcher must be installed if Ag function is needed
 
 " Fish is not fully compatible for fzf.vim, change to bash for convenience
-let $SHELL='/bin/bash'
+let $SHELL = '/bin/bash'
 " Add prefix FZF to all fzf commands
 let g:fzf_command_prefix = 'FZF'
 " Default fzf action keymapping
