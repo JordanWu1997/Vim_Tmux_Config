@@ -1394,6 +1394,12 @@ if USING_CODING_TOOL_PLUG
     nmap <leader>aj <Plug>(ale_next_wrap)zz
 endif
 
+" Neoformat ------------------------------------------------------------------
+if USING_CODING_TOOL_PLUG
+    nnoremap <leader>pi :Neoformat isort<CR>
+    nnoremap <leader>py :Neoformat yapf<CR>
+endif
+
 " Rainbow parentheses --------------------------------------------------------
 if USING_CODING_TOOL_PLUG
     " Don;t enable when start up
