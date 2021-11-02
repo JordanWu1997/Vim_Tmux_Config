@@ -375,14 +375,16 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 - Note: Jedi is needed for python code analysis (Check https://github.com/davidhalter/jedi )
 - Note: All below functions only work in .py files
 
-| VIM-Mode | Keymapping           | Function                      | Description                       | Note                |
-| :------: | :------------------: | :---------------------------: | :-------------------------------: | :-----------------: |
-| N/V      | [Shift]+[k]          | Search current word in doc    | Search current word in python doc |                     |
-| N/V      | [LK]+[p]+[n]         | Find current word occurrences | Find current word occurrences     | Here p for (p)ython |
-| N/V      | [LK]+[p]+[a]         | Find current word assignment  | Find current word assignment      |                     |
-| N/V      | [LK]+[p]+[d]         | Show current word definition  | Show current word definition      |                     |
-| N/V      | [LK]+[p]+[m]         | Show current word init.py     | Show current word init.py         |                     |
-| N/V      | [LK]+[p]+[Shift]+[m] | Show input module init.py     | Show input module init.py         |                     |
+| VIM-Mode | Keymapping           | Function                      | Description                       | Note                        |
+| :------: | :------------------: | :---------------------------: | :-------------------------------: | :-------------------------: |
+| N/V      | [Shift]+[k]          | Search current word in doc    | Search current word in python doc |                             |
+| N/V      | [LK]+[p]+[n]         | Find current word occurrences | Find current word occurrences     | Here p for (p)ython         |
+| N/V      | [LK]+[p]+[a]         | Find current word assignment  | Find current word assignment      |                             |
+| N/V      | [LK]+[p]+[d]         | Show current word definition  | Show current word definition      |                             |
+| N/V      | [LK]+[p]+[m]         | Show current word init.py     | Show current word init.py         |                             |
+| N/V      | [LK]+[p]+[Shift]+[m] | Show input module init.py     | Show input module init.py         |                             |
+| N        | [LK]+[p]+[i]         | Run isort formatter           | Run isort formatter (modules)     | isort needs to be installed |
+| N        | [LK]+[p]+[y]         | Run yapf formatter            | RUn yapf formatter (PEP8)         | yapf needs to be installed  |
 
 #### 3. Miscellaneous Function Keymapping
 - Useful tool (Note: startup by default)
@@ -563,7 +565,7 @@ tmux -V
 | Normal    | [BK]+[q/Enter]       | Move to pane (number)               | Move to pane (number)               | Pane number shows on pane           |
 | Normal    | [Ctrl]+[h/j/k/l]     | Move to pane (L/D/U/R)              | Move to pane (L/D/U/R)              | vim-tmux-navigator                  |
 | Normal    | [BK]+[;]             | Switch to last pane                 | Switch to last pane                 |                                     |
-| Normal    | [BK]+[j/k]           | Move to next/prev pane              | Move to next/prev pane              |                                     |
+| Normal    | [BK]+[j/k]           | Scroll current pane up              | Scroll current pane up              | Scroll in tmux copymode             |
 | Normal    | [BK]+[Shift]+[j/k]   | Swap pane to prev/next pane         | Swap pane to prev/next pane         |                                     |
 | Normal    | [BK]+[Space]         | Toggle pane layout                  | Toggle pane layout                  |                                     |
 | Normal    | [BK]+[Alt]+[h/j/k/l] | Resize pane to (L/D/U/R)            | Resize pane to (L/D/U/R)            |                                     |
