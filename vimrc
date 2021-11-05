@@ -598,6 +598,37 @@ endfunction
 nnoremap <F8> :call CommentHighlightToggle()<CR>
 nnoremap <leader><F8> :call CommentHighlightToggle()<CR>
 
+" Function - Update tmux display ---------------------------------------------
+" (1) For bash shell, add following function to ~/.bashrc
+"# Update tmux display (e.g. localhost:XX -> localhost:XX)
+"function tmux_update_display {
+"    export LAST_DISPLAY=$DISPLAY
+"    export DISPLAY=$(tmux show-env | sed -n 's/^DISPLAY=//p')
+"    echo "UPDATE_TMUX_DISPLAY: $LAST_DISPLAY (OLD) -> $DISPLAY (NEW)"
+"}
+
+"# (2) For fish shell, add following function to ~/.config/fish/config.fish
+"# Update tmux display (e.g. localhost:XX -> localhost:XX)
+"function tmux_update_display
+"    set LAST_DISPLAY $DISPLAY
+"    set DISPLAY (tmux show-env | sed -n 's/^DISPLAY=//p')
+"    echo "UPDATE_TMUX_DISPLAY: $LAST_DISPLAY (OLD) -> $DISPLAY (NEW)"
+"end
+"
+" Update tmux display for bash
+function! TmuxUpdateDisplayBash()
+    :!bash -c tmux_update_display
+    let DISPLAY=$DISPLAY
+endfunction
+" Update tmux display for fish
+function! TmuxUpdateDisplayFish()
+    :!fish -c tmux_update_display
+    let DISPLAY=$DISPLAY
+endfunction
+" Update tmux display for bash/fish
+"nnoremap <leader>tu :call TmuxUpdateDisplayBash()<CR>
+nnoremap <leader>tu :call TmuxUpdateDisplayFish()<CR>
+
 " ============================================================================
 " Customized terminal mode (Only support for vim >= 8.0)
 " ============================================================================
