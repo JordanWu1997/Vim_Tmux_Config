@@ -539,7 +539,7 @@ tmux -V
 | Normal    | [BK]+[Shift]+[c]   | Create new session         | Create new session        | tmux-sessionist     |
 | Normal    | [BK]+[Shift]+[x/7] | Kill current session       | Kill current session      | tmux-sessionist / & |
 | Normal    | [BK]+[Shift]+[9/0] | Move to prev/next session  | Move to prev/next session | ( / )               |
-| Normal    | [BK]+[`]           | Switch to last session     | Switch to last session    | tmux-sessionist     |
+| Normal    | [BK]+[Shift]+[`]   | Switch to last session     | Switch to last session    | tmux-sessionist / ~ |
 | Normal    | [BK]+[k/j]         | Move to prev/next session  | Move to prev/next session |                     |
 
 - Window
@@ -552,7 +552,7 @@ tmux -V
 | Normal    | [BK]+[w]           | Show all windows                 | Show all windows                |      |
 | Normal    | [BK]+[c]           | Create new window                | Create new window               |      |
 | Normal    | [BK]+[x]           | Kill current window              | Kill current window             |      |
-| Normal    | [BK]+[Tab]         | Switch to last window            | Switch to last window           |      |
+| Normal    | [BK]+[`]           | Switch to last window            | Switch to last window           |      |
 | Normal    | [BK]+[h/l]         | Move to next/prev window         | Move to next/prev window        |      |
 | Normal    | [BK]+[Shift]+[h/l] | Swap window to prev/next window  | Swap window to prev/next window |      |
 
@@ -589,6 +589,7 @@ tmux -V
 
 | TMUX-Mode | Keymapping       | Function                          | Description                       | Note                                              |
 | :-------: | :--------------: | :-------------------------------: | :-------------------------------: | :-----------------------------------------------: |
+| Normal    | [BK]+[Tab]       | Open tmux choose-tree             | Open tmux choose-tree             | Choose pane, window, session in tmux              |
 | Normal    | [BK]+[Shift]+[/] | Show all tmux keymapping          | Show all tmux keymapping          |                                                   |
 | Normal    | [BK]+[Shift]+[b] | Toggle tmux statusline            | Toggle tmux statusline            |                                                   |
 | Normal    | [BK]+[b]         | Toggle tmux borderline            | Toggle tmux borderline            |                                                   |
