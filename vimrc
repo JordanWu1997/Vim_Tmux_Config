@@ -618,12 +618,12 @@ nnoremap <leader><F8> :call CommentHighlightToggle()<CR>
 " Update tmux display for bash
 function! TmuxUpdateDisplayBash()
     :!bash -c tmux_update_display
-    let DISPLAY=$DISPLAY
+    let g:DISPLAY=$DISPLAY
 endfunction
 " Update tmux display for fish
 function! TmuxUpdateDisplayFish()
     :!fish -c tmux_update_display
-    let DISPLAY=$DISPLAY
+    let g:DISPLAY=$DISPLAY
 endfunction
 " Update tmux display for bash/fish
 "nnoremap <leader>tu :call TmuxUpdateDisplayBash()<CR>
