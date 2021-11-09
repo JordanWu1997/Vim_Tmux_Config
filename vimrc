@@ -987,6 +987,8 @@ function! LightlineStyle(theme, fancy, central_region_opaque)
     " Tabline (bufferline plugin)
     let g:lightline#bufferline#show_number = 0
     let g:lightline#bufferline#shorten_path = 1
+    let g:lightline#bufferline#min_buffer_count = 2
+    let g:lightline#bufferline#min_tab_count = 2
     let g:lightline#bufferline#unnamed = '[No Name]'
     let g:lightline#bufferline#filter_by_tabpage = 1
     " Fancy character for tabline (bufferline)
@@ -1687,9 +1689,9 @@ if USING_CUSTOMIZED_THEME
         call LightlineStyle('wal', 1, 1)
     else
         " Current available themes
-        colorscheme gruvbox
+        colorscheme nord
         " Lightline style
-        call LightlineStyle('gruvbox', USING_FANCY_SYMBOLS, 1)
+        call LightlineStyle('nord', USING_FANCY_SYMBOLS, 1)
     endif
     " Call customized color palette
     call CustomizedColorPalette()
