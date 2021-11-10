@@ -599,35 +599,6 @@ nnoremap <F8> :call CommentHighlightToggle()<CR>
 nnoremap <leader><F8> :call CommentHighlightToggle()<CR>
 
 " Function - Update tmux display ---------------------------------------------
-" (1) For bash shell, add following function to ~/.bashrc
-"# Update tmux display (e.g. localhost:XX -> localhost:XX)
-"function tmux_update_display {
-"    export LAST_DISPLAY=$DISPLAY
-"    export DISPLAY=$(tmux show-env | sed -n 's/^DISPLAY=//p')
-"    echo "UPDATE_TMUX_DISPLAY: $LAST_DISPLAY (OLD) -> $DISPLAY (NEW)"
-"}
-
-"# (2) For fish shell, add following function to ~/.config/fish/config.fish
-"# Update tmux display (e.g. localhost:XX -> localhost:XX)
-"function tmux_update_display
-"    set LAST_DISPLAY $DISPLAY
-"    set DISPLAY (tmux show-env | sed -n 's/^DISPLAY=//p')
-"    echo "UPDATE_TMUX_DISPLAY: $LAST_DISPLAY (OLD) -> $DISPLAY (NEW)"
-"end
-"
-" Update tmux display for bash
-function! TmuxUpdateDisplayBash()
-    :!bash -c tmux_update_display
-    let g:DISPLAY=$DISPLAY
-endfunction
-" Update tmux display for fish
-function! TmuxUpdateDisplayFish()
-    :!fish -c tmux_update_display
-    let g:DISPLAY=$DISPLAY
-endfunction
-" Update tmux display for bash/fish
-"nnoremap <leader>tu :call TmuxUpdateDisplayBash()<CR>
-nnoremap <leader>tu :call TmuxUpdateDisplayFish()<CR>
 
 " ============================================================================
 " Customized terminal mode (Only support for vim >= 8.0)
@@ -808,8 +779,11 @@ if USING_EXTRA_PLUG
     Plug 'vim-scripts/AutoComplPop'
     " Pending tasks list
     Plug 'fisadev/FixedTaskList.vim', { 'on': 'TaskList' }
-    " Paint hex colors in color code background color
-    Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
+    " Vim-hexokinase only works in termguicolors
+    if !USING_WAL_THEME
+        " Paint hex colors in color code background color
+        Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
+    endif
 endif
 
 " [Functions for coding] -----------------------------------------------------
@@ -1689,8 +1663,10 @@ if USING_CUSTOMIZED_THEME
         call LightlineStyle('wal', 1, 1)
     else
         " Current available themes
+        "colorscheme gruvbox
         colorscheme nord
         " Lightline style
+        "call LightlineStyle('gruvbox', USING_FANCY_SYMBOLS, 1)
         call LightlineStyle('nord', USING_FANCY_SYMBOLS, 1)
     endif
     " Call customized color palette
