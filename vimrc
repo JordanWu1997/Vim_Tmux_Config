@@ -1313,6 +1313,9 @@ if USING_EXTRA_PLUG
     \ }
     " Leave peekaboo markbar enabled, but don't set default mappings
     let g:markbar_set_default_peekaboo_mappings = v:false
+    " Markbar format
+    let g:markbar_file_mark_format_string = '%s (%d, %d)'
+    let g:markbar_file_mark_arguments = ['fname', 'col', 'line']
     " Peekaboo-like markbar (remap vim built-in ' key)
     nmap ` <Plug>OpenMarkbarPeekabooApostrophe
     " Peekaboo-like markbar (remap vim built-in ` key)
