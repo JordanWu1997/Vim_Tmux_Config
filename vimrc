@@ -341,7 +341,7 @@ noremap <F11> :set cursorbind<CR>
 noremap <leader><F11> :set nocursorbind<CR>
 
 " Display settings -----------------------------------------------------------
-set scrolloff=3           " Keep cursor 3 lines away from bottom
+set scrolloff=8           " Keep cursor 8 lines away from bottom
 set display+=lastline     " Show line as much as possible
 set title                 " Let vim change terminal title
 
