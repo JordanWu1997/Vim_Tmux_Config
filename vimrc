@@ -19,7 +19,7 @@
 " Followings are problems, recommended solutions, and plugin-function support
 " notes for configuration
 
-" Note: Old Powerline-status support [Not use anymore, use lightline now] ----
+" Note: Old powerline-status support [Not use anymore, use lightline now] ----
     " Powerline-status Installation (Choose one of the following)
     " (1) sudo intall vim-powerline (Fedora)
     " (2) sudo apt-get install powerline (Ubuntu)
@@ -37,14 +37,14 @@
     "     DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
     " (3) set terminal font to "DroidSansMono Nerd Font"
 
-" Note: Vim-Plugin support ---------------------------------------------------
+" Note: Vim plugin support ---------------------------------------------------
     " If curl is installed, vim-plug (vim-plugin manger) should automatically
     " run all installation at your first time loading vim.
 
     " If vim-plug somehow not working automatically or if you want manual
     " installation, in vim command mode, type :PlugInstall
 
-" Note: Vim-Features support -------------------------------------------------
+" Note: Vim features support -------------------------------------------------
     " In Fedora, vim is complied without clipboard and python3/dyn features,
 
     " For those feature support, you can try either recompile vim from source
@@ -81,7 +81,7 @@
     " Google format pyment not work with neoformat, instead in terminal
     " -- (1) pyment -o google -w <python_program.py>
 
-" Note: Python-completion and tmux-yank-clipboard on ZEUS --------------------
+" Note: Python-completion and tmux-yank-clipboard on remote machine ----------
     " Use neovim and everything is fine, but notice that neovim support of
     " Fedora repo is for Fedora 25 and higher version. For now, Seb used
     " AppImage directly from neovim website
@@ -107,7 +107,7 @@
 " ============================================================================
 " Select vim-plug to load, set guicolor (real color) support, and etc.
 
-" Enable/Disable Vim-plug ----------------------------------------------------
+" Enable/Disable vim-plug ----------------------------------------------------
     " Assign 1/0 to enable/disable plug option
 
     " Use vim or neovim (Auto-detect)
@@ -134,7 +134,7 @@
     " Web browser for markdown preview
     let WEBBROWSER = $BROWSER
 
-" TERM GUI color -------------------------------------------------------------
+" TERMGUI color --------------------------------------------------------------
     " Ctermcolors only support max 256 color
     " Termguicolors can support html color code
 
@@ -148,7 +148,7 @@
     endif
 
 " ============================================================================
-" Vim built-in function settings and Vim hotkeys settings
+" Vim built-in function settings and vim hotkeys settings
 " ============================================================================
 " All parameter settings and hotkey mappings
 
@@ -513,12 +513,12 @@
         endif
     endif
 
-" Function - No system bell --------------------------------------------------
+" Function - no system bell --------------------------------------------------
     set visualbell    " ┐
     set noerrorbells  " │ Disable beeping and window flashing
     set t_vb=         " ┘ https://vim.wikia.com/wiki/Disable_beeping
 
-" Function - Autoremove whitespace in end of line ----------------------------
+" Function - autoremove whitespace in end of line ----------------------------
     " -- Remove trailing whitespace when writing a buffer, but not for diff files
     " -- From Vigil <vim5632@rainslide.net>
     function! RemoveTrailingWhitespace()
@@ -533,14 +533,14 @@
     " Remove trailing whitespace for editing files
     autocmd BufWritePre * call RemoveTrailingWhitespace()
 
-" Function - Hex editor ------------------------------------------------------
+" Function - hex editor ------------------------------------------------------
     " -- From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
     noremap <leader>eho :%! xxd<CR>
                 \:echo 'Hex editor on: TF to binary data'<CR>
     noremap <leader>ehf :%! xxd -r<CR>
                 \:echo 'Hex editor off: TF to original data'<CR>
 
-" Function - Line length colorcolumn warnings --------------------------------
+" Function - line length colorcolumn warnings --------------------------------
     let g:overlength_column_is_open = 0
     " Toggle overlength function
     function! OverlengthColumnToggle()
@@ -557,7 +557,7 @@
     " Toggle overlength color column
     nnoremap <F7> :call OverlengthColumnToggle()<CR>
 
-" Function - Line length warnings --------------------------------------------
+" Function - line length warnings --------------------------------------------
     " Here adopt default vim-textwidth 78 as maximum line length
     " Default value (disabled at startup)
     let g:overlength_warning_is_open = 0
@@ -576,7 +576,7 @@
     " Toggle overlength
     nnoremap <leader><F7> :call OverlengthToggle()<CR>
 
-" Function - Comment highlight -----------------------------------------------
+" Function - comment highlight -----------------------------------------------
     " Default value (disabled at startup)
     let g:comment_highlight_is_open = 0
     " Toggle comment highlight function
@@ -604,7 +604,7 @@
     " -- Enter insert mode to use terminal command line
     " -- In terminal buffer, <C-\><C-n> back to normal mode
 
-" Set customized terminal mode keymapping
+" Set customized terminal mode keymapping ------------------------------------
     if USING_VIM8
         " Map key to enter terminal mode
         if USING_NEOVIM
@@ -713,7 +713,7 @@
         Plug 'mengelbrecht/lightline-bufferline'
     endif
 
-" [File/Code Browsing] -------------------------------------------------------
+" [File/Code browsing] -------------------------------------------------------
     if USING_FANCY_SYMBOLS
         " Nerdtree and other vim-plug powerline symbols support
         Plug 'ryanoasis/vim-devicons'
@@ -782,7 +782,7 @@
         endif
     endif
 
-" [Functions for coding] -----------------------------------------------------
+" [Vim coding tools] ---------------------------------------------------------
     if USING_CODING_TOOL_PLUG
         if USING_VIM8
             " Additional language packs
@@ -818,7 +818,7 @@
     " Navigate seamlessly in vim and tmux (Ctrl+h/j/k/l)
     Plug 'christoomey/vim-tmux-navigator'
 
-" [Neovim/Vim] ---------------------------------------------------------------
+" [Neovim <--> Vim communication] --------------------------------------------
 " Help communicate beteen vim and neovim [needed for deoplete.nvim]
     if USING_VIM
         Plug 'roxma/vim-hug-neovim-rpc'
@@ -880,7 +880,8 @@
     " Tell vim-plug we finished declaring plugins, so it can load them
     call plug#end()
 
-" Check vim startup time and loaded plugins
+" Note: plugin loading
+    " Check vim startup time and loaded plugins
     " vim --startuptime /tmp/startup.log [file_to_test] +q && vim /tmp/startup.log
 
 " ============================================================================
@@ -1004,7 +1005,7 @@
                     \:echo "STATUSLINE/TABLINE DISABLED"<CR>
     endif
 
-" Function - Reload lightline ------------------------------------------------
+" Function - reload lightline ------------------------------------------------
     " -- Reload lightline without close editing files
     " -- From https://github.com/itchyny/lightline.vim/issues/241
     function! LightlineReload()
@@ -1457,7 +1458,7 @@
     endif
 
 " Vim-fugitive ---------------------------------------------------------------
-" -- :G Summary for current git repository
+    " -- :G Summary for current git repository
     if USING_CODING_TOOL_PLUG
         noremap <leader>gd :Git diff %<CR>
         noremap <leader>gD :Git diff<CR>
