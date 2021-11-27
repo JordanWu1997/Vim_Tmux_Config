@@ -1555,8 +1555,9 @@
         let g:jedi#completions_enabled = 0
         " Use split instead of buffer
         let g:jedi#use_splits_not_buffers = "bottom"
-        " Goto variable definition
-        let g:jedi#goto_command = '<leader>pd'
+        " Open variable definition/docstring
+        let g:jedi#goto_command = '<leader>pg'
+        let g:jedi#goto_definitions_command = "<leader>pd"
         " Find all usages of variable name
         let g:jedi#usages_command = '<leader>pn'
         " Rename variable name
@@ -1636,7 +1637,7 @@
 " ============================================================================
 " Set colorscheme (syntax highlight), color assignment, and etc.
 
-" Vim colorscheme ------------------------------------------------------------
+" Vim highlight --------------------------------------------------------------
     " Customized color palette
     function! CustomizedColorPalette()
         " Common background setting (dark background)
