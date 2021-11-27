@@ -67,19 +67,19 @@
     " For code formatter support: https://github.com/sbdchd/Neoformat
 
     " Example: python code formatter
-    " Install formatter with terminal:
-    " -- (1) pip install isort
-    " -- (2) pip install pyment
-    " -- (3) pip install yapf
-    " Use formatter in vim command line:
-    " -- Usage :Neoformat! [lanaguage] [formatter]
-    " --  e.g. :Neoformat!   python       yapf
-    " Recommended PYTHON usage set (in order):
-    " -- (1) :Neoformat isort  # Sort import module
-    " -- (2) :Neoformat pyment # Add description of function/class
-    " -- (3) :Neoformat yapf   # Format to PEP8 standard
-    " Google format pyment not work with neoformat, instead in terminal
-    " -- (1) pyment -o google -w <python_program.py>
+    " -- Install formatter with terminal:
+    "    (1) pip install isort
+    "    (2) pip install pyment
+    "    (3) pip install yapf
+    " -- Use formatter in vim command line:
+    "    -- Usage :Neoformat! [lanaguage] [formatter]
+    "    --  e.g. :Neoformat!   python       yapf
+    " -- Recommended PYTHON usage set (in order):
+    "    -- (1) :Neoformat isort  # Sort import module
+    "    -- (2) :Neoformat pyment # Add description of function/class
+    "    -- (3) :Neoformat yapf   # Format to PEP8 standard
+    " -- Google format pyment not work with neoformat, instead in terminal
+    "    -- (1) pyment -o google -w <python_program.py>
 
 " Note: Python-completion and tmux-yank-clipboard on remote machine ----------
     " Use neovim and everything is fine, but notice that neovim support of
@@ -338,7 +338,7 @@
     noremap <leader><F11> :set nocursorbind<CR>
 
 " Display settings -----------------------------------------------------------
-    set scrolloff=8       " Keep cursor 8 lines away from bottom
+    set scrolloff=10      " Keep cursor 10 lines away from bottom
     set display+=lastline " Show line as much as possible
     set title             " Let vim change terminal title
 
@@ -818,8 +818,8 @@
     " Navigate seamlessly in vim and tmux (Ctrl+h/j/k/l)
     Plug 'christoomey/vim-tmux-navigator'
 
-" [Neovim <--> Vim communication] --------------------------------------------
-" Help communicate beteen vim and neovim [needed for deoplete.nvim]
+" [Vim Neovim communication] -------------------------------------------------
+    " Help communicate beteen vim and neovim [needed for deoplete.nvim]
     if USING_VIM
         Plug 'roxma/vim-hug-neovim-rpc'
     endif
@@ -876,7 +876,7 @@
     " I3 configuration syntax highlight
     Plug 'PotatoesMaster/i3-vim-syntax', { 'for': 'i3' }
 
-" End of loading plugin ------------------------------------------------------
+" End of plugin loading ------------------------------------------------------
     " Tell vim-plug we finished declaring plugins, so it can load them
     call plug#end()
 
@@ -1213,7 +1213,7 @@
     vnoremap <silent><leader> :<C-u>WhichKeyVisual '<space>'<CR>
     nnoremap <silent><leader> :<C-u>WhichKey '<space>'<CR>
 
-    " Vim-Tmux-navigator ---------------------------------------------------------
+" Vim-Tmux-navigator ---------------------------------------------------------
     " Disable navigator when TMUX pane is zoomed
     let g:tmux_navigator_disable_when_zoomed = 1
     " Disable default keymappings
@@ -1521,19 +1521,22 @@
 " Python coding tools settings, edit them as you wish.
 
 " Deoplete -------------------------------------------------------------------
-" Front end for python completion
+    " Front end for python completion
+    " Pynvim is needed [Installation: pip3 install --user pynvim]
     if USING_PYTHON_COMPLETION
-        " Pynvim is needed [Installation: pip3 install --user pynvim]
         " Needed so deoplete can auto select the first suggestion
         set completeopt+=noinsert
         " Comment this line to enable autocompletion preview window
         " (displays documentation related to the selected completion option)
         " Disabled by default because preview makes the window flicker
         set completeopt-=preview
-        " Python that uses to install jedi
-        let g:python3_host_prog = PYTHON_FOR_COMPLETION
         " Enable deoplete at startup
         let g:deoplete#enable_at_startup = 1
+        " Python that uses to install jedi
+        let g:python3_host_prog = PYTHON_FOR_COMPLETION
+        " Maximum length for completion
+        let g:deoplete#sources#jedi#statement_length = 30
+        " Ignore case for deoplete
         autocmd FileType python call deoplete#custom#option({
         \   'ignore_case': v:true,
         \   'smart_case': v:true,
@@ -1544,10 +1547,10 @@
     endif
 
 " Jedi-vim -------------------------------------------------------------------
-" All these mappings work only for python code [All should start with 'p']
+    " All these mappings work only for python code [All should start with 'p']
+    " jedi is needed [Installation: pip3 install --user jedi]
+    " jedi-vim remaps K to open python documents
     if USING_PYTHON_COMPLETION
-        " jedi is needed [Installation: pip3 install --user jedi]
-        " jedi-vim remaps K to open python documents
         " Disable autocompletion (using deoplete instead)
         let g:jedi#completions_enabled = 0
         " Use split instead of buffer
@@ -1679,7 +1682,7 @@
             highlight CursorLineNr cterm=bold ctermfg=10 ctermbg=NONE
         endif
     endif
-    " Colorschmeme shortcut
+    " Colorscheme shortcut
     nnoremap <leader>csd :colorscheme default<CR>:set termguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
                 \:call LightlineStyle('default', USING_FANCY_SYMBOLS, 0)<CR>
@@ -1718,5 +1721,5 @@
 " ============================================================================
 " End of Vim configuration, automatically reload current config after saving
 " ============================================================================
-" Automated run vim configuration file just after saving ---------------------
-"autocmd BufWritePost $MYVIMRC source $MYVIMRC
+    " Automated run vim configuration file just after saving
+    "autocmd BufWritePost $MYVIMRC source $MYVIMRC
