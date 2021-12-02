@@ -353,6 +353,7 @@
     noremap <leader>/ :set nohlsearch!<CR>
 
 " Line number settings -------------------------------------------------------
+    set numberwidth=4    " Set fixed width to number column
     set norelativenumber " Do not show relative line number
     set number           " Show absolute line number
     " Toggle absolute/relative line number
