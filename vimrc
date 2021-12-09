@@ -1105,7 +1105,8 @@
 " NERDTree -------------------------------------------------------------------
     " Disable vim built-in netrw
     let loaded_netrwPlugin = 1
-    let NERDTreeWinSize = min([40, winwidth(0) / 5])
+    "let NERDTreeWinSize = min([40, winwidth(0) / 5])
+    let NERDTreeWinSize = 40
     let NERDTreeShowLineNumbers = 0
     let NERDTreeShowHidden = 0
     " Disable bookmark label in nerdtree
@@ -1126,7 +1127,8 @@
     " Autofocus on tagbar open
     let g:tagbar_autofocus = 1
     let g:tagbar_map_showproto = 'd'
-    let g:tagbar_width = min([40, winwidth(0) / 5])
+    "let g:tagbar_width = min([40, winwidth(0) / 5])
+    let g:tagbar_width = 40
     " Map tagbar shortcut same as vim fold
     let g:tagbar_map_closeallfolds = 'zM'
     let g:tagbar_map_openallfolds = 'zR'
