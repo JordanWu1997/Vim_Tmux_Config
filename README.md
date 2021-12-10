@@ -580,7 +580,7 @@ tmux -V
 | Normal    | [BK]+[]]         | Paste selected contents       | Paste selected contents       |               |
 | Normal    | [BK]+[Shift]+[3] | Show all buffer list          | Show all buffer list          | #             |
 | Normal    | [BK]+[=]         | Paste from buffer list        | Paste from buffer list        |               |
-| Normal    | [BK]+[/]         | Search and select pattern     | Search and select pattern     | tmux-copy-cat |
+| Normal    | [BK]+[/]         | Search and select pattern     | Search and select pattern     |               |
 | Copy      | [v/Space]        | Start selection               | Start selection               |               |
 | Copy      | [Ctrl]+[v]       | Vim-like block selection      | Vim-like block selection      |               |
 | Copy      | [Shift]+[v]      | Vim-like line selection       | Vim-like line selection       |               |
