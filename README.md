@@ -580,7 +580,7 @@ tmux -V
 | Normal    | [BK]+[]]         | Paste selected contents       | Paste selected contents       |               |
 | Normal    | [BK]+[Shift]+[3] | Show all buffer list          | Show all buffer list          | #             |
 | Normal    | [BK]+[=]         | Paste from buffer list        | Paste from buffer list        |               |
-| Normal    | [BK]+[/]         | Search and select pattern     | Search and select pattern     |               |
+| Normal    | [BK]+[/]         | Search and select pattern     | Search and select pattern     | tmux-copy-cat |
 | Copy      | [v/Space]        | Start selection               | Start selection               |               |
 | Copy      | [Ctrl]+[v]       | Vim-like block selection      | Vim-like block selection      |               |
 | Copy      | [Shift]+[v]      | Vim-like line selection       | Vim-like line selection       |               |
@@ -604,7 +604,7 @@ tmux -V
 | Normal    | [BK]+[Ctrl]+[l]  | Send Ctrl+l to terminal           | Send Ctrl+l to terminal           | Ctrl+l is to clean screen for fish shell          |
 | Normal    | [BK]+[Ctrl]+[s]  | Toggle pane synchronization       | Toggle pane synchronization       | Synchronize input for all panes                   |
 | Normal    | [BK]+[Shift]+[m] | Toggle mouse mode                 | Toggle mouse mode                 |                                                   |
-| Copy      | [BK]+[o]         | Open selected with system default | Open selected with system default | tmux-open                                         |
+| Copy      | [BK]+[o]         | Open selected with system default | Open selected with system default | tmux-open, open with xdg-open                     |
 | Copy      | [BK]+[Ctrl]+[o]  | Open selected with `$EDITOR`      | Open selected with $EDITOR        | tmux-open                                         |
 
 ### Reference for TMUX Setup
