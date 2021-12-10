@@ -400,6 +400,13 @@
     nnoremap <F6> :call FoldColumnToggleShort()<CR>
     nnoremap <leader><F6> :call FoldColumnToggleLong()<CR>
 
+" Pane settings --------------------------------------------------------------
+    " Resize pane
+    noremap <silent> <A-l> :vertical resize +2<CR>
+    noremap <silent> <A-h> :vertical resize -2<CR>
+    noremap <silent> <A-k> :resize +2<CR>
+    noremap <silent> <A-j> :resize -2<CR>
+
 " Tab (window) settings ------------------------------------------------------
     " Tab (window) operations
     noremap <leader>ts :tabs<CR>
@@ -594,7 +601,24 @@
     endfunction
     " Toggle comment highlight
     nnoremap <F8> :call CommentHighlightToggle()<CR>
-    nnoremap <leader><F8> :call CommentHighlightToggle()<CR>
+
+" Function - fold highlight --------------------------------------------------
+    " Default value (disabled at startup)
+    let g:comment_fold_is_open = 0
+    " Toggle fold highlight function
+    function! FoldHighlightToggle()
+        if g:comment_fold_is_open
+            hi Folded ctermfg=8  guifg=#8a8a8a
+            echo 'Hi-Fold OFF'
+            let g:comment_fold_is_open = 0
+        else
+            hi Folded ctermfg=13 guifg=#FF2EFF
+            echo 'Hi-Fold ON'
+            let g:comment_fold_is_open = 1
+        endif
+    endfunction
+    " Toggle fold highlight
+    nnoremap <leader><F8> :call FoldHighlightToggle()<CR>
 
 " ============================================================================
 " Customized terminal mode (Only support for vim >= 8.0)
@@ -1202,7 +1226,7 @@
 " Auto-pairs -----------------------------------------------------------------
     " Insert, visual, normal mode
     let g:AutoPairsShortcutToggle = '<M-`>'
-    let g:AutoPairsShortcutJump = '<M-j>'
+    let g:AutoPairsShortcutJump = '<M-;>'
     " Insert mode only
     " Wrap current word with pair e.g. ()test -> (test)
     let g:AutoPairsShortcutFastWrap = '<M-w>'

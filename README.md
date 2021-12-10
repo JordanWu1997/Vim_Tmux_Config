@@ -290,6 +290,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N/V      | [F7]         | Toggle show line border         | On/Off highlight 79th character  | VIM recommends at most 78 characters for one line       |
 | N/V      | [LK]+[F7]    | Toggle show line border         | On/Off highlight 79th column     | VIM recommends at most 78 characters for one line       |
 | N/V      | [F8]         | Toggle highlight comment        | On/Off highlight code comment    | Assign brighter color to comment to highlight it        |
+| N/V      | [LK]+[F8]    | Toggle highlight fold           | On/Off highlight  vim fold       | Assign brighter color to comment to highlight it        |
 | N/V      | [F9]         | Toggle indent highlight (line)  | On/Off indent highlight (line)   |                                                         |
 | N/V      | [LK]+[F9]    | Toggle indent highlight (block) | On/Off indent highlight (block)  |                                                         |
 | N/V      | ([LK])+[F10] | (Load)/Save vim layout          | Load/Save vim layout             | Including pane split, folds, and etc.                   |
@@ -316,6 +317,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N/V      | [Ctrl]+[h/j/k/l]             | Move between vim splits           | Move between splits (L/D/U/R)      | With plugin, you can even move between TMUX pane and VIM splits |
 | N/V      | [Ctrl]+[w]+[h/j/k/l]         | Move between vim splits           | Move between splits (L/D/U/R)      |                                                                 |
 | N/V      | [Ctrl]+[w]+[Shift]+[h/j/k/l] | Move current split (L/D/U/R)      | Move current split (L/D/U/R)       |                                                                 |
+| N/V      | [Alt]+[h/j/k/l]              | Resize current split size         | Resize current split size          |                                                                 |
 | N/V      | [Ctrl]+[w]+[=]               | Re-split splits equally           | Re-split splits equally            | Here =(equal sign) for equally split                            |
 | N/V      | [LK]+[r]+[1/2]               | Resize current split to 10/20rows | Resize current split to 10/20 rows | For terminal pane resize                                        |
 
@@ -401,7 +403,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N/V      | [c]+[s]+[']+["]     | Change quotation/bracket        | From 'word' to "word"                 | vim-surrounder            |
 | N/V/I    | [LK]+[\`]           | Toggle auto-completion pop-up   | On/Off auto-completion pop-up         | autocomplpop              |
 | N/V/I    | [Alt]+[\`]          | Toggle auto-pair                | On/Off auto-pair quotation/bracket    | auto-pairs                |
-| N/V/I    | [Alt]+[j]           | Jump to next pairs              | Jump to next paired quotation/bracket | auto-pairs                |
+| N/V/I    | [Alt]+[;]           | Jump to next pairs              | Jump to next paired quotation/bracket | auto-pairs                |
 | I        | [Alt]+[w]           | Auto-pair fastwrap              | Auto-pair fastwrap current pairs      | Example: ()test -> (test) |
 | N        | [LK]+[v]+[w]        | Open vimwiki index page         | Open vimwiki index page               | vimwiki                   |
 | N        | [LK]+[v]+[i]        | Open vimwiki diary index page   | Open vimwiki diary index page         | vimwiki                   |
