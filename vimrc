@@ -183,16 +183,18 @@
 
 " Map normal/visual/operator-pending mode key --------------------------------
     " Note:
-    " -- z+[t/z/b/h/l]: Scroll window top/center/bottom/left/right
-    " -- Ctrl+[i/o]: Jump to Next/Prev cursor location, works even between files
+    " -- z+[t/z/b/h/l]: scroll window top/center/bottom/left/right
+    " -- Ctrl+[i/o]: jump to Next/Prev cursor location, works even between files
     " -- :jumps: show all jump history
-    " -- g+[;/,]: Go to Older/Newer change
-    " -- :changes: Show all change history
-    " -- g+[-/+]: Go to Prev/Next text-states (Undo/Redo)
-    " -- g+[j/k/l/h]: Move in visual lines instead of real lines in WRAP text
-    " -- g+[uu/UU/~~]: Set lowercase/uppercase/toggle for whole line
-    " -- :g/PATTERN/ACTION: In entire file, for matching PATTERN, do ACTION
-    " -- g+[t/T]: Go to Next/Prev tab
+    " -- g+[;/,]: go to Older/Newer change
+    " -- :changes: show all change history
+    " -- g+[-/+]: go to Prev/Next text-states (Undo/Redo)
+    " -- g+[j/k/l/h]: move in visual lines instead of real lines in WRAP text
+    " -- g+[uu/UU/~~]: set lowercase/uppercase/toggle for whole line
+    " -- :g/PATTERN/ACTION: in entire file, for matching PATTERN, do ACTION
+    " -- g+[t/T]: go to Next/Prev tab
+    " -- g+[i/v]: go to last location in insert/visual mode and enter insert/visual mode
+    " -- g+[n]: go to next search and visually select it
 
     " Unmap ex mode [old school mode] to prevent typo
     noremap gQ <nop>
@@ -1225,7 +1227,7 @@
 
 " Auto-pairs -----------------------------------------------------------------
     " Insert, visual, normal mode
-    let g:AutoPairsShortcutToggle = '<M-`>'
+    let g:AutoPairsShortcutToggle = '<M-">'
     let g:AutoPairsShortcutJump = '<M-;>'
     " Insert mode only
     " Wrap current word with pair e.g. ()test -> (test)

@@ -402,7 +402,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N/V      | [d]+[s]+[a]+[w]+["] | Del wrapped quotation/bracket   | From "word" to word                   | vim-surrounder            |
 | N/V      | [c]+[s]+[']+["]     | Change quotation/bracket        | From 'word' to "word"                 | vim-surrounder            |
 | N/V/I    | [LK]+[\`]           | Toggle auto-completion pop-up   | On/Off auto-completion pop-up         | autocomplpop              |
-| N/V/I    | [Alt]+[\`]          | Toggle auto-pair                | On/Off auto-pair quotation/bracket    | auto-pairs                |
+| N/V/I    | [Alt]+[Shift]+[']   | Toggle auto-pair                | On/Off auto-pair quotation/bracket    | auto-pairs                |
 | N/V/I    | [Alt]+[;]           | Jump to next pairs              | Jump to next paired quotation/bracket | auto-pairs                |
 | I        | [Alt]+[w]           | Auto-pair fastwrap              | Auto-pair fastwrap current pairs      | Example: ()test -> (test) |
 | N        | [LK]+[v]+[w]        | Open vimwiki index page         | Open vimwiki index page               | vimwiki                   |
