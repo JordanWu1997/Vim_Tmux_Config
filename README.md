@@ -63,7 +63,11 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 <details open>
 <summary>Click to expand!</summary>
 
-For
+|                 | Colorscheme                                   | More Information                                                               |
+| :-------------: | :-------------------------------------------: | :-----------------------------------------------------------------:            |
+| Vim/Gvim/Neovim | [Gruvbox](https://github.com/morhetz/gruvbox) |                                                                                |
+| Tmux            | [Pywal](https://github.com/dylanaraps/pywal)  | Also check [My_I3_Environment](https://github.com/JordanWu1997/I3_Sway_Config) |
+
 
 <details open>
 <summary>NEOVIM_DEMO_01</summary>
