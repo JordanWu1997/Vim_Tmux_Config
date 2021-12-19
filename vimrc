@@ -20,8 +20,8 @@
 " notes for configuration
 
 " Note: Old powerline-status support [Not use anymore, use lightline now] ----
-    " Powerline-status Installation (Choose one of the following)
-    " (1) sudo intall vim-powerline (Fedora)
+    " Powerline-status installation (Choose one of the followings)
+    " (1) sudo install vim-powerline (Fedora)
     " (2) sudo apt-get install powerline (Ubuntu)
     " (3) activate manually
     "     -- python3 from powerline.vim import setup as powerline_setup
@@ -29,7 +29,7 @@
     "     -- python3 del powerline_setup
 
 " Note: Special character support --------------------------------------------
-    " NERDFont Installation (Step by step)
+    " NERDFont installation (Step by step)
     " (1) mkdir -p ~/.local/share/fonts
     " (2) cd ~/.local/share/fonts && curl -fLo \
     "     "Droid Sans Mono for Powerline Nerd Font Complete.otf" \
@@ -72,7 +72,7 @@
     "    (2) pip install pyment
     "    (3) pip install yapf
     " -- Use formatter in vim command line:
-    "    -- Usage :Neoformat! [lanaguage] [formatter]
+    "    -- Usage :Neoformat! [language] [formatter]
     "    --  e.g. :Neoformat!   python       yapf
     " -- Recommended PYTHON usage set (in order):
     "    -- (1) :Neoformat isort  # Sort import module
@@ -83,7 +83,7 @@
 
 " Note: Python-completion and tmux-yank-clipboard on remote machine ----------
     " Use neovim and everything is fine, but notice that neovim support of
-    " Fedora repo is for Fedora 25 and higher version. For now, Seb used
+    " Fedora repo is for Fedora 25 and higher version. For now, Seb just used
     " AppImage directly from neovim website
 
     " Python-completion dependence
@@ -121,7 +121,7 @@
     let USING_FANCY_SYMBOLS = 1
     " Wal theme support (Xresources colortheme support, check pywal)
     let USING_WAL_THEME = 0
-    " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
+    " Extra vim-plug (Include easymotion, yankring, autocomplpop, and etc.)
     let USING_EXTRA_PLUG = 1
     " Coding tools vim-plug (Include syntax support, git function, and etc.)
     let USING_CODING_TOOL_PLUG = 1
@@ -160,7 +160,7 @@
     filetype off
 
 " Set leaderkey --------------------------------------------------------------
-    " Default leadkey '\'
+    " Default leaderkey '\'
     let mapleader = ' '
 
 " Map insert mode key --------------------------------------------------------
@@ -340,13 +340,16 @@
     noremap <leader><F11> :set nocursorbind<CR>
 
 " Display settings -----------------------------------------------------------
-    set scrolloff=10      " Keep cursor at middle (10 lines away from bottom)
-    set display+=lastline " Show line as much as possible
     set title             " Let vim change terminal title
+    set display+=lastline " Show line as much as possible
+    set scrolloff=10      " Keep cursor at middle (10 lines away from bottom)
+    " Change scrolloff
+    noremap <leader>sc9 :set scrolloff=999<CR>
+    noremap <leader>sc0 :set scrolloff=10<CR>
 
 " Search settings ------------------------------------------------------------
     " Note:
-    " -- Ctrl+[t/g]: Goto prev/next matching result before start searching
+    " -- Ctrl+[t/g]: Go to prev/next matching result before start searching
 
     set incsearch  " Incremental search (character-by-character search)
     set hlsearch   " Highlight search result
@@ -404,10 +407,10 @@
 
 " Pane settings --------------------------------------------------------------
     " Resize pane
-    noremap <silent> <A-l> :vertical resize +2<CR>
-    noremap <silent> <A-h> :vertical resize -2<CR>
-    noremap <silent> <A-k> :resize +2<CR>
-    noremap <silent> <A-j> :resize -2<CR>
+    noremap <silent><A-l> :vertical resize +2<CR>
+    noremap <silent><A-h> :vertical resize -2<CR>
+    noremap <silent><A-k> :resize +2<CR>
+    noremap <silent><A-j> :resize -2<CR>
 
 " Tab (window) settings ------------------------------------------------------
     " Tab (window) operations
@@ -642,6 +645,8 @@
         " Map key for resize pane
         nnoremap <leader>r1 :resize 10 <CR>
         nnoremap <leader>r2 :resize 20 <CR>
+        nnoremap <leader>r3 :resize 30 <CR>
+        nnoremap <leader>r4 :resize 40 <CR>
         " Map key to go back from terminal mode to normal mode
         " Do not use Esc (which conflicts with fzf window) but <C-\><C-n>
         tnoremap <leader><F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
@@ -732,7 +737,7 @@
         Plug 'srcery-colors/srcery-vim', { 'on': 'colorscheme srcery' }
         " Color theme (Nord - cold color lower contrast)
         Plug 'arcticicestudio/nord-vim', { 'on': 'colorscheme nord' }
-        " Color theme (Oceanic - solorized-like theme)
+        " Color theme (Oceanic - solarized-like theme)
         Plug 'mhartington/oceanic-next', { 'on': 'colorscheme OceanicNext' }
         " Lightline (status line)
         Plug 'itchyny/lightline.vim'
@@ -925,7 +930,7 @@
 " Part 1 - Common settings (Plugins settings and mappings)
 " ============================================================================
 
-" Tab key settings [Must be added after vim-plug to prevent being overwrited]
+" Tab key settings [Must be added after vim-plug to prevent being overwritten]
     set expandtab      " expand tab to spaces
     set tabstop=4      " numbers of space that tab in the file counts
     set shiftwidth=4   " number of space of auto-indent length
@@ -1346,6 +1351,7 @@
         " Yankring history
         noremap <leader>ys :YRShow<CR>
         noremap <leader>yC :YRClear<CR>
+        noremap <leader>yp :set paste!<CR>
     endif
 
 " Peekaboo -------------------------------------------------------------------
@@ -1437,10 +1443,12 @@
     endif
 
 " Hexokinase -----------------------------------------------------------------
-    " Set highlighter for hexokinase
-    let g:Hexokinase_highlighters = [ 'backgroundfull' ]
-    " All possible values for hexokinase pattern
-    let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla,colour_names'
+    if USING_EXTRA_PLUG
+        " Set highlighter for hexokinase
+        let g:Hexokinase_highlighters = [ 'backgroundfull' ]
+        " All possible values for hexokinase pattern
+        let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla,colour_names'
+    endif
 
 " ============================================================================
 " Part 6 - Vim coding tools settings (Plugins settings and mappings)
@@ -1685,6 +1693,7 @@
         let g:mkdp_echo_preview_url = 1
         autocmd BufEnter *.md echom '[Press F4 to Open .md File]'
         autocmd BufEnter *.md nmap <F4> <Plug>MarkdownPreviewToggle<CR>
+        autocmd BufEnter *.md setlocal scrolloff=999
     endif
 
 " ============================================================================
