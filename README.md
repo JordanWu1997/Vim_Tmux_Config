@@ -60,14 +60,34 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 <summary>Click to expand!</summary>
 
 ## Demo Current Customization
-<details open>
+<details>
 <summary>Click to expand!</summary>
+
+<details open>
+<summary>NEOVIM_DEMO_01</summary>
 
 ![alt text](./demo/NEOVIM_DEMO_01.png "Title")
 
 </details>
 
+<details open>
+<summary>NEOVIM_DEMO_02</summary>
+
+![alt text](./demo/NEOVIM_DEMO_02.png "Title")
+
+</details>
+
+<details open>
+<summary>TMUX_DEMO_01</summary>
+
+![alt text](./demo/TMUX_DEMO_01.png "Title")
+
+</details>
+</details>
+
 ## Part 1 - Vim/Gvim/Neovim
+<details open>
+<summary>Click to expand!</summary>
 
 ### Preparation (Dependence)
 <details>
@@ -184,9 +204,9 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 - For managing plugins enable/disable, see next section (Plugin usage configuration)
 ```bash
 # For vim/gvim
-" vim --startuptime /tmp/startup.log [file_to_test] +q && vim /tmp/startup.log
+vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 # For neovim
-" vim --startuptime /tmp/startup.log [file_to_test] +q && vim /tmp/startup.log
+vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 ```
 
 #### 2. Plugin Usage Configuration (for more details, check sections in vimrc)
@@ -479,27 +499,29 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
 </details>
 
-### Vim whichkey
+### Keymapping Sheet 3 - Vim Whichkey
 <details>
 <summary>Click to expand!</summary>
 
 - Most leaderkey related keymapping is mapped by which-key plugins which will show useful hints when leaderkey
 and following keys are pressed. Table below includes some frequently used keymappings.
 
-| Key after `[LK]` | Function    | Description     |
-| :--------------: | :---------: | :-------------: |
-| `a`              | Ale         | Linter          |
-| `b`              | Buffer      | Built-in buffer |
-| `c`              | Commenter   | Commenter       |
-| `d`              | Diff        | Built-in diff   |
-| `f`              | Fzf         | File-browser    |
-| `g`              | Git         |                 |
-| `m`              | Mark/Manual | Built-in mark   |
-| `p`              | Python      |                 |
-| `s`              | Spell       | Built-in spell  |
-| `t`              | Tab         | Built-in tab    |
-| `v`              | Vim-wiki    | Note-taking     |
-| `y`              | Yank        | Yank manager    |
+| `[LK]` + | Function    | Description     |
+| :------: | :---------: | :-------------: |
+| `a`      | Ale         | Linter          |
+| `b`      | Buffer      | Built-in buffer |
+| `c`      | Commenter   | Commenter       |
+| `d`      | Diff        | Built-in diff   |
+| `f`      | Fzf         | File-browser    |
+| `g`      | Git         |                 |
+| `m`      | Mark/Manual | Built-in mark   |
+| `p`      | Python      |                 |
+| `s`      | Spell       | Built-in spell  |
+| `t`      | Tab         | Built-in tab    |
+| `v`      | Vim-wiki    | Note-taking     |
+| `y`      | Yank        | Yank manager    |
+| `s`+`l`  | Statusline  | Statusline      |
+| `c`+`s`  | Colorscheme | Colorscheme     |
 
 </details>
 
@@ -526,8 +548,11 @@ and following keys are pressed. Table below includes some frequently used keymap
 - https://learnvimscriptthehardway.stevelosh.com/chapters/24.html
 
 </details>
+</details>
 
 ## Part 2 - Tmux
+<details open>
+<summary>Click to expand!</summary>
 
 ### Preparation (Dependence)
 <details>
@@ -588,7 +613,7 @@ tmux -V
 
 </details>
 
-### Plugins list
+### Plugin List
 <details>
 <summary>Click to expand!</summary>
 
@@ -722,5 +747,6 @@ tmux -V
 - https://gist.github.com/markandrewj/ead05ebc20f3968ec07e
 - https://github.com/tmux-plugins/tpm
 
+</details>
 </details>
 </details>
