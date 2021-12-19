@@ -340,7 +340,7 @@
     noremap <leader><F11> :set nocursorbind<CR>
 
 " Display settings -----------------------------------------------------------
-    set scrolloff=10      " Keep cursor 10 lines away from bottom
+    set scrolloff=10      " Keep cursor at middle (10 lines away from bottom)
     set display+=lastline " Show line as much as possible
     set title             " Let vim change terminal title
 
@@ -784,6 +784,8 @@
     if USING_EXTRA_PLUG
         " Goyo (Distraction-free mode)
         Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
+        " Limelight (Light-off tool with goyo)
+        Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
         " Fancy startup page of vim
         Plug 'mhinz/vim-startify'
         " Vim wiki for knowledge storage
@@ -1285,6 +1287,30 @@
 " Goyo -----------------------------------------------------------------------
     if USING_EXTRA_PLUG
         noremap <leader>gy :Goyo<CR>
+    endif
+
+" Limelight ------------------------------------------------------------------
+    if USING_EXTRA_PLUG
+        " Color name (:help cterm-colors) or ANSI code
+        let g:limelight_conceal_ctermfg = 'gray'
+        let g:limelight_conceal_ctermfg = 240
+        " Color name (:help gui-colors) or RGB color
+        let g:limelight_conceal_guifg = 'DarkGray'
+        let g:limelight_conceal_guifg = '#777777'
+        let g:limelight_default_coefficient = 0.7
+        " Number of preceding/following paragraphs to include (default: 0)
+        let g:limelight_paragraph_span = 1
+        " Beginning/end of paragraph
+        "   When there's no empty line between the paragraphs
+        "   and each paragraph starts with indentation
+        let g:limelight_bop = '^\s'
+        let g:limelight_eop = '\ze\n^\s'
+        " Highlighting priority (default: 10)
+        "   Set it to -1 not to overrule hlsearch
+        let g:limelight_priority = -1
+        " Integration with goyo
+        autocmd! User GoyoEnter Limelight
+        autocmd! User GoyoLeave Limelight!
     endif
 
 " YankRing -------------------------------------------------------------------

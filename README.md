@@ -209,6 +209,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     - Including
         - [Plug-in] vim-startify (start page for empty buffer)
         - [Plug-in] goyo (distraction-free editor)
+        - [Plug-in] limelight (light-off with goyo)
         - [Plug-in] yankring (clipboard history)
         - [Plug-in] vim-peekaboo (vim register viewer/manager)
         - [Plug-in] vim-markbar (vim mark viewer/manager)
@@ -415,6 +416,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | N/V      | [LK]+[h/j/k/l] | Quick move in four direction | Quick move in four direction | vim-easymotion |
 | N/V      | [LK]+[y]+[s]   | Show yank history            | Show yank history            | yankring       |
 | N/V      | [y]+[n/p]      | Paste next/prev clipped item | Paste next/prev clipped item | yankring       |
+| N/V      | [LK]+[g]+[y]   | Distraction-free mode        | Distraction-free mode        | goyo           |
 
 - Coding tool (Note: "let using_coding_tool_plug = 1" must be set in vimrc)
 
