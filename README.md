@@ -4,7 +4,7 @@ Backup for my vim and tmux configuration
 Table of Contents
 =================
 
-<details>
+<details open>
 <summary>Click to expand!</summary>
 
 * [Vim_Tmux_Config](#vim_tmux_config)
@@ -56,11 +56,11 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 </details>
 
 # Context
-<details>
+<details open>
 <summary>Click to expand!</summary>
 
 ## Demo Current Customization
-<details>
+<details open>
 <summary>Click to expand!</summary>
 
 ![alt text](./demo/NEOVIM_DEMO_01.png "Title")
