@@ -60,8 +60,10 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 <summary>Click to expand!</summary>
 
 ## Demo Current Customization
-<details>
+<details open>
 <summary>Click to expand!</summary>
+
+For
 
 <details open>
 <summary>NEOVIM_DEMO_01</summary>
@@ -86,7 +88,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 </details>
 
 ## Part 1 - Vim/Gvim/Neovim
-<details open>
+<details>
 <summary>Click to expand!</summary>
 
 ### Preparation (Dependence)
@@ -551,7 +553,7 @@ and following keys are pressed. Table below includes some frequently used keymap
 </details>
 
 ## Part 2 - Tmux
-<details open>
+<details>
 <summary>Click to expand!</summary>
 
 ### Preparation (Dependence)
