@@ -276,6 +276,8 @@
     "    -- <C-w>[+/-]: Increase/Decrease current pane height
     "    -- <C-w>[>/<]: Increase/Decrease current pane width
     "    -- <C-w>[_/|]: Maximize current pane horizontally/vertically
+    " -- Miscellaneous
+    "    -- <C-w><C-f>: Open selected file in horizontal split
 
     " Split pane - Split border style
     set fillchars+=vert:\ "
