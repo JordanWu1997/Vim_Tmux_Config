@@ -292,7 +292,7 @@
     set modifiable      " Make current buffer modifiable
     set encoding=utf-8  " Unicode display support
     set notildeop       " Not make ~ a operator like gu, gU, and etc.
-    set nolazyredraw    " Not only redraw when necessary.
+    set lazyredraw      " Only redraw when necessary.
     set shell=/bin/bash " Set default shell for vim/neovim (for navigator)
     set backspace=indent,eol,start     " Backspace through everything
     set clipboard^=unnamed,unnamedplus " Shared system clipboard
@@ -323,7 +323,7 @@
     set wildmode=list:full " Show all available input options (or use Ctrl-D)
 
 " Show tab and the space at the end of the line ------------------------------
-    set nolist
+    set list " Show list
     set listchars=eol:↵,tab:»·,trail:╳,extends:»,precedes:«
     noremap <leader>st :set list!<CR>
 
@@ -380,7 +380,7 @@
     set foldcolumn=0
     set foldlevel=0
     autocmd FileType vim setlocal foldmethod=indent foldenable
-    autocmd FileType python setlocal foldmethod=indent
+    autocmd FileType python setlocal foldmethod=indent nofoldenable
     " Default value (disabled at startup)
     set nofoldenable
     " Toggle foldcolumn (4 column)
@@ -529,9 +529,9 @@
     endif
 
 " Function - no system bell --------------------------------------------------
-    set visualbell    " ┐
-    set noerrorbells  " │ Disable beeping and window flashing
-    set t_vb=         " ┘ https://vim.wikia.com/wiki/Disable_beeping
+    set visualbell   " ┐
+    set noerrorbells " │ Disable beeping and window flashing
+    set t_vb=        " ┘ https://vim.wikia.com/wiki/Disable_beeping
 
 " Function - autoremove whitespace in end of line ----------------------------
     " -- Remove trailing whitespace when writing a buffer, but not for diff files
@@ -943,8 +943,6 @@
     " PEP8 recommendation for tab settings
     autocmd FileType python
                 \ setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=-1
-    " Makefile not support expand tabs to spaces
-    autocmd FileType make setlocal noexpandtab
 
 " ============================================================================
 " Part 2 - Vim-theme settings (Plugins settings and mappings)
@@ -1007,8 +1005,6 @@
         endif
 
         " Part 4 - Miscellaneous setup -------------------------------------------
-        " Miscellaneous variables
-        let g:nord_uniform_status_lines = 0
         " Central bar opaque option
         if !a:central_region_opaque
             let s:palette = g:lightline#colorscheme
@@ -1138,8 +1134,6 @@
     nnoremap <leader>fht :FZFHelptags<CR>
 
 " NERDTree -------------------------------------------------------------------
-    " Disable vim built-in netrw
-    let loaded_netrwPlugin = 1
     "let NERDTreeWinSize = min([40, winwidth(0) / 5])
     let NERDTreeWinSize = 40
     let NERDTreeShowLineNumbers = 0
@@ -1236,7 +1230,7 @@
 
 " Auto-pairs -----------------------------------------------------------------
     " Insert, visual, normal mode
-    let g:AutoPairsShortcutToggle = '<M-">'
+    let g:AutoPairsShortcutToggle = "<M-'>"
     let g:AutoPairsShortcutJump = '<M-;>'
     " Insert mode only
     " Wrap current word with pair e.g. ()test -> (test)
@@ -1359,7 +1353,7 @@
 " Peekaboo -------------------------------------------------------------------
     " Remap '"', '@' (Normal mode) and '<C-r>' (Insert mode) for register viewer
     if USING_EXTRA_PLUG
-        let g:peekaboo_window = "vert bo 35new"
+        let g:peekaboo_window = 'vert bo 40new'
         let g:peekaboo_prefix = ''
         let g:peekaboo_compat = 1
     endif
@@ -1369,6 +1363,7 @@
     if USING_EXTRA_PLUG
         " width of a vertical split markbar
         let g:markbar_width = 40
+        let g:markbar_peekaboo_width = 40
         " Ditto, but more granularly (any may be omitted)
         let g:markbar_num_lines_context = {
             \ 'peekaboo_around_local': 3,
@@ -1715,7 +1710,6 @@
         highlight CursorLineNr  cterm=bold                ctermbg=NONE gui=bold                 guibg=NONE
         highlight FoldColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
         highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
-        "highlight Normal        cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
         highlight OverLength    cterm=bold   ctermfg=15   ctermbg=9    gui=bold   guifg=#ffffff guibg=#ff0000
         highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
         highlight SignColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
