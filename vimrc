@@ -954,13 +954,13 @@
     " Lightline style setup
     function! LightlineStyle(theme, fancy, central_region_opaque)
 
-        " Part 1 - Lightline setup -----------------------------------------------
+        " Part 1 - Lightline setup -------------------------------------------
         " Initialize g:lightline variable
         let g:lightline = { 'colorscheme': a:theme }
         " Specify g:lightline dictionary objects
         let g:lightline.enable = { 'statusline': 1, 'tabline': 1 }
 
-        " Part 2 - Statusline setup ----------------------------------------------
+        " Part 2 - Statusline setup ------------------------------------------
         " Active statusline
         let g:lightline.active = {
             \ 'left': [ [ 'mode', 'paste' ],
@@ -981,7 +981,7 @@
             let g:lightline.subseparator = { 'left': '/', 'right': '/' }
         endif
 
-        " Part 3 - Tabline setup (bufferline plugin) -----------------------------
+        " Part 3 - Tabline setup (bufferline plugin) -------------------------
         " Tabline
         let g:lightline.tabline = {
             \ 'left': [ ['buffers'] ],
@@ -1004,7 +1004,7 @@
             let g:lightline#bufferline#unicode_symbols = 1
         endif
 
-        " Part 4 - Miscellaneous setup -------------------------------------------
+        " Part 4 - Miscellaneous setup ---------------------------------------
         " Central bar opaque option
         if !a:central_region_opaque
             let s:palette = g:lightline#colorscheme
