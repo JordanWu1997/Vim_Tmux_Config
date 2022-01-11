@@ -938,6 +938,7 @@
     set shiftwidth=4   " number of space of auto-indent length
     set softtabstop=-1 " numbers of space that tab while editing
                        " negative value -> adopt shiftwidth value
+    noremap <leader>et :set expandtab!<CR>
 
 " Filetype-dependent tab key settings ----------------------------------------
     " PEP8 recommendation for tab settings
@@ -1776,8 +1777,8 @@
                 \:call LightlineReload()<CR>:echo "wal colorscheme"<CR>
     " Transparent background shortcut
     nnoremap <leader>cst :highlight Normal cterm=NONE ctermfg=NONE ctermbg=NONE
-                \ gui=NONE guifg=NONE guibg=NONE<CR><CR>
-                \:echo "transparent background"<CR>
+                \ gui=NONE guifg=NONE guibg=NONE<CR>
+                \:echo "transparent background"<CR><CR>
 
 " ============================================================================
 " End of Vim configuration, automatically reload current config after saving
