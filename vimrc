@@ -442,13 +442,13 @@
     noremap <leader>bd :bdelete<space>
     noremap <leader>dd :bdelete<CR>:echo 'DELETE CURRENT BUFFER
                 \ [PRESS CTRL+O TO RECOVER]'<CR>
-    noremap <leader>bdd :bdelete<CR>'DELETE CURRENT BUFFER
-                \ [PRESS CTRL+O TO RECOVER]'<CR>
     " Navigate through buffers
     noremap <leader><F1> :bprev<CR>
     noremap <F1> :bnext<CR>
     noremap <leader>K :bprev<CR>
     noremap <leader>J :bnext<CR>
+    " Actions for all buffers (Bufdo)
+    noremap <leader>bdd :bufdo<space>
 
 " Marks settings -------------------------------------------------------------
     " Note:
