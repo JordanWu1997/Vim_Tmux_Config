@@ -1,54 +1,46 @@
 # Vim_Tmux_Config
-Backup for my vim and tmux configuration
+Backup for my Vim and TMUX configuration
+
+<details open>
+<summary>Click to expand!</summary>
 
 Table of Contents
 =================
-
 <details open>
 <summary>Click to expand!</summary>
 
 * [Vim_Tmux_Config](#vim_tmux_config)
 * [Table of Contents](#table-of-contents)
+* [Context](#context)
    * [Demo Current Customization](#demo-current-customization)
    * [Part 1 - Vim/Gvim/Neovim](#part-1---vimgvimneovim)
-      * [Preparation (Dependence)](#preparation-dependence)
-         * [1. Common Requirement](#1-common-requirement)
-         * [2. Requirement for Diverse Vim](#2-requirement-for-diverse-vim)
-         * [3. Requirement for Python Completion](#3-requirement-for-python-completion)
-      * [First Time Usage](#first-time-usage)
-         * [1. Copy Configuration File](#1-copy-configuration-file)
-         * [2. First Time Startup (Vim/Gvim/Neovim)](#2-first-time-startup-vimgvimneovim)
-      * [Plugins](#plugins)
-         * [1. Plugin Loading Time](#1-plugin-loading-time)
-         * [2. Plugin Usage Configuration (for more details, check sections in vimrc)](#2-plugin-usage-configuration-for-more-details-check-sections-in-vimrc)
-      * [Keymapping - Customized Keymapping Rule](#keymapping---customized-keymapping-rule)
-      * [Keymapping Sheet 1 - Fn Key Keymapping](#keymapping-sheet-1---fn-key-keymapping)
-         * [1. Function Key Keymapping](#1-function-key-keymapping)
-      * [Keymapping Sheet 2 - Built-in Function Keymapping](#keymapping-sheet-2---built-in-function-keymapping)
-         * [1. Buffer/Tab Keymapping](#1-buffertab-keymapping)
-         * [2. Split/Window Keymapping](#2-splitwindow-keymapping)
-         * [3. Code Folding Keymapping](#3-code-folding-keymapping)
-         * [4. Diff Mode Keymapping](#4-diff-mode-keymapping)
-         * [5. Miscellaneous Function Keymapping](#5-miscellaneous-function-keymapping)
-      * [Keymapping Sheet 3 - Plug-in Function Keymapping](#keymapping-sheet-3---plug-in-function-keymapping)
-         * [1. File/Code Browsing Keymapping](#1-filecode-browsing-keymapping)
-         * [2. Python Coding Keymapping](#2-python-coding-keymapping)
-         * [3. Miscellaneous Function Keymapping](#3-miscellaneous-function-keymapping)
-      * [Reference for VIM Setup](#reference-for-vim-setup)
-   * [Part 2 - Tmux](#part-2---tmux)
-      * [Preparation (Dependence)](#preparation-dependence-1)
-         * [1. Common Requirement](#1-common-requirement-1)
-         * [2. Requirement for Tmux](#2-requirement-for-tmux)
-      * [First Time Usage](#first-time-usage-1)
-         * [1. Copy Configuration File](#1-copy-configuration-file-1)
-         * [2. First Time Startup (Tmux)](#2-first-time-startup-tmux)
-      * [Plugins](#plugins-1)
-         * [Installed Plugins](#installed-plugins)
-      * [Major Difference Between Customized and Original](#major-difference-between-customized-and-original)
-      * [Keymapping Sheet](#keymapping-sheet)
-         * [1. Session/Window/Pane Keymapping](#1-sessionwindowpane-keymapping)
-         * [2. Copy-mode Keymapping](#2-copy-mode-keymapping)
-         * [3. Miscellaneous Keymapping](#3-miscellaneous-keymapping)
+      * [Section 1 - What's New in My Customization (Vim)](#section-1---whats-new-in-my-customization-vim)
+      * [Section 2 - First Time Usage (Vim)](#section-2---first-time-usage-vim)
+         * [1. Preparation for Dependence (Vim)](#1-preparation-for-dependence-vim)
+         * [2. Copy Configuration File (Vim)](#2-copy-configuration-file-vim)
+         * [3. First Time Startup (Vim)](#3-first-time-startup-vim)
+      * [Section 3 - Plugin Usage (Vim)](#section-3---plugin-usage-vim)
+         * [1. Plugin Loading Time (Vim)](#1-plugin-loading-time-vim)
+         * [2. Plugin Usage Configuration (Vim)](#2-plugin-usage-configuration-vim)
+      * [Section 4 - Key Mapping (Vim)](#section-4---key-mapping-vim)
+         * [Key mapping - Customized Key Mapping Rule (Vim)](#key-mapping---customized-key-mapping-rule-vim)
+         * [Key Mapping Sheet 1 - Fn Key Key Mapping (Vim)](#key-mapping-sheet-1---fn-key-key-mapping-vim)
+         * [Key Mapping Sheet 2 - Built-in Function Key Mapping (Vim)](#key-mapping-sheet-2---built-in-function-key-mapping-vim)
+         * [Key Mapping Sheet 3 - Plug-in Function Key Mapping (Vim)](#key-mapping-sheet-3---plug-in-function-key-mapping-vim)
+         * [Key Mapping Sheet 4 - Vim Whichkey (Vim)](#key-mapping-sheet-4---vim-whichkey-vim)
+      * [Reference for Setup (Vim)](#reference-for-setup-vim)
+   * [Part 2 - TMUX](#part-2---tmux)
+      * [Section 1 - What's New in My Customization (TMUX)](#section-1---whats-new-in-my-customization-tmux)
+      * [Section 2 - First Time Usage (TMUX)](#section-2---first-time-usage-tmux)
+         * [1. Preparation for Dependence (TMUX)](#1-preparation-for-dependence-tmux)
+         * [2. Copy Configuration File (TMUX)](#2-copy-configuration-file-tmux)
+         * [3. First Time Startup (TMUX)](#3-first-time-startup-tmux)
+      * [Section 3 - Plugin Usage (TMUX)](#section-3---plugin-usage-tmux)
+         * [Installed Plugins (TMUX)](#installed-plugins-tmux)
+      * [Section 4 - Key Mapping (TMUX)](#section-4---key-mapping-tmux)
+         * [Key Mapping Sheet 1 - Session/Window/Pane Key Mapping (TMUX)](#key-mapping-sheet-1---sessionwindowpane-key-mapping-tmux)
+         * [Key Mapping Sheet 2 - Copy-mode Key Mapping (TMUX)](#key-mapping-sheet-2---copy-mode-key-mapping-tmux)
+         * [Key Mapping Sheet 3 - Miscellaneous (TMUX)](#key-mapping-sheet-3---miscellaneous-tmux)
       * [Reference for TMUX Setup](#reference-for-tmux-setup)
 
 Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
@@ -63,10 +55,10 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 <details open>
 <summary>Click to expand!</summary>
 
-|                 | Colorscheme                                   | More Information                                                               |
-| :-------------: | :-------------------------------------------: | :-----------------------------------------------------------------:            |
-| Vim/Gvim/Neovim | [Gruvbox](https://github.com/morhetz/gruvbox) |                                                                                |
-| Tmux            | [Pywal](https://github.com/dylanaraps/pywal)  | Also check [My_I3_Environment](https://github.com/JordanWu1997/I3_Sway_Config) |
+|                 | Color scheme                                                     | More Information                                                                           |
+| :-------------: | :--------------------------------------------------------------: | :----------------------------------------------------------------------------------------: |
+| Vim/Gvim/Neovim | [Gruvbox](https://github.com/morhetz/gruvbox)                    |                                                                                            |
+| TMUX            | 8 pywal-color using [Pywal](https://github.com/dylanaraps/pywal) | For pywal usage, check [My_I3_Environment](https://github.com/JordanWu1997/I3_Sway_Config) |
 
 
 <details open>
@@ -92,31 +84,48 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 </details>
 
 ## Part 1 - Vim/Gvim/Neovim
+<details open>
+<summary>Click to expand!</summary>
+
+### Section 1 - What's New in My Customization (Vim)
 <details>
 <summary>Click to expand!</summary>
 
-### Preparation (Dependence)
+- Use interchangeable configuration for various vim-family e.g vim, gvim, and neovim
+- Integrate useful vim-plugin e.g. auto-pair parentheses, auto-popup completion, and etc
+- Integrate various color theme for better syntax highlighting e.g. gruvbox, nord, and etc
+- Integrate vim with TMUX for both pane/split and clipboard to work together smoothly
+- Map built-in/plugin-in function to keys that are easier to remember systematically
+- Add IDE-like features for python e.g. linter, formatter, analyzer, and etc
+- Add markdown features e.g preview, wiki-style markdown writer, and etc
+- Try to minimize loading time along with maximal functionality/variety
+
+</details>
+
+### Section 2 - First Time Usage (Vim)
 <details>
 <summary>Click to expand!</summary>
 
-#### 1. Common Requirement
+#### 1. Preparation for Dependence (Vim)
+
+1. Common Requirement
 - __Curl__ [for plugin manager setup]
     ```bash
     # For Fedora
     dnf install curl
     ```
-- __Web browser with markdown plugin__ (e.g. google-chrome, firefox, and etc.) [for markdown preview]
+- __Web browser with markdown extension__ (e.g. google-chrome, Firefox, and etc.) [for markdown preview]
     ```bash
     # For Fedora
     dnf install firefox
     ```
-- __PDF viewer__ (e.g. okular) [for latex preview]
+- __PDF viewer__ (e.g. Okular) [for latex preview]
     ```bash
     # For Fedora
     dnf install okular
     ```
 
-#### 2. Requirement for Diverse Vim
+2. Requirement for Diverse Vim
 - __Vim__
     - version >= __7.0__
     - clipboard option is on (+clipboard) [for sharing system clipboard]
@@ -139,7 +148,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     # Check nvim version and other options
     nvim --version
     ```
-#### 3. Requirement for Python Completion
+3. Requirement for Python Completion
 
 - __ipython__ (version >= __7.20__) [python console]
     ```bash
@@ -162,13 +171,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     pip install ipdb
     ```
 
-</details>
-
-### First Time Usage
-<details>
-<summary>Click to expand!</summary>
-
-#### 1. Copy Configuration File
+#### 2. Copy Configuration File (Vim)
 - __Vim/Gvim__
     1. copy "vimrc" to $HOME (current user's home)
     2. rename "vimrc" to ".vimrc"
@@ -183,7 +186,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     cp vimrc $HOME/nvim/init.vim
     ```
 
-#### 2. First Time Startup (Vim/Gvim/Neovim)
+#### 3. First Time Startup (Vim)
 - Following installation should start automatically at the first time startup
     1. vim-plug (plug manager) installation via __curl__
         - If not working, try manually install vim-plug (also within this repository)
@@ -199,13 +202,14 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
             # In vim command line mode
             :Pluginstall
             ```
+
 </details>
 
-### Plugin Usage
+### Section 3 - Plugin Usage (Vim)
 <details>
 <summary>Click to expand!</summary>
 
-#### 1. Plugin Loading Time
+#### 1. Plugin Loading Time (Vim)
 - Enable too much plugins may slow down your vim. You can check your loading time with following command
 - For managing plugins enable/disable, see next section (Plugin usage configuration)
 ```bash
@@ -215,7 +219,9 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 ```
 
-#### 2. Plugin Usage Configuration (for more details, check sections in vimrc)
+#### 2. Plugin Usage Configuration (Vim)
+for more details, check sections in vimrc
+
 - Plugin usage can be configured in the first section of vimrc
     ```vim
     " ============================================================================
@@ -226,7 +232,7 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
     ```
 - Detect using neovim or not (automatic detection)
     - Neovim is better for loading tons of plugins
-    - Neovim config path is different from vim
+    - Neovim configuration path is different from vim
     ```vim
     " Use vim or neovim (Auto-detect)
     let USING_NEOVIM = has('nvim')
@@ -242,11 +248,11 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
     " Check if vim version >= 8.0 (also for neovim >= 0.5)
     let USING_VIM8 = 1
     ```
-- Customize vim colorscheme
+- Customize vim color scheme
     - For fancy symbol support, nerd font is needed (check https://github.com/ryanoasis/nerd-fonts )
     - For pywal theme support, pywal is needed (check https://github.com/dylanaraps/pywal ), also remember to change the directory path to your $HOME/.cache/wal
     ```vim
-    " Customize vim theme (Include colortheme and statusline)
+    " Customize vim theme (Include colorscheme and statusline)
     let USING_CUSTOMIZED_THEME = 1
     " Fancy symbols (Mainly affect lightline and nerdtree icon)
     let USING_FANCY_SYMBOLS = 1
@@ -276,7 +282,7 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
     - Including
         - [Plug-in] vim-polyglot (multi-language support)
         - [Plug-in] ale (multi-language syntax highlight)
-        - [Plug-in] neoformat (code prettifier)
+        - [Plug-in] neoformat (code formatter)
         - [Plug-in] rainbow (pair bracket highlight)
         - [Plug-in] indentLine (indent line indicator)
         - [Plug-in] vim-indent-guides (indent highlight)
@@ -294,7 +300,7 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
     - Including
         - [Plug-in] nvim-yarp (yet another remote plugin framework for neovim)
         - [Plug-in] vim-hug-neovim-rpc (plugin bridge from neovim to vim)
-        - [Plug-in] deoplete-jedi (python completeion)
+        - [Plug-in] deoplete-jedi (python completion)
         - [Plug-in] jedi-vim (definition and feature finder)
     ```vim
     " Python Completion (Use deoplete and jedi, neovim is recommended to be used)
@@ -304,39 +310,44 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
     ```
 - GUI support
     - Functions for external GUI software
-    - Required for
+    - Requires
         - Latex previewer
         - Markdown previewer
     ```vim
-    " Support of external gui software (e.g. Okular, Google-chrome, and etc.)
+    " Support of external GUI software (e.g. Okular, Google-chrome, and etc.)
     let USING_GUI_SOFTWARE = 1
-    " Webbrowser for markdown preview
+    " Web browser for markdown preview
     let WEBBROWSER = 'brave-browser'
     ```
 
 </details>
 
-### Keymapping - Customized Keymapping Rule
+### Section 4 - Key Mapping (Vim)
 <details>
 <summary>Click to expand!</summary>
 
-> _1. Keymapping should not be much different from the original VIM_
-- To make life easier instead of filled up with bloated keymapping
+#### Key mapping - Customized Key Mapping Rule (Vim)
+<details open>
+<summary>Click to expand!</summary>
+
+> _1. Key mapping should not be much different from the original VIM_
+- To make life easier instead of filled up with bloated key mapping
 > _2. Every function (motion) should start with a leader key for most of time_
 - To prevent conflict with built-in hotkey or other program hotkeys
 - In this configuration, leader key is __SPACE__ key
-> 3. _Keymapping should be related to the name of the function_
+> 3. _Key mapping should be related to the name of the function_
 - Make it easier to remember or connect
 - e.g. "no wrap" function is mapped to `[SPACE]`+`[W]`+`[P]`
 
 </details>
 
-### Keymapping Sheet 1 - Fn Key Keymapping
+#### Key Mapping Sheet 1 - Fn Key Key Mapping (Vim)
 <details>
 <summary>Click to expand!</summary>
 
-#### 1. Function Key Keymapping
-| VIM-Mode | Keymapping       | Function                        | Description                      | Note                                                    |
+1. Function Key Key mapping
+
+| VIM-Mode | Key mapping      | Function                        | Description                      | Note                                                    |
 | :------: | :--------------: | :-----------------------------: | :------------------------------: | :-----------------------------------------------------: |
 | N/V      | (`[LK]`)+`[F1]`  | (Previous)/Next Buffer          | Switch between buffers           |                                                         |
 | N/V      | (`[LK]`)+`[F2]`  | (Previous)/Next Tab             | Switch between tabs              |                                                         |
@@ -344,7 +355,7 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 | N/V      | `[LK]`+`[F3]`    | Toggle Nerdtree                 | On/Off NerdTree plugin           |                                                         |
 | N/V      | `[F4]`           | Markdown/Latex previewer        | Open external Viewer             | Only for .md or .tex file                               |
 | N/V      | `[LK]`+`[F4]`    | Toggle Tagbar                   | On/Off Tagbar plugin             |                                                         |
-| N/V      | (`[LK]`)+`[F5]`  | Toggle (Rel)/Abs linenumber     | On/Off rel/abs linenumber        |                                                         |
+| N/V      | (`[LK]`)+`[F5]`  | Toggle (Rel)/Abs line number    | On/Off rel/abs line number       |                                                         |
 | N/V      | `[F6]`           | Toggle foldcolumn (short-4)     | On/Off foldcolumn (short-4)      | For easier code fold visualization                      |
 | N/V      | `[LK]`+`[F6]`    | Toggle foldcolumn (long-8)      | On/Off foldcolumn (long-8)       | For easier code fold visualization                      |
 | N/V      | `[F7]`           | Toggle show line border         | On/Off highlight 79th character  | VIM recommends at most 78 characters for one line       |
@@ -359,12 +370,13 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 
 </details>
 
-### Keymapping Sheet 2 - Built-in Function Keymapping
+#### Key Mapping Sheet 2 - Built-in Function Key Mapping (Vim)
 <details>
 <summary>Click to expand!</summary>
 
-#### 1. Buffer/Tab Keymapping
-| VIM-Mode | Keymapping               | Function               | Description            | Note |
+1. Buffer/Tab Key mapping
+
+| VIM-Mode | Key mapping              | Function               | Description            | Note |
 | :------: | :----------------------: | :--------------------: | :--------------------: | :--: |
 | N/V      | `[LK]`+`[b]`+`[b]`       | Add new buffer         | Add new buffer         |      |
 | N/V      | `[LK]`+`[b]`+`[d]`+`[d]` | Close current buffer   | Close current buffer   |      |
@@ -374,8 +386,9 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 | N/V      | `[LK]`+`[Shift]`+`[l/h]` | Go to next/prev tab    | Go to next/prev tab    |      |
 | N/V      | `[LK]`+`[Shift]`+`[./,]` | Move tab to next/prev  | Move tab to next/prev  |      |
 
-#### 2. Split/Window Keymapping
-| VIM-Mode | Keymapping                           | Function                          | Description                        | Note                                                            |
+2. Split/Window Key mapping
+
+| VIM-Mode | Key mapping                          | Function                          | Description                        | Note                                                            |
 | :------: | :----------------------------------: | :-------------------------------: | :--------------------------------: | :-------------------------------------------------------------: |
 | N/V      | `[Ctrl]`+`[w]`+`[s/v]`               | Add new split Horizontal/Vertical | Add new split Horizontal/Vertical  |                                                                 |
 | N/V      | `[Ctrl]`+`[h/j/k/l]`                 | Move between vim splits           | Move between splits (L/D/U/R)      | With plugin, you can even move between TMUX pane and VIM splits |
@@ -385,8 +398,9 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 | N/V      | `[Ctrl]`+`[w]`+`[=]`                 | Re-split splits equally           | Re-split splits equally            | Here =(equal sign) for equally split                            |
 | N/V      | `[LK]`+`[r]`+`[1/2]`                 | Resize current split to 10/20rows | Resize current split to 10/20 rows | For terminal pane resize                                        |
 
-#### 3. Code Folding Keymapping
-| VIM-Mode | Keymapping              | Function                     | Description                              | Note         |
+3. Code Folding Key mapping
+
+| VIM-Mode | Key mapping             | Function                     | Description                              | Note         |
 | :------: | :---------------------: | :--------------------------: | :--------------------------------------: | :----------: |
 | N/V      | (`[LK]`)+`[F10]`        | Load/Save layout and folding | Load/Save current split and code folding |              |
 | N/V      | `[z]`+`[k/j]`           | Go to Prev/Next folding      | Go to Prev/Next folding                  | Vim built-in |
@@ -394,8 +408,9 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 | N/V      | `[z]`+`[Shift]`+`[r/m]` | Show/Close all foldings      | Show/Close all foldings                  | Vim built-in |
 | V        | `[Shift]`+`[k/j]`       | Move selection block up/down | Move selection block up/down             |              |
 
-#### 4. Diff Mode Keymapping
-| VIM-Mode | Keymapping           | Function                           | Description                        | Note                                        |
+4. Diff Mode Key mapping
+
+| VIM-Mode | Key mapping          | Function                           | Description                        | Note                                        |
 | :------: | :------------------: | :--------------------------------: | :--------------------------------: | :-----------------------------------------: |
 | N/V      | `[LK]`+`[d]`+`[s/v]` | Add diff split Horizontal/Vertical | Add diff split Horizontal/Vertical |                                             |
 | N/V      | `[Lk]`+`[d]`+`[j/k]` | Jump to next/prev diff             | Jump to next/prev diff             |                                             |
@@ -403,8 +418,9 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 | N/V      | `[Lk]`+`[d]`+`[p]`   | Put diff to neighbor pane          | Put diff to neighbor pane          | Recommend to use with visual mode selection |
 | N/V      | `[Lk]`+`[d]`+`[u]`   | Update diff                        | Update diff                        |                                             |
 
-#### 5. Miscellaneous Function Keymapping
-| VIM-Mode | Keymapping            | Function                          | Description                       | Note                                            |
+5. Miscellaneous Function Key mapping
+
+| VIM-Mode | Key mapping           | Function                          | Description                       | Note                                            |
 | :------: | :-------------------: | :-------------------------------: | :-------------------------------: | :---------------------------------------------: |
 | I        | `[k]`+`[j]`           | Esc (escape form insert mode)     | Esc (escape form insert mode)     |                                                 |
 | N/V      | `[Shift]`+`[k]`       | Search current word in manual     | Search current word in manual     |                                                 |
@@ -419,29 +435,33 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 | N/V      | `[LK]`+`[g]`+`[o/i]`  | Show all cursor jump              | Show all cursor jump              | `[g/Ctrl]`+`[o/i]` jump backwards/forwards      |
 | N/V      | `[LK]`+`[g]`+`[;/,]`  | Show all file change              | Show all file change              | `[g]`+`[;/,]` go to earlier/later change        |
 
-### Keymapping Sheet 3 - Plug-in Function Keymapping
+</details>
 
-#### 1. File/Code Browsing Keymapping
+#### Key Mapping Sheet 3 - Plug-in Function Key Mapping (Vim)
+<details>
+<summary>Click to expand!</summary>
+
+1. File/Code Browsing Key mapping
 - Note: Fzf is needed for file browsing
 
-| VIM-Mode | Keymapping               | Function                      | Description                      | Note                       |
-| :------: | :----------------------: | :---------------------------: | :------------------------------: | :------------------------: |
-| N/V      | `[F3]`                   | Nerdtree Current Files        | Show current file location       |                            |
-| N/V      | `[LK]`+`[F3]`            | Toggle Nerdtree               | On/Off NerdTree plugin           |                            |
-| N/V      | `[LK]`+`[F4]`            | Toggle Tagbar                 | On/Off Tagbar plugin             |                            |
-| N        | `[LK]`+`[f]`+`[f]`+`[s]` | List files under input dir    | List files under input dir       |                            |
-| N        | `[LK]`+`[f]`+`[l]`+`[c]` | Locate files matched input    | Locate files matched input name  | Use system locate command  |
-| N        | `[LK]`+`[f]`+`[r]`+`[g]` | Find files with input pattern | Find files matched input pattern | Use system ripgrep command |
-| N        | `[LK]`+`[f]`+`[f]`+`[t]` | Select filetype for current   | Select filetype for current file |                            |
-| N        | `[LK]`+`[f]`+`[c]`+`[d]` | Show all command in vim now　 | Show all command in vim now      | 　                         |
-| N        | `[LK]`+`[f]`+`[n]`+`[m]` | Show all normal mode mapping  | Show all normal mode mapping     |                            |
-| N        | `[LK]`+`[f]`+`[h]`+`[t]` | Show all helptags in vim-help | Show all helptags in vim-help    |                            |
+| VIM-Mode | Key mapping              | Function                         | Description                      | Note                       |
+| :------: | :----------------------: | :---------------------------:    | :------------------------------: | :------------------------: |
+| N/V      | `[F3]`                   | Nerdtree Current Files           | Show current file location       |                            |
+| N/V      | `[LK]`+`[F3]`            | Toggle Nerdtree                  | On/Off NerdTree plugin           |                            |
+| N/V      | `[LK]`+`[F4]`            | Toggle Tagbar                    | On/Off Tagbar plugin             |                            |
+| N        | `[LK]`+`[f]`+`[f]`+`[s]` | List files under input directory | List files under input directory |                            |
+| N        | `[LK]`+`[f]`+`[l]`+`[c]` | Locate files matched input       | Locate files matched input name  | Use system locate command  |
+| N        | `[LK]`+`[f]`+`[r]`+`[g]` | Find files with input pattern    | Find files matched input pattern | Use system ripgrep command |
+| N        | `[LK]`+`[f]`+`[f]`+`[t]` | Select filetype for current      | Select filetype for current file |                            |
+| N        | `[LK]`+`[f]`+`[c]`+`[d]` | Show all command in vim now　    | Show all command in vim now      | 　                         |
+| N        | `[LK]`+`[f]`+`[n]`+`[m]` | Show all normal mode mapping     | Show all normal mode mapping     |                            |
+| N        | `[LK]`+`[f]`+`[h]`+`[t]` | Show all helptags in vim-help    | Show all helptags in vim-help    |                            |
 
-#### 2. Python Coding Keymapping
+2. Python Coding Key mapping
 - Note: Jedi is needed for python code analysis (Check https://github.com/davidhalter/jedi )
 - Note: All below functions only work in .py files
 
-| VIM-Mode | Keymapping                   | Function                      | Description                       | Note                        |
+| VIM-Mode | Key mapping                  | Function                      | Description                       | Note                        |
 | :------: | :--------------------------: | :---------------------------: | :-------------------------------: | :-------------------------: |
 | N/V      | `[Shift]`+`[k]`              | Search current word in doc    | Search current word in python doc |                             |
 | N/V      | `[LK]`+`[p]`+`[n]`           | Find current word occurrences | Find current word occurrences     | Here p for (p)ython         |
@@ -452,10 +472,10 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 | N        | `[LK]`+`[p]`+`[i]`           | Run isort formatter           | Run isort formatter (modules)     | isort needs to be installed |
 | N        | `[LK]`+`[p]`+`[y]`           | Run yapf formatter            | RUn yapf formatter (PEP8)         | yapf needs to be installed  |
 
-#### 3. Miscellaneous Function Keymapping
+3. Miscellaneous Function Key mapping
 - Useful tool (Note: startup by default)
 
-| VIM-Mode | Keymapping                    | Function                        | Description                           | Note                      |
+| VIM-Mode | Key mapping                   | Function                        | Description                           | Note                      |
 | :------: | :---------------------------: | :-----------------------------: | :-----------------------------------: | :-----------------------: |
 | N/V      | `[LK]`+`[c]`+`[c/y]`          | Comment (and copy) current line | Comment (and copy) current line       | NerdCommenter             |
 | N/V      | `[LK]`+`[c]`+`[u]`            | Uncomment current line          | Uncomment current line                | NerdCommenter             |
@@ -474,7 +494,7 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 
 - Extra plug (Note: "let using_extra_plug = 1" must be set in vimrc)
 
-| VIM-Mode | Keymapping           | Function                     | Description                  | Note           |
+| VIM-Mode | Key mapping          | Function                     | Description                  | Note           |
 | :------: | :------------------: | :--------------------------: | :--------------------------: | :------------: |
 | N/V      | `[LK]`+`[h/j/k/l]`   | Quick move in four direction | Quick move in four direction | vim-easymotion |
 | N/V      | `[LK]`+`[y]`+`[s]`   | Show yank history            | Show yank history            | yankring       |
@@ -483,16 +503,16 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 
 - Coding tool (Note: "let using_coding_tool_plug = 1" must be set in vimrc)
 
-| VIM-Mode | Keymapping                            | Function                        | Description                                        | Note                                                          |
+| VIM-Mode | Key mapping                           | Function                        | Description                                        | Note                                                          |
 | :------: | :-----------------------------------: | :-----------------------------: | :------------------------------------------------: | :-----------------------------------------------------------: |
 | N/V      | `[Alt]`+`[n]` (+`[n]`+`[n]`+...+`[n]` | Multiple cursor for selected    | Multiple cursor for currently selected word        | Press N to next word; Use I/A to insert word; Use Esc to exit |
 | N/V      | `[Alt]`+`[p]` (+`[p]`+`[p]`+...+`[p]` | Cancel selected multiple cursor | Cancel selected multiple cursor                    |                                                               |
 | N/V      | `[Alt]`+`[o]` (+`[o]`+`[o]`+...+`[o]` | Omit selected multiple cursor   | Omit selected multiple cursor                      |                                                               |
 | N/V      | `[LK]`+`[a]`+`[l]`                    | Toggle ALE                      | On/Off ALE                                         | Enabled at startup                                            |
-| N/V      | `[LK]`+`[a]`+`[j/k]`                  | Goto Next/Prev ALE linter       | Goto Next/Prev ALE linter                          |                                                               |
+| N/V      | `[LK]`+`[a]`+`[j/k]`                  | Go to Next/Prev ALE linter      | Go to Next/Prev ALE linter                         |                                                               |
 | N/V      | `[LK]`+`[g]`+`[g]`                    | Toggle GitGutter                | On/Off GitGutter                                   | Disabled at startup                                           |
 | N/V      | `[LK]`+`[g]`+`[h]`+`[s/l/n]`          | Toggle GitGutter highlight      | Toggle GitGutter highlight symbol/line/line number |                                                               |
-| N/V      | `[LK]`+`[g]`+`[j/k]`                  | Goto Next/Prev git hunks        | Goto Next/Prev git hunks                           | Hunk means changed block                                      |
+| N/V      | `[LK]`+`[g]`+`[j/k]`                  | Go to Next/Prev git hunks       | Go to Next/Prev git hunks                          | Hunk means changed block                                      |
 | N/V      | `[LK]`+`[g]`+`[Shift]`+`[p]`          | Hunk preview (before changed)   | Hunk preview (before changed)                      | Here p for (p)review                                          |
 | N/V      | `[LK]`+`[g]`+`[Shift]`+`[f]`          | Fold all unchanged lines        | Fold all unchanged lines                           |                                                               |
 | N/V      | `[LK]`+`[g]`+`[Shift]`+`[s]`          | Stage current hunk              | Stage current hunk                                 | Here s for (s)tage                                            |
@@ -505,12 +525,12 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 
 </details>
 
-### Keymapping Sheet 3 - Vim Whichkey
+#### Key Mapping Sheet 4 - Vim Whichkey (Vim)
 <details>
 <summary>Click to expand!</summary>
 
-- Most leaderkey related keymapping is mapped by which-key plugins which will show useful hints when leaderkey
-and following keys are pressed. Table below includes some frequently used keymappings.
+- Most leader key related key mapping is mapped by which-key plugins which will show useful hints when leader key
+and following keys are pressed. Table below includes some frequently used key mappings.
 
 | `[LK]` + | Function    | Description     |
 | :------: | :---------: | :-------------: |
@@ -530,8 +550,9 @@ and following keys are pressed. Table below includes some frequently used keymap
 | `c`+`s`  | Colorscheme | Colorscheme     |
 
 </details>
+</details>
 
-### Reference for VIM Setup
+### Reference for Setup (Vim)
 <details>
 <summary>Click to expand!</summary>
 
@@ -555,61 +576,69 @@ and following keys are pressed. Table below includes some frequently used keymap
 
 </details>
 </details>
+</details>
 
-## Part 2 - Tmux
+## Part 2 - TMUX
+<details open>
+<summary>Click to expand!</summary>
+
+### Section 1 - What's New in My Customization (TMUX)
 <details>
 <summary>Click to expand!</summary>
 
-### Preparation (Dependence)
+- Bindkey is remapped from "Ctrl+b" to "Ctrl+a" (primary) and "Ctrl+Space" (secondary)
+- Command related to pane and split is remapped to my vim-like key mapping to keep things consistent
+- Add new status line theme to make press of bindkey more eye-catching
+- Add clipboard sharing between vim, system, and TMUX (through xclip)
+
+</details>
+
+### Section 2 - First Time Usage (TMUX)
 <details>
 <summary>Click to expand!</summary>
 
-#### 1. Common Requirement
-- __Git__ [for tmux plugin manager setup]
+#### 1. Preparation for Dependence (TMUX)
+
+1. Common Requirement
+- __Git__ [for TMUX plugin manager setup]
 ```bash
 # For Fedora
 dnf install git
 ```
-- __Powerline__ [for statusline powerline support]
+- __Powerline__ [powerline support for TMUX status line ]
 ```bash
 # For Fedora
 dnf install powerline
 dnf install tmux-powerline
 ```
 
-#### 2. Requirement for Tmux
-- verion >= __2.0__
+#### 2. Copy Configuration File (TMUX)
+- version >= __2.0__
 ```bash
-# Check tmux version
+# Check TMUX version
 tmux -V
 ```
 
-</details>
-
-### First Time Usage
-<details>
-<summary>Click to expand!</summary>
-
-#### 1. Copy Configuration File
-- __Tmux__
+1. Copy Configuration File
+- __TMUX__
     1. copy "tmux.conf" to $HOME (current user's home)
     2. rename "tmux.conf" to .tmux.conf
     ```bash
     cp tmux.conf $HOME/.tmux.conf
     ```
-#### 2. First Time Startup (Tmux)
 
-- At first time startup, we need to install tmux plugin manager, load configuration file and install plugins
-    1. Tmux plugin manager (TPM) installation
+#### 3. First Time Startup (TMUX)
+- At first time startup, we need to install TMUX plugin manager, load configuration file and install plugins
+    1. TMUX plugin manager (TPM) installation
     ```bash
     # In terminal
     git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
     ```
     2. Load configuration file
     ```bash
-    # Open tmux in terminal
+    # Open TMUX in terminal
     tmux
-    # In tmux, press ctrl+b to enter command mode
+    # In TMUX, press ctrl+b to enter command mode
     # In command mode
     source-file ~/.tmux.conf
     ```
@@ -619,46 +648,35 @@ tmux -V
 
 </details>
 
-### Plugin List
+### Section 3 - Plugin Usage (TMUX)
 <details>
 <summary>Click to expand!</summary>
 
-#### Installed Plugins
-- [Plug-in] tmux-prefix-highlight (prefix/mode indicator for statusline)
-- [Plug-in] tmux-sidebar (nerdtree-like filetree for tmux)
+#### Installed Plugins (TMUX)
+- [Plug-in] tmux-prefix-highlight (prefix/mode indicator for status line)
+- [Plug-in] tmux-sidebar (nerdtree-like file tree for TMUX)
 - [Plug-in] tmux-sessionist (make create/kill session ability easier to use)
-- [Plug-in] tmux-resurrect (save tmux layout, and restore after restart tmux)
+- [Plug-in] tmux-resurrect (save TMUX layout, and restore after restart TMUX)
 - [Plug-in] tmux-continuum (auto-save, auto-load for tmux-resurrect)
 - [Plug-in] vim-tmux-navigator (move between vim and tmux pane seamlessly)
-- [Plug-in] tmux-copycat (enhanced tmux search)
-- [Plug-in] tmux-yank (share tmux clipboard with system clipboard)
-- [Plug-in] tmux-open (open tmux context easily in tmux copy mode)
-- [Plug-in] tmux-logging (logging and screen capturing for tmux)
+- [Plug-in] tmux-copycat (enhanced TMUX search)
+- [Plug-in] tmux-yank (share TMUX clipboard with system clipboard)
+- [Plug-in] tmux-open (open TMUX context easily in TMUX copy mode)
+- [Plug-in] tmux-logging (logging and screen capturing for TMUX)
 
 </details>
 
-### Major Difference Between Customized and Original
+### Section 4 - Key Mapping (TMUX)
 <details>
 <summary>Click to expand!</summary>
 
-- Bindkey is remapped from "Ctrl+b" to "Ctrl+a" (primary) and "Ctrl+Space" (secondary)
-- Command related to pane and split is remapped to my vim-like keymapping to keep things consistent
-- Add new statusline theme to make press of bindkey more eye-catching
-- Add clipboard sharing between vim, system, and tmux (through xclip)
-
-</details>
-
-### Keymapping Sheet
-<details>
-<summary>Click to expand!</summary>
-
-#### 1. Session/Window/Pane Keymapping
+#### Key Mapping Sheet 1 - Session/Window/Pane Key Mapping (TMUX)
 - Session
 
-| TMUX-Mode | Keymapping               | Function                   | Description               | Note                |
+| TMUX-Mode | Key mapping              | Function                   | Description               | Note                |
 | :-------: | :----------------------: | :------------------------: | :-----------------------: | :-----------------: |
 | Normal    | `[BK]`+`[Shift]`+`[4]`   | Rename current session     | Rename current session    | $                   |
-| Normal    | `[BK]`+`[s]`             | Show all tmux sessions     | Show all tmux sessions    |                     |
+| Normal    | `[BK]`+`[s]`             | Show all TMUX sessions     | Show all TMUX sessions    |                     |
 | Normal    | `[BK]`+`[Shift]`+`[c]`   | Create new session         | Create new session        | tmux-sessionist     |
 | Normal    | `[BK]`+`[Shift]`+`[x/7]` | Kill current session       | Kill current session      | tmux-sessionist / & |
 | Normal    | `[BK]`+`[Shift]`+`[9/0]` | Move to prev/next session  | Move to prev/next session | ( / )               |
@@ -667,7 +685,7 @@ tmux -V
 
 - Window
 
-| TMUX-Mode | Keymapping               | Function                         | Description                     | Note |
+| TMUX-Mode | Key mapping              | Function                         | Description                     | Note |
 | :-------: | :----------------------: | :------------------------------: | :-----------------------------: | :--: |
 | Normal    | `[BK]`+`[Number]`        | Move to window (number)          | Move to window (number)         |      |
 | Normal    | `[BK]`+`[']`             | Move to window index             | Move to window index            |      |
@@ -681,22 +699,22 @@ tmux -V
 
 - Pane
 
-| TMUX-Mode | Keymapping                 | Function                            | Description                           | Note                                      |
-| :-------: | :------------------------: | :---------------------------------: | :-----------------------------------: | :---------------------------------:       |
+| TMUX-Mode | Key mapping                | Function                            | Description                           | Note                                      |
+| :-------: | :------------------------: | :---------------------------------: | :-----------------------------------: | :---------------------------------------: |
 | Normal    | `[BK]`+`[Shift]`+`[-]`     | Split pane vertically               | Split pane vertically                 | Default key is `[LK]`+`[Shift]`+`[']` (") |
 | Normal    | `[BK]`+`[Shift]`+`[\]`     | Split pane horizontally             | Split pane horizontally               | Default key is `[LK]`+`[Shift]`+`[5]` (%) |
 | Normal    | `[BK]`+`[q/Enter]`         | Move to pane (number)               | Move to pane (number)                 | Pane number shows on pane                 |
 | Normal    | `[Ctrl]`+`[h/j/k/l]`       | Move to pane (L/D/U/R)              | Move to pane (L/D/U/R)                | vim-tmux-navigator                        |
 | Normal    | `[BK]`+`[Backspace]`       | Switch to last pane                 | Switch to last pane                   |                                           |
-| Normal    | `[BK]`+`[;]`               | Scroll current pane up              | Scroll current pane up                | Scroll in tmux copymode                   |
+| Normal    | `[BK]`+`[;]`               | Scroll current pane up              | Scroll current pane up                | Scroll in TMUX copy mode                  |
 | Normal    | `[BK]`+`[Shift]`+`[j/k]`   | Swap pane to prev/next pane         | Swap pane to prev/next pane           |                                           |
 | Normal    | `[BK]`+`[Space]`           | Toggle pane layout                  | Toggle pane layout                    |                                           |
 | Normal    | `[BK]`+`[Alt]`+`[h/j/k/l]` | Resize pane to (L/D/U/R)            | Resize pane to (L/D/U/R)              |                                           |
 | Normal    | `[BK]`+`[Ctrl/Alt]`+`[o]`  | Rotate pane anti-clock/clock wisely | Rotate pane (anti-clock/clock)wisely  |                                           |
 
-#### 2. Copy-mode Keymapping
+#### Key Mapping Sheet 2 - Copy-mode Key Mapping (TMUX)
 
-| TMUX-Mode | Keymapping                 | Function                      | Description                   | Note          |
+| TMUX-Mode | Key mapping                | Function                      | Description                   | Note          |
 | :-------: | :------------------------: | :---------------------------: | :---------------------------: | :-----------: |
 | Normal    | `[BK]`+`[`[/;]`            | Enter copy mode               | Enter copy mode               |               |
 | Normal    | `[BK]`+`[]`]`              | Paste selected contents       | Paste selected contents       |               |
@@ -709,15 +727,15 @@ tmux -V
 | Copy      | `[y]`                      | Vim-like yank selected region | Vim-like yank selected region |               |
 | Copy      | `[;/q/Enter]`              | Quit copy mode                | Quit copy mode                |               |
 
-#### 3. Miscellaneous Keymapping
+#### Key Mapping Sheet 3 - Miscellaneous (TMUX)
 
-| TMUX-Mode | Keymapping             | Function                          | Description                       | Note                                              |
+| TMUX-Mode | Key mapping            | Function                          | Description                       | Note                                              |
 | :-------: | :--------------------: | :-------------------------------: | :-------------------------------: | :-----------------------------------------------: |
-| Normal    | `[BK]`+`[Tab]`         | Open tmux choose-tree             | Open tmux choose-tree             | Choose pane, window, session in tmux              |
-| Normal    | `[BK]`+`[Shift]`+`[/]` | Show all tmux keymapping          | Show all tmux keymapping          |                                                   |
-| Normal    | `[BK]`+`[Shift]`+`[b]` | Toggle tmux statusline            | Toggle tmux statusline            |                                                   |
-| Normal    | `[BK]`+`[b]`           | Toggle tmux borderline            | Toggle tmux borderline            |                                                   |
-| Normal    | `[BK]`+`[Shift]`+`[r]` | Reload tmux configuration         | Reload tmux configuration         | Run source .tmux.conf file                        |
+| Normal    | `[BK]`+`[Tab]`         | Open TMUX choose-tree             | Open TMUX choose-tree             | Choose pane, window, session in TMUX              |
+| Normal    | `[BK]`+`[Shift]`+`[/]` | Show all TMUX key mapping         | Show all TMUX key mapping         |                                                   |
+| Normal    | `[BK]`+`[Shift]`+`[b]` | Toggle TMUX status line           | Toggle TMUX status line           |                                                   |
+| Normal    | `[BK]`+`[b]`           | Toggle TMUX borderline            | Toggle TMUX borderline            |                                                   |
+| Normal    | `[BK]`+`[Shift]`+`[r]` | Reload TMUX configuration         | Reload TMUX configuration         | Run source .tmux.conf file                        |
 | Normal    | `[BK]`+`[F3]`          | Sidebar file-tree                 | Sidebar file-tree                 | tmux-sidebar                                      |
 | Normal    | `[BK]`+`[Alt]`+`[s/r]` | Save/Load current session         | Save/Load current session         | tmux-resurrect                                    |
 | Normal    | `[BK]`+`[a]`           | Clear terminal output             | Clear terminal output             | Act like Ctrl-l in terminal                       |
@@ -753,6 +771,8 @@ tmux -V
 - https://gist.github.com/markandrewj/ead05ebc20f3968ec07e
 - https://github.com/tmux-plugins/tpm
 
+</details>
+</details>
 </details>
 </details>
 </details>
