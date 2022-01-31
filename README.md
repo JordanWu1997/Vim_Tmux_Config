@@ -41,7 +41,7 @@ Table of Contents
          * [Key Mapping Sheet 1 - Session/Window/Pane Key Mapping (TMUX)](#key-mapping-sheet-1---sessionwindowpane-key-mapping-tmux)
          * [Key Mapping Sheet 2 - Copy-mode Key Mapping (TMUX)](#key-mapping-sheet-2---copy-mode-key-mapping-tmux)
          * [Key Mapping Sheet 3 - Miscellaneous (TMUX)](#key-mapping-sheet-3---miscellaneous-tmux)
-      * [Reference for TMUX Setup](#reference-for-tmux-setup)
+     * [Reference for Setup (TMUX)](#reference-for-setup-tmux)
 
 Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
@@ -729,27 +729,30 @@ tmux -V
 
 #### Key Mapping Sheet 3 - Miscellaneous (TMUX)
 
-| TMUX-Mode | Key mapping            | Function                          | Description                       | Note                                              |
-| :-------: | :--------------------: | :-------------------------------: | :-------------------------------: | :-----------------------------------------------: |
-| Normal    | `[BK]`+`[Tab]`         | Open TMUX choose-tree             | Open TMUX choose-tree             | Choose pane, window, session in TMUX              |
-| Normal    | `[BK]`+`[Shift]`+`[/]` | Show all TMUX key mapping         | Show all TMUX key mapping         |                                                   |
-| Normal    | `[BK]`+`[Shift]`+`[b]` | Toggle TMUX status line           | Toggle TMUX status line           |                                                   |
-| Normal    | `[BK]`+`[b]`           | Toggle TMUX borderline            | Toggle TMUX borderline            |                                                   |
-| Normal    | `[BK]`+`[Shift]`+`[r]` | Reload TMUX configuration         | Reload TMUX configuration         | Run source .tmux.conf file                        |
-| Normal    | `[BK]`+`[F3]`          | Sidebar file-tree                 | Sidebar file-tree                 | tmux-sidebar                                      |
-| Normal    | `[BK]`+`[Alt]`+`[s/r]` | Save/Load current session         | Save/Load current session         | tmux-resurrect                                    |
-| Normal    | `[BK]`+`[a]`           | Clear terminal output             | Clear terminal output             | Act like Ctrl-l in terminal                       |
-| Normal    | `[BK]`+`[Ctrl]`+`[h]`  | Send Ctrl+h to terminal           | Send Ctrl+h to terminal           | Ctrl+h is alternative backspace for fish shell    |
-| Normal    | `[BK]`+`[Ctrl]`+`[k]`  | Send Ctrl+k to terminal           | Send Ctrl+k to terminal           | Ctrl+k is to delete to end of line for fish shell |
-| Normal    | `[BK]`+`[Ctrl]`+`[l]`  | Send Ctrl+l to terminal           | Send Ctrl+l to terminal           | Ctrl+l is to clean screen for fish shell          |
-| Normal    | `[BK]`+`[Ctrl]`+`[s]`  | Toggle pane synchronization       | Toggle pane synchronization       | Synchronize input for all panes                   |
-| Normal    | `[BK]`+`[Shift]`+`[m]` | Toggle mouse mode                 | Toggle mouse mode                 |                                                   |
-| Copy      | `[BK]`+`[o]`           | Open selected with system default | Open selected with system default | tmux-open, open with xdg-open                     |
-| Copy      | `[BK]`+`[Ctrl]`+`[o]`  | Open selected with `$EDITOR`      | Open selected with $EDITOR        | tmux-open                                         |
+| TMUX-Mode | Key mapping                    | Function                            | Description                        | Note                                              |
+| :-------: | :--------------------:         | :---------------------------------: | :--------------------------------: | :-----------------------------------------------: |
+| Normal    | `[BK]`+`[Tab]`                 | Open TMUX choose-tree               | Open TMUX choose-tree              | Choose pane, window, session in TMUX              |
+| Normal    | `[BK]`+`[Shift]`+`[/]`         | Show all TMUX key mapping           | Show all TMUX key mapping          |                                                   |
+| Normal    | `[BK]`+`[Shift]`+`[b]`         | Toggle TMUX status line             | Toggle TMUX status line            |                                                   |
+| Normal    | `[BK]`+`[b]`                   | Toggle TMUX borderline              | Toggle TMUX borderline             |                                                   |
+| Normal    | `[BK]`+`[Shift]`+`[r]`         | Reload TMUX configuration           | Reload TMUX configuration          | Run source .tmux.conf file                        |
+| Normal    | `[BK]`+`[F3]`                  | Sidebar file-tree                   | Sidebar file-tree                  | tmux-sidebar                                      |
+| Normal    | `[BK]`+`[Alt]`+`[s/r]`         | Save/Load current session           | Save/Load current session          | tmux-resurrect                                    |
+| Normal    | `[BK]`+`[a]`                   | Clear terminal output               | Clear terminal output              | Act like Ctrl-l in terminal                       |
+| Normal    | `[BK]`+`[Ctrl]`+`[h]`          | Send Ctrl+h to terminal             | Send Ctrl+h to terminal            | Ctrl+h is alternative backspace for fish shell    |
+| Normal    | `[BK]`+`[Ctrl]`+`[k]`          | Send Ctrl+k to terminal             | Send Ctrl+k to terminal            | Ctrl+k is to delete to end of line for fish shell |
+| Normal    | `[BK]`+`[Ctrl]`+`[l]`          | Send Ctrl+l to terminal             | Send Ctrl+l to terminal            | Ctrl+l is to clean screen for fish shell          |
+| Normal    | `[BK]`+`[Ctrl]`+`[s]`          | Toggle pane synchronization         | Toggle pane synchronization        | Synchronize input for all panes                   |
+| Normal    | `[BK]`+`[Shift]`+`[m]`         | Toggle mouse mode                   | Toggle mouse mode                  |                                                   |
+| Copy      | `[BK]`+`[o]`                   | Open selected with system default   | Open selected with system default  | tmux-open, open with xdg-open                     |
+| Copy      | `[BK]`+`[Ctrl]`+`[o]`          | Open selected with `$EDITOR`        | Open selected with $EDITOR         | tmux-open                                         |
+| Normal    | `[BK]`+`[m]`                   | Mark current pane                   | Mark current pane                  | Mark pane for following usage                     |
+| Normal    | `[BK]`+`[Shift]`+`[;]`         | Swap current pane with marked pane  | Swap current pane with marked pane | Target pane must be marked first                  |
+| Normal    | `[BK]`+`[Alt]`+`[Shift]`+`[;]` | Move marked pane to current window  | Move marked pane to current window | Move (merge) marked pane to current window        |
 
 </details>
 
-### Reference for TMUX Setup
+### Reference for Setup (TMUX)
 <details>
 <summary>Click to expand!</summary>
 
