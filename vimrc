@@ -315,6 +315,10 @@
 " Spell check ----------------------------------------------------------------
     set nospell " Vim built-in spell check
     noremap <leader>sp :set spell!<CR>
+    noremap <leader>sag <Esc>zg
+    noremap <leader>saw <Esc>zw
+    noremap <leader>srg <Esc>zug
+    noremap <leader>srw <Esc>zuw
     noremap <leader>sj ]s
     noremap <leader>sk [s
 

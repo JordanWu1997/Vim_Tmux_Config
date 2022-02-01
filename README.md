@@ -23,7 +23,7 @@ Table of Contents
          * [1. Plugin Loading Time (Vim)](#1-plugin-loading-time-vim)
          * [2. Plugin Usage Configuration (Vim)](#2-plugin-usage-configuration-vim)
       * [Section 4 - Key Mapping (Vim)](#section-4---key-mapping-vim)
-         * [Key mapping - Customized Key Mapping Rule (Vim)](#key-mapping---customized-key-mapping-rule-vim)
+         * [Key Mapping - Customized Key Mapping Rule (Vim)](#key-mapping---customized-key-mapping-rule-vim)
          * [Key Mapping Sheet 1 - Fn Key Key Mapping (Vim)](#key-mapping-sheet-1---fn-key-key-mapping-vim)
          * [Key Mapping Sheet 2 - Built-in Function Key Mapping (Vim)](#key-mapping-sheet-2---built-in-function-key-mapping-vim)
          * [Key Mapping Sheet 3 - Plug-in Function Key Mapping (Vim)](#key-mapping-sheet-3---plug-in-function-key-mapping-vim)
@@ -250,7 +250,8 @@ for more details, check sections in vimrc
     ```
 - Customize vim color scheme
     - For fancy symbol support, nerd font is needed (check https://github.com/ryanoasis/nerd-fonts )
-    - For pywal theme support, pywal is needed (check https://github.com/dylanaraps/pywal ), also remember to change the directory path to your $HOME/.cache/wal
+    - For pywal theme support, pywal is needed (check https://github.com/dylanaraps/pywal ),
+      also remember to change the directory path to your $HOME/.cache/wal
     ```vim
     " Customize vim theme (Include colorscheme and statusline)
     let USING_CUSTOMIZED_THEME = 1
@@ -326,11 +327,11 @@ for more details, check sections in vimrc
 <details>
 <summary>Click to expand!</summary>
 
-#### Key mapping - Customized Key Mapping Rule (Vim)
+#### Key Mapping - Customized Key Mapping Rule (Vim)
 <details open>
 <summary>Click to expand!</summary>
 
-> _1. Key mapping should not be much different from the original VIM_
+> _1. Key Mapping should not be much different from the original VIM_
 - To make life easier instead of filled up with bloated key mapping
 > _2. Every function (motion) should start with a leader key for most of time_
 - To prevent conflict with built-in hotkey or other program hotkeys
@@ -345,9 +346,9 @@ for more details, check sections in vimrc
 <details>
 <summary>Click to expand!</summary>
 
-1. Function Key Key mapping
+1. Function Key Key Mapping
 
-| VIM-Mode | Key mapping      | Function                        | Description                      | Note                                                    |
+| VIM-Mode | Key Mapping      | Function                        | Description                      | Note                                                    |
 | :------: | :--------------: | :-----------------------------: | :------------------------------: | :-----------------------------------------------------: |
 | N/V      | (`[LK]`)+`[F1]`  | (Previous)/Next Buffer          | Switch between buffers           |                                                         |
 | N/V      | (`[LK]`)+`[F2]`  | (Previous)/Next Tab             | Switch between tabs              |                                                         |
@@ -374,9 +375,9 @@ for more details, check sections in vimrc
 <details>
 <summary>Click to expand!</summary>
 
-1. Buffer/Tab Key mapping
+1. Buffer/Tab Key Mapping
 
-| VIM-Mode | Key mapping              | Function               | Description            | Note |
+| VIM-Mode | Key Mapping              | Function               | Description            | Note |
 | :------: | :----------------------: | :--------------------: | :--------------------: | :--: |
 | N/V      | `[LK]`+`[b]`+`[b]`       | Add new buffer         | Add new buffer         |      |
 | N/V      | `[LK]`+`[b]`+`[d]`+`[d]` | Close current buffer   | Close current buffer   |      |
@@ -386,9 +387,9 @@ for more details, check sections in vimrc
 | N/V      | `[LK]`+`[Shift]`+`[l/h]` | Go to next/prev tab    | Go to next/prev tab    |      |
 | N/V      | `[LK]`+`[Shift]`+`[./,]` | Move tab to next/prev  | Move tab to next/prev  |      |
 
-2. Split/Window Key mapping
+2. Split/Window Key Mapping
 
-| VIM-Mode | Key mapping                          | Function                          | Description                        | Note                                                            |
+| VIM-Mode | Key Mapping                          | Function                          | Description                        | Note                                                            |
 | :------: | :----------------------------------: | :-------------------------------: | :--------------------------------: | :-------------------------------------------------------------: |
 | N/V      | `[Ctrl]`+`[w]`+`[s/v]`               | Add new split Horizontal/Vertical | Add new split Horizontal/Vertical  |                                                                 |
 | N/V      | `[Ctrl]`+`[h/j/k/l]`                 | Move between vim splits           | Move between splits (L/D/U/R)      | With plugin, you can even move between TMUX pane and VIM splits |
@@ -398,9 +399,9 @@ for more details, check sections in vimrc
 | N/V      | `[Ctrl]`+`[w]`+`[=]`                 | Re-split splits equally           | Re-split splits equally            | Here =(equal sign) for equally split                            |
 | N/V      | `[LK]`+`[r]`+`[1/2]`                 | Resize current split to 10/20rows | Resize current split to 10/20 rows | For terminal pane resize                                        |
 
-3. Code Folding Key mapping
+3. Code Folding Key Mapping
 
-| VIM-Mode | Key mapping             | Function                     | Description                              | Note         |
+| VIM-Mode | Key Mapping             | Function                     | Description                              | Note         |
 | :------: | :---------------------: | :--------------------------: | :--------------------------------------: | :----------: |
 | N/V      | (`[LK]`)+`[F10]`        | Load/Save layout and folding | Load/Save current split and code folding |              |
 | N/V      | `[z]`+`[k/j]`           | Go to Prev/Next folding      | Go to Prev/Next folding                  | Vim built-in |
@@ -408,9 +409,9 @@ for more details, check sections in vimrc
 | N/V      | `[z]`+`[Shift]`+`[r/m]` | Show/Close all foldings      | Show/Close all foldings                  | Vim built-in |
 | V        | `[Shift]`+`[k/j]`       | Move selection block up/down | Move selection block up/down             |              |
 
-4. Diff Mode Key mapping
+4. Diff Mode Key Mapping
 
-| VIM-Mode | Key mapping          | Function                           | Description                        | Note                                        |
+| VIM-Mode | Key Mapping          | Function                           | Description                        | Note                                        |
 | :------: | :------------------: | :--------------------------------: | :--------------------------------: | :-----------------------------------------: |
 | N/V      | `[LK]`+`[d]`+`[s/v]` | Add diff split Horizontal/Vertical | Add diff split Horizontal/Vertical |                                             |
 | N/V      | `[Lk]`+`[d]`+`[j/k]` | Jump to next/prev diff             | Jump to next/prev diff             |                                             |
@@ -418,9 +419,21 @@ for more details, check sections in vimrc
 | N/V      | `[Lk]`+`[d]`+`[p]`   | Put diff to neighbor pane          | Put diff to neighbor pane          | Recommend to use with visual mode selection |
 | N/V      | `[Lk]`+`[d]`+`[u]`   | Update diff                        | Update diff                        |                                             |
 
-5. Miscellaneous Function Key mapping
+5. Spell Mode Key Mapping
 
-| VIM-Mode | Key mapping           | Function                          | Description                       | Note                                            |
+| VIM-Mode | Key Mapping              | Function                                   | Description                                | Note                              |
+| :------: | :----------------------: | :----------------------------------------: | :----------------------------------------: | :-------------------------------: |
+| N/V      | `[LK]`+`[s]`             | Toggle spell mode                          | Toggle spell mode                          | Here s for (s)pell                |
+| N/V      | `[LK]`+`[s]`+`[j/k]`     | Jump to prev/next bad word                 | Jump to pre/next bad word                  |                                   |
+| N/V      | `[LK]`+`[s]`+`[a]`+`[g]` | Add word to good word list spell mode      | Add word to good word list spell mode      | Here a for (a)dd, g for (g)ood    |
+| N/V      | `[LK]`+`[s]`+`[r]`+`[g]` | Remove word from good word list spell mode | Remove word from good word list spell mode | Here r for (r)emove, g for (g)ood |
+| N/V      | `[LK]`+`[s]`+`[a]`+`[b]` | Add word to bad word list spell mode       | Add word to bad word list spell mode       | Here a for (a)dd, b for (b)ad     |
+| N/V      | `[LK]`+`[s]`+`[r]`+`[b]` | Remove word from bad word list spell mode  | Remove word from bad word list spell mode  | Here r for (r)emove, b for (b)ad  |
+
+
+6. Miscellaneous Function Key Mapping
+
+| VIM-Mode | Key Mapping           | Function                          | Description                       | Note                                            |
 | :------: | :-------------------: | :-------------------------------: | :-------------------------------: | :---------------------------------------------: |
 | I        | `[k]`+`[j]`           | Esc (escape form insert mode)     | Esc (escape form insert mode)     |                                                 |
 | N/V      | `[Shift]`+`[k]`       | Search current word in manual     | Search current word in manual     |                                                 |
@@ -441,27 +454,27 @@ for more details, check sections in vimrc
 <details>
 <summary>Click to expand!</summary>
 
-1. File/Code Browsing Key mapping
+1. File/Code Browsing Key Mapping
 - Note: Fzf is needed for file browsing
 
-| VIM-Mode | Key mapping              | Function                         | Description                      | Note                       |
-| :------: | :----------------------: | :---------------------------:    | :------------------------------: | :------------------------: |
-| N/V      | `[F3]`                   | Nerdtree Current Files           | Show current file location       |                            |
-| N/V      | `[LK]`+`[F3]`            | Toggle Nerdtree                  | On/Off NerdTree plugin           |                            |
-| N/V      | `[LK]`+`[F4]`            | Toggle Tagbar                    | On/Off Tagbar plugin             |                            |
-| N        | `[LK]`+`[f]`+`[f]`+`[s]` | List files under input directory | List files under input directory |                            |
-| N        | `[LK]`+`[f]`+`[l]`+`[c]` | Locate files matched input       | Locate files matched input name  | Use system locate command  |
-| N        | `[LK]`+`[f]`+`[r]`+`[g]` | Find files with input pattern    | Find files matched input pattern | Use system ripgrep command |
-| N        | `[LK]`+`[f]`+`[f]`+`[t]` | Select filetype for current      | Select filetype for current file |                            |
-| N        | `[LK]`+`[f]`+`[c]`+`[d]` | Show all command in vim now　    | Show all command in vim now      | 　                         |
-| N        | `[LK]`+`[f]`+`[n]`+`[m]` | Show all normal mode mapping     | Show all normal mode mapping     |                            |
-| N        | `[LK]`+`[f]`+`[h]`+`[t]` | Show all helptags in vim-help    | Show all helptags in vim-help    |                            |
+| VIM-Mode | Key Mapping              | Function                         | Description                       | Note                       |
+| :------: | :----------------------: | :---------------------------:    | :------------------------------:  | :------------------------: |
+| N/V      | `[F3]`                   | Nerdtree Current Files           | Show current file location        |                            |
+| N/V      | `[LK]`+`[F3]`            | Toggle Nerdtree                  | On/Off NerdTree plugin            |                            |
+| N/V      | `[LK]`+`[F4]`            | Toggle Tagbar                    | On/Off Tagbar plugin              |                            |
+| N        | `[LK]`+`[f]`+`[f]`+`[s]` | List files under input directory | List files under input directory  |                            |
+| N        | `[LK]`+`[f]`+`[l]`+`[c]` | Locate files matched input       | Locate files matched input name   | Use system locate command  |
+| N        | `[LK]`+`[f]`+`[r]`+`[g]` | Find files with input pattern    | Find files matched input pattern  | Use system ripgrep command |
+| N        | `[LK]`+`[f]`+`[f]`+`[t]` | Select file type for current     | Select file type for current file |                            |
+| N        | `[LK]`+`[f]`+`[c]`+`[d]` | Show all command in vim now　    | Show all command in vim now       | 　                         |
+| N        | `[LK]`+`[f]`+`[n]`+`[m]` | Show all normal mode mapping     | Show all normal mode mapping      |                            |
+| N        | `[LK]`+`[f]`+`[h]`+`[t]` | Show all helptags in vim-help    | Show all helptags in vim-help     |                            |
 
-2. Python Coding Key mapping
+2. Python Coding Key Mapping
 - Note: Jedi is needed for python code analysis (Check https://github.com/davidhalter/jedi )
 - Note: All below functions only work in .py files
 
-| VIM-Mode | Key mapping                  | Function                      | Description                       | Note                        |
+| VIM-Mode | Key Mapping                  | Function                      | Description                       | Note                        |
 | :------: | :--------------------------: | :---------------------------: | :-------------------------------: | :-------------------------: |
 | N/V      | `[Shift]`+`[k]`              | Search current word in doc    | Search current word in python doc |                             |
 | N/V      | `[LK]`+`[p]`+`[n]`           | Find current word occurrences | Find current word occurrences     | Here p for (p)ython         |
@@ -470,12 +483,12 @@ for more details, check sections in vimrc
 | N/V      | `[LK]`+`[p]`+`[m]`           | Show current word init.py     | Show current word init.py         |                             |
 | N/V      | `[LK]`+`[p]`+`[Shift]`+`[m]` | Show input module init.py     | Show input module init.py         |                             |
 | N        | `[LK]`+`[p]`+`[i]`           | Run isort formatter           | Run isort formatter (modules)     | isort needs to be installed |
-| N        | `[LK]`+`[p]`+`[y]`           | Run yapf formatter            | RUn yapf formatter (PEP8)         | yapf needs to be installed  |
+| N        | `[LK]`+`[p]`+`[y]`           | Run yapf formatter            | Run yapf formatter (PEP8)         | yapf needs to be installed  |
 
-3. Miscellaneous Function Key mapping
+3. Miscellaneous Function Key Mapping
 - Useful tool (Note: startup by default)
 
-| VIM-Mode | Key mapping                   | Function                        | Description                           | Note                      |
+| VIM-Mode | Key Mapping                   | Function                        | Description                           | Note                      |
 | :------: | :---------------------------: | :-----------------------------: | :-----------------------------------: | :-----------------------: |
 | N/V      | `[LK]`+`[c]`+`[c/y]`          | Comment (and copy) current line | Comment (and copy) current line       | NerdCommenter             |
 | N/V      | `[LK]`+`[c]`+`[u]`            | Uncomment current line          | Uncomment current line                | NerdCommenter             |
@@ -494,7 +507,7 @@ for more details, check sections in vimrc
 
 - Extra plug (Note: "let using_extra_plug = 1" must be set in vimrc)
 
-| VIM-Mode | Key mapping          | Function                     | Description                  | Note           |
+| VIM-Mode | Key Mapping          | Function                     | Description                  | Note           |
 | :------: | :------------------: | :--------------------------: | :--------------------------: | :------------: |
 | N/V      | `[LK]`+`[h/j/k/l]`   | Quick move in four direction | Quick move in four direction | vim-easymotion |
 | N/V      | `[LK]`+`[y]`+`[s]`   | Show yank history            | Show yank history            | yankring       |
@@ -503,7 +516,7 @@ for more details, check sections in vimrc
 
 - Coding tool (Note: "let using_coding_tool_plug = 1" must be set in vimrc)
 
-| VIM-Mode | Key mapping                           | Function                        | Description                                        | Note                                                          |
+| VIM-Mode | Key Mapping                           | Function                        | Description                                        | Note                                                          |
 | :------: | :-----------------------------------: | :-----------------------------: | :------------------------------------------------: | :-----------------------------------------------------------: |
 | N/V      | `[Alt]`+`[n]` (+`[n]`+`[n]`+...+`[n]` | Multiple cursor for selected    | Multiple cursor for currently selected word        | Press N to next word; Use I/A to insert word; Use Esc to exit |
 | N/V      | `[Alt]`+`[p]` (+`[p]`+`[p]`+...+`[p]` | Cancel selected multiple cursor | Cancel selected multiple cursor                    |                                                               |
@@ -546,8 +559,8 @@ and following keys are pressed. Table below includes some frequently used key ma
 | `t`      | Tab         | Built-in tab    |
 | `v`      | Vim-wiki    | Note-taking     |
 | `y`      | Yank        | Yank manager    |
-| `s`+`l`  | Statusline  | Statusline      |
-| `c`+`s`  | Colorscheme | Colorscheme     |
+| `s`+`l`  | Statusline  | Status line     |
+| `c`+`s`  | Colorscheme | Color scheme    |
 
 </details>
 </details>
@@ -574,7 +587,6 @@ and following keys are pressed. Table below includes some frequently used key ma
 - https://ahuigo.github.io/b/vim/vim-var#/
 - https://learnvimscriptthehardway.stevelosh.com/chapters/24.html
 
-</details>
 </details>
 </details>
 
@@ -673,7 +685,7 @@ tmux -V
 #### Key Mapping Sheet 1 - Session/Window/Pane Key Mapping (TMUX)
 - Session
 
-| TMUX-Mode | Key mapping              | Function                   | Description               | Note                |
+| TMUX-Mode | Key Mapping              | Function                   | Description               | Note                |
 | :-------: | :----------------------: | :------------------------: | :-----------------------: | :-----------------: |
 | Normal    | `[BK]`+`[Shift]`+`[4]`   | Rename current session     | Rename current session    | $                   |
 | Normal    | `[BK]`+`[s]`             | Show all TMUX sessions     | Show all TMUX sessions    |                     |
@@ -685,7 +697,7 @@ tmux -V
 
 - Window
 
-| TMUX-Mode | Key mapping              | Function                         | Description                     | Note |
+| TMUX-Mode | Key Mapping              | Function                         | Description                     | Note |
 | :-------: | :----------------------: | :------------------------------: | :-----------------------------: | :--: |
 | Normal    | `[BK]`+`[Number]`        | Move to window (number)          | Move to window (number)         |      |
 | Normal    | `[BK]`+`[']`             | Move to window index             | Move to window index            |      |
@@ -699,7 +711,7 @@ tmux -V
 
 - Pane
 
-| TMUX-Mode | Key mapping                | Function                            | Description                           | Note                                      |
+| TMUX-Mode | Key Mapping                | Function                            | Description                           | Note                                      |
 | :-------: | :------------------------: | :---------------------------------: | :-----------------------------------: | :---------------------------------------: |
 | Normal    | `[BK]`+`[Shift]`+`[-]`     | Split pane vertically               | Split pane vertically                 | Default key is `[LK]`+`[Shift]`+`[']` (") |
 | Normal    | `[BK]`+`[Shift]`+`[\]`     | Split pane horizontally             | Split pane horizontally               | Default key is `[LK]`+`[Shift]`+`[5]` (%) |
@@ -714,7 +726,7 @@ tmux -V
 
 #### Key Mapping Sheet 2 - Copy-mode Key Mapping (TMUX)
 
-| TMUX-Mode | Key mapping                | Function                      | Description                   | Note          |
+| TMUX-Mode | Key Mapping                | Function                      | Description                   | Note          |
 | :-------: | :------------------------: | :---------------------------: | :---------------------------: | :-----------: |
 | Normal    | `[BK]`+`[`[/;]`            | Enter copy mode               | Enter copy mode               |               |
 | Normal    | `[BK]`+`[]`]`              | Paste selected contents       | Paste selected contents       |               |
@@ -729,7 +741,7 @@ tmux -V
 
 #### Key Mapping Sheet 3 - Miscellaneous (TMUX)
 
-| TMUX-Mode | Key mapping                    | Function                            | Description                        | Note                                              |
+| TMUX-Mode | Key Mapping                    | Function                            | Description                        | Note                                              |
 | :-------: | :--------------------:         | :---------------------------------: | :--------------------------------: | :-----------------------------------------------: |
 | Normal    | `[BK]`+`[Tab]`                 | Open TMUX choose-tree               | Open TMUX choose-tree              | Choose pane, window, session in TMUX              |
 | Normal    | `[BK]`+`[Shift]`+`[/]`         | Show all TMUX key mapping           | Show all TMUX key mapping          |                                                   |
@@ -774,6 +786,7 @@ tmux -V
 - https://gist.github.com/markandrewj/ead05ebc20f3968ec07e
 - https://github.com/tmux-plugins/tpm
 
+</details>
 </details>
 </details>
 </details>
