@@ -768,6 +768,7 @@ tmux -V
 <details>
 <summary>Click to expand!</summary>
 
+- https://leanpub.com/the-tao-of-tmux/read#config
 - https://github.com/powerline/powerline
 - https://github.com/erikw/tmux-powerline
 - https://github.com/tmux-plugins/tmux-resurrect
