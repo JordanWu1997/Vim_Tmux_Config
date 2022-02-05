@@ -149,7 +149,6 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     nvim --version
     ```
 3. Requirement for Python Completion
-
 - __ipython__ (version >= __7.20__) [python console]
     ```bash
     # Python3
@@ -273,7 +272,7 @@ for more details, check sections in vimrc
         - [Plug-in] vim-easymotion (physical movement)
         - [Plug-in] AutoComplPop (auto completion pop-up)
         - [Plug-in] FixedTaskList (find TODO tag in vim)
-        - [Plug-in] vim-hexokinase (hex colorcode color highlight support)
+        - [Plug-in] vim-hexokinase (hex color code color highlight support)
     ```vim
     " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
     let USING_EXTRA_PLUG = 1
@@ -357,8 +356,8 @@ for more details, check sections in vimrc
 | N/V      | `[F4]`           | Markdown/Latex previewer        | Open external Viewer             | Only for .md or .tex file                               |
 | N/V      | `[LK]`+`[F4]`    | Toggle Tagbar                   | On/Off Tagbar plugin             |                                                         |
 | N/V      | (`[LK]`)+`[F5]`  | Toggle (Rel)/Abs line number    | On/Off rel/abs line number       |                                                         |
-| N/V      | `[F6]`           | Toggle foldcolumn (short-4)     | On/Off foldcolumn (short-4)      | For easier code fold visualization                      |
-| N/V      | `[LK]`+`[F6]`    | Toggle foldcolumn (long-8)      | On/Off foldcolumn (long-8)       | For easier code fold visualization                      |
+| N/V      | `[F6]`           | Toggle fold column (short-4)    | On/Off fold column (short-4)     | For easier code fold visualization                      |
+| N/V      | `[LK]`+`[F6]`    | Toggle fold column (long-8)     | On/Off fold column (long-8)      | For easier code fold visualization                      |
 | N/V      | `[F7]`           | Toggle show line border         | On/Off highlight 79th character  | VIM recommends at most 78 characters for one line       |
 | N/V      | `[LK]`+`[F7]`    | Toggle show line border         | On/Off highlight 79th column     | VIM recommends at most 78 characters for one line       |
 | N/V      | `[F8]`           | Toggle highlight comment        | On/Off highlight code comment    | Assign brighter color to comment to highlight it        |
@@ -747,7 +746,7 @@ tmux -V
 | Normal    | `[BK]`+`[Shift]`+`[/]`         | Show all TMUX key mapping           | Show all TMUX key mapping          |                                                   |
 | Normal    | `[BK]`+`[Shift]`+`[b]`         | Toggle TMUX status line             | Toggle TMUX status line            |                                                   |
 | Normal    | `[BK]`+`[b]`                   | Toggle TMUX borderline              | Toggle TMUX borderline             |                                                   |
-| Normal    | `[BK]`+`[Shift]`+`[r]`         | Reload TMUX configuration           | Reload TMUX configuration          | Run source .tmux.conf file                        |
+| Normal    | `[BK]`+`[Shift]`+`[r]`         | Reload TMUX configuration           | Reload TMUX configuration          | Run source $HOME/.tmux.conf file                  |
 | Normal    | `[BK]`+`[F3]`                  | Sidebar file-tree                   | Sidebar file-tree                  | tmux-sidebar                                      |
 | Normal    | `[BK]`+`[Alt]`+`[s/r]`         | Save/Load current session           | Save/Load current session          | tmux-resurrect                                    |
 | Normal    | `[BK]`+`[a]`                   | Clear terminal output               | Clear terminal output              | Act like Ctrl-l in terminal                       |
