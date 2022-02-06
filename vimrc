@@ -896,11 +896,12 @@
 
 " [Latex] --------------------------------------------------------------------
     if USING_GUI_SOFTWARE
-        " Asynchronous Tex file -> Pdf file preview (pdf reader is needed)
-        Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
+        "" Asynchronous Tex file -> Pdf file preview (pdf reader is needed)
+        Plug 'xuhdev/vim-latex-live-preview',
+                    \ { 'for': [ 'plaintex', 'context', 'tex'] }
     endif
-    " Latex compiler link support (complier need to be installed externally)
-    Plug 'vim-latex/vim-latex', { 'for': 'tex' }
+    "" Latex compiler link support (complier need to be installed externally)
+    Plug 'vim-latex/vim-latex', { 'for': [ 'plaintex', 'context', 'tex'] }
 
 " [Markdown] -----------------------------------------------------------------
     if USING_GUI_SOFTWARE
@@ -908,7 +909,7 @@
             " Synchronous markdown file previewer
             Plug 'iamcco/markdown-preview.nvim',
                         \ { 'do': { -> mkdp#util#install() },
-                        \ 'for': ['markdown', 'vim-plug'] }
+                        \ 'for': [ 'markdown', 'vim-plug' ] }
         endif
     endif
 
@@ -1665,12 +1666,11 @@
 
 " LaTex ----------------------------------------------------------------------
     " Set spell check for LaTex files
-    " -- z= :Correct spell
-    autocmd FileType tex setlocal spell
-    autocmd FileType tex setlocal updatetime=10000 " Unit: millisecond
+    autocmd FileType plaintex,context,tex setlocal spell
+    autocmd FileType plaintex,context,tex setlocal updatetime=10000 " Unit: millisecond
     " Latex real-time viewer with gui pdf file manager
     if USING_GUI_SOFTWARE
-        let g:livepreview_previwer = 'okular'
+        let g:livepreview_previewer = 'zathura'
         let g:livepreview_engine = 'pdflatex'
         autocmd BufEnter *.tex echom '[Press F4 to Preview .tex File]'
         autocmd BufEnter *.tex noremap <F4> :LLPStartPreview<CR>

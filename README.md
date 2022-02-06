@@ -88,17 +88,18 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 <summary>Click to expand!</summary>
 
 ### Section 1 - What's New in My Customization (Vim)
-<details>
+<details open>
 <summary>Click to expand!</summary>
 
-- Use interchangeable configuration for various vim-family e.g vim, gvim, and neovim
-- Integrate useful vim-plugin e.g. auto-pair parentheses, auto-popup completion, and etc
-- Integrate various color theme for better syntax highlighting e.g. gruvbox, nord, and etc
-- Integrate vim with TMUX for both pane/split and clipboard to work together smoothly
-- Map built-in/plugin-in function to keys that are easier to remember systematically
-- Add IDE-like features for python e.g. linter, formatter, analyzer, and etc
-- Add markdown features e.g preview, wiki-style markdown writer, and etc
-- Try to minimize loading time along with maximal functionality/variety
+> 1. Use **_interchangeable configuration_** for various vim-family e.g vim, gvim, and neovim
+> 2. Integrate **_useful vim-plugin_** e.g. auto-pair parentheses, auto-popup completion, and etc.
+> 3. Integrate **_various color theme_** for better syntax highlighting e.g. gruvbox, nord, and etc.
+> 4. Integrate **_Vim with TMUX_** for both pane/split and clipboard to work together smoothly
+> 5. Map built-in/plugin-in function to keys that are easier to remember systematically
+> 6. Add IDE-like features for python e.g. linter, formatter, analyzer, and etc.
+> 7. Add markdown features e.g. preview, wiki-style markdown writer, and etc.
+> 8. Add Latex features e.g.  real-time preview, compilation, and etc.
+> 9. Try to minimize loading time along with maximal functionality/variety
 
 </details>
 
@@ -119,10 +120,10 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     # For Fedora
     dnf install firefox
     ```
-- __PDF viewer__ (e.g. Okular) [for latex preview]
+- __PDF viewer__ (e.g. zathura, Okular) [for latex preview]
     ```bash
     # For Fedora
-    dnf install okular
+    dnf install zathura*
     ```
 
 2. Requirement for Diverse Vim
@@ -168,6 +169,13 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     ```bash
     # Python3
     pip install ipdb
+    ```
+
+4. Requirements for Basic Latex Compilation
+- __texlive__ [latex suite]
+    ```bash
+    # For Fedora
+    dnf install texlive-scheme-basic
     ```
 
 #### 2. Copy Configuration File (Vim)
@@ -594,13 +602,13 @@ and following keys are pressed. Table below includes some frequently used key ma
 <summary>Click to expand!</summary>
 
 ### Section 1 - What's New in My Customization (TMUX)
-<details>
+<details open>
 <summary>Click to expand!</summary>
 
-- Bindkey is remapped from "Ctrl+b" to "Ctrl+a" (primary) and "Ctrl+Space" (secondary)
-- Command related to pane and split is remapped to my vim-like key mapping to keep things consistent
-- Add new status line theme to make press of bindkey more eye-catching
-- Add clipboard sharing between vim, system, and TMUX (through xclip)
+> 1. Bindkey is remapped from "Ctrl+b" to **_"Ctrl+a"_** primary and **_"Ctrl+Space"_** (secondary)
+> 2. Commands related to pane and split are remapped to my **_vim-like key mapping_** to keep things consistent
+> 3. Add **_new status line theme_** to make press of bindkey more eye-catching
+> 4. Add **_clipboard sharing_** between vim, system, and TMUX (through xclip)
 
 </details>
 
