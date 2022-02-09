@@ -345,7 +345,7 @@ for more details, check sections in vimrc
 - In this configuration, leader key is __SPACE__ key
 > 3. _Key mapping should be related to the name of the function_
 - Make it easier to remember or connect
-- e.g. "no wrap" function is mapped to `[SPACE]`+`[W]`+`[P]`
+- e.g. "no wrap" function is mapped to `[Space]`+`[w]`+`[p]`
 
 </details>
 

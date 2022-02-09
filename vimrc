@@ -828,8 +828,7 @@
             " Additional language packs
             Plug 'sheerun/vim-polyglot'
             " Multiple language syntax and lint support
-            Plug 'dense-analysis/ale',
-                        \ { 'for': ['python', 'fortran', 'html'] }
+            Plug 'dense-analysis/ale', { 'on': 'ALEToggle' }
         endif
         " Code formatter
         Plug 'sbdchd/neoformat', { 'on': 'Neoformat' }
@@ -896,11 +895,11 @@
 
 " [Latex] --------------------------------------------------------------------
     if USING_GUI_SOFTWARE
-        "" Asynchronous Tex file -> Pdf file preview (pdf reader is needed)
+        " Asynchronous Tex file -> Pdf file preview (pdf reader is needed)
         Plug 'xuhdev/vim-latex-live-preview',
                     \ { 'for': [ 'plaintex', 'context', 'tex'] }
     endif
-    "" Latex compiler link support (complier need to be installed externally)
+    " Latex compiler link support (complier need to be installed externally)
     Plug 'vim-latex/vim-latex', { 'for': [ 'plaintex', 'context', 'tex'] }
 
 " [Markdown] -----------------------------------------------------------------
