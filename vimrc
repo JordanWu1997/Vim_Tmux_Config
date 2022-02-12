@@ -444,6 +444,7 @@
     noremap <leader>ba :badd<space>
     " Delete buffer
     noremap <leader>bd :bdelete<space>
+    noremap <leader>bdd :bdelete<CR>
     noremap <leader>dd :bdelete<CR>:echo 'DELETE CURRENT BUFFER
                 \ [PRESS CTRL+O TO RECOVER]'<CR>
     " Navigate through buffers
@@ -452,7 +453,7 @@
     noremap <leader>K :bprev<CR>
     noremap <leader>J :bnext<CR>
     " Actions for all buffers (Bufdo)
-    noremap <leader>bdd :bufdo<space>
+    noremap <leader>bfd :bufdo<space>
 
 " Marks settings -------------------------------------------------------------
     " Note:
