@@ -860,6 +860,7 @@
 
 " [Vim Neovim communication] -------------------------------------------------
     " Help communicate beteen vim and neovim [needed for deoplete.nvim]
+    " Pynvim must be installed first [/usr/bin/python -m pip install pynvim]
     if USING_VIM
         Plug 'roxma/vim-hug-neovim-rpc'
     endif
