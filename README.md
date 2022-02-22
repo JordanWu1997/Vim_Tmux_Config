@@ -718,18 +718,19 @@ tmux -V
 
 - Pane
 
-| TMUX-Mode | Key Mapping                | Function                            | Description                           | Note                                      |
-| :-------: | :------------------------: | :---------------------------------: | :-----------------------------------: | :---------------------------------------: |
-| Normal    | `[BK]`+`[Shift]`+`[-]`     | Split pane vertically               | Split pane vertically                 | Default key is `[LK]`+`[Shift]`+`[']` (") |
-| Normal    | `[BK]`+`[Shift]`+`[\]`     | Split pane horizontally             | Split pane horizontally               | Default key is `[LK]`+`[Shift]`+`[5]` (%) |
-| Normal    | `[BK]`+`[q/Enter]`         | Move to pane (number)               | Move to pane (number)                 | Pane number shows on pane                 |
-| Normal    | `[Ctrl]`+`[h/j/k/l]`       | Move to pane (L/D/U/R)              | Move to pane (L/D/U/R)                | vim-tmux-navigator                        |
-| Normal    | `[BK]`+`[Backspace]`       | Switch to last pane                 | Switch to last pane                   |                                           |
-| Normal    | `[BK]`+`[;]`               | Scroll current pane up              | Scroll current pane up                | Scroll in TMUX copy mode                  |
-| Normal    | `[BK]`+`[Shift]`+`[j/k]`   | Swap pane to prev/next pane         | Swap pane to prev/next pane           |                                           |
-| Normal    | `[BK]`+`[Space]`           | Toggle pane layout                  | Toggle pane layout                    |                                           |
-| Normal    | `[BK]`+`[Alt]`+`[h/j/k/l]` | Resize pane to (L/D/U/R)            | Resize pane to (L/D/U/R)              |                                           |
-| Normal    | `[BK]`+`[Ctrl/Alt]`+`[o]`  | Rotate pane anti-clock/clock wisely | Rotate pane (anti-clock/clock)wisely  |                                           |
+| TMUX-Mode | Key Mapping                | Function                            | Description                           | Note                                                     |
+| :-------: | :------------------------: | :---------------------------------: | :-----------------------------------: | :------------------------------------------------------: |
+| Normal    | `[BK]`+`[Shift]`+`[-]`     | Split pane vertically               | Split pane vertically                 | Default key is `[LK]`+`[Shift]`+`[']` (")                |
+| Normal    | `[BK]`+`[Shift]`+`[\]`     | Split pane horizontally             | Split pane horizontally               | Default key is `[LK]`+`[Shift]`+`[5]` (%)                |
+| Normal    | `[BK]`+`[q/Enter]`         | Move to pane (number)               | Move to pane (number)                 | Pane number shows on pane                                |
+| Normal    | `[Ctrl]`+`[h/j/k/l]`       | Move to pane (L/D/U/R)              | Move to pane (L/D/U/R)                | vim-tmux-navigator                                       |
+| Normal    | `[BK]`+`[n/p]`             | Move to pane next/previous          | Move to pane next/previous            | TMUX Default: `[BK]`+`[n/p]` next/prev window [DISABLED] |
+| Normal    | `[BK]`+`[Backspace]`       | Switch to last pane                 | Switch to last pane                   |                                                          |
+| Normal    | `[BK]`+`[;]`               | Scroll current pane up              | Scroll current pane up                | Scroll in TMUX copy mode                                 |
+| Normal    | `[BK]`+`[Shift]`+`[j/k]`   | Swap pane to prev/next pane         | Swap pane to prev/next pane           |                                                          |
+| Normal    | `[BK]`+`[Shift]`+`[n/p]`   | Rotate pane anti-clock/clock wisely | Rotate pane (anti-clock/clock)wisely  | TMUX Default: `[BK]`+`[Ctrl/Alt]`+`[o]` [DISABLED]       |
+| Normal    | `[BK]`+`[Space]`           | Toggle pane layout                  | Toggle pane layout                    |                                                          |
+| Normal    | `[BK]`+`[Alt]`+`[h/j/k/l]` | Resize pane to (L/D/U/R)            | Resize pane to (L/D/U/R)              |                                                          |
 
 #### Key Mapping Sheet 2 - Copy-mode Key Mapping (TMUX)
 
