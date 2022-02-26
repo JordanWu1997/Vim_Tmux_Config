@@ -1062,15 +1062,15 @@
 
 " Keymapping for bufferline --------------------------------------------------
     " Goto buffers
-    nmap <leader>g1 <Plug>lightline#bufferline#go(1)
-    nmap <leader>g2 <Plug>lightline#bufferline#go(2)
-    nmap <leader>g3 <Plug>lightline#bufferline#go(3)
-    nmap <leader>g4 <Plug>lightline#bufferline#go(4)
-    nmap <leader>g5 <Plug>lightline#bufferline#go(5)
-    nmap <leader>g6 <Plug>lightline#bufferline#go(6)
-    nmap <leader>g7 <Plug>lightline#bufferline#go(7)
-    nmap <leader>g8 <Plug>lightline#bufferline#go(8)
-    nmap <leader>g9 <Plug>lightline#bufferline#go(9)
+    nmap <leader>'1 <Plug>lightline#bufferline#go(1)
+    nmap <leader>'2 <Plug>lightline#bufferline#go(2)
+    nmap <leader>'3 <Plug>lightline#bufferline#go(3)
+    nmap <leader>'4 <Plug>lightline#bufferline#go(4)
+    nmap <leader>'5 <Plug>lightline#bufferline#go(5)
+    nmap <leader>'6 <Plug>lightline#bufferline#go(6)
+    nmap <leader>'7 <Plug>lightline#bufferline#go(7)
+    nmap <leader>'8 <Plug>lightline#bufferline#go(8)
+    nmap <leader>'9 <Plug>lightline#bufferline#go(9)
     " Close buffers
     nmap <leader>d1 <Plug>lightline#bufferline#delete(1)
     nmap <leader>d2 <Plug>lightline#bufferline#delete(2)
@@ -1233,7 +1233,7 @@
 " Window-chooser (choosewin)--------------------------------------------------
     " Show big overlay letters
     let g:choosewin_overlay_enable = 1
-    nmap <leader><Enter> <Plug>(choosewin)
+    nmap <leader>` <Plug>(choosewin)
 
 " Auto-pairs -----------------------------------------------------------------
     " Insert, visual, normal mode
@@ -1422,7 +1422,7 @@
             endif
         endfunction
         " Toggle autocomplpop
-        noremap <leader>` :call AutoCompPopToggle()<CR>
+        noremap <leader><Enter> :call AutoCompPopToggle()<CR>
         " Disable autocomplpop for python file [use deoplete instead]
         if USING_PYTHON_COMPLETION
             autocmd FileType python let g:acp_enableAtStartup = 0
