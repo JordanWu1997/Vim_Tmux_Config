@@ -506,7 +506,7 @@ for more details, check sections in vimrc
 | N/V      | `[d]`+`[s]`+`[a]`+`[w]`+`["]` | Del wrapped quotation/bracket   | From "word" to word                   | vim-surrounder            |
 | N/V      | `[c]`+`[s]`+`[']`+`["]`       | Change quotation/bracket        | From 'word' to "word"                 | vim-surrounder            |
 | N/V/I    | `[LK]`+`[\`]`                 | Toggle auto-completion pop-up   | On/Off auto-completion pop-up         | autocomplpop              |
-| N/V/I    | `[Alt]`+`[Shift]`+`[']`       | Toggle auto-pair                | On/Off auto-pair quotation/bracket    | auto-pairs                |
+| N/V/I    | `[Alt]`+`[']`                 | Toggle auto-pair                | On/Off auto-pair quotation/bracket    | auto-pairs                |
 | N/V/I    | `[Alt]`+`[;]`                 | Jump to next pairs              | Jump to next paired quotation/bracket | auto-pairs                |
 | I        | `[Alt]`+`[w]`                 | Auto-pair fastwrap              | Auto-pair fastwrap current pairs      | Example: ()test -> (test) |
 | N        | `[LK]`+`[v]`+`[w]`            | Open vimwiki index page         | Open vimwiki index page               | vimwiki                   |
@@ -696,37 +696,37 @@ tmux -V
 | :-------: | :----------------------: | :------------------------: | :-----------------------: | :-----------------: |
 | Normal    | `[BK]`+`[Shift]`+`[4]`   | Rename current session     | Rename current session    | $                   |
 | Normal    | `[BK]`+`[s]`             | Show all TMUX sessions     | Show all TMUX sessions    |                     |
-| Normal    | `[BK]`+`[Shift]`+`[c]`   | Create new session         | Create new session        | tmux-sessionist     |
-| Normal    | `[BK]`+`[Shift]`+`[x/7]` | Kill current session       | Kill current session      | tmux-sessionist / & |
+| Normal    | `[BK]`+`[Alt`+`[c]`      | Create new session         | Create new session        | tmux-sessionist     |
+| Normal    | `[BK]`+`[Alt]`+`[x]`     | Kill current session       | Kill current session      | tmux-sessionist / & |
 | Normal    | `[BK]`+`[Shift]`+`[9/0]` | Move to prev/next session  | Move to prev/next session | ( / )               |
 | Normal    | `[BK]`+`[Shift]`+`[`]`   | Switch to last session     | Switch to last session    | tmux-sessionist / ~ |
 | Normal    | `[BK]`+`[k/j]`           | Move to prev/next session  | Move to prev/next session |                     |
 
 - Window
 
-| TMUX-Mode | Key Mapping              | Function                         | Description                     | Note |
-| :-------: | :----------------------: | :------------------------------: | :-----------------------------: | :--: |
-| Normal    | `[BK]`+`[Number]`        | Move to window (number)          | Move to window (number)         |      |
-| Normal    | `[BK]`+`[']`             | Move to window index             | Move to window index            |      |
-| Normal    | `[BK]`+`[,]`             | Rename current window            | Rename current session          |      |
-| Normal    | `[BK]`+`[w]`             | Show all windows                 | Show all windows                |      |
-| Normal    | `[BK]`+`[c]`             | Create new window                | Create new window               |      |
-| Normal    | `[BK]`+`[x]`             | Kill current window              | Kill current window             |      |
-| Normal    | `[BK]`+`[`]`             | Switch to last window            | Switch to last window           |      |
-| Normal    | `[BK]`+`[h/l]`           | Move to next/prev window         | Move to next/prev window        |      |
-| Normal    | `[BK]`+`[Shift]`+`[h/l]` | Swap window to prev/next window  | Swap window to prev/next window |      |
+| TMUX-Mode | Key Mapping              | Function                         | Description                     | Note                        |
+| :-------: | :----------------------: | :------------------------------: | :-----------------------------: | :-------------------------: |
+| Normal    | `[BK]`+`[Number]`        | Move to window (number)          | Move to window (number)         |                             |
+| Normal    | `[BK]`+`[']`             | Move to window index             | Move to window index            |                             |
+| Normal    | `[BK]`+`[,]`             | Rename current window            | Rename current session          |                             |
+| Normal    | `[BK]`+`[w]`             | Show all windows                 | Show all windows                |                             |
+| Normal    | `[BK]`+`[Shift]`+`[c]`   | Create new window                | Create new window               | Default key is `[BK]`+`[c]` |
+| Normal    | `[BK]`+`[Shift]`+`[x/7]` | Kill current window              | Kill current window             |                             |
+| Normal    | `[BK]`+`[`]`             | Switch to last window            | Switch to last window           |                             |
+| Normal    | `[BK]`+`[h/l]`           | Move to next/prev window         | Move to next/prev window        |                             |
+| Normal    | `[BK]`+`[Shift]`+`[h/l]` | Swap window to prev/next window  | Swap window to prev/next window |                             |
 
 - Pane
 
 | TMUX-Mode | Key Mapping                | Function                            | Description                           | Note                                                     |
 | :-------: | :------------------------: | :---------------------------------: | :-----------------------------------: | :------------------------------------------------------: |
-| Normal    | `[BK]`+`[Shift]`+`[-]`     | Split pane vertically               | Split pane vertically                 | Default key is `[LK]`+`[Shift]`+`[']` (")                |
-| Normal    | `[BK]`+`[Shift]`+`[\]`     | Split pane horizontally             | Split pane horizontally               | Default key is `[LK]`+`[Shift]`+`[5]` (%)                |
+| Normal    | `[BK]`+`[Tab]`             | Show all panes                      | Show all panes                        |                                                          |
+| Normal    | `[BK]`+`[Shift]`+`[-]`     | Split pane vertically               | Split pane vertically                 | Default key is `[BK]`+`[Shift]`+`[']` (")                |
+| Normal    | `[BK]`+`[Shift]`+`[\]`     | Split pane horizontally             | Split pane horizontally               | Default key is `[BK]`+`[Shift]`+`[5]` (%)                |
 | Normal    | `[BK]`+`[q/Enter]`         | Move to pane (number)               | Move to pane (number)                 | Pane number shows on pane                                |
 | Normal    | `[Ctrl]`+`[h/j/k/l]`       | Move to pane (L/D/U/R)              | Move to pane (L/D/U/R)                | vim-tmux-navigator                                       |
 | Normal    | `[BK]`+`[n/p]`             | Move to pane next/previous          | Move to pane next/previous            | TMUX Default: `[BK]`+`[n/p]` next/prev window [DISABLED] |
 | Normal    | `[BK]`+`[Backspace]`       | Switch to last pane                 | Switch to last pane                   |                                                          |
-| Normal    | `[BK]`+`[;]`               | Scroll current pane up              | Scroll current pane up                | Scroll in TMUX copy mode                                 |
 | Normal    | `[BK]`+`[Shift]`+`[j/k]`   | Swap pane to prev/next pane         | Swap pane to prev/next pane           |                                                          |
 | Normal    | `[BK]`+`[Shift]`+`[n/p]`   | Rotate pane anti-clock/clock wisely | Rotate pane (anti-clock/clock)wisely  | TMUX Default: `[BK]`+`[Ctrl/Alt]`+`[o]` [DISABLED]       |
 | Normal    | `[BK]`+`[Space]`           | Toggle pane layout                  | Toggle pane layout                    |                                                          |
@@ -751,7 +751,6 @@ tmux -V
 
 | TMUX-Mode | Key Mapping                    | Function                            | Description                        | Note                                              |
 | :-------: | :--------------------:         | :---------------------------------: | :--------------------------------: | :-----------------------------------------------: |
-| Normal    | `[BK]`+`[Tab]`                 | Open TMUX choose-tree               | Open TMUX choose-tree              | Choose pane, window, session in TMUX              |
 | Normal    | `[BK]`+`[Shift]`+`[/]`         | Show all TMUX key mapping           | Show all TMUX key mapping          |                                                   |
 | Normal    | `[BK]`+`[Shift]`+`[b]`         | Toggle TMUX status line             | Toggle TMUX status line            |                                                   |
 | Normal    | `[BK]`+`[b]`                   | Toggle TMUX borderline              | Toggle TMUX borderline             |                                                   |
