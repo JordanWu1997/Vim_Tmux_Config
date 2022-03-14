@@ -734,18 +734,19 @@ tmux -V
 
 #### Key Mapping Sheet 2 - Copy-mode Key Mapping (TMUX)
 
-| TMUX-Mode | Key Mapping            | Function                      | Description                   | Note          |
-| :-------: | :--------------------: | :---------------------------: | :---------------------------: | :-----------: |
-| Normal    | `[BK]`+`[;]`           | Enter copy mode               | Enter copy mode               |               |
-| Normal    | `[BK]`+`[]]`           | Paste selected contents       | Paste selected contents       |               |
-| Normal    | `[BK]`+`[Shift]`+`[3]` | Show all buffer list          | Show all buffer list          | `[#]`         |
-| Normal    | `[BK]`+`[=]`           | Paste from buffer list        | Paste from buffer list        |               |
-| Normal    | `[BK]`+`[/]`           | Search and select pattern     | Search and select pattern     | tmux-copy-cat |
-| Copy      | `[v/Space]`            | Start selection               | Start selection               |               |
-| Copy      | `[Ctrl]`+`[v]`         | Vim-like block selection      | Vim-like block selection      |               |
-| Copy      | `[Shift]`+`[v]`        | Vim-like line selection       | Vim-like line selection       |               |
-| Copy      | `[y]`                  | Vim-like yank selected region | Vim-like yank selected region |               |
-| Copy      | `[;/q/Enter]`          | Quit copy mode                | Quit copy mode                |               |
+| TMUX-Mode | Key Mapping            | Function                      | Description                   | Note                |
+| :-------: | :--------------------: | :---------------------------: | :---------------------------: | :-----------------: |
+| Normal    | `[BK]`+`[;]`           | Enter copy mode               | Enter copy mode               |                     |
+| Normal    | `[BK]`+`[]]`           | Paste selected contents       | Paste selected contents       |                     |
+| Normal    | `[BK]`+`[Shift]`+`[3]` | Show all buffer list          | Show all buffer list          | `[#]`               |
+| Normal    | `[BK]`+`[=]`           | Paste from buffer list        | Paste from buffer list        |                     |
+| Normal    | `[BK]`+`[/]`           | Search and select pattern     | Search and select pattern     | tmux-copy-cat       |
+| Normal    | `[BK]`+`[Shift]`+`[t]` | Show time in copy mode        | Show time in copy mode        |                     |
+| Copy      | `[v/Space]`            | Start selection               | Start selection               | TMUX built-in clock |
+| Copy      | `[Ctrl]`+`[v]`         | Vim-like block selection      | Vim-like block selection      |                     |
+| Copy      | `[Shift]`+`[v]`        | Vim-like line selection       | Vim-like line selection       |                     |
+| Copy      | `[y]`                  | Vim-like yank selected region | Vim-like yank selected region |                     |
+| Copy      | `[;/q/Enter]`          | Quit copy mode                | Quit copy mode                |                     |
 
 #### Key Mapping Sheet 3 - Miscellaneous (TMUX)
 
