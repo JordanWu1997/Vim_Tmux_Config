@@ -673,7 +673,7 @@
                         \ nocursorcolumn nocursorline nonumber laststatus=0
             " Auto start command when leaving terminal mode
             autocmd TermClose * setlocal
-                        \ cursorcolumn cursorline number laststatus=2
+                        \ nocursorcolumn cursorline number laststatus=2
         endif
     endif
 
