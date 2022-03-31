@@ -125,9 +125,9 @@
     let USING_EXTRA_PLUG = 1
     " Coding tools vim-plug (Include syntax support, git function, and etc.)
     let USING_CODING_TOOL_PLUG = 1
-    " Python Completion (Use deoplete and jedi, neovim is recommended to be used)
+    " Python Completion (Use deoplete and jedi, neovim is recommended)
     let USING_PYTHON_COMPLETION = 1
-    " Python that used to install jedi, pynvim and python packages for completion
+    " Python that has jedi, pynvim and packages installed for completion
     let PYTHON_FOR_COMPLETION = $CONDA_PYTHON_EXE
     " Support of external gui software (e.g. Okular, Google-chrome, and etc.)
     let USING_GUI_SOFTWARE = 1
@@ -184,16 +184,17 @@
 " Map normal/visual/operator-pending mode key --------------------------------
     " Note:
     " -- z+[t/z/b/h/l]: scroll window top/center/bottom/left/right
-    " -- Ctrl+[i/o]: jump to Next/Prev cursor location, works even between files
+    " -- Ctrl+[i/o]: jump to next/prev cursor location
     " -- :jumps: show all jump history
-    " -- g+[;/,]: go to Older/Newer change
+    " -- g+[;/,]: go to older/newer change
     " -- :changes: show all change history
-    " -- g+[-/+]: go to Prev/Next text-states (Undo/Redo)
+    " -- g+[-/+]: go to prev/next text-states (undo/redo)
     " -- g+[j/k/l/h]: move in visual lines instead of real lines in WRAP text
     " -- g+[uu/UU/~~]: set lowercase/uppercase/toggle for whole line
     " -- :g/PATTERN/ACTION: in entire file, for matching PATTERN, do ACTION
-    " -- g+[t/T]: go to Next/Prev tab
-    " -- g+[i/v]: go to last location in insert/visual mode and enter insert/visual mode
+    " -- g+[t/T]: go to next/prev tab
+    " -- g+[i]: go to last location in insert mode and enter insert mode
+    " -- g+[v]: go to last location in visual mode and enter visual mode
     " -- g+[n]: go to next search and visually select it
 
     " Unmap ex mode [old school mode] to prevent typo
@@ -202,7 +203,7 @@
     " Use :<C-f> to open command history instead
     noremap q: <nop>
     noremap Q <nop>
-    " Make Y yank to the end of line instead of whole line just like D do
+    " Make Y yank to the EOL instead of whole line just like what D does
     nnoremap Y y$
     " Move selection block up/down in visual mode
     vnoremap K :m '<-2<CR>gv=gv
@@ -332,7 +333,7 @@
     noremap <leader>st :set list!<CR>
 
 " Cursor settings ------------------------------------------------------------
-    set ruler          " Show cursor position in statusline
+    set ruler          " Show cursor position in status line
     set cursorline     " Show vertical line
     set nocursorcolumn " Show horizontal line (leggy sometimes)
     " Toggle cursor line/column indicator (horizontal/vertical)
@@ -349,7 +350,7 @@
     set title             " Let vim change terminal title
     set display+=lastline " Show line as much as possible
     set scrolloff=10      " Keep cursor at middle (10 lines away from bottom)
-    " Change scrolloff
+    " Change scroll off
     noremap <leader>sc9 :set scrolloff=999<CR>
     noremap <leader>sc0 :set scrolloff=10<CR>
 
@@ -379,7 +380,7 @@
     " -- z+[M/R/i]: Maximize/Remove/Invert all folds
     " -- z+[j/k]: Jump to next/prev fold
 
-" Fold settings
+    " Fold settings
     set foldmethod=syntax
     set foldcolumn=0
     set foldlevel=0
@@ -878,8 +879,8 @@
         Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
         " Python autocompletion
         Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
-        " Just to add go-to-definition and similar features, autocompeletion from
-        " this plugin is disabled
+        " Just to add go-to-definition and similar features, autocompeletion
+        " from this plugin is disabled
         Plug 'davidhalter/jedi-vim', { 'for': 'python' }
     endif
     " More python syntax highlight
@@ -1325,8 +1326,8 @@
     if USING_EXTRA_PLUG
         if USING_NEOVIM
             let g:yankring_history_dir = '~/.config/nvim/'
-            " Fix for yankring and neovim problem when system has non-text things
-            " copied in clipboard
+            " Fix for yankring and neovim problem when system has non-text
+            " things copied in clipboard
             let g:yankring_clipboard_monitor = 0
         else
             let g:yankring_history_dir = '~/.vim/dirs/'
@@ -1668,7 +1669,7 @@
 " LaTex ----------------------------------------------------------------------
     " Set spell check for LaTex files
     autocmd FileType plaintex,context,tex setlocal spell
-    autocmd FileType plaintex,context,tex setlocal updatetime=10000 " Unit: millisecond
+    autocmd FileType plaintex,context,tex setlocal updatetime=10000 " Unit: ms
     " Latex real-time viewer with gui pdf file manager
     if USING_GUI_SOFTWARE
         let g:livepreview_previewer = 'zathura'
@@ -1680,7 +1681,7 @@
 " Markdown -------------------------------------------------------------------
     " Set spell check for markdown files
     autocmd FileType markdown setlocal spell
-    " Markdown previewer (no extra vim plugin needed)
+    " Markdown previewer [no extra vim plugin needed]
     " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
     " Google-chrome extension is needed for markdown viewer
     if USING_GUI_SOFTWARE && !USING_VIM8

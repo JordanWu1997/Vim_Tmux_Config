@@ -98,7 +98,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 > 5. Map built-in/plugin-in function to keys that are easier to remember systematically
 > 6. Add IDE-like features for python e.g. linter, formatter, analyzer, and etc.
 > 7. Add markdown features e.g. preview, wiki-style markdown writer, and etc.
-> 8. Add Latex features e.g.  real-time preview, compilation, and etc.
+> 8. Add Latex features e.g. real-time preview, compilation, and etc.
 > 9. Try to minimize loading time along with maximal functionality/variety
 
 </details>
@@ -150,7 +150,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     nvim --version
     ```
 3. Requirement for Python Completion
-- __ipython__ (version >= __7.20__) [python console]
+- __ipython__ (version >= __7.20__) [python consoler]
     ```bash
     # Python3
     pip install ipython
