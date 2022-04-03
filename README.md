@@ -464,18 +464,22 @@ for more details, check sections in vimrc
 1. File/Code Browsing Key Mapping
 - Note: Fzf is needed for file browsing
 
-| VIM-Mode | Key Mapping              | Function                         | Description                       | Note                       |
-| :------: | :----------------------: | :---------------------------:    | :------------------------------:  | :------------------------: |
-| N/V      | `[F3]`                   | Nerdtree Current Files           | Show current file location        |                            |
-| N/V      | `[LK]`+`[F3]`            | Toggle Nerdtree                  | On/Off NerdTree plugin            |                            |
-| N/V      | `[LK]`+`[F4]`            | Toggle Tagbar                    | On/Off Tagbar plugin              |                            |
-| N        | `[LK]`+`[f]`+`[f]`+`[s]` | List files under input directory | List files under input directory  |                            |
-| N        | `[LK]`+`[f]`+`[l]`+`[c]` | Locate files matched input       | Locate files matched input name   | Use system locate command  |
-| N        | `[LK]`+`[f]`+`[r]`+`[g]` | Find files with input pattern    | Find files matched input pattern  | Use system ripgrep command |
-| N        | `[LK]`+`[f]`+`[f]`+`[t]` | Select file type for current     | Select file type for current file |                            |
-| N        | `[LK]`+`[f]`+`[c]`+`[d]` | Show all command in vim now　    | Show all command in vim now       | 　                         |
-| N        | `[LK]`+`[f]`+`[n]`+`[m]` | Show all normal mode mapping     | Show all normal mode mapping      |                            |
-| N        | `[LK]`+`[f]`+`[h]`+`[t]` | Show all helptags in vim-help    | Show all helptags in vim-help     |                            |
+| VIM-Mode | Key Mapping                     | Function                              | Description                           | Note                       |
+| :------: | :-----------------------------: | :-----------------------------------: | :-----------------------------------: | :------------------------: |
+| N/V      | `[F3]`                          | Nerdtree Current Files                | Show current file location            |                            |
+| N/V      | `[LK]`+`[F3]`                   | Toggle Nerdtree                       | On/Off NerdTree plugin                |                            |
+| N        | `[s/v]`                         | Open file in split/vsplit pane        | Open file in split/vsplit pane        | In NERDTree pane           |
+| N        | `[g]`+`[s/v]`                   | Preview file in split/vsplit pane     | Preview file in split/vsplit pane     | In NERDTree pane           |
+| N        | `[c]`+`[d]`                     | Change pwd to selected location       | Change pwd to selected location       | In NERDTree pane           |
+| N        | `[Shift]`+`[c]`+`[Shift]`+`[d]` | Change tree root to selected location | Change tree root to selected location | In NERDTree pane           |
+| N/V      | `[LK]`+`[F4]`                   | Toggle Tagbar                         | On/Off Tagbar plugin                  |                            |
+| N        | `[LK]`+`[f]`+`[f]`+`[s]`        | List files under input directory      | List files under input directory      |                            |
+| N        | `[LK]`+`[f]`+`[l]`+`[c]`        | Locate files matched input            | Locate files matched input name       | Use system locate command  |
+| N        | `[LK]`+`[f]`+`[r]`+`[g]`        | Find files with input pattern         | Find files matched input pattern      | Use system ripgrep command |
+| N        | `[LK]`+`[f]`+`[f]`+`[t]`        | Select file type for current          | Select file type for current file     |                            |
+| N        | `[LK]`+`[f]`+`[c]`+`[d]`        | Show all command in vim now　         | Show all command in vim now           | 　                         |
+| N        | `[LK]`+`[f]`+`[n]`+`[m]`        | Show all normal mode mapping          | Show all normal mode mapping          |                            |
+| N        | `[LK]`+`[f]`+`[h]`+`[t]`        | Show all helptags in vim-help         | Show all helptags in vim-help         |                            |
 
 2. Python Coding Key Mapping
 - Note: Jedi is needed for python code analysis (Check https://github.com/davidhalter/jedi )

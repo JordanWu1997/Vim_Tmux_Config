@@ -1152,12 +1152,18 @@
     let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
     let g:NERDTreeMouseMode = 3
     let g:NERDTreeDirArrows = ''
-    " Set nerdtree dir arrow symbols
+    " Set NERDTree dir arrow symbols
     let g:NERDTreeDirArrowExpandable = '►'
     let g:NERDTreeDirArrowCollapsible = '▼'
-    " Open nerdtree with the current file selected
+    " Set NERDTree open split
+    let NERDTreeMapOpenSplit = 's'
+    let NERDTreeMapOpenVSplit = 'v'
+    " Set NERDTree open preview
+    let NERDTreeletPreviewSplit = 'gs'
+    let NERDTreeletPreviewVSplit = 'gv'
+    " Open NERDTree with the current file selected
     noremap <F3> :NERDTreeFind<CR>
-    " Toggle nerdtree display
+    " Toggle NERDTree display pane
     noremap <leader><F3> :NERDTreeToggle<CR>
 
 " Tagbar ---------------------------------------------------------------------
