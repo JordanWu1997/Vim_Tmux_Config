@@ -609,7 +609,7 @@ and following keys are pressed. Table below includes some frequently used key ma
 <details open>
 <summary>Click to expand!</summary>
 
-> 1. Bindkey is remapped from "Ctrl+b" to **_"Ctrl+a"_** primary and **_"Ctrl+Space"_** (secondary)
+> 1. Bindkey is remapped from "Ctrl+b" to **_"Ctrl+a"_** (primary) and **_"Ctrl+Space"_** (secondary)
 > 2. Commands related to pane and split are remapped to my **_vim-like key mapping_** to keep things consistent
 > 3. Add **_new status line theme_** to make press of bindkey more eye-catching
 > 4. Add **_clipboard sharing_** between vim, system, and TMUX (through xclip)
