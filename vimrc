@@ -1241,6 +1241,7 @@
     " Show big overlay letters
     let g:choosewin_overlay_enable = 1
     nmap <leader>` <Plug>(choosewin)
+    nmap <leader>" <Plug>(choosewin)
 
 " Auto-pairs -----------------------------------------------------------------
     " Insert, visual, normal mode
