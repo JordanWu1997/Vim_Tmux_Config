@@ -38,10 +38,11 @@ Table of Contents
       * [Section 3 - Plugin Usage (TMUX)](#section-3---plugin-usage-tmux)
          * [Installed Plugins (TMUX)](#installed-plugins-tmux)
       * [Section 4 - Key Mapping (TMUX)](#section-4---key-mapping-tmux)
+         * [Key Mapping - Customized Key Mapping Rule (TMUX)](#key-mapping---customized-key-mapping-rule-tmux)
          * [Key Mapping Sheet 1 - Session/Window/Pane Key Mapping (TMUX)](#key-mapping-sheet-1---sessionwindowpane-key-mapping-tmux)
          * [Key Mapping Sheet 2 - Copy-mode Key Mapping (TMUX)](#key-mapping-sheet-2---copy-mode-key-mapping-tmux)
          * [Key Mapping Sheet 3 - Miscellaneous (TMUX)](#key-mapping-sheet-3---miscellaneous-tmux)
-     * [Reference for Setup (TMUX)](#reference-for-setup-tmux)
+      * [Reference for Setup (TMUX)](#reference-for-setup-tmux)
 
 Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
@@ -677,6 +678,7 @@ tmux -V
 
 #### Installed Plugins (TMUX)
 - [Plug-in] tmux-prefix-highlight (prefix/mode indicator for status line)
+- [Plug-in] tmux-pop (flash when change focus to different pane)
 - [Plug-in] tmux-sidebar (nerdtree-like file tree for TMUX)
 - [Plug-in] tmux-sessionist (make create/kill session ability easier to use)
 - [Plug-in] tmux-resurrect (save TMUX layout, and restore after restart TMUX)
@@ -692,6 +694,21 @@ tmux -V
 ### Section 4 - Key Mapping (TMUX)
 <details>
 <summary>Click to expand!</summary>
+
+#### Key Mapping - Customized Key Mapping Rule (TMUX)
+<details open>
+<summary>Click to expand!</summary>
+
+> _1. Key mapping should not be much different from the original TMUX_
+- To make life easier instead of filled up with bloated key mapping
+> _2. Key mapping should start with bindkey_
+- Though more keys is needed, but this can prevent key conflict with other applications
+> _3. Window related operations should be mapped related to `[Shift]`+`[']`_
+- To make it consistent within TMUX
+> _4. Session related operations should be mapped related to `[Alt]`+`[']`_
+- To make it consistent within TMUX
+
+</details>
 
 #### Key Mapping Sheet 1 - Session/Window/Pane Key Mapping (TMUX)
 - Session
