@@ -226,6 +226,8 @@
     noremap <leader>du :diffupdate<CR>
     noremap <leader>dj ]c
     noremap <leader>dk [c
+    " Inline substitution
+    nnoremap gs :%s/\<<c-r><c-w>\>//g<left><left>
 
 " Save/Load file hotkey ------------------------------------------------------
     " Note:
