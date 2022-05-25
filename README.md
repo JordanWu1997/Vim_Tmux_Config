@@ -92,15 +92,15 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 <details open>
 <summary>Click to expand!</summary>
 
-> 1. Use **_interchangeable configuration_** for various vim-family e.g vim, gvim, and neovim
-> 2. Integrate **_useful vim-plugin_** e.g. auto-pair parentheses, auto-popup completion, and etc.
-> 3. Integrate **_various color theme_** for better syntax highlighting e.g. gruvbox, nord, and etc.
-> 4. Integrate **_Vim with TMUX_** for both pane/split and clipboard to work together smoothly
-> 5. Map built-in/plugin-in function to keys that are easier to remember systematically
-> 6. Add IDE-like features for python e.g. linter, formatter, analyzer, and etc.
-> 7. Add markdown features e.g. preview, wiki-style markdown writer, and etc.
-> 8. Add Latex features e.g. real-time preview, compilation, and etc.
-> 9. Try to minimize loading time along with maximal functionality/variety
+- [x] Use **_interchangeable configuration_** for various vim-family e.g vim, gvim, and neovim
+- [x] Integrate **_useful vim-plugin_** e.g. auto-pair parentheses, auto-popup completion, and etc.
+- [x] Integrate **_various color theme_** for better syntax highlighting e.g. gruvbox, nord, and etc.
+- [x] Integrate **_Vim with TMUX_** for both pane/split and clipboard to work together smoothly
+- [x] Map built-in/plugin-in function to keys that are easier to remember systematically
+- [x] Add **_IDE-like features for python_** e.g. linter, formatter, analyzer, and etc.
+- [x] Add **_Markdown features_** e.g. preview, wiki-style markdown writer, and etc.
+- [x] Add **_Latex features_** e.g. real-time preview, compilation, and etc.
+- [x] Try to minimize loading time along with maximal functionality/variety
 
 </details>
 
@@ -610,10 +610,10 @@ and following keys are pressed. Table below includes some frequently used key ma
 <details open>
 <summary>Click to expand!</summary>
 
-> 1. Bindkey is remapped from "Ctrl+b" to **_"Ctrl+a"_** (primary) and **_"Ctrl+Space"_** (secondary)
-> 2. Commands related to pane and split are remapped to my **_vim-like key mapping_** to keep things consistent
-> 3. Add **_new status line theme_** to make press of bindkey more eye-catching
-> 4. Add **_clipboard sharing_** between vim, system, and TMUX (through xclip)
+- [x] Bindkey is remapped from "Ctrl+b" to **_"Ctrl+a"_** (primary) and **_"Ctrl+Space"_** (secondary)
+- [x] Commands related to pane and split are remapped to my **_vim-like key mapping_** to keep things consistent
+- [x] Add **_new status line theme_** to make press of bindkey more eye-catching
+- [x] Add **_clipboard sharing_** between vim, system, and TMUX (through xclip)
 
 </details>
 
