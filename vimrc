@@ -605,11 +605,11 @@
     " Toggle comment highlight function
     function! CommentHighlightToggle()
         if g:comment_highlight_is_open
-            hi Comment cterm=italic ctermfg=8  guifg=#8a8a8a
+            highlight Comment cterm=italic ctermfg=8  guifg=#8a8a8a
             echo 'Hi-Comment OFF'
             let g:comment_highlight_is_open = 0
         else
-            hi Comment cterm=italic ctermfg=14 guifg=#00ffff
+            highlight Comment cterm=italic ctermfg=14 guifg=#00ffff
             echo 'Hi-Comment ON'
             let g:comment_highlight_is_open = 1
         endif
@@ -623,11 +623,11 @@
     " Toggle fold highlight function
     function! FoldHighlightToggle()
         if g:comment_fold_is_open
-            hi Folded ctermfg=8  guifg=#8a8a8a
+            highlight Folded ctermfg=8  guifg=#8a8a8a
             echo 'Hi-Fold OFF'
             let g:comment_fold_is_open = 0
         else
-            hi Folded ctermfg=13 guifg=#FF2EFF
+            highlight Folded ctermfg=13 guifg=#FF2EFF
             echo 'Hi-Fold ON'
             let g:comment_fold_is_open = 1
         endif
@@ -749,6 +749,8 @@
         Plug 'arcticicestudio/nord-vim', { 'on': 'colorscheme nord' }
         " Color theme (Oceanic - solarized-like theme)
         Plug 'mhartington/oceanic-next', { 'on': 'colorscheme OceanicNext' }
+        " Color theme (Dracula - low contrast)
+        Plug 'dracula/vim', { 'as': 'dracula'}
         " Lightline (status line)
         Plug 'itchyny/lightline.vim'
         " Lightline bufferline
@@ -1509,9 +1511,9 @@
         let g:indent_guides_guide_size = 4
         let g:indent_guides_auto_colors = 0
         autocmd VimEnter,Colorscheme *
-                    \ :hi IndentGuidesOdd  guibg='#303030' ctermbg=225
+                    \ :highlight IndentGuidesOdd  guibg='#303030' ctermbg=7
         autocmd VimEnter,Colorscheme *
-                    \ :hi IndentGuidesEven guibg='#24242d' ctermbg=194
+                    \ :highlight IndentGuidesEven guibg='#24242d' ctermbg=8
         noremap <leader><F9> :IndentGuidesToggle<CR>
     endif
 
@@ -1570,9 +1572,9 @@
         " Use Esc key to quit preview pane
         let g:gitgutter_close_preview_on_escape = 1
         " Assign color to GitGutter group
-        highlight GitGutterAdd    cterm=bold ctermfg=2 ctermbg=NONE gui=bold guifg=#009900 guibg=NONE
-        highlight GitGutterChange cterm=bold ctermfg=3 ctermbg=NONE gui=bold guifg=#bbbb00 guibg=NONE
-        highlight GitGutterDelete cterm=bold ctermfg=1 ctermbg=NONE gui=bold guifg=#ff2222 guibg=NONE
+        highlight GitGutterAdd    cterm=bold ctermfg=10 ctermbg=NONE gui=bold guifg=#009900 guibg=NONE
+        highlight GitGutterChange cterm=bold ctermfg=11 ctermbg=NONE gui=bold guifg=#bbbb00 guibg=NONE
+        highlight GitGutterDelete cterm=bold ctermfg=9  ctermbg=NONE gui=bold guifg=#ff2222 guibg=NONE
         " GitGutter toggle
         noremap <leader>gg :GitGutterToggle<CR>
         noremap <leader>gb :GitGutterBufferToggle<CR>
@@ -1719,11 +1721,11 @@
     function! CustomizedColorPalette()
         " Common background setting (dark background)
         set bg=dark
-        " Color setup (hi command must be added after colorscheme)
+        " Color setup (highlight command must be added after colorscheme)
         highlight Comment       cterm=italic ctermfg=8    ctermbg=NONE gui=italic guifg=#8a8a8a guibg=NONE
         highlight CursorColumn  cterm=NONE   ctermfg=NONE ctermbg=234  gui=NONE   guifg=NONE    guibg=#444444
         highlight CursorLine    cterm=NONE   ctermfg=NONE ctermbg=234  gui=NONE   guifg=NONE    guibg=#444444
-        highlight CursorLineNr  cterm=bold                ctermbg=NONE gui=bold                 guibg=NONE
+        highlight CursorLineNr  cterm=bold   ctermfg=10   ctermbg=NONE gui=bold                 guibg=NONE
         highlight FoldColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
         highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
         highlight OverLength    cterm=bold   ctermfg=15   ctermbg=9    gui=bold   guifg=#ffffff guibg=#ff0000
@@ -1754,13 +1756,9 @@
         highlight Normal
                     \ cterm=NONE ctermfg=NONE ctermbg=NONE
                     \ gui=NONE guifg=NONE guibg=NONE
-        " Cursor line number highlight for wal theme
-        if USING_WAL_THEME
-            highlight CursorLineNr cterm=bold ctermfg=10 ctermbg=NONE
-        endif
     endif
     " Colorscheme shortcut
-    nnoremap <leader>csd :colorscheme default<CR>:set termguicolors<CR>
+    nnoremap <leader>csD :colorscheme default<CR>:set termguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
                 \:call LightlineStyle('default', USING_FANCY_SYMBOLS, 0)<CR>
                 \:call LightlineReload()<CR>:echo "default colorscheme"<CR>
@@ -1785,10 +1783,13 @@
                 \:call CustomizedColorPalette()<CR>
                 \:call LightlineStyle('oceanicnext', USING_FANCY_SYMBOLS, 1)<CR>
                 \:call LightlineReload()<CR>:echo "oceanicnext colorscheme"<CR>
+    nnoremap <leader>csd :colorscheme dracula<CR>:set termguicolors<CR>
+                \:call CustomizedColorPalette()<CR>
+                \:call LightlineStyle('dracula', USING_FANCY_SYMBOLS, 1)<CR>
+                \:call LightlineReload()<CR>:echo "dracula colorscheme"<CR>
     nnoremap <leader>csw :colorscheme wal<CR>:set notermguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
                 \:call LightlineStyle('wal', 1, 1)<CR>
-                \:highlight CursorLineNr cterm=bold ctermfg=10 ctermbg=NONE<CR>
                 \:call LightlineReload()<CR>:echo "wal colorscheme"<CR>
     " Transparent background shortcut
     nnoremap <leader>cst :highlight Normal cterm=NONE ctermfg=NONE ctermbg=NONE
