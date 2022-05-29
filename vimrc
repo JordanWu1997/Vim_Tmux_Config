@@ -846,8 +846,8 @@
         Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
         " Indent text object (i for indent as w for word)
         Plug 'michaeljsmith/vim-indent-object'
-        "Multiple cursor with incsearch support
-        Plug 'terryma/vim-multiple-cursors'
+        " Multiple cursor with extended visual-multi mode
+        Plug 'mg979/vim-visual-multi', {'branch': 'master'}
         " Git integration (Git functions in vim command line)
         Plug 'tpope/vim-fugitive'
         " GitGutter (enhanced signify), also with git integration
@@ -1527,13 +1527,16 @@
 
 " Multiple-cursors -----------------------------------------------------------
     if USING_CODING_TOOL_PLUG
-        let g:multi_cursor_use_default_mapping = 0
-        let g:multi_cursor_start_word_key      = '<M-n>'
-        let g:multi_cursor_select_all_word_key = '<M-n>a'
-        let g:multi_cursor_next_key            = '<M-n>'
-        let g:multi_cursor_prev_key            = '<M-p>'
-        let g:multi_cursor_skip_key            = '<M-o>'
-        let g:multi_cursor_quit_key            = '<Esc>'
+        let g:VM_default_mappings = 0
+        let g:VM_leader = '<space>'
+        let g:VM_maps = {}
+        let g:VM_maps['Find Under'] = '<M-n>'
+        let g:VM_maps['Find Subword Under'] = '<M-n>'
+        let g:VM_maps["Add Cursor Down"] = '<M-S-j>'
+        let g:VM_maps["Add Cursor Up"] = '<M-S-k>'
+        let g:VM_maps["Visual All"] = '<leader>A'
+        let g:VM_maps["Skip Region"] = 'q'
+        let g:VM_maps["Remove Region"] = 'Q'
     endif
 
 " Vim-fugitive ---------------------------------------------------------------

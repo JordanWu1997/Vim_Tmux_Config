@@ -296,7 +296,7 @@ for more details, check sections in vimrc
         - [Plug-in] indentLine (indent line indicator)
         - [Plug-in] vim-indent-guides (indent highlight)
         - [Plug-in] vim-indent-object (add indent object to vim)
-        - [Plug-in] vim-multiple-cursors (multiple cursors)
+        - [Plug-in] vim-visual-multi (multiple cursors)
         - [Plug-in] vim-fugitive (git toolbox)
         - [Plug-in] vim-gitgutter (git diff highlight)
     ```vim
@@ -528,25 +528,24 @@ for more details, check sections in vimrc
 
 - Coding tool (Note: "let using_coding_tool_plug = 1" must be set in vimrc)
 
-| VIM-Mode | Key Mapping                           | Function                        | Description                                        | Note                                                          |
-| :------: | :-----------------------------------: | :-----------------------------: | :------------------------------------------------: | :-----------------------------------------------------------: |
-| N/V      | `[Alt]`+`[n]` (+`[n]`+`[n]`+...+`[n]` | Multiple cursor for selected    | Multiple cursor for currently selected word        | Press N to next word; Use I/A to insert word; Use Esc to exit |
-| N/V      | `[Alt]`+`[p]` (+`[p]`+`[p]`+...+`[p]` | Cancel selected multiple cursor | Cancel selected multiple cursor                    |                                                               |
-| N/V      | `[Alt]`+`[o]` (+`[o]`+`[o]`+...+`[o]` | Omit selected multiple cursor   | Omit selected multiple cursor                      |                                                               |
-| N/V      | `[LK]`+`[a]`+`[l]`                    | Toggle ALE                      | On/Off ALE                                         | Enabled at startup                                            |
-| N/V      | `[LK]`+`[a]`+`[j/k]`                  | Go to Next/Prev ALE linter      | Go to Next/Prev ALE linter                         |                                                               |
-| N/V      | `[LK]`+`[g]`+`[g]`                    | Toggle GitGutter                | On/Off GitGutter                                   | Disabled at startup                                           |
-| N/V      | `[LK]`+`[g]`+`[h]`+`[s/l/n]`          | Toggle GitGutter highlight      | Toggle GitGutter highlight symbol/line/line number |                                                               |
-| N/V      | `[LK]`+`[g]`+`[j/k]`                  | Go to Next/Prev git hunks       | Go to Next/Prev git hunks                          | Hunk means changed block                                      |
-| N/V      | `[LK]`+`[g]`+`[Shift]`+`[p]`          | Hunk preview (before changed)   | Hunk preview (before changed)                      | Here p for (p)review                                          |
-| N/V      | `[LK]`+`[g]`+`[Shift]`+`[f]`          | Fold all unchanged lines        | Fold all unchanged lines                           |                                                               |
-| N/V      | `[LK]`+`[g]`+`[Shift]`+`[s]`          | Stage current hunk              | Stage current hunk                                 | Here s for (s)tage                                            |
-| N/V      | `[LK]`+`[g]`+`[Shift]`+`[u]`          | Restore current hunk            | Restore current hunk                               | Like vim undo                                                 |
-| N/V      | `[LK]`+`[g]`+`[s]`                    | Summary of current git repo     | Summary of current git repo                        | Here s for (s)ummary                                          |
-| N/V      | `[LK]`+`[g]`+(`[Shift]`)+`[d]`        | Git diff (all unstaged files)   | Git diff (all unstaged files)                      |                                                               |
-| N/V      | `[LK]`+`[g]`+(`[Shift]`)+`[a]`        | Git add (all unstaged files)    | Git add (all unstaged files)                       |                                                               |
-| N/V      | `[LK]`+`[g]`+(`[Shift]`)+`[c]`        | Git commit all staged files     | Git commit all staged files)                       |                                                               |
-| N/V      | `[LK]`+`[g]`+`[Shift]`+`[b]`          | Git blame current file          | Git blame current file                             |                                                               |
+| VIM-Mode | Key Mapping                           | Function                        | Description                                        | Note                                                          |   |
+| :------: | :-----------------------------------: | :-----------------------------: | :------------------------------------------------: | :-----------------------------------------------------------: |   |
+| N        | `[Alt]`+`[n]`                         | Enter visual-multi mode         | Enter visual-multi mode with selected word         | Press n to next word; q to ignore word, Q to erase word mark  |   |
+| N        | `[Alt]`+`[Shift]`+`[j/k]`             | Add vertical multi-cursor       | Enter visual-multi mode and add vertical cursor    |                                                               |   |
+| N/V      | `[LK]`+`[a]`+`[l]`                    | Toggle ALE                      | On/Off ALE                                         | Enabled at startup                                            |   |
+| N/V      | `[LK]`+`[a]`+`[j/k]`                  | Go to Next/Prev ALE linter      | Go to Next/Prev ALE linter                         |                                                               |   |
+| N/V      | `[LK]`+`[g]`+`[g]`                    | Toggle GitGutter                | On/Off GitGutter                                   | Disabled at startup                                           |   |
+| N/V      | `[LK]`+`[g]`+`[h]`+`[s/l/n]`          | Toggle GitGutter highlight      | Toggle GitGutter highlight symbol/line/line number |                                                               |   |
+| N/V      | `[LK]`+`[g]`+`[j/k]`                  | Go to Next/Prev git hunks       | Go to Next/Prev git hunks                          | Hunk means changed block                                      |   |
+| N/V      | `[LK]`+`[g]`+`[Shift]`+`[p]`          | Hunk preview (before changed)   | Hunk preview (before changed)                      | Here p for (p)review                                          |   |
+| N/V      | `[LK]`+`[g]`+`[Shift]`+`[f]`          | Fold all unchanged lines        | Fold all unchanged lines                           |                                                               |   |
+| N/V      | `[LK]`+`[g]`+`[Shift]`+`[s]`          | Stage current hunk              | Stage current hunk                                 | Here s for (s)tage                                            |   |
+| N/V      | `[LK]`+`[g]`+`[Shift]`+`[u]`          | Restore current hunk            | Restore current hunk                               | Like vim undo                                                 |   |
+| N/V      | `[LK]`+`[g]`+`[s]`                    | Summary of current git repo     | Summary of current git repo                        | Here s for (s)ummary                                          |   |
+| N/V      | `[LK]`+`[g]`+(`[Shift]`)+`[d]`        | Git diff (all unstaged files)   | Git diff (all unstaged files)                      |                                                               |   |
+| N/V      | `[LK]`+`[g]`+(`[Shift]`)+`[a]`        | Git add (all unstaged files)    | Git add (all unstaged files)                       |                                                               |   |
+| N/V      | `[LK]`+`[g]`+(`[Shift]`)+`[c]`        | Git commit all staged files     | Git commit all staged files)                       |                                                               |   |
+| N/V      | `[LK]`+`[g]`+`[Shift]`+`[b]`          | Git blame current file          | Git blame current file                             |                                                               |   |
 
 </details>
 
