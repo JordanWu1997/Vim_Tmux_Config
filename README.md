@@ -531,6 +531,7 @@ for more details, check sections in vimrc
 | VIM-Mode | Key Mapping                           | Function                        | Description                                        | Note                                                          |   |
 | :------: | :-----------------------------------: | :-----------------------------: | :------------------------------------------------: | :-----------------------------------------------------------: |   |
 | N        | `[Alt]`+`[n]`                         | Enter visual-multi mode         | Enter visual-multi mode with selected word         | Press n to next word; q to ignore word, Q to erase word mark  |   |
+| N        | `[Alt]`+`[a]`                         | Enter visual-multi mode         | Enter visual-multi mode with all selected word     | Press n to next word; q to ignore word, Q to erase word mark  |   |
 | N        | `[Alt]`+`[Shift]`+`[j/k]`             | Add vertical multi-cursor       | Enter visual-multi mode and add vertical cursor    |                                                               |   |
 | N/V      | `[LK]`+`[a]`+`[l]`                    | Toggle ALE                      | On/Off ALE                                         | Enabled at startup                                            |   |
 | N/V      | `[LK]`+`[a]`+`[j/k]`                  | Go to Next/Prev ALE linter      | Go to Next/Prev ALE linter                         |                                                               |   |

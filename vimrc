@@ -1531,10 +1531,11 @@
         let g:VM_leader = '<space>'
         let g:VM_maps = {}
         let g:VM_maps['Find Under'] = '<M-n>'
-        let g:VM_maps['Find Subword Under'] = '<M-n>'
         let g:VM_maps["Add Cursor Down"] = '<M-S-j>'
         let g:VM_maps["Add Cursor Up"] = '<M-S-k>'
-        let g:VM_maps["Visual All"] = '<leader>A'
+        let g:VM_maps["Select All"] = '<M-a>'
+        let g:VM_maps["Find Next"] = ']'
+        let g:VM_maps["Find Prev"] = '['
         let g:VM_maps["Skip Region"] = 'q'
         let g:VM_maps["Remove Region"] = 'Q'
     endif
