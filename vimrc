@@ -455,7 +455,7 @@
     noremap <F1> :bnext<CR>
     noremap <leader>K :bprev<CR>
     noremap <leader>J :bnext<CR>
-    " Actions for all buffers (Bufdo)
+    " Actions for all buffers (bufdo)
     noremap <leader>bfd :bufdo<space>
 
 " Marks settings -------------------------------------------------------------
@@ -563,9 +563,9 @@
     noremap <leader>ehf :%! xxd -r<CR>
                 \:echo 'Hex editor off: TF to original data'<CR>
 
-" Function - line length colorcolumn warnings --------------------------------
+" Function - over-length column color warnings -------------------------------
     let g:overlength_column_is_open = 0
-    " Toggle overlength function
+    " Toggle over-length function
     function! OverlengthColumnToggle()
         if g:overlength_column_is_open
             set colorcolumn=
@@ -577,14 +577,14 @@
             let g:overlength_column_is_open = 1
         endif
     endfunction
-    " Toggle overlength color column
+    " Toggle over-length column color
     nnoremap <F7> :call OverlengthColumnToggle()<CR>
 
-" Function - line length warnings --------------------------------------------
-    " Here adopt default vim-textwidth 78 as maximum line length
+" Function - over-length character color warnings ----------------------------
+    " Here adopt default vim text width 78 characters as maximum line length
     " Default value (disabled at startup)
     let g:overlength_warning_is_open = 0
-    " Toggle overlength function
+    " Toggle over-length function
     function! OverlengthToggle()
         if g:overlength_warning_is_open
             match UnlimitLength /\%79v.\+/
@@ -596,7 +596,7 @@
             let g:overlength_warning_is_open = 1
         endif
     endfunction
-    " Toggle overlength
+    " Toggle over-length
     nnoremap <leader><F7> :call OverlengthToggle()<CR>
 
 " Function - comment highlight -----------------------------------------------
@@ -636,7 +636,7 @@
     nnoremap <leader><F8> :call FoldHighlightToggle()<CR>
 
 " ============================================================================
-" Customized terminal mode (Only support for vim >= 8.0)
+" Customized terminal mode (ONLY support for vim >= 8.0)
 " ============================================================================
 " Vim support built-in terminal, by default use system $SHELL
 
@@ -644,7 +644,7 @@
     " -- Enter insert mode to use terminal command line
     " -- In terminal buffer, <C-\><C-n> back to normal mode
 
-" Set customized terminal mode keymapping ------------------------------------
+" Set customized terminal mode key mapping -----------------------------------
     if USING_VIM8
         " Map key to enter terminal mode
         if USING_NEOVIM
@@ -736,7 +736,7 @@
 
 " [Vim theme] ----------------------------------------------------------------
     if USING_CUSTOMIZED_THEME
-        " Wal (Autocolorcheme based on wallpaper) [Only work with Cterm color]
+        " Wal (Autocolorcheme based on wallpaper) [ONLY work with cterm color]
         Plug 'dylanaraps/wal.vim', { 'on': 'colorscheme wal' }
         " Color theme (Monokai - high contrast)
         Plug 'patstockwell/vim-monokai-tasty',
@@ -749,7 +749,7 @@
         Plug 'arcticicestudio/nord-vim', { 'on': 'colorscheme nord' }
         " Color theme (Oceanic - solarized-like theme)
         Plug 'mhartington/oceanic-next', { 'on': 'colorscheme OceanicNext' }
-        " Color theme (Dracula - low contrast)
+        " Color theme (Dracula - medium contrast)
         Plug 'dracula/vim', { 'as': 'dracula'}
         " Lightline (status line)
         Plug 'itchyny/lightline.vim'
@@ -758,7 +758,7 @@
     endif
 
 " [File/Code browsing] -------------------------------------------------------
-    if USING_FANCY_SYMBOLS
+if USING_FANCY_SYMBOLS
         " Nerdtree and other vim-plug powerline symbols support
         Plug 'ryanoasis/vim-devicons'
         " More highlight in nertree
@@ -960,7 +960,7 @@
 " Part 2 - Vim-theme settings (Plugins settings and mappings)
 " ============================================================================
 " Vim-theme settings, edit them as you wish.
-" As for colorscheme, it at the end of this plug settings section
+" As for color scheme, it is in the end of this plug settings section
 
 " Lightline statusline/tabline options ---------------------------------------
     " Lightline style setup
@@ -1685,7 +1685,7 @@
     " Set spell check for LaTex files
     autocmd FileType plaintex,context,tex setlocal spell
     autocmd FileType plaintex,context,tex setlocal updatetime=10000 " Unit: ms
-    " Latex real-time viewer with gui pdf file manager
+    " Latex real-time viewer with GUI pdf file manager
     if USING_GUI_SOFTWARE
         let g:livepreview_previewer = 'zathura'
         let g:livepreview_engine = 'pdflatex'

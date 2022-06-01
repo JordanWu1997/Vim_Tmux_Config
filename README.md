@@ -356,26 +356,26 @@ for more details, check sections in vimrc
 
 1. Function Key Key Mapping
 
-| VIM-Mode | Key Mapping      | Function                        | Description                      | Note                                                    |
-| :------: | :--------------: | :-----------------------------: | :------------------------------: | :-----------------------------------------------------: |
-| N/V      | (`[LK]`)+`[F1]`  | (Previous)/Next Buffer          | Switch between buffers           |                                                         |
-| N/V      | (`[LK]`)+`[F2]`  | (Previous)/Next Tab             | Switch between tabs              |                                                         |
-| N/V      | `[F3]`           | Nerdtree current file           | Show current file location       |                                                         |
-| N/V      | `[LK]`+`[F3]`    | Toggle Nerdtree                 | On/Off NerdTree plugin           |                                                         |
-| N/V      | `[F4]`           | Markdown/Latex previewer        | Open external Viewer             | Only for .md or .tex file                               |
-| N/V      | `[LK]`+`[F4]`    | Toggle Tagbar                   | On/Off Tagbar plugin             |                                                         |
-| N/V      | (`[LK]`)+`[F5]`  | Toggle (Rel)/Abs line number    | On/Off rel/abs line number       |                                                         |
-| N/V      | `[F6]`           | Toggle fold column (short-4)    | On/Off fold column (short-4)     | For easier code fold visualization                      |
-| N/V      | `[LK]`+`[F6]`    | Toggle fold column (long-8)     | On/Off fold column (long-8)      | For easier code fold visualization                      |
-| N/V      | `[F7]`           | Toggle show line border         | On/Off highlight 79th character  | VIM recommends at most 78 characters for one line       |
-| N/V      | `[LK]`+`[F7]`    | Toggle show line border         | On/Off highlight 79th column     | VIM recommends at most 78 characters for one line       |
-| N/V      | `[F8]`           | Toggle highlight comment        | On/Off highlight code comment    | Assign brighter color to comment to highlight it        |
-| N/V      | `[LK]`+`[F8]`    | Toggle highlight fold           | On/Off highlight  vim fold       | Assign brighter color to comment to highlight it        |
-| N/V      | `[F9]`           | Toggle indent highlight (line)  | On/Off indent highlight (line)   |                                                         |
-| N/V      | `[LK]`+`[F9]`    | Toggle indent highlight (block) | On/Off indent highlight (block)  |                                                         |
-| N/V      | (`[LK]`)+`[F10]` | (Load)/Save vim layout          | Load/Save vim layout             | Including pane split, folds, and etc.                   |
-| N/V      | (`[LK]`)+`[F11]` | (Off)/On synchronized cursor    | Off/On synchronized cursor       | Need to execute in every pane that wants to synchronize |
-| N/V      | (`[LK]`)+`[F12]` | (Exit)/Enter terminal mode      | Exit/Enter terminal mode         |                                                         |
+| VIM-Mode | Key Mapping      | Function                        | Description                      | Note                                              |
+| :------: | :--------------: | :-----------------------------: | :------------------------------: | :-----------------------------------------------: |
+| N/V      | (`[LK]`)+`[F1]`  | (Previous)/Next Buffer          | Switch between buffers           |                                                   |
+| N/V      | (`[LK]`)+`[F2]`  | (Previous)/Next Tab             | Switch between tabs              |                                                   |
+| N/V      | `[F3]`           | Nerdtree current file           | Show current file location       |                                                   |
+| N/V      | `[LK]`+`[F3]`    | Toggle Nerdtree                 | On/Off NerdTree plugin           |                                                   |
+| N/V      | `[F4]`           | Markdown/Latex previewer        | Open external Viewer             | Only for .md or .tex file                         |
+| N/V      | `[LK]`+`[F4]`    | Toggle Tagbar                   | On/Off Tagbar plugin             |                                                   |
+| N/V      | (`[LK]`)+`[F5]`  | Toggle (Rel)/Abs line number    | On/Off rel/abs line number       |                                                   |
+| N/V      | `[F6]`           | Toggle fold column (short-4)    | On/Off fold column (short-4)     | For easier code fold visualization                |
+| N/V      | `[LK]`+`[F6]`    | Toggle fold column (long-8)     | On/Off fold column (long-8)      | For easier code fold visualization                |
+| N/V      | `[F7]`           | Toggle show line border         | On/Off highlight 79th character  | VIM recommends at most 78 characters for one line |
+| N/V      | `[LK]`+`[F7]`    | Toggle show line border         | On/Off highlight 79th column     | VIM recommends at most 78 characters for one line |
+| N/V      | `[F8]`           | Toggle highlight comment        | On/Off highlight code comment    | Assign brighter color to comment to highlight it  |
+| N/V      | `[LK]`+`[F8]`    | Toggle highlight fold           | On/Off highlight  vim fold       | Assign brighter color to comment to highlight it  |
+| N/V      | `[F9]`           | Toggle indent highlight (line)  | On/Off indent highlight (line)   |                                                   |
+| N/V      | `[LK]`+`[F9]`    | Toggle indent highlight (block) | On/Off indent highlight (block)  |                                                   |
+| N/V      | (`[LK]`)+`[F10]` | (Load)/Save vim layout          | Load/Save vim layout             | Including pane split, folds, and etc.             |
+| N/V      | (`[LK]`)+`[F11]` | (Off)/On synchronized cursor    | Off/On synchronized cursor       | Need to execute in every panes to synchronize     |
+| N/V      | (`[LK]`)+`[F12]` | (Exit)/Enter terminal mode      | Exit/Enter terminal mode         |                                                   |
 
 </details>
 
