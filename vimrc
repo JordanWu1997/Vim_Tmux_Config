@@ -227,7 +227,8 @@
     noremap <leader>dj ]c
     noremap <leader>dk [c
     " Inline substitution
-    nnoremap gs :%s/\<<c-r><c-w>\>//g<left><left>
+    nnoremap gs :s/\<<c-r><c-w>\>//g<left><left>
+    nnoremap gS :%s/\<<c-r><c-w>\>//g<left><left>
 
 " Save/Load file hotkey ------------------------------------------------------
     " Note:
@@ -758,7 +759,7 @@
     endif
 
 " [File/Code browsing] -------------------------------------------------------
-if USING_FANCY_SYMBOLS
+    if USING_FANCY_SYMBOLS
         " Nerdtree and other vim-plug powerline symbols support
         Plug 'ryanoasis/vim-devicons'
         " More highlight in nertree
@@ -1096,6 +1097,8 @@ if USING_FANCY_SYMBOLS
     " Note:
     " -- ripgrep must be installed if Rg function is needed
     " -- the_silver_searcher must be installed if Ag function is needed
+    " -- if focus on fzf floating window is stolen, press <C-w>w severals time
+    "    to cycle focus back
 
     " Fish is not fully compatible for fzf.vim, change to bash for convenience
     let $SHELL = '/bin/bash'
