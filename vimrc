@@ -2,7 +2,7 @@
 " ============================================================================
 " Fisa-vim-config
 " http://fisadev.github.io/fisa-vim-config/
-" Modified [Vim]/[Neovim] version:[8.2]/[v0.4.4]
+" Modified [Vim]/[Neovim] version: >= [8.2]/[v0.4.4]
 " by Kuan-Hsien Wu, Sheng-Jun Lin
 " ============================================================================
 " This vim configuration is for both vim and neovim
@@ -387,7 +387,7 @@
     set foldmethod=syntax
     set foldcolumn=0
     set foldlevel=0
-    autocmd FileType vim setlocal foldmethod=indent foldenable
+    autocmd FileType vim setlocal foldmethod=indent nofoldenable
     autocmd FileType python setlocal foldmethod=indent nofoldenable
     " Default value (disabled at startup)
     set nofoldenable
@@ -1749,13 +1749,21 @@
             "source $HOME/.cache/wal/colors-wal.vim
             " Option 2 - Use wal vim plugin [Recommended]
             colorscheme wal
-            " Lightline style
+            " Startup lightline style
             call LightlineStyle('wal', 1, 1)
         else
-            " Current available themes
-            colorscheme gruvbox
-            " Lightline style
-            call LightlineStyle('gruvbox', USING_FANCY_SYMBOLS, 1)
+            " For now, my sway environment has been customized to dracula theme
+            if $DESKTOP_SESSION == "sway"
+                " Startup color theme
+                colorscheme dracula
+                " Startup lightline style
+                call LightlineStyle('dracula', USING_FANCY_SYMBOLS, 1)
+            else
+                " Startup color theme
+                colorscheme gruvbox
+                " Startup lightline style
+                call LightlineStyle('gruvbox', USING_FANCY_SYMBOLS, 1)
+            endif
         endif
         " Call customized color palette
         call CustomizedColorPalette()
