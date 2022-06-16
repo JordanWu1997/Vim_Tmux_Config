@@ -438,6 +438,7 @@
     noremap <M-<> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 
 " Buffer settings ------------------------------------------------------------
+    set hidden " Switch buffers without saving
     " Show all buffers
     noremap <leader>bs :buffers<CR>
     " Add buffer in foreground (use :edit! to give up all changes)
