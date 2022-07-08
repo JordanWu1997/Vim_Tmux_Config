@@ -354,8 +354,9 @@
     set display+=lastline " Show line as much as possible
     set scrolloff=10      " Keep cursor at middle (10 lines away from bottom)
     " Change scroll off
-    noremap <leader>sc9 :set scrolloff=999<CR>
     noremap <leader>sc0 :set scrolloff=10<CR>
+    noremap <leader>sc1 :set scrolloff=0<CR>
+    noremap <leader>sc9 :set scrolloff=999<CR>
 
 " Search settings ------------------------------------------------------------
     " Note:
