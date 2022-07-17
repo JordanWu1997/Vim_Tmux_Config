@@ -133,6 +133,8 @@
     let USING_GUI_SOFTWARE = 1
     " Web browser for markdown preview
     let WEBBROWSER = $BROWSER
+    " Ctag generator for vimwiki plugins
+    let CTAGSBIN = '/home/jordankhwu/Desktop/Vim_Tmux_Config/bin/vwtags.py'
 
 " TERMGUI color --------------------------------------------------------------
     " Ctermcolors only support max 256 color
@@ -1307,6 +1309,15 @@
         nmap <leader>vr <Plug>VimwikiRenameFile
         nmap <leader>v= <Plug>VimwikiAddHeaderLevel
         nmap <leader>v- <Plug>VimwikiRemoveHeaderLevel
+        let g:tagbar_type_vimwiki = {
+                    \ 'ctagstype':'vimwiki',
+                    \ 'kinds':['h:header'],
+                    \ 'sro':'&&&' ,
+                    \ 'kind2scope':{'h':'header'},
+                    \ 'sort':0,
+                    \ 'ctagsbin': CTAGSBIN,
+                    \ 'ctagsargs': 'markdown'
+                    \ }
     endif
 
 " Goyo -----------------------------------------------------------------------
@@ -1719,6 +1730,12 @@
         autocmd BufEnter *.md nmap <F4> <Plug>MarkdownPreviewToggle<CR>
         autocmd BufEnter *.md setlocal scrolloff=999
     endif
+    " Insert image in markdown file
+    noremap <leader>mi <Esc>i![alt text]()<Left>
+    " Insert link in markdown file
+    noremap <leader>ml <Esc>i[]()<Left>
+    " Insert code block in markdown file
+    noremap <leader>mb <Esc>i```<CR>```<Up>
 
 " ============================================================================
 " Part 9 - Colorscheme and other color settings (Plugin settings and mappings)

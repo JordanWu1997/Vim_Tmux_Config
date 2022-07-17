@@ -113,17 +113,17 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 1. Common Requirement
 - __Curl__ [for plugin manager setup]
     ```bash
-    # For Fedora
+    #For Fedora
     dnf install curl
     ```
 - __Web browser with markdown extension__ (e.g. google-chrome, Firefox, and etc.) [for markdown preview]
     ```bash
-    # For Fedora
+    #For Fedora
     dnf install firefox
     ```
 - __PDF viewer__ (e.g. zathura, Okular) [for latex preview]
     ```bash
-    # For Fedora
+    #For Fedora
     dnf install zathura*
     ```
 
@@ -133,49 +133,49 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     - clipboard option is on (+clipboard) [for sharing system clipboard]
     - python3 option is on (+python3/dyn) [for python completion]
     ```bash
-    # Check vim version and other options
+    #Check vim version and other options
     vim --version
     ```
 - __Gvim__
     - version >= __7.0__
     - gvim already shipped with clipboard and python3 options
     ```bash
-    # Check gvim version and other options
+    #Check gvim version and other options
     vim --version
     ```
 - __Neovim__
     - version >= __0.4__
     - neovim already shipped with clipboard and python3 options
     ```bash
-    # Check nvim version and other options
+    #Check nvim version and other options
     nvim --version
     ```
 3. Requirement for Python Completion
 - __ipython__ (version >= __7.20__) [python consoler]
     ```bash
-    # Python3
+    #Python3
     pip install ipython
     ```
 - __jedi__ for jedi [python code analyzer]
     ```bash
-    # Python3
+    #Python3
     pip install jedi
     ```
 - __pynvim__ for deoplete neovim plugin usage [python code analyzer]
     ```bash
-    # Python3
+    #Python3
     pip install pynvim
     ```
 - __ipdb__ for ipdb [python breakpoint maker]
     ```bash
-    # Python3
+    #Python3
     pip install ipdb
     ```
 
 4. Requirements for Basic Latex Compilation
 - __texlive__ [latex suite]
     ```bash
-    # For Fedora
+    #For Fedora
     dnf install texlive-scheme-basic
     ```
 
@@ -199,9 +199,9 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     1. vim-plug (plug manager) installation via __curl__
         - If not working, try manually install vim-plug (also within this repository)
             ```bash
-            # For vim/gvim
+            #For vim/gvim
             cp -r vim/autoload $HOME/.vim
-            # For neovim
+            #For neovim
             cp -r vim/autoload $HOME/.config/nvim
             ```
     2. vim plugin installation via __vim-plug__
@@ -221,9 +221,9 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 - Enable too much plugins may slow down your vim. You can check your loading time with following command
 - For managing plugins enable/disable, see next section (Plugin usage configuration)
 ```bash
-# For vim/gvim
+#For vim/gvim
 vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
-# For neovim
+#For neovim
 vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 ```
 
@@ -470,10 +470,15 @@ for more details, check sections in vimrc
 | N/V      | `[F3]`                          | Nerdtree Current Files                | Show current file location            |                            |
 | N/V      | `[LK]`+`[F3]`                   | Toggle Nerdtree                       | On/Off NerdTree plugin                |                            |
 | N        | `[s/v]`                         | Open file in split/vsplit pane        | Open file in split/vsplit pane        | In NERDTree pane           |
+| N        | (`[Shift]`)+`[t]`               | Open file in new tab (silently)       | Open file in new tab (silently)       | In NERDTree pane           |
 | N        | `[g]`+`[s/v]`                   | Preview file in split/vsplit pane     | Preview file in split/vsplit pane     | In NERDTree pane           |
 | N        | `[c]`+`[d]`                     | Change pwd to selected location       | Change pwd to selected location       | In NERDTree pane           |
 | N        | `[Shift]`+`[c]`+`[Shift]`+`[d]` | Change tree root to selected location | Change tree root to selected location | In NERDTree pane           |
+| N        | (`[Shift]`)+`[o/x]`             | Open/Close folds (recursively)        | Open/Close folds (recursively)        | In NERDTree pane           |
 | N/V      | `[LK]`+`[F4]`                   | Toggle Tagbar                         | On/Off Tagbar plugin                  |                            |
+| N        | `[p]`                           | Preview tags within Tagbar            | Preview tags within Tagbar            | In Tagbar pane             |
+| N        | `[d]`                           | Show definition of tags               | Show definition of tags               | In Tagbar pane             |
+| N        | `[o]``                          | Toggle folds                          | Toggle folds                          | In Tagbar pane             |
 | N        | `[LK]`+`[f]`+`[f]`+`[s]`        | List files under input directory      | List files under input directory      |                            |
 | N        | `[LK]`+`[f]`+`[l]`+`[c]`        | Locate files matched input            | Locate files matched input name       | Use system locate command  |
 | N        | `[LK]`+`[f]`+`[r]`+`[g]`        | Find files with input pattern         | Find files matched input pattern      | Use system ripgrep command |
@@ -598,6 +603,7 @@ and following keys are pressed. Table below includes some frequently used key ma
 - https://github.com/mhinz/vim-galore
 - https://ahuigo.github.io/b/vim/vim-var#/
 - https://learnvimscriptthehardway.stevelosh.com/chapters/24.html
+- https://gist.github.com/EinfachToll/9071573
 
 </details>
 </details>
@@ -626,12 +632,12 @@ and following keys are pressed. Table below includes some frequently used key ma
 1. Common Requirement
 - __Git__ [for TMUX plugin manager setup]
 ```bash
-# For Fedora
+#For Fedora
 dnf install git
 ```
 - __Powerline__ [powerline support for TMUX status line ]
 ```bash
-# For Fedora
+#For Fedora
 dnf install powerline
 dnf install tmux-powerline
 ```
@@ -639,7 +645,7 @@ dnf install tmux-powerline
 #### 2. Copy Configuration File (TMUX)
 - version >= __2.0__
 ```bash
-# Check TMUX version
+#Check TMUX version
 tmux -V
 ```
 
@@ -655,15 +661,15 @@ tmux -V
 - At first time startup, we need to install TMUX plugin manager, load configuration file and install plugins
     1. TMUX plugin manager (TPM) installation
     ```bash
-    # In terminal
+    #In terminal
     git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
     ```
     2. Load configuration file
     ```bash
-    # Open TMUX in terminal
+    #Open TMUX in terminal
     tmux
-    # In TMUX, press ctrl+b to enter command mode
-    # In command mode
+    #In TMUX, press ctrl+b to enter command mode
+    #In command mode
     source-file ~/.tmux.conf
     ```
     3. Install plugins
