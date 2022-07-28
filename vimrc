@@ -134,7 +134,7 @@
     " Web browser for markdown preview
     let WEBBROWSER = $BROWSER
     " Ctag generator for vimwiki plugins
-    let CTAGSBIN = '/home/jordankhwu/Desktop/Vim_Tmux_Config/bin/vwtags.py'
+    let CTAGSBIN = '$HOME/Desktop/Vim_Tmux_Config/bin/vwtags.py'
 
 " TERMGUI color --------------------------------------------------------------
     " Ctermcolors only support max 256 color
@@ -284,6 +284,7 @@
     "    -- <C-w>[_/|]: Maximize current pane horizontally/vertically
     " -- Miscellaneous
     "    -- <C-w><C-f>: Open selected file in horizontal split
+    "    -- <C-w>w: Cycle through all panes
 
     " Split pane - Split border style
     set fillchars+=vert:\ "
@@ -1172,10 +1173,12 @@
     " Set NERDTree open preview
     let NERDTreeletPreviewSplit = 'gs'
     let NERDTreeletPreviewVSplit = 'gv'
-    " Open NERDTree with the current file selected
-    noremap <F3> :NERDTreeFind<CR>
+    " Toggle NERTree Zoom
+    let NERDTreeMapToggleZoom = 'zz'
     " Toggle NERDTree display pane
-    noremap <leader><F3> :NERDTreeToggle<CR>
+    noremap <F3> :NERDTreeToggle<CR>
+    " Open NERDTree with the current file selected
+    noremap <leader><F3> :NERDTreeFind<CR>
 
 " Tagbar ---------------------------------------------------------------------
     " Autofocus on tagbar open
@@ -1188,8 +1191,13 @@
     let g:tagbar_map_openallfolds = 'zR'
     let g:tagbar_map_closefold = 'zc'
     let g:tagbar_map_openfold = 'zo'
+    " tagbar zoom
+    let tagbar_map_zoomwin = 'zz'
     " Toggle tagbar display
-    noremap <leader><F4> :TagbarToggle<CR>
+    noremap <F4> :TagbarToggle<CR>
+    " Tagbar location
+    noremap <leader>tgl :let g:tagbar_position = 'leftabove vertical'<CR>
+    noremap <leader>tgr :let g:tagbar_position = 'botright vertical'<CR>
 
 " ============================================================================
 " Part 4 - Vim useful functions settings (Plugins settings and mappings)
@@ -1705,8 +1713,8 @@
     if USING_GUI_SOFTWARE
         let g:livepreview_previewer = 'zathura'
         let g:livepreview_engine = 'pdflatex'
-        autocmd BufEnter *.tex echom '[Press F4 to Preview .tex File]'
-        autocmd BufEnter *.tex noremap <F4> :LLPStartPreview<CR>
+        autocmd BufEnter *.tex echom '[Press Space+F4 to Preview .tex File]'
+        autocmd BufEnter *.tex noremap <leader><F4> :LLPStartPreview<CR>
     endif
 
 " Markdown -------------------------------------------------------------------
@@ -1716,8 +1724,8 @@
     " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
     " Google-chrome extension is needed for markdown viewer
     if USING_GUI_SOFTWARE && !USING_VIM8
-        let $OPENBROWSER = 'noremap <F4> :!'. $WEBBROWSER .' %:p &<CR>'
-        autocmd BufEnter *.md echom '[Press F4 to Open .md File]'
+        let $OPENBROWSER = 'noremap <leader><F4> :!'. $WEBBROWSER .' %:p &<CR>'
+        autocmd BufEnter *.md echom '[Press Space+F4 to Open .md File]'
         autocmd BufEnter *.md exe $OPENBROWSER
     endif
     " Synchronous markdown previewer (markdown-preview plugin)
@@ -1726,8 +1734,8 @@
         let g:mkdp_browser = $WEBBROWSER
         " Show url of markdown previewer
         let g:mkdp_echo_preview_url = 1
-        autocmd BufEnter *.md echom '[Press F4 to Open .md File]'
-        autocmd BufEnter *.md nmap <F4> <Plug>MarkdownPreviewToggle<CR>
+        autocmd BufEnter *.md echom '[Press Space+F4 to Open .md File]'
+        autocmd BufEnter *.md nmap <leader><F4> <Plug>MarkdownPreviewToggle<CR>
         autocmd BufEnter *.md setlocal scrolloff=999
     endif
     " Insert image in markdown file

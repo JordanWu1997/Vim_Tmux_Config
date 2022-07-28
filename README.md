@@ -207,7 +207,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     2. vim plugin installation via __vim-plug__
         - If not working, try manually install vim-Plug
             ```bash
-            # In vim command line mode
+            #In vim command line mode
             :Pluginstall
             ```
 
@@ -360,10 +360,10 @@ for more details, check sections in vimrc
 | :------: | :--------------: | :-----------------------------: | :------------------------------: | :-----------------------------------------------: |
 | N/V      | (`[LK]`)+`[F1]`  | (Previous)/Next Buffer          | Switch between buffers           |                                                   |
 | N/V      | (`[LK]`)+`[F2]`  | (Previous)/Next Tab             | Switch between tabs              |                                                   |
-| N/V      | `[F3]`           | Nerdtree current file           | Show current file location       |                                                   |
-| N/V      | `[LK]`+`[F3]`    | Toggle Nerdtree                 | On/Off NerdTree plugin           |                                                   |
-| N/V      | `[F4]`           | Markdown/Latex previewer        | Open external Viewer             | Only for .md or .tex file                         |
-| N/V      | `[LK]`+`[F4]`    | Toggle Tagbar                   | On/Off Tagbar plugin             |                                                   |
+| N/V      | `[F3]`           | Toggle Nerdtree                 | On/Off NerdTree plugin           |                                                   |
+| N/V      | `[LK]`+`[F3]`    | Nerdtree current file           | Show current file location       |                                                   |
+| N/V      | `[F4]`           | Toggle Tagbar                   | On/Off Tagbar plugin             |                                                   |
+| N/V      | `[LK]`+`[F4]`    | Markdown/Latex previewer        | Open external Viewer             | Only for .md or .tex file                         |
 | N/V      | (`[LK]`)+`[F5]`  | Toggle (Rel)/Abs line number    | On/Off rel/abs line number       |                                                   |
 | N/V      | `[F6]`           | Toggle fold column (short-4)    | On/Off fold column (short-4)     | For easier code fold visualization                |
 | N/V      | `[LK]`+`[F6]`    | Toggle fold column (long-8)     | On/Off fold column (long-8)      | For easier code fold visualization                |
@@ -747,20 +747,22 @@ tmux -V
 
 - Pane
 
-| TMUX-Mode | Key Mapping                | Function                            | Description                          | Note                                                              |
-| :-------: | :------------------------: | :---------------------------------: | :----------------------------------: | :---------------------------------------------------------------: |
-| Normal    | `[BK]`+`[Tab]`             | Show all panes                      | Show all panes                       |                                                                   |
-| Normal    | `[BK]`+`[Shift]`+`[-]`     | Split pane vertically               | Split pane vertically                | Default key is `[BK]`+`[Shift]`+`[']` (`["]`)                     |
-| Normal    | `[BK]`+`[Shift]`+`[\]`     | Split pane horizontally             | Split pane horizontally              | Default key is `[BK]`+`[Shift]`+`[5]` (`[%]`)                     |
-| Normal    | `[BK]`+`[q/']`             | Move to pane (number)               | Move to pane (number)                | Pane number shows on pane                                         |
-| Normal    | `[Ctrl]`+`[h/j/k/l]`       | Move to pane (L/D/U/R)              | Move to pane (L/D/U/R)               | vim-tmux-navigator                                                |
-| Normal    | `[BK]`+`[n/p]`             | Move to pane next/previous          | Move to pane next/previous           | Default key is `[BK]`+`[n/p]` next/prev window                    |
-| Normal    | `[BK]`+`[t]`+`[h/v]`       | Move marked pane to current window  | Move marked pane to current window   | tmux-sessionist; pane to move must be marked (`[BK]`+`[m]`) first |
-| Normal    | `[BK]`+`[Backtick]`        | Switch to last pane                 | Switch to last pane                  | Default key is `[BK]`+`[;]`                                       |
-| Normal    | `[BK]`+`[Shift]`+`[j/k]`   | Swap pane to prev/next pane         | Swap pane to prev/next pane          |                                                                   |
-| Normal    | `[BK]`+`[Shift]`+`[n/p]`   | Rotate pane anti-clock/clock wisely | Rotate pane (anti-clock/clock)wisely | Default key is `[BK]`+`[Ctrl/Alt]`+`[o]`                          |
-| Normal    | `[BK]`+`[Space]`           | Toggle pane layout                  | Toggle pane layout                   |                                                                   |
-| Normal    | `[BK]`+`[Alt]`+`[h/j/k/l]` | Resize pane to (L/D/U/R)            | Resize pane to (L/D/U/R)             |                                                                   |
+| TMUX-Mode | Key Mapping                | Function                              | Description                           | Note                                                              |
+| :-------: | :------------------------: | :-----------------------------------: | :-----------------------------------: | :---------------------------------------------------------------: |
+| Normal    | `[BK]`+`[Tab]`             | Show all panes                        | Show all panes                        |                                                                   |
+| Normal    | `[BK]`+`[Shift]`+`[\]`     | Split pane horizontally               | Split pane horizontally               | Default key is `[BK]`+`[Shift]`+`[5]` (`[%]`)                     |
+| Normal    | `[BK]`+`[Shift]`+`[-]`     | Split pane vertically                 | Split pane vertically                 | Default key is `[BK]`+`[Shift]`+`[']` (`["]`)                     |
+| Normal    | `[BK]`+`[Alt]`+`[\]`       | Split pane horizontally (full window) | Split pane horizontally (full window) |                                                                   |
+| Normal    | `[BK]`+`[Alt]`+`[-]`       | Split pane vertically (full window)   | Split pane vertically (full window)   |                                                                   |
+| Normal    | `[BK]`+`[q/']`             | Move to pane (number)                 | Move to pane (number)                 | Pane number shows on pane                                         |
+| Normal    | `[Ctrl]`+`[h/j/k/l]`       | Move to pane (L/D/U/R)                | Move to pane (L/D/U/R)                | vim-tmux-navigator                                                |
+| Normal    | `[BK]`+`[n/p]`             | Move to pane next/previous            | Move to pane next/previous            | Default key is `[BK]`+`[n/p]` next/prev window                    |
+| Normal    | `[BK]`+`[t]`+`[h/v]`       | Move marked pane to current window    | Move marked pane to current window    | tmux-sessionist; pane to move must be marked (`[BK]`+`[m]`) first |
+| Normal    | `[BK]`+`[Backtick]`        | Switch to last pane                   | Switch to last pane                   | Default key is `[BK]`+`[;]`                                       |
+| Normal    | `[BK]`+`[Shift]`+`[j/k]`   | Swap pane to prev/next pane           | Swap pane to prev/next pane           |                                                                   |
+| Normal    | `[BK]`+`[Shift]`+`[n/p]`   | Rotate pane anti-clock/clock wisely   | Rotate pane (anti-clock/clock)wisely  | Default key is `[BK]`+`[Ctrl/Alt]`+`[o]`                          |
+| Normal    | `[BK]`+`[Space]`           | Toggle pane layout                    | Toggle pane layout                    |                                                                   |
+| Normal    | `[BK]`+`[Alt]`+`[h/j/k/l]` | Resize pane to (L/D/U/R)              | Resize pane to (L/D/U/R)              |                                                                   |
 
 #### Key Mapping Sheet 2 - Copy-mode Key Mapping (TMUX)
 
@@ -825,6 +827,7 @@ tmux -V
 - https://gist.github.com/markandrewj/ead05ebc20f3968ec07e
 - https://github.com/tmux-plugins/tpm
 - https://github.com/samoshkin/tmux-config/blob/master/tmux/tmux.conf
+- https://github.com/gotbletu/dotfiles_v2/blob/master/normal_user/tmux/.tmux.conf
 
 </details>
 </details>
