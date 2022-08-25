@@ -1118,12 +1118,12 @@
     let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
     " Preview window layout
     let g:fzf_preview_window = ['up:50%', 'ctrl-/']
-    " Buffer (Local vim)
+    " Line/Tag in buffer (Local vim)
     nnoremap <leader>fbL :FZFBLines<CR>
     nnoremap <leader>fbl :execute ":FZFBLines " . expand('<cword>')<CR>
     nnoremap <leader>fbT :FZFBTags<CR>
     nnoremap <leader>fbt :execute ":FZFBTag " . expand('<cword>')<CR>
-    " All files (Global system)
+    " Line/Tag in all files (Global system)
     nnoremap <leader>fgL :FZFLines<CR>
     nnoremap <leader>fgl :execute ":FZFLines " . expand('<cword>')<CR>
     nnoremap <leader>fgT :FZFTags<CR>
@@ -1134,7 +1134,7 @@
     nnoremap <leader>flc :FZFLocate<space>
     nnoremap <leader>frg :FZFRg<CR>
     nnoremap <leader>fag :FZFAg<CR>
-    " Git command
+    " Git command (requires fugitive.vim plugin)
     nnoremap <leader>fgf :FZFGFiles<CR>
     nnoremap <leader>fgs :FZFGFiles?<CR>
     nnoremap <leader>fgc :FZFBCommits<CR>
@@ -1143,12 +1143,14 @@
     nnoremap <leader>fhs :FZFHistory<CR>
     nnoremap <leader>fh: :FZFHistory:<CR>
     nnoremap <leader>fh/ :FZFHistory/<CR>
-    " Buffers/Windows/Marks
-    nnoremap <leader>fbf :FZFBuffers<CR>
-    nnoremap <leader>fmk :FZFMarks<CR>
-    nnoremap <leader>fmp :FZFMaps<CR>
+    " Buffers/Windows
+    nnoremap <leader>fbs :FZFBuffers<CR>
     nnoremap <leader>fwd :FZFWindows<CR>
+    " Marks
+    nnoremap <leader>fmk :FZFMarks<CR>
+    nnoremap <leader>f' :FZFMarks<CR>
     " Miscellaneous
+    nnoremap <leader>fmp :FZFMaps<CR>
     nnoremap <leader>fcd :FZFCommands<CR>
     nnoremap <leader>fft :FZFFiletypes<CR>
     nnoremap <leader>fht :FZFHelptags<CR>
