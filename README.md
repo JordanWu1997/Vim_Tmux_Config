@@ -616,7 +616,7 @@ and following keys are pressed. Table below includes some frequently used key ma
 <details open>
 <summary>Click to expand!</summary>
 
-- [x] Bindkey is remapped from "Ctrl+b" to **_"Ctrl+a"_** (primary) and **_"Ctrl+Space"_** (secondary)
+- [x] Primary keybinding prefix is remapped from "Ctrl+b" to **_"Ctrl+a"_**, but **_"Ctrl+b"_** still works as secondary keybinding prefix
 - [x] Commands related to pane and split are remapped to my **_vim-like key mapping_** to keep things consistent
 - [x] Add **_new status line theme_** to make press of bindkey more eye-catching
 - [x] Add **_clipboard sharing_** between vim, system, and TMUX (through xclip)
@@ -771,7 +771,7 @@ tmux -V
 | Normal    | `[BK]`+`[;]`           | Enter copy mode               | Enter copy mode               |                     |
 | Normal    | `[BK]`+`[]]`           | Paste selected contents       | Paste selected contents       |                     |
 | Normal    | `[BK]`+`[Shift]`+`[3]` | Show all buffer list          | Show all buffer list          | `[#]`               |
-| Normal    | `[BK]`+`[=]`           | Paste from buffer list        | Paste from buffer list        |                     |
+| Normal    | `[BK]`+`[=]`           | Paste from buffer list        | Paste from buffer list        | `[e]` to edit       |
 | Normal    | `[BK]`+`[/]`           | Search and select pattern     | Search and select pattern     | tmux-copy-cat       |
 | Normal    | `[BK]`+`[Shift]`+`[t]` | Show time in copy mode        | Show time in copy mode        |                     |
 | Copy      | `[v/Space]`            | Start selection               | Start selection               | TMUX built-in clock |

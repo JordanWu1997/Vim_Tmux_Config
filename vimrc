@@ -425,8 +425,6 @@
     noremap <silent><A-h> :vertical resize -2<CR>
     noremap <silent><A-k> :resize +2<CR>
     noremap <silent><A-j> :resize -2<CR>
-
-" Tab (window) settings ------------------------------------------------------
     " Tab (window) operations
     noremap <leader>ts :tabs<CR>
     noremap <leader>tt :tabnew<space>
@@ -1319,6 +1317,7 @@
         nmap <leader>vr <Plug>VimwikiRenameFile
         nmap <leader>v= <Plug>VimwikiAddHeaderLevel
         nmap <leader>v- <Plug>VimwikiRemoveHeaderLevel
+        " Create tagbar type for vimwiki
         let g:tagbar_type_vimwiki = {
                     \ 'ctagstype':'vimwiki',
                     \ 'kinds':['h:header'],
