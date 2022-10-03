@@ -828,7 +828,8 @@
         " Vim-hexokinase only works in termguicolors
         if !USING_WAL_THEME
             " Paint hex colors in color code background color
-            Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
+            Plug 'rrethy/vim-hexokinase', {
+                        \ 'do': 'make hexokinase', 'on':'HexokinaseToggle' }
         endif
     endif
 
@@ -851,7 +852,7 @@
         " Indent text object (i for indent as w for word)
         Plug 'michaeljsmith/vim-indent-object'
         " Multiple cursor with extended visual-multi mode
-        Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+        Plug 'mg979/vim-visual-multi', { 'branch': 'master' }
         " Git integration (Git functions in vim command line)
         Plug 'tpope/vim-fugitive'
         " GitGutter (enhanced signify), also with git integration
@@ -1484,11 +1485,13 @@
     endif
 
 " Hexokinase -----------------------------------------------------------------
+    " -- For compling, golang must be installed [sudo dnf install golang]
     if USING_EXTRA_PLUG
+        " All possible values for hexokinase pattern
+        let g:Hexokinase_optInPatterns = 'full_hex,triple_hex,rgb,rgba,hsl,hsla,colour_names'
         " Set highlighter for hexokinase
         let g:Hexokinase_highlighters = [ 'backgroundfull' ]
-        " All possible values for hexokinase pattern
-        let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla,colour_names'
+        noremap <leader>co :HexokinaseToggle<CR>
     endif
 
 " ============================================================================

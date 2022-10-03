@@ -360,8 +360,8 @@ for more details, check sections in vimrc
 | :------: | :--------------: | :-----------------------------: | :------------------------------: | :-----------------------------------------------: |
 | N/V      | (`[LK]`)+`[F1]`  | (Previous)/Next Buffer          | Switch between buffers           |                                                   |
 | N/V      | (`[LK]`)+`[F2]`  | (Previous)/Next Tab             | Switch between tabs              |                                                   |
-| N/V      | `[F3]`           | Toggle Nerdtree                 | On/Off NerdTree plugin           |                                                   |
-| N/V      | `[LK]`+`[F3]`    | Nerdtree current file           | Show current file location       |                                                   |
+| N/V      | `[F3]`           | Toggle NerdTree                 | On/Off NerdTree plugin           |                                                   |
+| N/V      | `[LK]`+`[F3]`    | NerdTree current file           | Show current file location       |                                                   |
 | N/V      | `[F4]`           | Toggle Tagbar                   | On/Off Tagbar plugin             |                                                   |
 | N/V      | `[LK]`+`[F4]`    | Markdown/Latex previewer        | Open external Viewer             | Only for .md or .tex file                         |
 | N/V      | (`[LK]`)+`[F5]`  | Toggle (Rel)/Abs line number    | On/Off rel/abs line number       |                                                   |
@@ -782,25 +782,25 @@ tmux -V
 
 #### Key Mapping Sheet 3 - Miscellaneous (TMUX)
 
-| TMUX-Mode | Key Mapping                    | Function                            | Description                        | Note                                              |
-| :-------: | :----------------------------: | :---------------------------------: | :--------------------------------: | :-----------------------------------------------: |
-| Normal    | `[BK]`+`[Shift]`+`[/]`         | Show all TMUX key mapping           | Show all TMUX key mapping          |                                                   |
-| Normal    | `[BK]`+`[Shift]`+`[b]`         | Toggle TMUX status line             | Toggle TMUX status line            |                                                   |
-| Normal    | `[BK]`+`[b]`                   | Toggle TMUX borderline              | Toggle TMUX borderline             |                                                   |
-| Normal    | `[BK]`+`[Shift]`+`[r]`         | Reload TMUX configuration           | Reload TMUX configuration          | Run source `$HOME/.tmux.conf` file                |
-| Normal    | `[BK]`+`[F3]`                  | Sidebar file-tree                   | Sidebar file-tree                  | tmux-sidebar                                      |
-| Normal    | `[BK]`+`[Alt]`+`[s/r]`         | Save/Load current session           | Save/Load current session          | tmux-resurrect                                    |
-| Normal    | `[BK]`+`[a]`                   | Clear terminal output               | Clear terminal output              | Act like Ctrl-l in terminal                       |
-| Normal    | `[BK]`+`[Ctrl]`+`[h]`          | Send Ctrl+h to terminal             | Send Ctrl+h to terminal            | Ctrl+h is alternative backspace for fish shell    |
-| Normal    | `[BK]`+`[Ctrl]`+`[k]`          | Send Ctrl+k to terminal             | Send Ctrl+k to terminal            | Ctrl+k is to delete to end of line for fish shell |
-| Normal    | `[BK]`+`[Ctrl]`+`[l]`          | Send Ctrl+l to terminal             | Send Ctrl+l to terminal            | Ctrl+l is to clean screen for fish shell          |
-| Normal    | `[BK]`+`[Ctrl]`+`[s]`          | Toggle pane synchronization         | Toggle pane synchronization        | Synchronize input for all panes                   |
-| Normal    | `[BK]`+`[Shift]`+`[m]`         | Toggle mouse mode                   | Toggle mouse mode                  |                                                   |
-| Copy      | `[BK]`+`[o]`                   | Open selected with system default   | Open selected with system default  | tmux-open, open with xdg-open                     |
-| Copy      | `[BK]`+`[Ctrl]`+`[o]`          | Open selected with `$EDITOR`        | Open selected with `$EDITOR`       | tmux-open                                         |
-| Normal    | `[BK]`+`[m]`                   | Mark current pane                   | Mark current pane                  | Mark pane for following usage                     |
-| Normal    | `[BK]`+`[Shift]`+`[;]`         | Swap current pane with marked pane  | Swap current pane with marked pane | Target pane must be marked first                  |
-| Normal    | `[BK]`+`[Alt]`+`[Shift]`+`[;]` | Move marked pane to current window  | Move marked pane to current window | Move (merge) marked pane to current window        |
+| TMUX-Mode | Key Mapping                    | Function                           | Description                        | Note                                              |
+| :-------: | :----------------------------: | :--------------------------------: | :--------------------------------: | :-----------------------------------------------: |
+| Normal    | `[BK]`+`[Shift]`+`[/]`         | Show all TMUX key mapping          | Show all TMUX key mapping          |                                                   |
+| Normal    | `[BK]`+`[Shift]`+`[b]`         | Toggle TMUX status line            | Toggle TMUX status line            |                                                   |
+| Normal    | `[BK]`+`[b]`                   | Toggle TMUX borderline             | Toggle TMUX borderline             |                                                   |
+| Normal    | `[BK]`+`[Shift]`+`[r]`         | Reload TMUX configuration          | Reload TMUX configuration          | Run source `$HOME/.tmux.conf` file                |
+| Normal    | `[BK]`+`[F3]`                  | Sidebar file-tree                  | Sidebar file-tree                  | tmux-sidebar                                      |
+| Normal    | `[BK]`+`[Alt]`+`[s/r]`         | Save/Load current session          | Save/Load current session          | tmux-resurrect                                    |
+| Normal    | `[BK]`+`[a]`                   | Clear pane output                  | Clear pane output                  | Act like Ctrl-l in terminal                       |
+| Normal    | `[BK]`+`[Ctrl]`+`[h]`          | Send Ctrl+h to terminal            | Send Ctrl+h to terminal            | Ctrl+h is alternative backspace for fish shell    |
+| Normal    | `[BK]`+`[Ctrl]`+`[k]`          | Send Ctrl+k to terminal            | Send Ctrl+k to terminal            | Ctrl+k is to delete to end of line for fish shell |
+| Normal    | `[BK]`+`[Ctrl]`+`[l]`          | Clear scrollback history           | Clear TMUX scrollback history      |                                                   |
+| Normal    | `[BK]`+`[Ctrl]`+`[s]`          | Toggle pane synchronization        | Toggle pane synchronization        | Synchronize input for all panes                   |
+| Normal    | `[BK]`+`[Shift]`+`[m]`         | Toggle mouse mode                  | Toggle mouse mode                  |                                                   |
+| Copy      | `[BK]`+`[o]`                   | Open selected with system default  | Open selected with system default  | tmux-open, open with xdg-open                     |
+| Copy      | `[BK]`+`[Ctrl]`+`[o]`          | Open selected with `$EDITOR`       | Open selected with `$EDITOR`       | tmux-open                                         |
+| Normal    | `[BK]`+`[m]`                   | Mark current pane                  | Mark current pane                  | Mark pane for following usage                     |
+| Normal    | `[BK]`+`[Shift]`+`[;]`         | Swap current pane with marked pane | Swap current pane with marked pane | Target pane must be marked first                  |
+| Normal    | `[BK]`+`[Alt]`+`[Shift]`+`[;]` | Move marked pane to current window | Move marked pane to current window | Move (merge) marked pane to current window        |
 
 </details>
 
