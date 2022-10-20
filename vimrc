@@ -153,6 +153,9 @@
 " Vim built-in function settings and vim hotkeys settings
 " ============================================================================
 " All parameter settings and hotkey mappings
+    " Note:
+    " -- Ctrl+i (Tab)
+    " -- Ctrl+m (Enter)
 
 " Vim built-in filetype setting ----------------------------------------------
     " Following settings are later automatically executed by VIM-plug
@@ -167,6 +170,8 @@
 
 " Map insert mode key --------------------------------------------------------
     " Note:
+    " -- Ctrl+j (Enter)
+    " -- Ctrl+o (execute single normal mode operation)
     " -- Ctrl+r+(register) (Paste register)
     " -- Ctrl+[n/p] (Autocompletion next/prev candidate)
     " -- Ctrl+[d/t] (Unindent/Indent current line)
@@ -198,6 +203,7 @@
     " -- g+[i]: go to last location in insert mode and enter insert mode
     " -- g+[v]: go to last location in visual mode and enter visual mode
     " -- g+[n]: go to next search and visually select it
+    " -- g+[f]: go to file
 
     " Unmap ex mode [old school mode] to prevent typo
     noremap gQ <nop>
@@ -215,9 +221,10 @@
     noremap <S-Tab> <C-o>
     noremap gi <C-i>
     noremap go <C-o>
-    " Show jump list and change list
+    " Show jump list
     noremap <leader>go :jumps<CR>
     noremap <leader>gi :jumps<CR>
+    " Show change list
     noremap <leader>g; :changes<CR>
     noremap <leader>g, :changes<CR>
     " Diff mode (vimdiff or nvim -d)
@@ -268,30 +275,6 @@
     " Load current file previous layout
     noremap <leader><F10> :loadview<CR>
 
-" Vim split window (pane) control --------------------------------------------
-    " Note:
-    " -- Split pane navigation [Now integrate with tmux, check vim-tmux-navigator]
-    "    -- <C-w>[h/j/k/l]: Move to L/D/U/R pane
-    "    -- <C-w>[H/J/K/L]: Move pane to L/D/U/R
-    " -- Split pane action (built-in, extended)
-    "    -- <C-w>T: Move current pane to new tab
-    "    -- <C-w>n: Add new empty pane
-    "    -- <C-w>[q/c]: Close current pane
-    "    -- <C-w>[s/v]: Open current buffer in split/vsplit
-    " -- Split pane resize (built-in, extended)
-    "    -- <C-w>[+/-]: Increase/Decrease current pane height
-    "    -- <C-w>[>/<]: Increase/Decrease current pane width
-    "    -- <C-w>[_/|]: Maximize current pane horizontally/vertically
-    " -- Miscellaneous
-    "    -- <C-w><C-f>: Open selected file in horizontal split
-    "    -- <C-w>w: Cycle through all panes
-
-    " Split pane - Split border style
-    set fillchars+=vert:\ "
-    " Split pane - More natural split opening
-    set splitbelow
-    set splitright
-
 " General Vim settings -------------------------------------------------------
     set exrc            " Search vimrc file in current directory
     set timeoutlen=300  " Timeout for entering combined key (millisecond)
@@ -301,6 +284,7 @@
     set notildeop       " Not make ~ a operator like gu, gU, and etc.
     set lazyredraw      " Only redraw when necessary.
     set shell=/bin/bash " Set default shell for vim/neovim (for navigator)
+    set mouse=          " Disable mouse function
     set backspace=indent,eol,start     " Backspace through everything
     set clipboard^=unnamed,unnamedplus " Shared system clipboard
 
@@ -355,7 +339,7 @@
 " Display settings -----------------------------------------------------------
     set title             " Let vim change terminal title
     set display+=lastline " Show line as much as possible
-    set scrolloff=10      " Keep cursor at middle (10 lines away from bottom)
+    set scrolloff=10      " Keep cursor 10 lines away from top and bottom
     " Change scroll off
     noremap <leader>sc0 :set scrolloff=10<CR>
     noremap <leader>sc1 :set scrolloff=0<CR>
@@ -419,48 +403,104 @@
     nnoremap <F6> :call FoldColumnToggleShort()<CR>
     nnoremap <leader><F6> :call FoldColumnToggleLong()<CR>
 
-" Pane settings --------------------------------------------------------------
-    " Resize pane
+" Window settings ------------------------------------------------------------
+    " Note:
+    " -- Split pane navigation [Now integrate with tmux, check vim-tmux-navigator]
+    "    -- <C-w>[h/j/k/l]: Move to L/D/U/R pane
+    "    -- <C-w>[H/J/K/L]: Move pane to L/D/U/R
+    " -- Split pane action (built-in, extended)
+    "    -- <C-w>T: Move current pane to new tab
+    "    -- <C-w>n: Add new empty pane
+    "    -- <C-w>[q/c]: Close current pane
+    "    -- <C-w>[s/v]: Open current buffer in split/vsplit
+    " -- Split pane resize (built-in, extended)
+    "    -- <C-w>[+/-]: Increase/Decrease current pane height
+    "    -- <C-w>[>/<]: Increase/Decrease current pane width
+    "    -- <C-w>[_/|]: Maximize current pane horizontally/vertically
+    " -- Miscellaneous
+    "    -- <C-w><C-f>: Open selected file in horizontal split
+    "    -- <C-w>w: Cycle through all panes
+    "    -- :sfind FILENAME: Open split with FILENAME
+
+    " Split pane - Split border style
+    set fillchars+=vert:\ "
+    " Split pane - More natural split opening
+    set splitbelow
+    set splitright
+    " Resize window
     noremap <silent><A-l> :vertical resize +2<CR>
     noremap <silent><A-h> :vertical resize -2<CR>
     noremap <silent><A-k> :resize +2<CR>
     noremap <silent><A-j> :resize -2<CR>
-    " Tab (window) operations
+
+" Tab (window container) settings --------------------------------------------
+    " List tabs
     noremap <leader>ts :tabs<CR>
-    noremap <leader>tt :tabnew<space>
-    noremap <leader>td :tabclose<space>
-    noremap <leader>tdd :tabclose<CR>
-    " Tab (window) navigation
-    noremap <F2> :tabnext<CR>
-    noremap <leader><F2> :tabprevious<CR>
-    noremap <leader>L :tabnext<CR>
-    noremap <leader>H :tabprevious<CR>
-    " Tab (window) swap
-    noremap <M->> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
-    noremap <M-<> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
+    " Open new tab in background
+    noremap <leader>ta :tabnew<space>
+    " Open new tab in foreground
+    noremap <leader>te :tabedit<space>
+    noremap <leader>tf :tabfind<space>
+    " Close tab
+    noremap <leader>td :tabclose<CR>
+    noremap <leader>tD :tabclose<space>
+    " Navigate through tabs
+    noremap <leader>t0 :tabfirst<CR>
+    noremap <leader>t$ :tablast<CR>
+    noremap <leader>tj :tabnext<CR>
+    noremap <leader>tk :tabprevious<CR>
+    " Swap tabs
+    noremap <leader>tJ :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
+    noremap <leader>tK :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
+    " Merge into one tab
+    noremap <leader>to :tabonly<CR>
+    " Split buffers into individual tabs
+    noremap <leader>tO :tab ball<CR>
+    "Action for all tabs (tabdo)
+    noremap <leader>tbd :tabdo<space>
 
 " Buffer settings ------------------------------------------------------------
-    set hidden " Switch buffers without saving
-    " Show all buffers
+    " Switch buffers without saving
+    set hidden
+    " List all buffers
     noremap <leader>bs :buffers<CR>
-    " Add buffer in foreground (use :edit! to give up all changes)
-    noremap <leader>bb :edit<space>
-    " Undo buffer to last save
-    noremap <leader>bu :edit!<CR>
     " Add buffer in background
     noremap <leader>ba :badd<space>
+    " Add buffer in foreground (use :edit! to give up all changes)
+    noremap <leader>be :edit<space>
     " Delete buffer
-    noremap <leader>bd :bdelete<space>
-    noremap <leader>bdd :bdelete<CR>
-    noremap <leader>dd :bdelete<CR>:echo 'DELETE CURRENT BUFFER
-                \ [PRESS CTRL+O TO RECOVER]'<CR>
+    noremap <leader>bd :bdelete<CR>
+    noremap <leader>bD :bdelete<space>
+    " Undo buffer to last save
+    noremap <leader>bu :edit!<CR>
     " Navigate through buffers
-    noremap <leader><F1> :bprev<CR>
-    noremap <F1> :bnext<CR>
-    noremap <leader>K :bprev<CR>
-    noremap <leader>J :bnext<CR>
+    noremap <leader>b0 :bfirst<CR>
+    noremap <leader>b$ :blast<CR>
+    noremap <leader>bk :bprev<CR>
+    noremap <leader>bj :bnext<CR>
     " Actions for all buffers (bufdo)
     noremap <leader>bfd :bufdo<space>
+
+" Args settings --------------------------------------------------------------
+    " List args
+    noremap <leader>as :args<CR>
+    " Reset args with new input arguments
+    noremap <leader>aS :args<space>
+    " Add file to args in background
+    noremap <leader>aa :argadd %<CR>:args<CR>
+    noremap <leader>aA :argadd<space>
+    " Add file to args and edit in foreground
+    noremap <leader>ae :argedit<space>
+    " Delete file from args
+    noremap <leader>ad :argdelete %<CR>:args<CR>
+    noremap <leader>aD :argdelete<space>
+    " Navigate through args
+    noremap <leader>a0 :first<CR>:args<CR>
+    noremap <leader>a$ :last<CR>:args<CR>
+    noremap <leader>aj :next<CR>:args<CR>
+    noremap <leader>ak :prev<CR>:args<CR>
+    " Do actions to all files in args
+    noremap <leader>agd :argdo<space>
 
 " Marks settings -------------------------------------------------------------
     " Note:
@@ -856,7 +896,8 @@
         " Git integration (Git functions in vim command line)
         Plug 'tpope/vim-fugitive'
         " GitGutter (enhanced signify), also with git integration
-        Plug 'airblade/vim-gitgutter', { 'on': 'GitGutterToggle' }
+        Plug 'airblade/vim-gitgutter',
+                    \ { 'on': ['GitGutterToggle', 'GitGutterEnable'] }
     endif
 
 " [Tmux] ---------------------------------------------------------------------
@@ -1116,7 +1157,7 @@
     " fzf layout (Floating in the center of window)
     let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
     " Preview window layout
-    let g:fzf_preview_window = ['up:50%', 'ctrl-/']
+    let g:fzf_preview_window = ['up:50%', 'alt-/']
     " Line/Tag in buffer (Local vim)
     nnoremap <leader>fbL :FZFBLines<CR>
     nnoremap <leader>fbl :execute ":FZFBLines " . expand('<cword>')<CR>
@@ -1505,10 +1546,10 @@
     "    -- pip install pylint
     if USING_CODING_TOOL_PLUG
         let g:ale_enabled = 0
-        noremap <leader>al :ALEToggle<CR>
-        noremap <leader>ai :ALEInfo<CR>
-        nmap <leader>ak <Plug>(ale_previous_wrap)zz
-        nmap <leader>aj <Plug>(ale_next_wrap)zz
+        noremap <leader>el :ALEToggle<CR>
+        noremap <leader>ei :ALEInfo<CR>
+        nmap <leader>ek <Plug>(ale_previous_wrap)zz
+        nmap <leader>ej <Plug>(ale_next_wrap)zz
     endif
 
 " Neoformat ------------------------------------------------------------------
@@ -1587,7 +1628,7 @@
 
 " GitGutter ------------------------------------------------------------------
     if USING_CODING_TOOL_PLUG
-        "Disable all gitgutter key mappings
+        " Disable all gitgutter key mappings
         let g:gitgutter_map_keys = 0
         " Enable gitgutter at start
         let g:gitgutter_enabled = 0
@@ -1614,8 +1655,10 @@
         noremap <leader>ghs :GitGutterSignsToggle<CR>
         noremap <leader>ghl :GitGutterLineHighlightsToggle<CR>
         noremap <leader>ghn :GitGutterLineNrHighlightsToggle<CR>
-        noremap <leader>gha :GitGutterSignsEnable<CR>
+        noremap <leader>ghe :GitGutterEnable<CR>:GitGutterSignsEnable<CR>
                     \:GitGutterLineHighlightsEnable<CR>
+        noremap <leader>ghd :GitGutterEnable<CR>:GitGutterDisable<CR>
+                    \:GitGutterSignsDisable<CR>:GitGutterLineHighlightsDisable<CR>
         " GitGutter hunk move/action/git
         nmap <leader>gP <Plug>(GitGutterPreviewHunk)
         nmap <leader>gF :GitGutterFold<CR>
