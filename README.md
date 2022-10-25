@@ -388,12 +388,12 @@ for more details, check sections in vimrc
 | VIM-Mode | Key Mapping                    | Function                        | Description                | Note                                               |
 | :------: | :----------------------------: | :-----------------------------: | :------------------------: | :------------------------------------------------: |
 | N/V      | `[LK]`+`[b]`+`[a/d/e]`         | Add/Delete/Edit new buffer      | Add/Delete/Edit new buffer | Here b for (b)uffer. Edit action will switch focus |
-| N/V      | `[LK]`+`[b]`+`[j/k]`           | Go to next/prev buffer          | Go to next/prev buffer     |                                                    |
+| N/V      | `[LK]`+`[b]`+`[n/p]`           | Go to next/prev buffer          | Go to next/prev buffer     |                                                    |
 | N/V      | `[LK]`+`[a]`+`[a/d/e]`         | Add/Delete/Edit current to args | Add/Delete current to args | Here a for (a)rg. Edit action will switch focus    |
-| N/V      | `[LK]`+`[a]`+`[j/k]`           | Go to next/prev arg             | Go to next/prev arg        |                                                    |
+| N/V      | `[LK]`+`[a]`+`[n/p]`           | Go to next/prev arg             | Go to next/prev arg        |                                                    |
 | N/V      | `[LK]`+`[t]`+`[a/d/e]`         | Add/Delete/Edit new tab         | Add/Delete new tab         | Here f for (t)ab. Edit action will switch focus    |
-| N/V      | `[LK]`+`[t]`+`[j/k]`           | Go to next/prev tab             | Go to next/prev tab        |                                                    |
-| N/V      | `[LK]`+`[t]`+`[Shift]`+`[j/k]` | Move tab to next/prev tab       | Move tab to next/prev tab  |                                                    |
+| N/V      | `[LK]`+`[t]`+`[n/p]`           | Go to next/prev tab             | Go to next/prev tab        |                                                    |
+| N/V      | `[LK]`+`[t]`+`[Shift]`+`[n/p]` | Move tab to next/prev tab       | Move tab to next/prev tab  |                                                    |
 
 2. Split/Window Key Mapping
 
@@ -608,6 +608,7 @@ and following keys are pressed. Table below includes some frequently used key ma
 - https://gist.github.com/EinfachToll/9071573
 - https://www.youtube.com/watch?v=E-ZbrtoSuzw&t=1s
 - https://vim.rtorr.com/
+- https://vimtricks.com/p/50-useful-vim-commands/
 
 </details>
 </details>

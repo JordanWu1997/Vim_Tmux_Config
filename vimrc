@@ -447,11 +447,11 @@
     " Navigate through tabs
     noremap <leader>t0 :tabfirst<CR>
     noremap <leader>t$ :tablast<CR>
-    noremap <leader>tj :tabnext<CR>
-    noremap <leader>tk :tabprevious<CR>
+    noremap <leader>tn :tabnext<CR>
+    noremap <leader>tp :tabprevious<CR>
     " Swap tabs
-    noremap <leader>tJ :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
-    noremap <leader>tK :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
+    noremap <leader>tN :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
+    noremap <leader>tP :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
     " Merge into one tab
     noremap <leader>to :tabonly<CR>
     " Split buffers into individual tabs
@@ -476,8 +476,8 @@
     " Navigate through buffers
     noremap <leader>b0 :bfirst<CR>
     noremap <leader>b$ :blast<CR>
-    noremap <leader>bk :bprev<CR>
-    noremap <leader>bj :bnext<CR>
+    noremap <leader>bp :bprev<CR>
+    noremap <leader>bn :bnext<CR>
     " Actions for all buffers (bufdo)
     noremap <leader>bfd :bufdo<space>
 
@@ -497,8 +497,8 @@
     " Navigate through args
     noremap <leader>a0 :first<CR>:args<CR>
     noremap <leader>a$ :last<CR>:args<CR>
-    noremap <leader>aj :next<CR>:args<CR>
-    noremap <leader>ak :prev<CR>:args<CR>
+    noremap <leader>an :next<CR>:args<CR>
+    noremap <leader>ap :prev<CR>:args<CR>
     " Do actions to all files in args
     noremap <leader>agd :argdo<space>
 
@@ -508,6 +508,8 @@
     "    -- '' : Last cursor location
     "    -- '" : Last cursor location when buffer closed
     "    -- '. : Last modification
+    "    -- '[ : Beginning of last yanked text (] for end)
+    "    -- '< : Beginning of last visual selection (> for end)
 
     " Show marks in vim [Also check markbar plugin]
     noremap <leader>mk :marks<CR>
@@ -1112,6 +1114,9 @@
     set showcmd       " This line must be added AFTER statusline option
 
 " Keymapping for bufferline --------------------------------------------------
+    " Note:
+    " -- Here use buffer number in bufferline not buffer number in buffers
+
     " Goto buffers
     nmap <leader>'1 <Plug>lightline#bufferline#go(1)
     nmap <leader>'2 <Plug>lightline#bufferline#go(2)
@@ -1509,7 +1514,8 @@
     endif
 
 " Pop-up window selection ----------------------------------------------------
-    " Previous/next suggestion
+    " Previous/next suggestion, use Ctrl+y to select completion
+
     " [Double quotation matters here, DO NOT change to single quotation]
     if USING_EXTRA_PLUG
         inoremap <expr><S-tab> pumvisible() ? "\<C-p>" : "\<S-tab>"
