@@ -246,7 +246,7 @@
     " -- :earlier Nf (Undo to last N file change)
     " -- :later Nf (Redo to N file change)
 
-    noremap <leader>qQ :qall<CR>
+    noremap <leader>qa :qall<CR>
     noremap <leader>qq :q<CR>
     noremap <leader>ww :w<CR>
     noremap <leader>wq :wq<CR>
