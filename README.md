@@ -62,7 +62,6 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 | Vim/Gvim/Neovim | [Gruvbox](https://github.com/morhetz/gruvbox)                    |                                                                                            |
 | TMUX            | 8 pywal-color using [Pywal](https://github.com/dylanaraps/pywal) | For pywal usage, check [My_I3_Environment](https://github.com/JordanWu1997/I3_Sway_Config) |
 
-
 <details open>
 <summary>NEOVIM_DEMO_01</summary>
 
@@ -99,7 +98,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 - [x] Integrate **_Vim with TMUX_** for both pane/split and clipboard to work together smoothly
 - [x] Map built-in/plugin-in function to keys that are easier to remember systematically
 - [x] Add **_IDE-like features for python_** e.g. linter, formatter, analyzer, and etc.
-- [x] Add **_Markdown features_** e.g. preview, wiki-style markdown writer, and etc.
+- [x] Add **_Markdown features_** e.g. preview, folding, wiki-style markdown writer, and etc.
 - [x] Add **_Latex features_** e.g. real-time preview, compilation, and etc.
 - [x] Try to minimize loading time while keeping maximal functionality/variety
 
@@ -114,17 +113,17 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 1. Common Requirement
 - __Curl__ [for plugin manager setup]
     ```bash
-    #For Fedora
+    #\ For Fedora
     dnf install curl
     ```
 - __Web browser with markdown extension__ (e.g. google-chrome, Firefox, and etc.) [for markdown preview]
     ```bash
-    #For Fedora
+    #\ For Fedora
     dnf install firefox
     ```
 - __PDF viewer__ (e.g. zathura, Okular) [for latex preview]
     ```bash
-    #For Fedora
+    #\ For Fedora
     dnf install zathura*
     ```
 
@@ -134,49 +133,49 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     - clipboard option is on (+clipboard) [for sharing system clipboard]
     - python3 option is on (+python3/dyn) [for python completion]
     ```bash
-    #Check vim version and other options
+    #\ Check vim version and other options
     vim --version
     ```
 - __Gvim__
     - version >= __7.0__
     - gvim already shipped with clipboard and python3 options
     ```bash
-    #Check gvim version and other options
+    #\ Check gvim version and other options
     vim --version
     ```
 - __Neovim__
     - version >= __0.4__
     - neovim already shipped with clipboard and python3 options
     ```bash
-    #Check nvim version and other options
+    #\ Check nvim version and other options
     nvim --version
     ```
 3. Requirement for Python Completion
 - __ipython__ (version >= __7.20__) [python consoler]
     ```bash
-    #Python3
+    #\ Python3
     pip install ipython
     ```
 - __jedi__ for jedi [python code analyzer]
     ```bash
-    #Python3
+    #\ Python3
     pip install jedi
     ```
 - __pynvim__ for deoplete neovim plugin usage [python code analyzer]
     ```bash
-    #Python3
+    #\ Python3
     pip install pynvim
     ```
 - __ipdb__ for ipdb [python breakpoint maker]
     ```bash
-    #Python3
+    #\ Python3
     pip install ipdb
     ```
 
 4. Requirements for Basic Latex Compilation
 - __texlive__ [latex suite]
     ```bash
-    #For Fedora
+    #\ For Fedora
     dnf install texlive-scheme-basic
     ```
 
@@ -510,13 +509,13 @@ for more details, check sections in vimrc
 | :------: | :---------------------------: | :-----------------------------: | :-----------------------------------: | :-----------------------: |
 | N/V      | `[LK]`+`[c]`+`[c/y]`          | Comment (and copy) current line | Comment (and copy) current line       | NerdCommenter             |
 | N/V      | `[LK]`+`[c]`+`[u]`            | Uncomment current line          | Uncomment current line                | NerdCommenter             |
-| N/V      | `[LK]`+`[Backtick]`           | Select vim pane                 | Select vim pane in tabs and splits    | vim-choosewin             |
+| N/V      | `[LK]`+`[Shift]`+`["]`        | Select vim pane                 | Select vim pane in tabs and splits    | vim-choosewin             |
 | N/V      | `[LK]`+`[z]`                  | Toggle maximize current split   | On/Off maximize current split         | vim-maximizer             |
 | N/V      | `[Ctrl]`+`[w]`+`[z]`          | Toggle maximize current split   | On/Off maximize current split         | vim-maximizer             |
 | N/V      | `[y]`+`[s]`+`[a]`+`[w]`+`["]` | Add wrapped quotation/bracket   | From word to "word"                   | vim-surrounder            |
 | N/V      | `[d]`+`[s]`+`[a]`+`[w]`+`["]` | Del wrapped quotation/bracket   | From "word" to word                   | vim-surrounder            |
 | N/V      | `[c]`+`[s]`+`[']`+`["]`       | Change quotation/bracket        | From 'word' to "word"                 | vim-surrounder            |
-| N/V/I    | `[LK]`+`[Enter]`              | Toggle auto-completion pop-up   | On/Off auto-completion pop-up         | autocomplpop              |
+| N/V/I    | `[LK]`+`[`]`                 | Toggle auto-completion pop-up   | On/Off auto-completion pop-up         | autocomplpop              |
 | N/V/I    | `[Alt]`+`[']`                 | Toggle auto-pair                | On/Off auto-pair quotation/bracket    | auto-pairs                |
 | N/V/I    | `[Alt]`+`[;]`                 | Jump to next pairs              | Jump to next paired quotation/bracket | auto-pairs                |
 | I        | `[Alt]`+`[w]`                 | Auto-pair fastwrap              | Auto-pair fastwrap current pairs      | Example: ()test -> (test) |
@@ -642,7 +641,7 @@ dnf install git
 ```
 - __Powerline__ [powerline support for TMUX status line ]
 ```bash
-#For Fedora
+#\ For Fedora
 dnf install powerline
 dnf install tmux-powerline
 ```

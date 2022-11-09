@@ -118,7 +118,7 @@
     " Customize vim theme (Include colortheme and statusline)
     let USING_CUSTOMIZED_THEME = 1
     " Fancy symbols (Mainly affect lightline and nerdtree icon)
-    let USING_FANCY_SYMBOLS = 1
+    let USING_FANCY_SYMBOLS = 0
     " Wal theme support (Xresources colortheme support, check pywal)
     let USING_WAL_THEME = 0
     " Extra vim-plug (Include easymotion, yankring, autocomplpop, and etc.)
@@ -138,7 +138,7 @@
 
 " TERMGUI color --------------------------------------------------------------
     " Ctermcolors only support max 256 color
-    " Termguicolors can support html color code
+    " Termguicolors can support HTML color code
 
     " Wal colortheme does not work well with termguicolors
     if has('termguicolors') && !USING_WAL_THEME
@@ -943,7 +943,7 @@
     Plug 'tomedunn/vim.fortran', { 'for': 'fortran' }
 
 " [HTML coding] --------------------------------------------------------------
-    " Generate html in a simple way
+    " Generate HTML in a simple way
     Plug 'mattn/emmet-vim', { 'for': 'html' }
     " Generate closetag for HTML
     Plug 'alvan/vim-closetag', { 'for': 'html' }
@@ -966,6 +966,8 @@
                         \ 'for': [ 'markdown', 'vim-plug' ] }
         endif
     endif
+    " Markdown syntax header folding
+    Plug 'masukomi/vim-markdown-folding', { 'for': 'markdown' }
 
 " [I3 syntax highlight] ------------------------------------------------------
     " I3 configuration syntax highlight
@@ -1282,7 +1284,7 @@
     map <leader>cy <Plug>NERDCommenterYank
 
 " Vim-surround ---------------------------------------------------------------
-    " Surround current word or sentence with brackets or html tags
+    " Surround current word or sentence with brackets or HTML tags
     " -- Support surrounding: (), {}, [], "", ''
     " -- Difference between left/right bracket
     "    -- ysaw{ : test -> { test }
@@ -1343,27 +1345,15 @@
 
 " Vimwiki --------------------------------------------------------------------
     if USING_EXTRA_PLUG
-        let g:vimwiki_list = [{'path': '~/Documents/KNOWLEDGE_BASE/',
-                              \ 'syntax': 'markdown', 'ext': '.md'}]
-        " Global mappings
-        nmap <leader>vw <Plug>VimwikiIndex
-        nmap <leader>vs <Plug>VimwikiUISelect
-        nmap <leader>vt <Plug>VimwikiTabIndex
-        nmap <leader>v<leader>t <Plug>VimwikiTabMakeDiaryNote
-        nmap <leader>vi <Plug>VimwikiDiaryIndex
-        nmap <leader>v<leader>w <Plug>VimwikiMakeDiaryNote
-        nmap <leader>v<leader>i <Plug>VimwikiDiaryGenerateLinks
-        nmap <leader>v<leader>m <Plug>VimwikiMakeTomorrowDiaryNote
-        nmap <leader>v<leader>y <Plug>VimwikiMakeYesterdayDiaryNote
         " Disable all local mappings then remap needed ones
         let g:vimwiki_key_mappings = { 'all_maps': 0, }
-        nmap <CR> <Plug>VimwikiFollowLink
-        nmap <Backspace> <Plug>VimwikiGoBackLink
-        nmap <leader>vn <Plug>VimwikiGoto
-        nmap <leader>vd <Plug>VimwikiDeleteFile
-        nmap <leader>vr <Plug>VimwikiRenameFile
-        nmap <leader>v= <Plug>VimwikiAddHeaderLevel
-        nmap <leader>v- <Plug>VimwikiRemoveHeaderLevel
+        " Vimwiki Settings
+        let g:vimwiki_list = [{'path': '~/Documents/KNOWLEDGE_BASE/',
+                              \ 'syntax': 'markdown', 'ext': '.md'}]
+        " Must set to expr to get vim-markdown-folding to work
+        let g:vimwiki_folding='expr'
+        " Set all markdown filetype to vimwiki
+        let g:vimwiki_global_ext = 1
         " Create tagbar type for vimwiki
         let g:tagbar_type_vimwiki = {
                     \ 'ctagstype':'vimwiki',
@@ -1374,6 +1364,23 @@
                     \ 'ctagsbin': CTAGSBIN,
                     \ 'ctagsargs': 'markdown'
                     \ }
+        " Global mappings
+        nmap <leader>vw <Plug>VimwikiIndex
+        nmap <leader>vs <Plug>VimwikiUISelect
+        nmap <leader>vt <Plug>VimwikiTabIndex
+        nmap <leader>v<leader>t <Plug>VimwikiTabMakeDiaryNote
+        nmap <leader>vi <Plug>VimwikiDiaryIndex
+        nmap <leader>v<leader>w <Plug>VimwikiMakeDiaryNote
+        nmap <leader>v<leader>i <Plug>VimwikiDiaryGenerateLinks
+        nmap <leader>v<leader>m <Plug>VimwikiMakeTomorrowDiaryNote
+        nmap <leader>v<leader>y <Plug>VimwikiMakeYesterdayDiaryNote
+        nmap <CR> <Plug>VimwikiFollowLink
+        nmap <Backspace> <Plug>VimwikiGoBackLink
+        nmap <leader>vn <Plug>VimwikiGoto
+        nmap <leader>vd <Plug>VimwikiDeleteFile
+        nmap <leader>vr <Plug>VimwikiRenameFile
+        nmap <leader>v= <Plug>VimwikiAddHeaderLevel
+        nmap <leader>v- <Plug>VimwikiRemoveHeaderLevel
     endif
 
 " Goyo -----------------------------------------------------------------------
@@ -1506,7 +1513,7 @@
             endif
         endfunction
         " Toggle autocomplpop
-        noremap <leader><Enter> :call AutoCompPopToggle()<CR>
+        noremap <leader>` :call AutoCompPopToggle()<CR>
         " Disable autocomplpop for python file [use deoplete instead]
         if USING_PYTHON_COMPLETION
             autocmd FileType python let g:acp_enableAtStartup = 0
@@ -1514,7 +1521,7 @@
     endif
 
 " Pop-up window selection ----------------------------------------------------
-    " Previous/next suggestion, use Ctrl+y to select completion
+    " AUto completion pop-up, use Ctrl+[e/y] to select completion
 
     " [Double quotation matters here, DO NOT change to single quotation]
     if USING_EXTRA_PLUG
@@ -1750,7 +1757,7 @@
 " Part 8 - Other language coding tools settings (Plugin settings and mappings)
 " ============================================================================
 " Other language support settings, edit them as you wish.
-" Language support: Fortran, LaTex, Html, Markdown
+" Language support: Fortran, LaTex, HTML, Markdown
 
 " Fortran --------------------------------------------------------------------
     " Ensure correct highlighting for
