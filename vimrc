@@ -246,10 +246,15 @@
     " -- :earlier Nf (Undo to last N file change)
     " -- :later Nf (Redo to N file change)
 
-    noremap <leader>qa :qall<CR>
     noremap <leader>qq :q<CR>
+    noremap <leader>q! :q!<CR>
+    noremap <leader>qa :qall<CR>
+    noremap <leader>qa! :qall!<CR>
     noremap <leader>ww :w<CR>
+    noremap <leader>w! :w!<CR>
     noremap <leader>wq :wq<CR>
+    noremap <leader>wa! :wall!<CR>
+    noremap <leader>wa :wqall<CR>
 
 " External command -----------------------------------------------------------
     " Note:
