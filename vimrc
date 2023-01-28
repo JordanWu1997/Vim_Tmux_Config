@@ -795,7 +795,7 @@
         " Color theme (Gruvbox - low contrast)
         Plug 'morhetz/gruvbox', { 'on': 'colorscheme gruvbox' }
         " Color theme (Srcery - low contrast)
-        Plug 'srcery-colors/srcery-vim', { 'on': 'colorscheme srcery' }
+        Plug 'srcery-colors/srcery-vim' ", { 'on': 'colorscheme srcery' }
         " Color theme (Nord - cold color lower contrast)
         Plug 'arcticicestudio/nord-vim', { 'on': 'colorscheme nord' }
         " Color theme (Oceanic - solarized-like theme)
@@ -1797,6 +1797,8 @@
     if USING_GUI_SOFTWARE && USING_VIM8
         " Web browser used to preview
         let g:mkdp_browser = $WEBBROWSER
+        " Close browser after markdown file is close
+        let g:mkdp_auto_close = 0
         " Show url of markdown previewer
         let g:mkdp_echo_preview_url = 1
         autocmd BufEnter *.md echom '[Press Space+F4 to Open .md File]'

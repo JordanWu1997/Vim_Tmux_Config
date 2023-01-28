@@ -10,7 +10,6 @@ Table of Contents
 <summary>Click to expand!</summary>
 
 * [Vim_Tmux_Config](#vim_tmux_config)
-* [Table of Contents](#table-of-contents)
 * [Context](#context)
    * [Demo Current Customization](#demo-current-customization)
    * [Part 1 - Vim/Gvim/Neovim](#part-1---vimgvimneovim)
