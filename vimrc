@@ -1208,12 +1208,12 @@
     nnoremap <leader>fht :FZFHelptags<CR>
 
 " NERDTree -------------------------------------------------------------------
-    "let NERDTreeWinSize = min([40, winwidth(0) / 5])
-    let NERDTreeWinSize = 40
-    let NERDTreeShowLineNumbers = 0
-    let NERDTreeShowHidden = 0
+    " NERDTree Pane
+    let g:NERDTreeWinSize = 40
+    let g:NERDTreeShowLineNumbers = 0
+    let g:NERDTreeShowHidden = 0
     " Disable bookmark label in nerdtree
-    let NERDTreeMinimalUI = 0
+    let g:NERDTreeMinimalUI = 0
     " Don;t show these file types
     let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
     let g:NERDTreeMouseMode = 3
@@ -1222,23 +1222,25 @@
     let g:NERDTreeDirArrowExpandable = '►'
     let g:NERDTreeDirArrowCollapsible = '▼'
     " Set NERDTree open split
-    let NERDTreeMapOpenSplit = 's'
-    let NERDTreeMapOpenVSplit = 'v'
+    let g:NERDTreeMapOpenSplit = 's'
+    let g:NERDTreeMapOpenVSplit = 'v'
     " Set NERDTree open preview
-    let NERDTreeletPreviewSplit = 'gs'
-    let NERDTreeletPreviewVSplit = 'gv'
+    let g:NERDTreeletPreviewSplit = 'gs'
+    let g:NERDTreeletPreviewVSplit = 'gv'
     " Toggle NERTree Zoom
-    let NERDTreeMapToggleZoom = 'zz'
+    let g:NERDTreeMapToggleZoom = 'zz'
     " Toggle NERDTree display pane
     noremap <F3> :NERDTreeToggle<CR>
     " Open NERDTree with the current file selected
     noremap <leader><F3> :NERDTreeFind<CR>
+    " Tagbar location
+    noremap <leader>ntl :let g:NERDTreeWinPos = 'left'<CR>
+    noremap <leader>ntr :let g:NERDTreeWinPos = 'right'<CR>
 
 " Tagbar ---------------------------------------------------------------------
     " Autofocus on tagbar open
     let g:tagbar_autofocus = 1
     let g:tagbar_map_showproto = 'd'
-    "let g:tagbar_width = min([40, winwidth(0) / 5])
     let g:tagbar_width = 40
     " Map tagbar shortcut same as vim fold
     let g:tagbar_map_closeallfolds = 'zM'
