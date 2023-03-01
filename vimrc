@@ -1209,6 +1209,7 @@
 
 " NERDTree -------------------------------------------------------------------
     " NERDTree Pane
+    let g:NERDTreeWinPos = 'left'
     let g:NERDTreeWinSize = 40
     let g:NERDTreeShowLineNumbers = 0
     let g:NERDTreeShowHidden = 0
@@ -1238,10 +1239,12 @@
     noremap <leader>ntr :let g:NERDTreeWinPos = 'right'<CR>
 
 " Tagbar ---------------------------------------------------------------------
+    " Tagbar pane
+    let g:tagbar_position = 'botright vertical'
+    let g:tagbar_width = 40
     " Autofocus on tagbar open
     let g:tagbar_autofocus = 1
     let g:tagbar_map_showproto = 'd'
-    let g:tagbar_width = 40
     " Map tagbar shortcut same as vim fold
     let g:tagbar_map_closeallfolds = 'zM'
     let g:tagbar_map_openallfolds = 'zR'
