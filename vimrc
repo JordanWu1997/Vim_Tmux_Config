@@ -1531,7 +1531,7 @@
     endif
 
 " Pop-up window selection ----------------------------------------------------
-    " AUto completion pop-up, use Ctrl+[e/y] to select completion
+    " AUto completion pop-up, use Ctrl+[e/y] to close/select completion
 
     " [Double quotation matters here, DO NOT change to single quotation]
     if USING_EXTRA_PLUG

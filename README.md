@@ -189,8 +189,8 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     1. copy "vimrc" to $HOME/.config/nvim (create one if not exists)
     2. rename "vimrc" to "init.vim"
     ```bash
-    mkdir -p $HOME/nvim
-    cp vimrc $HOME/nvim/init.vim
+    mkdir -p $HOME/.config/nvim
+    cp vimrc $HOME/.config/nvim/init.vim
     ```
 
 #### 3. First Time Startup (Vim)
