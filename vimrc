@@ -1794,14 +1794,14 @@
     " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
     " Google-chrome extension is needed for markdown viewer
     if USING_GUI_SOFTWARE && !USING_VIM8
-        let $OPENBROWSER = 'noremap <leader><F4> :!'. $WEBBROWSER .' %:p &<CR>'
+        let $OPENBROWSER = 'noremap <leader><F4> :!'. g:WEBBROWSER .' %:p &<CR>'
         autocmd BufEnter *.md echom '[Press Space+F4 to Open .md File]'
         autocmd BufEnter *.md exe $OPENBROWSER
     endif
     " Synchronous markdown previewer (markdown-preview plugin)
     if USING_GUI_SOFTWARE && USING_VIM8
         " Web browser used to preview
-        let g:mkdp_browser = $WEBBROWSER
+        let g:mkdp_browser = g:WEBBROWSER
         " Close browser after markdown file is close
         let g:mkdp_auto_close = 0
         " Show url of markdown previewer
