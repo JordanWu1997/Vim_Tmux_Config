@@ -35,7 +35,7 @@
     "     "Droid Sans Mono for Powerline Nerd Font Complete.otf" \
     "     https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/\
     "     DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
-    " (3) set terminal font to "DroidSansMono Nerd Font"
+    " (3) [No needs for kitty] set terminal font to "DroidSansMono Nerd Font"
 
 " Note: Vim plugin support ---------------------------------------------------
     " If curl is installed, vim-plug (vim-plugin manger) should automatically
@@ -155,7 +155,7 @@
 " All parameter settings and hotkey mappings
     " Note:
     " -- Ctrl+i (Tab)
-    " -- Ctrl+m (Enter)
+    " -- Ctrl+[j/m] (Enter)
 
 " Vim built-in filetype setting ----------------------------------------------
     " Following settings are later automatically executed by VIM-plug
@@ -324,7 +324,7 @@
 
 " Show tab and the space at the end of the line ------------------------------
     set list " Show list
-    set listchars=eol:↵,tab:»·,trail:╳,extends:»,precedes:«
+    set listchars=eol:↵,tab:»·,trail:╳,extends:»,precedes:«,nbsp:␣
     noremap <leader>st :set list!<CR>
 
 " Cursor settings ------------------------------------------------------------
