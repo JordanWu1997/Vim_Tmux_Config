@@ -1178,15 +1178,15 @@
     nnoremap <leader>fpk :let g:fzf_preview_window = ['up:50%', 'alt-/']<CR>
     nnoremap <leader>fph :let g:fzf_preview_window = ['left:50%', 'alt-/']<CR>
     " Line/Tag in buffer (Local vim)
-    nnoremap <leader>fbL :FZFBLines<CR>
-    nnoremap <leader>fbl :execute ":FZFBLines " . expand('<cword>')<CR>
-    nnoremap <leader>fbT :FZFBTags<CR>
-    nnoremap <leader>fbt :execute ":FZFBTag " . expand('<cword>')<CR>
+    nnoremap <leader>fbl :FZFBLines<CR>
+    nnoremap <leader>fbL :execute ":FZFBLines " . expand('<cword>')<CR>
+    nnoremap <leader>fbt :FZFBTags<CR>
+    nnoremap <leader>fbT :execute ":FZFBTag " . expand('<cword>')<CR>
     " Line/Tag in all files (Global system)
-    nnoremap <leader>fgL :FZFLines<CR>
-    nnoremap <leader>fgl :execute ":FZFLines " . expand('<cword>')<CR>
-    nnoremap <leader>fgT :FZFTags<CR>
-    nnoremap <leader>fgt :execute ":FZFTag " . expand('<cword>')<CR>
+    nnoremap <leader>fgl :FZFLines<CR>
+    nnoremap <leader>fgL :execute ":FZFLines " . expand('<cword>')<CR>
+    nnoremap <leader>fgt :FZFTags<CR>
+    nnoremap <leader>fgT :execute ":FZFTag " . expand('<cword>')<CR>
     " File/Pattern search
     nnoremap <leader>ffs :FZFFiles<CR>
     nnoremap <leader>ffS :FZFFiles<space>
@@ -1196,8 +1196,8 @@
     " Git command (requires fugitive.vim plugin)
     nnoremap <leader>fgf :FZFGFiles<CR>
     nnoremap <leader>fgs :FZFGFiles?<CR>
-    nnoremap <leader>fgc :FZFBCommits<CR>
-    nnoremap <leader>fgC :FZFCommits<CR>
+    nnoremap <leader>fgb :FZFBCommits<CR>
+    nnoremap <leader>fgc :FZFCommits<CR>
     " History
     nnoremap <leader>fhs :FZFHistory<CR>
     nnoremap <leader>fh: :FZFHistory:<CR>

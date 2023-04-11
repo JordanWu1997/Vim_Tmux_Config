@@ -488,7 +488,7 @@ for more details, check sections in vimrc
 | N        | `[LK]`+`[f]`+`[f]`+`[s]`        | List files under input directory      | List files under input directory      |                            |
 | N        | `[LK]`+`[f]`+`[l]`+`[c]`        | Locate files matched input            | Locate files matched input name       | Use system locate command  |
 | N        | `[LK]`+`[f]`+`[r]`+`[g]`        | Find files with input pattern         | Find files matched input pattern      | Use system ripgrep command |
-| N        | `[LK]`+`[f]`+`[f]`+`[t]`        | Select file type for current          | Select file type for current file     |                            |
+| N        | `[LK]`+`[f]`+`[f]`+`[t]`        | Select file type for current file     | Select file type for current file     |                            |
 | N        | `[LK]`+`[f]`+`[c]`+`[d]`        | Show all command in vim now　         | Show all command in vim now           | 　                         |
 | N        | `[LK]`+`[f]`+`[n]`+`[m]`        | Show all normal mode mapping          | Show all normal mode mapping          |                            |
 | N        | `[LK]`+`[f]`+`[h]`+`[t]`        | Show all helptags in vim-help         | Show all helptags in vim-help         |                            |
