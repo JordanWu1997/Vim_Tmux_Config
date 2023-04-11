@@ -110,20 +110,15 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 #### 1. Preparation for Dependence (Vim)
 
 1. Common Requirement
+- __Git__ [for plugin installation]
+    ```bash
+    #\ For Fedora
+    dnf install git
+    ```
 - __Curl__ [for plugin manager setup]
     ```bash
     #\ For Fedora
     dnf install curl
-    ```
-- __Web browser with markdown extension__ (e.g. google-chrome, Firefox, and etc.) [for markdown preview]
-    ```bash
-    #\ For Fedora
-    dnf install firefox
-    ```
-- __PDF viewer__ (e.g. zathura, Okular) [for latex preview]
-    ```bash
-    #\ For Fedora
-    dnf install zathura*
     ```
 
 2. Requirement for Diverse Vim
@@ -178,16 +173,28 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
     dnf install texlive-scheme-basic
     ```
 
+5. Requirements for Latex/Markdown Viewer
+- __Web browser with markdown extension__ (e.g. google-chrome, Firefox, and etc.) [for markdown preview]
+    ```bash
+    #\ For Fedora
+    dnf install firefox
+    ```
+- __PDF viewer__ (e.g. zathura, Okular) [for latex preview]
+    ```bash
+    #\ For Fedora
+    dnf install zathura*
+    ```
+
 #### 2. Copy Configuration File (Vim)
 - __Vim/Gvim__
-    1. copy "vimrc" to $HOME (current user's home)
-    2. rename "vimrc" to ".vimrc"
+    1. copy `vimrc` to `$HOME` (current user's home)
+    2. rename `vimrc` to `.vimrc`
     ```bash
     cp vimrc $HOME/.vimrc
     ```
 - __Neovim__
-    1. copy "vimrc" to $HOME/.config/nvim (create one if not exists)
-    2. rename "vimrc" to "init.vim"
+    1. copy `vimrc` to `$HOME/.config/nvim` (create one if not exists)
+    2. rename `vimrc` to `init.vim`
     ```bash
     mkdir -p $HOME/.config/nvim
     cp vimrc $HOME/.config/nvim/init.vim
@@ -654,8 +661,8 @@ tmux -V
 
 1. Copy Configuration File
 - __TMUX__
-    1. copy "tmux.conf" to $HOME (current user's home)
-    2. rename "tmux.conf" to .tmux.conf
+    1. copy `tmux.conf` to $HOME (current user's home)
+    2. rename `tmux.conf` to `.tmux.conf`
     ```bash
     cp tmux.conf $HOME/.tmux.conf
     ```

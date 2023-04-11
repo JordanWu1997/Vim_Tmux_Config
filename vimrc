@@ -87,8 +87,8 @@
     " AppImage directly from neovim website
 
     " Python-completion dependence
-    " -- jedi-Vim: pip install jedi
-    " -- deoplete: pip install pynvim
+    " -- jedi-vim: pip install jedi
+    " -- deoplete: pip install pynvim neovim
     " -- ipdb    : pip install ipdb
     " -- ipython : pip install ipython (version >= 7.2)
 
@@ -128,7 +128,7 @@
     " Python Completion (Use deoplete and jedi, neovim is recommended)
     let USING_PYTHON_COMPLETION = 1
     " Python that has jedi, pynvim and packages installed for completion
-    let PYTHON_FOR_COMPLETION = $CONDA_PYTHON_EXE
+    let PYTHON_FOR_COMPLETION = '/usr/bin/python' "$CONDA_PYTHON_EXE
     " Support of external gui software (e.g. Okular, Google-chrome, and etc.)
     let USING_GUI_SOFTWARE = 1
     " Web browser for markdown preview
@@ -235,7 +235,7 @@
     noremap <leader>du :diffupdate<CR>
     noremap <leader>dj ]c
     noremap <leader>dk [c
-    " Inline substitution
+    " Inline substitution (press & to repeat last substitution action)
     nnoremap gs :s/\<<c-r><c-w>\>//g<left><left>
     nnoremap gS :%s/\<<c-r><c-w>\>//g<left><left>
 
@@ -435,8 +435,8 @@
     " Resize window
     noremap <silent><A-l> :vertical resize +2<CR>
     noremap <silent><A-h> :vertical resize -2<CR>
-    noremap <silent><A-k> :resize +2<CR>
-    noremap <silent><A-j> :resize -2<CR>
+    noremap <silent><A-j> :resize +2<CR>
+    noremap <silent><A-k> :resize -2<CR>
 
 " Tab (window container) settings --------------------------------------------
     " List tabs
@@ -925,11 +925,6 @@
 
 " [Python coding] ------------------------------------------------------------
     if USING_PYTHON_COMPLETION
-        " Front end of completion (python and etc.)
-        if vim_plug_just_installed
-            Plug 'Shougo/deoplete.nvim',
-                            \ { 'do': ':autocmd VimEnter * UpdateRemotePlugins' }
-        endif
         " Yet Another Remote Plugin Framework for Neovim [needed for deoplete]
         Plug 'roxma/nvim-yarp', { 'for': 'python' }
         " Front end of completion (python and etc.)
@@ -939,6 +934,11 @@
         " Just to add go-to-definition and similar features, autocompeletion
         " from this plugin is disabled
         Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+        " Update for the first time usage
+        if vim_plug_just_installed
+            Plug 'Shougo/deoplete.nvim',
+                            \ { 'do': ':autocmd VimEnter * UpdateRemotePlugins' }
+        endif
     endif
     " More python syntax highlight
     Plug 'vim-python/python-syntax', { 'for': 'python' }
@@ -966,6 +966,9 @@
     if USING_GUI_SOFTWARE
         if USING_VIM8
             " Synchronous markdown file previewer
+            " NOTE: For now, the hook function is not working. You have to
+            " enter :call mkdp#util#install() by yourself after plug
+            " installation. Make sure you have nodejs and yarn installed
             Plug 'iamcco/markdown-preview.nvim',
                         \ { 'do': { -> mkdp#util#install() },
                         \ 'for': [ 'markdown', 'vim-plug' ] }
@@ -1170,6 +1173,10 @@
     let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
     " Preview window layout
     let g:fzf_preview_window = ['up:50%', 'alt-/']
+    nnoremap <leader>fpl :let g:fzf_preview_window = ['right:50%', 'alt-/']<CR>
+    nnoremap <leader>fpj :let g:fzf_preview_window = ['down:50%', 'alt-/']<CR>
+    nnoremap <leader>fpk :let g:fzf_preview_window = ['up:50%', 'alt-/']<CR>
+    nnoremap <leader>fph :let g:fzf_preview_window = ['left:50%', 'alt-/']<CR>
     " Line/Tag in buffer (Local vim)
     nnoremap <leader>fbL :FZFBLines<CR>
     nnoremap <leader>fbl :execute ":FZFBLines " . expand('<cword>')<CR>
@@ -1569,7 +1576,7 @@
     "    -- pip install pylint
     if USING_CODING_TOOL_PLUG
         let g:ale_enabled = 0
-        noremap <leader>el :ALEToggle<CR>
+        noremap <leader>ee :ALEToggle<CR>
         noremap <leader>ei :ALEInfo<CR>
         nmap <leader>ek <Plug>(ale_previous_wrap)zz
         nmap <leader>ej <Plug>(ale_next_wrap)zz
@@ -1577,8 +1584,12 @@
 
 " Neoformat ------------------------------------------------------------------
     if USING_CODING_TOOL_PLUG
+        " Normal mode
         nnoremap <leader>pi :Neoformat isort<CR>
         nnoremap <leader>py :Neoformat yapf<CR>
+        " Visual mode
+        vnoremap <leader>pi :Neoformat isort<CR>
+        vnoremap <leader>py :Neoformat yapf<CR>
     endif
 
 " Rainbow parentheses --------------------------------------------------------
