@@ -49,7 +49,7 @@
 
     " For those feature support, you can try either recompile vim from source
     " codes or [Recommended] just install gvim (gui-vim) from Fedora instead.
-    " Also, xclip MUST be installed [dnf install xclip]
+    " Also, xclip or parcellite MUST be installed [dnf install xclip/parcellite]
 
 " Note: Leader key delay solution---------------------------------------------
     " In the following configuration, I use space as leader key, however, it
@@ -700,35 +700,25 @@
         " Map key to enter terminal mode
         if USING_NEOVIM
             noremap <F12> :split<CR>:resize 10<CR>:terminal<CR>i
+            noremap <leader>tm :split<CR>:resize 10<CR>:terminal<CR>i
         else
             noremap <F12> :terminal<CR>
+            noremap <leader>tm :terminal<CR>
         endif
         " Map key for resize pane
-        nnoremap <leader>r1 :resize 10 <CR>
-        nnoremap <leader>r2 :resize 20 <CR>
-        nnoremap <leader>r3 :resize 30 <CR>
-        nnoremap <leader>r4 :resize 40 <CR>
+        nnoremap <leader>r1 :resize 10<CR>
+        nnoremap <leader>r2 :resize 20<CR>
+        nnoremap <leader>r3 :resize 30<CR>
+        nnoremap <leader>r4 :resize 40<CR>
         " Map key to go back from terminal mode to normal mode
         " Do not use Esc (which conflicts with fzf window) but <C-\><C-n>
         tnoremap <leader><F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
         tnoremap <F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
-        tnoremap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
+        "tnoremap kj <C-\><C-n>:echo 'Back to Normal Mode'<CR>
         tnoremap <C-h> <C-\><C-n><C-w>h
         tnoremap <C-j> <C-\><C-n><C-w>j
         tnoremap <C-k> <C-\><C-n><C-w>k
         tnoremap <C-l> <C-\><C-n><C-w>l
-        " Terminal customization for neovim
-        if USING_NEOVIM
-            " Auto start command when starting terminal mode
-            autocmd TermOpen * setlocal
-                        \ nocursorcolumn nocursorline nonumber laststatus=0
-            " Auto start command when entering terminal mode
-            autocmd TermEnter * setlocal
-                        \ nocursorcolumn nocursorline nonumber laststatus=0
-            " Auto start command when leaving terminal mode
-            autocmd TermClose * setlocal
-                        \ nocursorcolumn cursorline number laststatus=2
-        endif
     endif
 
 " ============================================================================
