@@ -507,6 +507,43 @@
     " Do actions to all files in args
     noremap <leader>agd :argdo<space>
 
+" Quickfix list settings ------------------------------------------------------
+    " Function to toggle quickfix list pane
+    let g:quickfix_list_is_open = 0
+    function! QuickfixListToggle()
+        if g:quickfix_list_is_open
+            cclose
+            let g:quickfix_list_is_open = 0
+        else
+            copen
+            let g:quickfix_list_is_open = 1
+        endif
+    endfunction
+    " Keymapping for quickfix list
+    noremap <leader>cg :vimgrep<space>
+    noremap <leader>cd :cdo<space>
+    noremap <leader>co :call QuickfixListToggle()<CR>
+    noremap <leader>cj :cnext<CR>zz
+    noremap <leader>ck :cprev<CR>zz
+
+" Location list settings ------------------------------------------------------
+    " Function to toggle location list pane
+    let g:location_list_is_open = 0
+    function! LocationListToggle()
+        if g:location_list_is_open
+            lclose
+            let g:location_list_is_open = 0
+        else
+            lopen
+            let g:location_list_is_open = 1
+        endif
+    endfunction
+    " Keymapping for location list
+    noremap <leader>eg :lvimgrep<space>
+    noremap <leader>eo :call LocationListToggle()<CR>
+    noremap <leader>ej :lnext<CR>zz
+    noremap <leader>ek :lprev<CR>zz
+
 " Marks settings -------------------------------------------------------------
     " Note:
     " -- Mark should start with ' (single quotation) or ` (grave symbol)
@@ -895,6 +932,8 @@
         " GitGutter (enhanced signify), also with git integration
         Plug 'airblade/vim-gitgutter',
                     \ { 'on': ['GitGutterToggle', 'GitGutterEnable'] }
+        " Pairs of handy bracket mappings (e.g. quickfix list, location list)
+        Plug 'tpope/vim-unimpaired'
     endif
 
 " [Tmux] ---------------------------------------------------------------------
@@ -1199,6 +1238,8 @@
     nnoremap <leader>fmk :FZFMarks<CR>
     nnoremap <leader>f' :FZFMarks<CR>
     " Miscellaneous
+    nnoremap <leader>fqf :FZFQuickFix<CR>
+    nnoremap <leader>fll :FZFLocList<CR>
     nnoremap <leader>fmp :FZFMaps<CR>
     nnoremap <leader>fcd :FZFCommands<CR>
     nnoremap <leader>fft :FZFFiletypes<CR>
@@ -1289,6 +1330,8 @@
     map <leader>cc <Plug>NERDCommenterComment
     map <leader>cu <Plug>NERDCommenterUncomment
     map <leader>cy <Plug>NERDCommenterYank
+    " For common editor convention
+    map <M-/> <Plug>NERDCommenterToggle
 
 " Vim-surround ---------------------------------------------------------------
     " Surround current word or sentence with brackets or HTML tags
@@ -1381,8 +1424,8 @@
         nmap <leader>v<leader>i <Plug>VimwikiDiaryGenerateLinks
         nmap <leader>v<leader>m <Plug>VimwikiMakeTomorrowDiaryNote
         nmap <leader>v<leader>y <Plug>VimwikiMakeYesterdayDiaryNote
-        nmap <CR> <Plug>VimwikiFollowLink
-        nmap <Backspace> <Plug>VimwikiGoBackLink
+        nmap <leader><CR> <Plug>VimwikiFollowLink
+        nmap <leader><Backspace> <Plug>VimwikiGoBackLink
         nmap <leader>vn <Plug>VimwikiGoto
         nmap <leader>vd <Plug>VimwikiDeleteFile
         nmap <leader>vr <Plug>VimwikiRenameFile
@@ -1552,7 +1595,7 @@
         let g:Hexokinase_optInPatterns = 'full_hex,triple_hex,rgb,rgba,hsl,hsla,colour_names'
         " Set highlighter for hexokinase
         let g:Hexokinase_highlighters = [ 'backgroundfull' ]
-        noremap <leader>co :HexokinaseToggle<CR>
+        noremap <leader>chk :HexokinaseToggle<CR>
     endif
 
 " ============================================================================
@@ -1562,14 +1605,21 @@
 
 " ALE (Asynchronous Lint Engine) ---------------------------------------------
     " -- For python, flake8, pylint or other linting engines must be installed
-    "    -- pip install flake8
-    "    -- pip install pylint
+    "    -- pip install mypy   # type checker
+    "    -- pip install flake8 # error and style linter
+    "    -- pip install pylint # error and style linter
     if USING_CODING_TOOL_PLUG
+        if USING_NEOVIM
+            let g:ale_use_neovim_diagnostics_api = 1
+        endif
         let g:ale_enabled = 0
+        let g:ale_disable_lsp = 1
+        let g:ale_linters = { 'python': ['mypy', 'flake8'] }
+        " ALE use location list for output, instead of quickfix list
+        let g:ale_set_loclist = 1
+        let g:ale_set_quickfix = 0
         noremap <leader>ee :ALEToggle<CR>
         noremap <leader>ei :ALEInfo<CR>
-        nmap <leader>ek <Plug>(ale_previous_wrap)zz
-        nmap <leader>ej <Plug>(ale_next_wrap)zz
     endif
 
 " Neoformat ------------------------------------------------------------------
@@ -1691,6 +1741,14 @@
         " Move through hunks in current buffer
         nmap <leader>gj <Plug>(GitGutterNextHunk)zz
         nmap <leader>gk <Plug>(GitGutterPrevHunk)zz
+    endif
+
+" Vim-Unimpaired -------------------------------------------------------------
+    if USING_CODING_TOOL_PLUG
+        nmap [e [l
+        nmap ]e ]l
+        nmap [E [L
+        nmap ]E ]L
     endif
 
 " ============================================================================

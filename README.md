@@ -352,7 +352,7 @@ for more details, check sections in vimrc
 - In this configuration, leader key is __SPACE__ key
 > 3. _Key mapping should be related to the name of the function_
 - Make it easier to remember or connect
-- e.g. "no wrap" function is mapped to `[Space]`+`[w]`+`[p]`
+- e.g. "wrap toggle" function is mapped to `[Space]`+`[w]`+`[p]`
 
 </details>
 
@@ -438,14 +438,22 @@ for more details, check sections in vimrc
 | VIM-Mode | Key Mapping              | Function                                   | Description                                | Note                              |
 | :------: | :----------------------: | :----------------------------------------: | :----------------------------------------: | :-------------------------------: |
 | N/V      | `[LK]`+`[s]`             | Toggle spell mode                          | Toggle spell mode                          | Here s for (s)pell                |
-| N/V      | `[LK]`+`[s]`+`[j/k]`     | Jump to prev/next bad word                 | Jump to pre/next bad word                  |                                   |
+| N/V      | `[LK]`+`[s]`+`[j/k]`     | Jump to next/prev bad word                 | Jump to prev/next bad word                 |                                   |
 | N/V      | `[LK]`+`[s]`+`[a]`+`[g]` | Add word to good word list spell mode      | Add word to good word list spell mode      | Here a for (a)dd, g for (g)ood    |
 | N/V      | `[LK]`+`[s]`+`[r]`+`[g]` | Remove word from good word list spell mode | Remove word from good word list spell mode | Here r for (r)emove, g for (g)ood |
 | N/V      | `[LK]`+`[s]`+`[a]`+`[b]` | Add word to bad word list spell mode       | Add word to bad word list spell mode       | Here a for (a)dd, b for (b)ad     |
 | N/V      | `[LK]`+`[s]`+`[r]`+`[b]` | Remove word from bad word list spell mode  | Remove word from bad word list spell mode  | Here r for (r)emove, b for (b)ad  |
 
+6. Quickfix/Location List Key Mapping
 
-6. Miscellaneous Function Key Mapping
+| VIM-Mode | Key Mapping              | Function                                | Description                                 | Note                                 |
+| :------: | :----------------------: | :-------------------------------------: | :-----------------------------------------: | :----------------------------------: |
+| N        | `[LK]`+`[c/e]`+`[g]`     | call built-in vimgrep/lvimgrep function | search like grep and store results in lists |                                      |
+| N        | `[LK]`+`[c/e]`+`[o]`     | toggle quickfix/location list pane      | toggle quickfix/location list pane          | built-in: copen/cclose, lopen/lclose |
+| N        | `[LK]`+`[c/e]`+`[j/k]`   | go to next/prev quickfix/location item  | go to next/prev quickfix/location item      | built-in: cnext/cprev, lnext/lprev   |
+| N        | `[LK]`+`[c]`+`[d]`       | call cdo for items in quickfix list     | call cdo for items in quickfix list         | like argdo, bdo for args and buffers |
+
+7. Miscellaneous Function Key Mapping
 
 | VIM-Mode | Key Mapping           | Function                          | Description                       | Note                                            |
 | :------: | :-------------------: | :-------------------------------: | :-------------------------------: | :---------------------------------------------: |
@@ -492,6 +500,8 @@ for more details, check sections in vimrc
 | N        | `[LK]`+`[f]`+`[c]`+`[d]`        | Show all command in vim now　         | Show all command in vim now           | 　                         |
 | N        | `[LK]`+`[f]`+`[n]`+`[m]`        | Show all normal mode mapping          | Show all normal mode mapping          |                            |
 | N        | `[LK]`+`[f]`+`[h]`+`[t]`        | Show all helptags in vim-help         | Show all helptags in vim-help         |                            |
+| N        | `[LK]`+`[f]`+`[q]`+`[f]`        | Show build-in quickfix list           | Show build-in quickfix list           | vim quickfix list          |
+| N        | `[LK]`+`[f]`+`[l]`+`[l]`        | Show build-in location list           | Show build-in location list           | vim location list          |
 
 2. Python Coding Key Mapping
 - Note: Jedi is needed for python code analysis (Check https://github.com/davidhalter/jedi )
@@ -827,23 +837,24 @@ tmux -V
 <details open>
 <summary>Click to expand!</summary>
 
-| TMUX-Mode | Key Mapping                     | Function                           | Description                        | Note                                         |
-| :-------: | :-----------------------------: | :--------------------------------: | :--------------------------------: | :------------------------------------------: |
-| Normal    | `[BK]`+`[Shift]`+`[/]`          | Show all TMUX key mapping          | Show all TMUX key mappings         |                                              |
-| Normal    | `[BK]`+`[Shift]`+`[b]`          | Toggle TMUX status line            | Toggle TMUX status line            |                                              |
-| Normal    | `[BK]`+`[b]`                    | Toggle TMUX borderline             | Toggle TMUX borderline             |                                              |
-| Normal    | `[BK]`+`[Shift]`+`[r]`          | Reload TMUX configuration          | Reload TMUX configuration          | Run (source) `$HOME/.tmux.conf` file         |
-| Normal    | `[BK]`+`[a]`                    | Clear pane output                  | Clear pane output                  | Act like Ctrl-l in terminal                  |
-| Normal    | `[BK]`+`[Ctrl]`+`[j]`           | Send Ctrl+j to terminal            | Send Ctrl+j to terminal            | Ctrl+j is alternative enter for shell        |
-| Normal    | `[BK]`+`[Ctrl]`+`[h]`           | Send Ctrl+h to terminal            | Send Ctrl+h to terminal            | Ctrl+h is alternative backspace for shell    |
-| Normal    | `[BK]`+`[Ctrl]`+`[k]`           | Send Ctrl+k to terminal            | Send Ctrl+k to terminal            | Ctrl+k is to delete to end of line for shell |
-| Normal    | `[BK]`+`[Ctrl]`+`[l]`           | Send Ctrl+l to terminal            | Send Ctrl+l to terminal            | Ctrl+l is to clear pane output for shell     |
-| Normal    | `[BK]`+`[Ctrl]`+`[Shift]`+`[l]` | Clear scrollback history           | Clear TMUX scrollback history      |                                              |
-| Normal    | `[BK]`+`[Ctrl]`+`[s]`           | Toggle pane input synchronization  | Toggle pane input synchronization  | Synchronize input for all panes              |
-| Normal    | `[BK]`+`[Shift]`+`[m]`          | Toggle mouse usage                 | Toggle mouse usage                 | Mouse usage support                          |
-| Normal    | `[BK]`+`[m]`                    | Mark current pane                  | Mark current pane                  | Mark pane for following usage                |
-| Normal    | `[BK]`+`[Shift]`+`[;]`          | Swap current pane with marked pane | Swap current pane with marked pane | Target pane must be marked first             |
-| Normal    | `[BK]`+`[Alt]`+`[Shift]`+`[;]`  | Move marked pane to current window | Move marked pane to current window | Move (merge) marked pane to current window   |
+| TMUX-Mode | Key Mapping                     | Function                                     | Description                                  | Note                                         |
+| :-------: | :-----------------------------: | :------------------------------------------: | :------------------------------------------: | :------------------------------------------: |
+| Normal    | `[BK]`+`[Shift]`+`[/]`          | Show all TMUX key mapping                    | Show all TMUX key mappings                   |                                              |
+| Normal    | `[BK]`+`[Shift]`+`[b]`          | Toggle TMUX status line                      | Toggle TMUX status line                      |                                              |
+| Normal    | `[BK]`+(`[Alt]`)+`[b]`          | Set status line position (bottom)/top/bottom | Set status line position (bottom)/top/bottom |                                              |
+| Normal    | `[BK]`+`[b]`                    | Toggle TMUX borderline                       | Toggle TMUX borderline                       |                                              |
+| Normal    | `[BK]`+`[Shift]`+`[r]`          | Reload TMUX configuration                    | Reload TMUX configuration                    | Run (source) `$HOME/.tmux.conf` file         |
+| Normal    | `[BK]`+`[a]`                    | Clear pane output                            | Clear pane output                            | Act like Ctrl-l in terminal                  |
+| Normal    | `[BK]`+`[Ctrl]`+`[j]`           | Send Ctrl+j to terminal                      | Send Ctrl+j to terminal                      | Ctrl+j is alternative enter for shell        |
+| Normal    | `[BK]`+`[Ctrl]`+`[h]`           | Send Ctrl+h to terminal                      | Send Ctrl+h to terminal                      | Ctrl+h is alternative backspace for shell    |
+| Normal    | `[BK]`+`[Ctrl]`+`[k]`           | Send Ctrl+k to terminal                      | Send Ctrl+k to terminal                      | Ctrl+k is to delete to end of line for shell |
+| Normal    | `[BK]`+`[Ctrl]`+`[l]`           | Send Ctrl+l to terminal                      | Send Ctrl+l to terminal                      | Ctrl+l is to clear pane output for shell     |
+| Normal    | `[BK]`+`[Ctrl]`+`[Shift]`+`[l]` | Clear scrollback history                     | Clear TMUX scrollback history                |                                              |
+| Normal    | `[BK]`+`[Ctrl]`+`[s]`           | Toggle pane input synchronization            | Toggle pane input synchronization            | Synchronize input for all panes              |
+| Normal    | `[BK]`+`[Shift]`+`[m]`          | Toggle mouse usage                           | Toggle mouse usage                           | Mouse usage support                          |
+| Normal    | `[BK]`+`[m]`                    | Mark current pane                            | Mark current pane                            | Mark pane for following usage                |
+| Normal    | `[BK]`+`[Shift]`+`[;]`          | Swap current pane with marked pane           | Swap current pane with marked pane           | Target pane must be marked first             |
+| Normal    | `[BK]`+`[Alt]`+`[Shift]`+`[;]`  | Move marked pane to current window           | Move marked pane to current window           | Move (merge) marked pane to current window   |
 
 </details>
 </details>
