@@ -358,7 +358,7 @@
     set hlsearch   " Highlight search result
     set ignorecase " Close case sensitive [Needed for smartcase]
     set smartcase  " Case sensitive if search contains uppercase letter
-    noremap <leader>/ :set nohlsearch!<CR>
+    noremap <leader>? :set nohlsearch!<CR>
 
 " Line number settings -------------------------------------------------------
     set numberwidth=4    " Set fixed width to number column
@@ -1543,6 +1543,7 @@
         nmap <leader>k <Plug>(easymotion-k)
         nmap <leader>l <Plug>(easymotion-lineforward)
         nmap <leader>h <Plug>(easymotion-linebackward)
+        nmap <leader>/ <Plug>(easymotion-sn)
     endif
 
 " AutoComplPop ---------------------------------------------------------------
@@ -1581,6 +1582,9 @@
         inoremap <expr><C-j>   pumvisible() ? "\<C-n>" : "\<C-j>"
         inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
         inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+        inoremap <expr><M-k>   pumvisible() ? "\<C-p>" : "\<M-k>"
+        inoremap <expr><M-j>   pumvisible() ? "\<C-n>" : "\<M-j>"
+
     endif
 
 " Tasklist -------------------------------------------------------------------
