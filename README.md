@@ -814,23 +814,23 @@ tmux -V
 <details open>
 <summary>Click to expand!</summary>
 
-| TMUX-Mode | Key Mapping            | Function                      | Description                          | Note           |
-| :-------: | :--------------------: | :---------------------------: | :----------------------------------: | :------------: |
-| Normal    | `[BK]`+`[Shift]`+`[i]` | Install plugins               | Install plugins                      | tpm            |
-| Normal    | `[BK]`+`[Shift]`+`[u]` | Update plugins                | Update plugins                       | tpm            |
-| Normal    | `[BK]`+`[Shift]`+`[i]` | Uninstall plugins             | Uninstall plugins                    | tpm            |
-| Normal    | `[BK]`+`[F3]`          | Sidebar file-tree             | Sidebar file-tree                    | tmux-sidebar   |
-| Normal    | `[BK]`+`[Alt]`+`[s/r]` | Save/Load current session     | Save/Load current session            | tmux-resurrect |
-| Normal    | `[BK]`+`[Alt]`+`[d]`   | Search for digit              | Enter copy mode and search for digit | tmux-copycat   |
-| Normal    | `[BK]`+`[Alt]`+`[f]`   | Search for file               | Enter copy mode and search for file  | tmux-copycat   |
-| Normal    | `[BK]`+`[Alt]`+`[g]`   | Search for git                | Enter copy mode and search for git   | tmux-copycat   |
-| Normal    | `[BK]`+`[Alt]`+`[a]`   | Search for hash               | Enter copy mode and search for hash  | tmux-copycat   |
-| Normal    | `[BK]`+`[Alt]`+`[i]`   | Search for IP                 | Enter copy mode and search for IP    | tmux-copycat   |
-| Normal    | `[BK]`+`[Alt]`+`[w]`   | Search for URL                | Enter copy mode and search for URL   | tmux-copycat   |
-| Normal    | `[BK]`+`[y]`           | Copy current line             | Copy current line                    | tmux-yank      |
-| Normal    | `[BK]`+`[Shift]`+`[y]` | Copy current directory        | Copy current directory               | tmux-yank      |
-| Copy      | `[BK]`+`[o]`           | Open selected with `$EDITOR`  | Open selected with `$EDITOR`         | tmux-open      |
-| Copy      | `[BK]`+`[Shift]`+`[o]` | Open selected with `xdg-open` | Open selected with `xdg-open`        | tmux-open      |
+| TMUX-Mode | Key Mapping            | Function                      | Description                               | Note           |
+| :-------: | :--------------------: | :---------------------------: | :---------------------------------------: | :------------: |
+| Normal    | `[BK]`+`[Shift]`+`[i]` | Install plugins               | Install plugins                           | tpm            |
+| Normal    | `[BK]`+`[Shift]`+`[u]` | Update plugins                | Update plugins                            | tpm            |
+| Normal    | `[BK]`+`[Shift]`+`[i]` | Uninstall plugins             | Uninstall plugins                         | tpm            |
+| Normal    | `[BK]`+`[F3]`          | Sidebar file-tree             | Sidebar file-tree                         | tmux-sidebar   |
+| Normal    | `[BK]`+`[Alt]`+`[s/r]` | Save/Load current session     | Save/Load current session                 | tmux-resurrect |
+| Normal    | `[BK]`+`[Alt]`+`[d]`   | Search for digit              | Enter copy mode and search for digit      | tmux-copycat   |
+| Normal    | `[BK]`+`[Alt]`+`[f]`   | Search for file               | Enter copy mode and search for file       | tmux-copycat   |
+| Normal    | `[BK]`+`[Alt]`+`[g]`   | Search for git                | Enter copy mode and search for git        | tmux-copycat   |
+| Normal    | `[BK]`+`[Alt]`+`[v]`   | Search for hash value         | Enter copy mode and search for hash value | tmux-copycat   |
+| Normal    | `[BK]`+`[Alt]`+`[i]`   | Search for IP                 | Enter copy mode and search for IP         | tmux-copycat   |
+| Normal    | `[BK]`+`[Alt]`+`[w]`   | Search for URL                | Enter copy mode and search for URL        | tmux-copycat   |
+| Normal    | `[BK]`+`[y]`           | Copy current line             | Copy current line                         | tmux-yank      |
+| Normal    | `[BK]`+`[Shift]`+`[y]` | Copy current directory        | Copy current directory                    | tmux-yank      |
+| Copy      | `[BK]`+`[o]`           | Open selected with `$EDITOR`  | Open selected with `$EDITOR`              | tmux-open      |
+| Copy      | `[BK]`+`[Shift]`+`[o]` | Open selected with `xdg-open` | Open selected with `xdg-open`             | tmux-open      |
 
 </details>
 
