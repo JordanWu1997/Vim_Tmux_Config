@@ -1584,7 +1584,6 @@
         inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
         inoremap <expr><M-k>   pumvisible() ? "\<C-p>" : "\<M-k>"
         inoremap <expr><M-j>   pumvisible() ? "\<C-n>" : "\<M-j>"
-
     endif
 
 " Tasklist -------------------------------------------------------------------
