@@ -118,7 +118,7 @@
     " Customize vim theme (Include colortheme and statusline)
     let USING_CUSTOMIZED_THEME = 1
     " Fancy symbols (Mainly affect lightline and nerdtree icon)
-    let USING_FANCY_SYMBOLS = 0
+    let USING_FANCY_SYMBOLS = 1
     " Wal theme support (Xresources colortheme support, check pywal)
     let USING_WAL_THEME = 0
     " Extra vim-plug (Include easymotion, yankring, autocomplpop, and etc.)
@@ -358,7 +358,7 @@
     set hlsearch   " Highlight search result
     set ignorecase " Close case sensitive [Needed for smartcase]
     set smartcase  " Case sensitive if search contains uppercase letter
-    noremap <leader>? :set nohlsearch!<CR>
+    noremap <M-/> :set nohlsearch!<CR>
 
 " Line number settings -------------------------------------------------------
     set numberwidth=4    " Set fixed width to number column
@@ -1282,14 +1282,16 @@
     let g:tagbar_width = 40
     " Autofocus on tagbar open
     let g:tagbar_autofocus = 1
-    let g:tagbar_map_showproto = 'd'
+    " Disable sort in tagbar
+    let g:tagbar_sort = 0
     " Map tagbar shortcut same as vim fold
     let g:tagbar_map_closeallfolds = 'zM'
     let g:tagbar_map_openallfolds = 'zR'
     let g:tagbar_map_closefold = 'zc'
     let g:tagbar_map_openfold = 'zo'
     " tagbar zoom
-    let tagbar_map_zoomwin = 'zz'
+    let g:tagbar_map_zoomwin = 'zz'
+    let g:tagbar_map_showproto = 'd'
     " Toggle tagbar display
     noremap <F4> :TagbarToggle<CR>
     " Tagbar location
@@ -1330,8 +1332,10 @@
     map <leader>cc <Plug>NERDCommenterComment
     map <leader>cu <Plug>NERDCommenterUncomment
     map <leader>cy <Plug>NERDCommenterYank
-    " For common editor convention
-    map <M-/> <Plug>NERDCommenterToggle
+    " Block comment for common editor convention
+    " NOTE: Ctrl+/ is recognized as Ctrl+_ by vim in linux
+    map <C-_> <Plug>NERDCommenterToggle
+    map <C-/> <Plug>NERDCommenterToggle
 
 " Vim-surround ---------------------------------------------------------------
     " Surround current word or sentence with brackets or HTML tags
@@ -1582,6 +1586,8 @@
         inoremap <expr><C-j>   pumvisible() ? "\<C-n>" : "\<C-j>"
         inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
         inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+        inoremap <expr><C-b>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-b>"
+        inoremap <expr><C-f>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-f>"
         inoremap <expr><M-k>   pumvisible() ? "\<C-p>" : "\<M-k>"
         inoremap <expr><M-j>   pumvisible() ? "\<C-n>" : "\<M-j>"
     endif

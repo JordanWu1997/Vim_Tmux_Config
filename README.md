@@ -455,20 +455,20 @@ for more details, check sections in vimrc
 
 7. Miscellaneous Function Key Mapping
 
-| VIM-Mode | Key Mapping            | Function                          | Description                       | Note                                            |
-| :------: | :--------------------: | :-------------------------------: | :-------------------------------: | :---------------------------------------------: |
-| I        | `[k]`+`[j]`            | Esc (escape form insert mode)     | Esc (escape form insert mode)     |                                                 |
-| N/V      | `[Shift]`+`[k]`        | Search current word in manual     | Search current word in manual     |                                                 |
-| N/V      | `[LK]`+`[d]`+`[d]`     | Close current buffer              | Close current buffer              | Here d for (d)eletion                           |
-| N/V      | `[LK]`+`[w]`+`[p]`     | Toggle line wrap                  | On/Off line wrap                  | Here wp for (w)ra(p)                            |
-| N/V      | `[LK]`+`[s]`+`[t]`     | Toggle list (trailing chars)      | On/Off list (trailing characters) | Here st for li(s)(t)                            |
-| N/V      | `[LK]`+`[Shift]`+`[/]` | Toggle search highlight           | On/Off search highlight           |                                                 |
-| N/V      | `[LK]`+`[m]`+`[k]`     | Show all vim marks                | Show all vim marks                | This shows marks using fzf instead vim built-in |
-| N/V      | `[LK]`+`[r]`+`[g]`     | Show all vim registers            | Show all vim registers            | Here re for (re)gister                          |
-| N/V      | `[LK]`+`[a]`+`[b]`     | Show all vim abbreviates          | Show all vim abbreviates          | Here ab for (ab)reviation                       |
-| N/V      | `[LK]`+`[c]`+`[h/v]`   | Toggle Horizontal/Vertical cursor | On/Off Horizontal/Vertical cursor |                                                 |
-| N/V      | `[LK]`+`[g]`+`[o/i]`   | Show all cursor jump              | Show all cursor jump              | `[g/Ctrl]`+`[o/i]` jump backwards/forwards      |
-| N/V      | `[LK]`+`[g]`+`[;/,]`   | Show all file change              | Show all file change              | `[g]`+`[;/,]` go to earlier/later change        |
+| VIM-Mode | Key Mapping          | Function                          | Description                       | Note                                            |
+| :------: | :------------------: | :-------------------------------: | :-------------------------------: | :---------------------------------------------: |
+| I        | `[k]`+`[j]`          | Esc (escape form insert mode)     | Esc (escape form insert mode)     |                                                 |
+| N/V      | `[Shift]`+`[k]`      | Search current word in manual     | Search current word in manual     |                                                 |
+| N/V      | `[Alt]`+`[/]`        | Toggle search highlight           | On/Off search highlight           |                                                 |
+| N/V      | `[LK]`+`[d]`+`[d]`   | Close current buffer              | Close current buffer              | Here d for (d)eletion                           |
+| N/V      | `[LK]`+`[w]`+`[p]`   | Toggle line wrap                  | On/Off line wrap                  | Here wp for (w)ra(p)                            |
+| N/V      | `[LK]`+`[s]`+`[t]`   | Toggle list (trailing chars)      | On/Off list (trailing characters) | Here st for li(s)(t)                            |
+| N/V      | `[LK]`+`[m]`+`[k]`   | Show all vim marks                | Show all vim marks                | This shows marks using fzf instead vim built-in |
+| N/V      | `[LK]`+`[r]`+`[g]`   | Show all vim registers            | Show all vim registers            | Here re for (re)gister                          |
+| N/V      | `[LK]`+`[a]`+`[b]`   | Show all vim abbreviates          | Show all vim abbreviates          | Here ab for (ab)reviation                       |
+| N/V      | `[LK]`+`[c]`+`[h/v]` | Toggle Horizontal/Vertical cursor | On/Off Horizontal/Vertical cursor |                                                 |
+| N/V      | `[LK]`+`[g]`+`[o/i]` | Show all cursor jump              | Show all cursor jump              | `[g/Ctrl]`+`[o/i]` jump backwards/forwards      |
+| N/V      | `[LK]`+`[g]`+`[;/,]` | Show all file change              | Show all file change              | `[g]`+`[;/,]` go to earlier/later change        |
 
 </details>
 
