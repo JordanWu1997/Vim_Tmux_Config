@@ -118,7 +118,7 @@
     " Customize vim theme (Include colortheme and statusline)
     let USING_CUSTOMIZED_THEME = 1
     " Fancy symbols (Mainly affect lightline and nerdtree icon)
-    let USING_FANCY_SYMBOLS = 1
+    let USING_FANCY_SYMBOLS = 0
     " Wal theme support (Xresources colortheme support, check pywal)
     let USING_WAL_THEME = 0
     " Extra vim-plug (Include easymotion, yankring, autocomplpop, and etc.)
@@ -874,6 +874,8 @@
     Plug 'jiangmiao/auto-pairs'
     " Show vim keybindings (for now only leader key)
     Plug 'liuchengxu/vim-which-key'
+    " Highlight current word and twin words
+    Plug 'dominikduda/vim_current_word', { 'on': 'VimCurrentWordToggle' }
 
 " [Vim extra functions] ------------------------------------------------------
     if USING_EXTRA_PLUG
@@ -889,7 +891,7 @@
         Plug 'vim-scripts/YankRing.vim'
         " Register investigator
         Plug 'junegunn/vim-peekaboo'
-        " Mark investigator
+        " Mark investigators
         Plug 'Yilin-Yang/vim-markbar', {
                     \ 'on': [ '<Plug>OpenMarkbarPeekabooApostrophe',
                     \ '<Plug>OpenMarkbarPeekabooBacktick' ] }
@@ -1381,6 +1383,11 @@
     " Map space key to normal/visual mode
     vnoremap <silent><leader> :<C-u>WhichKeyVisual '<space>'<CR>
     nnoremap <silent><leader> :<C-u>WhichKey '<space>'<CR>
+
+" Vim-current-word -----------------------------------------------------------
+    " Disable highlight current word and twin words at start
+    let g:vim_current_word#enabled = 0
+    map <leader>cw :VimCurrentWordToggle<CR>
 
 " Vim-Tmux-navigator ---------------------------------------------------------
     " Disable navigator when TMUX pane is zoomed

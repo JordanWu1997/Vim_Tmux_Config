@@ -531,12 +531,13 @@ for more details, check sections in vimrc
 | N/V      | `[y]`+`[s]`+`[a]`+`[w]`+`["]` | Add wrapped quotation/bracket   | From word to "word"                   | vim-surrounder            |
 | N/V      | `[d]`+`[s]`+`[a]`+`[w]`+`["]` | Del wrapped quotation/bracket   | From "word" to word                   | vim-surrounder            |
 | N/V      | `[c]`+`[s]`+`[']`+`["]`       | Change quotation/bracket        | From 'word' to "word"                 | vim-surrounder            |
-| N/V/I    | `[LK]`+`[`]`                 | Toggle auto-completion pop-up   | On/Off auto-completion pop-up         | autocomplpop              |
+| N/V/I    | `[LK]`+`[`]`                  | Toggle auto-completion pop-up   | On/Off auto-completion pop-up         | autocomplpop              |
 | N/V/I    | `[Alt]`+`[']`                 | Toggle auto-pair                | On/Off auto-pair quotation/bracket    | auto-pairs                |
 | N/V/I    | `[Alt]`+`[;]`                 | Jump to next pairs              | Jump to next paired quotation/bracket | auto-pairs                |
 | I        | `[Alt]`+`[w]`                 | Auto-pair fastwrap              | Auto-pair fastwrap current pairs      | Example: ()test -> (test) |
 | N        | `[LK]`+`[v]`+`[w]`            | Open vimwiki index page         | Open vimwiki index page               | vimwiki                   |
 | N        | `[LK]`+`[v]`+`[i]`            | Open vimwiki diary index page   | Open vimwiki diary index page         | vimwiki                   |
+| N/V      | `[LK]`+`[c]`+`[w]`            | Highlight current word          | Highlight current word and its twins  | vim-current-word          |
 
 - Extra plug (Note: "let using_extra_plug = 1" must be set in vimrc)
 
