@@ -310,8 +310,10 @@
     noremap <leader>wp :set wrap!<CR>
 
 " Spell check ----------------------------------------------------------------
+    " Note:
+    " -- [g] for good, [w] for wrong, [a] for add, [r] for remove
     set nospell " Vim built-in spell check
-    noremap <leader>sp :set spell!<CR>
+    noremap <leader>sl :set spell!<CR>
     noremap <leader>sag <Esc>zg
     noremap <leader>saw <Esc>zw
     noremap <leader>srg <Esc>zug
@@ -323,10 +325,10 @@
     set wildmenu           " Show menu options
     set wildmode=list:full " Show all available input options (or use Ctrl-D)
 
-" Show tab and the space at the end of the line ------------------------------
-    set list " Show list
+" Show special characters ----------------------------------------------------
+    set list " Show character in list
     set listchars=eol:↵,tab:»·,trail:╳,extends:»,precedes:«,nbsp:␣
-    noremap <leader>st :set list!<CR>
+    noremap <leader>cl :set list!<CR>
 
 " Cursor settings ------------------------------------------------------------
     set ruler          " Show cursor position in status line
@@ -568,7 +570,7 @@
     "    -- "/ : Last search
 
     " Show registers in vim [Also check peekaboo plugin]
-    noremap <leader>rg :registers<CR>
+    noremap <leader>rr :registers<CR>
     " Command that wipe out all registers
     command! WipeReg for i in range(34,122) |
                 \ silent! call setreg(nr2char(i), []) | endfor
@@ -877,6 +879,8 @@
     Plug 'liuchengxu/vim-which-key'
     " Highlight current word and twin words
     Plug 'dominikduda/vim_current_word', { 'on': 'VimCurrentWordToggle' }
+    " Pairs of handy bracket mappings (e.g. quickfix list, location list)
+    Plug 'tpope/vim-unimpaired'
 
 " [Vim extra functions] ------------------------------------------------------
     if USING_EXTRA_PLUG
@@ -935,8 +939,6 @@
         " GitGutter (enhanced signify), also with git integration
         Plug 'airblade/vim-gitgutter',
                     \ { 'on': ['GitGutterToggle', 'GitGutterEnable'] }
-        " Pairs of handy bracket mappings (e.g. quickfix list, location list)
-        Plug 'tpope/vim-unimpaired'
     endif
 
 " [Tmux] ---------------------------------------------------------------------
@@ -972,8 +974,6 @@
                             \ { 'do': ':autocmd VimEnter * UpdateRemotePlugins' }
         endif
     endif
-    " More python syntax highlight
-    Plug 'vim-python/python-syntax', { 'for': 'python' }
 
 " [Fortran coding] -----------------------------------------------------------
     " Fortran syntax support
@@ -1122,15 +1122,15 @@
 
 " Conditional lightline status/tab line --------------------------------------
     if USING_CUSTOMIZED_THEME
-        " Toggle tabline
+        " Toggle lightline tabline
         noremap <leader>slte :set showtabline=2<CR>:echo "TABLINE ENABLED"<CR>
         noremap <leader>sltd :set showtabline=0<CR>:echo "TABLINE DISABLED"<CR>
-        " Toggle lightline
-        noremap <leader>slle :call lightline#enable()<CR>:set noshowmode<CR>
+        " Toggle lightline statusline
+        noremap <leader>slse :call lightline#enable()<CR>:set noshowmode<CR>
                     \:set laststatus=2<CR>:echo "LIGHTLINE ENABLED"<CR>
-        noremap <leader>slld :call lightline#disable()<CR>:set showmode<CR>
+        noremap <leader>slsd :call lightline#disable()<CR>:set showmode<CR>
                     \:set laststatus=2<CR>:echo "LIGHTLINE DISABLED"<CR>
-        " Toggle statusline (including lightline) and tabline
+        " Toggle all lightline status/tab line
         noremap <leader>slae :call lightline#enable()<CR>:set showmode<CR>
                     \:set showtabline=2<CR>:set laststatus=2<CR>
                     \:echo "STATUSLINE/TABLINE DISABLED"<CR>
@@ -1209,14 +1209,15 @@
     nnoremap <leader>fpj :let g:fzf_preview_window = ['down:50%', 'alt-/']<CR>
     nnoremap <leader>fpk :let g:fzf_preview_window = ['up:50%', 'alt-/']<CR>
     nnoremap <leader>fph :let g:fzf_preview_window = ['left:50%', 'alt-/']<CR>
-    " Line/Tag in buffer (Local vim)
+    " Line in local/global buffer
     nnoremap <leader>fbl :FZFBLines<CR>
     nnoremap <leader>fbL :execute ":FZFBLines " . expand('<cword>')<CR>
-    nnoremap <leader>fbt :FZFBTags<CR>
-    nnoremap <leader>fbT :execute ":FZFBTag " . expand('<cword>')<CR>
-    " Line/Tag in all files (Global system)
+    nnoremap <leader>?   :execute ":FZFBLines " . expand('<cword>')<CR>
     nnoremap <leader>fgl :FZFLines<CR>
     nnoremap <leader>fgL :execute ":FZFLines " . expand('<cword>')<CR>
+    " Tag in local/global buffer
+    nnoremap <leader>fbt :FZFBTags<CR>
+    nnoremap <leader>fbT :execute ":FZFBTag " . expand('<cword>')<CR>
     nnoremap <leader>fgt :FZFTags<CR>
     nnoremap <leader>fgT :execute ":FZFTag " . expand('<cword>')<CR>
     " File/Pattern search
@@ -1228,15 +1229,15 @@
     " Git command (requires fugitive.vim plugin)
     nnoremap <leader>fgf :FZFGFiles<CR>
     nnoremap <leader>fgs :FZFGFiles?<CR>
-    nnoremap <leader>fgb :FZFBCommits<CR>
-    nnoremap <leader>fgc :FZFCommits<CR>
+    nnoremap <leader>fgc :FZFBCommits<CR>
+    nnoremap <leader>fgC :FZFCommits<CR>
     " History
     nnoremap <leader>fhs :FZFHistory<CR>
     nnoremap <leader>fh: :FZFHistory:<CR>
     nnoremap <leader>fh/ :FZFHistory/<CR>
     " Buffers/Windows
     nnoremap <leader>fbs :FZFBuffers<CR>
-    nnoremap <leader>fwd :FZFWindows<CR>
+    nnoremap <leader>fws :FZFWindows<CR>
     " Marks
     nnoremap <leader>fmk :FZFMarks<CR>
     nnoremap <leader>f' :FZFMarks<CR>
@@ -1315,8 +1316,8 @@
     " -- K (Vim help page for current selected word)
 
     " Open offline manual in system
-    noremap <leader>mm :execute ":Man " . expand('<cword>')<CR>
-    noremap <leader>mM :Man<space>
+    noremap <leader>mm :Man<space>
+    noremap <leader>mM :execute ":Man " . expand('<cword>')<CR>
 
 " Nerdcommenter --------------------------------------------------------------
     " Note:
@@ -1657,7 +1658,7 @@
     if USING_CODING_TOOL_PLUG
         " Don;t enable when start up
         let g:rainbow_active = 0
-        noremap <leader>rb :RainbowToggle<CR>
+        noremap <leader>rw :RainbowToggle<CR>
     endif
 
 " Indentline -----------------------------------------------------------------
@@ -1829,10 +1830,6 @@
                     \ noremap <leader>pm
                     \ :execute ":Pyimport " . expand('<cword>')<CR>
     endif
-
-" Python syntax --------------------------------------------------------------
-    " Add more syntax highlight for python
-    let g:python_highlight_all = 1
 
 " Python debug (add python breakpoints) --------------------------------------
     " -- ipdb must be installed first

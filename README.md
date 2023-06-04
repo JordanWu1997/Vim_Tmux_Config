@@ -351,7 +351,7 @@ for more details, check sections in vimrc
 - To prevent conflict with built-in hotkey or other program hotkeys
 - In this configuration, leader key is __SPACE__ key
 > 3. _Key mapping should be related to the name of the function_
-- Make it easier to remember or connect
+- Make it easier to remember or connect with configuration
 - e.g. "wrap toggle" function is mapped to `[Space]`+`[w]`+`[p]`
 
 </details>
@@ -437,7 +437,7 @@ for more details, check sections in vimrc
 
 | VIM-Mode | Key Mapping              | Function                                   | Description                                | Note                              |
 | :------: | :----------------------: | :----------------------------------------: | :----------------------------------------: | :-------------------------------: |
-| N/V      | `[LK]`+`[s]`             | Toggle spell mode                          | Toggle spell mode                          | Here s for (s)pell                |
+| N/V      | `[LK]`+`[s]`+`[l]`       | Toggle spell mode                          | Toggle spell mode                          | Here sl for (s)pel(l)             |
 | N/V      | `[LK]`+`[s]`+`[j/k]`     | Jump to next/prev bad word                 | Jump to prev/next bad word                 |                                   |
 | N/V      | `[LK]`+`[s]`+`[a]`+`[g]` | Add word to good word list spell mode      | Add word to good word list spell mode      | Here a for (a)dd, g for (g)ood    |
 | N/V      | `[LK]`+`[s]`+`[r]`+`[g]` | Remove word from good word list spell mode | Remove word from good word list spell mode | Here r for (r)emove, g for (g)ood |
@@ -460,12 +460,11 @@ for more details, check sections in vimrc
 | I        | `[k]`+`[j]`          | Esc (escape form insert mode)     | Esc (escape form insert mode)     |                                            |
 | N/V      | `[Shift]`+`[k]`      | Search current word in manual     | Search current word in manual     |                                            |
 | N/V      | `[Alt]`+`[/]`        | Toggle search highlight           | On/Off search highlight           |                                            |
-| N/V      | `[LK]`+`[d]`+`[d]`   | Close current buffer              | Close current buffer              | Here d for (d)eletion                      |
 | N/V      | `[LK]`+`[w]`+`[p]`   | Toggle line wrap                  | On/Off line wrap                  | Here wp for (w)ra(p)                       |
-| N/V      | `[LK]`+`[s]`+`[t]`   | Toggle list (trailing chars)      | On/Off list (trailing characters) | Here st for li(s)(t)                       |
+| N/V      | `[LK]`+`[c]`+`[l]`   | Toggle list characters show-up    | On/Off list characters show-up    | Here cl for (c)haracter (l)ist             |
 | N/V      | `[LK]`+`[m]`+`[k]`   | Show all vim marks                | Show all vim marks                | Here mk for (m)ar(k)                       |
-| N/V      | `[LK]`+`[r]`+`[g]`   | Show all vim registers            | Show all vim registers            | Here re for (re)gister                     |
-| N/V      | `[LK]`+`[a]`+`[b]`   | Show all vim abbreviates          | Show all vim abbreviates          | Here ab for (ab)reviation                  |
+| N/V      | `[LK]`+`[r]`+`[r]`   | Show all vim registers            | Show all vim registers            | Here re for (r)egiste(r)                   |
+| N/V      | `[LK]`+`[a]`+`[b]`   | Show all vim abbreviates          | Show all vim abbreviates          | Here ab for (a)(b)breviate                 |
 | N/V      | `[LK]`+`[c]`+`[h/v]` | Toggle Horizontal/Vertical cursor | On/Off Horizontal/Vertical cursor |                                            |
 | N/V      | `[LK]`+`[g]`+`[o/i]` | Show all cursor jump              | Show all cursor jump              | `[g/Ctrl]`+`[o/i]` jump backwards/forwards |
 | N/V      | `[LK]`+`[g]`+`[;/,]` | Show all file change              | Show all file change              | `[g]`+`[;/,]` go to earlier/later change   |
