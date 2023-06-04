@@ -247,6 +247,7 @@ for more details, check sections in vimrc
 - Detect using neovim or not (automatic detection)
     - Neovim is better for loading tons of plugins
     - Neovim configuration path is different from vim
+    - If using vim, `vim-hug-neovim-rpc` plug will be loaded to bridge vim and neovim
     ```vim
     " Use vim or neovim (Auto-detect)
     let USING_NEOVIM = has('nvim')
@@ -278,9 +279,10 @@ for more details, check sections in vimrc
 - Extra vim-plug
     - Extra plug for productivity (or enhance vim-built in function)
     - Including
-        - [Plug-in] vim-startify (start page for empty buffer)
         - [Plug-in] goyo (distraction-free editor)
         - [Plug-in] limelight (light-off with goyo)
+        - [Plug-in] vim-startify (start page for empty buffer)
+        - [Plug-in] vimwiki (markdown wiki in vim)
         - [Plug-in] yankring (clipboard history)
         - [Plug-in] vim-peekaboo (vim register viewer/manager)
         - [Plug-in] vim-markbar (vim mark viewer/manager)
@@ -321,7 +323,16 @@ for more details, check sections in vimrc
     " Python Completion (Use deoplete and jedi, neovim is recommended to be used)
     let USING_PYTHON_COMPLETION = 1
     " Python that used to install jedi, pynvim and python packages for completion
-    let PYTHON_FOR_COMPLETION = '/home/jordankhwu/anaconda3/bin/python'
+    let PYTHON_FOR_COMPLETION = '/usr/bin/python'
+    ```
+- Python skeleton file
+    - Add preset python skeleton file for new created `.py` python file
+    - If you use different skeleton file, please change `s:PYTHON_SKELETON` variable
+    ```vim
+    " Add python skeleton file for new created .py python file
+    let USING_PYTHON_SKELETON = 1
+    " Python Skeleton file
+    let s:PYTHON_SKELETON = '$HOME/Desktop/Vim_Tmux_Config/share/skeleton.py'
     ```
 - GUI support
     - Functions for external GUI software
@@ -589,9 +600,9 @@ and following keys are pressed. Table below includes some frequently used key ma
 | `d`      | Diff        | Built-in diff   |
 | `e`      | Ale         | Linter          |
 | `f`      | Fzf         | File-browser    |
-| `g`      | Git         |                 |
+| `g`      | Git         | Git             |
 | `m`      | Mark/Manual | Built-in mark   |
-| `p`      | Python      |                 |
+| `p`      | Python      | Python          |
 | `s`      | Spell       | Built-in spell  |
 | `t`      | Tab         | Built-in tab    |
 | `v`      | Vim-wiki    | Note-taking     |

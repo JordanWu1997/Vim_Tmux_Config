@@ -106,9 +106,7 @@
 " ============================================================================
 " Select vim-plug to load, set guicolor (real color) support, and etc.
 
-" Enable/Disable vim-plug ----------------------------------------------------
-    " Assign 1/0 to enable/disable plug option
-
+" Options for my vim/neovim configuration ------------------------------------
     " Use vim or neovim (Auto-detect)
     let USING_NEOVIM = has('nvim')
     let USING_VIM = !USING_NEOVIM
@@ -127,11 +125,17 @@
     " Python Completion (Use deoplete and jedi, neovim is recommended)
     let USING_PYTHON_COMPLETION = 1
     " Python that has jedi, pynvim and packages installed for completion
-    let PYTHON_FOR_COMPLETION = '/usr/bin/python' "$CONDA_PYTHON_EXE
+    let s:PYTHON_FOR_COMPLETION = '/usr/bin/python' "$CONDA_PYTHON_EXE
     " Support of external gui software (e.g. Okular, Google-chrome, and etc.)
     let USING_GUI_SOFTWARE = 1
     " Web browser for markdown preview
     let s:WEBBROWSER = $BROWSER
+    " Add python skeleton file for new created .py python file
+    let USING_PYTHON_SKELETON = 1
+    " Python Skeleton file
+    let s:PYTHON_SKELETON = '$HOME/Desktop/Vim_Tmux_Config/share/skeleton.py'
+
+" Variables for vim/neovim or plug-in ----------------------------------------
     " Ctag generator for vimwiki plugins
     let s:CTAGSBIN = '$HOME/Desktop/Vim_Tmux_Config/bin/vwtags.py'
     " FZF patches for change/jump list
@@ -815,6 +819,13 @@
 " Plugins from github repos:
 " ****************************************************************************
 
+" [Vim Neovim communication] -------------------------------------------------
+    " Help communicate beteen vim and neovim [needed for deoplete.nvim]
+    " Pynvim must be installed first [/usr/bin/python -m pip install pynvim]
+    if USING_VIM
+        Plug 'roxma/vim-hug-neovim-rpc'
+    endif
+
 " [Vim theme] ----------------------------------------------------------------
     if USING_CUSTOMIZED_THEME
         " Wal (Autocolorcheme based on wallpaper) [ONLY work with cterm color]
@@ -949,13 +960,6 @@
     "Plug 'roxma/vim-tmux-clipboard'
     " Navigate seamlessly in vim and tmux (Ctrl+h/j/k/l)
     Plug 'christoomey/vim-tmux-navigator'
-
-" [Vim Neovim communication] -------------------------------------------------
-    " Help communicate beteen vim and neovim [needed for deoplete.nvim]
-    " Pynvim must be installed first [/usr/bin/python -m pip install pynvim]
-    if USING_VIM
-        Plug 'roxma/vim-hug-neovim-rpc'
-    endif
 
 " [Python coding] ------------------------------------------------------------
     if USING_PYTHON_COMPLETION
@@ -1791,7 +1795,7 @@
         " Enable deoplete at startup
         let g:deoplete#enable_at_startup = 1
         " Python that uses to install jedi
-        let g:python3_host_prog = PYTHON_FOR_COMPLETION
+        let g:python3_host_prog = s:PYTHON_FOR_COMPLETION
         " Maximum length for completion
         let g:deoplete#sources#jedi#statement_length = 30
         " Ignore case for deoplete
@@ -1838,6 +1842,11 @@
         autocmd FileType python
                     \ noremap <silent><leader>pb Oimport ipdb;
                     \ ipdb.set_trace()<Esc>
+    endif
+
+" Python skeleton (add python skeleton for new python .py file) --------------
+    if USING_PYTHON_SKELETON
+        exec 'autocmd BufNewFile *.py 0r' s:PYTHON_SKELETON
     endif
 
 " ============================================================================
