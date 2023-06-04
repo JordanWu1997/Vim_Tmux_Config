@@ -455,20 +455,20 @@ for more details, check sections in vimrc
 
 7. Miscellaneous Function Key Mapping
 
-| VIM-Mode | Key Mapping          | Function                          | Description                       | Note                                            |
-| :------: | :------------------: | :-------------------------------: | :-------------------------------: | :---------------------------------------------: |
-| I        | `[k]`+`[j]`          | Esc (escape form insert mode)     | Esc (escape form insert mode)     |                                                 |
-| N/V      | `[Shift]`+`[k]`      | Search current word in manual     | Search current word in manual     |                                                 |
-| N/V      | `[Alt]`+`[/]`        | Toggle search highlight           | On/Off search highlight           |                                                 |
-| N/V      | `[LK]`+`[d]`+`[d]`   | Close current buffer              | Close current buffer              | Here d for (d)eletion                           |
-| N/V      | `[LK]`+`[w]`+`[p]`   | Toggle line wrap                  | On/Off line wrap                  | Here wp for (w)ra(p)                            |
-| N/V      | `[LK]`+`[s]`+`[t]`   | Toggle list (trailing chars)      | On/Off list (trailing characters) | Here st for li(s)(t)                            |
-| N/V      | `[LK]`+`[m]`+`[k]`   | Show all vim marks                | Show all vim marks                | This shows marks using fzf instead vim built-in |
-| N/V      | `[LK]`+`[r]`+`[g]`   | Show all vim registers            | Show all vim registers            | Here re for (re)gister                          |
-| N/V      | `[LK]`+`[a]`+`[b]`   | Show all vim abbreviates          | Show all vim abbreviates          | Here ab for (ab)reviation                       |
-| N/V      | `[LK]`+`[c]`+`[h/v]` | Toggle Horizontal/Vertical cursor | On/Off Horizontal/Vertical cursor |                                                 |
-| N/V      | `[LK]`+`[g]`+`[o/i]` | Show all cursor jump              | Show all cursor jump              | `[g/Ctrl]`+`[o/i]` jump backwards/forwards      |
-| N/V      | `[LK]`+`[g]`+`[;/,]` | Show all file change              | Show all file change              | `[g]`+`[;/,]` go to earlier/later change        |
+| VIM-Mode | Key Mapping          | Function                          | Description                       | Note                                       |
+| :------: | :------------------: | :-------------------------------: | :-------------------------------: | :----------------------------------------: |
+| I        | `[k]`+`[j]`          | Esc (escape form insert mode)     | Esc (escape form insert mode)     |                                            |
+| N/V      | `[Shift]`+`[k]`      | Search current word in manual     | Search current word in manual     |                                            |
+| N/V      | `[Alt]`+`[/]`        | Toggle search highlight           | On/Off search highlight           |                                            |
+| N/V      | `[LK]`+`[d]`+`[d]`   | Close current buffer              | Close current buffer              | Here d for (d)eletion                      |
+| N/V      | `[LK]`+`[w]`+`[p]`   | Toggle line wrap                  | On/Off line wrap                  | Here wp for (w)ra(p)                       |
+| N/V      | `[LK]`+`[s]`+`[t]`   | Toggle list (trailing chars)      | On/Off list (trailing characters) | Here st for li(s)(t)                       |
+| N/V      | `[LK]`+`[m]`+`[k]`   | Show all vim marks                | Show all vim marks                | Here mk for (m)ar(k)                       |
+| N/V      | `[LK]`+`[r]`+`[g]`   | Show all vim registers            | Show all vim registers            | Here re for (re)gister                     |
+| N/V      | `[LK]`+`[a]`+`[b]`   | Show all vim abbreviates          | Show all vim abbreviates          | Here ab for (ab)reviation                  |
+| N/V      | `[LK]`+`[c]`+`[h/v]` | Toggle Horizontal/Vertical cursor | On/Off Horizontal/Vertical cursor |                                            |
+| N/V      | `[LK]`+`[g]`+`[o/i]` | Show all cursor jump              | Show all cursor jump              | `[g/Ctrl]`+`[o/i]` jump backwards/forwards |
+| N/V      | `[LK]`+`[g]`+`[;/,]` | Show all file change              | Show all file change              | `[g]`+`[;/,]` go to earlier/later change   |
 
 </details>
 
@@ -479,29 +479,31 @@ for more details, check sections in vimrc
 1. File/Code Browsing Key Mapping
 - Note: Fzf is needed for file browsing
 
-| VIM-Mode | Key Mapping                     | Function                              | Description                           | Note                       |
-| :------: | :-----------------------------: | :-----------------------------------: | :-----------------------------------: | :------------------------: |
-| N/V      | `[F3]`                          | Nerdtree Current Files                | Show current file location            |                            |
-| N/V      | `[LK]`+`[F3]`                   | Toggle Nerdtree                       | On/Off NerdTree plugin                |                            |
-| N        | `[s/v]`                         | Open file in split/vsplit pane        | Open file in split/vsplit pane        | In NERDTree pane           |
-| N        | (`[Shift]`)+`[t]`               | Open file in new tab (silently)       | Open file in new tab (silently)       | In NERDTree pane           |
-| N        | `[g]`+`[s/v]`                   | Preview file in split/vsplit pane     | Preview file in split/vsplit pane     | In NERDTree pane           |
-| N        | `[c]`+`[d]`                     | Change pwd to selected location       | Change pwd to selected location       | In NERDTree pane           |
-| N        | `[Shift]`+`[c]`+`[Shift]`+`[d]` | Change tree root to selected location | Change tree root to selected location | In NERDTree pane           |
-| N        | (`[Shift]`)+`[o/x]`             | Open/Close folds (recursively)        | Open/Close folds (recursively)        | In NERDTree pane           |
-| N/V      | `[LK]`+`[F4]`                   | Toggle Tagbar                         | On/Off Tagbar plugin                  |                            |
-| N        | `[p]`                           | Preview tags within Tagbar            | Preview tags within Tagbar            | In Tagbar pane             |
-| N        | `[d]`                           | Show definition of tags               | Show definition of tags               | In Tagbar pane             |
-| N        | `[o]``                          | Toggle folds                          | Toggle folds                          | In Tagbar pane             |
-| N        | `[LK]`+`[f]`+`[f]`+`[s]`        | List files under input directory      | List files under input directory      |                            |
-| N        | `[LK]`+`[f]`+`[l]`+`[c]`        | Locate files matched input            | Locate files matched input name       | Use system locate command  |
-| N        | `[LK]`+`[f]`+`[r]`+`[g]`        | Find files with input pattern         | Find files matched input pattern      | Use system ripgrep command |
-| N        | `[LK]`+`[f]`+`[f]`+`[t]`        | Select file type for current file     | Select file type for current file     |                            |
-| N        | `[LK]`+`[f]`+`[c]`+`[d]`        | Show all command in vim now　         | Show all command in vim now           | 　                         |
-| N        | `[LK]`+`[f]`+`[n]`+`[m]`        | Show all normal mode mapping          | Show all normal mode mapping          |                            |
-| N        | `[LK]`+`[f]`+`[h]`+`[t]`        | Show all helptags in vim-help         | Show all helptags in vim-help         |                            |
-| N        | `[LK]`+`[f]`+`[q]`+`[f]`        | Show build-in quickfix list           | Show build-in quickfix list           | vim quickfix list          |
-| N        | `[LK]`+`[f]`+`[l]`+`[l]`        | Show build-in location list           | Show build-in location list           | vim location list          |
+| VIM-Mode | Key Mapping                     | Function                              | Description                           | Note                                    |
+| :------: | :-----------------------------: | :-----------------------------------: | :-----------------------------------: | :-------------------------------------: |
+| N/V      | `[F3]`                          | Nerdtree Current Files                | Show current file location            |                                         |
+| N/V      | `[LK]`+`[F3]`                   | Toggle Nerdtree                       | On/Off NerdTree plugin                |                                         |
+| N        | `[s/v]`                         | Open file in split/vsplit pane        | Open file in split/vsplit pane        | In NERDTree pane                        |
+| N        | (`[Shift]`)+`[t]`               | Open file in new tab (silently)       | Open file in new tab (silently)       | In NERDTree pane                        |
+| N        | `[g]`+`[s/v]`                   | Preview file in split/vsplit pane     | Preview file in split/vsplit pane     | In NERDTree pane                        |
+| N        | `[c]`+`[d]`                     | Change pwd to selected location       | Change pwd to selected location       | In NERDTree pane                        |
+| N        | `[Shift]`+`[c]`+`[Shift]`+`[d]` | Change tree root to selected location | Change tree root to selected location | In NERDTree pane                        |
+| N        | (`[Shift]`)+`[o/x]`             | Open/Close folds (recursively)        | Open/Close folds (recursively)        | In NERDTree pane                        |
+| N/V      | `[LK]`+`[F4]`                   | Toggle Tagbar                         | On/Off Tagbar plugin                  |                                         |
+| N        | `[p]`                           | Preview tags within Tagbar            | Preview tags within Tagbar            | In Tagbar pane                          |
+| N        | `[d]`                           | Show definition of tags               | Show definition of tags               | In Tagbar pane                          |
+| N        | `[o]``                          | Toggle folds                          | Toggle folds                          | In Tagbar pane                          |
+| N        | `[LK]`+`[f]`+`[f]`+`[s]`        | List files under input directory      | List files under input directory      |                                         |
+| N        | `[LK]`+`[f]`+`[l]`+`[c]`        | Locate files matched input            | Locate files matched input name       | Use system locate command               |
+| N        | `[LK]`+`[f]`+`[r]`+`[g]`        | Find files with input pattern         | Find files matched input pattern      | Use system ripgrep command              |
+| N        | `[LK]`+`[f]`+`[f]`+`[t]`        | Select file type for current file     | Select file type for current file     |                                         |
+| N        | `[LK]`+`[f]`+`[c]`+`[d]`        | Show all command in vim now　         | Show all command in vim now           | 　                                      |
+| N        | `[LK]`+`[f]`+`[n]`+`[m]`        | Show all normal mode mapping          | Show all normal mode mapping          |                                         |
+| N        | `[LK]`+`[f]`+`[h]`+`[t]`        | Show all helptags in vim-help         | Show all helptags in vim-help         |                                         |
+| N        | `[LK]`+`[f]`+`[q]`+`[f]`        | Show build-in quickfix list           | Show build-in quickfix list           | vim quickfix list                       |
+| N        | `[LK]`+`[f]`+`[l]`+`[l]`        | Show build-in location list           | Show build-in location list           | vim location list                       |
+| N        | `[LK]`+`[f]`+`[c]`+`[l]`        | Show build-in change list             | Show build-in change list             | `./vim/patch/fzf_patch.vim` is required |
+| N        | `[LK]`+`[f]`+`[j]`+`[l]`        | Show build-in jump list               | Show build-in jump list               | `./vim/patch/fzf_patch.vim` is required |
 
 2. Python Coding Key Mapping
 - Note: Jedi is needed for python code analysis (Check https://github.com/davidhalter/jedi )

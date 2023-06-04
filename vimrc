@@ -58,9 +58,8 @@
     " press more keys to execute some function mapped in insert mode.
 
     " For now, there are two solutions: One is to set leader key to other key
-    " than space; The other one (RECOMMENDED) is to remap all keymaps that
-    " start with space in INSERTMODE (which can be found by vim command :imap)
-
+    " than space; The other one (RECOMMENDED) is to remap all keymaps in
+    " INSERTMODE (vim command :imap) that start with space
 " Note: Neoformat (Formatter) ------------------------------------------------
     " Call multi-language code formatter [formatter need to be installed]
     " Also need to make sure that formatter is executable [e.g. pyment]
@@ -132,9 +131,11 @@
     " Support of external gui software (e.g. Okular, Google-chrome, and etc.)
     let USING_GUI_SOFTWARE = 1
     " Web browser for markdown preview
-    let WEBBROWSER = $BROWSER
+    let s:WEBBROWSER = $BROWSER
     " Ctag generator for vimwiki plugins
-    let CTAGSBIN = '$HOME/Desktop/Vim_Tmux_Config/bin/vwtags.py'
+    let s:CTAGSBIN = '$HOME/Desktop/Vim_Tmux_Config/bin/vwtags.py'
+    " FZF patches for change/jump list
+    let s:FZF_PATCH = '$HOME/Desktop/Vim_Tmux_Config/vim/patch/fzf_patch.vim'
 
 " TERMGUI color --------------------------------------------------------------
     " Ctermcolors only support max 256 color
@@ -1246,6 +1247,10 @@
     nnoremap <leader>fcd :FZFCommands<CR>
     nnoremap <leader>fft :FZFFiletypes<CR>
     nnoremap <leader>fht :FZFHelptags<CR>
+    " Add patch for jump/change list
+    exec 'source ' . s:FZF_PATCH
+    nnoremap <leader>fcl :FZFChanges<CR>
+    nnoremap <leader>fjl :FZFJumps<CR>
 
 " NERDTree -------------------------------------------------------------------
     " NERDTree Pane
@@ -1422,7 +1427,7 @@
                     \ 'sro':'&&&' ,
                     \ 'kind2scope':{'h':'header'},
                     \ 'sort':0,
-                    \ 'ctagsbin': CTAGSBIN,
+                    \ 'ctagsbin': s:CTAGSBIN,
                     \ 'ctagsargs': 'markdown'
                     \ }
         " Global mappings
@@ -1876,7 +1881,7 @@
     " Synchronous markdown previewer (markdown-preview plugin)
     if USING_GUI_SOFTWARE && USING_VIM8
         " Web browser used to preview
-        let g:mkdp_browser = g:WEBBROWSER
+        let g:mkdp_browser = s:WEBBROWSER
         " Close browser after markdown file is close
         let g:mkdp_auto_close = 0
         " Show url of markdown previewer
