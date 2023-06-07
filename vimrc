@@ -77,8 +77,6 @@
     "    -- (1) :Neoformat isort  # Sort import module
     "    -- (2) :Neoformat pyment # Add description of function/class
     "    -- (3) :Neoformat yapf   # Format to PEP8 standard
-    " -- Google format pyment not work with neoformat, instead in terminal
-    "    -- (1) pyment -o google -w <python_program.py>
 
 " Note: Python-completion and tmux-yank-clipboard on remote machine ----------
     " Use neovim and everything is fine, but notice that neovim support of
@@ -1650,12 +1648,37 @@
 
 " Neoformat ------------------------------------------------------------------
     if USING_CODING_TOOL_PLUG
-        " Normal mode
+        " pyment: python docstring creater/formatter
+        let g:neoformat_python_pyment_google = {
+                \ 'exe': 'pyment',
+                \ 'args': ['-', '-o "google"', '-w'],
+                \ 'stdin': 1,
+                \ }
+        let g:neoformat_python_pyment_javadoc = {
+                \ 'exe': 'pyment',
+                \ 'args': ['-', '-o "javadoc"', '-w'],
+                \ 'stdin': 1,
+                \ }
+        let g:neoformat_python_pyment_numpydoc = {
+                \ 'exe': 'pyment',
+                \ 'args': ['-', '-o "numpydoc"', '-w'],
+                \ 'stdin': 1,
+                \ }
+        let g:neoformat_enabled_python = ['pyment_google', 'pyment_javadoc']
+        " pyment: python docstring creater/formatter
+        nnoremap <leader>ptd :Neoformat pyment<CR>
+        nnoremap <leader>ptg :Neoformat pyment_google<CR>
+        nnoremap <leader>ptj :Neoformat pyment_javadoc<CR>
+        nnoremap <leader>ptn :Neoformat pyment_numpydoc<CR>
+        " pyment: visual mode selection for finetune
+        vnoremap <leader>ptd :'<,'>Neoformat pyment<CR>
+        vnoremap <leader>ptg :'<,'>Neoformat pyment_google<CR>
+        vnoremap <leader>ptj :'<,'>Neoformat pyment_javadoc<CR>
+        vnoremap <leader>ptn :'<,'>Neoformat pyment_numpydoc<CR>
+        " isort: python import sorter
         nnoremap <leader>pi :Neoformat isort<CR>
+        " yapf: python code formatter
         nnoremap <leader>py :Neoformat yapf<CR>
-        " Visual mode
-        vnoremap <leader>pi :Neoformat isort<CR>
-        vnoremap <leader>py :Neoformat yapf<CR>
     endif
 
 " Rainbow parentheses --------------------------------------------------------
@@ -1880,7 +1903,7 @@
     " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
     " Google-chrome extension is needed for markdown viewer
     if USING_GUI_SOFTWARE && !USING_VIM8
-        let $OPENBROWSER = 'noremap <leader><F4> :!'. g:WEBBROWSER .' %:p &<CR>'
+        let $OPENBROWSER = 'noremap <leader><F4> :!'. s:WEBBROWSER .' %:p &<CR>'
         autocmd BufEnter *.md echom '[Press Space+F4 to Open .md File]'
         autocmd BufEnter *.md exe $OPENBROWSER
     endif
