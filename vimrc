@@ -1282,9 +1282,9 @@
     " Toggle NERDTree Zoom
     let g:NERDTreeMapToggleZoom = 'zz'
     " Toggle NERDTree display pane
-    noremap <F3> :!silent NERDTreeToggle<CR>
+    noremap <F3> :silent! NERDTreeToggle<CR>
     " Open NERDTree with the current file selected
-    noremap <leader><F3> :!silent NERDTreeFind<CR>
+    noremap <leader><F3> :silent! NERDTreeFind<CR>
     " Tagbar location
     noremap <leader>ntl :let g:NERDTreeWinPos = 'left'<CR>
     noremap <leader>ntr :let g:NERDTreeWinPos = 'right'<CR>
