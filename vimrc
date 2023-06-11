@@ -357,7 +357,8 @@
 
 " Search settings ------------------------------------------------------------
     " Note:
-    " -- Ctrl+[t/g]: Go to prev/next matching result before start searching
+    " -- Ctrl+[t/g]: Go to prev/next matching result in incsearch
+    " -- [+I: Show lines with matching words
 
     set incsearch  " Incremental search (character-by-character search)
     set hlsearch   " Highlight search result
@@ -381,14 +382,14 @@
     " -- z+[M/R/i]: Maximize/Remove/Invert all folds
     " -- z+[j/k]: Jump to next/prev fold
 
-    " Fold settings
+    " Default fold settings
     set foldmethod=syntax
     set foldcolumn=0
     set foldlevel=0
+    set nofoldenable
+    " Fold settings for different language
     autocmd FileType vim setlocal foldmethod=indent nofoldenable
     autocmd FileType python setlocal foldmethod=indent nofoldenable
-    " Default value (disabled at startup)
-    set nofoldenable
     " Toggle foldcolumn (4 column)
     function! FoldColumnToggleShort()
         if &foldcolumn
@@ -412,6 +413,8 @@
     " Toggle foldcolumn (short, long)
     nnoremap <F6> :call FoldColumnToggleShort()<CR>
     nnoremap <leader><F6> :call FoldColumnToggleLong()<CR>
+    " Toggle fold
+    map <leader><space> za
 
 " Window settings ------------------------------------------------------------
     " Note:
@@ -1276,12 +1279,12 @@
     " Set NERDTree open preview
     let g:NERDTreeletPreviewSplit = 'gs'
     let g:NERDTreeletPreviewVSplit = 'gv'
-    " Toggle NERTree Zoom
+    " Toggle NERDTree Zoom
     let g:NERDTreeMapToggleZoom = 'zz'
     " Toggle NERDTree display pane
-    noremap <F3> :NERDTreeToggle<CR>
+    noremap <F3> :!silent NERDTreeToggle<CR>
     " Open NERDTree with the current file selected
-    noremap <leader><F3> :NERDTreeFind<CR>
+    noremap <leader><F3> :!silent NERDTreeFind<CR>
     " Tagbar location
     noremap <leader>ntl :let g:NERDTreeWinPos = 'left'<CR>
     noremap <leader>ntr :let g:NERDTreeWinPos = 'right'<CR>
