@@ -1018,6 +1018,9 @@
     " I3 configuration syntax highlight
     Plug 'PotatoesMaster/i3-vim-syntax', { 'for': 'i3' }
 
+" [ChatGPT] ------------------------------------------------------------------
+    Plug 'zhenyangze/vim-bitoai'
+
 " End of plugin loading ------------------------------------------------------
     " Tell vim-plug we finished declaring plugins, so it can load them
     call plug#end()
@@ -1641,7 +1644,7 @@
         endif
         let g:ale_enabled = 0
         let g:ale_disable_lsp = 1
-        let g:ale_linters = { 'python': ['mypy', 'flake8'] }
+        let g:ale_linters = { 'python': ['mypy', 'isort', 'yapf', 'flake8'] }
         " ALE use location list for output, instead of quickfix list
         let g:ale_set_loclist = 1
         let g:ale_set_quickfix = 0
