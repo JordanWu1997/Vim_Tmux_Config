@@ -128,10 +128,14 @@
     let USING_GUI_SOFTWARE = 1
     " Web browser for markdown preview
     let s:WEBBROWSER = $BROWSER
-    " Add python skeleton file for new created .py python file
+    " Add python skeleton file to newly created .py python file
     let USING_PYTHON_SKELETON = 1
     " Python Skeleton file
     let s:PYTHON_SKELETON = '$HOME/Desktop/Vim_Tmux_Config/share/skeleton.py'
+    " Add markdown template file to newly created .md markdown file
+    let USING_MARKDOWN_TEMPLATE = 1
+    " Markdown Template file
+    let s:MARKDOWN_TEMPLATE = '$HOME/Documents/KNOWLEDGE_BASE/template/My_Note_Template.md'
 
 " Variables for vim/neovim or plug-in ----------------------------------------
     " Ctag generator for vimwiki plugins
@@ -988,7 +992,7 @@
     " Generate HTML in a simple way
     Plug 'mattn/emmet-vim', { 'for': 'html' }
     " Generate closetag for HTML
-    Plug 'alvan/vim-closetag', { 'for': 'html' }
+    Plug 'alvan/vim-closetag', { 'for': [ 'html', 'markdown'] }
 
 " [Latex] --------------------------------------------------------------------
     if USING_GUI_SOFTWARE
@@ -1013,6 +1017,7 @@
     endif
     " Markdown syntax header folding
     Plug 'masukomi/vim-markdown-folding', { 'for': 'markdown' }
+    Plug 'mzlogin/vim-markdown-toc', { 'for': 'markdown' }
 
 " [I3 syntax highlight] ------------------------------------------------------
     " I3 configuration syntax highlight
@@ -1924,6 +1929,10 @@
         autocmd BufEnter *.md echom '[Press Space+F4 to Open .md File]'
         autocmd BufEnter *.md nmap <leader><F4> <Plug>MarkdownPreviewToggle<CR>
         autocmd BufEnter *.md setlocal scrolloff=999
+    endif
+    " Load template file when new file created
+    if USING_MARKDOWN_TEMPLATE
+        exec 'autocmd BufNewFile *.md 0r' s:MARKDOWN_TEMPLATE
     endif
     " Insert image in markdown file
     noremap <leader>mi <Esc>i![alt text]()<Left>
