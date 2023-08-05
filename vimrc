@@ -1610,8 +1610,8 @@
         inoremap <expr><tab>   pumvisible() ? "\<C-n>" : "\<tab>"
         inoremap <expr><C-k>   pumvisible() ? "\<C-p>" : "\<C-k>"
         inoremap <expr><C-j>   pumvisible() ? "\<C-n>" : "\<C-j>"
-        inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
-        inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+        "inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+        "inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
         inoremap <expr><C-b>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-b>"
         inoremap <expr><C-f>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-f>"
         inoremap <expr><M-k>   pumvisible() ? "\<C-p>" : "\<M-k>"
@@ -1940,6 +1940,16 @@
     noremap <leader>ml <Esc>i[]()<Left>
     " Insert code block in markdown file
     noremap <leader>mb <Esc>i```<CR>```<Up>
+
+" BitoAI ---------------------------------------------------------------------
+    noremap <leader>aic :BitoAiCheck<CR>
+    noremap <leader>aip :BitoAiCheckPerformance<CR>
+    noremap <leader>ais :BitoAiCheckStyle<CR>
+    noremap <leader>aiS :BitoAiCheckSecurity<CR>
+    noremap <leader>aie :BitoAiExplain<CR>
+    noremap <leader>aig :BitoAiGenerate<CR>
+    "noremap <leader>aiG :BitoAiGenerateComment<CR>
+    noremap <leader>air :BitoAiReadable<CR>
 
 " ============================================================================
 " Part 9 - Colorscheme and other color settings (Plugin settings and mappings)
