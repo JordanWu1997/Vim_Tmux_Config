@@ -863,6 +863,8 @@
     endif
     " File browser [support netrw (vim built-in file browser) functions]
     Plug 'scrooloose/nerdtree'
+    " Undo history visualizer
+    Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
     " Code class/module/tag browser [Update to latest]
     Plug 'preservim/tagbar', { 'on': 'TagbarToggle' }
     " Code and files fuzzy finder and previewer (main program)
@@ -1296,6 +1298,10 @@
     " Tagbar location
     noremap <leader>ntl :let g:NERDTreeWinPos = 'left'<CR>
     noremap <leader>ntr :let g:NERDTreeWinPos = 'right'<CR>
+
+" UndoTree -------------------------------------------------------------------
+    " Toggle UndoTree
+    noremap <leader>ut :UndotreeToggle<CR>
 
 " Tagbar ---------------------------------------------------------------------
     " Tagbar pane

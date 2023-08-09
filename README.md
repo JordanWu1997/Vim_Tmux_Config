@@ -499,6 +499,7 @@ for more details, check sections in vimrc
 | N        | `[c]`+`[d]`                     | Change pwd to selected location       | Change pwd to selected location       | In NERDTree pane                        |
 | N        | `[Shift]`+`[c]`+`[Shift]`+`[d]` | Change tree root to selected location | Change tree root to selected location | In NERDTree pane                        |
 | N        | (`[Shift]`)+`[o/x]`             | Open/Close folds (recursively)        | Open/Close folds (recursively)        | In NERDTree pane                        |
+| N/V      | `[LK]`+`[u]`+`[t]`              | Toggle Undotree                       | On/Off Undotree (visualizer) plugin   | Vim built-in undotree visualizer        |
 | N/V      | `[LK]`+`[F4]`                   | Toggle Tagbar                         | On/Off Tagbar plugin                  |                                         |
 | N        | `[p]`                           | Preview tags within Tagbar            | Preview tags within Tagbar            | In Tagbar pane                          |
 | N        | `[d]`                           | Show definition of tags               | Show definition of tags               | In Tagbar pane                          |
@@ -580,7 +581,7 @@ for more details, check sections in vimrc
 | N/V      | `[LK]`+`[g]`+`[Shift]`+`[p]`          | Hunk preview (before changed)   | Hunk preview (before changed)                      | Here p for (p)review                                          |
 | N/V      | `[LK]`+`[g]`+`[Shift]`+`[f]`          | Fold all unchanged lines        | Fold all unchanged lines                           |                                                               |
 | N/V      | `[LK]`+`[g]`+`[Shift]`+`[s]`          | Stage current hunk              | Stage current hunk                                 | Here s for (s)tage                                            |
-| N/V      | `[LK]`+`[g]`+`[Shift]`+`[u]`          | Restore current hunk            | Restore current hunk                               | Like vim undo                                                 |
+| N/V      | `[LK]`+`[g]`+`[Shift]`+`[u]`          | Restore current hunk            | Restore current hunk                               | Like git restore                                              |
 | N/V      | `[LK]`+`[g]`+`[s]`                    | Summary of current git repo     | Summary of current git repo                        | Here s for (s)ummary                                          |
 | N/V      | `[LK]`+`[g]`+(`[Shift]`)+`[d]`        | Git diff (all unstaged files)   | Git diff (all unstaged files)                      |                                                               |
 | N/V      | `[LK]`+`[g]`+(`[Shift]`)+`[a]`        | Git add (all unstaged files)    | Git add (all unstaged files)                       |                                                               |
