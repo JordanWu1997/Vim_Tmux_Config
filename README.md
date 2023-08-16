@@ -733,6 +733,7 @@ tmux -V
 - [Plug-in] tmux-yank (share TMUX clipboard with system clipboard)
 - [Plug-in] tmux-open (open TMUX context easily in TMUX copy mode)
 - [Plug-in] tmux-logging (logging and screen capturing for TMUX)
+- [Plug-in] tmux-transient-status (TMUX statusline auto-hiding)
 
 </details>
 
@@ -890,6 +891,7 @@ tmux -V
 - https://github.com/tmux-plugins/tmux-yank
 - https://github.com/tmux-plugins/tmux-logging
 - https://github.com/tmux-plugins/tmux-copycat
+- https://github.com/TheSast/tmux-transient-status
 - https://github.com/g6ai/dotfiles/tree/master/tmux
 - https://danielmiessler.com/study/tmux/
 - https://leimao.github.io/blog/Tmux-Tutorial/
