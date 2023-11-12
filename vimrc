@@ -7,7 +7,7 @@
 " ============================================================================
 " This vim configuration is for both vim and neovim
 
-" Note: Vim / Neovim configuration file --------------------------------------
+" NOTE: Vim / Neovim configuration file --------------------------------------
     " Vim configuration file
     " -- Store in ~/.vimrc
     " Neovim configuration file
@@ -19,7 +19,7 @@
 " Followings are problems, recommended solutions, and plugin-function support
 " notes for configuration
 
-" Note: Old powerline-status support [Not use anymore, use lightline now] ----
+" NOTE: Old powerline-status support [Not use anymore, use lightline now] ----
     " Powerline-status installation (Choose one of the followings)
     " (1) sudo install vim-powerline (Fedora)
     " (2) sudo apt-get install powerline (Ubuntu)
@@ -28,7 +28,7 @@
     "     -- python3 powerline_setup()
     "     -- python3 del powerline_setup
 
-" Note: Special character support --------------------------------------------
+" NOTE: Special character support --------------------------------------------
     " NERDFont installation (Step by step)
     " (1) mkdir -p ~/.local/share/fonts
     " (2) cd ~/.local/share/fonts && curl -fLo \
@@ -37,21 +37,21 @@
     "     DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
     " (3) [No needs for kitty] set terminal font to "DroidSansMono Nerd Font"
 
-" Note: Vim plugin support ---------------------------------------------------
+" NOTE: Vim plugin support ---------------------------------------------------
     " If curl is installed, vim-plug (vim-plugin manger) should automatically
     " run all installation at your first time loading vim.
 
     " If vim-plug somehow not working automatically or if you want manual
     " installation, in vim command mode, type :PlugInstall
 
-" Note: Vim features support -------------------------------------------------
+" NOTE: Vim features support -------------------------------------------------
     " In Fedora, vim is complied without clipboard and python3/dyn features,
 
     " For those feature support, you can try either recompile vim from source
     " codes or [Recommended] just install gvim (gui-vim) from Fedora instead.
     " Also, xclip or parcellite MUST be installed [dnf install xclip/parcellite]
 
-" Note: Leader key delay solution---------------------------------------------
+" NOTE: Leader key delay solution---------------------------------------------
     " In the following configuration, I use space as leader key, however, it
     " will encounter delay problem in insert mode (Need wait for a while to
     " insert space character) since vim always waits to see if you want to
@@ -60,7 +60,8 @@
     " For now, there are two solutions: One is to set leader key to other key
     " than space; The other one (RECOMMENDED) is to remap all keymaps in
     " INSERTMODE (vim command :imap) that start with space
-" Note: Neoformat (Formatter) ------------------------------------------------
+
+" NOTE: Neoformat (Formatter) ------------------------------------------------
     " Call multi-language code formatter [formatter need to be installed]
     " Also need to make sure that formatter is executable [e.g. pyment]
     " For code formatter support: https://github.com/sbdchd/Neoformat
@@ -78,7 +79,7 @@
     "    -- (2) :Neoformat pyment # Add description of function/class
     "    -- (3) :Neoformat yapf   # Format to PEP8 standard
 
-" Note: Python-completion and tmux-yank-clipboard on remote machine ----------
+" NOTE: Python-completion and tmux-yank-clipboard on remote machine ----------
     " Use neovim and everything is fine, but notice that neovim support of
     " Fedora repo is for Fedora 25 and higher version. For now, Seb just used
     " AppImage directly from neovim website
@@ -92,7 +93,7 @@
     " Python packages already installed in somewhere else
     " -- Use: pip install (--user) --ignore_installed <PACKAGE_NAME>
 
-" Note: Keyboard key repeat time settings ------------------------------------
+" NOTE: Keyboard key repeat time settings ------------------------------------
     " Speed up/down key repeat time for pressing key
     " -- e.g jjjjjjjj, kkkkkkkkkk, wwwwwwwwwww
     " Use Xset to set key repeat
@@ -160,7 +161,7 @@
 " Vim built-in function settings and vim hotkeys settings
 " ============================================================================
 " All parameter settings and hotkey mappings
-    " Note:
+    " NOTE:
     " -- Ctrl+i (Tab)
     " -- Ctrl+[j/m] (Enter)
 
@@ -176,7 +177,7 @@
     let mapleader = ' '
 
 " Map insert mode key --------------------------------------------------------
-    " Note:
+    " NOTE:
     " -- Ctrl+j (Enter)
     " -- Ctrl+o (execute single normal mode operation)
     " -- Ctrl+r+(register) (Paste register)
@@ -196,7 +197,7 @@
     inoremap ! !<C-g>u
 
 " Map normal/visual/operator-pending mode key --------------------------------
-    " Note:
+    " NOTE:
     " -- z+[t/z/b/h/l]: scroll window top/center/bottom/left/right
     " -- Ctrl+[i/o]: jump to next/prev cursor location
     " -- :jumps: show all jump history
@@ -235,6 +236,8 @@
     noremap <leader>g; :changes<CR>
     noremap <leader>g, :changes<CR>
     " Diff mode (vimdiff or nvim -d)
+    noremap <leader>dd :diffthis<CR>
+    noremap <leader>do :diffoff<CR>
     noremap <leader>ds :diffsplit<space>
     noremap <leader>dv :vertical diffsplit<space>
     noremap <leader>dg :diffget<CR>
@@ -247,7 +250,7 @@
     nnoremap gS :%s/\<<c-r><c-w>\>//g<left><left>
 
 " Save/Load file hotkey ------------------------------------------------------
-    " Note:
+    " NOTE:
     " -- ZZ (Quit and save if there's change in file without confirmation)
     " -- :f <new-filename> (Save current file with new filename)
     " -- :earlier Nf (Undo to last N file change)
@@ -264,7 +267,7 @@
     noremap <leader>wa :wqall<CR>
 
 " External command -----------------------------------------------------------
-    " Note:
+    " NOTE:
     " -- :r !date (Insert time stamp)
     " -- :r !seq [START] [INCREMENT] LAST (Insert number sequence)
     " -- :!dir (Show current directory file)
@@ -299,6 +302,7 @@
     set mouse=          " Disable mouse function
     set backspace=indent,eol,start     " Backspace through everything
     set clipboard^=unnamed,unnamedplus " Shared system clipboard
+    "set dictionary+=/usr/share/dict/words " Dictionary for word completion
 
 " Vim only settings ----------------------------------------------------------
     if USING_VIM
@@ -316,7 +320,7 @@
     noremap <leader>wp :set wrap!<CR>
 
 " Spell check ----------------------------------------------------------------
-    " Note:
+    " NOTE:
     " -- [g] for good, [w] for wrong, [a] for add, [r] for remove
     set nospell " Vim built-in spell check
     noremap <leader>sl :set spell!<CR>
@@ -360,7 +364,7 @@
     noremap <leader>sc9 :set scrolloff=999<CR>
 
 " Search settings ------------------------------------------------------------
-    " Note:
+    " NOTE:
     " -- Ctrl+[t/g]: Go to prev/next matching result in incsearch
     " -- [+I: Show lines with matching words
 
@@ -379,7 +383,7 @@
     noremap <F5> :set relativenumber!<CR>
 
 " Fold settings --------------------------------------------------------------
-    " Note:
+    " NOTE:
     " -- z+[c/o]: Close/Open current fold
     " -- z+[C/O]: Close/Open current fold recursively
     " -- z+[m/r]: More/Reduce fold level
@@ -421,7 +425,7 @@
     map <leader><space> za
 
 " Window settings ------------------------------------------------------------
-    " Note:
+    " NOTE:
     " -- Split pane navigation [Now integrate with tmux, check vim-tmux-navigator]
     "    -- <C-w>[h/j/k/l]: Move to L/D/U/R pane
     "    -- <C-w>[H/J/K/L]: Move pane to L/D/U/R
@@ -557,7 +561,7 @@
     noremap <leader>ek :lprev<CR>zz
 
 " Marks settings -------------------------------------------------------------
-    " Note:
+    " NOTE:
     " -- Mark should start with ' (single quotation) or ` (grave symbol)
     "    -- '' : Last cursor location
     "    -- '" : Last cursor location when buffer closed
@@ -571,7 +575,7 @@
     noremap <leader>mdd :delmarks!<CR>
 
 " Registers settings ---------------------------------------------------------
-    " Note:
+    " NOTE:
     " -- Register should start with " (double quotation)
     "    -- ": : Last command
     "    -- ". : Last text
@@ -585,7 +589,7 @@
                 \ silent! call setreg(nr2char(i), []) | endfor
 
 " Abbreviation settings ------------------------------------------------------
-    " Note:
+    " NOTE:
     " -- :abbclear : Clear abbreviation
 
     " Show abbreviate in vim
@@ -863,8 +867,8 @@
     endif
     " File browser [support netrw (vim built-in file browser) functions]
     Plug 'scrooloose/nerdtree'
-    " Undo history visualizer
-    Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+    " Visualize undo history and navigate within them
+    Plug 'simnalamburt/vim-mundo', { 'on': 'MundoToggle' }
     " Code class/module/tag browser [Update to latest]
     Plug 'preservim/tagbar', { 'on': 'TagbarToggle' }
     " Code and files fuzzy finder and previewer (main program)
@@ -998,7 +1002,7 @@
 
 " [Latex] --------------------------------------------------------------------
     if USING_GUI_SOFTWARE
-        " Asynchronous Tex file -> Pdf file preview (pdf reader is needed)
+        " Asynchronous Tex file -> PDF file preview (pdf reader is needed)
         Plug 'xuhdev/vim-latex-live-preview',
                     \ { 'for': [ 'plaintex', 'context', 'tex'] }
     endif
@@ -1028,13 +1032,16 @@
 " [ChatGPT] ------------------------------------------------------------------
     Plug 'zhenyangze/vim-bitoai'
 
+" [LeetCode] -----------------------------------------------------------------
+    Plug 'ianding1/leetcode.vim'
+
 " End of plugin loading ------------------------------------------------------
     " Tell vim-plug we finished declaring plugins, so it can load them
     call plug#end()
 
-" Note: plugin loading
-    " Check vim startup time and loaded plugins
-    " vim --startuptime /tmp/startup.log [file_to_test] +q && vim /tmp/startup.log
+    " NOTE: plugin loading
+    " -- Check vim startup time and loaded plugins
+    " -- vim --startuptime /tmp/startup.log [file_to_test] +q && vim /tmp/startup.log
 
 " ============================================================================
 " Install plugins the first time vim runs
@@ -1050,9 +1057,9 @@
 
 " Tab key settings [Must be added after vim-plug to prevent being overwritten]
     set expandtab      " expand tab to spaces
-    set tabstop=4      " numbers of space that tab in the file counts
+    set tabstop=4      " number of space that tab in the file counts
     set shiftwidth=4   " number of space of auto-indent length
-    set softtabstop=-1 " numbers of space that tab while editing
+    set softtabstop=-1 " number of space that tab while editing
                        " negative value -> adopt shiftwidth value
     noremap <leader>et :set expandtab!<CR>
 
@@ -1171,7 +1178,7 @@
     set showcmd       " This line must be added AFTER statusline option
 
 " Keymapping for bufferline --------------------------------------------------
-    " Note:
+    " NOTE:
     " -- Here use buffer number in bufferline not buffer number in buffers
 
     " Goto buffers
@@ -1201,7 +1208,7 @@
 " File/Code browsing settings, edit them as you wish.
 
 " fzf.vim --------------------------------------------------------------------
-    " Note:
+    " NOTE:
     " -- ripgrep must be installed if Rg function is needed
     " -- the_silver_searcher must be installed if Ag function is needed
     " -- if focus on fzf floating window is stolen, press <C-w>w severals time
@@ -1299,9 +1306,9 @@
     noremap <leader>ntl :let g:NERDTreeWinPos = 'left'<CR>
     noremap <leader>ntr :let g:NERDTreeWinPos = 'right'<CR>
 
-" UndoTree -------------------------------------------------------------------
-    " Toggle UndoTree
-    noremap <leader>ut :UndotreeToggle<CR>
+" Mundo ----------------------------------------------------------------------
+    " Toggle undotree
+    noremap <leader>ut :MundoToggle<CR>
 
 " Tagbar ---------------------------------------------------------------------
     " Tagbar pane
@@ -1331,7 +1338,7 @@
 " Vim useful functions settings, edit them as you wish.
 
 " Vim-man --------------------------------------------------------------------
-    " Note:
+    " NOTE:
     " -- K (Vim help page for current selected word)
 
     " Open offline manual in system
@@ -1339,7 +1346,7 @@
     noremap <leader>mM :execute ":Man " . expand('<cword>')<CR>
 
 " Nerdcommenter --------------------------------------------------------------
-    " Note:
+    " NOTE:
     " -- Common prefix: <leader>c
 
     " Disable default mappings
@@ -1616,8 +1623,6 @@
         inoremap <expr><tab>   pumvisible() ? "\<C-n>" : "\<tab>"
         inoremap <expr><C-k>   pumvisible() ? "\<C-p>" : "\<C-k>"
         inoremap <expr><C-j>   pumvisible() ? "\<C-n>" : "\<C-j>"
-        "inoremap <expr><C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
-        "inoremap <expr><C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
         inoremap <expr><C-b>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-b>"
         inoremap <expr><C-f>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-f>"
         inoremap <expr><M-k>   pumvisible() ? "\<C-p>" : "\<M-k>"
@@ -1956,6 +1961,11 @@
     noremap <leader>aig :BitoAiGenerate<CR>
     "noremap <leader>aiG :BitoAiGenerateComment<CR>
     noremap <leader>air :BitoAiReadable<CR>
+
+" LeetCode -------------------------------------------------------------------
+    let g:leetcode_browser = 'firefox'
+    let g:leetcode_hide_paid_only = 1
+    let g:leetcode_solution_filetype = 'python'
 
 " ============================================================================
 " Part 9 - Colorscheme and other color settings (Plugin settings and mappings)
