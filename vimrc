@@ -421,8 +421,8 @@
     " Toggle foldcolumn (short, long)
     nnoremap <F6> :call FoldColumnToggleShort()<CR>
     nnoremap <leader><F6> :call FoldColumnToggleLong()<CR>
-    " Toggle fold
-    map <leader><space> za
+    "" Toggle fold
+    "map <leader><space> za
 
 " Window settings ------------------------------------------------------------
     " NOTE:
