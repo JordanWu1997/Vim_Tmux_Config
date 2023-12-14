@@ -100,6 +100,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 - [x] Add **_Markdown features_** e.g. preview, folding, wiki-style markdown writer, and etc.
 - [x] Add **_Latex features_** e.g. real-time preview, compilation, and etc.
 - [x] Try to minimize loading time while keeping maximal functionality/variety
+- [x] Also offer Minimal **_cross-platform configuration_** (`./mini.vim`) for both UNIX-like system and Windows system
 
 </details>
 

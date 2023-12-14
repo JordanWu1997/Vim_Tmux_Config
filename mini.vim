@@ -1,10 +1,26 @@
-" ~/.vimrc
+" ========================================================================== "
+" My minimal cross-platfrom vim config for normal usage and python coding    "
+" ========================================================================== "
+"
+" Note: Vim installation with clipboard support (+clipboard)
+" - UNIX-like: sudo apt install vim-gtk3
+" - Windows: https://www.vim.org/download.php#pc
+"
+" Note: Location for this configuration file (you may need to rename it ...)
+" - UNIX-like: $HOME/.vimrc (e.g. /home/admin/.vimrc)
+" - Windows: %USERPROFILE%\_vimrc (e.g. C:\Users\Administrator\_vimrc)
+"
+" Note: Keyboard settings (for speeding up repeat key)
+" - UNIX-like: setxkbmap -option 'ctrl:nocaps'; xset r rate 300 40
 
-" Note: For +clipboard support
-" - sudo apt install vim-gtk3
-" Note: keyboard settings
-" - setxkbmap -option 'ctrl:nocaps'; xset r rate 300 40
+" Load GVim configs on Windows
+if has('win32') || has('win64') || has('win16')
+    source $VIMRUNTIME/../_vimrc
+endif
 
+" Vim-ONLY
+set nocompatible                   " Set to be not compatible with ancient vi
+set ttyfast                        " Faster redrawing
 " Tab
 set expandtab                      " Expand tab to spaces
 set tabstop=4                      " Number of space that tab in the file countss
@@ -13,23 +29,27 @@ set softtabstop=-1                 " Negative value -> adopt shiftwidth value
 " Clipboard
 set clipboard^=unnamed,unnamedplus " Copy to system clipboard
 " Misc
+set backspace=2                    " Make backspace work like most other programs
+set nowrap                         " Line wrap for small monitor or display window
+set wildmenu                       " Show menu options
 set number                         " Show line number
+set cursorline                     " Show horizontal line
 set hlsearch                       " Highlight search result
 set incsearch                      " Incremental search
-set hidden                         " Switch buffers without saving
+set hidden                         " Switch focus between buffers without saving
 
-" Undo
-if has('nvim')
+" Backup/Undo for Windows system
+if has('win32') || has('win64') || has('win16')
     " Directory to place swap files
-    set directory=~/.config/nvim/dirs/tmp
+    set directory=%USERPROFILE%\.vim\dirs\tmp
     " Make backup files
     set backup
     " Where to put backup files
-    set backupdir=~/.config/nvim/dirs/backups
+    set backupdir=%USERPROFILE%\.vim\dirs\backups
     " Persistent undoes - undo after re-opening
     set undofile
-    set undodir=~/.config/nvim/dirs/undos
-    set viminfo+=n~/.config/nvim/dirs/viminfo
+    set undodir=%USERPROFILE%\.vim\dirs\undos
+" Backup/Undo for UNIX-like system
 else
     " Directory to place swap files
     set directory=~/.vim/dirs/tmp
@@ -40,7 +60,6 @@ else
     " Persistent undoes - undo after re-opening
     set undofile
     set undodir=~/.vim/dirs/undos
-    set viminfo+=n~/.vim/dirs/viminfo
 endif
 " Create needed directories if they don't exist
 if !isdirectory(&backupdir)
