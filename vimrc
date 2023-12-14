@@ -747,6 +747,7 @@
 " Terminal mode - open terminal in vim buffer --------------------------------
     " -- Enter insert mode to use terminal command line
     " -- In terminal buffer, <C-\><C-n> back to normal mode
+    " -- In terminal buffer, :bd! to kill terminal buffer
 
 " Set customized terminal mode key mapping -----------------------------------
     if USING_VIM8
