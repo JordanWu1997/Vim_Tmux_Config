@@ -1,3 +1,10 @@
+# ctag: generate tag files for source code
+# - Installation
+#   - Ubuntu (deb): apt install exuberant-ctags
+#   - Fedora (rpm): dnf install global-tags
+# - Configuration (this file)
+#   - Ubuntu (deb): $HOME/.ctags
+#   - Fedora (rpm): $HOME/.ctags.d/default.ctags
 --recurse=yes
 --exclude=.git
 --exclude=.bak
