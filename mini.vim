@@ -37,6 +37,13 @@ set cursorline                     " Show horizontal line
 set hlsearch                       " Highlight search result
 set incsearch                      " Incremental search
 set hidden                         " Switch focus between buffers without saving
+" Hidden characters
+set list                           " Show hidden characters
+set listchars=eol:↵,tab:»·,trail:╳,extends:»,precedes:«,nbsp:␣
+" Ctags
+set tags=./.tags,.tags;/           " use ctag -o .tags -R . to generate file tags
+" Python completion
+autocmd FileType python set omnifunc=python3complete#Complete
 
 " Backup/Undo for Windows system
 if has('win32') || has('win64') || has('win16')
