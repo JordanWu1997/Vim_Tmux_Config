@@ -23,23 +23,29 @@ set backspace=2                    " Make backspace work like most other program
 set clipboard^=unnamed,unnamedplus " Copy selection to system clipboard
 set cursorline                     " Show horizontal line
 set encoding=utf-8                 " Use unicode encoding
-set expandtab                      " Expand tab to spaces
 set exrc                           " Use local vimrc file
 set hidden                         " Switch focus between buffers without saving
-set hlsearch                       " Highlight search result
-set incsearch                      " Incremental search
 set modifiable                     " Make current buffer modifiable
 set nocompatible                   " Set to be not compatible with ancient vi
 set nowrap                         " Line wrap for small monitor or display window
 set number                         " Show line number
-set shiftwidth=4                   " Number of space of auto-indent length
 set showcmd                        " Show entered commands
-set softtabstop=-1                 " Negative value -> adopt shiftwidth value
 set splitbelow                     " New hsplit pane spawn at the bottom
 set splitright                     " New vsplit pane spawn on the right
-set tabstop=4                      " Number of space that tab in the file countss
 set ttyfast                        " Faster redrawing
 set wildmenu                       " Show menu options
+
+" Tab
+set expandtab                      " Expand tab to spaces
+set shiftwidth=4                   " Number of space of auto-indent length
+set softtabstop=-1                 " Negative value -> adopt shiftwidth value
+set tabstop=4                      " Number of space that tab in the file countss
+
+" Search
+set hlsearch                       " Highlight search result
+set ignorecase                     " Close case sensitive [Needed for smartcase]
+set incsearch                      " Incremental search
+set smartcase                      " Case sensitive if search contains uppercase letter
 
 " Hidden characters
 set nolist                         " Don't show hidden characters
@@ -85,12 +91,10 @@ endif
 " Filetype settings
 filetype plugin indent on
 
-" Python completion (w/o ALE)
-"autocmd FileType python set omnifunc=python3complete#Complete
-
 " Python completion (w/ ALE)
 " - ALE installation
-"   - mkdir -p ~/.vim/pack/git-plugins/start; git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.vim/pack/git-plugins/start/ale
+"   - UNIX-like: mkdir -p ~/.vim/pack/git-plugins/start; git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.vim/pack/git-plugins/start/ale
+"   - Window: mkdir -p ~/vimfiles/pack/git-plugins/start; git clone --depth 1 https://github.com/dense-analysis/ale.git ~/vimfiles/pack/git-plugins/start/ale
 " - Python packages for completion
 "   - pip install python-lsp-server yapf isort mypy
 set omnifunc=ale#completion#OmniFunc
@@ -105,3 +109,6 @@ let g:ale_completion_enabled = 1
 let g:ale_fix_on_save = 1
 autocmd FileType python nmap K :ALEHover<CR>
 autocmd FileType python nmap gK :ALEGoToDefinition<CR>
+
+" Python completion (w/o ALE)
+"autocmd FileType python set omnifunc=python3complete#Complete
