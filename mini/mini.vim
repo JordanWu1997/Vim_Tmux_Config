@@ -1,3 +1,5 @@
+" ~/.vimrc
+" vim: ft=vim
 " ========================================================================== "
 " My minimal cross-platfrom vim config for normal usage and python coding    "
 " ========================================================================== "
@@ -57,14 +59,14 @@ set tags=./.tags,.tags;/           " use ctag -o .tags -R . to generate file tag
 " Tmp/Backup/Undo for Windows system
 if has('win32') || has('win64') || has('win16')
     " Directory to place swap files
-    set directory=%USERPROFILE%\.vim\dirs\tmp
+    set directory=%USERPROFILE%\vimfiles\dirs\tmp
     " Make backup files
     set backup
     " Where to put backup files
-    set backupdir=%USERPROFILE%\.vim\dirs\backups
+    set backupdir=%USERPROFILE%\vimfiles\dirs\backups
     " Persistent undoes - undo after re-opening
     set undofile
-    set undodir=%USERPROFILE%\.vim\dirs\undos
+    set undodir=%USERPROFILE%\vimfiles\dirs\undos
 " Tmp/Backup/Undo for UNIX-like system
 else
     " Directory to place swap files

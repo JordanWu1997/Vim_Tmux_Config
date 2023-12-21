@@ -100,7 +100,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 - [x] Add **_Markdown features_** e.g. preview, folding, wiki-style markdown writer, and etc.
 - [x] Add **_Latex features_** e.g. real-time preview, compilation, and etc.
 - [x] Try to minimize loading time while keeping maximal functionality/variety
-- [x] Also offer Minimal **_cross-platform configuration_** (`./mini.vim`) for both UNIX-like system and Windows system
+- [x] Also offer Minimal **_cross-platform configuration_** (`./mini/mini.vim`) for both UNIX-like system and Windows system
 
 </details>
 
@@ -659,7 +659,8 @@ and following keys are pressed. Table below includes some frequently used key ma
 - [x] Primary keybinding prefix is remapped from "Ctrl+b" to **_"Ctrl+a"_**, but **_"Ctrl+b"_** still works as secondary keybinding prefix
 - [x] Commands related to pane and split are remapped to my **_vim-like key mapping_** to keep things consistent
 - [x] Add **_new status line theme_** to make press of bindkey (prefix) more eye-catching
-- [x] Add **_clipboard sharing_** between vim, system, and TMUX (through xclip)
+- [x] Add **_clipboard sharing_** between vim, system, and TMUX (through xsel or xclip)
+- [x] Also offer **_minimal configuration_** (`./mini/mini.tmux`) on UNIX-like system
 
 </details>
 
