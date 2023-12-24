@@ -49,6 +49,10 @@ set ignorecase                     " Close case sensitive [Needed for smartcase]
 set incsearch                      " Incremental search
 set smartcase                      " Case sensitive if search contains uppercase letter
 
+" Cursor
+let &t_EI="\e[2 q"                 " Blinking bar in insert/replace mode
+let &t_SI="\e[6 q"                 " Blinking block in normal/visual mode
+
 " Hidden characters
 set nolist                         " Don't show hidden characters
 set listchars=eol:↵,tab:»·,trail:╳,extends:»,precedes:«,nbsp:␣
