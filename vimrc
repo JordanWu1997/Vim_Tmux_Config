@@ -1472,23 +1472,26 @@
                     \ 'ctagsbin': s:CTAGSBIN,
                     \ 'ctagsargs': 'markdown'
                     \ }
-        " Global mappings
-        nmap <leader>vw <Plug>VimwikiIndex
-        nmap <leader>vs <Plug>VimwikiUISelect
-        nmap <leader>vt <Plug>VimwikiTabIndex
-        nmap <leader>v<leader>t <Plug>VimwikiTabMakeDiaryNote
-        nmap <leader>vi <Plug>VimwikiDiaryIndex
-        nmap <leader>v<leader>w <Plug>VimwikiMakeDiaryNote
-        nmap <leader>v<leader>i <Plug>VimwikiDiaryGenerateLinks
-        nmap <leader>v<leader>m <Plug>VimwikiMakeTomorrowDiaryNote
-        nmap <leader>v<leader>y <Plug>VimwikiMakeYesterdayDiaryNote
+        " Global wiki mappings (start with v)
+        nmap <leader>wS <Plug>VimwikiUISelect
+        nmap <leader>wI <Plug>VimwikiIndex
+        nmap <leader>wD <Plug>VimwikiDeleteFile
+        nmap <leader>wR <Plug>VimwikiRenameFile
+        nmap <leader>wL <Plug>VimwikiGenerateLinks
         nmap <leader><CR> <Plug>VimwikiFollowLink
         nmap <leader><Backspace> <Plug>VimwikiGoBackLink
-        nmap <leader>vn <Plug>VimwikiGoto
-        nmap <leader>vd <Plug>VimwikiDeleteFile
-        nmap <leader>vr <Plug>VimwikiRenameFile
-        nmap <leader>v= <Plug>VimwikiAddHeaderLevel
-        nmap <leader>v- <Plug>VimwikiRemoveHeaderLevel
+        nmap <leader>w<CR> <Plug>VimwikiGoto
+        nmap <leader>wT <Esc>:VimwikiTOC<CR>
+        nmap <leader>wtt <Esc>:VimwikiTable<CR>
+        nmap <leader>wth <Esc>:VimwikiTableMoveColumnLeft<CR>
+        nmap <leader>wtl <Esc>:VimwikiTableMoveColumnRight<CR>
+        nmap <leader>wc <Esc>:VimwikiColorize<CR>
+        " Diary mappings (start with v and then d)
+        nmap <leader>wdL <Plug>VimwikiDiaryGenerateLinks
+        nmap <leader>wdI <Plug>VimwikiDiaryIndex
+        nmap <leader>wdd <Plug>VimwikiMakeDiaryNote
+        nmap <leader>wdn <Esc>:VimwikiDiaryNextDay<CR>
+        nmap <leader>wdp <Esc>:VimwikiDiaryPrevDay<CR>
     endif
 
 " Goyo -----------------------------------------------------------------------

@@ -539,23 +539,23 @@ for more details, check sections in vimrc
 3. Miscellaneous Function Key Mapping
 - Useful tool (Note: startup by default)
 
-| VIM-Mode | Key Mapping                   | Function                        | Description                           | Note                      |
-| :------: | :---------------------------: | :-----------------------------: | :-----------------------------------: | :-----------------------: |
-| N/V      | `[LK]`+`[c]`+`[c/y]`          | Comment (and copy) current line | Comment (and copy) current line       | NerdCommenter             |
-| N/V      | `[LK]`+`[c]`+`[u]`            | Uncomment current line          | Uncomment current line                | NerdCommenter             |
-| N/V      | `[LK]`+`[Shift]`+`["]`        | Select vim pane                 | Select vim pane in tabs and splits    | vim-choosewin             |
-| N/V      | `[LK]`+`[z]`                  | Toggle maximize current split   | On/Off maximize current split         | vim-maximizer             |
-| N/V      | `[Ctrl]`+`[w]`+`[z]`          | Toggle maximize current split   | On/Off maximize current split         | vim-maximizer             |
-| N/V      | `[y]`+`[s]`+`[a]`+`[w]`+`["]` | Add wrapped quotation/bracket   | From word to "word"                   | vim-surrounder            |
-| N/V      | `[d]`+`[s]`+`[a]`+`[w]`+`["]` | Del wrapped quotation/bracket   | From "word" to word                   | vim-surrounder            |
-| N/V      | `[c]`+`[s]`+`[']`+`["]`       | Change quotation/bracket        | From 'word' to "word"                 | vim-surrounder            |
-| N/V/I    | `[LK]`+`[`]`                  | Toggle auto-completion pop-up   | On/Off auto-completion pop-up         | autocomplpop              |
-| N/V/I    | `[Alt]`+`[']`                 | Toggle auto-pair                | On/Off auto-pair quotation/bracket    | auto-pairs                |
-| N/V/I    | `[Alt]`+`[;]`                 | Jump to next pairs              | Jump to next paired quotation/bracket | auto-pairs                |
-| I        | `[Alt]`+`[w]`                 | Auto-pair fastwrap              | Auto-pair fastwrap current pairs      | Example: ()test -> (test) |
-| N        | `[LK]`+`[v]`+`[w]`            | Open vimwiki index page         | Open vimwiki index page               | vimwiki                   |
-| N        | `[LK]`+`[v]`+`[i]`            | Open vimwiki diary index page   | Open vimwiki diary index page         | vimwiki                   |
-| N/V      | `[LK]`+`[c]`+`[w]`            | Highlight current word          | Highlight current word and its twins  | vim-current-word          |
+| VIM-Mode | Key Mapping                        | Function                        | Description                           | Note                      |
+| :------: | :--------------------------------: | :-----------------------------: | :-----------------------------------: | :-----------------------: |
+| N/V      | `[LK]`+`[c]`+`[c/y]`               | Comment (and copy) current line | Comment (and copy) current line       | NerdCommenter             |
+| N/V      | `[LK]`+`[c]`+`[u]`                 | Uncomment current line          | Uncomment current line                | NerdCommenter             |
+| N/V      | `[LK]`+`[Shift]`+`["]`             | Select vim pane                 | Select vim pane in tabs and splits    | vim-choosewin             |
+| N/V      | `[LK]`+`[z]`                       | Toggle maximize current split   | On/Off maximize current split         | vim-maximizer             |
+| N/V      | `[Ctrl]`+`[w]`+`[z]`               | Toggle maximize current split   | On/Off maximize current split         | vim-maximizer             |
+| N/V      | `[y]`+`[s]`+`[a]`+`[w]`+`["]`      | Add wrapped quotation/bracket   | From word to "word"                   | vim-surrounder            |
+| N/V      | `[d]`+`[s]`+`[a]`+`[w]`+`["]`      | Del wrapped quotation/bracket   | From "word" to word                   | vim-surrounder            |
+| N/V      | `[c]`+`[s]`+`[']`+`["]`            | Change quotation/bracket        | From 'word' to "word"                 | vim-surrounder            |
+| N/V/I    | `[LK]`+`[`]`                       | Toggle auto-completion pop-up   | On/Off auto-completion pop-up         | autocomplpop              |
+| N/V/I    | `[Alt]`+`[']`                      | Toggle auto-pair                | On/Off auto-pair quotation/bracket    | auto-pairs                |
+| N/V/I    | `[Alt]`+`[;]`                      | Jump to next pairs              | Jump to next paired quotation/bracket | auto-pairs                |
+| I        | `[Alt]`+`[w]`                      | Auto-pair fastwrap              | Auto-pair fastwrap current pairs      | Example: ()test -> (test) |
+| N/V      | `[LK]`+`[c]`+`[w]`                 | Highlight current word          | Highlight current word and its twins  | vim-current-word          |
+| N        | `[LK]`+`[w]`+`[Shift]`+`[i]`       | Open vimwiki index page         | Open vimwiki index page               | vimwiki                   |
+| N        | `[LK]`+`[w]`+`[d]`+`[Shift]`+`[i]` | Open vimwiki diary index page   | Open vimwiki diary index page         | vimwiki                   |
 
 - Extra plug (Note: "let using_extra_plug = 1" must be set in vimrc)
 
@@ -611,7 +611,7 @@ and following keys are pressed. Table below includes some frequently used key ma
 | `p`      | Python      | Python          |
 | `s`      | Spell       | Built-in spell  |
 | `t`      | Tab         | Built-in tab    |
-| `v`      | Vim-wiki    | Note-taking     |
+| `w`      | Vim-wiki    | Note-taking     |
 | `y`      | Yank        | Yank manager    |
 | `s`+`l`  | Statusline  | Status line     |
 | `c`+`s`  | Colorscheme | Color scheme    |
@@ -751,10 +751,10 @@ tmux -V
 - To make life easier instead of filled up with bloated key mapping
 > _2. Key mapping should start with bindkey_
 - Though more keys is needed, but this can prevent key conflict with other applications
-> _3. Window related operations should be mapped related to `[Shift]`+`[']`_
-- To make it consistent within TMUX
-> _4. Session related operations should be mapped related to `[Alt]`+`[']`_
-- To make it consistent within TMUX
+> _3. Key mapping of operations for pane/window/session should only differ by prefix_
+- To make it consistent for pane/window/session within this TMUX configuration
+    - e.g. go to last pane/window/session should be mapped to `[BK]`+`NONE`/`[SHIFT]`/`[Alt]`+`[grave]`
+    - e.g. select pane/window/session should be mapped to `[BK]`+`NONE`/`[SHIFT]`/`[Alt]`+`[q]`
 
 </details>
 
@@ -764,23 +764,23 @@ tmux -V
 
 - Session
 
-| TMUX-Mode | Key Mapping                 | Function                         | Description                        | Note                                                   |
-| :-------: | :-------------------------: | :------------------------------: | :--------------------------------: | :----------------------------------------------------: |
-| Normal    | `[BK]`+`[Shift]`+`[4]`      | Rename current session           | Rename current session             | `[$]`                                                  |
-| Normal    | `[BK]`+`[s]`                | Show all TMUX sessions           | Show all TMUX sessions             |                                                        |
-| Normal    | `[BK]`+`[Alt`+`[c]`         | Create new session               | Create new session                 | tmux-sessionist                                        |
-| Normal    | `[BK]`+`[Alt]`+`[x]`        | Kill current session             | Kill current session               | tmux-sessionist; Default key is `[BK]`+`[&]`           |
-| Normal    | `[BK]`+`[Shift]`+`[9/0]`    | Move to prev/next session        | Move to prev/next session          | `(` / `)`                                              |
-| Normal    | `[BK]`+`[Alt]`+`[Backtick]` | Switch to last session           | Switch to last session             | tmux-sesionist; Default key is `[BK]`+`[Shift]`+`[l]`  |
-| Normal    | `[BK]`+`[k/j]`              | Move to prev/next session        | Move to prev/next session          |                                                        |
-| Normal    | `[BK]`+`[Alt]`+`[t]`        | Merge session to another session | Move all window to another session |                                                        |
+| TMUX-Mode | Key Mapping              | Function                         | Description                        | Note                                                   |
+| :-------: | :----------------------: | :------------------------------: | :--------------------------------: | :----------------------------------------------------: |
+| Normal    | `[BK]`+`[Shift]`+`[4]`   | Rename current session           | Rename current session             | `[$]`                                                  |
+| Normal    | `[BK]`+`[s]`             | Show all TMUX sessions           | Show all TMUX sessions             |                                                        |
+| Normal    | `[BK]`+`[Alt`+`[c]`      | Create new session               | Create new session                 | tmux-sessionist                                        |
+| Normal    | `[BK]`+`[Alt]`+`[x]`     | Kill current session             | Kill current session               | tmux-sessionist; Default key is `[BK]`+`[&]`           |
+| Normal    | `[BK]`+`[Shift]`+`[9/0]` | Move to prev/next session        | Move to prev/next session          | `(` / `)`                                              |
+| Normal    | `[BK]`+`[Alt]`+`[q]`     | Switch to last session           | Switch to last session             | tmux-sesionist; Default key is `[BK]`+`[Shift]`+`[l]`  |
+| Normal    | `[BK]`+`[k/j]`           | Move to prev/next session        | Move to prev/next session          |                                                        |
+| Normal    | `[BK]`+`[Alt]`+`[t]`     | Merge session to another session | Move all window to another session |                                                        |
 
 - Window
 
 | TMUX-Mode | Key Mapping                     | Function                         | Description                     | Note                                  |
 | :-------: | :-----------------------------: | :------------------------------: | :-----------------------------: | :-----------------------------------: |
 | Normal    | `[BK]`+`[Number]`               | Move to window (number)          | Move to window (number)         |                                       |
-| Normal    | `[BK]`+`["]`                    | Move to window index             | Move to window index            | Default key is `[BK]`+`[']`           |
+| Normal    | `[BK]`+`[Shift]`+`[q]`          | Move to window index             | Move to window index            | Default key is `[BK]`+`[']`           |
 | Normal    | `[BK]`+`[,]`                    | Rename current window            | Rename current session          |                                       |
 | Normal    | `[BK]`+`[w]`                    | Show all windows                 | Show all windows                |                                       |
 | Normal    | `[BK]`+`[Shift]`+`[c]`          | Create new window                | Create new window               | Default key is `[BK]`+`[c]`           |
