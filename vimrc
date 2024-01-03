@@ -315,6 +315,10 @@
         set inccommand=nosplit " Enable incremental command without split pane
     endif
 
+" Working directory ----------------------------------------------------------
+    set autochdir " Change working directory to current file
+    noremap <leader>ac :set autochdir!<CR>
+
 " Line wrap ------------------------------------------------------------------
     set nowrap " Line wrap for small monitor or display window
     noremap <leader>wp :set wrap!<CR>
@@ -342,8 +346,8 @@
 
 " Cursor settings ------------------------------------------------------------
     set ruler          " Show cursor position in status line
-    set cursorline     " Show vertical line
-    set nocursorcolumn " Show horizontal line (leggy sometimes)
+    set cursorline     " Show horizontal line
+    set nocursorcolumn " Show vertical line (laggy sometimes)
     " Toggle cursor line/column indicator (horizontal/vertical)
     noremap <leader>ch :set cursorline!<CR>
                 \:echo 'Toggle Cursor Line [Horizontal]'<CR>
@@ -1224,10 +1228,10 @@
                 \ 'ctrl-t': 'tab split',
                 \ 'ctrl-s': 'split',
                 \ 'ctrl-v': 'vsplit' }
-    " fzf layout (Floating in the center of window)
-    let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
+    " fzf window layout
+    let g:fzf_layout = { 'window': '-tabnew' }
     " Preview window layout
-    let g:fzf_preview_window = ['up:50%', 'alt-/']
+    let g:fzf_preview_window = ['right:50%,<70(up:50%)', 'alt-/']
     nnoremap <leader>fpl :let g:fzf_preview_window = ['right:50%', 'alt-/']<CR>
     nnoremap <leader>fpj :let g:fzf_preview_window = ['down:50%', 'alt-/']<CR>
     nnoremap <leader>fpk :let g:fzf_preview_window = ['up:50%', 'alt-/']<CR>
@@ -1235,9 +1239,9 @@
     " Line in local/global buffer
     nnoremap <leader>fbl :FZFBLines<CR>
     nnoremap <leader>fbL :execute ":FZFBLines " . expand('<cword>')<CR>
-    nnoremap <leader>?   :execute ":FZFBLines " . expand('<cword>')<CR>
     nnoremap <leader>fgl :FZFLines<CR>
     nnoremap <leader>fgL :execute ":FZFLines " . expand('<cword>')<CR>
+    nnoremap <leader>?   :execute ":FZFLines " . expand('<cword>')<CR>
     " Tag in local/global buffer
     nnoremap <leader>fbt :FZFBTags<CR>
     nnoremap <leader>fbT :execute ":FZFBTag " . expand('<cword>')<CR>
@@ -1247,8 +1251,9 @@
     nnoremap <leader>ffs :FZFFiles<CR>
     nnoremap <leader>ffS :FZFFiles<space>
     nnoremap <leader>flc :FZFLocate<space>
-    nnoremap <leader>frg :FZFRg<CR>
     nnoremap <leader>fag :FZFAg<CR>
+    nnoremap <leader>frg :FZFRg<CR>
+    nnoremap <leader>frG :FZFRG<CR>
     " Git command (requires fugitive.vim plugin)
     nnoremap <leader>fgf :FZFGFiles<CR>
     nnoremap <leader>fgs :FZFGFiles?<CR>
@@ -1275,6 +1280,15 @@
     exec 'source ' . s:FZF_PATCH
     nnoremap <leader>fcl :FZFChanges<CR>
     nnoremap <leader>fjl :FZFJumps<CR>
+    " FZF replacement
+    nnoremap <leader>' :FZFBuffers<CR>
+    nnoremap <leader>mk :FZFMarks<CR>
+    nnoremap <leader>co :FZFQuickFix<CR>
+    nnoremap <leader>eo :FZFLocList<CR>
+    nnoremap <leader>g; :FZFChanges<CR>
+    nnoremap <leader>g. :FZFChanges<CR>
+    nnoremap <leader>gi :FZFJumps<CR>
+    nnoremap <leader>go :FZFJumps<CR>
 
 " NERDTree -------------------------------------------------------------------
     " NERDTree Pane
@@ -2026,40 +2040,40 @@
     nnoremap <leader>csD :colorscheme default<CR>:set termguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
                 \:call LightlineStyle('default', USING_FANCY_SYMBOLS, 0)<CR>
-                \:call LightlineReload()<CR>:echo "default colorscheme"<CR>
+                \:call LightlineReload()<CR>:echo 'default colorscheme'<CR>
     nnoremap <leader>csg :colorscheme gruvbox<CR>:set termguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
                 \:call LightlineStyle('gruvbox', USING_FANCY_SYMBOLS, 1)<CR>
                 \:call CustomizedColorPalette()<CR>
-                \:call LightlineReload()<CR>:echo "gruvbox colorscheme"<CR>
+                \:call LightlineReload()<CR>:echo 'gruvbox colorscheme'<CR>
     nnoremap <leader>csv :colorscheme vim-monokai-tasty<CR>:set termguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
                 \:call LightlineStyle('deus', USING_FANCY_SYMBOLS, 0)<CR>
-                \:call LightlineReload()<CR>:echo "monokai colorscheme"<CR>
+                \:call LightlineReload()<CR>:echo 'monokai colorscheme'<CR>
     nnoremap <leader>css :colorscheme srcery<CR>:set termguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
                 \:call LightlineStyle('srcery_drk', USING_FANCY_SYMBOLS, 1)<CR>
-                \:call LightlineReload()<CR>:echo "srcery colorscheme"<CR>
+                \:call LightlineReload()<CR>:echo 'srcery colorscheme'<CR>
     nnoremap <leader>csn :colorscheme nord<CR>:set termguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
                 \:call LightlineStyle('nord', USING_FANCY_SYMBOLS, 1)<CR>
-                \:call LightlineReload()<CR>:echo "nord colorscheme"<CR>
-    nnoremap <leader>cso :colorscheme OceanicNext<CR>:set termguicolors<CR>
-                \:call CustomizedColorPalette()<CR>
-                \:call LightlineStyle('oceanicnext', USING_FANCY_SYMBOLS, 1)<CR>
-                \:call LightlineReload()<CR>:echo "oceanicnext colorscheme"<CR>
+                \:call LightlineReload()<CR>:echo 'nord colorscheme'<CR>
+    "nnoremap <leader>cso :colorscheme OceanicNext<CR>:set termguicolors<CR>
+                "\:call CustomizedColorPalette()<CR>
+                "\:call LightlineStyle('oceanicnext', USING_FANCY_SYMBOLS, 1)<CR>
+                "\:call LightlineReload()<CR>:echo 'oceanicnext colorscheme'<CR>
     nnoremap <leader>csd :colorscheme dracula<CR>:set termguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
                 \:call LightlineStyle('dracula', USING_FANCY_SYMBOLS, 1)<CR>
-                \:call LightlineReload()<CR>:echo "dracula colorscheme"<CR>
+                \:call LightlineReload()<CR>:echo 'dracula colorscheme'<CR>
     nnoremap <leader>csw :colorscheme wal<CR>:set notermguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
                 \:call LightlineStyle('wal', 1, 1)<CR>
-                \:call LightlineReload()<CR>:echo "wal colorscheme"<CR>
+                \:call LightlineReload()<CR>:echo 'wal colorscheme'<CR>
     " Transparent background shortcut
     nnoremap <leader>cst :highlight Normal cterm=NONE ctermfg=NONE ctermbg=NONE
                 \ gui=NONE guifg=NONE guibg=NONE<CR>
-                \:echo "transparent background"<CR><CR>
+                \:echo 'transparent background'<CR><CR>
 
 " ============================================================================
 " End of Vim configuration, automatically reload current config after saving

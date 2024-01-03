@@ -22,7 +22,6 @@ install_vim_python_packages () {
 install_tmux_tpm_packages () {
     # Clone tpm repository
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-
 }
 
 install_vim_font_packages () {
