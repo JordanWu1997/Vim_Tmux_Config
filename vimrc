@@ -136,7 +136,7 @@
     " Add markdown template file to newly created .md markdown file
     let USING_MARKDOWN_TEMPLATE = 1
     " Markdown Template file
-    let s:MARKDOWN_TEMPLATE = '$HOME/Documents/KNOWLEDGE_BASE/template/My_Note_Template.md'
+    let s:MARKDOWN_TEMPLATE = '$HOME/Documents/KNOWLEDGE_BASE/Template/My_Note_Template.md'
 
 " Variables for vim/neovim or plug-in ----------------------------------------
     " Ctag generator for vimwiki plugins
@@ -1268,7 +1268,7 @@
     nnoremap <leader>fws :FZFWindows<CR>
     " Marks
     nnoremap <leader>fmk :FZFMarks<CR>
-    nnoremap <leader>f' :FZFMarks<CR>
+    nnoremap <leader>f'  :FZFMarks<CR>
     " Miscellaneous
     nnoremap <leader>fqf :FZFQuickFix<CR>
     nnoremap <leader>fll :FZFLocList<CR>
@@ -1281,7 +1281,7 @@
     nnoremap <leader>fcl :FZFChanges<CR>
     nnoremap <leader>fjl :FZFJumps<CR>
     " FZF replacement
-    nnoremap <leader>' :FZFBuffers<CR>
+    nnoremap <leader>'  :FZFBuffers<CR>
     nnoremap <leader>mk :FZFMarks<CR>
     nnoremap <leader>co :FZFQuickFix<CR>
     nnoremap <leader>eo :FZFLocList<CR>
@@ -1289,6 +1289,8 @@
     nnoremap <leader>g. :FZFChanges<CR>
     nnoremap <leader>gi :FZFJumps<CR>
     nnoremap <leader>go :FZFJumps<CR>
+    nnoremap <leader>rg :FZFRg<CR>
+    nnoremap <leader>rG :FZFRG<CR>
 
 " NERDTree -------------------------------------------------------------------
     " NERDTree Pane
@@ -1473,11 +1475,10 @@
                     \ 'ctagsargs': 'markdown'
                     \ }
         " Global wiki mappings (start with v)
-        nmap <leader>wS <Plug>VimwikiUISelect
         nmap <leader>wI <Plug>VimwikiIndex
         nmap <leader>wD <Plug>VimwikiDeleteFile
         nmap <leader>wR <Plug>VimwikiRenameFile
-        nmap <leader>wL <Plug>VimwikiGenerateLinks
+        nmap <leader>ws <Plug>VimwikiUISelect
         nmap <leader><CR> <Plug>VimwikiFollowLink
         nmap <leader><Backspace> <Plug>VimwikiGoBackLink
         nmap <leader>w<CR> <Plug>VimwikiGoto
@@ -1487,7 +1488,7 @@
         nmap <leader>wtl <Esc>:VimwikiTableMoveColumnRight<CR>
         nmap <leader>wc <Esc>:VimwikiColorize<CR>
         " Diary mappings (start with v and then d)
-        nmap <leader>wdL <Plug>VimwikiDiaryGenerateLinks
+        nmap <leader>wdG <Plug>VimwikiDiaryGenerateLinks
         nmap <leader>wdI <Plug>VimwikiDiaryIndex
         nmap <leader>wdd <Plug>VimwikiMakeDiaryNote
         nmap <leader>wdn <Esc>:VimwikiDiaryNextDay<CR>
@@ -1944,7 +1945,7 @@
     " Google-chrome extension is needed for markdown viewer
     if USING_GUI_SOFTWARE && !USING_VIM8
         let $OPENBROWSER = 'noremap <leader><F4> :!'. s:WEBBROWSER .' %:p &<CR>'
-        autocmd BufEnter *.md echom '[Press Space+F4 to Open .md File]'
+        autocmd BufEnter *.md echom '[Press Space+F4 to Preview .md File]'
         autocmd BufEnter *.md exe $OPENBROWSER
     endif
     " Synchronous markdown previewer (markdown-preview plugin)
@@ -1955,7 +1956,7 @@
         let g:mkdp_auto_close = 0
         " Show url of markdown previewer
         let g:mkdp_echo_preview_url = 1
-        autocmd BufEnter *.md echom '[Press Space+F4 to Open .md File]'
+        autocmd BufEnter *.md echom '[Press Space+F4 to Preview .md File]'
         autocmd BufEnter *.md nmap <leader><F4> <Plug>MarkdownPreviewToggle<CR>
         autocmd BufEnter *.md setlocal scrolloff=999
     endif
