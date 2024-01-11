@@ -795,10 +795,10 @@ tmux -V
 | TMUX-Mode | Key Mapping                | Function                              | Description                           | Note                                                              |
 | :-------: | :------------------------: | :-----------------------------------: | :-----------------------------------: | :---------------------------------------------------------------: |
 | Normal    | `[BK]`+`[Tab]`             | Show all panes                        | Show all panes                        |                                                                   |
-| Normal    | `[BK]`+`[Shift]`+`[\]`     | Split pane horizontally               | Split pane horizontally               | Default key is `[BK]`+`[Shift]`+`[5]` (`[%]`)                     |
-| Normal    | `[BK]`+`[Shift]`+`[-]`     | Split pane vertically                 | Split pane vertically                 | Default key is `[BK]`+`[Shift]`+`[']` (`["]`)                     |
-| Normal    | `[BK]`+`[Alt]`+`[\]`       | Split pane horizontally (full window) | Split pane horizontally (full window) |                                                                   |
-| Normal    | `[BK]`+`[Alt]`+`[-]`       | Split pane vertically (full window)   | Split pane vertically (full window)   |                                                                   |
+| Normal    | `[BK]`+`[Shift]`+`[5]`     | Split pane horizontally               | Split pane horizontally               | Default key is `[BK]`+`[Shift]`+`[5]` (`[%]`)                     |
+| Normal    | `[BK]`+`[Shift]`+`[']`     | Split pane vertically                 | Split pane vertically                 | Default key is `[BK]`+`[Shift]`+`[']` (`["]`)                     |
+| Normal    | `[BK]`+`[Alt]`+`[5]`       | Split pane horizontally (full window) | Split pane horizontally (full window) |                                                                   |
+| Normal    | `[BK]`+`[Alt]`+`[']`       | Split pane vertically (full window)   | Split pane vertically (full window)   |                                                                   |
 | Normal    | `[BK]`+`[q/']`             | Move to pane (number)                 | Move to pane (number)                 | Pane number shows on pane                                         |
 | Normal    | `[Ctrl]`+`[h/j/k/l]`       | Move to pane (L/D/U/R)                | Move to pane (L/D/U/R)                | vim-tmux-navigator                                                |
 | Normal    | `[BK]`+`[n/p]`             | Move to pane next/previous            | Move to pane next/previous            | Default key is `[BK]`+`[n/p]` next/prev window                    |
