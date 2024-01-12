@@ -87,7 +87,6 @@
     " Python-completion dependence
     " -- jedi-vim: pip install jedi
     " -- deoplete: pip install pynvim neovim
-    " -- ipdb    : pip install ipdb
     " -- ipython : pip install ipython (version >= 7.2)
 
     " Python packages already installed in somewhere else
@@ -853,8 +852,8 @@
         Plug 'srcery-colors/srcery-vim' ", { 'on': 'colorscheme srcery' }
         " Color theme (Nord - cold color lower contrast)
         Plug 'arcticicestudio/nord-vim', { 'on': 'colorscheme nord' }
-        " Color theme (Oceanic - solarized-like theme)
-        Plug 'mhartington/oceanic-next', { 'on': 'colorscheme OceanicNext' }
+        "" Color theme (Oceanic - solarized-like theme)
+        "Plug 'mhartington/oceanic-next', { 'on': 'colorscheme OceanicNext' }
         " Color theme (Dracula - medium contrast)
         Plug 'dracula/vim', { 'as': 'dracula'}
         " Lightline (status line)
@@ -1035,10 +1034,10 @@
     Plug 'PotatoesMaster/i3-vim-syntax', { 'for': 'i3' }
 
 " [ChatGPT] ------------------------------------------------------------------
-    Plug 'zhenyangze/vim-bitoai'
+    "Plug 'zhenyangze/vim-bitoai'
 
 " [LeetCode] -----------------------------------------------------------------
-    Plug 'ianding1/leetcode.vim'
+    "Plug 'ianding1/leetcode.vim'
 
 " End of plugin loading ------------------------------------------------------
     " Tell vim-plug we finished declaring plugins, so it can load them
@@ -1272,8 +1271,8 @@
     " Miscellaneous
     nnoremap <leader>fqf :FZFQuickFix<CR>
     nnoremap <leader>fll :FZFLocList<CR>
-    nnoremap <leader>fmp :FZFMaps<CR>
     nnoremap <leader>fcd :FZFCommands<CR>
+    nnoremap <leader>fmp :FZFMaps<CR>
     nnoremap <leader>fft :FZFFiletypes<CR>
     nnoremap <leader>fht :FZFHelptags<CR>
     " Add patch for jump/change list
@@ -1458,8 +1457,9 @@
         " Disable all local mappings then remap needed ones
         let g:vimwiki_key_mappings = { 'all_maps': 0, }
         " Vimwiki Settings
-        let g:vimwiki_list = [{'path': '~/Documents/KNOWLEDGE_BASE/',
-                              \ 'syntax': 'markdown', 'ext': '.md'}]
+        let g:vimwiki_list = [
+        \ {'path': '~/Documents/KNOWLEDGE_BASE/', 'syntax': 'markdown', 'ext': '.md'},
+        \ ]
         " Must set to expr to get vim-markdown-folding to work
         let g:vimwiki_folding='expr'
         " Set all markdown filetype to vimwiki
@@ -1900,12 +1900,14 @@
     endif
 
 " Python debug (add python breakpoints) --------------------------------------
-    " -- ipdb must be installed first
-    " -- Installation in terminal: run 'pip install ipdb'
     if USING_PYTHON_COMPLETION
+        " Python built-in pdb debugger
         autocmd FileType python
-                    \ noremap <silent><leader>pb Oimport ipdb;
-                    \ ipdb.set_trace()<Esc>
+                    \ noremap <silent><leader>pb Oimport pdb; pdb.set_trace()<Esc>
+        " %:p for current file in full path
+        autocmd FileType python
+                    \ noremap <silent><leader>pB
+                    \ <Esc>:split<CR>:terminal python -m pdb '%:p'<space>
     endif
 
 " Python skeleton (add python skeleton for new python .py file) --------------
@@ -1972,19 +1974,19 @@
     noremap <leader>mb <Esc>i```<CR>```<Up>
 
 " BitoAI ---------------------------------------------------------------------
-    noremap <leader>aic :BitoAiCheck<CR>
-    noremap <leader>aip :BitoAiCheckPerformance<CR>
-    noremap <leader>ais :BitoAiCheckStyle<CR>
-    noremap <leader>aiS :BitoAiCheckSecurity<CR>
-    noremap <leader>aie :BitoAiExplain<CR>
-    noremap <leader>aig :BitoAiGenerate<CR>
-    "noremap <leader>aiG :BitoAiGenerateComment<CR>
-    noremap <leader>air :BitoAiReadable<CR>
+    "noremap <leader>aic :BitoAiCheck<CR>
+    "noremap <leader>aip :BitoAiCheckPerformance<CR>
+    "noremap <leader>ais :BitoAiCheckStyle<CR>
+    "noremap <leader>aiS :BitoAiCheckSecurity<CR>
+    "noremap <leader>aie :BitoAiExplain<CR>
+    "noremap <leader>aig :BitoAiGenerate<CR>
+    ""noremap <leader>aiG :BitoAiGenerateComment<CR>
+    "noremap <leader>air :BitoAiReadable<CR>
 
 " LeetCode -------------------------------------------------------------------
-    let g:leetcode_browser = 'firefox'
-    let g:leetcode_hide_paid_only = 1
-    let g:leetcode_solution_filetype = 'python'
+    "let g:leetcode_browser = 'firefox'
+    "let g:leetcode_hide_paid_only = 1
+    "let g:leetcode_solution_filetype = 'python'
 
 " ============================================================================
 " Part 9 - Colorscheme and other color settings (Plugin settings and mappings)

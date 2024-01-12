@@ -37,6 +37,18 @@ bind [ copy-mode
 bind ] paste-buffer
 bind = choose-buffer
 
+# Split window
+unbind \%; bind \% split-window -v -c "#{pane_current_path}"
+unbind \"; bind \" split-window -h -c "#{pane_current_path}"
+
+# Split full window
+bind M-\% split-window -fv -c "#{pane_current_path}"
+bind M-\" split-window -fh -c "#{pane_current_path}"
+
+# Mark pane operation
+bind -r M-\; swap-pane
+bind -r M-\: join-pane
+
 # Set Copy/Paste Mode (VIM-like key binding in copy-mode-vi)
 # -- https://superuser.com/questions/395158/tmux-copy-mode-select-text-block
 # -- TMUX version < 2.5
