@@ -889,6 +889,8 @@
     Plug 'vim-utils/vim-man', { 'on': 'Man' }
     " Search results counter
     Plug 'vim-scripts/IndexedSearch'
+    " Large file options
+    Plug 'vim-scripts/LargeFile'
     " Code commenter
     Plug 'scrooloose/nerdcommenter'
     " Generate bracket/quotation in pair
@@ -1360,6 +1362,10 @@
     " Open offline manual in system
     noremap <leader>mm :Man<space>
     noremap <leader>mM :execute ":Man " . expand('<cword>')<CR>
+
+" LargeFile ------------------------------------------------------------------
+    " Large file size in MB
+    let g:LargeFile = 10
 
 " Nerdcommenter --------------------------------------------------------------
     " NOTE:
@@ -1901,12 +1907,15 @@
 
 " Python debug (add python breakpoints) --------------------------------------
     if USING_PYTHON_COMPLETION
+        " Python built-in pdb debugge (python > 3.7 ONLY)
+        "autocmd FileType python
+                    "\ noremap <leader>pb Obreakpoint()<Esc>
         " Python built-in pdb debugger
         autocmd FileType python
-                    \ noremap <silent><leader>pb Oimport pdb; pdb.set_trace()<Esc>
+                    \ noremap <leader>pb Oimport pdb; pdb.set_trace()<Esc>
         " %:p for current file in full path
         autocmd FileType python
-                    \ noremap <silent><leader>pB
+                    \ noremap <leader>pB
                     \ <Esc>:split<CR>:terminal python -m pdb '%:p'<space>
     endif
 

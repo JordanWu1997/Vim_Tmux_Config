@@ -1,0 +1,23 @@
+# git: version control system
+# - Configuration (this file)
+#   - $HOME/.gitconfig
+#   - <GIT_PROJECT_DIR>/.git/config
+# - References:
+#   - https://stackoverflow.com/questions/70552371/is-there-a-neovim-version-of-vimdiff
+[user]
+	email = jordankhwu@gmail.com
+	name = jordan
+[core]
+	editor = nvim
+[diff]
+    tool = nvimdiff
+[difftool]
+    prompt = false
+[difftool "nvimdiff"]
+    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+[merge]
+    tool = nvimdiff
+[mergetool]
+    prompt = true
+[mergetool "nvimdiff"]
+    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\" \"$MERGED\" -c 'wincmd w' -c 'wincmd J'"
