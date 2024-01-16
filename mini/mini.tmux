@@ -38,12 +38,12 @@ bind ] paste-buffer
 bind = choose-buffer
 
 # Split window
-unbind \%; bind \% split-window -v -c "#{pane_current_path}"
-unbind \"; bind \" split-window -h -c "#{pane_current_path}"
+unbind \%; bind \% split-window -h -c "#{pane_current_path}"
+unbind \"; bind \" split-window -v -c "#{pane_current_path}"
 
 # Split full window
-bind M-\% split-window -fv -c "#{pane_current_path}"
-bind M-\" split-window -fh -c "#{pane_current_path}"
+bind M-\% split-window -fh -c "#{pane_current_path}"
+bind M-\" split-window -fv -c "#{pane_current_path}"
 
 # Mark pane operation
 bind -r M-\; swap-pane
