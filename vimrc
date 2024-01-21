@@ -315,7 +315,7 @@
     endif
 
 " Working directory ----------------------------------------------------------
-    set autochdir " Change working directory to current file
+    set autochdir " Change working directory to current buffer file directory
     noremap <leader>ac :set autochdir!<CR>
 
 " Line wrap ------------------------------------------------------------------
@@ -1271,8 +1271,8 @@
     nnoremap <leader>fmk :FZFMarks<CR>
     nnoremap <leader>f'  :FZFMarks<CR>
     " Miscellaneous
-    nnoremap <leader>fqf :FZFQuickFix<CR>
-    nnoremap <leader>fll :FZFLocList<CR>
+    nnoremap <leader>cO  :FZFQuickFix<CR>
+    nnoremap <leader>eO  :FZFLocList<CR>
     nnoremap <leader>fcd :FZFCommands<CR>
     nnoremap <leader>fmp :FZFMaps<CR>
     nnoremap <leader>fft :FZFFiletypes<CR>
@@ -1284,8 +1284,6 @@
     " FZF replacement
     nnoremap <leader>'  :FZFBuffers<CR>
     nnoremap <leader>mk :FZFMarks<CR>
-    nnoremap <leader>co :FZFQuickFix<CR>
-    nnoremap <leader>eo :FZFLocList<CR>
     nnoremap <leader>g; :FZFChanges<CR>
     nnoremap <leader>g. :FZFChanges<CR>
     nnoremap <leader>gi :FZFJumps<CR>
@@ -1785,15 +1783,12 @@
         noremap <leader>gd :Git diff %<CR>
         noremap <leader>gD :Git diff<CR>
         noremap <leader>gs :Git<CR>
-        noremap <leader>gl :GcLog<CR>
-        noremap <leader>ga :Git add %<CR>
-        noremap <leader>gA :Git add --all<CR>
-        noremap <leader>gc :Git commit<CR>
-        noremap <leader>gC :Git commit -m<space>
-        noremap <leader>gB :Git blame<CR>
+        noremap <leader>gc :Gclog<CR>
+        noremap <leader>gl :Gllog<CR>
+        noremap <leader>gA :Git add %<CR>
+        noremap <leader>gC :Git commit<CR>
         noremap <leader>gR :Git reset<space>
-        noremap <leader>gph :Git push<CR>
-        noremap <leader>gpl :Git pull<CR>
+        noremap <leader>gB :Git blame<CR>
     endif
 
 " GitGutter ------------------------------------------------------------------
@@ -1829,11 +1824,12 @@
                     \:GitGutterLineHighlightsEnable<CR>
         noremap <leader>ghd :GitGutterEnable<CR>:GitGutterDisable<CR>
                     \:GitGutterSignsDisable<CR>:GitGutterLineHighlightsDisable<CR>
-        " GitGutter hunk move/action/git
+        " GitGutter hunk: diff preview
         nmap <leader>gP <Plug>(GitGutterPreviewHunk)
         nmap <leader>gF :GitGutterFold<CR>
-        nmap <leader>gS <Plug>(GitGutterStageHunk)
-        nmap <leader>gU <Plug>(GitGutterUndoHunk)
+        " GitGutter action: add/restore
+        nmap <leader>ga <Plug>(GitGutterStageHunk)
+        nmap <leader>gr <Plug>(GitGutterUndoHunk)
         " Move through hunks in current buffer
         nmap <leader>gj <Plug>(GitGutterNextHunk)zz
         nmap <leader>gk <Plug>(GitGutterPrevHunk)zz
