@@ -578,12 +578,12 @@ for more details, check sections in vimrc
 | N/V      | `[LK]`+`[g]`+`[j/k]`                  | Go to Next/Prev git hunks       | Go to Next/Prev git hunks                          | Hunk means changed block                                      |
 | N/V      | `[LK]`+`[g]`+`[Shift]`+`[p]`          | Hunk preview (before changed)   | Hunk preview (before changed)                      | Here p for (p)review                                          |
 | N/V      | `[LK]`+`[g]`+`[Shift]`+`[f]`          | Fold all unchanged lines        | Fold all unchanged lines                           |                                                               |
-| N/V      | `[LK]`+`[g]`+`[Shift]`+`[s]`          | Stage current hunk              | Stage current hunk                                 | Here s for (s)tage                                            |
-| N/V      | `[LK]`+`[g]`+`[Shift]`+`[u]`          | Restore current hunk            | Restore current hunk                               | Like git restore                                              |
-| N/V      | `[LK]`+`[g]`+`[s]`                    | Summary of current git repo     | Summary of current git repo                        | Here s for (s)ummary                                          |
-| N/V      | `[LK]`+`[g]`+(`[Shift]`)+`[d]`        | Git diff (all unstaged files)   | Git diff (all unstaged files)                      |                                                               |
-| N/V      | `[LK]`+`[g]`+(`[Shift]`)+`[a]`        | Git add (all unstaged files)    | Git add (all unstaged files)                       |                                                               |
-| N/V      | `[LK]`+`[g]`+(`[Shift]`)+`[c]`        | Git commit all staged files     | Git commit all staged files)                       |                                                               |
+| N/V      | `[LK]`+`[g]`+`[Shift]`+`[a]`          | Stage current hunk              | Stage current hunk (git add)                       | Here a for git (a)dd                                          |
+| N/V      | `[LK]`+`[g]`+`[Shift]`+`[r]`          | Restore current hunk            | Restore current hunk (git restore)                 | Here r for git (r)estore                                      |
+| N/V      | `[LK]`+`[g]`+`[s]`                    | Show status of current git repo | Show status of current git repo             | Here s for git (s)tatus                                       |
+| N/V      | `[LK]`+`[g]`+(`[Shift]`)+`[d]`        | Git diff (all) unstaged files   | Git diff (all) unstaged files                      |                                                               |
+| N/V      | `[LK]`+`[g]`+(`[Shift]`)+`[a]`        | Git add (all) unstaged files    | Git add (all) unstaged files                       |                                                               |
+| N/V      | `[LK]`+`[g]`+(`[Shift]`)+`[c]`        | Git commit (all) staged files   | Git commit (all) staged files                      |                                                               |
 | N/V      | `[LK]`+`[g]`+`[Shift]`+`[b]`          | Git blame current file          | Git blame current file                             |                                                               |
 
 </details>
