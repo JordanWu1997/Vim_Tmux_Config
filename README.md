@@ -455,10 +455,10 @@ for more details, check sections in vimrc
 
 | VIM-Mode | Key Mapping              | Function                                | Description                                 | Note                                 |
 | :------: | :----------------------: | :-------------------------------------: | :-----------------------------------------: | :----------------------------------: |
-| N        | `[LK]`+`[c/e]`+`[g]`     | call built-in vimgrep/lvimgrep function | search like grep and store results in lists |                                      |
-| N        | `[LK]`+`[c/e]`+`[o]`     | toggle quickfix/location list pane      | toggle quickfix/location list pane          | built-in: copen/cclose, lopen/lclose |
-| N        | `[LK]`+`[c/e]`+`[j/k]`   | go to next/prev quickfix/location item  | go to next/prev quickfix/location item      | built-in: cnext/cprev, lnext/lprev   |
-| N        | `[LK]`+`[c]`+`[d]`       | call cdo for items in quickfix list     | call cdo for items in quickfix list         | like argdo, bdo for args and buffers |
+| N        | `[LK]`+`[q/e]`+`[g]`     | call built-in vimgrep/lvimgrep function | search like grep and store results in lists |                                      |
+| N        | `[LK]`+`[q/e]`+`[o]`     | toggle quickfix/location list pane      | toggle quickfix/location list pane          | built-in: copen/cclose, lopen/lclose |
+| N        | `[LK]`+`[q/e]`+`[j/k]`   | go to next/prev quickfix/location item  | go to next/prev quickfix/location item      | built-in: cnext/cprev, lnext/lprev   |
+| N        | `[LK]`+`[q]`+`[d]`       | call cdo for items in quickfix list     | call cdo for items in quickfix list         | like argdo, bdo for args and buffers |
 
 7. Miscellaneous Function Key Mapping
 

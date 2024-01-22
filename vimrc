@@ -302,6 +302,7 @@
     set backspace=indent,eol,start     " Backspace through everything
     set clipboard^=unnamed,unnamedplus " Shared system clipboard
     "set dictionary+=/usr/share/dict/words " Dictionary for word completion
+    set tags=./.tags,.tags;/           " use ctag -o .tags -R . to generate file tags
 
 " Vim only settings ----------------------------------------------------------
     if USING_VIM
@@ -539,11 +540,11 @@
         endif
     endfunction
     " Keymapping for quickfix list
-    noremap <leader>cg :vimgrep<space>
-    noremap <leader>cd :cdo<space>
-    noremap <leader>co :call QuickfixListToggle()<CR>
-    noremap <leader>cj :cnext<CR>zz
-    noremap <leader>ck :cprev<CR>zz
+    noremap <leader>qg :vimgrep<space>
+    noremap <leader>qd :cdo<space>
+    noremap <leader>qo :call QuickfixListToggle()<CR>
+    noremap <leader>qj :cnext<CR>zz
+    noremap <leader>qk :cprev<CR>zz
 
 " Location list settings ------------------------------------------------------
     " Function to toggle location list pane
@@ -1825,6 +1826,7 @@
         noremap <leader>ghd :GitGutterEnable<CR>:GitGutterDisable<CR>
                     \:GitGutterSignsDisable<CR>:GitGutterLineHighlightsDisable<CR>
         " GitGutter hunk: diff preview
+        nmap <leader>gq :GitGutterQuickFix<CR>
         nmap <leader>gP <Plug>(GitGutterPreviewHunk)
         nmap <leader>gF :GitGutterFold<CR>
         " GitGutter action: add/restore
@@ -1836,6 +1838,8 @@
     endif
 
 " Vim-Unimpaired -------------------------------------------------------------
+    " -- [: previous, ]:next
+    " -- a:arg, b:buffer, l:locationlist, q:quickfix
     if USING_CODING_TOOL_PLUG
         nmap [e [l
         nmap ]e ]l
