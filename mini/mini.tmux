@@ -31,6 +31,10 @@ set -g status-keys vi
 bind -n Home send Escape "OH"
 bind -n End send Escape "OF"
 
+# Send keys already binded by TMUX
+bind C-a send-keys 'C-a'
+bind -r C-b send-keys 'C-b'
+
 # Buffer settings
 set -g set-clipboard on
 bind [ copy-mode
