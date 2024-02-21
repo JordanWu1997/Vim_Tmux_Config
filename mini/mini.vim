@@ -4,15 +4,15 @@
 " My minimal cross-platfrom vim config for normal usage and python coding    "
 " ========================================================================== "
 "
-" Note: Vim installation with clipboard support (+clipboard)
+" NOTE: Vim installation with clipboard support (+clipboard)
 " - UNIX-like: sudo apt install vim-gtk3
 " - Windows: https://www.vim.org/download.php#pc
 "
-" Note: Location for this configuration file (you also need to rename it ...)
+" NOTE: Location for this configuration file (you also need to rename it ...)
 " - UNIX-like: $HOME/.vimrc (e.g. /home/admin/.vimrc)
 " - Windows: %USERPROFILE%\_vimrc (e.g. C:\Users\Administrator\_vimrc)
 "
-" Note: Keyboard settings for mapping capslock to ctrl and speeding up repeat key
+" NOTE: Keyboard settings for mapping capslock to ctrl and speeding up repeat key
 " - UNIX-like: setxkbmap -option 'ctrl:nocaps'; xset r rate 300 40
 
 " Load GVim configs on Windows

@@ -4,10 +4,10 @@
 # My minimal TMUX configuration
 # ============================================================================
 
-# Note: this configuration is tested in TMUX version 3.1
+# NOTE: this configuration is tested in TMUX version 3.1
 # - UNIX-like: sudo apt install tmux
 
-# Note: Location for this configuration file (you also need to rename it ...)
+# NOTE: Location for this configuration file (you also need to rename it ...)
 # - UNIX-like: $HOME/.tmux.conf (e.g. /home/admin/.tmux.conf)
 
 # Set prefix [Ctrl]+[b], [Ctrl]+[a] (default: [Ctrl]+[b])
