@@ -972,9 +972,9 @@
 
 " [Tmux] ---------------------------------------------------------------------
     " Clipboard sharing [No need if already using xclip for tmux clipboard]
-    " Share focus between vim and tmux for clipboard sharing
+    "" Share focus between vim and tmux for clipboard sharing
     "Plug 'tmux-plugins/vim-tmux-focus-events'
-    " Share clipboard between vim and tmux
+    "" Share clipboard between vim and tmux
     "Plug 'roxma/vim-tmux-clipboard'
     " Navigate seamlessly in vim and tmux (Ctrl+h/j/k/l)
     Plug 'christoomey/vim-tmux-navigator'
@@ -1498,6 +1498,8 @@
         nmap <leader>wdd <Plug>VimwikiMakeDiaryNote
         nmap <leader>wdn <Esc>:VimwikiDiaryNextDay<CR>
         nmap <leader>wdp <Esc>:VimwikiDiaryPrevDay<CR>
+        nmap <C-Up>      <Esc>:VimwikiDiaryPrevDay<CR>
+        nmap <C-Down>    <Esc>:VimwikiDiaryNextDay<CR>
     endif
 
 " Goyo -----------------------------------------------------------------------
