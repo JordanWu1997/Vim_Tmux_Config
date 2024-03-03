@@ -1973,6 +1973,10 @@
         autocmd BufEnter *.md nmap <leader><F4> <Plug>MarkdownPreviewToggle<CR>
         autocmd BufEnter *.md setlocal scrolloff=999
     endif
+    " MARP: markdown presentation ecosystem (https://marp.app/)
+    noremap <leader>mp <Esc>:!marp %<CR>
+    let $OPENHTMLBROWSER = 'noremap <leader>mP :!'. s:WEBBROWSER .' %:r.html &<CR>'
+    autocmd BufEnter *.md exe $OPENHTMLBROWSER
     " Load template file when new file created
     if USING_MARKDOWN_TEMPLATE
         exec 'autocmd BufNewFile *.md 0r' s:MARKDOWN_TEMPLATE
