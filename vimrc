@@ -402,6 +402,7 @@
     " Fold settings for different language
     autocmd FileType vim setlocal foldmethod=indent nofoldenable
     autocmd FileType python setlocal foldmethod=indent nofoldenable
+    autocmd FileType cpp setlocal foldmethod=indent nofoldenable
     " Toggle foldcolumn (4 column)
     function! FoldColumnToggleShort()
         if &foldcolumn
@@ -1074,6 +1075,9 @@
     " PEP8 recommendation for tab settings
     autocmd FileType python
                 \ setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=-1
+    " CPP
+    autocmd FileType cpp
+                \ setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=-1
 
 " ============================================================================
 " Part 2 - Vim-theme settings (Plugins settings and mappings)
@@ -1696,6 +1700,10 @@
 
 " Neoformat ------------------------------------------------------------------
     if USING_CODING_TOOL_PLUG
+        " C++ ----------------------------------------------------------------
+        " clangformat: C++ formatter
+        nnoremap <leader>cf :Neoformat clangformat<CR>
+        " Python -------------------------------------------------------------
         " pyment: python docstring creater/formatter
         let g:neoformat_python_pyment_google = {
                 \ 'exe': 'pyment',
@@ -1974,7 +1982,7 @@
         autocmd BufEnter *.md setlocal scrolloff=999
     endif
     " MARP: markdown presentation ecosystem (https://marp.app/)
-    noremap <leader>mp <Esc>:!marp %<CR>
+    noremap <leader>mp <Esc>:!marp % --html<CR>
     let $OPENHTMLBROWSER = 'noremap <leader>mP :!'. s:WEBBROWSER .' %:r.html &<CR>'
     autocmd BufEnter *.md exe $OPENHTMLBROWSER
     " Load template file when new file created
@@ -1982,11 +1990,14 @@
         exec 'autocmd BufNewFile *.md 0r' s:MARKDOWN_TEMPLATE
     endif
     " Insert image in markdown file
-    noremap <leader>mi <Esc>i![alt text]()<Left>
+    noremap <leader>mi <Esc>i![image]()<Left>
     " Insert link in markdown file
-    noremap <leader>ml <Esc>i[]()<Left>
+    noremap <leader>ml <Esc>i[link]()<Left>
     " Insert code block in markdown file
     noremap <leader>mb <Esc>i```<CR>```<Up>
+    " Insert HTML style color tag
+    noremap <leader>mc <Esc>i<span style="color:"><Esc>F<<Esc>19<Right>i
+    noremap <leader>ms <Esc>a</span><Esc>
 
 " BitoAI ---------------------------------------------------------------------
     "noremap <leader>aic :BitoAiCheck<CR>
