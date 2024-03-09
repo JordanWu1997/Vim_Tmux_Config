@@ -120,6 +120,8 @@
     let USING_EXTRA_PLUG = 1
     " Coding tools vim-plug (Include syntax support, git function, and etc.)
     let USING_CODING_TOOL_PLUG = 1
+    " Language Server Protocal (LSP) (Include completion, linting and etc.)
+    let USING_LSP = 1
     " Python Completion (Use deoplete and jedi, neovim is recommended)
     let USING_PYTHON_COMPLETION = 1
     " Python that has jedi, pynvim and packages installed for completion
@@ -758,17 +760,12 @@
     if USING_VIM8
         " Map key to enter terminal mode
         if USING_NEOVIM
-            noremap <F12> :split<CR>:resize 10<CR>:terminal<CR>i
-            noremap <leader>tm :split<CR>:resize 10<CR>:terminal<CR>i
+            noremap <F12> :split<CR>:terminal<CR>i
+            noremap <leader>tm :split<CR>:terminal<CR>i
         else
             noremap <F12> :terminal<CR>
             noremap <leader>tm :terminal<CR>
         endif
-        " Map key for resize pane
-        nnoremap <leader>r1 :resize 10<CR>
-        nnoremap <leader>r2 :resize 20<CR>
-        nnoremap <leader>r3 :resize 30<CR>
-        nnoremap <leader>r4 :resize 40<CR>
         " Map key to go back from terminal mode to normal mode
         " Do not use Esc (which conflicts with fzf window) but <C-\><C-n>
         tnoremap <leader><F12> <C-\><C-n>:echo 'Back to Normal Mode'<CR>
@@ -854,8 +851,6 @@
         Plug 'srcery-colors/srcery-vim' ", { 'on': 'colorscheme srcery' }
         " Color theme (Nord - cold color lower contrast)
         Plug 'arcticicestudio/nord-vim', { 'on': 'colorscheme nord' }
-        "" Color theme (Oceanic - solarized-like theme)
-        "Plug 'mhartington/oceanic-next', { 'on': 'colorscheme OceanicNext' }
         " Color theme (Dracula - medium contrast)
         Plug 'dracula/vim', { 'as': 'dracula'}
         " Lightline (status line)
@@ -932,10 +927,12 @@
                     \ '<Plug>OpenMarkbarPeekabooBacktick' ] }
         " Easymotion (Key-mapping moving in vim)
         Plug 'easymotion/vim-easymotion'
-        " Auto pop-up completion options from vim
-        Plug 'vim-scripts/AutoComplPop'
         " Pending tasks list
         Plug 'fisadev/FixedTaskList.vim', { 'on': 'TaskList' }
+        if !USING_LSP
+            " Auto pop-up completion options from vim
+            Plug 'vim-scripts/AutoComplPop'
+        endif
         " Vim-hexokinase only works in termguicolors
         if !USING_WAL_THEME
             " Paint hex colors in color code background color
@@ -949,8 +946,10 @@
         if USING_VIM8
             " Additional language packs
             Plug 'sheerun/vim-polyglot'
-            " Multiple language syntax and lint support
-            Plug 'dense-analysis/ale', { 'on': 'ALEToggle' }
+            if !USING_LSP
+                " Multiple language syntax and lint support
+                Plug 'dense-analysis/ale', { 'on': 'ALEToggle' }
+            endif
         endif
         " Code formatter
         Plug 'sbdchd/neoformat', { 'on': 'Neoformat' }
@@ -980,8 +979,17 @@
     " Navigate seamlessly in vim and tmux (Ctrl+h/j/k/l)
     Plug 'christoomey/vim-tmux-navigator'
 
+" [LSP] ----------------------------------------------------------------------
+   " Language Server Protocol (LSP)
+   if USING_LSP && USING_VIM8
+        Plug 'prabirshrestha/vim-lsp'
+        Plug 'mattn/vim-lsp-settings'
+        Plug 'prabirshrestha/asyncomplete.vim'
+        Plug 'prabirshrestha/asyncomplete-lsp.vim'
+    endif
+
 " [Python coding] ------------------------------------------------------------
-    if USING_PYTHON_COMPLETION
+    if USING_PYTHON_COMPLETION && !USING_LSP
         " Yet Another Remote Plugin Framework for Neovim [needed for deoplete]
         Plug 'roxma/nvim-yarp', { 'for': 'python' }
         " Front end of completion (python and etc.)
@@ -1620,7 +1628,7 @@
     endif
 
 " AutoComplPop ---------------------------------------------------------------
-    if USING_EXTRA_PLUG
+    if USING_EXTRA_PLUG && !USING_LSP
         " Enable autocomplpop at startup
         let g:acp_enableAtStartup = 1
         " Toggle autocomplpop function
@@ -1684,7 +1692,7 @@
     "    -- pip install mypy   # type checker
     "    -- pip install flake8 # error and style linter
     "    -- pip install pylint # error and style linter
-    if USING_CODING_TOOL_PLUG
+    if USING_CODING_TOOL_PLUG && !USING_LSP
         if USING_NEOVIM
             let g:ale_use_neovim_diagnostics_api = 1
         endif
@@ -1865,7 +1873,7 @@
 " Deoplete -------------------------------------------------------------------
     " Front end for python completion
     " Pynvim is needed [Installation: pip3 install --user pynvim]
-    if USING_PYTHON_COMPLETION
+    if USING_PYTHON_COMPLETION && !USING_LSP
         " Needed so deoplete can auto select the first suggestion
         set completeopt+=noinsert
         " Comment this line to enable autocompletion preview window
@@ -1892,7 +1900,7 @@
     " All these mappings work only for python code [All should start with 'p']
     " jedi is needed [Installation: pip3 install --user jedi]
     " jedi-vim remaps K to open python documents
-    if USING_PYTHON_COMPLETION
+    if USING_PYTHON_COMPLETION && !USING_LSP
         " Disable autocompletion (using deoplete instead)
         let g:jedi#completions_enabled = 0
         " Use split instead of buffer
@@ -2015,6 +2023,43 @@
     "let g:leetcode_solution_filetype = 'python'
 
 " ============================================================================
+" Part 10 - Language Server Protocol (LSP)
+" ============================================================================
+
+" Asyncomplete for LSP -------------------------------------------------------
+    if USING_LSP && USING_VIM8
+        inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+        inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+        inoremap <expr> <CR>    pumvisible() ? asyncomplete#close_popup() : "\<CR>"
+    endif
+
+" Vim-LSP --------------------------------------------------------------------
+    if USING_LSP && USING_VIM8
+        " LSP keybinding
+        function! s:on_lsp_buffer_enabled() abort
+            setlocal omnifunc=lsp#complete
+            setlocal signcolumn=yes
+            if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+            nmap <buffer> gd <plug>(lsp-definition)
+            nmap <buffer> gs <plug>(lsp-document-symbol-search)
+            nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+            nmap <buffer> gr <plug>(lsp-references)
+            nmap <buffer> gi <plug>(lsp-implementation)
+            nmap <buffer> gt <plug>(lsp-type-definition)
+            nmap <buffer> <leader>rn <plug>(lsp-rename)
+            nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+            nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+            nmap <buffer> K <plug>(lsp-hover)
+        endfunction
+        # Load LSP keybinding
+        augroup lsp_install
+            au!
+            " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+            autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+        augroup END
+    endif
+
+" ============================================================================
 " Part 9 - Colorscheme and other color settings (Plugin settings and mappings)
 " ============================================================================
 " Set colorscheme (syntax highlight), color assignment, and etc.
@@ -2029,12 +2074,12 @@
         highlight CursorColumn  cterm=NONE   ctermfg=NONE ctermbg=234  gui=NONE   guifg=NONE    guibg=#444444
         highlight CursorLine    cterm=NONE   ctermfg=NONE ctermbg=234  gui=NONE   guifg=NONE    guibg=#444444
         highlight CursorLineNr  cterm=bold   ctermfg=10   ctermbg=NONE gui=bold                 guibg=NONE
-        highlight FoldColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
-        highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
-        highlight OverLength    cterm=bold   ctermfg=15   ctermbg=9    gui=bold   guifg=#ffffff guibg=#ff0000
-        highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
-        highlight SignColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
-        highlight UnlimitLength cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
+        "highlight FoldColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
+        "highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
+        "highlight OverLength    cterm=bold   ctermfg=15   ctermbg=9    gui=bold   guifg=#ffffff guibg=#ff0000
+        "highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
+        "highlight SignColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
+        "highlight UnlimitLength cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
     endfunction
 
 " Vim colorscheme ------------------------------------------------------------
@@ -2090,10 +2135,6 @@
                 \:call CustomizedColorPalette()<CR>
                 \:call LightlineStyle('nord', USING_FANCY_SYMBOLS, 1)<CR>
                 \:call LightlineReload()<CR>:echo 'nord colorscheme'<CR>
-    "nnoremap <leader>cso :colorscheme OceanicNext<CR>:set termguicolors<CR>
-                "\:call CustomizedColorPalette()<CR>
-                "\:call LightlineStyle('oceanicnext', USING_FANCY_SYMBOLS, 1)<CR>
-                "\:call LightlineReload()<CR>:echo 'oceanicnext colorscheme'<CR>
     nnoremap <leader>csd :colorscheme dracula<CR>:set termguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
                 \:call LightlineStyle('dracula', USING_FANCY_SYMBOLS, 1)<CR>

@@ -97,6 +97,7 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 - [x] Integrate **_Vim with TMUX_** for both pane/split and clipboard to work together smoothly
 - [x] Map built-in/plugin-in function to keys that are easier to remember systematically
 - [x] Add **_IDE-like features for python_** e.g. linter, formatter, analyzer, and etc.
+- [x] Add **_IDE-like features using LSP_** e.g. linter, formatter, analyzer, and etc.
 - [x] Add **_Markdown features_** e.g. preview, folding, wiki-style markdown writer, and etc.
 - [x] Add **_Latex features_** e.g. real-time preview, compilation, and etc.
 - [x] Try to minimize loading time while keeping maximal functionality/variety
