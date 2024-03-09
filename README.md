@@ -500,7 +500,7 @@ for more details, check sections in vimrc
 | N/V      | `[LK]`+`[F4]`                   | Toggle Tagbar                         | On/Off Tagbar plugin                  |                                         |
 | N        | `[p]`                           | Preview tags within Tagbar            | Preview tags within Tagbar            | In Tagbar pane                          |
 | N        | `[d]`                           | Show definition of tags               | Show definition of tags               | In Tagbar pane                          |
-| N        | `[o]``                          | Toggle folds                          | Toggle folds                          | In Tagbar pane                          |
+| N        | `[o]`                           | Toggle folds                          | Toggle folds                          | In Tagbar pane                          |
 | N        | `[LK]`+`[f]`+`[f]`+`[s]`        | List files under input directory      | List files under input directory      |                                         |
 | N        | `[LK]`+`[f]`+`[l]`+`[c]`        | Locate files matched input            | Locate files matched input name       | Use system locate command               |
 | N        | `[LK]`+`[f]`+`[r]`+`[g]`        | Find files with input pattern         | Find files matched input pattern      | Use system ripgrep command              |

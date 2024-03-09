@@ -906,6 +906,8 @@
     Plug 'dominikduda/vim_current_word', { 'on': 'VimCurrentWordToggle' }
     " Pairs of handy bracket mappings (e.g. quickfix list, location list)
     Plug 'tpope/vim-unimpaired'
+    " Startup time profiler
+    Plug 'dstein64/vim-startuptime', { 'on': 'StartupTime' }
 
 " [Vim extra functions] ------------------------------------------------------
     if USING_EXTRA_PLUG
@@ -1053,7 +1055,7 @@
     " Tell vim-plug we finished declaring plugins, so it can load them
     call plug#end()
 
-    " NOTE: plugin loading
+    " NOTE: plugin loading [Use vim-startuptime plug-in instead]
     " -- Check vim startup time and loaded plugins
     " -- vim --startuptime /tmp/startup.log [file_to_test] +q && vim /tmp/startup.log
 
@@ -1282,7 +1284,7 @@
     nnoremap <leader>fmk :FZFMarks<CR>
     nnoremap <leader>f'  :FZFMarks<CR>
     " Miscellaneous
-    nnoremap <leader>cO  :FZFQuickFix<CR>
+    nnoremap <leader>qO  :FZFQuickFix<CR>
     nnoremap <leader>eO  :FZFLocList<CR>
     nnoremap <leader>fcd :FZFCommands<CR>
     nnoremap <leader>fmp :FZFMaps<CR>
@@ -2045,7 +2047,16 @@
             nmap <buffer> ]g <plug>(lsp-next-diagnostic)
             nmap <buffer> K <plug>(lsp-hover)
             " Close pop-up window without opening a new line
-            inoremap <expr> <CR> pumvisible() ? asyncomplete#close_popup() : "\<CR>"
+            inoremap <expr> <CR>
+                        \ pumvisible() ? asyncomplete#close_popup() : "\<CR>"
+            " Show LSP server status
+            nmap <buffer> <leader>pp :LspStatus<CR>
+            " Stop LSP server
+            nmap <buffer> <leader>ps :LspStopServer<CR>
+            " Restart LSP server
+            noremap <buffer> <leader>pr
+                \ :lua vim.lsp.stop_client(vim.lsp.get_active_clients())<CR>
+                \ :edit<CR>
         endfunction
         " Load LSP
         augroup lsp_install
