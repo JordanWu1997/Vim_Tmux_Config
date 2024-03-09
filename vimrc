@@ -123,7 +123,7 @@
     " Language Server Protocal (LSP) (Include completion, linting and etc.)
     let USING_LSP = 1
     " Python Completion (Use deoplete and jedi, neovim is recommended)
-    let USING_PYTHON_COMPLETION = 1
+    let USING_PYTHON_COMPLETION = !USING_LSP
     " Python that has jedi, pynvim and packages installed for completion
     let s:PYTHON_FOR_COMPLETION = '/usr/bin/python' "$CONDA_PYTHON_EXE
     " Support of external gui software (e.g. Okular, Google-chrome, and etc.)
@@ -1922,18 +1922,16 @@
     endif
 
 " Python debug (add python breakpoints) --------------------------------------
-    if USING_PYTHON_COMPLETION
-        " Python built-in pdb debugge (python > 3.7 ONLY)
-        "autocmd FileType python
-                    "\ noremap <leader>pb Obreakpoint()<Esc>
-        " Python built-in pdb debugger
-        autocmd FileType python
-                    \ noremap <leader>pb Oimport pdb; pdb.set_trace()<Esc>
-        " %:p for current file in full path
-        autocmd FileType python
-                    \ noremap <leader>pB
-                    \ <Esc>:split<CR>:terminal python -m pdb '%:p'<space>
-    endif
+    "" Python built-in pdb debugge (python > 3.7 ONLY)
+    "autocmd FileType python
+                "\ noremap <leader>pb Obreakpoint()<Esc>
+    " Python built-in pdb debugger
+    autocmd FileType python
+                \ noremap <leader>pb Oimport pdb; pdb.set_trace()<Esc>
+    " %:p for current file in full path
+    autocmd FileType python
+                \ noremap <leader>pB
+                \ <Esc>:split<CR>:terminal python -m pdb '%:p'<space>
 
 " Python skeleton (add python skeleton for new python .py file) --------------
     if USING_PYTHON_SKELETON
