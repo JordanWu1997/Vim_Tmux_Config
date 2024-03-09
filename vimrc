@@ -929,10 +929,8 @@
         Plug 'easymotion/vim-easymotion'
         " Pending tasks list
         Plug 'fisadev/FixedTaskList.vim', { 'on': 'TaskList' }
-        if !USING_LSP
-            " Auto pop-up completion options from vim
-            Plug 'vim-scripts/AutoComplPop'
-        endif
+        " Auto pop-up completion options from vim
+        Plug 'vim-scripts/AutoComplPop'
         " Vim-hexokinase only works in termguicolors
         if !USING_WAL_THEME
             " Paint hex colors in color code background color
@@ -1628,7 +1626,7 @@
     endif
 
 " AutoComplPop ---------------------------------------------------------------
-    if USING_EXTRA_PLUG && !USING_LSP
+    if USING_EXTRA_PLUG
         " Enable autocomplpop at startup
         let g:acp_enableAtStartup = 1
         " Toggle autocomplpop function
@@ -2026,20 +2024,18 @@
 " Part 10 - Language Server Protocol (LSP)
 " ============================================================================
 
-" Asyncomplete for LSP -------------------------------------------------------
-    if USING_LSP && USING_VIM8
-        inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-        inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-        inoremap <expr> <CR>    pumvisible() ? asyncomplete#close_popup() : "\<CR>"
-    endif
-
 " Vim-LSP --------------------------------------------------------------------
     if USING_LSP && USING_VIM8
-        " LSP keybinding
+        " Load LSP
         function! s:on_lsp_buffer_enabled() abort
+            " Disable autocomplpop at startup if LSP is enabled
+            AcpDisable
+            let g:AutoCompPop_is_open = 0
+            " LSP settings
             setlocal omnifunc=lsp#complete
             setlocal signcolumn=yes
             if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+            " LSP keybinding
             nmap <buffer> gd <plug>(lsp-definition)
             nmap <buffer> gs <plug>(lsp-document-symbol-search)
             nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
@@ -2050,8 +2046,10 @@
             nmap <buffer> [g <plug>(lsp-previous-diagnostic)
             nmap <buffer> ]g <plug>(lsp-next-diagnostic)
             nmap <buffer> K <plug>(lsp-hover)
+            " Close pop-up window without opening a new line
+            inoremap <expr> <CR> pumvisible() ? asyncomplete#close_popup() : "\<CR>"
         endfunction
-        # Load LSP keybinding
+        " Load LSP
         augroup lsp_install
             au!
             " call s:on_lsp_buffer_enabled only for languages that has the server registered.
