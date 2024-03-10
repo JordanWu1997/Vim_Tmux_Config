@@ -365,9 +365,9 @@
     set display+=lastline " Show line as much as possible
     set scrolloff=10      " Keep cursor 10 lines away from top and bottom
     " Change scroll off
-    noremap <leader>sc0 :set scrolloff=10<CR>
-    noremap <leader>sc1 :set scrolloff=0<CR>
-    noremap <leader>sc9 :set scrolloff=999<CR>
+    noremap <leader>so0 :set scrolloff=10<CR>
+    noremap <leader>so1 :set scrolloff=0<CR>
+    noremap <leader>so9 :set scrolloff=999<CR>
 
 " Search settings ------------------------------------------------------------
     " NOTE:
@@ -1045,8 +1045,8 @@
     " I3 configuration syntax highlight
     Plug 'PotatoesMaster/i3-vim-syntax', { 'for': 'i3' }
 
-" [ChatGPT] ------------------------------------------------------------------
-    "Plug 'zhenyangze/vim-bitoai'
+" [BitoAI (ChatGPT wrapper)] -------------------------------------------------
+    Plug 'zhenyangze/vim-bitoai'
 
 " [LeetCode] -----------------------------------------------------------------
     "Plug 'ianding1/leetcode.vim'
@@ -2006,14 +2006,14 @@
     noremap <leader>ms <Esc>a</span><Esc>
 
 " BitoAI ---------------------------------------------------------------------
-    "noremap <leader>aic :BitoAiCheck<CR>
-    "noremap <leader>aip :BitoAiCheckPerformance<CR>
-    "noremap <leader>ais :BitoAiCheckStyle<CR>
-    "noremap <leader>aiS :BitoAiCheckSecurity<CR>
-    "noremap <leader>aie :BitoAiExplain<CR>
-    "noremap <leader>aig :BitoAiGenerate<CR>
-    ""noremap <leader>aiG :BitoAiGenerateComment<CR>
-    "noremap <leader>air :BitoAiReadable<CR>
+    noremap <leader>aic :BitoAiCheck<CR>
+    noremap <leader>aip :BitoAiCheckPerformance<CR>
+    noremap <leader>ais :BitoAiCheckStyle<CR>
+    noremap <leader>aiS :BitoAiCheckSecurity<CR>
+    noremap <leader>aie :BitoAiExplain<CR>
+    noremap <leader>aig :BitoAiGenerate<CR>
+    noremap <leader>aiG :BitoAiGenerateComment<CR>
+    noremap <leader>air :BitoAiReadable<CR>
 
 " LeetCode -------------------------------------------------------------------
     "let g:leetcode_browser = 'firefox'

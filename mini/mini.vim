@@ -114,7 +114,9 @@ let g:ale_linters = {
 let g:ale_completion_enabled = 1
 let g:ale_fix_on_save = 1
 autocmd FileType python nmap K :ALEHover<CR>
-autocmd FileType python nmap gK :ALEGoToDefinition<CR>
+autocmd FileType python nmap gd :ALEGoToDefinition<CR>
+autocmd Filetype python nmap gr :ALEFindReferences<CR>
+autocmd Filetype python nmap gs :ALESymbolSearch<CR>
 
 " Python completion (w/o ALE)
 "autocmd FileType python set omnifunc=python3complete#Complete
