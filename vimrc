@@ -2012,7 +2012,7 @@
     noremap <leader>aiS :BitoAiCheckSecurity<CR>
     noremap <leader>aie :BitoAiExplain<CR>
     noremap <leader>aig :BitoAiGenerate<CR>
-    noremap <leader>aiG :BitoAiGenerateComment<CR>
+    "noremap <leader>aiG :BitoAiGenerateComment<CR>
     noremap <leader>air :BitoAiReadable<CR>
 
 " LeetCode -------------------------------------------------------------------
@@ -2050,11 +2050,14 @@
             inoremap <expr> <CR>
                         \ pumvisible() ? asyncomplete#close_popup() : "\<CR>"
             " Show LSP server status
-            nmap <buffer> <leader>pp :LspStatus<CR>
+            nmap <buffer> <leader>LS :LspStatus<CR>
+            nmap <buffer> <leader>LM :LspManageServers<CR>
+            nmap <buffer> <leader>LI :LspInstallServers<CR>
+            nmap <buffer> <leader>ee :LspDocumentDiagnostics<CR>
             " Stop LSP server
-            nmap <buffer> <leader>ps :LspStopServer<CR>
+            nmap <buffer> <leader>Ls :LspStopServer<CR>
             " Restart LSP server
-            noremap <buffer> <leader>pr
+            noremap <buffer> <leader>Lr
                 \ :lua vim.lsp.stop_client(vim.lsp.get_active_clients())<CR>
                 \ :edit<CR>
         endfunction
@@ -2081,12 +2084,12 @@
         highlight CursorColumn  cterm=NONE   ctermfg=NONE ctermbg=234  gui=NONE   guifg=NONE    guibg=#444444
         highlight CursorLine    cterm=NONE   ctermfg=NONE ctermbg=234  gui=NONE   guifg=NONE    guibg=#444444
         highlight CursorLineNr  cterm=bold   ctermfg=10   ctermbg=NONE gui=bold                 guibg=NONE
-        "highlight FoldColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
-        "highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
-        "highlight OverLength    cterm=bold   ctermfg=15   ctermbg=9    gui=bold   guifg=#ffffff guibg=#ff0000
-        "highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
-        "highlight SignColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
-        "highlight UnlimitLength cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
+        highlight FoldColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
+        highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
+        highlight OverLength    cterm=bold   ctermfg=15   ctermbg=9    gui=bold   guifg=#ffffff guibg=#ff0000
+        highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
+        highlight SignColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
+        highlight UnlimitLength cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
     endfunction
 
 " Vim colorscheme ------------------------------------------------------------
