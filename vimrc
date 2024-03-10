@@ -247,6 +247,7 @@
     noremap <leader>dj ]c
     noremap <leader>dk [c
     " Inline substitution (press & to repeat last substitution action)
+    vnoremap gs :s/\<<c-r><c-w>\>//g<left><left>
     nnoremap gs :s/\<<c-r><c-w>\>//g<left><left>
     nnoremap gS :%s/\<<c-r><c-w>\>//g<left><left>
 
@@ -304,7 +305,7 @@
     set backspace=indent,eol,start     " Backspace through everything
     set clipboard^=unnamed,unnamedplus " Shared system clipboard
     "set dictionary+=/usr/share/dict/words " Dictionary for word completion
-    set tags=./.tags,.tags;/           " use ctag -o .tags -R . to generate file tags
+    set tags=./.tags,.tags;/ " use ctag -o .tags -R . to generate file tags
 
 " Vim only settings ----------------------------------------------------------
     if USING_VIM
@@ -428,8 +429,6 @@
     " Toggle foldcolumn (short, long)
     nnoremap <F6> :call FoldColumnToggleShort()<CR>
     nnoremap <leader><F6> :call FoldColumnToggleLong()<CR>
-    "" Toggle fold
-    "map <leader><space> za
 
 " Window settings ------------------------------------------------------------
     " NOTE:
@@ -1055,7 +1054,7 @@
     " Tell vim-plug we finished declaring plugins, so it can load them
     call plug#end()
 
-    " NOTE: plugin loading [Use vim-startuptime plug-in instead]
+    " NOTE: plugin loading [Now use vim-startuptime plugin instead]
     " -- Check vim startup time and loaded plugins
     " -- vim --startuptime /tmp/startup.log [file_to_test] +q && vim /tmp/startup.log
 
@@ -1181,7 +1180,7 @@
     endif
 
 " Function - reload lightline ------------------------------------------------
-    " -- Reload lightline without close editing files
+    " -- Reload lightline without closing editing files
     " -- From https://github.com/itchyny/lightline.vim/issues/241
     function! LightlineReload()
         call lightline#init()
@@ -1429,7 +1428,6 @@
 " Window-chooser (choosewin)--------------------------------------------------
     " Show big overlay letters
     let g:choosewin_overlay_enable = 1
-    nmap <leader>` <Plug>(choosewin)
     nmap <leader>" <Plug>(choosewin)
 
 " Auto-pairs -----------------------------------------------------------------
@@ -1996,9 +1994,9 @@
         exec 'autocmd BufNewFile *.md 0r' s:MARKDOWN_TEMPLATE
     endif
     " Insert image in markdown file
-    noremap <leader>mi <Esc>i![image]()<Left>
+    noremap <leader>mi <Esc>i![this_is_an_image]()<Left>
     " Insert link in markdown file
-    noremap <leader>ml <Esc>i[link]()<Left>
+    noremap <leader>ml <Esc>i[this_is_a_link]()<Left>
     " Insert code block in markdown file
     noremap <leader>mb <Esc>i```<CR>```<Up>
     " Insert HTML style color tag
@@ -2028,17 +2026,14 @@
     if USING_LSP && USING_VIM8
         " Load LSP
         function! s:on_lsp_buffer_enabled() abort
-            " Disable autocomplpop at startup if LSP is enabled
-            AcpDisable
-            let g:AutoCompPop_is_open = 0
             " LSP settings
             setlocal omnifunc=lsp#complete
             setlocal signcolumn=yes
             if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
             " LSP keybinding
             nmap <buffer> gd <plug>(lsp-definition)
-            nmap <buffer> gs <plug>(lsp-document-symbol-search)
-            nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+            nmap <buffer> g/ <plug>(lsp-document-symbol-search)
+            nmap <buffer> g? <plug>(lsp-workspace-symbol-search)
             nmap <buffer> gr <plug>(lsp-references)
             nmap <buffer> gi <plug>(lsp-implementation)
             nmap <buffer> gt <plug>(lsp-type-definition)
@@ -2087,7 +2082,7 @@
         highlight FoldColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
         highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
         highlight OverLength    cterm=bold   ctermfg=15   ctermbg=9    gui=bold   guifg=#ffffff guibg=#ff0000
-        highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
+        "highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
         highlight SignColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
         highlight UnlimitLength cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
     endfunction
