@@ -367,8 +367,8 @@
     set scrolloff=10      " Keep cursor 10 lines away from top and bottom
     " Change scroll off
     noremap <leader>so0 :set scrolloff=10<CR>
-    noremap <leader>so1 :set scrolloff=0<CR>
-    noremap <leader>so9 :set scrolloff=999<CR>
+    noremap <leader>so- :set scrolloff=0<CR>
+    noremap <leader>so= :set scrolloff=999<CR>
 
 " Search settings ------------------------------------------------------------
     " NOTE:
@@ -2024,6 +2024,19 @@
 
 " Vim-LSP --------------------------------------------------------------------
     if USING_LSP && USING_VIM8
+        " Show LSP server status
+        nmap <buffer> <leader>LS :LspStatus<CR>
+        " Manage LSP server
+        nmap <buffer> <leader>LM :LspManageServers<CR>
+        nmap <buffer> <leader>LI :LspInstallServer<CR>
+        " Stop LSP server
+        nmap <buffer> <leader>Ls :LspStopServer<CR>
+        " Restart LSP server
+        noremap <buffer> <leader>Lr
+            \ :lua vim.lsp.stop_client(vim.lsp.get_active_clients())<CR>
+            \ :edit<CR>
+        " Load LSP diagnostics to location list
+        nmap <buffer> <leader>ee :LspDocumentDiagnostics<CR>
         " Load LSP
         function! s:on_lsp_buffer_enabled() abort
             " LSP settings
@@ -2044,17 +2057,6 @@
             " Close pop-up window without opening a new line
             inoremap <expr> <CR>
                         \ pumvisible() ? asyncomplete#close_popup() : "\<CR>"
-            " Show LSP server status
-            nmap <buffer> <leader>LS :LspStatus<CR>
-            nmap <buffer> <leader>LM :LspManageServers<CR>
-            nmap <buffer> <leader>LI :LspInstallServers<CR>
-            nmap <buffer> <leader>ee :LspDocumentDiagnostics<CR>
-            " Stop LSP server
-            nmap <buffer> <leader>Ls :LspStopServer<CR>
-            " Restart LSP server
-            noremap <buffer> <leader>Lr
-                \ :lua vim.lsp.stop_client(vim.lsp.get_active_clients())<CR>
-                \ :edit<CR>
         endfunction
         " Load LSP
         augroup lsp_install
