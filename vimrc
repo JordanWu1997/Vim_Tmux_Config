@@ -262,9 +262,9 @@
     noremap <leader>q! :q!<CR>
     noremap <leader>qa :qall<CR>
     noremap <leader>qa! :qall!<CR>
-    noremap <leader>ww :w<CR>
-    noremap <leader>w! :w!<CR>
-    noremap <leader>wq :wq<CR>
+    noremap <leader>ww :call RemoveTrailingWhitespace()<CR>:w<CR>
+    noremap <leader>w! :call RemoveTrailingWhitespace()<CR>:w!<CR>
+    noremap <leader>wq :call RemoveTrailingWhitespace()<CR>:wq<CR>
     noremap <leader>wa! :wall!<CR>
     noremap <leader>wa :wqall<CR>
 
@@ -664,7 +664,7 @@
         endif
     endfunction
     " Remove trailing whitespace for editing files
-    autocmd BufWritePre * call RemoveTrailingWhitespace()
+    "autocmd BufWritePre * call RemoveTrailingWhitespace()
 
 " Function - hex editor ------------------------------------------------------
     " -- From https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
@@ -2084,7 +2084,7 @@
         highlight FoldColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
         highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
         highlight OverLength    cterm=bold   ctermfg=15   ctermbg=9    gui=bold   guifg=#ffffff guibg=#ff0000
-        "highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
+        highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
         highlight SignColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
         highlight UnlimitLength cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
     endfunction
