@@ -373,7 +373,8 @@
 " Search settings ------------------------------------------------------------
     " NOTE:
     " -- Ctrl+[t/g]: Go to prev/next matching result in incsearch
-    " -- [+I: Show lines with matching words
+    " -- [+I: Show lines with matching words in current buffer
+    " -- ]+I: Show lines with matching words after current line in current buffer
 
     set incsearch  " Incremental search (character-by-character search)
     set hlsearch   " Highlight search result

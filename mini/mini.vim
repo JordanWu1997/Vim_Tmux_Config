@@ -15,6 +15,10 @@
 " NOTE: Keyboard settings for mapping capslock to ctrl and speeding up repeat key
 " - UNIX-like: setxkbmap -option 'ctrl:nocaps'; xset r rate 300 40
 
+" ============================================================================
+" Basic settings
+" ============================================================================
+
 " Load GVim configs on Windows
 if has('win32') || has('win64') || has('win16')
     source $VIMRUNTIME/../_vimrc
@@ -29,7 +33,7 @@ set exrc                           " Use local vimrc file
 set hidden                         " Switch focus between buffers without saving
 set modifiable                     " Make current buffer modifiable
 set nocompatible                   " Set to be not compatible with ancient vi
-set nowrap                         " Line wrap for small monitor or display window
+set wrap                           " Line wrap for small monitor or display window
 set number                         " Show line number
 set showcmd                        " Show entered commands
 set splitbelow                     " New hsplit pane spawn at the bottom
@@ -54,11 +58,15 @@ let &t_EI="\e[2 q"                 " Blinking bar in insert/replace mode
 let &t_SI="\e[6 q"                 " Blinking block in normal/visual mode
 
 " Hidden characters
-set nolist                         " Don't show hidden characters
+set list                           " Show hidden characters
 set listchars=eol:↵,tab:»·,trail:╳,extends:»,precedes:«,nbsp:␣
 
 " Ctags
 set tags=./.tags,.tags;/           " use ctag -o .tags -R . to generate file tags
+
+" ============================================================================
+" Backup settings
+" ============================================================================
 
 " Tmp/Backup/Undo for Windows system
 if has('win32') || has('win64') || has('win16')
@@ -71,6 +79,7 @@ if has('win32') || has('win64') || has('win16')
     " Persistent undoes - undo after re-opening
     set undofile
     set undodir=%USERPROFILE%\vimfiles\dirs\undos
+
 " Tmp/Backup/Undo for UNIX-like system
 else
     " Directory to place swap files
@@ -83,6 +92,7 @@ else
     set undofile
     set undodir=~/.vim/dirs/undos
 endif
+
 " Create needed directories if they don't exist
 if !isdirectory(&backupdir)
     call mkdir(&backupdir, 'p')
@@ -94,16 +104,51 @@ if !isdirectory(&undodir)
     call mkdir(&undodir, 'p')
 endif
 
+" ============================================================================
+" Keybindings
+" ============================================================================
+
+" Leader key
+let mapleader = ' '
+
+" Easier keybinding for Escape
+inoremap kj <Esc>
+
+" Add break point for text-writing undo
+" e.g. w/o bp: test,test,test --undo->
+" e.g. w/i bp: test,test,test --undo-> test,test,
+inoremap , ,<C-g>u
+inoremap . .<C-g>u
+inoremap ? ?<C-g>u
+inoremap ! !<C-g>u
+
+" Make Y yank to the EOL instead of whole line just like what D does
+nnoremap Y y$
+
+" Move selection block up/down in visual mode
+vnoremap K :m '<-2<CR>gv=gv
+vnoremap J :m '>+1<CR>gv=gv
+
+" ============================================================================
+" Filetype settings
+" ============================================================================
+
 " Filetype settings
 filetype plugin indent on
 
-" Python completion (w/ ALE)
+" ALE
 " - ALE installation
 "   - UNIX-like: mkdir -p ~/.vim/pack/git-plugins/start; git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.vim/pack/git-plugins/start/ale
 "   - Window: mkdir -p ~/vimfiles/pack/git-plugins/start; git clone --depth 1 https://github.com/dense-analysis/ale.git ~/vimfiles/pack/git-plugins/start/ale
 " - Python packages for completion
 "   - pip install python-lsp-server yapf isort mypy
-set omnifunc=ale#completion#OmniFunc
+
+" ALE option
+let g:ale_enabled = 1
+let g:ale_completion_enabled = 1
+let g:ale_fix_on_save = 0
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
 let g:ale_fixers = {
     \ '*': ['remove_trailing_lines', 'trim_whitespace'],
     \ 'python': ['yapf', 'isort'],
@@ -111,12 +156,25 @@ let g:ale_fixers = {
 let g:ale_linters = {
     \ 'python': ['pylsp', 'mypy']
 \}
-let g:ale_completion_enabled = 1
-let g:ale_fix_on_save = 1
+
+" ALE keybinding
 autocmd FileType python nmap K :ALEHover<CR>
 autocmd FileType python nmap gd :ALEGoToDefinition<CR>
+autocmd Filetype python nmap gi :ALEGoToImplementation<CR>
+autocmd Filetype python nmap gt :ALEGoToTypeDefinition<CR>
 autocmd Filetype python nmap gr :ALEFindReferences<CR>
-autocmd Filetype python nmap gs :ALESymbolSearch<CR>
+autocmd Filetype python nmap g/ :ALESymbolSearch<space>
+autocmd Filetype python nmap g? :execute ":ALESymbolSearch " . expand('<cword>')<CR>
+autocmd Filetype python nmap ]g :ALENextWrap<CR>
+autocmd Filetype python nmap [g :ALEPreviousWrap<CR>
+nmap <buffer> <leader>Le :ALEToggleBuffer<CR>
+nmap <buffer> <leader>LE :ALEToggle<CR>
+nmap <buffer> <leader>Lr :ALELint<CR>
+nmap <buffer> <leader>Ls :ALELintStop<CR>
+nmap <buffer> <leader>LS :ALEInfo<CR>
+nmap <buffer> <leader>Lf :ALEFix<CR>
 
+" Python completion (w/ ALE)
+set omnifunc=ale#completion#OmniFunc
 " Python completion (w/o ALE)
 "autocmd FileType python set omnifunc=python3complete#Complete
