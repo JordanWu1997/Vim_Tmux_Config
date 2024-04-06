@@ -1,4 +1,5 @@
 " ~/.vimrc
+" vim: syntax=vim ft=vim ff=unix
 " ============================================================================
 " Fisa-vim-config
 " http://fisadev.github.io/fisa-vim-config/
