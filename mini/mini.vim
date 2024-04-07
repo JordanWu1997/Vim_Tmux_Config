@@ -157,16 +157,20 @@ let g:ale_linters = {
     \ 'python': ['pylsp', 'mypy']
 \}
 
-" ALE keybinding
-autocmd FileType python nmap K :ALEHover<CR>
-autocmd FileType python nmap gd :ALEGoToDefinition<CR>
-autocmd Filetype python nmap gi :ALEGoToImplementation<CR>
-autocmd Filetype python nmap gt :ALEGoToTypeDefinition<CR>
-autocmd Filetype python nmap gr :ALEFindReferences<CR>
-autocmd Filetype python nmap g/ :ALESymbolSearch<space>
-autocmd Filetype python nmap g? :execute ":ALESymbolSearch " . expand('<cword>')<CR>
-autocmd Filetype python nmap ]g :ALENextWrap<CR>
-autocmd Filetype python nmap [g :ALEPreviousWrap<CR>
+" ALE Keybindings (OVERWRITE vim built-in keybindings)
+autocmd FileType python nmap <buffer> K :ALEHover<CR>
+autocmd FileType python nmap <buffer> gd :ALEGoToDefinition<CR>
+autocmd FileType python nmap <buffer> gt :ALEGoToTypeDefinition<CR>
+autocmd FileType python nmap <buffer> gi :ALEGoToImplementation<CR>
+
+" ALE Keybindings (DO NOT OVERWRITE vim built-in keybindings)
+nmap <buffer> gr :ALEFindReferences<CR>
+nmap <buffer> g/ :ALESymbolSearch<space>
+nmap <buffer> g? :execute ":ALESymbolSearch " . expand('<cword>')<CR>
+nmap <buffer> ]g :ALENextWrap<CR>
+nmap <buffer> [g :ALEPreviousWrap<CR>
+
+" ALE Keybindings start with LEADER KEY
 nmap <buffer> <leader>Le :ALEToggleBuffer<CR>
 nmap <buffer> <leader>LE :ALEToggle<CR>
 nmap <buffer> <leader>Lr :ALELint<CR>
