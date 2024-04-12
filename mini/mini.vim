@@ -136,12 +136,34 @@ vnoremap J :m '>+1<CR>gv=gv
 " Filetype settings
 filetype plugin indent on
 
-" ALE
-" - ALE installation
-"   - UNIX-like: mkdir -p ~/.vim/pack/git-plugins/start; git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.vim/pack/git-plugins/start/ale
-"   - Window: mkdir -p ~/vimfiles/pack/git-plugins/start; git clone --depth 1 https://github.com/dense-analysis/ale.git ~/vimfiles/pack/git-plugins/start/ale
-" - Python packages for completion
-"   - pip install python-lsp-server yapf isort mypy
+" ALE installation
+if has('win32')
+    " Windows: mkdir -p ~/vimfiles/pack/git-plugins/start; git clone --depth 1 https://github.com/dense-analysis/ale.git ~/vimfiles/pack/git-plugins/start/ale
+    let vim_plug_path = expand('~/.vim/pack/git-plugins/start/ale/autoload/ale.vim')
+    if !filereadable(vim_plug_path)
+        echo 'Installing ALE...'
+        echo ''
+        silent !mkdir -p ~/.vim/pack/git-plugins/start
+        silent !git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.vim/pack/git-plugins/start/ale
+        " Python packages for completion: python-lsp-server yapf isort mypy
+        echo 'Installing Python LSP...'
+        echo ''
+        silent !pip install python-lsp-server yapf isort mypy
+    endif
+else
+    " UNIX-like: mkdir -p ~/.vim/pack/git-plugins/start; git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.vim/pack/git-plugins/start/ale
+    let vim_plug_path = expand('~/.vim/pack/git-plugins/start/ale/autoload/ale.vim')
+    if !filereadable(vim_plug_path)
+        echo 'Installing ALE...'
+        echo ''
+        silent !mkdir -p ~/.vim/pack/git-plugins/start
+        silent !git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.vim/pack/git-plugins/start/ale
+        " Python packages for completion: python-lsp-server yapf isort mypy
+        echo 'Installing Python LSP...'
+        echo ''
+        silent !pip install python-lsp-server yapf isort mypy
+    endif
+endif
 
 " ALE option
 let g:ale_enabled = 1
