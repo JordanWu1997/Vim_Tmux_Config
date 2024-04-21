@@ -287,12 +287,6 @@
     " Filter out unique word [Context should be sorted first]
     vnoremap <leader>euq :!uniq<CR>
 
-" Vim window/pane/fold configuration -----------------------------------------
-    " Save current file layout
-    noremap <F10> :mkview<CR>
-    " Load current file previous layout
-    noremap <leader><F10> :loadview<CR>
-
 " General Vim settings -------------------------------------------------------
     set exrc            " Search vimrc file in current directory
     set timeoutlen=300  " Timeout for entering combined key (millisecond)
@@ -391,6 +385,16 @@
     noremap <leader><F5> :set number!<CR>
     noremap <F5> :set relativenumber!<CR>
 
+" View/Session settings ------------------------------------------------------
+    " NOTE:
+    " -- View (stored at ~/.local/state/nvim/view)
+    "    -- viewoptions: folds,cursor,curdir
+    " -- Session (save more info and can be stored anywhere),
+    "    -- sessionoptions: blank,buffers,curdir,folds,help,tabpages,winsize,terminal
+    noremap <F10> :mkview<CR>
+    noremap <leader><F10> :loadview<CR>
+    noremap <C-s> :mksession<space>
+
 " Fold settings --------------------------------------------------------------
     " NOTE:
     " -- z+[c/o]: Close/Open current fold
@@ -400,14 +404,10 @@
     " -- z+[j/k]: Jump to next/prev fold
 
     " Default fold settings
-    set foldmethod=syntax
+    set foldmethod=manual
     set foldcolumn=0
     set foldlevel=0
     set nofoldenable
-    " Fold settings for different language
-    autocmd FileType vim setlocal foldmethod=indent nofoldenable
-    autocmd FileType python setlocal foldmethod=indent nofoldenable
-    autocmd FileType cpp setlocal foldmethod=indent nofoldenable
     " Toggle foldcolumn (4 column)
     function! FoldColumnToggleShort()
         if &foldcolumn
@@ -1661,10 +1661,10 @@
         inoremap <expr><tab>   pumvisible() ? "\<C-n>" : "\<tab>"
         inoremap <expr><C-k>   pumvisible() ? "\<C-p>" : "\<C-k>"
         inoremap <expr><C-j>   pumvisible() ? "\<C-n>" : "\<C-j>"
-        inoremap <expr><C-b>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-b>"
-        inoremap <expr><C-f>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-f>"
         inoremap <expr><M-k>   pumvisible() ? "\<C-p>" : "\<M-k>"
         inoremap <expr><M-j>   pumvisible() ? "\<C-n>" : "\<M-j>"
+        inoremap <expr><C-b>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-b>"
+        inoremap <expr><C-f>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-f>"
     endif
 
 " Tasklist -------------------------------------------------------------------
