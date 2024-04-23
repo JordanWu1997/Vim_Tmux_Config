@@ -135,6 +135,10 @@
     let USING_PYTHON_SKELETON = 1
     " Python Skeleton file
     let s:PYTHON_SKELETON = '$HOME/Desktop/Vim_Tmux_Config/share/skeleton.py'
+    " Add Tex template file to newly created .tex tex file
+    let USING_TEX_TEMPLATE = 1
+    " Tex Template file
+    let s:TEX_TEMPLATE = '/home/jordankhwu/Desktop/Vim_Tmux_Config/share/template.tex'
     " Add markdown template file to newly created .md markdown file
     let USING_MARKDOWN_TEMPLATE = 1
     " Markdown Template file
@@ -1962,6 +1966,10 @@
         let g:livepreview_engine = 'pdflatex'
         autocmd BufEnter *.tex echom '[Press Space+F4 to Preview .tex File]'
         autocmd BufEnter *.tex noremap <leader><F4> :LLPStartPreview<CR>
+    endif
+    " Load template file when new file created
+    if USING_TEX_TEMPLATE
+        exec 'autocmd BufNewFile *.tex 0r' s:TEX_TEMPLATE
     endif
 
 " Markdown -------------------------------------------------------------------
