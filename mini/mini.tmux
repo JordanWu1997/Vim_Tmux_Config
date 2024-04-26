@@ -11,11 +11,12 @@
 # - UNIX-like: $HOME/.tmux.conf (e.g. /home/admin/.tmux.conf)
 
 # Set prefix [Ctrl]+[b], [Ctrl]+[a] (default: [Ctrl]+[b])
-set -g prefix C-b
-set -g prefix2 C-a
+set -g prefix C-a
+set -g prefix2 C-b
 
 # Terminal
 set -g default-terminal "xterm-256color"
+set -g default-shell "$SHELL"
 
 # Window option
 set -g base-index 1
@@ -27,13 +28,25 @@ setw -g pane-base-index 1
 set -g mode-keys vi
 set -g status-keys vi
 
+# Enable mouse
+set -g mouse
+
 # Let Home/End work in TMUX
 bind -n Home send Escape "OH"
 bind -n End send Escape "OF"
 
+# Change focus
+bind -n C-h select-pane -L
+bind -n C-j select-pane -D
+bind -n C-k select-pane -U
+bind -n C-l select-pane -R
+
 # Send keys already binded by TMUX
-bind C-a send-keys 'C-a'
 bind -r C-b send-keys 'C-b'
+bind -r C-h send-keys 'C-h'
+bind -r C-j send-keys 'C-j'
+bind C-a send-keys 'C-a'
+bind C-k send-keys 'C-k'
 
 # Buffer settings
 set -g set-clipboard on
@@ -69,9 +82,13 @@ bind \; copy-mode
 bind -T copy-mode-vi \; send -X cancel
 bind -T copy-mode-vi C-[ send -X cancel
 
-# Scrollback history
-# Disable scrollback clearing
+# Disable scrollback history clearing
 set -g alternate-screen off
+
+# Clear current pane output but keep scrollback history
+bind a send-keys 'C-l'
+bind C-l send-keys 'C-l'
+
 # Clear current pane output and scrollback history
 bind C-S-l confirm-before -p "clear scrollback history? (y/n)" "clear-history \; display-message 'scrollback history cleared'"
 
