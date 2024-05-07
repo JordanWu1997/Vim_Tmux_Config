@@ -64,7 +64,8 @@ bind M-\" split-window -fv -c "#{pane_current_path}"
 
 # Mark pane operation
 bind -r M-\; swap-pane
-bind -r M-\: join-pane
+bind -r | join-pane -h
+bind -r _ join-pane -v
 
 # Set Copy/Paste Mode (VIM-like key binding in copy-mode-vi)
 # -- https://superuser.com/questions/395158/tmux-copy-mode-select-text-block
