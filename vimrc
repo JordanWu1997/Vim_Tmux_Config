@@ -100,6 +100,10 @@
     " --      xset [repeat rate] [start repeat time (ms)] [repeat rate (/sec)]
     " -- e.g. xset     r rate              300                    40
 
+" NOTE: Edit file on remote machine ------------------------------------------
+    " SCP (via SSH connection)
+    " -- :edit scp://user@remote_machine//path_to_file
+
 " ============================================================================
 " Vim and Neovim settings (***MUST-READ SESSION***)
 " ============================================================================
