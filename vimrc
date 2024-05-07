@@ -142,7 +142,7 @@
     " Add Tex template file to newly created .tex tex file
     let USING_TEX_TEMPLATE = 1
     " Tex Template file
-    let s:TEX_TEMPLATE = '/home/jordankhwu/Desktop/Vim_Tmux_Config/share/template.tex'
+    let s:TEX_TEMPLATE = '$HOME/Desktop/Vim_Tmux_Config/share/template.tex'
     " Add markdown template file to newly created .md markdown file
     let USING_MARKDOWN_TEMPLATE = 1
     " Markdown Template file
@@ -306,7 +306,7 @@
     set shell=/bin/bash " Set default shell for vim/neovim (for navigator)
     set mouse=          " Disable mouse function
     set backspace=indent,eol,start     " Backspace through everything
-    set clipboard^=unnamed,unnamedplus " Shared system clipboard
+    set clipboard^=unnamed,unnamedplus " Shared system clipboard (+clipboard)
     "set dictionary+=/usr/share/dict/words " Dictionary for word completion
     set tags=./.tags,.tags;/ " use ctag -o .tags -R . to generate file tags
 
@@ -457,6 +457,7 @@
     " -- Miscellaneous
     "    -- <C-w><C-f>: Open selected file in horizontal split
     "    -- <C-w>w: Cycle through all panes
+    "    -- <C-w>o: Close all other window panes
     "    -- :sfind FILENAME: Open split with FILENAME
 
     " Split pane - Split border style
