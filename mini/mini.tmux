@@ -28,13 +28,27 @@ set -g automatic-rename off
 setw -g pane-base-index 1
 setw -g aggressive-resize on
 
+# Master pane size
+set -g main-pane-height "50%"
+set -g main-pane-width "50%"
+
+# Close tmux after closing current session
+set -g detach-on-destroy off
+
 # Vi mode (use keys of copy-mode-vi instead of copy-mode)
 set -g mode-keys vi
 set -g status-keys vi
 
 # Miscellaneous tmux settings
 set -g default-terminal "xterm-256color"
-set -g mouse
+set -g display-time 3000
+set -g display-panes-time 3000
+set -g escape-time 0
+set -g repeat-time 450
+set -g history-limit 30000
+set -g visual-activity on
+set -g focus-events on
+set -g mouse on
 
 # ============================================================================
 # TMUX buffer and copymode
@@ -115,7 +129,7 @@ bind -r M-k resize-pane -U 1
 bind -r M-l resize-pane -R 1
 bind -r M-h resize-pane -L 1
 
-# Manipulate mark pane (prefix + [m])
+# Manipulate mark pane (<prefix>+[m])
 bind -r M-\; swap-pane
 bind -r | join-pane -h
 bind -r _ join-pane -v
