@@ -799,13 +799,11 @@ tmux -V
 | Normal    | `[BK]`+`[Alt]`+`[']`       | Split pane vertically (full window)   | Split pane vertically (full window)   |                                                                   |
 | Normal    | `[BK]`+`[q/']`             | Move to pane (number)                 | Move to pane (number)                 | Pane number shows on pane                                         |
 | Normal    | `[Ctrl]`+`[h/j/k/l]`       | Move to pane (L/D/U/R)                | Move to pane (L/D/U/R)                | vim-tmux-navigator                                                |
-| Normal    | `[BK]`+`[n/p]`             | Move to pane next/previous            | Move to pane next/previous            | Default key is `[BK]`+`[n/p]` next/prev window                    |
 | Normal    | `[BK]`+`[t]`+`[h/v]`       | Move marked pane to current window    | Move marked pane to current window    | tmux-sessionist; pane to move must be marked (`[BK]`+`[m]`) first |
 | Normal    | `[BK]`+`[Backtick]`        | Switch to last pane                   | Switch to last pane                   | Default key is `[BK]`+`[;]`                                       |
 | Normal    | `[BK]`+`[Shift]`+`[j/k]`   | Swap pane to prev/next pane           | Swap pane to prev/next pane           |                                                                   |
-| Normal    | `[BK]`+`[Shift]`+`[n/p]`   | Rotate pane anti-clock/clock wisely   | Rotate pane (anti-clock/clock)wisely  | Default key is `[BK]`+`[Ctrl/Alt]`+`[o]`                          |
 | Normal    | `[BK]`+`[Space]`           | Toggle pane layout                    | Toggle pane layout                    |                                                                   |
-| Normal    | `[BK]`+`[Alt]`+`[h/j/k/l]` | Resize pane to (L/D/U/R)              | Resize pane to (L/D/U/R)              |                                                                   |
+| Normal    | `[BK]`+`[Alt]`+`[h/j/k/l]` | Resize pane in (L/D/U/R) direction    | Resize pane in (L/D/U/R) direction    |                                                                   |
 
 </details>
 
