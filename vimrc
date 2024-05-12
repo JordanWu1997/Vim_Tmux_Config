@@ -129,30 +129,33 @@
     let USING_LSP = 1
     " Python Completion (Use deoplete and jedi, neovim is recommended)
     let USING_PYTHON_COMPLETION = !USING_LSP
-    " Python that has jedi, pynvim and packages installed for completion
-    let s:PYTHON_FOR_COMPLETION = '/usr/bin/python' "$CONDA_PYTHON_EXE
     " Support of external gui software (e.g. Okular, Google-chrome, and etc.)
     let USING_GUI_SOFTWARE = 1
-    " Web browser for markdown preview
-    let s:WEBBROWSER = $BROWSER
     " Add python skeleton file to newly created .py python file
     let USING_PYTHON_SKELETON = 1
-    " Python Skeleton file
-    let s:PYTHON_SKELETON = '$HOME/Desktop/Vim_Tmux_Config/share/skeleton.py'
     " Add Tex template file to newly created .tex tex file
     let USING_TEX_TEMPLATE = 1
-    " Tex Template file
-    let s:TEX_TEMPLATE = '$HOME/Desktop/Vim_Tmux_Config/share/template.tex'
     " Add markdown template file to newly created .md markdown file
     let USING_MARKDOWN_TEMPLATE = 1
-    " Markdown Template file
-    let s:MARKDOWN_TEMPLATE = '$HOME/Documents/KNOWLEDGE_BASE/Template/My_Note_Template.md'
 
 " Variables for vim/neovim or plug-in ----------------------------------------
+    " Web browser for markdown preview
+    let s:WEBBROWSER = $BROWSER
     " Ctag generator for vimwiki plugins
     let s:CTAGSBIN = '$HOME/Desktop/Vim_Tmux_Config/bin/vwtags.py'
     " FZF patches for change/jump list
     let s:FZF_PATCH = '$HOME/Desktop/Vim_Tmux_Config/vim/patch/fzf_patch.vim'
+    " Python that has jedi, pynvim and packages installed for completion
+    let s:PYTHON_FOR_COMPLETION = '/usr/bin/python' "$CONDA_PYTHON_EXE
+    " Python skeleton file (template)
+    let s:PYTHON_SKELETON = '$HOME/Desktop/Vim_Tmux_Config/share/skeleton.py'
+    " Tex template file
+    let s:TEX_TEMPLATE = '$HOME/Desktop/Vim_Tmux_Config/share/template.tex'
+    " Markdown Template file
+    let g:MARKDOWN_NOTE_TEMPLATE = '$HOME/Desktop/Vim_Tmux_Config/share/note_template.md'
+    let g:MARKDOWN_TEMPLATE = g:MARKDOWN_NOTE_TEMPLATE
+    " HTML Table template
+    let g:HTML_TABLE_TEMPLATE = '$HOME/Desktop/Vim_Tmux_Config/share/table.html'
 
 " TERMGUI color --------------------------------------------------------------
     " Ctermcolors only support max 256 color
@@ -198,9 +201,9 @@
     " -- Use Ctrl+v to escape for 'ii' word (e.g. ascii)
     "imap ii <Esc>
     imap kj <Esc>
-    " Add break point for text-writing undo
-    " e.g. w/o bp: test,test,test --undo->
-    " e.g. w/i bp: test,test,test --undo-> test,test,
+    " <C-g>u: add break point for text-writing undo
+    " -- e.g. w/o bp: test,test,test --undo->
+    " -- e.g. w/i bp: test,test,test --undo-> test,test,
     inoremap , ,<C-g>u
     inoremap . .<C-g>u
     inoremap ? ?<C-g>u
@@ -210,7 +213,7 @@
     " NOTE:
     " -- z+[t/z/b/h/l]: scroll window top/center/bottom/left/right
     " -- Ctrl+[i/o]: jump to next/prev cursor location
-    " -- :jumps: show all jump history
+    " -- :ju[mps]: show all jump history
     " -- g+[;/,]: go to older/newer change
     " -- :changes: show all change history
     " -- g+[-/+]: go to prev/next text-states (undo/redo)
@@ -1505,13 +1508,16 @@
         nmap <leader>wD <Plug>VimwikiDeleteFile
         nmap <leader>wR <Plug>VimwikiRenameFile
         nmap <leader>ws <Plug>VimwikiUISelect
+        nmap <leader>wT <Esc>:VimwikiTOC<CR>
         nmap <leader><CR> <Plug>VimwikiFollowLink
         nmap <leader><Backspace> <Plug>VimwikiGoBackLink
+        " Goto markdown file (create one if there is no one)
         nmap <leader>w<CR> <Plug>VimwikiGoto
-        nmap <leader>wT <Esc>:VimwikiTOC<CR>
+        " Create table
         nmap <leader>wtt <Esc>:VimwikiTable<CR>
         nmap <leader>wth <Esc>:VimwikiTableMoveColumnLeft<CR>
         nmap <leader>wtl <Esc>:VimwikiTableMoveColumnRight<CR>
+        " Add HTML tag that assigns text background color
         nmap <leader>wc <Esc>:VimwikiColorize<CR>
         " Diary mappings (start with v and then d)
         nmap <leader>wdG <Plug>VimwikiDiaryGenerateLinks
@@ -2006,17 +2012,22 @@
     autocmd BufEnter *.md exe $OPENHTMLBROWSER
     " Load template file when new file created
     if USING_MARKDOWN_TEMPLATE
-        exec 'autocmd BufNewFile *.md 0r' s:MARKDOWN_TEMPLATE
+        exec 'autocmd BufNewFile *.md 0r' g:MARKDOWN_TEMPLATE
     endif
-    " Insert image in markdown file
+    " Insert image
     noremap <leader>mi <Esc>i![this_is_an_image]()<Left>
-    " Insert link in markdown file
+    noremap <leader>mI <Esc>i<img src="" width="100%" height="100%"/><Esc>29<Left>
+    " Insert video in markdown file
+    noremap <leader>mV <Esc>i<video src="" width="100%" height="100%" control/><Esc>37<Left>
+    " Insert link
     noremap <leader>ml <Esc>i[this_is_a_link]()<Left>
-    " Insert code block in markdown file
+    " Insert code block
     noremap <leader>mb <Esc>i```<CR>```<Up>
     " Insert HTML style color tag
     noremap <leader>mc <Esc>i<span style="color:"><Esc>F<<Esc>19<Right>i
-    noremap <leader>ms <Esc>a</span><Esc>
+    noremap <leader>mC <Esc>a</span><Esc>
+    " Insert HTML table template
+    noremap <leader>mT <Esc>:execute('r'.g:HTML_TABLE_TEMPLATE)<CR>
 
 " BitoAI ---------------------------------------------------------------------
     noremap <leader>aic :BitoAiCheck<CR>

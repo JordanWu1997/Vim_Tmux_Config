@@ -32,14 +32,14 @@ setw -g aggressive-resize on
 set -g main-pane-height "50%"
 set -g main-pane-width "50%"
 
-# Close tmux after closing current session
+# Close TMUX after closing current session
 set -g detach-on-destroy off
 
 # Vi mode (use keys of copy-mode-vi instead of copy-mode)
 set -g mode-keys vi
 set -g status-keys vi
 
-# Miscellaneous tmux settings
+# Miscellaneous TMUX settings
 set -g default-terminal "xterm-256color"
 set -g display-time 3000
 set -g display-panes-time 3000
@@ -141,7 +141,7 @@ bind -r _ join-pane -v
 #
 # (1) For bash shell, add following function to ~/.bashrc
 #
-## Update tmux display (e.g. localhost:XX -> localhost:XX)
+## Update TMUX display (e.g. localhost:XX -> localhost:XX)
 #function tmux_update_display {
 #    export LAST_DISPLAY=$DISPLAY
 #    export DISPLAY=$(tmux show-env | sed -n 's/^DISPLAY=//p')
@@ -150,7 +150,7 @@ bind -r _ join-pane -v
 #
 # (2) For fish shell, add following function to ~/.config/fish/config.fish
 #
-## Update tmux display (e.g. localhost:XX -> localhost:XX)
+## Update TMUX display (e.g. localhost:XX -> localhost:XX)
 #function tmux_update_display
 #    set LAST_DISPLAY $DISPLAY
 #    set DISPLAY (tmux show-env | sed -n 's/^DISPLAY=//p')
@@ -190,6 +190,6 @@ bind -n End send Escape "OF"
 # TMUX statusline / titlebar
 # ============================================================================
 
-# Toggle tmux statusline/borderline
+# Toggle TMUX statusline/borderline
 bind B set status
 bind b set pane-border-status
