@@ -155,7 +155,7 @@
     let g:MARKDOWN_NOTE_TEMPLATE = '$HOME/Desktop/Vim_Tmux_Config/share/note_template.md'
     let g:MARKDOWN_TEMPLATE = g:MARKDOWN_NOTE_TEMPLATE
     " HTML Table template
-    let g:HTML_TABLE_TEMPLATE = '$HOME/Desktop/Vim_Tmux_Config/share/table.html'
+    let g:MARKDOWN_TABLE_TEMPLATE = '$HOME/Desktop/Vim_Tmux_Config/share/table.html'
 
 " TERMGUI color --------------------------------------------------------------
     " Ctermcolors only support max 256 color
@@ -192,13 +192,13 @@
 " Map insert mode key --------------------------------------------------------
     " NOTE:
     " -- Ctrl+j (Enter)
-    " -- Ctrl+o (execute single normal mode operation)
+    " -- Ctrl+o (Execute single normal mode operation)
     " -- Ctrl+r+(register) (Paste register)
     " -- Ctrl+[n/p] (Autocompletion next/prev candidate)
     " -- Ctrl+[d/t] (Unindent/Indent current line)
 
     " Map exit insert mode (Esc/Ctrl+[) to ii, kj
-    " -- Use Ctrl+v to escape for 'ii' word (e.g. ascii)
+    " -- Use Ctrl+[q/v] to escape for 'ii' word (e.g. ascii)
     "imap ii <Esc>
     imap kj <Esc>
     " <C-g>u: add break point for text-writing undo
@@ -234,6 +234,10 @@
     noremap Q <nop>
     " Make Y yank to the EOL instead of whole line just like what D does
     nnoremap Y y$
+    " Stop delete/change/replace overwriting current register
+    "nnoremap d "_d
+    "nnoremap x "_x
+    nnoremap r "_r
     " Move selection block up/down in visual mode
     vnoremap K :m '<-2<CR>gv=gv
     vnoremap J :m '>+1<CR>gv=gv
@@ -2027,7 +2031,7 @@
     noremap <leader>mc <Esc>i<span style="color:"><Esc>F<<Esc>19<Right>i
     noremap <leader>mC <Esc>a</span><Esc>
     " Insert HTML table template
-    noremap <leader>mT <Esc>:execute('r'.g:HTML_TABLE_TEMPLATE)<CR>
+    noremap <leader>mT <Esc>:execute('r'.g:MARKDOWN_TABLE_TEMPLATE)<CR>
 
 " BitoAI ---------------------------------------------------------------------
     noremap <leader>aic :BitoAiCheck<CR>
@@ -2075,7 +2079,7 @@
             nmap <buffer> g? <plug>(lsp-workspace-symbol-search)
             nmap <buffer> gr <plug>(lsp-references)
             nmap <buffer> gi <plug>(lsp-implementation)
-            nmap <buffer> gt <plug>(lsp-type-definition)
+            nmap <buffer> gy <plug>(lsp-type-definition)
             nmap <buffer> <leader>rn <plug>(lsp-rename)
             nmap <buffer> [g <plug>(lsp-previous-diagnostic)
             nmap <buffer> ]g <plug>(lsp-next-diagnostic)
