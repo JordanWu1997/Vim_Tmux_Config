@@ -219,7 +219,8 @@
     " -- g+[-/+]: go to prev/next text-states (undo/redo)
     " -- g+[j/k/l/h]: move in visual lines instead of real lines in WRAP text
     " -- g+[uu/UU/~~]: set lowercase/uppercase/toggle for whole line
-    " -- :g/PATTERN/ACTION: in entire file, for matching PATTERN, do ACTION
+    " -- :g/PATTERN/ACTION: in entire file, for lines matched PATTERN, do ACTION
+    " -- :v/PATTERN/ACTION: in entire file, for lines do not matched PATTERN, do ACTION
     " -- g+[t/T]: go to next/prev tab
     " -- g+[i]: go to last location in insert mode and enter insert mode
     " -- g+[v]: go to last location in visual mode and enter visual mode
