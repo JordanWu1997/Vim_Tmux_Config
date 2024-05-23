@@ -337,6 +337,10 @@
     set nowrap " Line wrap for small monitor or display window
     noremap <leader>wp :set wrap!<CR>
 
+" Word -----------------------------------------------------------------------
+    noremap <leader>w- :set iskeyword-=_<CR>
+    noremap <leader>w= :set iskeyword+=_<CR>
+
 " Spell check ----------------------------------------------------------------
     " NOTE:
     " -- [g] for good, [w] for wrong, [a] for add, [r] for remove
