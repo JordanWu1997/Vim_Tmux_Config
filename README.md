@@ -813,7 +813,7 @@ tmux -V
 
 | TMUX-Mode | Key Mapping            | Function                      | Description                   | Note                               |
 | :-------: | :--------------------: | :---------------------------: | :---------------------------: | :--------------------------------: |
-| Normal    | `[BK]`+`[;]`           | Enter copy mode               | Enter copy mode               |                                    |
+| Normal    | `[BK]`+`[[]`           | Enter copy mode               | Enter copy mode               |                                    |
 | Normal    | `[BK]`+`[]]`           | Paste selected contents       | Paste selected contents       |                                    |
 | Normal    | `[BK]`+`[Shift]`+`[3]` | Show all buffer list          | Show all buffer list          | `[#]`                              |
 | Normal    | `[BK]`+`[=]`           | Paste from buffer list        | Paste from buffer list        | press `[e]` to edit with `$EDITOR` |
@@ -823,7 +823,7 @@ tmux -V
 | Copy      | `[Ctrl]`+`[v]`         | Vim-like block selection      | Vim-like block selection      |                                    |
 | Copy      | `[Shift]`+`[v]`        | Vim-like line selection       | Vim-like line selection       |                                    |
 | Copy      | `[y]`                  | Vim-like yank selected region | Vim-like yank selected region |                                    |
-| Copy      | `[;/q/Enter]`          | Quit copy mode                | Quit copy mode                |                                    |
+| Copy      | `[q/Enter]`            | Quit copy mode                | Quit copy mode                |                                    |
 
 </details>
 

@@ -226,13 +226,14 @@
     " -- g+[v]: go to last location in visual mode and enter visual mode
     " -- g+[n]: go to next search and visually select it
     " -- g+[f]: go to file
+    " -- g+Ctrl+g: count words
 
-    " Unmap ex mode [old school mode] to prevent typo
-    noremap gQ <nop>
-    " Unmap command history to prevent typo
-    " Use :<C-f> to open command history instead
-    noremap q: <nop>
-    noremap Q <nop>
+    " Unmap q-key related keybindings to prevent typo when quitting/closing
+    " -- :<C-f>: open command mode history
+    " -- /<C-f>: open search history
+    map gQ <nop>
+    map q: <nop>
+    nnoremap Q <nop>
     " Make Y yank to the EOL instead of whole line just like what D does
     nnoremap Y y$
     " Stop delete/change/replace overwriting current register
