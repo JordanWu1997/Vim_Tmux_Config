@@ -77,8 +77,8 @@ bind -T copy-mode-vi C-v send -X rectangle-toggle \; send -X begin-selection
 bind -T copy-mode-vi y send -X copy-selection-and-cancel
 
 # Quick enter copy mode for screen scrolling
-bind \; copy-mode
-bind -T copy-mode-vi \; send -X cancel
+#bind \; copy-mode
+#bind -T copy-mode-vi \; send -X cancel
 bind -T copy-mode-vi C-[ send -X cancel
 
 # ============================================================================
@@ -87,8 +87,11 @@ bind -T copy-mode-vi C-[ send -X cancel
 
 # Switch to last pane
 bind -r ` last-pane
+bind -r \; last-pane
+
 # Switch to last window
 bind -r \~ last-window
+bind -r \^ last-window
 
 # Create/Kill window
 bind C new-window -c "#{pane_current_path}"
@@ -129,7 +132,7 @@ bind -r M-k resize-pane -U 1
 bind -r M-l resize-pane -R 1
 bind -r M-h resize-pane -L 1
 
-# Manipulate mark pane (<prefix>+[m])
+# Manipulate mark pane (<prefix> + [m])
 bind -r M-\; swap-pane
 bind -r | join-pane -h
 bind -r _ join-pane -v
@@ -162,6 +165,12 @@ set -g alternate-screen off
 
 # Setup load change of .tmux.conf
 bind R source-file ~/.tmux.conf \; display-message "source-file ~/.tmux.conf"
+
+# Remap clock mode from t to T
+bind T clock-mode
+
+# Command below generates default TMUX configuration
+# tmux -f /dev/null -L temp start-server \; list-keys > ~/.tmux.reset.conf
 
 # Toggle mouse mode
 bind M set mouse \; display-message "set mouse"
