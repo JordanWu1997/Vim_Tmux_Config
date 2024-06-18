@@ -4,8 +4,7 @@ Backup for my Vim and TMUX configuration
 <details open>
 <summary>Click to expand!</summary>
 
-Table of Contents
-=================
+# Table of Contents
 <details open>
 <summary>Click to expand!</summary>
 
@@ -22,11 +21,12 @@ Table of Contents
          * [1. Plugin Loading Time (Vim)](#1-plugin-loading-time-vim)
          * [2. Plugin Usage Configuration (Vim)](#2-plugin-usage-configuration-vim)
       * [Section 4 - Key Mapping (Vim)](#section-4---key-mapping-vim)
-         * [Key Mapping - Customized Key Mapping Rule (Vim)](#key-mapping---customized-key-mapping-rule-vim)
+         * [Key Mapping Rule - Customized Key Mapping (Vim)](#key-mapping-rule---customized-key-mapping-vim)
+         * [Key Mapping Hinter - Vim Whichkey (Vim)](#key-mapping-hinter---vim-whichkey-vim)
          * [Key Mapping Sheet 1 - Fn Key Key Mapping (Vim)](#key-mapping-sheet-1---fn-key-key-mapping-vim)
          * [Key Mapping Sheet 2 - Built-in Function Key Mapping (Vim)](#key-mapping-sheet-2---built-in-function-key-mapping-vim)
          * [Key Mapping Sheet 3 - Plug-in Function Key Mapping (Vim)](#key-mapping-sheet-3---plug-in-function-key-mapping-vim)
-         * [Key Mapping Sheet 4 - Vim Whichkey (Vim)](#key-mapping-sheet-4---vim-whichkey-vim)
+         * [Key Mapping Sheet 4 - LSP Key Mapping (Vim)](#key-mapping-sheet-4---lsp-key-mapping-vim)
       * [Reference for Setup (Vim)](#reference-for-setup-vim)
    * [Part 2 - TMUX](#part-2---tmux)
       * [Section 1 - What's New in My Customization (TMUX)](#section-1---whats-new-in-my-customization-tmux)
@@ -349,7 +349,7 @@ for more details, check sections in vimrc
 <details>
 <summary>Click to expand!</summary>
 
-#### Key Mapping - Customized Key Mapping Rule (Vim)
+#### Key Mapping Rule - Customized Key Mapping (Vim)
 <details open>
 <summary>Click to expand!</summary>
 
@@ -361,6 +361,33 @@ for more details, check sections in vimrc
 > 3. _Key mapping should be related to the name of the function_
 - Make it easier to remember or connect with configuration
 - e.g. "wrap toggle" function is mapped to `[Space]`+`[w]`+`[p]`
+
+</details>
+
+#### Key Mapping Hinter - Vim Whichkey (Vim)
+<details open>
+<summary>Click to expand!</summary>
+
+- Most leader key related key mapping is mapped by which-key plugins which will show useful hints when leader key
+and following keys are pressed. Table below includes some frequently used key mappings.
+
+| `[LK]` + | Function    | Description     |
+| :------: | :---------: | :-------------: |
+| `a`      | Arg         | Built-in arg    |
+| `b`      | Buffer      | Built-in buffer |
+| `c`      | Commenter   | Commenter       |
+| `d`      | Diff        | Built-in diff   |
+| `e`      | Ale         | Linter          |
+| `f`      | Fzf         | File-browser    |
+| `g`      | Git         | Git             |
+| `m`      | Mark/Manual | Built-in mark   |
+| `p`      | Python      | Python          |
+| `s`      | Spell       | Built-in spell  |
+| `t`      | Tab         | Built-in tab    |
+| `w`      | Vim-wiki    | Note-taking     |
+| `y`      | Yank        | Yank manager    |
+| `s`+`l`  | Statusline  | Status line     |
+| `c`+`s`  | Colorscheme | Color scheme    |
 
 </details>
 
@@ -589,30 +616,33 @@ for more details, check sections in vimrc
 
 </details>
 
-#### Key Mapping Sheet 4 - Vim Whichkey (Vim)
+#### Key Mapping Sheet 4 - LSP Key Mapping (Vim)
+
 <details>
 <summary>Click to expand!</summary>
 
-- Most leader key related key mapping is mapped by which-key plugins which will show useful hints when leader key
-and following keys are pressed. Table below includes some frequently used key mappings.
+- LSP server management
 
-| `[LK]` + | Function    | Description     |
-| :------: | :---------: | :-------------: |
-| `a`      | Arg         | Built-in arg    |
-| `b`      | Buffer      | Built-in buffer |
-| `c`      | Commenter   | Commenter       |
-| `d`      | Diff        | Built-in diff   |
-| `e`      | Ale         | Linter          |
-| `f`      | Fzf         | File-browser    |
-| `g`      | Git         | Git             |
-| `m`      | Mark/Manual | Built-in mark   |
-| `p`      | Python      | Python          |
-| `s`      | Spell       | Built-in spell  |
-| `t`      | Tab         | Built-in tab    |
-| `w`      | Vim-wiki    | Note-taking     |
-| `y`      | Yank        | Yank manager    |
-| `s`+`l`  | Statusline  | Status line     |
-| `c`+`s`  | Colorscheme | Color scheme    |
+| VIM-Mode | Key Mapping              | Function                  | Description                                   | Note                                         |
+| :------: | :----------------------: | :-----------------------: | :-------------------------------------------: | :------------------------------------------: |
+| N        | `[LK]`+`[Shift]`+`[s]`   | Show LSP server status    | Show LSP server status                        |                                              |
+| N        | `[LK]`+`[Shift]`+`[m]`   | Manage LSP server         | Manage LSP server (install, remove, and etc.) |                                              |
+| N        | `[LK]`+`[Shift]`+`[i]`   | Install LSP server        | Install LSP server for current filetype       |                                              |
+| N        | `[LK]`+`[Shift]`+`[e/d]` | Enable/Disable LSP server | Enable/Disable LSP server                     | LSP is disabled by default to save resources |
+
+- LSP server tools
+
+| VIM-Mode | Key Mapping        | Function                              | Description                                | Note                               |
+| :------: | :----------------: | :-----------------------------------: | :----------------------------------------: | :--------------------------------: |
+| N        | `[LK]`+`[e]`+`[e]` | Send LSP diagnostics to location list | Send LSP diagnostics to location list      |                                    |
+| N        | `[LK]`+`[r]`+`[e]` | Rename variable across current file   | Rename current word across current file    |                                    |
+| N        | `[Shift]`+`[k]`    | Show information in hovering window   | Show information in hovering window        | Same as `[Shift]`+`[k]` in vim     |
+| N        | `[[\]]`+`[g]`      | Go to previous/next LSP diagnostic    | Go to previous/next LSP diagnostic         | Includes warnings, errors and etc. |
+| N        | `[g]`+`[d]`        | Go to current word definition         | Go to current word definition              |                                    |
+| N        | `[g]`+`[i]`        | Go to current word implementation     | Go to current word implementation          | Not supported for python           |
+| N        | `[g]`+`[t]`        | Go to current word type definition    | Go to current word type definition         | Not supported for python           |
+| N        | `[g]`+`[r]`        | Find current word references          | Find current word references (occurrences) | Results are saved to quickfix list |
+| N        | `[g]`+`[/]`        | Symbol search                         | Search variable, function, and etc.        |                                    |
 
 </details>
 </details>

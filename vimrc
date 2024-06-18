@@ -2060,20 +2060,19 @@
 
 " Vim-LSP --------------------------------------------------------------------
     if USING_LSP && USING_VIM8
+        " Disable LSP at startup
+        let g:lsp_auto_enable = 0
         " Show LSP server status
         nmap <buffer> <leader>LS :LspStatus<CR>
         " Manage LSP server
         nmap <buffer> <leader>LM :LspManageServers<CR>
         nmap <buffer> <leader>LI :LspInstallServer<CR>
-        " Stop LSP server
-        nmap <buffer> <leader>Ls :LspStopServer<CR>
-        " Restart LSP server
-        noremap <buffer> <leader>Lr
-            \ :lua vim.lsp.stop_client(vim.lsp.get_active_clients())<CR>
-            \ :edit<CR>
+        " Enable/Disable LSP server
+        nmap <buffer> <leader>Le :setlocal signcolumn=yes<CR>:call lsp#enable()<CR>
+        nmap <buffer> <leader>Ld :setlocal signcolumn=no<CR>:call lsp#disable()<CR>
         " Load LSP diagnostics to location list
         nmap <buffer> <leader>ee :LspDocumentDiagnostics<CR>
-        " Load LSP
+        " Load LSP settings and keybindings
         function! s:on_lsp_buffer_enabled() abort
             " LSP settings
             setlocal omnifunc=lsp#complete
@@ -2086,15 +2085,16 @@
             nmap <buffer> gr <plug>(lsp-references)
             nmap <buffer> gi <plug>(lsp-implementation)
             nmap <buffer> gy <plug>(lsp-type-definition)
-            nmap <buffer> <leader>rn <plug>(lsp-rename)
             nmap <buffer> [g <plug>(lsp-previous-diagnostic)
             nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-            nmap <buffer> K <plug>(lsp-hover)
+            nmap <buffer> K  <plug>(lsp-hover)
+            " Rename variable
+            nmap <buffer> <leader>re <plug>(lsp-rename)
             " Close pop-up window without opening a new line
             inoremap <expr> <CR>
                         \ pumvisible() ? asyncomplete#close_popup() : "\<CR>"
         endfunction
-        " Load LSP
+        " Install LSP server
         augroup lsp_install
             au!
             " call s:on_lsp_buffer_enabled only for languages that has the server registered.
