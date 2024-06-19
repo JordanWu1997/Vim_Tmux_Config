@@ -625,18 +625,20 @@ and following keys are pressed. Table below includes some frequently used key ma
 
 | VIM-Mode | Key Mapping              | Function                  | Description                                   | Note                                         |
 | :------: | :----------------------: | :-----------------------: | :-------------------------------------------: | :------------------------------------------: |
-| N        | `[LK]`+`[Shift]`+`[s]`   | Show LSP server status    | Show LSP server status                        |                                              |
+| N        | `[LK]`+`[s]`             | Show LSP server status    | Show LSP server status                        |                                              |
 | N        | `[LK]`+`[Shift]`+`[m]`   | Manage LSP server         | Manage LSP server (install, remove, and etc.) |                                              |
 | N        | `[LK]`+`[Shift]`+`[i]`   | Install LSP server        | Install LSP server for current filetype       |                                              |
 | N        | `[LK]`+`[Shift]`+`[e/d]` | Enable/Disable LSP server | Enable/Disable LSP server                     | LSP is disabled by default to save resources |
+| N        | `[LK]`+`[Shift]`+`[s/r]` | Stop/Reload LSP server    | Stop/Reload LSP server                        |                                              |
+| N        | `[LK]`+`[f]`             | Run LSP formatter         | Run LSP formatter                             |                                              |
 
-- LSP server tools
+- LSP server tool
 
 | VIM-Mode | Key Mapping        | Function                              | Description                                | Note                               |
 | :------: | :----------------: | :-----------------------------------: | :----------------------------------------: | :--------------------------------: |
 | N        | `[LK]`+`[e]`+`[e]` | Send LSP diagnostics to location list | Send LSP diagnostics to location list      |                                    |
 | N        | `[LK]`+`[r]`+`[e]` | Rename variable across current file   | Rename current word across current file    |                                    |
-| N        | `[Shift]`+`[k]`    | Show information in hovering window   | Show information in hovering window        | Same as `[Shift]`+`[k]` in vim     |
+| N        | `[Shift]`+`[k]`    | Show information in a hovering window | Show information in a hovering window      | Same as `[Shift]`+`[k]` in vim     |
 | N        | `[[\]]`+`[g]`      | Go to previous/next LSP diagnostic    | Go to previous/next LSP diagnostic         | Includes warnings, errors and etc. |
 | N        | `[g]`+`[d]`        | Go to current word definition         | Go to current word definition              |                                    |
 | N        | `[g]`+`[i]`        | Go to current word implementation     | Go to current word implementation          | Not supported for python           |

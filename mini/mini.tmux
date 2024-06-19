@@ -18,11 +18,14 @@
 set -g prefix C-a
 set -g prefix2 C-b
 
-# Window option
+# Window settings
 set -g base-index 1
 set -g renumber-windows on
-set -g allow-rename on
-set -g automatic-rename off
+
+# Allow automatic rename but do not rename automatically after mannually rename
+# NOTE: the option order here matters
+set -g automatic-rename on
+set -g allow-rename off
 
 # Window option
 setw -g pane-base-index 1

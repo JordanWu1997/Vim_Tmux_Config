@@ -2062,23 +2062,26 @@
     if USING_LSP && USING_VIM8
         " Disable LSP at startup
         let g:lsp_auto_enable = 0
-        " Show LSP server status
-        nmap <buffer> <leader>LS :LspStatus<CR>
         " Manage LSP server
         nmap <buffer> <leader>LM :LspManageServers<CR>
         nmap <buffer> <leader>LI :LspInstallServer<CR>
+        nmap <buffer> <leader>LS :LspStopServer<space>
+        nmap <buffer> <leader>LR
+            \ :lua vim.lsp.stop_client(vim.lsp.get_active_clients())<CR>
+            \:setlocal signcolumn=yes<CR>:call lsp#enable()<CR>
+        " Show LSP server status
+        nmap <buffer> <leader>Ls :LspStatus<CR>
         " Enable/Disable LSP server
         nmap <buffer> <leader>Le :setlocal signcolumn=yes<CR>:call lsp#enable()<CR>
         nmap <buffer> <leader>Ld :setlocal signcolumn=no<CR>:call lsp#disable()<CR>
-        " Load LSP diagnostics to location list
-        nmap <buffer> <leader>ee :LspDocumentDiagnostics<CR>
         " Load LSP settings and keybindings
         function! s:on_lsp_buffer_enabled() abort
             " LSP settings
             setlocal omnifunc=lsp#complete
             setlocal signcolumn=yes
             if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-            " LSP keybinding
+            " LSP keybindings
+            nmap <buffer> K  <plug>(lsp-hover)
             nmap <buffer> gd <plug>(lsp-definition)
             nmap <buffer> g/ <plug>(lsp-document-symbol-search)
             nmap <buffer> g? <plug>(lsp-workspace-symbol-search)
@@ -2087,9 +2090,12 @@
             nmap <buffer> gy <plug>(lsp-type-definition)
             nmap <buffer> [g <plug>(lsp-previous-diagnostic)
             nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-            nmap <buffer> K  <plug>(lsp-hover)
+            " Load LSP diagnostics to location list
+            nmap <buffer> <leader>ee :LspDocumentDiagnostics<CR>
             " Rename variable
             nmap <buffer> <leader>re <plug>(lsp-rename)
+            " Format w/ LSP server
+            map <buffer> <leader>Lf :LspDocumentRangeFormat<CR>
             " Close pop-up window without opening a new line
             inoremap <expr> <CR>
                         \ pumvisible() ? asyncomplete#close_popup() : "\<CR>"
