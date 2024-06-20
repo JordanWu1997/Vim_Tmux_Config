@@ -2072,8 +2072,20 @@
         " Show LSP server status
         nmap <buffer> <leader>Ls :LspStatus<CR>
         " Enable/Disable LSP server
-        nmap <buffer> <leader>Le :setlocal signcolumn=yes<CR>:call lsp#enable()<CR>
-        nmap <buffer> <leader>Ld :setlocal signcolumn=no<CR>:call lsp#disable()<CR>
+        nmap <buffer> <leader>Le :call EnableLSP()<CR>
+        nmap <buffer> <leader>Ld :call DisableLSP()<CR>
+        " Enable LSP
+        function! EnableLSP()
+            setlocal signcolumn=yes
+            call lsp#enable()
+            nmap <buffer> K <plug>(lsp-hover)
+        endfunction
+        " Disable LSP
+        function! DisableLSP()
+            setlocal signcolumn=no
+            call lsp#disable()
+            map <buffer> K :execute "help " . expand("<cword>")<CR>
+        endfunction
         " Load LSP settings and keybindings
         function! s:on_lsp_buffer_enabled() abort
             " LSP settings
@@ -2081,7 +2093,6 @@
             setlocal signcolumn=yes
             if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
             " LSP keybindings
-            nmap <buffer> K  <plug>(lsp-hover)
             nmap <buffer> gd <plug>(lsp-definition)
             nmap <buffer> g/ <plug>(lsp-document-symbol-search)
             nmap <buffer> g? <plug>(lsp-workspace-symbol-search)
@@ -2093,7 +2104,7 @@
             " Load LSP diagnostics to location list
             nmap <buffer> <leader>ee :LspDocumentDiagnostics<CR>
             " Rename variable
-            nmap <buffer> <leader>re <plug>(lsp-rename)
+            map <buffer> <leader>re <plug>(lsp-rename)
             " Format w/ LSP server
             map <buffer> <leader>Lf :LspDocumentRangeFormat<CR>
             " Close pop-up window without opening a new line
