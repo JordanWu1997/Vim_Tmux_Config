@@ -1949,12 +1949,12 @@
     endif
 
 " Python debug (add python breakpoints) --------------------------------------
-    "" Python built-in pdb debugge (python > 3.7 ONLY)
-    "autocmd FileType python
-                "\ noremap <leader>pb Obreakpoint()<Esc>
-    " Python built-in pdb debugger
+    " Python built-in pdb debugge (python > 3.7 ONLY)
     autocmd FileType python
-                \ noremap <leader>pb Oimport pdb; pdb.set_trace()<Esc>
+                \ noremap <leader>pb Obreakpoint()<Esc>
+    "" Python built-in pdb debugger
+    "autocmd FileType python
+                "\ noremap <leader>pb Oimport pdb; pdb.set_trace()<Esc>
     " %:p for current file in full path
     autocmd FileType python
                 \ noremap <leader>pB
