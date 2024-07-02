@@ -827,8 +827,8 @@ tmux -V
 | Normal    | `[BK]`+`[Tab]`             | Show all panes                        | Show all panes                        |                                                                   |
 | Normal    | `[BK]`+`[Shift]`+`[5]`     | Split pane horizontally               | Split pane horizontally               | Default key is `[BK]`+`[Shift]`+`[5]` (`[%]`)                     |
 | Normal    | `[BK]`+`[Shift]`+`[']`     | Split pane vertically                 | Split pane vertically                 | Default key is `[BK]`+`[Shift]`+`[']` (`["]`)                     |
-| Normal    | `[BK]`+`[Alt]`+`[5]`       | Split pane horizontally (full window) | Split pane horizontally (full window) |                                                                   |
-| Normal    | `[BK]`+`[Alt]`+`[']`       | Split pane vertically (full window)   | Split pane vertically (full window)   |                                                                   |
+| Normal    | `[BK]`+`[Shift]`+`[\]`     | Split pane horizontally (full window) | Split pane horizontally (full window) | `[Shift]`+`[\]` just \| for horizontal split                      |
+| Normal    | `[BK]`+`[Shift]`+`[-]`     | Split pane vertically (full window)   | Split pane vertically (full window)   | `[Shift]`+`[-]` just _ for vertical split                         |
 | Normal    | `[BK]`+`[q/']`             | Move to pane (number)                 | Move to pane (number)                 | Pane number shows on pane                                         |
 | Normal    | `[Ctrl]`+`[h/j/k/l]`       | Move to pane (L/D/U/R)                | Move to pane (L/D/U/R)                | vim-tmux-navigator                                                |
 | Normal    | `[BK]`+`[t]`+`[h/v]`       | Move marked pane to current window    | Move marked pane to current window    | tmux-sessionist; pane to move must be marked (`[BK]`+`[m]`) first |
@@ -887,24 +887,25 @@ tmux -V
 <details open>
 <summary>Click to expand!</summary>
 
-| TMUX-Mode | Key Mapping                     | Function                                       | Description                                    | Note                                         |
-| :-------: | :-----------------------------: | :--------------------------------------------: | :--------------------------------------------: | :------------------------------------------: |
-| Normal    | `[BK]`+`[Shift]`+`[/]`          | Show all TMUX key mapping                      | Show all TMUX key mappings                     |                                              |
-| Normal    | `[BK]`+`[Shift]`+`[b]`          | Toggle TMUX status line                        | Toggle TMUX status line                        |                                              |
-| Normal    | `[BK]`+(`[Alt]`)+`[b]`          | Set status line position (bottom)/top/bottom   | Set status line position (bottom)/top/bottom   |                                              |
-| Normal    | `[BK]`+`[b]`                    | Toggle TMUX borderline                         | Toggle TMUX borderline                         |                                              |
-| Normal    | `[BK]`+`[Shift]`+`[r]`          | Reload TMUX configuration                      | Reload TMUX configuration                      | Run (source) `$HOME/.tmux.conf` file         |
-| Normal    | `[BK]`+`[a]`                    | Clear pane output                              | Clear pane output                              | Act like Ctrl-l in terminal                  |
-| Normal    | `[BK]`+`[Ctrl]`+`[j]`           | Send Ctrl+j to terminal                        | Send Ctrl+j to terminal                        | Ctrl+j is alternative enter in shell         |
-| Normal    | `[BK]`+`[Ctrl]`+`[h]`           | Send Ctrl+h to terminal                        | Send Ctrl+h to terminal                        | Ctrl+h is alternative backspace in shell     |
-| Normal    | `[BK]`+`[Ctrl]`+`[k]`           | Send Ctrl+k to terminal                        | Send Ctrl+k to terminal                        | Ctrl+k is to delete to end of line in shell  |
-| Normal    | `[BK]`+`[Ctrl]`+`[l]`           | Send Ctrl+l to terminal                        | Send Ctrl+l to terminal                        | Ctrl+l is to clear pane output in shell      |
-| Normal    | `[BK]`+`[Ctrl]`+`[Shift]`+`[l]` | Clear scrollback history                       | Clear TMUX scrollback history                  |                                              |
-| Normal    | `[BK]`+`[Ctrl]`+`[s]`           | Toggle pane input synchronization              | Toggle pane input synchronization              | Synchronize input for all panes              |
-| Normal    | `[BK]`+`[Shift]`+`[m]`          | Toggle mouse usage                             | Toggle mouse usage                             | Mouse usage support                          |
-| Normal    | `[BK]`+`[m]`                    | Mark current pane                              | Mark current pane                              | Mark pane for following usage                |
-| Normal    | `[BK]`+`[Shift]`+`[;]`          | Swap current pane with marked pane             | Swap current pane with marked pane             | Target pane must be marked first             |
-| Normal    | `[BK]`+`[Shift]`+`[\/-]`        | Move marked pane to right/bottom of focus pane | Move marked pane to right/bottom of focus pane | Shift+\/- just \| for H-dir, _ for V-dir     |
+| TMUX-Mode | Key Mapping                      | Function                                       | Description                                    | Note                                         |
+| :-------: | :------------------------------: | :--------------------------------------------: | :--------------------------------------------: | :------------------------------------------: |
+| Normal    | `[BK]`+`[Shift]`+`[/]`           | Show all TMUX key mappings                     | Show all TMUX key mappings                     |                                              |
+| Normal    | `[BK]`+`[Shift]`+`[b]`           | Toggle TMUX status line                        | Toggle TMUX status line                        |                                              |
+| Normal    | `[BK]`+(`[Alt]`)+`[b]`           | Set status line position (bottom)/top/bottom   | Set status line position (bottom)/top/bottom   |                                              |
+| Normal    | `[BK]`+`[b]`                     | Toggle TMUX borderline                         | Toggle TMUX borderline                         |                                              |
+| Normal    | `[BK]`+`[Shift]`+`[r]`           | Reload TMUX configuration                      | Reload TMUX configuration                      | Run (source) `$HOME/.tmux.conf` file         |
+| Normal    | `[BK]`+`[a]`                     | Clear pane output                              | Clear pane output                              | Act like Ctrl-l in terminal                  |
+| Normal    | `[BK]`+`[Ctrl]`+`[j]`            | Send Ctrl+j to terminal                        | Send Ctrl+j to terminal                        | Ctrl+j is alternative enter in shell         |
+| Normal    | `[BK]`+`[Ctrl]`+`[h]`            | Send Ctrl+h to terminal                        | Send Ctrl+h to terminal                        | Ctrl+h is alternative backspace in shell     |
+| Normal    | `[BK]`+`[Ctrl]`+`[k]`            | Send Ctrl+k to terminal                        | Send Ctrl+k to terminal                        | Ctrl+k is to delete to end of line in shell  |
+| Normal    | `[BK]`+`[Ctrl]`+`[l]`            | Send Ctrl+l to terminal                        | Send Ctrl+l to terminal                        | Ctrl+l is to clear pane output in shell      |
+| Normal    | `[BK]`+`[Ctrl]`+`[Shift]`+`[l]`  | Clear scrollback history                       | Clear TMUX scrollback history                  |                                              |
+| Normal    | `[BK]`+`[Ctrl]`+`[s]`            | Toggle pane input synchronization              | Toggle pane input synchronization              | Synchronize input for all panes              |
+| Normal    | `[BK]`+`[Shift]`+`[m]`           | Toggle mouse usage                             | Toggle mouse usage                             | Mouse usage support                          |
+| Normal    | `[BK]`+`[m]`                     | Mark current pane                              | Mark current pane                              | Mark pane for following usage                |
+| Normal    | `[BK]`+`[Alt]`+`[;]`             | Swap current pane with marked pane             | Swap current pane with marked pane             | Target pane must be marked first             |
+| Normal    | `[BK]`+`[Alt]`+`[Shift]`+`[\/-]` | Move marked pane to right/bottom of focus pane | Move marked pane to right/bottom of focus pane | Shift+\/- just \| for H-dir, _ for V-dir     |
+| Normal    | `[BK]`+`[Alt]`+`[Shift]`+`[5/']` | Move marked pane to right/bottom of focus pane | Move marked pane to right/bottom of focus pane | Shift+5/' just % for H-dir, " for V-dir      |
 
 </details>
 </details>

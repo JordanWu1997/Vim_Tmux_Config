@@ -35,7 +35,7 @@ setw -g aggressive-resize on
 set -g main-pane-height "50%"
 set -g main-pane-width "50%"
 
-# Close TMUX after closing current session
+# Do not close TMUX after closing current session
 set -g detach-on-destroy off
 
 # Copy mode keybindings (options: vi/emacs, default: emacs)
@@ -108,8 +108,8 @@ unbind \%; bind \% split-window -h -c "#{pane_current_path}"
 unbind \"; bind \" split-window -v -c "#{pane_current_path}"
 
 # Split full window
-bind M-\% split-window -fh -c "#{pane_current_path}"
-bind M-\" split-window -fv -c "#{pane_current_path}"
+bind | split-window -fh -c "#{pane_current_path}"
+bind _ split-window -fv -c "#{pane_current_path}"
 
 # Change focus
 bind -n C-h select-pane -L
@@ -137,10 +137,12 @@ bind -r M-k resize-pane -U 1
 bind -r M-l resize-pane -R 1
 bind -r M-h resize-pane -L 1
 
-# Manipulate mark pane (<prefix> + [m])
+# Manipulate mark pane (mark: <prefix> + [m])
 bind -r M-\; swap-pane
-bind -r | join-pane -h
-bind -r _ join-pane -v
+bind -r M-| join-pane -h
+bind -r M-_ join-pane -v
+bind -r M-\% join-pane -h
+bind -r M-\" join-pane -v
 
 # ============================================================================
 # TMUX miscellaneous
