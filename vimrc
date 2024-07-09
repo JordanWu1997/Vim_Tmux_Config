@@ -1951,10 +1951,10 @@
     endif
 
 " Python debug (add python breakpoints) --------------------------------------
-    " Python built-in pdb debugge (python > 3.7 ONLY)
+    " Python built-in pdb debugge
     autocmd FileType python
                 \ noremap <leader>pb Obreakpoint()<Esc>
-    "" Python built-in pdb debugger
+    "" Python built-in pdb debugger (for python < 3.7)
     "autocmd FileType python
                 "\ noremap <leader>pb Oimport pdb; pdb.set_trace()<Esc>
     " %:p for current file in full path
@@ -2076,6 +2076,9 @@
         " Enable/Disable LSP server
         nmap <buffer> <leader>Le :call EnableLSP()<CR>
         nmap <buffer> <leader>Ld :call DisableLSP()<CR>
+        " Enable/Disable LSP server
+        nmap <buffer> <leader>eL :call EnableLSP()<CR>
+        nmap <buffer> <leader>dL :call DisableLSP()<CR>
         " Enable LSP
         function! EnableLSP()
             setlocal signcolumn=yes
