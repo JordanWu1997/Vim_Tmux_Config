@@ -2073,10 +2073,10 @@
             \:setlocal signcolumn=yes<CR>:call lsp#enable()<CR>
         " Show LSP server status
         nmap <buffer> <leader>Ls :LspStatus<CR>
-        " Enable/Disable LSP server
-        nmap <buffer> <leader>Le :call EnableLSP()<CR>
-        nmap <buffer> <leader>Ld :call DisableLSP()<CR>
-        " Enable/Disable LSP server
+        " Enable/Disable LSP server (in all buffers)
+        nmap <leader>Le :call EnableLSP()<CR>
+        nmap <leader>Ld :call DisableLSP()<CR>
+        " Enable/Disable LSP server (in current buffer)
         nmap <buffer> <leader>eL :call EnableLSP()<CR>
         nmap <buffer> <leader>dL :call DisableLSP()<CR>
         " Enable LSP
