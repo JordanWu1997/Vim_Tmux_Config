@@ -1628,6 +1628,8 @@
         " Markbar format
         let g:markbar_file_mark_format_string = '%s (%d, %d)'
         let g:markbar_file_mark_arguments = ['fname', 'col', 'line']
+        " Stop caching marked file in hidden buffers
+        let g:markbar_cache_with_hidden_buffers = v:false
         " Peekaboo-like markbar (remap vim built-in ' key)
         nmap ` <Plug>OpenMarkbarPeekabooApostrophe
         " Peekaboo-like markbar (remap vim built-in ` key)
