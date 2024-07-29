@@ -22,10 +22,9 @@ set -g prefix2 C-b
 set -g base-index 1
 set -g renumber-windows on
 
-# Allow automatic rename but do not rename automatically after mannually rename
-# NOTE: the option order here matters
-set -g automatic-rename on
-set -g allow-rename off
+# Allow window to be renamed by TMUX but not by pane process
+set -g automatic-rename off
+set -g allow-rename on
 
 # Window option
 setw -g pane-base-index 1
