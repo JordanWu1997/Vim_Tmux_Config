@@ -53,6 +53,10 @@ set ignorecase                     " Close case sensitive [Needed for smartcase]
 set incsearch                      " Incremental search
 set smartcase                      " Case sensitive if search contains uppercase letter
 
+" Fold
+set foldenable                     " Enable fold
+set foldmethod=indent              " Set fold method to indent
+
 " Cursor
 let &t_EI="\e[2 q"                 " Blinking bar in insert/replace mode
 let &t_SI="\e[6 q"                 " Blinking block in normal/visual mode

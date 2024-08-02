@@ -423,12 +423,13 @@
     " -- z+[m/r]: More/Reduce fold level
     " -- z+[M/R/i]: Maximize/Remove/Invert all folds
     " -- z+[j/k]: Jump to next/prev fold
+    " -- z+[n/N/i]: Diable/Enable/Toggle foldenable
 
     " Default fold settings
-    set foldmethod=manual
+    set foldenable
+    set foldmethod=indent
     set foldcolumn=0
     set foldlevel=0
-    set nofoldenable
     " Toggle foldcolumn (4 column)
     function! FoldColumnToggleShort()
         if &foldcolumn
@@ -1068,8 +1069,8 @@
     " I3 configuration syntax highlight
     Plug 'PotatoesMaster/i3-vim-syntax', { 'for': 'i3' }
 
-" [BitoAI (ChatGPT wrapper)] -------------------------------------------------
-    Plug 'zhenyangze/vim-bitoai'
+"" [BitoAI (ChatGPT wrapper)] -------------------------------------------------
+    "Plug 'zhenyangze/vim-bitoai'
 
 " [LeetCode] -----------------------------------------------------------------
     "Plug 'ianding1/leetcode.vim'
@@ -2041,15 +2042,15 @@
     " Insert HTML table template
     noremap <leader>mT <Esc>:execute('r'.g:MARKDOWN_TABLE_TEMPLATE)<CR>
 
-" BitoAI ---------------------------------------------------------------------
-    noremap <leader>aic :BitoAiCheck<CR>
-    noremap <leader>aip :BitoAiCheckPerformance<CR>
-    noremap <leader>ais :BitoAiCheckStyle<CR>
-    noremap <leader>aiS :BitoAiCheckSecurity<CR>
-    noremap <leader>aie :BitoAiExplain<CR>
-    noremap <leader>aig :BitoAiGenerate<CR>
-    "noremap <leader>aiG :BitoAiGenerateComment<CR>
-    noremap <leader>air :BitoAiReadable<CR>
+"" BitoAI ---------------------------------------------------------------------
+    "noremap <leader>aic :BitoAiCheck<CR>
+    "noremap <leader>aip :BitoAiCheckPerformance<CR>
+    "noremap <leader>ais :BitoAiCheckStyle<CR>
+    "noremap <leader>aiS :BitoAiCheckSecurity<CR>
+    "noremap <leader>aie :BitoAiExplain<CR>
+    "noremap <leader>aig :BitoAiGenerate<CR>
+    ""noremap <leader>aiG :BitoAiGenerateComment<CR>
+    "noremap <leader>air :BitoAiReadable<CR>
 
 " LeetCode -------------------------------------------------------------------
     "let g:leetcode_browser = 'firefox'
