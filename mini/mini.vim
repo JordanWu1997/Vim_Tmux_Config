@@ -54,7 +54,7 @@ set incsearch                      " Incremental search
 set smartcase                      " Case sensitive if search contains uppercase letter
 
 " Fold
-set foldenable                     " Enable fold
+set nofoldenable                   " Do not enable fold
 set foldmethod=indent              " Set fold method to indent
 
 " Cursor
