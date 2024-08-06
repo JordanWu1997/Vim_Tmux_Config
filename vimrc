@@ -426,7 +426,7 @@
     " -- z+[n/N/i]: Diable/Enable/Toggle foldenable
 
     " Default fold settings
-    set foldenable
+    set nofoldenable
     set foldmethod=indent
     set foldcolumn=0
     set foldlevel=0
