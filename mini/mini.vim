@@ -143,27 +143,27 @@ filetype plugin indent on
 " ALE installation
 if has('win32')
     " Windows: mkdir -p ~/vimfiles/pack/git-plugins/start; git clone --depth 1 https://github.com/dense-analysis/ale.git ~/vimfiles/pack/git-plugins/start/ale
-    let vim_plug_path = expand('~/.vim/pack/git-plugins/start/ale/autoload/ale.vim')
+    let vim_plug_path = expand('~/vimfiles/pack/git-plugins/start/ale/autoload/ale.vim')
     if !filereadable(vim_plug_path)
-        echo 'Installing ALE...'
+        echo 'Installing ALE ...'
         echo ''
-        silent !mkdir -p ~/.vim/pack/git-plugins/start
-        silent !git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.vim/pack/git-plugins/start/ale
+        silent !mkdir -p ~/vimfiles/pack/git-plugins/start
+        silent !git clone --depth 1 https://github.com/dense-analysis/ale.git ~/vimfiles/pack/git-plugins/start/ale
         " Python packages for completion: python-lsp-server yapf isort mypy
-        echo 'Installing Python LSP...'
+        echo 'Installing Python LSP Packages ...'
         echo ''
         silent !pip install python-lsp-server yapf isort mypy
     endif
 else
-    " UNIX-like: mkdir -p ~/.vim/pack/git-plugins/start; git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.vim/pack/git-plugins/start/ale
+    " UNIXlike: mkdir -p ~/.vim/pack/git-plugins/start; git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.vim/pack/git-plugins/start/ale
     let vim_plug_path = expand('~/.vim/pack/git-plugins/start/ale/autoload/ale.vim')
     if !filereadable(vim_plug_path)
-        echo 'Installing ALE...'
+        echo 'Installing ALE ...'
         echo ''
         silent !mkdir -p ~/.vim/pack/git-plugins/start
         silent !git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.vim/pack/git-plugins/start/ale
         " Python packages for completion: python-lsp-server yapf isort mypy
-        echo 'Installing Python LSP...'
+        echo 'Installing Python LSP Packages ...'
         echo ''
         silent !pip install python-lsp-server yapf isort mypy
     endif
