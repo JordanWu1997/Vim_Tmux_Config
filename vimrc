@@ -212,21 +212,22 @@
 " Map normal/visual/operator-pending mode key --------------------------------
     " NOTE:
     " -- z+[t/z/b/h/l]: scroll window top/center/bottom/left/right
-    " -- Ctrl+[i/o]: jump to next/prev cursor location
     " -- :ju[mps]: show all jump history
-    " -- g+[;/,]: go to older/newer change
+    " -- Ctrl+[i/o]: jump to next/prev cursor location
     " -- :changes: show all change history
+    " -- g+[;/,]: go to older/newer change
     " -- g+[-/+]: go to prev/next text-states (undo/redo)
     " -- g+[j/k/l/h]: move in visual lines instead of real lines in WRAP text
     " -- g+[uu/UU/~~]: set lowercase/uppercase/toggle for whole line
-    " -- :g/PATTERN/ACTION: in entire file, for lines matched PATTERN, do ACTION
-    " -- :v/PATTERN/ACTION: in entire file, for lines do not matched PATTERN, do ACTION
     " -- g+[t/T]: go to next/prev tab
     " -- g+[i]: go to last location in insert mode and enter insert mode
     " -- g+[v]: go to last location in visual mode and enter visual mode
     " -- g+[n]: go to next search and visually select it
-    " -- g+[f]: go to file
+    " -- g+[f/x]: go to file/URL
+    " -- g+[*/#]: like */# but also find matches that are not a whole word
     " -- g+Ctrl+g: count words
+    " -- :g/PATTERN/ACTION: in entire file, for lines matched PATTERN, do ACTION
+    " -- :v/PATTERN/ACTION: in entire file, for lines do not matched PATTERN, do ACTION
 
     " Unmap q-key related keybindings to prevent typo when quitting/closing
     " -- :<C-f>: open command mode history
@@ -246,11 +247,9 @@
     " Tab is already mapped to <C-i> by vim
     noremap <Tab> <C-i>
     noremap <S-Tab> <C-o>
-    noremap gi <C-i>
-    noremap go <C-o>
     " Show jump list
-    noremap <leader>go :jumps<CR>
-    noremap <leader>gi :jumps<CR>
+    noremap <leader><Tab> :jumps<CR>
+    noremap <leader><S-Tab> :jumps<CR>
     " Show change list
     noremap <leader>g; :changes<CR>
     noremap <leader>g, :changes<CR>
@@ -286,6 +285,13 @@
     noremap <leader>wa! :wall!<CR>
     noremap <leader>wa :wqall<CR>
 
+" Macro ----------------------------------------------------------------------
+    " NOTE:
+    " Edit register visually [https://thoughtbot.com/blog/how-to-edit-an-existing-vim-macro]
+    "    1. :let @q='
+    "    2. <Ctrl-r><Ctrl-r>q
+    "    3. Add closing quote ' and <Enter> to finish editing
+
 " External command -----------------------------------------------------------
     " NOTE:
     " -- :r !date (Insert time stamp)
@@ -316,6 +322,7 @@
     set mouse=          " Disable mouse function
     set backspace=indent,eol,start     " Backspace through everything
     set clipboard^=unnamed,unnamedplus " Shared system clipboard (+clipboard)
+    set virtualedit=none " Cursor can only be positioned where there is a char
     "set dictionary+=/usr/share/dict/words " Dictionary for word completion
     set tags=./.tags,.tags;/ " use ctag -o .tags -R . to generate file tags
 

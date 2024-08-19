@@ -40,6 +40,7 @@ set splitbelow                     " New hsplit pane spawn at the bottom
 set splitright                     " New vsplit pane spawn on the right
 set ttyfast                        " Faster redrawing
 set wildmenu                       " Show menu options
+set virtualedit=none               " Cursor can only be positioned where there is a char
 
 " Tab
 set expandtab                      " Expand tab to spaces
