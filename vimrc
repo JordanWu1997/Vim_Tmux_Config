@@ -2074,6 +2074,10 @@
     "noremap <leader>air :BitoAiReadable<CR>
 
 " Codeium --------------------------------------------------------------------
+    " NOTE: Codeium Chat uses web browser as front-end UI but it doest not work
+    " well OTB. Find $HOME/.config/nvim/plugged/codeium.vim/autoload/codeium.vim
+    " Change let l:browser = codeium#command#BrowserCommand() to whatever web
+    " browser you like e.g. let l:browser = 'brave-browser --new-window'
     if USING_LSP && USING_VIM8
         " Disable Codeium at startup
         let g:codeium_enabled = v:false
@@ -2081,12 +2085,13 @@
         let g:codeium_disable_bindings = 1
         " Keybindings
         map <leader>cm :CodeiumToggle<CR>
+        map <leader>ct :call codeium#Chat()<CR>
         imap <script><silent><nowait><expr> <C-]> codeium#Accept()
         imap <script><silent><nowait><expr> <C-e> codeium#AcceptNextLine()
-        imap <script><silent><nowait><expr> <C-.> codeium#AcceptNextWord()
-        imap <C-;> <Cmd>call codeium#CycleCompletions(1)<CR>
-        imap <C-,> <Cmd>call codeium#CycleCompletions(-1)<CR>
-        imap <C-'> <Cmd>call codeium#Clear()<CR>
+        imap <script><silent><nowait><expr> <C-f> codeium#AcceptNextWord()
+        imap <M-[> <Cmd>call codeium#CycleCompletions(1)<CR>
+        imap <M-]> <Cmd>call codeium#CycleCompletions(-1)<CR>
+        imap <C-\> <Cmd>call codeium#Clear()<CR>
         imap <C-/> <Cmd>call codeium#Complete()<CR>
     endif
 
