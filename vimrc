@@ -93,6 +93,15 @@
     " Python packages already installed in somewhere else
     " -- Use: pip install (--user) --ignore_installed <PACKAGE_NAME>
 
+" NOTE: clangd (C++ completion) ----------------------------------------------
+    " To make clangd detected used libraries
+    " -- Standard Libarary
+    "    -- Copy ./share/clangd as $HOME/.clangd
+    "    -- Note that You may need to check the C++ path in ./share/clangd
+    " -- Library outside current project (requires CMAKE):
+    "    -- compile_command.json file must be generated
+    "    -- In CMakeLists.txt, Add set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 " NOTE: Keyboard key repeat time settings ------------------------------------
     " Speed up/down key repeat time for pressing key
     " -- e.g jjjjjjjj, kkkkkkkkkk, wwwwwwwwwww
