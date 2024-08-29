@@ -1088,6 +1088,11 @@
 "" [BitoAI (ChatGPT wrapper)] -------------------------------------------------
     "Plug 'zhenyangze/vim-bitoai'
 
+" [Codeium] -------------------------------------------------------------------
+    Plug 'Exafunction/codeium.vim',
+                \ { 'branch': 'main',
+                \ 'on': ['CodeiumToggle', 'CodeiumEnable']}
+
 " [LeetCode] -----------------------------------------------------------------
     "Plug 'ianding1/leetcode.vim'
 
@@ -2068,13 +2073,30 @@
     ""noremap <leader>aiG :BitoAiGenerateComment<CR>
     "noremap <leader>air :BitoAiReadable<CR>
 
+" Codeium --------------------------------------------------------------------
+    if USING_LSP && USING_VIM8
+        " Disable Codeium at startup
+        let g:codeium_enabled = v:false
+        " Remove all Codeium default keybindings
+        let g:codeium_disable_bindings = 1
+        " Keybindings
+        map <leader>cm :CodeiumToggle<CR>
+        imap <script><silent><nowait><expr> <C-]> codeium#Accept()
+        imap <script><silent><nowait><expr> <C-e> codeium#AcceptNextLine()
+        imap <script><silent><nowait><expr> <C-.> codeium#AcceptNextWord()
+        imap <C-;> <Cmd>call codeium#CycleCompletions(1)<CR>
+        imap <C-,> <Cmd>call codeium#CycleCompletions(-1)<CR>
+        imap <C-'> <Cmd>call codeium#Clear()<CR>
+        imap <C-/> <Cmd>call codeium#Complete()<CR>
+    endif
+
 " LeetCode -------------------------------------------------------------------
     "let g:leetcode_browser = 'firefox'
     "let g:leetcode_hide_paid_only = 1
     "let g:leetcode_solution_filetype = 'python'
 
 " ============================================================================
-" Part 10 - Language Server Protocol (LSP)
+" Part 9 - Language Server Protocol (LSP)
 " ============================================================================
 
 " Vim-LSP --------------------------------------------------------------------
