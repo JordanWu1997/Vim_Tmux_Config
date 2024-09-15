@@ -237,6 +237,7 @@
     " -- g+Ctrl+g: count words
     " -- :g/PATTERN/ACTION: in entire file, for lines matched PATTERN, do ACTION
     " -- :v/PATTERN/ACTION: in entire file, for lines do not matched PATTERN, do ACTION
+    " -- o: jump between both ends of selection in visual mode
 
     " Unmap q-key related keybindings to prevent typo when quitting/closing
     " -- :<C-f>: open command mode history
@@ -1056,13 +1057,13 @@
     " Generate closetag for HTML
     Plug 'alvan/vim-closetag', { 'for': [ 'html', 'markdown'] }
 
-" [Latex] --------------------------------------------------------------------
+" [LaTex] --------------------------------------------------------------------
     if USING_GUI_SOFTWARE
         " Asynchronous Tex file -> PDF file preview (pdf reader is needed)
         Plug 'xuhdev/vim-latex-live-preview',
                     \ { 'for': [ 'plaintex', 'context', 'tex'] }
     endif
-    " Latex compiler link support (complier need to be installed externally)
+    " LaTex compiler link support (complier need to be installed externally)
     Plug 'vim-latex/vim-latex', { 'for': [ 'plaintex', 'context', 'tex'] }
 
 " [Markdown] -----------------------------------------------------------------
@@ -2005,7 +2006,7 @@
     " Set spell check for LaTex files
     autocmd FileType plaintex,context,tex setlocal spell
     autocmd FileType plaintex,context,tex setlocal updatetime=10000 " Unit: ms
-    " Latex real-time viewer with GUI pdf file manager
+    " LaTex real-time viewer with GUI pdf file manager
     if USING_GUI_SOFTWARE
         let g:livepreview_previewer = 'zathura'
         let g:livepreview_engine = 'pdflatex'
