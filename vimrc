@@ -1624,7 +1624,7 @@
         " Yankring history
         noremap <leader>ys :YRShow<CR>
         noremap <leader>yC :YRClear<CR>
-        noremap <leader>yp :set paste!<CR>
+        noremap <leader>yP :set paste!<CR>
     endif
 
 " Peekaboo -------------------------------------------------------------------
