@@ -48,7 +48,7 @@ set -g default-terminal "xterm-256color"
 set -g display-time 3000
 set -g display-panes-time 3000
 set -g escape-time 0
-set -g repeat-time 250
+set -g repeat-time 450
 set -g history-limit 30000
 set -g visual-activity on
 set -g focus-events on

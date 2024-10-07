@@ -238,12 +238,13 @@
     " -- :g/PATTERN/ACTION: in entire file, for lines matched PATTERN, do ACTION
     " -- :v/PATTERN/ACTION: in entire file, for lines do not matched PATTERN, do ACTION
     " -- o: jump between both ends of selection in visual mode
+    " -- q:: open command line history
+    " -- q/: open search history
 
     " Unmap q-key related keybindings to prevent typo when quitting/closing
     " -- :<C-f>: open command mode history
     " -- /<C-f>: open search history
     map gQ <nop>
-    map q: <nop>
     nnoremap Q <nop>
     " Make Y yank to the EOL instead of whole line just like what D does
     nnoremap Y y$
@@ -1422,7 +1423,7 @@
 
 " LargeFile ------------------------------------------------------------------
     " Large file size in MB
-    let g:LargeFile = 10
+    let g:LargeFile = 2
 
 " Nerdcommenter --------------------------------------------------------------
     " NOTE:
