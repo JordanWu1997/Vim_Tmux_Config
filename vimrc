@@ -200,11 +200,12 @@
 
 " Map insert mode key --------------------------------------------------------
     " NOTE:
-    " -- Ctrl+j (Enter)
-    " -- Ctrl+o (Execute single normal mode operation)
-    " -- Ctrl+r+(register) (Paste register)
-    " -- Ctrl+[n/p] (Autocompletion next/prev candidate)
-    " -- Ctrl+[d/t] (Unindent/Indent current line)
+    " -- Ctrl+o: Execute single normal mode operation
+    " -- Ctrl+r+(register): Paste register
+    " -- Ctrl+[n/p]: Autocompletion next/prev candidate
+    " -- Ctrl+[d/t]: Unindent/Indent current line
+    " -- Ctrl+[q/v]: Insert-special-keys mode
+    "    -- Usage: insert u2713 to insert unicode character u+2713
 
     " Map exit insert mode (Esc/Ctrl+[) to ii, kj
     " -- Use Ctrl+[q/v] to escape for 'ii' word (e.g. ascii)
@@ -238,14 +239,15 @@
     " -- :g/PATTERN/ACTION: in entire file, for lines matched PATTERN, do ACTION
     " -- :v/PATTERN/ACTION: in entire file, for lines do not matched PATTERN, do ACTION
     " -- o: jump between both ends of selection in visual mode
+    "    -- jumps: ', `, G, /, ?, n, N, %, (, ), [[, ]], {, }, :s, :tag, L, M, H
+    "    -- also jumps: commands that start editing a new file.
     " -- q:: open command line history
     " -- q/: open search history
-
-    " Unmap q-key related keybindings to prevent typo when quitting/closing
     " -- :<C-f>: open command mode history
     " -- /<C-f>: open search history
+
+    " Unmap gQ prevent entering ex mode by typo when quitting/closing file
     map gQ <nop>
-    nnoremap Q <nop>
     " Make Y yank to the EOL instead of whole line just like what D does
     nnoremap Y y$
     " Stop delete/change/replace overwriting current register
@@ -253,8 +255,8 @@
     "nnoremap x "_x
     nnoremap r "_r
     " Move selection block up/down in visual mode
-    vnoremap K :m '<-2<CR>gv=gv
-    vnoremap J :m '>+1<CR>gv=gv
+    vnoremap K :move '<-2<CR>gv=gv
+    vnoremap J :move '>+1<CR>gv=gv
     " Tab is already mapped to <C-i> by vim
     noremap <Tab> <C-i>
     noremap <S-Tab> <C-o>

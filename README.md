@@ -654,26 +654,28 @@ and following keys are pressed. Table below includes some frequently used key ma
 <summary>Click to expand!</summary>
 
 - http://fisadev.github.io/fisa-vim-config/
+- http://nadypan.blogspot.com/2014/01/vim-fold.html
 - http://www.viemu.com/a_vi_vim_graphical_cheat_sheet_tutorial.html
+- https://ahuigo.github.io/b/vim/vim-var#/
+- https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
+- https://factorpad.com/tech/vim-cheat-sheet.html#structure
+- https://gist.github.com/EinfachToll/9071573
+- https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
+- https://github.com/junegunn/vim-plug
+- https://github.com/learnbyexample/vim_reference/blob/master/vim_reference_guide.md
+- https://github.com/mhinz/vim-galore
 - https://github.com/ryanoasis/nerd-fonts/
 - https://github.com/sbdchd/Neoformat
-- https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
-- https://vim.wikia.com/wiki/Disable_beeping
-- https://blog.gtwang.org/useful-tools/how-to-use-vim-as-a-hex-editor/
-- https://github.com/junegunn/vim-plug
-- https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
 - https://github.com/shengjunlin/vimrc
-- http://nadypan.blogspot.com/2014/01/vim-fold.html
-- https://github.com/yangyangwithgnu/use_vim_as_ide
-- https://factorpad.com/tech/vim-cheat-sheet.html#structure
 - https://github.com/wsdjeg/vim-galore-zh_cn
-- https://github.com/mhinz/vim-galore
-- https://ahuigo.github.io/b/vim/vim-var#/
+- https://github.com/yangyangwithgnu/use_vim_as_ide
+- https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
+- https://learnbyexample.github.io/curated_resources/vim.html
 - https://learnvimscriptthehardway.stevelosh.com/chapters/24.html
-- https://gist.github.com/EinfachToll/9071573
-- https://www.youtube.com/watch?v=E-ZbrtoSuzw&t=1s
 - https://vim.rtorr.com/
+- https://vim.wikia.com/wiki/Disable_beeping
 - https://vimtricks.com/p/50-useful-vim-commands/
+- https://www.youtube.com/watch?v=E-ZbrtoSuzw&t=1s
 
 </details>
 </details>
