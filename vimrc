@@ -246,8 +246,9 @@
     " -- :<C-f>: open command mode history
     " -- /<C-f>: open search history
 
-    " Unmap gQ prevent entering ex mode by typo when quitting/closing file
+    " Unmap keys to prevent entering ex mode by typo
     map gQ <nop>
+    nnoremap Q <nop>
     " Make Y yank to the EOL instead of whole line just like what D does
     nnoremap Y y$
     " Stop delete/change/replace overwriting current register
