@@ -938,6 +938,7 @@ tmux -V
 - https://github.com/samoshkin/tmux-config/blob/master/tmux/tmux.conf
 - https://github.com/gotbletu/dotfiles_v2/blob/master/normal_user/tmux/.tmux.conf
 - https://waylonwalker.com/tmux-copy-mode/
+- https://github.com/tmux/tmux/wiki/Advanced-Use
 
 </details>
 </details>

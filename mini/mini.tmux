@@ -29,6 +29,9 @@ set -g allow-rename on
 # Window option
 setw -g pane-base-index 1
 setw -g aggressive-resize on
+setw -g monitor-activity on
+set -g visual-activity on
+set -g visual-bell on
 
 # Master pane size
 set -g main-pane-height "50%"
@@ -50,7 +53,6 @@ set -g display-panes-time 3000
 set -g escape-time 0
 set -g repeat-time 450
 set -g history-limit 30000
-set -g visual-activity on
 set -g focus-events on
 set -g mouse on
 
@@ -58,11 +60,10 @@ set -g mouse on
 # TMUX buffer and copymode
 # ============================================================================
 
-
-# Clipboard is set to "on" for gnome-terminal emulator, but MUST be set to "off"
+# Clipboard is set to "on" for gnome-terminal, but MUST be set to "external"
 # for kitty or other terminal emulator supports set-clipboard
 # -- https://github.com/tmux/tmux/wiki/Clipboard
-set -g set-clipboard on
+set -g set-clipboard external
 
 # Set Copy/Paste Mode
 bind [ copy-mode

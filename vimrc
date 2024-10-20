@@ -1540,6 +1540,8 @@
                     \ 'ctagsbin': s:CTAGSBIN,
                     \ 'ctagsargs': 'markdown'
                     \ }
+        "" Disable shorten URL
+        "let g:vimwiki_url_maxsave = 0
         " Global wiki mappings (start with v)
         nmap <leader>wI <Plug>VimwikiIndex
         nmap <leader>wD <Plug>VimwikiDeleteFile
