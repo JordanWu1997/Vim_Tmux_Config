@@ -381,6 +381,7 @@ and following keys are pressed. Table below includes some frequently used key ma
 | `f`      | Fzf         | File-browser    |
 | `g`      | Git         | Git             |
 | `m`      | Mark/Manual | Built-in mark   |
+| `n`      | Neoformat   | Neoformat       |
 | `p`      | Python      | Python          |
 | `s`      | Spell       | Built-in spell  |
 | `t`      | Tab         | Built-in tab    |
@@ -544,22 +545,22 @@ and following keys are pressed. Table below includes some frequently used key ma
 - Note: Jedi is needed for python code analysis (Check https://github.com/davidhalter/jedi )
 - Note: All below functions only work in .py files
 
-| VIM-Mode | Key Mapping                  | Function                      | Description                       | Note                            |
-| :------: | :--------------------------: | :---------------------------: | :-------------------------------: | :-----------------------------: |
-| N/V      | `[Shift]`+`[k]`              | Search current word in doc    | Search current word in python doc |                                 |
-| N/V      | `[LK]`+`[p]`+`[n]`           | Find current word occurrences | Find current word occurrences     | Here p for (p)ython             |
-| N/V      | `[LK]`+`[p]`+`[a]`           | Find current word assignment  | Find current word assignment      |                                 |
-| N/V      | `[LK]`+`[p]`+`[d]`           | Show current word definition  | Show current word definition      |                                 |
-| N/V      | `[LK]`+`[p]`+`[m]`           | Show current word init.py     | Show current word init.py         |                                 |
-| N/V      | `[LK]`+`[p]`+`[Shift]`+`[m]` | Show input module init.py     | Show input module init.py         |                                 |
-| N        | `[LK]`+`[p]`+`[i]`           | Run import module formatter   | Run isort formatter (for modules) | isort needs to be installed     |
-| N        | `[LK]`+`[p]`+`[y]`           | Run code formatter            | Run yapf formatter (for formats)  | pyment needs to be installed    |
-| N/V      | `[LK]`+`[p]`+`[t]`+`[d]`     | Run pyment (default: reST)    | Run pyment (default: reST)        | pyment needs to be installed    |
-| N/V      | `[LK]`+`[p]`+`[t]`+`[g]`     | Run pyment (google)           | Run pyment (google style)         | pyment needs to be installed    |
-| N/V      | `[LK]`+`[p]`+`[t]`+`[j]`     | Run pyment (javadoc)          | Run pyment (javadoc style)        | pyment needs to be installed    |
-| N/V      | `[LK]`+`[p]`+`[t]`+`[n]`     | Run pyment (numpydoc)         | Run pyment (numpydoc style)       | pyment needs to be installed    |
-| N/V      | `[LK]`+`[p]`+`[b]`           | Insert pdb trace start        | Insert pdb trace start            | pdb is python built-in debugger |
-| N/V      | `[LK]`+`[p]`+`[Shift]`+`[b]` | Run pdb in new terminal pane  | Run pdb in new terminal pane      | pdb is python built-in debugger |
+| VIM-Mode | Key Mapping                    | Function                      | Description                       | Note                                                |
+| :------: | :----------------------------: | :---------------------------: | :-------------------------------: | :-------------------------------------------------: |
+| N/V      | `[Shift]`+`[k]`                | Search current word in doc    | Search current word in python doc |                                                     |
+| N/V      | `[LK]`+`[p]`+`[n]`             | Find current word occurrences | Find current word occurrences     | Here p for (p)ython                                 |
+| N/V      | `[LK]`+`[p]`+`[a]`             | Find current word assignment  | Find current word assignment      |                                                     |
+| N/V      | `[LK]`+`[p]`+`[d]`             | Show current word definition  | Show current word definition      |                                                     |
+| N/V      | `[LK]`+`[p]`+`[m]`             | Show current word init.py     | Show current word init.py         |                                                     |
+| N/V      | `[LK]`+`[p]`+`[Shift]`+`[m]`   | Show input module init.py     | Show input module init.py         |                                                     |
+| N        | `[LK]`+`[n]`+`[p]`+`[i]`       | Run import module formatter   | Run isort formatter (for modules) | isort needs to be installed. here n for (n)eoformat |
+| N        | `[LK]`+`[n]`+`[p]`+`[y]`       | Run code formatter            | Run yapf formatter (for formats)  | pyment needs to be installed                        |
+| N/V      | `[LK]`+`[n]`+`[p]`+`[t]`+`[d]` | Run pyment (default: reST)    | Run pyment (default: reST)        | pyment needs to be installed                        |
+| N/V      | `[LK]`+`[n]`+`[p]`+`[t]`+`[g]` | Run pyment (google)           | Run pyment (google style)         | pyment needs to be installed                        |
+| N/V      | `[LK]`+`[n]`+`[p]`+`[t]`+`[j]` | Run pyment (javadoc)          | Run pyment (javadoc style)        | pyment needs to be installed                        |
+| N/V      | `[LK]`+`[n]`+`[p]`+`[t]`+`[n]` | Run pyment (numpydoc)         | Run pyment (numpydoc style)       | pyment needs to be installed                        |
+| N/V      | `[LK]`+`[p]`+`[b]`             | Insert pdb trace start        | Insert pdb trace start            | pdb is python built-in debugger                     |
+| N/V      | `[LK]`+`[p]`+`[Shift]`+`[b]`   | Run pdb in new terminal pane  | Run pdb in new terminal pane      | pdb is python built-in debugger                     |
 
 3. Miscellaneous Function Key Mapping
 - Useful tool (Note: startup by default)

@@ -80,6 +80,14 @@
     "    -- (2) :Neoformat pyment # Add description of function/class
     "    -- (3) :Neoformat yapf   # Format to PEP8 standard
 
+    " Example: SQL formater
+    " -- Installation: sqlformat in sqlparse:
+    "    -- pip install sqlparse
+
+    " Example: Markdown formatter
+    " -- Installation: mdformat
+    "    -- pip install mdformat
+
 " NOTE: Python-completion and tmux-yank-clipboard on remote machine ----------
     " Use neovim and everything is fine, but notice that neovim support of
     " Fedora repo is for Fedora 25 and higher version. For now, Seb just used
@@ -93,7 +101,7 @@
     " Python packages already installed in somewhere else
     " -- Use: pip install (--user) --ignore_installed <PACKAGE_NAME>
 
-" NOTE: clangd (C++ completion) ----------------------------------------------
+" NOTE: clangd (C++ completion, formatter, linter and etc.) ------------------
     " To make clangd detected used libraries
     " -- Standard Libarary
     "    -- Copy ./share/clangd as $HOME/.clangd
@@ -323,6 +331,10 @@
     vnoremap <leader>est :!sort<CR>
     " Filter out unique word [Context should be sorted first]
     vnoremap <leader>euq :!uniq<CR>
+    " Insert date (to date)
+    nnoremap <leader>edd :r !date '+\%Y-\%m-\%d'<CR>
+    " Insert date (to sec)
+    nnoremap <leader>eds :r !date '+\%Y-\%m-\%d \%H:\%M:\%S'<CR>
 
 " General Vim settings -------------------------------------------------------
     set exrc            " Search vimrc file in current directory
@@ -1765,10 +1777,17 @@
 " Neoformat ------------------------------------------------------------------
     if USING_CODING_TOOL_PLUG
         " C++ ----------------------------------------------------------------
-        " clangformat: C++ formatter
-        nnoremap <leader>cf :Neoformat clangformat<CR>
+        " clangformat: C++ formatter (c for C++)
+        nnoremap <leader>ncf :Neoformat clangformat<CR>
+        vnoremap <leader>ncf :'<,'>Neoformat clangformat<CR>
+        " sqlsparse: SQL formatter (s for SQL)
+        nnoremap <leader>nsf :Neoformat! sql sqlformat<CR>
+        vnoremap <leader>nsf :'<,'>Neoformat! sql sqlformat<CR>
+        " mdformat: Markdown formatter (m for markdown)
+        nnoremap <leader>nmf :Neoformat! markdown mdformat<CR>
+        vnoremap <leader>nmf :'<,'>Neoformat! markdown mdformat<CR>
         " Python -------------------------------------------------------------
-        " pyment: python docstring creater/formatter
+        " pyment: python docstring creater/formatter (p for python)
         let g:neoformat_python_pyment_google = {
                 \ 'exe': 'pyment',
                 \ 'args': ['-', '-o "google"', '-w'],
@@ -1786,19 +1805,19 @@
                 \ }
         let g:neoformat_enabled_python = ['pyment_google', 'pyment_javadoc']
         " pyment: python docstring creater/formatter
-        nnoremap <leader>ptd :Neoformat pyment<CR>
-        nnoremap <leader>ptg :Neoformat pyment_google<CR>
-        nnoremap <leader>ptj :Neoformat pyment_javadoc<CR>
-        nnoremap <leader>ptn :Neoformat pyment_numpydoc<CR>
+        nnoremap <leader>nptt :Neoformat pyment<CR>
+        nnoremap <leader>nptg :Neoformat pyment_google<CR>
+        nnoremap <leader>nptj :Neoformat pyment_javadoc<CR>
+        nnoremap <leader>nptn :Neoformat pyment_numpydoc<CR>
         " pyment: visual mode selection for finetune
-        vnoremap <leader>ptd :'<,'>Neoformat pyment<CR>
-        vnoremap <leader>ptg :'<,'>Neoformat pyment_google<CR>
-        vnoremap <leader>ptj :'<,'>Neoformat pyment_javadoc<CR>
-        vnoremap <leader>ptn :'<,'>Neoformat pyment_numpydoc<CR>
+        vnoremap <leader>nptt :'<,'>Neoformat !python pyment<CR>
+        vnoremap <leader>nptg :'<,'>Neoformat !python pyment_google<CR>
+        vnoremap <leader>nptj :'<,'>Neoformat !python pyment_javadoc<CR>
+        vnoremap <leader>nptn :'<,'>Neoformat !python pyment_numpydoc<CR>
         " isort: python import sorter
-        nnoremap <leader>pi :Neoformat isort<CR>
+        nnoremap <leader>npi :Neoformat isort<CR>
         " yapf: python code formatter
-        nnoremap <leader>py :Neoformat yapf<CR>
+        nnoremap <leader>npy :Neoformat yapf<CR>
     endif
 
 " Rainbow parentheses --------------------------------------------------------
