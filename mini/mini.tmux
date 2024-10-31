@@ -29,9 +29,9 @@ set -g allow-rename on
 # Window option
 setw -g pane-base-index 1
 setw -g aggressive-resize on
-setw -g monitor-activity on
-set -g visual-activity on
-set -g visual-bell on
+setw -g monitor-activity off
+set -g visual-activity off
+set -g visual-bell off
 
 # Master pane size
 set -g main-pane-height "50%"
