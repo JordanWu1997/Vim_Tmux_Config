@@ -110,6 +110,11 @@
     "    -- compile_command.json file must be generated
     "    -- In CMakeLists.txt, Add set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+" NOTE: LanguageTool (Grammar Checker) ---------------------------------------
+    " -- Instatll LanguageTool (for now, scrip only works with version up to 5.9
+    "    -- wget https://languagetool.org/download/archive/LanguageTool-5.9.zip
+    "    -- unzip LanguageTool-5.9.zip
+
 " NOTE: Keyboard key repeat time settings ------------------------------------
     " Speed up/down key repeat time for pressing key
     " -- e.g jjjjjjjj, kkkkkkkkkk, wwwwwwwwwww
@@ -173,6 +178,8 @@
     let g:MARKDOWN_TEMPLATE = g:MARKDOWN_NOTE_TEMPLATE
     " HTML Table template
     let g:MARKDOWN_TABLE_TEMPLATE = '$HOME/Desktop/Vim_Tmux_Config/share/table.html'
+    " Language Tool CLI jar file
+    let g:languagetool_jar = '/opt/LanguageTool-5.9/languagetool-commandline.jar'
 
 " TERMGUI color --------------------------------------------------------------
     " Ctermcolors only support max 256 color
@@ -313,6 +320,15 @@
     "    1. :let @q='
     "    2. <Ctrl-r><Ctrl-r>q
     "    3. Add closing quote ' and <Enter> to finish editing
+
+    " Apply macro to all selected lines
+    " -- From https://github.com/stoeffel/.dotfiles/blob/master/vim/visual-at.vim
+    " -- Reference https://medium.com/@schtoeffel/you-don-t-need-more-than-one-cursor-in-vim-2c44117d51db
+    function! ExecuteMacroOverVisualRange()
+        echo "@".getcmdline()
+        execute ":'<,'>normal @".nr2char(getchar())
+    endfunction
+    xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
 
 " External command -----------------------------------------------------------
     " NOTE:
@@ -1097,6 +1113,11 @@
     " Markdown syntax header folding
     Plug 'masukomi/vim-markdown-folding', { 'for': 'markdown' }
     Plug 'mzlogin/vim-markdown-toc', { 'for': 'markdown' }
+
+" [Language] -----------------------------------------------------------------
+    " Language Tool
+    Plug 'dpelle/vim-LanguageTool',
+        \ { 'for': ['markdown', 'html', 'txt', 'tex', 'plaintext', 'context'] }
 
 " [I3 syntax highlight] ------------------------------------------------------
     " I3 configuration syntax highlight
@@ -2088,6 +2109,10 @@
     noremap <leader>mC <Esc>a</span><Esc>
     " Insert HTML table template
     noremap <leader>mT <Esc>:execute('r'.g:MARKDOWN_TABLE_TEMPLATE)<CR>
+
+" LanguageTool ---------------------------------------------------------------
+    noremap <leader>Lc <Esc>:LanguageToolCheck<CR>
+    noremap <leader>LC <Esc>:LanguageToolClear<CR>
 
 "" BitoAI ---------------------------------------------------------------------
     "noremap <leader>aic :BitoAiCheck<CR>

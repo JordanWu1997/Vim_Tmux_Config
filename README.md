@@ -23,7 +23,7 @@ Backup for my Vim and TMUX configuration
       * [Section 4 - Key Mapping (Vim)](#section-4---key-mapping-vim)
          * [Key Mapping Rule - Customized Key Mapping (Vim)](#key-mapping-rule---customized-key-mapping-vim)
          * [Key Mapping Hinter - Vim Whichkey (Vim)](#key-mapping-hinter---vim-whichkey-vim)
-         * [Key Mapping Sheet 1 - Fn Key Key Mapping (Vim)](#key-mapping-sheet-1---fn-key-key-mapping-vim)
+         * [Key Mapping Sheet 1 - Fn-key Key Mapping (Vim)](#key-mapping-sheet-1---fn-key-key-mapping-vim)
          * [Key Mapping Sheet 2 - Built-in Function Key Mapping (Vim)](#key-mapping-sheet-2---built-in-function-key-mapping-vim)
          * [Key Mapping Sheet 3 - Plug-in Function Key Mapping (Vim)](#key-mapping-sheet-3---plug-in-function-key-mapping-vim)
          * [Key Mapping Sheet 4 - LSP Key Mapping (Vim)](#key-mapping-sheet-4---lsp-key-mapping-vim)
@@ -91,15 +91,15 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 <details open>
 <summary>Click to expand!</summary>
 
-- [x] Use **_interchangeable configuration_** for various vim-family e.g vim, gvim, and neovim
-- [x] Integrate **_useful vim-plugin_** e.g. auto-pair parentheses, auto-popup completion, and etc.
-- [x] Integrate **_various color theme_** for better syntax highlighting e.g. gruvbox, nord, and etc.
+- [x] Use **_interchangeable configuration_** for various vim-family e.g. vim, gvim, and neovim
+- [x] Integrate **_useful vim-plugin_** e.g. auto-pair parentheses, auto-popup completion, etc.
+- [x] Integrate **_various color theme_** for better syntax highlighting e.g. gruvbox, nord, etc.
 - [x] Integrate **_Vim with TMUX_** for both pane/split and clipboard to work together smoothly
 - [x] Map built-in/plugin-in function to keys that are easier to remember systematically
-- [x] Add **_IDE-like features for python_** e.g. linter, formatter, analyzer, and etc.
-- [x] Add **_IDE-like features using LSP_** e.g. linter, formatter, analyzer, and etc.
-- [x] Add **_Markdown features_** e.g. preview, folding, wiki-style markdown writer, and etc.
-- [x] Add **_Latex features_** e.g. real-time preview, compilation, and etc.
+- [x] Add **_IDE-like features for python_** e.g. linter, formatter, analyzer, etc.
+- [x] Add **_IDE-like features using LSP_** e.g. linter, formatter, analyzer, etc.
+- [x] Add **_Markdown features_** e.g. preview, folding, wiki-style markdown writer, etc.
+- [x] Add **_Latex features_** e.g. real-time preview, compilation, etc.
 - [x] Try to minimize loading time while keeping maximal functionality/variety
 - [x] Also offer Minimal **_cross-platform configuration_** (`./mini/mini.vim`) for both UNIX-like system and Windows system
 
@@ -112,86 +112,105 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 #### 1. Preparation for Dependence (Vim)
 
 1. Common Requirement
-- __Git__ [for plugin installation]
-    ```bash
-    #\ For Fedora
-    dnf install git
-    ```
-- __Curl__ [for plugin manager setup]
-    ```bash
-    #\ For Fedora
-    dnf install curl
-    ```
+    - __Git__ [for plugin installation]
+
+        ```bash
+        #_For Fedora
+        dnf install git
+        ```
+
+    - __Curl__ [for plugin manager setup]
+
+        ```bash
+        #_For Fedora
+        dnf install curl
+        ```
 
 2. Requirement for Diverse Vim
 - __Vim__
     - version >= __7.0__
     - clipboard option is on (+clipboard) [for sharing system clipboard]
     - python3 option is on (+python3/dyn) [for python completion]
+
     ```bash
-    #\ Check vim version and other options
+    #_Check vim version and other options
     vim --version
     ```
+
 - __Gvim__
     - version >= __7.0__
     - gvim already shipped with clipboard and python3 options
+
     ```bash
-    #\ Check gvim version and other options
+    #_Check gvim version and other options
     vim --version
     ```
+
 - __Neovim__
     - version >= __0.4__
     - neovim already shipped with clipboard and python3 options
+
     ```bash
-    #\ Check nvim version and other options
+    #_Check neovim version and other options
     nvim --version
     ```
+
 3. Requirement for Python Completion
 - __ipython__ (version >= __7.20__) [python consoler]
+
     ```bash
-    #\ Python3
+    #_Python3
     pip install ipython
     ```
 - __jedi__ for jedi [python code analyzer]
+
     ```bash
-    #\ Python3
+    #_Python3
     pip install jedi
     ```
 - __pynvim__ for deoplete neovim plugin usage [python code analyzer]
+
     ```bash
-    #\ Python3
+    #_Python3
     pip install pynvim
     ```
 
 4. Requirements for Basic Latex Compilation
 - __texlive__ [latex suite]
+
     ```bash
-    #\ For Fedora
+    #_For Fedora
     dnf install texlive-scheme-basic
     ```
 
 5. Requirements for Latex/Markdown Viewer
-- __Web browser with markdown extension__ (e.g. google-chrome, Firefox, and etc.) [for markdown preview]
+- __Web browser with markdown extension__ (e.g. google-chrome, Firefox, etc.) [for markdown preview]
+
     ```bash
-    #\ For Fedora
+    #_For Fedora
     dnf install firefox
     ```
+
 - __PDF viewer__ (e.g. zathura, Okular) [for latex preview]
+
     ```bash
-    #\ For Fedora
+    #_For Fedora
     dnf install zathura*
     ```
 
 #### 2. Copy Configuration File (Vim)
 - __Vim/Gvim__
-    1. copy `vimrc` to `$HOME` (current user's home)
-    2. rename `vimrc` to `.vimrc`
+    1. Copy `vimrc` to `$HOME` (current user's home)
+    2. Rename `vimrc` to `.vimrc`
+
     ```bash
     cp vimrc $HOME/.vimrc
     ```
+
 - __Neovim__
-    1. copy `vimrc` to `$HOME/.config/nvim` (create one if not exists)
-    2. rename `vimrc` to `init.vim`
+    1. Copy `vimrc` to `$HOME/.config/nvim` (create one if not exists)
+    2. Rename `vimrc` to `init.vim`
+
     ```bash
     mkdir -p $HOME/.config/nvim
     cp vimrc $HOME/.config/nvim/init.vim
@@ -199,20 +218,23 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
 #### 3. First Time Startup (Vim)
 - Following installation should start automatically at the first time startup
-    1. vim-plug (plug manager) installation via __curl__
+    1. Vim-plug (plug manager) installation via __curl__
         - If not working, try manually install vim-plug (also within this repository)
-            ```bash
-            #For vim/gvim
-            cp -r vim/autoload $HOME/.vim
-            #For neovim
-            cp -r vim/autoload $HOME/.config/nvim
-            ```
-    2. vim plugin installation via __vim-plug__
+
+        ```bash
+        #_For vim/gvim
+        cp -r vim/autoload $HOME/.vim
+        #_For neovim
+        cp -r vim/autoload $HOME/.config/nvim
+        ```
+
+    2. Vim plugin installation via __vim-plug__
         - If not working, try manually install vim-Plug
-            ```bash
-            #In vim command line mode
-            :Pluginstall
-            ```
+
+        ```bash
+        #_In vim command line mode
+        :Pluginstall
+        ```
 
 </details>
 
@@ -221,8 +243,9 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 <summary>Click to expand!</summary>
 
 #### 1. Plugin Loading Time (Vim)
-- Enable too much plugins may slow down your vim. You can check your loading time with following command
+- Enabling too many plugins may slow down your vim. You can check your loading time with following command
 - For managing plugins enable/disable, see next section (Plugin usage configuration)
+
 ```bash
 #For vim/gvim
 vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
@@ -233,37 +256,44 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 #### 2. Plugin Usage Configuration (Vim)
 for more details, check sections in vimrc
 
-- Plugin usage can be configured in the first section of vimrc
+- Plugin usage can be configured in the first section of `vimrc` file
+
     ```vim
     " ============================================================================
     " Vim and Neovim settings
     " ============================================================================
-    " Select vim-plug to load, set GUI color (real color) support, and etc.
+    " Select vim-plug to load, set GUI color (real color) support, etc.
     " Assign 0 to disable plug option
     ```
+
 - Detect using neovim or not (automatic detection)
     - Neovim is better for loading tons of plugins
     - Neovim configuration path is different from vim
     - If using vim, `vim-hug-neovim-rpc` plug will be loaded to bridge vim and neovim
+
     ```vim
     " Use vim or neovim (Auto-detect)
     let USING_NEOVIM = has('nvim')
     let USING_VIM = !USING_NEOVIM
     ```
+
 - Check if using vim 8.0 or higher
     - If vim version is less than 8.0, some function is not available (e.g. terminal)
     - Required for
         - [Built-in] terminal mode
         - [Plug-in] vim-polyglot (multi-language support)
         - [Plug-in] ale (multi-languages syntax highlight)
+
     ```vim
     " Check if vim version >= 8.0 (also for neovim >= 0.5)
     let USING_VIM8 = 1
     ```
+
 - Customize vim color scheme
     - For fancy symbol support, nerd font is needed (check https://github.com/ryanoasis/nerd-fonts )
     - For pywal theme support, pywal is needed (check https://github.com/dylanaraps/pywal ),
       also remember to change the directory path to your $HOME/.cache/wal
+
     ```vim
     " Customize vim theme (Include colorscheme and statusline)
     let USING_CUSTOMIZED_THEME = 1
@@ -273,6 +303,7 @@ for more details, check sections in vimrc
     "let USING_WAL_THEME = isdirectory('/home/jordankhwu/.cache/wal')
     let USING_WAL_THEME = 0
     ```
+
 - Extra vim-plug
     - Extra plug for productivity (or enhance vim-built in function)
     - Including
@@ -284,13 +315,15 @@ for more details, check sections in vimrc
         - [Plug-in] vim-peekaboo (vim register viewer/manager)
         - [Plug-in] vim-markbar (vim mark viewer/manager)
         - [Plug-in] vim-easymotion (physical movement)
-        - [Plug-in] AutoComplPop (auto completion pop-up)
+        - [Plug-in] AutoComplPop (auto-completion pop-up)
         - [Plug-in] FixedTaskList (find TODO tag in vim)
         - [Plug-in] vim-hexokinase (hex color code color highlight support)
+
     ```vim
-    " Extra vim-plug (Include easymotion, yankring, autocolpop, and etc.)
+    " Extra vim-plug (Include easymotion, yankring, autocolpop, etc.)
     let USING_EXTRA_PLUG = 1
     ```
+
 - Coding tool vim-plug
     - Tools for coding, git, language syntax highlight
     - Including
@@ -304,10 +337,12 @@ for more details, check sections in vimrc
         - [Plug-in] vim-visual-multi (multiple cursors)
         - [Plug-in] vim-fugitive (git toolbox)
         - [Plug-in] vim-gitgutter (git diff highlight)
+
     ```vim
-    " Coding tools vim-plug (Include syntax support, git function, and etc.)
+    " Coding tools vim-plug (Include syntax support, git function, etc.)
     let USING_CODING_TOOL_PLUG = 1
     ```
+
 - Python completion vim-plug
     - Tools for python completion
     - Requirements must be satisfied (check python completion preparation at the first session)
@@ -316,28 +351,33 @@ for more details, check sections in vimrc
         - [Plug-in] vim-hug-neovim-rpc (plugin bridge from neovim to vim)
         - [Plug-in] deoplete-jedi (python completion)
         - [Plug-in] jedi-vim (definition and feature finder)
+
     ```vim
     " Python Completion (Use deoplete and jedi, neovim is recommended to be used)
     let USING_PYTHON_COMPLETION = 1
     " Python that used to install jedi, pynvim and python packages for completion
     let PYTHON_FOR_COMPLETION = '/usr/bin/python'
     ```
+
 - Python skeleton file
     - Add preset python skeleton file for new created `.py` python file
     - If you use different skeleton file, please change `s:PYTHON_SKELETON` variable
+
     ```vim
     " Add python skeleton file for new created .py python file
     let USING_PYTHON_SKELETON = 1
     " Python Skeleton file
     let s:PYTHON_SKELETON = '$HOME/Desktop/Vim_Tmux_Config/share/skeleton.py'
     ```
+
 - GUI support
     - Functions for external GUI software
     - Requires
         - Latex previewer
         - Markdown previewer
+
     ```vim
-    " Support of external GUI software (e.g. Okular, Google-chrome, and etc.)
+    " Support of external GUI software (e.g. Okular, Google-chrome, etc.)
     let USING_GUI_SOFTWARE = 1
     " Web browser for markdown preview
     let WEBBROWSER = 'brave-browser'
@@ -355,7 +395,7 @@ for more details, check sections in vimrc
 
 > _1. Key Mapping should not be much different from the original VIM_
 - To make life easier instead of filled up with bloated key mapping
-> _2. Every function (motion) should start with a leader key for most of time_
+> _2. Every function (motion) should start with a leader key for most time_
 - To prevent conflict with built-in hotkey or other program hotkeys
 - In this configuration, leader key is __SPACE__ key
 > 3. _Key mapping should be related to the name of the function_
@@ -392,11 +432,11 @@ and following keys are pressed. Table below includes some frequently used key ma
 
 </details>
 
-#### Key Mapping Sheet 1 - Fn Key Key Mapping (Vim)
+#### Key Mapping Sheet 1 - Fn-key Key Mapping (Vim)
 <details>
 <summary>Click to expand!</summary>
 
-1. Function Key Key Mapping
+1. Fu-key Key Mapping
 
 | VIM-Mode | Key Mapping      | Function                        | Description                      | Note                                              |
 | :------: | :--------------: | :-----------------------------: | :------------------------------: | :-----------------------------------------------: |
@@ -414,8 +454,8 @@ and following keys are pressed. Table below includes some frequently used key ma
 | N/V      | `[LK]`+`[F8]`    | Toggle highlight fold           | On/Off highlight  vim fold       | Assign brighter color to comment to highlight it  |
 | N/V      | `[F9]`           | Toggle indent highlight (line)  | On/Off indent highlight (line)   |                                                   |
 | N/V      | `[LK]`+`[F9]`    | Toggle indent highlight (block) | On/Off indent highlight (block)  |                                                   |
-| N/V      | (`[LK]`)+`[F10]` | (Load)/Save vim layout          | Load/Save vim layout             | Including pane split, folds, and etc.             |
-| N/V      | (`[LK]`)+`[F11]` | (Off)/On synchronized cursor    | Off/On synchronized cursor       | Need to execute in every panes to synchronize     |
+| N/V      | (`[LK]`)+`[F10]` | (Load)/Save vim layout          | Load/Save vim layout             | Including pane split, folds, etc.             |
+| N/V      | (`[LK]`)+`[F11]` | (Off)/On synchronized cursor    | Off/On synchronized cursor       | Need to execute in every pane to synchronize     |
 | N/V      | (`[LK]`)+`[F12]` | (Exit)/Enter terminal mode      | Exit/Enter terminal mode         |                                                   |
 
 </details>
@@ -553,7 +593,7 @@ and following keys are pressed. Table below includes some frequently used key ma
 | N/V      | `[LK]`+`[p]`+`[d]`             | Show current word definition  | Show current word definition      |                                                     |
 | N/V      | `[LK]`+`[p]`+`[m]`             | Show current word init.py     | Show current word init.py         |                                                     |
 | N/V      | `[LK]`+`[p]`+`[Shift]`+`[m]`   | Show input module init.py     | Show input module init.py         |                                                     |
-| N        | `[LK]`+`[n]`+`[p]`+`[i]`       | Run import module formatter   | Run isort formatter (for modules) | isort needs to be installed. here n for (n)eoformat |
+| N        | `[LK]`+`[n]`+`[p]`+`[i]`       | Run import module formatter   | Run isort formatter (for modules) | isort needs to be installed. Here n for (n)eoformat |
 | N        | `[LK]`+`[n]`+`[p]`+`[y]`       | Run code formatter            | Run yapf formatter (for formats)  | pyment needs to be installed                        |
 | N/V      | `[LK]`+`[n]`+`[p]`+`[t]`+`[d]` | Run pyment (default: reST)    | Run pyment (default: reST)        | pyment needs to be installed                        |
 | N/V      | `[LK]`+`[n]`+`[p]`+`[t]`+`[g]` | Run pyment (google)           | Run pyment (google style)         | pyment needs to be installed                        |
@@ -627,7 +667,7 @@ and following keys are pressed. Table below includes some frequently used key ma
 | VIM-Mode | Key Mapping              | Function                  | Description                                   | Note                                         |
 | :------: | :----------------------: | :-----------------------: | :-------------------------------------------: | :------------------------------------------: |
 | N        | `[LK]`+`[s]`             | Show LSP server status    | Show LSP server status                        |                                              |
-| N        | `[LK]`+`[Shift]`+`[m]`   | Manage LSP server         | Manage LSP server (install, remove, and etc.) |                                              |
+| N        | `[LK]`+`[Shift]`+`[m]`   | Manage LSP server         | Manage LSP server (install, remove, etc.) |                                              |
 | N        | `[LK]`+`[Shift]`+`[i]`   | Install LSP server        | Install LSP server for current filetype       |                                              |
 | N        | `[LK]`+`[Shift]`+`[e/d]` | Enable/Disable LSP server | Enable/Disable LSP server                     | LSP is disabled by default to save resources |
 | N        | `[LK]`+`[Shift]`+`[s/r]` | Stop/Reload LSP server    | Stop/Reload LSP server                        |                                              |
@@ -640,12 +680,12 @@ and following keys are pressed. Table below includes some frequently used key ma
 | N        | `[LK]`+`[e]`+`[e]` | Send LSP diagnostics to location list | Send LSP diagnostics to location list      |                                    |
 | N        | `[LK]`+`[r]`+`[e]` | Rename variable across current file   | Rename current word across current file    |                                    |
 | N        | `[Shift]`+`[k]`    | Show information in a hovering window | Show information in a hovering window      | Same as `[Shift]`+`[k]` in vim     |
-| N        | `[[\]]`+`[g]`      | Go to previous/next LSP diagnostic    | Go to previous/next LSP diagnostic         | Includes warnings, errors and etc. |
+| N        | `[[\]]`+`[g]`      | Go to previous/next LSP diagnostic    | Go to previous/next LSP diagnostic         | Includes warnings, errors etc. |
 | N        | `[g]`+`[d]`        | Go to current word definition         | Go to current word definition              |                                    |
 | N        | `[g]`+`[i]`        | Go to current word implementation     | Go to current word implementation          | Not supported for python           |
 | N        | `[g]`+`[t]`        | Go to current word type definition    | Go to current word type definition         | Not supported for python           |
 | N        | `[g]`+`[r]`        | Find current word references          | Find current word references (occurrences) | Results are saved to quickfix list |
-| N        | `[g]`+`[/]`        | Symbol search                         | Search variable, function, and etc.        |                                    |
+| N        | `[g]`+`[/]`        | Symbol search                         | Search variable, function, etc.            |                                    |
 
 </details>
 </details>
@@ -705,47 +745,56 @@ and following keys are pressed. Table below includes some frequently used key ma
 
 1. Common Requirement
 - __Git__ [for TMUX plugin manager setup]
-```bash
-#For Fedora
-dnf install git
-```
+
+    ```bash
+    #_For Fedora
+    dnf install git
+    ```
+
 - __Powerline__ [powerline support for TMUX status line ]
-```bash
-#\ For Fedora
-dnf install powerline
-dnf install tmux-powerline
-```
+
+    ```bash
+    #_For Fedora
+    dnf install powerline
+    dnf install tmux-powerline
+    ```
 
 #### 2. Copy Configuration File (TMUX)
-- version >= __2.0__
-```bash
-#Check TMUX version
-tmux -V
-```
+- Check if TMUX version >= __2.0__
+
+    ```bash
+    #_Check TMUX version
+    tmux -V
+    ```
 
 1. Copy Configuration File
-- __TMUX__
-    1. copy `tmux.conf` to $HOME (current user's home)
-    2. rename `tmux.conf` to `.tmux.conf`
-    ```bash
-    cp tmux.conf $HOME/.tmux.conf
-    ```
+    - __TMUX__
+        1. Copy `tmux.conf` to $HOME (current user's home)
+        2. Rename `tmux.conf` to `.tmux.conf`
+
+        ```bash
+        cp tmux.conf $HOME/.tmux.conf
+        ```
 
 #### 3. First Time Startup (TMUX)
 - At first time startup, we need to install TMUX plugin manager, load configuration file and install plugins
     1. TMUX plugin manager (TPM) installation
-    ```bash
-    #In terminal
-    git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
-    ```
+
+        ```bash
+        #_In terminal
+        git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+        ```
+
     2. Load configuration file
-    ```bash
-    #Open TMUX in terminal
-    tmux
-    #In TMUX, press ctrl+b to enter command mode
-    #In command mode
-    source-file ~/.tmux.conf
-    ```
+
+        ```bash
+        #_Open TMUX in terminal
+        tmux
+        #_In TMUX, press ctrl+b to enter command mode
+        #_In command mode
+        source-file ~/.tmux.conf
+        ```
+
     3. Install plugins
         - Press "Ctrl+Space", then "I"
         - Plugin manager should start installation automatically
@@ -762,7 +811,7 @@ tmux -V
 - [Plug-in] tmux-sidebar (nerdtree-like file tree for TMUX)
 - [Plug-in] tmux-sessionist (make create/kill session ability easier to use)
 - [Plug-in] tmux-resurrect (save TMUX layout, and restore after restart TMUX)
-- [Plug-in] tmux-continuum (auto-save, auto-load for tmux-resurrect)
+- [Plug-in] tmux-continuum (auto-save, autoload for tmux-resurrect)
 - [Plug-in] vim-tmux-navigator (move between vim and tmux pane seamlessly)
 - [Plug-in] tmux-copycat (enhanced TMUX search)
 - [Plug-in] tmux-yank (share TMUX clipboard with system clipboard)
@@ -898,7 +947,7 @@ tmux -V
 | Normal    | `[BK]`+`[b]`                     | Toggle TMUX borderline                         | Toggle TMUX borderline                         |                                              |
 | Normal    | `[BK]`+`[Shift]`+`[r]`           | Reload TMUX configuration                      | Reload TMUX configuration                      | Run (source) `$HOME/.tmux.conf` file         |
 | Normal    | `[BK]`+`[a]`                     | Clear pane output                              | Clear pane output                              | Act like Ctrl-l in terminal                  |
-| Normal    | `[BK]`+`[Ctrl]`+`[j]`            | Send Ctrl+j to terminal                        | Send Ctrl+j to terminal                        | Ctrl+j is alternative enter in shell         |
+| Normal    | `[BK]`+`[Ctrl]`+`[j]`            | Send Ctrl+j to terminal                        | Send Ctrl+j to terminal                        | Ctrl+j is alternative to enter in shell      |
 | Normal    | `[BK]`+`[Ctrl]`+`[h]`            | Send Ctrl+h to terminal                        | Send Ctrl+h to terminal                        | Ctrl+h is alternative backspace in shell     |
 | Normal    | `[BK]`+`[Ctrl]`+`[k]`            | Send Ctrl+k to terminal                        | Send Ctrl+k to terminal                        | Ctrl+k is to delete to end of line in shell  |
 | Normal    | `[BK]`+`[Ctrl]`+`[l]`            | Send Ctrl+l to terminal                        | Send Ctrl+l to terminal                        | Ctrl+l is to clear pane output in shell      |
