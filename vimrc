@@ -1116,8 +1116,7 @@
 
 " [Language] -----------------------------------------------------------------
     " Language Tool
-    Plug 'dpelle/vim-LanguageTool',
-        \ { 'for': ['markdown', 'html', 'txt', 'tex', 'plaintext', 'context'] }
+    Plug 'dpelle/vim-LanguageTool', { 'on': 'LanguageToolCheck' }
 
 " [I3 syntax highlight] ------------------------------------------------------
     " I3 configuration syntax highlight
