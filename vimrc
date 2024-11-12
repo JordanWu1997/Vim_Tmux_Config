@@ -1168,8 +1168,8 @@
     " CPP
     autocmd FileType cpp
                 \ setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=-1
-    " Markdown (vimwiki)
-    autocmd FileType markdown
+    " Markdown (also vimwiki)
+    autocmd BufEnter *.md
                 \ setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=-1
 
 " ============================================================================
@@ -2081,7 +2081,7 @@
 
 " Markdown -------------------------------------------------------------------
     " Set spell check for markdown files
-    autocmd FileType markdown setlocal spell
+    autocmd BufEnter *.md setlocal spell
     " Markdown previewer [no extra vim plugin needed]
     " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
     " Google-chrome extension is needed for markdown viewer

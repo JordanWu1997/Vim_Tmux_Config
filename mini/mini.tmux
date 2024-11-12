@@ -207,5 +207,6 @@ bind -n End send Escape "OF"
 # ============================================================================
 
 # Toggle TMUX statusline/borderline
-bind B set status
 bind b set pane-border-status
+bind B set status
+bind C-g set status
