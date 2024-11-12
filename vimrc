@@ -1168,6 +1168,9 @@
     " CPP
     autocmd FileType cpp
                 \ setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=-1
+    " Markdown (vimwiki)
+    autocmd FileType markdown
+                \ setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=-1
 
 " ============================================================================
 " Part 2 - Vim-theme settings (Plugins settings and mappings)
@@ -1582,14 +1585,19 @@
         nmap <leader>wT <Esc>:VimwikiTOC<CR>
         nmap <leader><CR> <Plug>VimwikiFollowLink
         nmap <leader><Backspace> <Plug>VimwikiGoBackLink
+        " Backlinks
+        nmap <leader>w<Backspace> <Esc>:VimwikiBacklinks<CR>
+        nmap <leader>wyy <Esc>:VimwikiPasteLink<CR>jddk:echo 'Current Link Yanked'<CR>
         " Goto markdown file (create one if there is no one)
         nmap <leader>w<CR> <Plug>VimwikiGoto
         " Create table
         nmap <leader>wtt <Esc>:VimwikiTable<CR>
         nmap <leader>wth <Esc>:VimwikiTableMoveColumnLeft<CR>
         nmap <leader>wtl <Esc>:VimwikiTableMoveColumnRight<CR>
+        " Toggle checkbox
+        nmap <leader>wct <Esc>:VimwikiToggleListItem<CR>
         " Add HTML tag that assigns text background color
-        nmap <leader>wc <Esc>:VimwikiColorize<CR>
+        nmap <leader>wcc <Esc>:VimwikiColorize<CR>
         " Diary mappings (start with v and then d)
         nmap <leader>wdG <Plug>VimwikiDiaryGenerateLinks
         nmap <leader>wdI <Plug>VimwikiDiaryIndex
@@ -1598,6 +1606,14 @@
         nmap <leader>wdp <Esc>:VimwikiDiaryPrevDay<CR>
         nmap <C-Up>      <Esc>:VimwikiDiaryPrevDay<CR>
         nmap <C-Down>    <Esc>:VimwikiDiaryNextDay<CR>
+        " Highlight current word
+        nmap <leader>wcw <Esc>:VimwikiCurrentWordToggle<CR>
+        " Search in vimwiki
+        nmap <leader>w/  <Esc>:VimwikiSearch<space>
+        nmap <leader>wt/ <Esc>:VimwikiSearchTags<space>
+        " Tag (Vimwiki-style: :TAG1:TAG2:TAG3:)
+        nmap <leader>wtR <Esc>:VimwikiRebuildTags<CR>
+        nmap <leader>wtG <Esc>:VimwikiGenerateTagLinks<CR>
     endif
 
 " Goyo -----------------------------------------------------------------------
@@ -2103,6 +2119,10 @@
     noremap <leader>ml <Esc>i[this_is_a_link]()<Left>
     " Insert code block
     noremap <leader>mb <Esc>i```<CR>```<Up>
+    " Insert checkbox
+    noremap <leader>mt <Esc>i-<space>[ ]<space>
+    " Insert tag (Vimwiki-favored)
+    noremap <leader>mw <Esc>i::<Esc>i
     " Insert HTML style color tag
     noremap <leader>mc <Esc>i<span style="color:"><Esc>F<<Esc>19<Right>i
     noremap <leader>mC <Esc>a</span><Esc>

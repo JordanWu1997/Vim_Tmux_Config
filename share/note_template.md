@@ -1,4 +1,5 @@
-Tags:
+Tags: #Note
+Vimwiki: :Note:
 
 ---
 
