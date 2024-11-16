@@ -8,7 +8,6 @@
 " Extra commands
 " ============================================================================
 " from https://github.com/phongnh/fzf-settings.vim/blob/master/plugin/fzf_settings.vim
-" Extra commands
 
 function! s:warn(message) abort
     echohl WarningMsg
@@ -220,3 +219,24 @@ function! Changes()
 endfunction
 
 command! FZFChanges call Changes()
+
+" ============================================================================
+" FZF Buffer Delete
+" ============================================================================
+" from https://www.reddit.com/r/neovim/comments/mlqyca/fzf_buffer_delete/
+
+function! s:list_buffers()
+  redir => list
+  silent ls
+  redir END
+  return split(list, "\n")
+endfunction
+
+function! s:delete_buffers(lines)
+  execute 'bwipeout' join(map(a:lines, {_, line -> split(line)[0]}))
+endfunction
+
+command! FZFBD call fzf#run(fzf#wrap({
+    \ 'source': s:list_buffers(),
+    \ 'sink*': { lines -> s:delete_buffers(lines) },
+    \ 'options': '--multi --bind V:select-all'}))

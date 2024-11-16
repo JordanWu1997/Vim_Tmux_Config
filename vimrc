@@ -1036,11 +1036,6 @@
         Plug 'michaeljsmith/vim-indent-object'
         " Multiple cursor with extended visual-multi mode
         Plug 'mg979/vim-visual-multi', { 'branch': 'master' }
-        " Git integration (Git functions in vim command line)
-        Plug 'tpope/vim-fugitive'
-        " GitGutter (enhanced signify), also with git integration
-        Plug 'airblade/vim-gitgutter',
-                    \ { 'on': ['GitGutterToggle', 'GitGutterEnable'] }
     endif
 
 " [Tmux] ---------------------------------------------------------------------
@@ -1051,6 +1046,21 @@
     "Plug 'roxma/vim-tmux-clipboard'
     " Navigate seamlessly in vim and tmux (Ctrl+h/j/k/l)
     Plug 'christoomey/vim-tmux-navigator'
+
+" [Git] ----------------------------------------------------------------------
+    if USING_CODING_TOOL_PLUG
+        " Git integration (Git functions in vim command line)
+        Plug 'tpope/vim-fugitive'
+        " GitGutter (enhanced signify), also with git integration
+        Plug 'airblade/vim-gitgutter',
+                    \ { 'on': ['GitGutterToggle', 'GitGutterEnable'] }
+    endif
+
+" [DB] -----------------------------------------------------------------------
+    if USING_CODING_TOOL_PLUG
+        " SQL DB
+        Plug 'tpope/vim-dadbod'
+    endif
 
 " [LSP] ----------------------------------------------------------------------
    " Language Server Protocol (LSP)
@@ -1364,6 +1374,7 @@
     nnoremap <leader>fh/ :FZFHistory/<CR>
     " Buffers/Windows
     nnoremap <leader>fbs :FZFBuffers<CR>
+    nnoremap <leader>fbd :FZFBD<CR>
     nnoremap <leader>fws :FZFWindows<CR>
     " Marks
     nnoremap <leader>fmk :FZFMarks<CR>
@@ -2130,8 +2141,8 @@
     noremap <leader>mT <Esc>:execute('r'.g:MARKDOWN_TABLE_TEMPLATE)<CR>
 
 " LanguageTool ---------------------------------------------------------------
-    noremap <leader>Lc <Esc>:LanguageToolCheck<CR>
-    noremap <leader>LC <Esc>:LanguageToolClear<CR>
+    noremap <leader>LC <Esc>:LanguageToolCheck<CR>
+    noremap <leader>Lc <Esc>:LanguageToolClear<CR>
 
 "" BitoAI ---------------------------------------------------------------------
     "noremap <leader>aic :BitoAiCheck<CR>
