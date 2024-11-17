@@ -1203,14 +1203,12 @@
         let g:lightline.active = {
             \ 'left': [ [ 'mode', 'paste' ],
             \           [ 'gitbranch', 'readonly', 'absolutepath', 'modified' ] ],
-            \ 'right': [ [ 'lineinfo' ],
-            \            [ 'percent' ],
+            \ 'right': [ [ 'percent', 'lineinfo' ],
             \            [ 'spell', 'fileformat', 'fileencoding', 'filetype' ] ] }
         " Inactive statusline
         let g:lightline.inactive = {
             \ 'left': [ [ 'absolutepath', 'modified' ] ],
-            \ 'right': [ [ 'lineinfo' ],
-            \            [ 'percent' ],
+            \ 'right': [ [ 'percent', 'lineinfo' ],
             \            [ 'spell', 'fileformat', 'fileencoding', 'filetype' ] ] }
         " Statusline component function
         let g:lightline.component_function = { 'gitbranch': 'FugitiveHead', }
