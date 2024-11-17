@@ -1202,15 +1202,16 @@
         " Active statusline
         let g:lightline.active = {
             \ 'left': [ [ 'mode', 'paste' ],
-            \           [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+            \           [ 'gitbranch', 'readonly', 'absolutepath', 'modified' ] ],
             \ 'right': [ [ 'lineinfo' ],
             \            [ 'percent' ],
-            \            [ 'fileformat', 'fileencoding', 'filetype' ] ] }
+            \            [ 'spell', 'fileformat', 'fileencoding', 'filetype' ] ] }
         " Inactive statusline
         let g:lightline.inactive = {
-            \ 'left': [ [ 'filename' ] ],
+            \ 'left': [ [ 'absolutepath', 'modified' ] ],
             \ 'right': [ [ 'lineinfo' ],
-            \            [ 'percent' ] ] }
+            \            [ 'percent' ],
+            \            [ 'spell', 'fileformat', 'fileencoding', 'filetype' ] ] }
         " Statusline component function
         let g:lightline.component_function = { 'gitbranch': 'FugitiveHead', }
         " Fancy symbol for statusline separator
