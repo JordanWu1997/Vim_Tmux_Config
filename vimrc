@@ -988,8 +988,8 @@
         Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
         " Limelight (Light-off tool with goyo)
         Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
-        " Fancy startup page of vim
-        Plug 'mhinz/vim-startify'
+        "" Fancy startup page of vim
+        "Plug 'mhinz/vim-startify'
         " Vim wiki for knowledge storage
         Plug 'vimwiki/vimwiki'
         " History of yank
@@ -1222,14 +1222,14 @@
         " Part 3 - Tabline setup (bufferline plugin) -------------------------
         " Tabline
         let g:lightline.tabline = {
-            \ 'left': [ ['buffers'] ],
-            \ 'right': [ ['tabs'] ] }
+            \ 'left': [ ['tabs'] ],
+            \ 'right': [ ['buffers'] ] }
         " Tabline component
         let g:lightline.component_type = { 'buffers': 'tabsel' }
         let g:lightline.component_expand = {
             \ 'buffers': 'lightline#bufferline#buffers' }
         " Tabline (bufferline plugin)
-        let g:lightline#bufferline#show_number = 0
+        let g:lightline#bufferline#show_number = 1
         let g:lightline#bufferline#shorten_path = 1
         let g:lightline#bufferline#min_buffer_count = 2
         let g:lightline#bufferline#min_tab_count = 2
