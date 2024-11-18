@@ -572,6 +572,9 @@
     " Delete buffer
     noremap <leader>bd :bdelete<CR>
     noremap <leader>bD :bdelete<space>
+    " Delete all other buffers
+    " -- https://stackoverflow.com/questions/4545275/vim-close-all-buffers-but-this-one
+    noremap <leader>bo :%bd\|e#\|bd#<cr>
     " Undo buffer to last save
     noremap <leader>bu :edit!<CR>
     " Navigate through buffers
@@ -990,8 +993,10 @@
         Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
         " Fancy startup page of vim
         Plug 'mhinz/vim-startify'
-        " Vim wiki for knowledge storage
+        " Wiki for knowledge storage
         Plug 'vimwiki/vimwiki'
+        " Vimwiki plugin for calendar
+        Plug 'mattn/calendar-vim', { 'on': 'Calendar' }
         " History of yank
         Plug 'vim-scripts/YankRing.vim'
         " Register investigator
@@ -1127,6 +1132,8 @@
 " [Language] -----------------------------------------------------------------
     " Language Tool
     Plug 'dpelle/vim-LanguageTool', { 'on': 'LanguageToolCheck' }
+    "" Spell/Tone Tool
+    "Plug 'preservim/vim-wordy'
 
 " [I3 syntax highlight] ------------------------------------------------------
     " I3 configuration syntax highlight
@@ -1350,7 +1357,9 @@
     nnoremap <leader>fbL :execute ":FZFBLines " . expand('<cword>')<CR>
     nnoremap <leader>fgl :FZFLines<CR>
     nnoremap <leader>fgL :execute ":FZFLines " . expand('<cword>')<CR>
-    nnoremap <leader>?   :execute ":FZFLines " . expand('<cword>')<CR>
+    " Line in global buffer
+    nnoremap <leader>f/  :FZFLines<CR>
+    nnoremap <leader>f?  :execute ":FZFLines " . expand('<cword>')<CR>
     " Tag in local/global buffer
     nnoremap <leader>fbt :FZFBTags<CR>
     nnoremap <leader>fbT :execute ":FZFBTag " . expand('<cword>')<CR>
@@ -1380,8 +1389,8 @@
     nnoremap <leader>fmk :FZFMarks<CR>
     nnoremap <leader>f'  :FZFMarks<CR>
     " Miscellaneous
-    nnoremap <leader>qO  :FZFQuickFix<CR>
-    nnoremap <leader>eO  :FZFLocList<CR>
+    nnoremap <leader>fql :FZFQuickFix<CR>
+    nnoremap <leader>fel :FZFLocList<CR>
     nnoremap <leader>fcd :FZFCommands<CR>
     nnoremap <leader>fmp :FZFMaps<CR>
     nnoremap <leader>fft :FZFFiletypes<CR>
@@ -1399,6 +1408,8 @@
     nnoremap <leader>go :FZFJumps<CR>
     nnoremap <leader>rg :FZFRg<CR>
     nnoremap <leader>rG :FZFRG<CR>
+    nnoremap <leader>qo :FZFQuickFix<CR>
+    nnoremap <leader>eo :FZFLocList<CR>
 
 " NERDTree -------------------------------------------------------------------
     " NERDTree Pane
@@ -1625,6 +1636,8 @@
         " Tag (Vimwiki-style: :TAG1:TAG2:TAG3:)
         nmap <leader>wtR <Esc>:VimwikiRebuildTags<CR>
         nmap <leader>wtG <Esc>:VimwikiGenerateTagLinks<CR>
+        " Calendar plug-in
+        nmap <leader>wcr <Esc>:Calendar<CR>
     endif
 
 " Goyo -----------------------------------------------------------------------
