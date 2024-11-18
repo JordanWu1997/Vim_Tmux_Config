@@ -991,9 +991,9 @@
         Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
         " Limelight (Light-off tool with goyo)
         Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
-        " Fancy startup page of vim
-        Plug 'mhinz/vim-startify'
-        " Wiki for knowledge storage
+        "" Fancy startup page of vim
+        "Plug 'mhinz/vim-startify'
+        " Vim wiki for knowledge storage
         Plug 'vimwiki/vimwiki'
         " Vimwiki plugin for calendar
         Plug 'mattn/calendar-vim', { 'on': 'Calendar' }
@@ -1209,15 +1209,14 @@
         " Active statusline
         let g:lightline.active = {
             \ 'left': [ [ 'mode', 'paste' ],
-            \           [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
-            \ 'right': [ [ 'lineinfo' ],
-            \            [ 'percent' ],
-            \            [ 'fileformat', 'fileencoding', 'filetype' ] ] }
+            \           [ 'gitbranch', 'readonly', 'absolutepath', 'modified' ] ],
+            \ 'right': [ [ 'percent', 'lineinfo' ],
+            \            [ 'spell', 'fileformat', 'fileencoding', 'filetype' ] ] }
         " Inactive statusline
         let g:lightline.inactive = {
-            \ 'left': [ [ 'filename' ] ],
-            \ 'right': [ [ 'lineinfo' ],
-            \            [ 'percent' ] ] }
+            \ 'left': [ [ 'absolutepath', 'modified' ] ],
+            \ 'right': [ [ 'percent', 'lineinfo' ],
+            \            [ 'spell', 'fileformat', 'fileencoding', 'filetype' ] ] }
         " Statusline component function
         let g:lightline.component_function = { 'gitbranch': 'FugitiveHead', }
         " Fancy symbol for statusline separator
@@ -1229,14 +1228,14 @@
         " Part 3 - Tabline setup (bufferline plugin) -------------------------
         " Tabline
         let g:lightline.tabline = {
-            \ 'left': [ ['buffers'] ],
-            \ 'right': [ ['tabs'] ] }
+            \ 'left': [ ['tabs'] ],
+            \ 'right': [ ['buffers'] ] }
         " Tabline component
         let g:lightline.component_type = { 'buffers': 'tabsel' }
         let g:lightline.component_expand = {
             \ 'buffers': 'lightline#bufferline#buffers' }
         " Tabline (bufferline plugin)
-        let g:lightline#bufferline#show_number = 0
+        let g:lightline#bufferline#show_number = 1
         let g:lightline#bufferline#shorten_path = 1
         let g:lightline#bufferline#min_buffer_count = 2
         let g:lightline#bufferline#min_tab_count = 2
