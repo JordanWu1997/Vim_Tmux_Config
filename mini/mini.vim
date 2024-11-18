@@ -1,8 +1,8 @@
 " ~/.vimrc
 " vim: ft=vim
-" ========================================================================== "
-" My minimal cross-platfrom vim config for normal usage and python coding    "
-" ========================================================================== "
+" ============================================================================
+" My minimal cross-platfrom vim config for normal usage and python coding
+" ============================================================================
 "
 " NOTE: Vim installation with clipboard support (+clipboard)
 " - UNIX-like: sudo apt install vim-gtk3
