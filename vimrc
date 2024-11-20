@@ -1400,6 +1400,7 @@
     nnoremap <leader>fjl :FZFJumps<CR>
     " FZF replacement
     nnoremap <leader>'  :FZFBuffers<CR>
+    nnoremap <leader>bD :FZFBD<CR>
     nnoremap <leader>mk :FZFMarks<CR>
     nnoremap <leader>g; :FZFChanges<CR>
     nnoremap <leader>g. :FZFChanges<CR>
@@ -1616,7 +1617,7 @@
         nmap <leader>wth <Esc>:VimwikiTableMoveColumnLeft<CR>
         nmap <leader>wtl <Esc>:VimwikiTableMoveColumnRight<CR>
         " Toggle checkbox
-        nmap <leader>wct <Esc>:VimwikiToggleListItem<CR>
+        nmap <leader>w<space> <Esc>:VimwikiToggleListItem<CR>
         " Add HTML tag that assigns text background color
         nmap <leader>wcc <Esc>:VimwikiColorize<CR>
         " Diary mappings (start with v and then d)
