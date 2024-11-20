@@ -1222,7 +1222,7 @@
             \            [ 'fileformat', 'fileencoding', 'filetype' ] ] }
         " Statusline component function
         let g:lightline.component_function = {
-            \ 'gitbranch': 'FugitiveHead',
+            \ 'gitbranch': 'LightlineGitbranch',
             \ 'filename': 'LightlineFileName',
             \ 'lineinfo': 'LightlineLineinfo',
             \ 'spell': 'LightlineSpell',
@@ -1276,10 +1276,10 @@
         function! LightlineFileName()
             if expand('%t') == ''
                 return '[No Name]'
-            elseif strlen(expand('%:t')) >= 40
+            elseif strlen(expand('%:t')) >= 35
                 return expand('%:t')
-            elseif winwidth(0) <= 60
-                \ || strlen(expand('%:~')) >= 55 || strlen(expand('%:p')) >= 60
+            elseif winwidth(0) <= 70
+                \ || strlen(expand('%:~')) >= 60 || strlen(expand('%:p')) >= 60
                 if expand('%:p') =~ '^' . expand('~')
                     return pathshorten(expand('%:~'))
                 else
@@ -1295,6 +1295,10 @@
             endif
         endfunction
         " Hide for small window
+        function! LightlineGitbranch()
+            return winwidth(0) > 80 ? FugitiveHead() : ''
+        endfunction
+        " Hide for small window
         function! LightlineSpell()
             return winwidth(0) > 85 ? (&spell ? &spelllang : '') : ''
         endfunction
@@ -1304,15 +1308,15 @@
         endfunction
         " Hide for small window
         function! LightlineFileencoding()
-            return winwidth(0) > 65 ? (&fileencoding !=# '' ? &fileencoding : 'NO FE') : ''
+            return winwidth(0) > 60 ? (&fileencoding !=# '' ? &fileencoding : 'NO FE') : ''
         endfunction
         " Hide for small window
         function! LightlineFiletype()
-            return winwidth(0) > 55 ? (&filetype !=# '' ? &filetype : 'NO FT') : ''
+            return winwidth(0) > 45 ? (&filetype !=# '' ? &filetype : 'NO FT') : ''
         endfunction
         " Hide for small window
         function! LightlineLineinfo()
-            return winwidth(0) > 40 ? printf("%3d:%-2d", line('.'), col('.')) : ''
+            return winwidth(0) > 30 ? printf("%3d:%-2d", line('.'), col('.')) : ''
         endfunction
 
     endfunction
