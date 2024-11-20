@@ -1210,7 +1210,7 @@
         " Active statusline
         let g:lightline.active = {
             \ 'left': [ [ 'mode', 'paste' ],
-            \           [ 'gitbranch', 'readonly', 'absolutepath', 'modified' ] ],
+            \           [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
             \ 'right': [ [ 'percent', 'lineinfo' ],
             \            [ 'spell', 'fileformat', 'fileencoding', 'filetype' ] ] }
         " Inactive statusline
@@ -1219,7 +1219,12 @@
             \ 'right': [ [ 'percent', 'lineinfo' ],
             \            [ 'fileformat', 'fileencoding', 'filetype' ] ] }
         " Statusline component function
-        let g:lightline.component_function = { 'gitbranch': 'FugitiveHead' }
+        let g:lightline.component_function = {
+            \ 'gitbranch': 'FugitiveHead',
+            \ 'filename': 'LightlineFileName',
+            \ 'fileformat': 'LightlineFileformat',
+            \ 'fileencoding': 'LightlineFileencoding',
+            \ 'filetype': 'LightlineFiletype' }
         " Fancy symbol for statusline separator
         if a:fancy
             let g:lightline.separator = { 'left': "", "right": "" }
@@ -1261,6 +1266,43 @@
             let s:palette.tabline.middle = s:palette.normal.middle
             let s:palette.replace.middle = s:palette.normal.middle
         endif
+
+        " Part 5 - Lightline component modules -------------------------------
+        " Truncate file path for small window or long filename
+        function! LightlineFileName()
+            if expand('%t') == ''
+                return '[No Name]'
+            elseif strlen(expand('%:t')) > 40
+                return expand('%:t')
+            elseif winwidth(0) <= 60
+                \ || strlen(expand('%:~')) > 50 || strlen(expand('%:p')) > 65
+                if expand('%:p') =~ '^' . expand('~')
+                    return pathshorten(expand('%:~'))
+                else
+                    return pathshorten(expand('%:p'))
+                endif
+            else
+                " Use ~ as user's home
+                if expand('%:p') =~ '^' . expand('~')
+                    return expand('%:~')
+                else
+                    return expand('%:p')
+                endif
+            endif
+        endfunction
+        " Hide for small window
+        function! LightlineFileformat()
+            return winwidth(0) > 85 ? &fileformat : ''
+        endfunction
+        " Hide for small window
+        function! LightlineFileencoding()
+            return winwidth(0) > 75 ? (&fileencoding !=# '' ? &fileencoding : 'NO FE') : ''
+        endfunction
+        " Hide for small window
+        function! LightlineFiletype()
+            return winwidth(0) > 65 ? (&filetype !=# '' ? &filetype : 'NO FT') : ''
+        endfunction
+
     endfunction
 
 " Conditional lightline status/tab line --------------------------------------
@@ -1322,6 +1364,10 @@
     nmap <leader>d7 <Plug>lightline#bufferline#delete(7)
     nmap <leader>d8 <Plug>lightline#bufferline#delete(8)
     nmap <leader>d9 <Plug>lightline#bufferline#delete(9)
+    " Change buffer order
+    nmap <leader><F1> <Plug>lightline#bufferline#move_previous()
+    nmap <leader><F2> <Plug>lightline#bufferline#move_next()
+    nmap <leader>br <Plug>lightline#bufferline#reset_order()
 
 " ============================================================================
 " Part 3 - File/Code browsing settings (Plugins settings and mappings)
@@ -2142,10 +2188,10 @@
     noremap <leader>mV <Esc>i<video src="" width="100%" height="100%" control/><Esc>37<Left>
     " Insert link
     noremap <leader>ml <Esc>i[this_is_a_link]()<Left>
-    " Insert code block
-    noremap <leader>mb <Esc>i```<CR>```<Up>
     " Insert checkbox
-    noremap <leader>mt <Esc>i-<space>[ ]<space>
+    noremap <leader>mb <Esc>i-<space>[ ]<space>
+    " Insert code block
+    noremap <leader>mB <Esc>i```<CR>```<Up>
     " Insert tag (Vimwiki-favored)
     noremap <leader>mw <Esc>i::<Esc>i
     " Insert HTML style color tag
@@ -2153,6 +2199,9 @@
     noremap <leader>mC <Esc>a</span><Esc>
     " Insert HTML table template
     noremap <leader>mT <Esc>:execute('r'.g:MARKDOWN_TABLE_TEMPLATE)<CR>
+    " Send headers to quickfix/location list
+    noremap <leader>mh <Esc>:vimgrep /^#/ %<CR>
+    noremap <leader>mH <Esc>:lvimgrep /^#/ %<CR>
 
 " LanguageTool ---------------------------------------------------------------
     noremap <leader>LC <Esc>:LanguageToolCheck<CR>
