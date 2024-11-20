@@ -1196,6 +1196,7 @@
 " As for color scheme, it is in the end of this plug settings section
 
 " Lightline statusline/tabline options ---------------------------------------
+"
     " Lightline style setup
     function! LightlineStyle(theme, fancy, central_region_opaque)
 
@@ -1216,9 +1217,9 @@
         let g:lightline.inactive = {
             \ 'left': [ [ 'absolutepath', 'modified' ] ],
             \ 'right': [ [ 'percent', 'lineinfo' ],
-            \            [ 'spell', 'fileformat', 'fileencoding', 'filetype' ] ] }
+            \            [ 'fileformat', 'fileencoding', 'filetype' ] ] }
         " Statusline component function
-        let g:lightline.component_function = { 'gitbranch': 'FugitiveHead', }
+        let g:lightline.component_function = { 'gitbranch': 'FugitiveHead' }
         " Fancy symbol for statusline separator
         if a:fancy
             let g:lightline.separator = { 'left': "", "right": "" }
@@ -1228,14 +1229,14 @@
         " Part 3 - Tabline setup (bufferline plugin) -------------------------
         " Tabline
         let g:lightline.tabline = {
-            \ 'left': [ ['tabs'] ],
-            \ 'right': [ ['buffers'] ] }
+            \ 'left': [ ['buffers'] ],
+            \ 'right': [ ['tabs'] ] }
         " Tabline component
         let g:lightline.component_type = { 'buffers': 'tabsel' }
         let g:lightline.component_expand = {
             \ 'buffers': 'lightline#bufferline#buffers' }
         " Tabline (bufferline plugin)
-        let g:lightline#bufferline#show_number = 1
+        let g:lightline#bufferline#show_number = 0
         let g:lightline#bufferline#shorten_path = 1
         let g:lightline#bufferline#min_buffer_count = 2
         let g:lightline#bufferline#min_tab_count = 2
