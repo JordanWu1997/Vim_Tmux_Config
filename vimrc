@@ -678,7 +678,22 @@
     " Show abbreviate in vim
     noremap <leader>ab :abbreviate<CR>
 
-" Better backup, swap and undoes storage -------------------------------------
+" Viminfo settings -----------------------------------------------------------
+    " NOTE:
+    " -- viminfo contains info like edits files, jump around and execute commands etc.
+    " -- viminfo file can also be redirect with -i option in CLI
+
+    " Exclude directory pattern to track in viminfo [r must be put before n]
+    " -- https://vi.stackexchange.com/questions/17063/exclude-file-pattern-from-keeping-it-in-viminfo-history
+    set viminfo+=r/tmp,r~/Desktop/C-LINK/AI@CORE,
+    " Change viminfo file location from default $HOME/.viminfo
+    if USING_NEOVIM
+        set viminfo+=n~/.config/nvim/dirs/viminfo
+    else
+        set viminfo+=n~/.vim/dirs/viminfo
+    endif
+
+" Better backup, swap and undos storage --------------------------------------
     if USING_NEOVIM
         " Directory to place swap files
         set directory=~/.config/nvim/dirs/tmp
@@ -689,7 +704,6 @@
         " Persistent undoes - undo after re-opening
         set undofile
         set undodir=~/.config/nvim/dirs/undos
-        set viminfo+=n~/.config/nvim/dirs/viminfo
         " Create needed directories if they don't exist
         if !isdirectory(&backupdir)
             call mkdir(&backupdir, 'p')
@@ -710,7 +724,6 @@
         " Persistent undoes - undo after re-opening
         set undofile
         set undodir=~/.vim/dirs/undos
-        set viminfo+=n~/.vim/dirs/viminfo
         " Create needed directories if they don't exist
         if !isdirectory(&backupdir)
             call mkdir(&backupdir, 'p')
@@ -1316,7 +1329,7 @@
         endfunction
         " Hide for small window
         function! LightlineLineinfo()
-            return winwidth(0) > 30 ? printf("%3d:%-2d", line('.'), col('.')) : ''
+            return winwidth(0) > 35 ? printf("%3d:%-2d", line('.'), col('.')) : ''
         endfunction
 
     endfunction
