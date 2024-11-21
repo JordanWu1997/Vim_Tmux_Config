@@ -295,7 +295,9 @@
     " Inline substitution (press & to repeat last substitution action)
     vnoremap gs :s/\<<c-r><c-w>\>//g<left><left>
     nnoremap gs :s/\<<c-r><c-w>\>//g<left><left>
-    nnoremap gS :%s/\<<c-r><c-w>\>//g<left><left>
+    " Insert date (to date/to sec)
+    nnoremap <leader>idd <Esc>i<C-r>=strftime('%F')<CR>
+    nnoremap <leader>ids <Esc>i<C-r>=strftime('%Y-%m-%d %H:%M:%S')<CR>
 
 " Save/Load file hotkey ------------------------------------------------------
     " NOTE:
@@ -347,10 +349,6 @@
     vnoremap <leader>est :!sort<CR>
     " Filter out unique word [Context should be sorted first]
     vnoremap <leader>euq :!uniq<CR>
-    " Insert date (to date)
-    nnoremap <leader>edd :r !date '+\%Y-\%m-\%d'<CR>
-    " Insert date (to sec)
-    nnoremap <leader>eds :r !date '+\%Y-\%m-\%d \%H:\%M:\%S'<CR>
 
 " General Vim settings -------------------------------------------------------
     set exrc            " Search vimrc file in current directory
@@ -685,7 +683,7 @@
 
     " Exclude directory pattern to track in viminfo [r must be put before n]
     " -- https://vi.stackexchange.com/questions/17063/exclude-file-pattern-from-keeping-it-in-viminfo-history
-    set viminfo+=r/tmp,r~/Desktop/C-LINK/AI@CORE,
+    set viminfo+=r/tmp,
     " Change viminfo file location from default $HOME/.viminfo
     if USING_NEOVIM
         set viminfo+=n~/.config/nvim/dirs/viminfo
@@ -1004,8 +1002,8 @@
         Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
         " Limelight (Light-off tool with goyo)
         Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
-        "" Fancy startup page of vim
-        "Plug 'mhinz/vim-startify'
+        " Fancy startup page of vim
+        Plug 'mhinz/vim-startify'
         " Vim wiki for knowledge storage
         Plug 'vimwiki/vimwiki'
         " Vimwiki plugin for calendar
@@ -1693,7 +1691,7 @@
         nmap <leader>wth <Esc>:VimwikiTableMoveColumnLeft<CR>
         nmap <leader>wtl <Esc>:VimwikiTableMoveColumnRight<CR>
         " Toggle checkbox
-        nmap <leader>w<space> <Esc>:VimwikiToggleListItem<CR>
+        nmap <leader>\ <Esc>:VimwikiToggleListItem<CR>
         " Add HTML tag that assigns text background color
         nmap <leader>wcc <Esc>:VimwikiColorize<CR>
         " Diary mappings (start with v and then d)
@@ -2149,6 +2147,7 @@
 " Python skeleton (add python skeleton for new python .py file) --------------
     if USING_PYTHON_SKELETON
         exec 'autocmd BufNewFile *.py 0r' s:PYTHON_SKELETON
+        exec 'autocmd BufNewFile *.py :silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g'
     endif
 
 " ============================================================================
@@ -2209,6 +2208,7 @@
     " Load template file when new file created
     if USING_MARKDOWN_TEMPLATE
         exec 'autocmd BufNewFile *.md 0r' g:MARKDOWN_TEMPLATE
+        exec 'autocmd BufNewFile *.md :silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g'
     endif
     " Insert image
     noremap <leader>mi <Esc>i![this_is_an_image]()<Left>
