@@ -8,13 +8,14 @@
 # | |/ /  | | | |  Author: Jordan Kuan-Hsien Wu           \ \      / / | | | #
 # | ' /   | |_| |  E-mail: jordankhwu@gmail.com            \ \ /\ / /| | | | #
 # | . \   |  _  |  Github: https://github.com/JordanWu1997  \ V  V / | |_| | #
-# |_|\_\  |_| |_|  Date:   YYYY-mm-DD HH:MM:SS               \_/\_/   \___/  #
+# |_|\_\  |_| |_|  Datetime: YYYY-mm-DD HH:MM:SS             \_/\_/   \___/  #
 #                                                                            #
 # ========================================================================== #
 """
 
 
 def main():
+    """  """
     pass
 
 

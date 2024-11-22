@@ -1,5 +1,5 @@
-- Tags: #Note
-- Vimwiki: :Note:
+- __Tags__: #Note
+- __Vimwiki__: :Note:
 
 ______________________________________________________________________
 
@@ -8,9 +8,9 @@ ______________________________________________________________________
 - __Description:__
 - __Author:__ Kuan-Hsien Wu
 - __Contact:__ jordankhwu@gmail.com
-- __Date:__ YYYY-mm-DD HH:MM:SS
+- __Datetime:__ YYYY-mm-DD HH:MM:SS
 
-# Table of Contents
+## Contents
 
 # Context
 

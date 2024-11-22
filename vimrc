@@ -115,9 +115,15 @@
     "    -- wget https://languagetool.org/download/archive/LanguageTool-5.9.zip
     "    -- unzip LanguageTool-5.9.zip
 
+" NOTE: Pandoc HTML template -------------------------------------------------
+    " Add template to $HOME/.pandoc for pandoc
+    " -- Copy HTML templates
+        " -- curl https://raw.githubusercontent.com/ryangrose/\
+        "         easy-pandoc-templates/master/copy_templates.sh | bash
+
 " NOTE: Keyboard key repeat time settings ------------------------------------
     " Speed up/down key repeat time for pressing key
-    " -- e.g jjjjjjjj, kkkkkkkkkk, wwwwwwwwwww
+    " -- e.g. jjjjjjjj, kkkkkkkkkk, wwwwwwwwwww
     " Use Xset to set key repeat
     " --      xset [repeat rate] [start repeat time (ms)] [repeat rate (/sec)]
     " -- e.g. xset     r rate              300                    40
@@ -293,8 +299,8 @@
     noremap <leader>dj ]c
     noremap <leader>dk [c
     " Inline substitution (press & to repeat last substitution action)
-    vnoremap gs :s/\<<c-r><c-w>\>//g<left><left>
-    nnoremap gs :s/\<<c-r><c-w>\>//g<left><left>
+    noremap gs :s/<c-r><c-w>//g<left><left>
+    noremap gS :s/\<<c-r><c-w>\>//g<left><left>
     " Insert date (to date/to sec)
     nnoremap <leader>idd <Esc>i<C-r>=strftime('%F')<CR>
     nnoremap <leader>ids <Esc>i<C-r>=strftime('%Y-%m-%d %H:%M:%S')<CR>
@@ -1658,7 +1664,7 @@
         \ {'path': '~/Documents/KNOWLEDGE_BASE/', 'syntax': 'markdown', 'ext': '.md'},
         \ ]
         " Must set to expr to get vim-markdown-folding to work
-        let g:vimwiki_folding='expr'
+        let g:vimwiki_folding = 'expr'
         " Set all markdown filetype to vimwiki
         let g:vimwiki_global_ext = 1
         " Create tagbar type for vimwiki
@@ -2202,14 +2208,24 @@
         autocmd BufEnter *.md setlocal scrolloff=999
     endif
     " MARP: markdown presentation ecosystem (https://marp.app/)
-    noremap <leader>mp <Esc>:!marp % --html<CR>
-    let $OPENHTMLBROWSER = 'noremap <leader>mP :!'. s:WEBBROWSER .' %:r.html &<CR>'
-    autocmd BufEnter *.md exe $OPENHTMLBROWSER
+    autocmd BufEnter *.md noremap <leader>mp <Esc>:!marp % --html<CR>
+    let $MARPOPENHTMLBROWSER = 'noremap <leader>mP :!'. s:WEBBROWSER .' %:r.html &<CR>'
+    autocmd BufEnter *.md exe $MARPOPENHTMLBROWSER
     " Load template file when new file created
     if USING_MARKDOWN_TEMPLATE
         exec 'autocmd BufNewFile *.md 0r' g:MARKDOWN_TEMPLATE
         exec 'autocmd BufNewFile *.md :silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g'
     endif
+    " Pandoc: export markdown file as html
+    " -- To pack resources e.g. image to single HTML file
+    "    -- For newer pandoc, add --standalone --embed-resources
+    "    -- For older pandoc, add --self-contained
+    " -- Template: https://github.com/ryangrose/easy-pandoc-templates
+    autocmd BufEnter *.md noremap <leader>me
+            \ <Esc>:!pandoc % -f markdown -t html --template=bootstrap_menu.html
+            \ -o %:r.html --metadata=title:%:t:r --toc<space>
+    let $PANDOCOPENHTMLBROWSER = 'noremap <leader>mE :!'. s:WEBBROWSER .' %:r.html &<CR>'
+    autocmd BufEnter *.md exe $PANDOCOPENHTMLBROWSER
     " Insert image
     noremap <leader>mi <Esc>i![this_is_an_image]()<Left>
     noremap <leader>mI <Esc>i<img src="" width="100%" height="100%"/><Esc>29<Left>
