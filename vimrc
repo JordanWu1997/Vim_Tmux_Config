@@ -1479,7 +1479,7 @@
     nnoremap <leader>fcl :FZFChanges<CR>
     nnoremap <leader>fjl :FZFJumps<CR>
     " FZF replacement
-    nnoremap <leader>'  :FZFBuffers<CR>
+    nnoremap <leader>'' :FZFBuffers<CR>
     nnoremap <leader>bD :FZFBD<CR>
     nnoremap <leader>mk :FZFMarks<CR>
     nnoremap <leader>g; :FZFChanges<CR>
@@ -1667,6 +1667,8 @@
         let g:vimwiki_folding = 'expr'
         " Set all markdown filetype to vimwiki
         let g:vimwiki_global_ext = 1
+        " Keep markdwon file ext (.md) when generating link
+        let g:vimwiki_markdown_link_ext = 1
         " Create tagbar type for vimwiki
         let g:tagbar_type_vimwiki = {
                     \ 'ctagstype':'vimwiki',
@@ -1685,6 +1687,7 @@
         nmap <leader>wR <Plug>VimwikiRenameFile
         nmap <leader>ws <Plug>VimwikiUISelect
         nmap <leader>wT <Esc>:VimwikiTOC<CR>
+        nmap <leader>wC <Esc>:VimwikiCheckLinks<CR>
         nmap <leader><CR> <Plug>VimwikiFollowLink
         nmap <leader><Backspace> <Plug>VimwikiGoBackLink
         " Backlinks
@@ -2222,12 +2225,14 @@
     "    -- For older pandoc, add --self-contained
     " -- Template: https://github.com/ryangrose/easy-pandoc-templates
     autocmd BufEnter *.md noremap <leader>me
-            \ <Esc>:!pandoc % -f markdown -t html --template=bootstrap_menu.html
+            \ <Esc>:!pandoc % -f markdown -t html
+            \ --data-dir=$HOME/.pandoc
+            \ --template=bootstrap_menu.html
             \ -o %:r.html --metadata=title:%:t:r --toc<space>
     let $PANDOCOPENHTMLBROWSER = 'noremap <leader>mE :!'. s:WEBBROWSER .' %:r.html &<CR>'
     autocmd BufEnter *.md exe $PANDOCOPENHTMLBROWSER
     " Insert image
-    noremap <leader>mi <Esc>i![this_is_an_image]()<Left>
+    noremap <leader>mi <Esc>i![this_is_an_image](//)<Left>
     noremap <leader>mI <Esc>i<img src="" width="100%" height="100%"/><Esc>29<Left>
     " Insert video in markdown file
     noremap <leader>mV <Esc>i<video src="" width="100%" height="100%" control/><Esc>37<Left>

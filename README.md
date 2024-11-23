@@ -64,21 +64,21 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 <details open>
 <summary>NEOVIM_DEMO_01</summary>
 
-![alt text](./demo/NEOVIM_DEMO_01.png "Title")
+![NEOVIM_DEMO_01](./demo/NEOVIM_DEMO_01.png)
 
 </details>
 
 <details open>
 <summary>NEOVIM_DEMO_02</summary>
 
-![alt text](./demo/NEOVIM_DEMO_02.png "Title")
+![NEOVIM_DEMO_02](./demo/NEOVIM_DEMO_02.png)
 
 </details>
 
 <details open>
 <summary>TMUX_DEMO_01</summary>
 
-![alt text](./demo/TMUX_DEMO_01.png "Title")
+![TMUX_DEMO_01](./demo/TMUX_DEMO_01.png)
 
 </details>
 </details>
