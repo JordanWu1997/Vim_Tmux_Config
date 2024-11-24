@@ -1,6 +1,0 @@
-! #########################################################
-! Aurthor     : Kuan-Hsien Wu
-! Email       : jordankhwu@gapp.nthu.edu.tw
-! Description :
-! Date        : YYYY-mm-DD
-! #########################################################

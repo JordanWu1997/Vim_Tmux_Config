@@ -179,6 +179,8 @@
     let s:PYTHON_SKELETON = '$HOME/Desktop/Vim_Tmux_Config/share/skeleton.py'
     " Tex template file
     let s:TEX_TEMPLATE = '$HOME/Desktop/Vim_Tmux_Config/share/template.tex'
+    " Bash template file
+    let g:BASH_TEMPLATE = '$HOME/Desktop/Vim_Tmux_Config/share/bash_template.sh'
     " Markdown Template file
     let g:MARKDOWN_NOTE_TEMPLATE = '$HOME/Desktop/Vim_Tmux_Config/share/note_template.md'
     let g:MARKDOWN_TEMPLATE = g:MARKDOWN_NOTE_TEMPLATE
@@ -2171,6 +2173,12 @@
     let fortran_free_source = 1
     let fortran_do_enddo = 1
 
+" Bash -----------------------------------------------------------------------
+    if USING_MARKDOWN_TEMPLATE
+        exec 'autocmd BufNewFile *.sh 0r' g:BASH_TEMPLATE
+        exec 'autocmd BufNewFile *.sh :silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g'
+    endif
+
 " LaTex ----------------------------------------------------------------------
     " Set spell check for LaTex files
     autocmd FileType plaintex,context,tex setlocal spell
@@ -2238,7 +2246,7 @@
     noremap <leader>mV <Esc>i<video src="" width="100%" height="100%" control/><Esc>37<Left>
     " Insert link
     noremap <leader>ml <Esc>i[this_is_a_link]()<Left>
-    " Insert checkbox
+    " Insert checkbox (also included in VimwikiToggleListItem)
     noremap <leader>mb <Esc>i-<space>[ ]<space>
     " Insert code block
     noremap <leader>mB <Esc>i```<CR>```<Up>
@@ -2250,8 +2258,8 @@
     " Insert HTML table template
     noremap <leader>mT <Esc>:execute('r'.g:MARKDOWN_TABLE_TEMPLATE)<CR>
     " Send headers to quickfix/location list
-    noremap <leader>mh <Esc>:vimgrep /^#/ %<CR>
-    noremap <leader>mH <Esc>:lvimgrep /^#/ %<CR>
+    noremap <leader>mh <Esc>:lvimgrep /^#/ %<CR>
+    noremap <leader>mH <Esc>:vimgrep /^#/ %<CR>
 
 " LanguageTool ---------------------------------------------------------------
     noremap <leader>LC <Esc>:LanguageToolCheck<CR>
