@@ -161,8 +161,10 @@
     let USING_GUI_SOFTWARE = 1
     " Add python skeleton file to newly created .py python file
     let USING_PYTHON_SKELETON = 1
-    " Add Tex template file to newly created .tex tex file
+    " Add tex template file to newly created .tex tex file
     let USING_TEX_TEMPLATE = 1
+    " Add bash template file to newly created .sh bash file
+    let USING_BASH_TEMPLATE = 1
     " Add markdown template file to newly created .md markdown file
     let USING_MARKDOWN_TEMPLATE = 1
 
@@ -175,17 +177,20 @@
     let s:FZF_PATCH = '$HOME/Desktop/Vim_Tmux_Config/vim/patch/fzf_patch.vim'
     " Python that has jedi, pynvim and packages installed for completion
     let s:PYTHON_FOR_COMPLETION = '/usr/bin/python' "$CONDA_PYTHON_EXE
+    " Template Directory
+    let s:TEMPLATE_DIR = '$HOME/Desktop/Vim_Tmux_Config/share/'
     " Python skeleton file (template)
-    let s:PYTHON_SKELETON = '$HOME/Desktop/Vim_Tmux_Config/share/skeleton.py'
+    let s:PYTHON_SKELETON = s:TEMPLATE_DIR . 'skeleton.py'
     " Tex template file
-    let s:TEX_TEMPLATE = '$HOME/Desktop/Vim_Tmux_Config/share/template.tex'
+    let s:TEX_TEMPLATE = s:TEMPLATE_DIR . 'template.tex'
     " Bash template file
-    let g:BASH_TEMPLATE = '$HOME/Desktop/Vim_Tmux_Config/share/bash_template.sh'
+    let s:BASH_TEMPLATE = s:TEMPLATE_DIR . 'bash_template.sh'
     " Markdown Template file
-    let g:MARKDOWN_NOTE_TEMPLATE = '$HOME/Desktop/Vim_Tmux_Config/share/note_template.md'
-    let g:MARKDOWN_TEMPLATE = g:MARKDOWN_NOTE_TEMPLATE
-    " HTML Table template
-    let g:MARKDOWN_TABLE_TEMPLATE = '$HOME/Desktop/Vim_Tmux_Config/share/table.html'
+    let s:MARKDOWN_TEMPLATE = s:TEMPLATE_DIR . 'markdown_template.md'
+    " Markdown Table template (in HTML)
+    let g:MARKDOWN_TABLE_TEMPLATE = s:TEMPLATE_DIR . 'table.html'
+    " Vimwiki Template file
+    let g:WIKI_TEMPLATE_DIR = expand('$HOME/Documents/KNOWLEDGE_BASE/resources/template/')
     " Language Tool CLI jar file
     let g:languagetool_jar = '/opt/LanguageTool-5.9/languagetool-commandline.jar'
 
@@ -1723,7 +1728,42 @@
         nmap <leader>wtG <Esc>:VimwikiGenerateTagLinks<CR>
         " Calendar plug-in
         nmap <leader>wcr <Esc>:Calendar<CR>
+        " Template
+        nmap <Leader>wtI :call <SID>VimwikiInsertTemplate()<CR>
+        nmap <leader>wcd <Esc>:%s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g<CR>
     endif
+    " Function to list and select templates using fzf
+    function! s:VimwikiInsertTemplate() abort
+        " Check if template directory exists
+        if !isdirectory(g:WIKI_TEMPLATE_DIR)
+            echoerr "Template directory doesn't exist: " . g:WIKI_TEMPLATE_DIR
+            return
+        endif
+        " Get list of template files
+        let l:templates = split(globpath(g:WIKI_TEMPLATE_DIR, '*.md'), '\n')
+        " Extract template names for display
+        let l:template_names = map(copy(l:templates), 'fnamemodify(v:val, ":t:r")')
+        " Create dictionary mapping display names to full paths
+        let l:template_dict = {}
+        let l:index = 0
+        while l:index < len(l:templates)
+            let l:template_dict[l:template_names[l:index]] = l:templates[l:index]
+            let l:index += 1
+        endwhile
+        " Show selection menu using fzf
+        call fzf#run({
+            \ 'source': l:template_names,
+            \ 'sink': function('s:VimwikiReadSelectedTemplate', [l:template_dict]),
+            \ 'down': '25%'
+            \ })
+    endfunction
+    " Function to read and insert the selected template
+    function! s:VimwikiReadSelectedTemplate(template_dict, template_name) abort
+        let l:template_path = a:template_dict[a:template_name]
+        let l:template_content = readfile(l:template_path)
+        " Insert template content at cursor position
+        call append(line('.') - 1, l:template_content)
+    endfunction
 
 " Goyo -----------------------------------------------------------------------
     if USING_EXTRA_PLUG
@@ -2174,8 +2214,8 @@
     let fortran_do_enddo = 1
 
 " Bash -----------------------------------------------------------------------
-    if USING_MARKDOWN_TEMPLATE
-        exec 'autocmd BufNewFile *.sh 0r' g:BASH_TEMPLATE
+    if USING_BASH_TEMPLATE
+        exec 'autocmd BufNewFile *.sh 0r' s:BASH_TEMPLATE
         exec 'autocmd BufNewFile *.sh :silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g'
     endif
 
@@ -2224,7 +2264,7 @@
     autocmd BufEnter *.md exe $MARPOPENHTMLBROWSER
     " Load template file when new file created
     if USING_MARKDOWN_TEMPLATE
-        exec 'autocmd BufNewFile *.md 0r' g:MARKDOWN_TEMPLATE
+        exec 'autocmd BufNewFile *.md 0r' s:MARKDOWN_TEMPLATE
         exec 'autocmd BufNewFile *.md :silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g'
     endif
     " Pandoc: export markdown file as html
