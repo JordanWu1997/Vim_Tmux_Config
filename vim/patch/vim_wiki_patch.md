@@ -40,7 +40,7 @@
     ```vim
     " ONLY add the dot for ambiguous file ext ()
     let nonambiguous_extensions = ['.png', '.jpg', '.jpeg', '.pdf', '.gif', '.bmp']
-    if index(nonambiguous_extensions, ext_with_dot) != 0
+    if index(nonambiguous_extensions, ext_with_dot) == -1
       " Add the dot
       if do_add_ext
         let link_infos.filename .= vimwiki#vars#get_wikilocal('ext', link_infos.index)

@@ -166,7 +166,7 @@
     " Add bash template file to newly created .sh bash file
     let USING_BASH_TEMPLATE = 1
     " Add markdown template file to newly created .md markdown file
-    let USING_MARKDOWN_TEMPLATE = 1
+    let USING_MARKDOWN_TEMPLATE = 0
 
 " Variables for vim/neovim or plug-in ----------------------------------------
     " Web browser for markdown preview
@@ -1149,9 +1149,6 @@
                         \ 'for': [ 'markdown', 'vim-plug' ] }
         endif
     endif
-    " Markdown syntax header folding
-    Plug 'masukomi/vim-markdown-folding', { 'for': 'markdown' }
-    Plug 'mzlogin/vim-markdown-toc', { 'for': 'markdown' }
 
 " [Language] -----------------------------------------------------------------
     " Language Tool
@@ -1670,7 +1667,7 @@
         let g:vimwiki_list = [
         \ {'path': '~/Documents/KNOWLEDGE_BASE/', 'syntax': 'markdown', 'ext': '.md'},
         \ ]
-        " Must set to expr to get vim-markdown-folding to work
+        " Fold according to header
         let g:vimwiki_folding = 'expr'
         " Set all markdown filetype to vimwiki
         let g:vimwiki_global_ext = 1
@@ -2280,7 +2277,7 @@
     let $PANDOCOPENHTMLBROWSER = 'noremap <leader>mE :!'. s:WEBBROWSER .' %:r.html &<CR>'
     autocmd BufEnter *.md exe $PANDOCOPENHTMLBROWSER
     " Insert image
-    noremap <leader>mi <Esc>i![this_is_an_image](//)<Left>
+    noremap <leader>mi <Esc>i![this_is_an_image]()<Left>
     noremap <leader>mI <Esc>i<img src="" width="100%" height="100%"/><Esc>29<Left>
     " Insert video in markdown file
     noremap <leader>mV <Esc>i<video src="" width="100%" height="100%" control/><Esc>37<Left>
