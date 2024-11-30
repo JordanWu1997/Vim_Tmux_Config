@@ -505,7 +505,7 @@ and following keys are pressed. Table below includes some frequently used key ma
 | :------: | :------------------: | :--------------------------------: | :--------------------------------: | :-----------------------------------------: |
 | N/V      | `[LK]`+`[d]`+`[s/v]` | Add diff split Horizontal/Vertical | Add diff split Horizontal/Vertical |                                             |
 | N/V      | `[Lk]`+`[d]`+`[j/k]` | Jump to next/prev diff             | Jump to next/prev diff             |                                             |
-| N/V      | `[Lk]`+`[d]`+`[g]`   | Get diff from neighbor pane        | Get diff from neighbor pane        | Recommend to use with visual mode selection |
+| N/V      | `[Lk]`+`[d]`+`[o]`   | Get diff from neighbor pane        | Get diff from neighbor pane        | Recommend to use with visual mode selection |
 | N/V      | `[Lk]`+`[d]`+`[p]`   | Put diff to neighbor pane          | Put diff to neighbor pane          | Recommend to use with visual mode selection |
 | N/V      | `[Lk]`+`[d]`+`[u]`   | Update diff                        | Update diff                        |                                             |
 

@@ -297,11 +297,11 @@
     noremap <leader>g, :changes<CR>
     " Diff mode (vimdiff or nvim -d)
     noremap <leader>dd :diffthis<CR>
-    noremap <leader>do :diffoff<CR>
+    noremap <leader>dD :diffoff<CR>
     noremap <leader>ds :diffsplit<space>
     noremap <leader>dv :vertical diffsplit<space>
-    noremap <leader>dg :diffget<CR>
-    noremap <leader>dp :diffput<CR>
+    noremap <leader>do :diffget<space>
+    noremap <leader>dp :diffput<space>
     noremap <leader>du :diffupdate<CR>
     noremap <leader>dj ]c
     noremap <leader>dk [c
@@ -593,6 +593,8 @@
     noremap <leader>b$ :blast<CR>
     noremap <leader>bp :bprev<CR>
     noremap <leader>bn :bnext<CR>
+    noremap <PageUp> :bprev<CR>
+    noremap <PageDown> :bnext<CR>
     " Actions for all buffers (bufdo)
     noremap <leader>bfd :bufdo<space>
 
@@ -862,9 +864,11 @@
         if USING_NEOVIM
             noremap <F12> :split<CR>:terminal<CR>i
             noremap <leader>tm :split<CR>:terminal<CR>i
+            noremap <leader>tr :terminal ranger<CR>
         else
             noremap <F12> :terminal<CR>
             noremap <leader>tm :terminal<CR>
+            noremap <leader>tr :terminal ranger<CR>
         endif
         " Map key to go back from terminal mode to normal mode
         " Do not use Esc (which conflicts with fzf window) but <C-\><C-n>
@@ -1402,8 +1406,8 @@
     nmap <leader>d8 <Plug>lightline#bufferline#delete(8)
     nmap <leader>d9 <Plug>lightline#bufferline#delete(9)
     " Change buffer order
-    nmap <leader><F1> <Plug>lightline#bufferline#move_previous()
-    nmap <leader><F2> <Plug>lightline#bufferline#move_next()
+    nmap <M-PageUp> <Plug>lightline#bufferline#move_previous()
+    nmap <M-PageDown> <Plug>lightline#bufferline#move_next()
     nmap <leader>br <Plug>lightline#bufferline#reset_order()
 
 " ============================================================================
