@@ -2351,6 +2351,8 @@
     if USING_LSP && USING_VIM8
         " Disable LSP at startup
         let g:lsp_auto_enable = 0
+        let g:lsp_preview_float = 0
+        let g:lsp_preview_keep_focus = 1
         " Manage LSP server
         nmap <buffer> <leader>LM :LspManageServers<CR>
         nmap <buffer> <leader>LI :LspInstallServer<CR>
@@ -2394,8 +2396,10 @@
             nmap <buffer> [g <plug>(lsp-previous-diagnostic)
             nmap <buffer> ]g <plug>(lsp-next-diagnostic)
             " Scroll LSP hover page
-            nnoremap <buffer> <expr><C-e> lsp#scroll(+3)
-            nnoremap <buffer> <expr><C-y> lsp#scroll(-3)
+            nnoremap <buffer> <expr><C-PageDown> lsp#scroll(+4)
+            nnoremap <buffer> <expr><C-PageUp> lsp#scroll(-4)
+            nnoremap <buffer> <expr><C-End> lsp#scroll(+10000)
+            nnoremap <buffer> <expr><C-Home> lsp#scroll(-10000)
             " Load LSP diagnostics to location list
             nmap <buffer> <leader>ee :LspDocumentDiagnostics<CR>
             " Rename variable
