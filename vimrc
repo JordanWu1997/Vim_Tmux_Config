@@ -2393,6 +2393,9 @@
             nmap <buffer> gy <plug>(lsp-type-definition)
             nmap <buffer> [g <plug>(lsp-previous-diagnostic)
             nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+            " Scroll LSP hover page
+            nnoremap <buffer> <expr><C-e> lsp#scroll(+3)
+            nnoremap <buffer> <expr><C-y> lsp#scroll(-3)
             " Load LSP diagnostics to location list
             nmap <buffer> <leader>ee :LspDocumentDiagnostics<CR>
             " Rename variable
