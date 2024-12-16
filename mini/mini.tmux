@@ -144,6 +144,10 @@ bind -r M-_ join-pane -v
 bind -r M-\% join-pane -h
 bind -r M-\" join-pane -v
 
+# Scratchpad (popup-window, TMUX version >= 3.2 required)
+bind g display-popup -w 85% -h 85% -E "tmux new-session -A -s scratch"
+bind Enter display-popup -w 85% -h 85% -d "#{pane_current_path}"
+
 # ============================================================================
 # TMUX miscellaneous
 # ============================================================================
