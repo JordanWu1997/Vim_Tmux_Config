@@ -46,8 +46,11 @@ set -g mode-keys vi
 # Statusline keybindings (options: vi/emacs, default: emacs)
 set -g status-keys vi
 
+# Terminal color settings
+set -g default-terminal "tmux-256color"
+set -ag terminal-overrides ",xterm-256color:RGB"
+
 # Miscellaneous TMUX settings
-set -g default-terminal "xterm-256color"
 set -g display-time 3000
 set -g display-panes-time 3000
 set -g escape-time 0
