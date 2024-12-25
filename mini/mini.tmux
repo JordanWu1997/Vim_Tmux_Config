@@ -29,9 +29,14 @@ set -g allow-rename on
 # Window option
 setw -g pane-base-index 1
 setw -g aggressive-resize on
+
+# Window status monitoring: (status: activity/bell/silence, options: on/off)
 setw -g monitor-activity off
-set -g visual-activity off
-set -g visual-bell off
+setw -g monitor-bell off
+
+# Alert by ringing bell (off), sending visual-message (on), or both (both)
+set -g visual-activity off # when monitor-activity is on, triggered by activity-action
+set -g visual-bell off # when monitor-bell is on, triggered by bell-action
 
 # Master pane size
 set -g main-pane-height "50%"
@@ -191,6 +196,9 @@ bind M set mouse \; display-message "set mouse"
 
 # Toggle pane input synchronization
 bind C-s setw synchronize-panes
+
+# Toggle activity monitoring
+bind N set monitor-activity \; display-message "set monitor-activity"
 
 # Shell shortcut need to be remapped by prefix+...
 bind -r C-b send-keys 'C-b'
