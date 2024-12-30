@@ -864,11 +864,13 @@
         if USING_NEOVIM
             noremap <F12> :split<CR>:terminal<CR>i
             noremap <leader>tm :split<CR>:terminal<CR>i
-            noremap <leader>tr :terminal ranger<CR>
+            noremap <leader>tr :split<CR>:terminal ranger<CR>
+            noremap <leader>tt :split<CR>:terminal tmux new-session -A -s scratch<CR>
         else
             noremap <F12> :terminal<CR>
             noremap <leader>tm :terminal<CR>
             noremap <leader>tr :terminal ranger<CR>
+            noremap <leader>tt :terminal tmux new-session -A -s scratch<CR>
         endif
         " Map key to go back from terminal mode to normal mode
         " Do not use Esc (which conflicts with fzf window) but <C-\><C-n>
