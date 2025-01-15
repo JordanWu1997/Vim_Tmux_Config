@@ -456,6 +456,8 @@
     set hlsearch   " Highlight search result
     set ignorecase " Close case sensitive [Needed for smartcase]
     set smartcase  " Case sensitive if search contains uppercase letter
+    " Turn off search highlight until next search/match
+    noremap <silent><C-[> :nohlsearch<CR><Esc>
     noremap <M-/> :set nohlsearch!<CR>
 
 " Line number settings -------------------------------------------------------
