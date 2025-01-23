@@ -4,6 +4,7 @@
 
   - https://www.lazyvim.org/
   - https://github.com/neovim/neovim/releases/tag/v0.10.3
+  - https://github.com/vimwiki/vimwiki/issues/1130
 
 - Requirements
 

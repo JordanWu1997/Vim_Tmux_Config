@@ -52,8 +52,7 @@ set -g mode-keys vi
 set -g status-keys vi
 
 # Terminal color settings
-set -g default-terminal "tmux-256color"
-set -ag terminal-overrides ",xterm-256color:RGB"
+set -g default-terminal "xterm-256color"
 
 # Miscellaneous TMUX settings
 set -g display-time 3000
