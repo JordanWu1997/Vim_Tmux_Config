@@ -546,6 +546,30 @@
     noremap <silent><A-h> :vertical resize -2<CR>
     noremap <silent><A-j> :resize +2<CR>
     noremap <silent><A-k> :resize -2<CR>
+    " Resize window to fraction
+    function! ResizeWidthToFraction(fraction)
+        let total_width = &columns
+        let target_width = float2nr(total_width * a:fraction)
+        execute 'vertical resize ' . target_width
+    endfunction
+    " Resize width to fraction
+    function! ResizeWidthToFraction(fraction)
+        let total_width = &columns
+        let target_width = float2nr(total_width * a:fraction)
+        execute 'vertical resize ' . target_width
+    endfunction
+    " Resize height to fraction
+    function! ResizeHeightToFraction(fraction)
+        let total_height = &lines
+        let target_height = float2nr(total_height * a:fraction)
+        execute 'resize ' . target_height
+    endfunction
+    noremap <leader>rw2 :call ResizeWidthToFraction(1.0/2.0)<CR>
+    noremap <leader>rw3 :call ResizeWidthToFraction(1.0/3.0)<CR>
+    noremap <leader>rw4 :call ResizeWidthToFraction(1.0/4.0)<CR>
+    noremap <leader>rh2 :call ResizeHeightToFraction(1.0/2.0)<CR>
+    noremap <leader>rh3 :call ResizeHeightToFraction(1.0/3.0)<CR>
+    noremap <leader>rh4 :call ResizeHeightToFraction(1.0/4.0)<CR>
 
 " Tab (window container) settings --------------------------------------------
     " List tabs
@@ -585,6 +609,8 @@
     " Delete buffer
     noremap <leader>bd :bdelete<CR>
     noremap <leader>bD :bdelete<space>
+    noremap <leader>b' :bdelete#<CR>
+    noremap <leader>b" :bnext<CR>:bdelete#<CR>
     " Delete all other buffers
     " -- https://stackoverflow.com/questions/4545275/vim-close-all-buffers-but-this-one
     noremap <leader>bo :%bd\|e#\|bd#<cr>
@@ -2014,7 +2040,7 @@
     if USING_CODING_TOOL_PLUG
         " Don;t enable when start up
         let g:rainbow_active = 0
-        noremap <leader>rw :RainbowToggle<CR>
+        noremap <leader>rb :RainbowToggle<CR>
     endif
 
 " Indentline -----------------------------------------------------------------
