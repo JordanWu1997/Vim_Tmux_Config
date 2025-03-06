@@ -2289,6 +2289,9 @@
         autocmd BufEnter *.md nmap <leader><F4> <Plug>MarkdownPreviewToggle<CR>
         autocmd BufEnter *.md setlocal scrolloff=999
     endif
+    " Open current file directly with web-browser
+    let $OPENBROWSER = 'noremap <leader><S-F4> :!'. s:WEBBROWSER .' %:p &<CR>'
+    autocmd BufEnter *.md exe $OPENBROWSER
     " MARP: markdown presentation ecosystem (https://marp.app/)
     autocmd BufEnter *.md noremap <leader>mp <Esc>:!marp % --html<CR>
     let $MARPOPENHTMLBROWSER = 'noremap <leader>mP :!'. s:WEBBROWSER .' %:r.html &<CR>'
@@ -2314,7 +2317,7 @@
     noremap <leader>mi <Esc>i![this_is_an_image]()<Left>
     noremap <leader>mI <Esc>i<img src="" width="100%" height="100%"/><Esc>29<Left>
     " Insert video in markdown file
-    noremap <leader>mV <Esc>i<video src="" width="100%" height="100%" control/><Esc>37<Left>
+    noremap <leader>mV <Esc>i<video src="" width="100%" height="100%" controls/><Esc>38<Left>
     " Insert link
     noremap <leader>ml <Esc>i[this_is_a_link]()<Left>
     " Insert checkbox (also included in VimwikiToggleListItem)
