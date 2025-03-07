@@ -2290,7 +2290,7 @@
         autocmd BufEnter *.md setlocal scrolloff=999
     endif
     " Open current file directly with web-browser
-    let $OPENBROWSER = 'noremap <leader><S-F4> :!'. s:WEBBROWSER .' %:p &<CR>'
+    let $OPENBROWSER = 'noremap <leader>mo :!'. s:WEBBROWSER .' %:p &<CR>'
     autocmd BufEnter *.md exe $OPENBROWSER
     " MARP: markdown presentation ecosystem (https://marp.app/)
     autocmd BufEnter *.md noremap <leader>mp <Esc>:!marp % --html<CR>
