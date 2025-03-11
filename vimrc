@@ -1735,8 +1735,10 @@
         nmap <leader>w<CR> <Plug>VimwikiGoto
         " Create table
         nmap <leader>wtt <Esc>:VimwikiTable<CR>
-        nmap <leader>wth <Esc>:VimwikiTableMoveColumnLeft<CR>
-        nmap <leader>wtl <Esc>:VimwikiTableMoveColumnRight<CR>
+        nmap <A-Left>  <Esc>:VimwikiTableMoveColumnLeft<CR>
+        nmap <A-Right> <Esc>:VimwikiTableMoveColumnRight<CR>
+        "nmap <leader>wth <Esc>:VimwikiTableMoveColumnLeft<CR>
+        "nmap <leader>wtl <Esc>:VimwikiTableMoveColumnRight<CR>
         " Toggle checkbox
         nmap <leader>\ <Esc>:VimwikiToggleListItem<CR>
         " Add HTML tag that assigns text background color
