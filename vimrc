@@ -1194,8 +1194,8 @@
     " I3 configuration syntax highlight
     Plug 'PotatoesMaster/i3-vim-syntax', { 'for': 'i3' }
 
-"" [BitoAI (ChatGPT wrapper)] -------------------------------------------------
-    "Plug 'zhenyangze/vim-bitoai'
+"" [Ollma] --------------------------------------------------------------------
+    "Plug 'madox2/vim-ai'
 
 " [Codeium] -------------------------------------------------------------------
     Plug 'Exafunction/codeium.vim',
@@ -2341,15 +2341,41 @@
     noremap <leader>LC <Esc>:LanguageToolCheck<CR>
     noremap <leader>Lc <Esc>:LanguageToolClear<CR>
 
-"" BitoAI ---------------------------------------------------------------------
-    "noremap <leader>aic :BitoAiCheck<CR>
-    "noremap <leader>aip :BitoAiCheckPerformance<CR>
-    "noremap <leader>ais :BitoAiCheckStyle<CR>
-    "noremap <leader>aiS :BitoAiCheckSecurity<CR>
-    "noremap <leader>aie :BitoAiExplain<CR>
-    "noremap <leader>aig :BitoAiGenerate<CR>
-    ""noremap <leader>aiG :BitoAiGenerateComment<CR>
-    "noremap <leader>air :BitoAiReadable<CR>
+"" Vim-AI ---------------------------------------------------------------------
+    "let s:vim_ai_endpoint_url = "http://localhost:11434/v1/chat/completions"
+    "let s:vim_ai_model = "codellama:13b"
+    "let s:vim_ai_temperature = 0.3
+    "let s:vim_ai_chat_config = #{
+    "\  engine: "chat",
+    "\  options: #{
+    "\    model: s:vim_ai_model,
+    "\    temperature: s:vim_ai_temperature,
+    "\    endpoint_url: s:vim_ai_endpoint_url,
+    "\    auth_type: 'none',
+    "\    max_tokens: 0,
+    "\    request_timeout: 60,
+    "\  },
+    "\  ui: #{
+    "\    code_syntax_enabled: 1,
+    "\  },
+    "\}
+    "let s:vim_ai_edit_config = #{
+    "\  engine: "chat",
+    "\  options: #{
+    "\    model: s:vim_ai_model,
+    "\    temperature: s:vim_ai_temperature,
+    "\    endpoint_url: s:vim_ai_endpoint_url,
+    "\    auth_type: 'none',
+    "\    max_tokens: 0,
+    "\    request_timeout: 60,
+    "\  },
+    "\  ui: #{
+    "\    paste_mode: 1,
+    "\  },
+    "\}
+    "let g:vim_ai_chat = s:vim_ai_chat_config
+    "let g:vim_ai_complete = s:vim_ai_edit_config
+    "let g:vim_ai_edit = s:vim_ai_edit_config
 
 " Codeium --------------------------------------------------------------------
     " NOTE: Codeium Chat uses web browser as front-end UI but it doest not work
