@@ -2353,7 +2353,7 @@
         \    endpoint_url: s:vim_ai_endpoint_url,
         \    auth_type: 'none',
         \    max_tokens: 0,
-        \    request_timeout: 60,
+        \    request_timeout: 90,
         \  },
         \  ui: #{
         \    code_syntax_enabled: 1,
@@ -2367,7 +2367,7 @@
         \    endpoint_url: s:vim_ai_endpoint_url,
         \    auth_type: 'none',
         \    max_tokens: 0,
-        \    request_timeout: 60,
+        \    request_timeout: 90,
         \  },
         \  ui: #{
         \    paste_mode: 1,
@@ -2387,14 +2387,16 @@
         let g:codeium_enabled = v:false
         " Remove all Codeium default keybindings
         let g:codeium_disable_bindings = 1
+        " Disable the <Tab> binding
+        let g:codeium_no_map_tab = 1
         " Keybindings
         map <leader>cm :CodeiumToggle<CR>
         map <leader>ct :call codeium#Chat()<CR>
         imap <script><silent><nowait><expr> <C-]> codeium#Accept()
         imap <script><silent><nowait><expr> <C-e> codeium#AcceptNextLine()
         imap <script><silent><nowait><expr> <C-f> codeium#AcceptNextWord()
-        imap <M-[> <Cmd>call codeium#CycleCompletions(1)<CR>
-        imap <M-]> <Cmd>call codeium#CycleCompletions(-1)<CR>
+        imap <M-j> <Cmd>call codeium#CycleCompletions(1)<CR>
+        imap <M-k> <Cmd>call codeium#CycleCompletions(-1)<CR>
         imap <C-\> <Cmd>call codeium#Clear()<CR>
         imap <C-/> <Cmd>call codeium#Complete()<CR>
     endif
