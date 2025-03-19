@@ -647,7 +647,7 @@
     " Do actions to all files in args
     noremap <leader>agd :argdo<space>
 
-" Quickfix list settings ------------------------------------------------------
+" Quickfix list settings -----------------------------------------------------
     " Function to toggle quickfix list pane
     let g:quickfix_list_is_open = 0
     function! QuickfixListToggle()
@@ -666,7 +666,7 @@
     noremap <leader>qj :cnext<CR>zz
     noremap <leader>qk :cprev<CR>zz
 
-" Location list settings ------------------------------------------------------
+" Location list settings -----------------------------------------------------
     " Function to toggle location list pane
     let g:location_list_is_open = 0
     function! LocationListToggle()
@@ -1194,10 +1194,10 @@
     " I3 configuration syntax highlight
     Plug 'PotatoesMaster/i3-vim-syntax', { 'for': 'i3' }
 
-"" [Ollma] --------------------------------------------------------------------
-    "Plug 'madox2/vim-ai'
+" [Ollma] --------------------------------------------------------------------
+    Plug 'madox2/vim-ai', { 'on': [ 'AI', 'AIE', 'AIC' ] }
 
-" [Codeium] -------------------------------------------------------------------
+" [Codeium] ------------------------------------------------------------------
     Plug 'Exafunction/codeium.vim',
                 \ { 'branch': 'main',
                 \ 'on': ['CodeiumToggle', 'CodeiumEnable']}
@@ -2341,41 +2341,41 @@
     noremap <leader>LC <Esc>:LanguageToolCheck<CR>
     noremap <leader>Lc <Esc>:LanguageToolClear<CR>
 
-"" Vim-AI ---------------------------------------------------------------------
-    "let s:vim_ai_endpoint_url = "http://localhost:11434/v1/chat/completions"
-    "let s:vim_ai_model = "codellama:13b"
-    "let s:vim_ai_temperature = 0.3
-    "let s:vim_ai_chat_config = #{
-    "\  engine: "chat",
-    "\  options: #{
-    "\    model: s:vim_ai_model,
-    "\    temperature: s:vim_ai_temperature,
-    "\    endpoint_url: s:vim_ai_endpoint_url,
-    "\    auth_type: 'none',
-    "\    max_tokens: 0,
-    "\    request_timeout: 60,
-    "\  },
-    "\  ui: #{
-    "\    code_syntax_enabled: 1,
-    "\  },
-    "\}
-    "let s:vim_ai_edit_config = #{
-    "\  engine: "chat",
-    "\  options: #{
-    "\    model: s:vim_ai_model,
-    "\    temperature: s:vim_ai_temperature,
-    "\    endpoint_url: s:vim_ai_endpoint_url,
-    "\    auth_type: 'none',
-    "\    max_tokens: 0,
-    "\    request_timeout: 60,
-    "\  },
-    "\  ui: #{
-    "\    paste_mode: 1,
-    "\  },
-    "\}
-    "let g:vim_ai_chat = s:vim_ai_chat_config
-    "let g:vim_ai_complete = s:vim_ai_edit_config
-    "let g:vim_ai_edit = s:vim_ai_edit_config
+" Vim-AI ---------------------------------------------------------------------
+    let s:vim_ai_endpoint_url = "http://localhost:11434/v1/chat/completions"
+    let s:vim_ai_model = "qwen2.5-coder:1.5b"
+    let s:vim_ai_temperature = 0.3
+    let s:vim_ai_chat_config = #{
+        \  engine: "chat",
+        \  options: #{
+        \    model: s:vim_ai_model,
+        \    temperature: s:vim_ai_temperature,
+        \    endpoint_url: s:vim_ai_endpoint_url,
+        \    auth_type: 'none',
+        \    max_tokens: 0,
+        \    request_timeout: 60,
+        \  },
+        \  ui: #{
+        \    code_syntax_enabled: 1,
+        \  },
+        \}
+    let s:vim_ai_edit_config = #{
+        \  engine: "chat",
+        \  options: #{
+        \    model: s:vim_ai_model,
+        \    temperature: s:vim_ai_temperature,
+        \    endpoint_url: s:vim_ai_endpoint_url,
+        \    auth_type: 'none',
+        \    max_tokens: 0,
+        \    request_timeout: 60,
+        \  },
+        \  ui: #{
+        \    paste_mode: 1,
+        \  },
+        \}
+    let g:vim_ai_chat = s:vim_ai_chat_config
+    let g:vim_ai_complete = s:vim_ai_edit_config
+    let g:vim_ai_edit = s:vim_ai_edit_config
 
 " Codeium --------------------------------------------------------------------
     " NOTE: Codeium Chat uses web browser as front-end UI but it doest not work
