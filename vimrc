@@ -2376,6 +2376,9 @@
     let g:vim_ai_chat = s:vim_ai_chat_config
     let g:vim_ai_complete = s:vim_ai_edit_config
     let g:vim_ai_edit = s:vim_ai_edit_config
+    " Keybindings
+    map <leader>ai :AIC<space>
+    map <leader>aI :AIE<space>
 
 " Codeium --------------------------------------------------------------------
     " NOTE: Codeium Chat uses web browser as front-end UI but it doest not work
