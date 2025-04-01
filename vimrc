@@ -2377,8 +2377,10 @@
     let g:vim_ai_complete = s:vim_ai_edit_config
     let g:vim_ai_edit = s:vim_ai_edit_config
     " Keybindings
-    map <leader>ai :AIC<space>
-    map <leader>aI :AIE<space>
+    map <leader>oi :AI<space>
+    map <leader>oo :AIC<space>
+    map <leader>oe :AIE<space>
+    map <leader>or :AIR<CR>
 
 " Codeium --------------------------------------------------------------------
     " NOTE: Codeium Chat uses web browser as front-end UI but it doest not work
