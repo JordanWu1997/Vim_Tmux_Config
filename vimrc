@@ -87,6 +87,9 @@
     " Example: Markdown formatter
     " -- Installation: mdformat
     "    -- pip install mdformat
+    " -- [Optional] Installatoin: plug-ins for mdformat
+    "    -- pip install mdformat-deflist mdformat-footnote mdformat-frontmatter
+    "    -- pip install mdformat-simple-breaks mdformat-tables mdformat-wikilink
 
 " NOTE: Python-completion and tmux-yank-clipboard on remote machine ----------
     " Use neovim and everything is fine, but notice that neovim support of
@@ -2004,6 +2007,8 @@
         " mdformat: Markdown formatter (m for markdown)
         nnoremap <leader>nmf :Neoformat! markdown mdformat<CR>
         vnoremap <leader>nmf :'<,'>Neoformat! markdown mdformat<CR>
+        " mdformat: for now mdformat mess up Tex syntax, use this as patch
+        nnoremap <leader>nmp :%s/\\\\\([^\\]\)/\\\1/g<CR>
         " Python -------------------------------------------------------------
         " pyment: python docstring creater/formatter (p for python)
         let g:neoformat_python_pyment_google = {
