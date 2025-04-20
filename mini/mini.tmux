@@ -79,15 +79,20 @@ bind = choose-buffer
 
 # Set Copy/Paste Mode (VIM-like key binding in copy-mode-vi)
 # -- https://superuser.com/questions/395158/tmux-copy-mode-select-text-block
+# -- https://unix.stackexchange.com/questions/131011/use-system-clipboard-in-vi-copy-mode-in-tmux
+
 # -- TMUX version < 2.5
 #bind-key -t vi-copy 'v' begin-selection
 #bind-key -t vi-copy 'C-v' rectangle-toggle
 #bind-key -t vi-copy 'y' copy-selection
+
 # -- TMUX version >= 2.5
 bind -T copy-mode-vi v send -X begin-selection
 bind -T copy-mode-vi C-v send -X rectangle-toggle \; send -X begin-selection
 bind -T copy-mode-vi y send -X copy-selection-and-cancel
-#bind -T copy-mode-vi y send -X copy-pipe-and-canel "xsel --clipboard --input"
+#bind -T copy-mode-vi y send -X copy-pipe-and-canel "xsel --input --clipboard"
+#bind -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel \
+#    "xsel --inputi --follow --primary | xsel --input --clipboard"
 
 # Quick enter copy mode for screen scrolling
 #bind \; copy-mode
