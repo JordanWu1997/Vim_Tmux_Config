@@ -209,3 +209,9 @@ nmap <buffer> <leader>Lf :ALEFix<CR>
 set omnifunc=ale#completion#OmniFunc
 " Python completion (w/o ALE)
 "autocmd FileType python set omnifunc=python3complete#Complete
+
+" AI Assistant w/ Ollama
+let s:vim_AI_config_path = expand('~/.mini_AI.vim')
+if filereadable(s:vim_AI_config_path)
+    exec 'source ' . s:vim_AI_config_path
+endif
