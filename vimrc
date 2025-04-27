@@ -624,8 +624,8 @@
     noremap <leader>b$ :blast<CR>
     noremap <leader>bp :bprev<CR>
     noremap <leader>bn :bnext<CR>
-    noremap <PageUp> :bprev<CR>
-    noremap <PageDown> :bnext<CR>
+    noremap <C-PageUp> :bprev<CR>
+    noremap <C-PageDown> :bnext<CR>
     " Actions for all buffers (bufdo)
     noremap <leader>bfd :bufdo<space>
 
