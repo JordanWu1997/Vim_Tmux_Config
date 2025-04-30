@@ -1,4 +1,4 @@
-" ~/.vimrc
+" ~/.mini_AI.vim
 " vim: ft=vim
 " ============================================================================
 " My minimal cross-platfrom vim config for normal usage and python coding
@@ -7,12 +7,13 @@
 " vim-ai installation
 if has('win32')
     " Windows: mkdir -p ~/vimfiles/pack/git-plugins/start; git clone --depth 1 https://github.com/dense-analysis/ale.git ~/vimfiles/pack/git-plugins/start/ale
-    let vim_plug_path = expand('~/vimfiles/pack/git-plugins/start/ale/autoload/ale.vim')
+    let home = expand('$HOME')
+    let vim_plug_path = home . '\vimfiles\pack\git-plugins\start\vim-ai\autoload\vim_ai.vim'
     if !filereadable(vim_plug_path)
         echo 'Installing VIM-AI ...'
         echo ''
-        silent !mkdir -p ~/vimfiles/pack/git-plugins/start
-        silent !git clone https://github.com/madox2/vim-ai.git ~/vimfiles/pack/git-plugins/start/vim-ai
+        silent execute '!mkdir "' . home . '\vimfiles\pack\git-plugins\start\vim-ai'
+        silent execute '!git clone https://github.com/madox2/vim-ai.git' '"' . home . '\vimfiles\pack\git-plugins\start\vim-ai"'
     endif
 else
     " UNIXlike: mkdir -p ~/.vim/pack/git-plugins/start; git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.vim/pack/git-plugins/start/ale
