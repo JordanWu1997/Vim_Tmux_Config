@@ -2009,6 +2009,7 @@
         vnoremap <leader>nmf :'<,'>Neoformat! markdown mdformat<CR>
         " mdformat: for now mdformat mess up Tex syntax, use this as patch
         nnoremap <leader>nmp :%s/\\\\\([^\\]\)/\\\1/g \| %s/\\\([^\\a-zA-Z0-9]\)/\1/g<CR>
+        vnoremap <leader>nm# :'<,'>s/# /#_/<CR>
         " Python -------------------------------------------------------------
         " pyment: python docstring creater/formatter (p for python)
         let g:neoformat_python_pyment_google = {
