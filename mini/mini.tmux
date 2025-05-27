@@ -51,8 +51,9 @@ set -g mode-keys vi
 # Statusline keybindings (options: vi/emacs, default: emacs)
 set -g status-keys vi
 
-# Terminal color settings
-set -g default-terminal "xterm-256color"
+# Terminal color settings (enable true colors)
+set -g default-terminal "${TERM}"
+set -ag terminal-overrides ",*:RGB"
 
 # Miscellaneous TMUX settings
 set -g display-time 3000
@@ -61,6 +62,7 @@ set -g escape-time 0
 set -g repeat-time 450
 set -g history-limit 30000
 set -g focus-events on
+set -g extended-keys on
 set -g mouse on
 
 # ============================================================================
