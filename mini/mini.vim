@@ -148,6 +148,17 @@ autocmd FileType python set omnifunc=python3complete#Complete
 " Plug-in settings
 " ============================================================================
 
+" Vim-Tmux-Navigator
+if !has('win32')
+    let vim_plug_path = expand('~/.vim/pack/git-plugins/start/vim-tmux-navigator/vim-tmux-navigator.tmux')
+    if !filereadable(vim_plug_path)
+        echo 'Installing Vim-Tmux-Navigator ...'
+        echo ''
+        silent !mkdir -p ~/.vim/pack/git-plugins/start
+        silent !git clone https://github.com/christoomey/vim-tmux-navigator.git ~/.vim/pack/git-plugins/start/vim-tmux-navigator
+    endif
+endif
+
 " ALE (Asynchronous Lint Engine)
 if has('win32')
     let home = expand('$HOME')
