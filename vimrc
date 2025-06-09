@@ -1642,6 +1642,9 @@
     "    -- Prep. a: around
     "    -- Noun, w: word, s: sentence, t: tag
     "    -- Verb. d: delete, c: change, y:yield
+    " -- Normal mode
+    "    -- use ys to trigger add operation
+    "    -- use cs to trigger substitute operation
     " -- Visual mode
     "    -- use S to trigger vim-surround
 
