@@ -2015,23 +2015,23 @@
                     \:silent! %s/\\\([^\\a-zA-Z0-9]\)/\1/g<CR>
                     \:echo 'Neoformat: mdformat patch applied'<CR>
         " mdformat: convert #<space> to #_ within code block for vimwiki tag
-        function! ReplaceHashInCodeBlocks()
-            let inside_code = 0
-            for lnum in range(1, line('$'))
-                let line_text = getline(lnum)
-                " Detect the start or end of a code block: supports ``` or ```lang
-                if line_text =~ '^\s*```'
-                    let inside_code = !inside_code
-                elseif inside_code
-                    " Replace '# ' with '#_' globally on this line
-                    let new_line = substitute(line_text, '# ', '#_', 'g')
-                    if new_line !=# line_text
-                        call setline(lnum, new_line)
-                    endif
-                endif
-            endfor
-        endfunction
-        nnoremap <leader>nmh :call ReplaceHashInCodeBlocks()<CR>
+        "function! ReplaceHashInCodeBlocks()
+        "    let inside_code = 0
+        "    for lnum in range(1, line('$'))
+        "        let line_text = getline(lnum)
+        "        " Detect the start or end of a code block: supports ``` or ```lang
+        "        if line_text =~ '^\s*```'
+        "            let inside_code = !inside_code
+        "        elseif inside_code
+        "            " Replace '# ' with '#_' globally on this line
+        "            let new_line = substitute(line_text, '# ', '#_', 'g')
+        "            if new_line !=# line_text
+        "                call setline(lnum, new_line)
+        "            endif
+        "        endif
+        "    endfor
+        "endfunction
+        "nnoremap <leader>nmh :call ReplaceHashInCodeBlocks()<CR>
         " Python -------------------------------------------------------------
         " pyment: python docstring creater/formatter (p for python)
         let g:neoformat_python_pyment_google = {

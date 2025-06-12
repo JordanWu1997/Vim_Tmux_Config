@@ -133,14 +133,14 @@ Backup for my Vim and TMUX configuration
    - __Git__ [for plugin installation]
 
      ```bash
-     #_For Fedora
+     # For Fedora
      dnf install git
      ```
 
    - __Curl__ [for plugin manager setup]
 
      ```bash
-     #_For Fedora
+     # For Fedora
      dnf install curl
      ```
 
@@ -153,7 +153,7 @@ Backup for my Vim and TMUX configuration
      - python3 option is on (+python3/dyn) [for python completion]
 
      ```bash
-     #_Check vim version and other options
+     # Check vim version and other options
      vim --version
      ```
 
@@ -163,7 +163,7 @@ Backup for my Vim and TMUX configuration
      - gvim already shipped with clipboard and python3 options
 
      ```bash
-     #_Check gvim version and other options
+     # Check gvim version and other options
      vim --version
      ```
 
@@ -173,7 +173,7 @@ Backup for my Vim and TMUX configuration
      - neovim already shipped with clipboard and python3 options
 
      ```bash
-     #_Check neovim version and other options
+     # Check neovim version and other options
      nvim --version
      ```
 
@@ -182,21 +182,21 @@ Backup for my Vim and TMUX configuration
    - __ipython__ (version >= __7.20__) [python consoler]
 
      ```bash
-     #_Python3
+     # Python3
      pip install ipython
      ```
 
    - __jedi__ for jedi [python code analyzer]
 
      ```bash
-     #_Python3
+     # Python3
      pip install jedi
      ```
 
    - __pynvim__ for deoplete neovim plugin usage [python code analyzer]
 
      ```bash
-     #_Python3
+     # Python3
      pip install pynvim
      ```
 
@@ -205,7 +205,7 @@ Backup for my Vim and TMUX configuration
    - __texlive__ [latex suite]
 
      ```bash
-     #_For Fedora
+     # For Fedora
      dnf install texlive-scheme-basic
      ```
 
@@ -214,14 +214,14 @@ Backup for my Vim and TMUX configuration
    - __Web browser with markdown extension__ (e.g. google-chrome, Firefox, etc.) [for markdown preview]
 
      ```bash
-     #_For Fedora
+     # For Fedora
      dnf install firefox
      ```
 
    - __PDF viewer__ (e.g. zathura, Okular) [for latex preview]
 
      ```bash
-     #_For Fedora
+     # For Fedora
      dnf install zathura*
      ```
 
@@ -274,9 +274,9 @@ Backup for my Vim and TMUX configuration
      - If not working, try manually install vim-plug (also within this repository)
 
      ```bash
-     #_For vim/gvim
+     # For vim/gvim
      cp -r vim/autoload $HOME/.vim
-     #_For neovim
+     # For neovim
      cp -r vim/autoload $HOME/.config/nvim
      ```
 
@@ -285,7 +285,7 @@ Backup for my Vim and TMUX configuration
      - If not working, try manually install vim-Plug
 
      ```bash
-     #_In vim command line mode
+     # In vim command line mode
      :Pluginstall
      ```
 
@@ -302,9 +302,9 @@ Backup for my Vim and TMUX configuration
 - For managing plugins enable/disable, see next section (Plugin usage configuration)
 
 ```bash
-#_For vim/gvim
+# For vim/gvim
 vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
-#_For neovim
+# For neovim
 vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 ```
 
@@ -828,7 +828,7 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 1. __Git__ [for TMUX plugin manager setup]
 
    ```bash
-   #_For Fedora
+   # For Fedora
    dnf install git
    ```
 
@@ -837,7 +837,7 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 1. Check if TMUX version >= __2.0__
 
    ```bash
-   #_Check TMUX version
+   # Check TMUX version
    tmux -V
    ```
 
@@ -870,17 +870,17 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
   1. TMUX plugin manager (TPM) installation
 
      ```bash
-     #_In terminal
+     # In terminal
      git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
      ```
 
   2. Load configuration file
 
      ```bash
-     #_Open TMUX in terminal
+     # Open TMUX in terminal
      tmux
-     #_In TMUX, press ctrl+b to enter command mode
-     #_In command mode
+     # In TMUX, press ctrl+b to enter command mode
+     # In command mode
      source-file ~/.tmux.conf
      ```
 

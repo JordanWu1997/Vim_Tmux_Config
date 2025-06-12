@@ -31,9 +31,19 @@ with open(filename, "r") as vim_buffer:
     file_content = vim_buffer.readlines()
 
 state = [""] * 6
+in_code_block = False
 for lnum, line in enumerate(file_content):
-    match_header = rx_header.match(line)
+    stripped = line.strip()
 
+    # Toggle code block state
+    if stripped.startswith("```"):
+        in_code_block = not in_code_block
+        continue
+
+    if in_code_block:
+        continue
+
+    match_header = rx_header.match(line)
     if not match_header:
         continue
 
