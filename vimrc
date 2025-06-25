@@ -1874,7 +1874,7 @@
     if USING_EXTRA_PLUG
         let g:peekaboo_window = 'vert bo 40new'
         let g:peekaboo_prefix = ''
-        let g:peekaboo_compat = 1
+        let g:peekaboo_compact = 0
     endif
 
 " Markbar --------------------------------------------------------------------
