@@ -2011,27 +2011,13 @@
         nnoremap <leader>nmf :Neoformat! markdown mdformat<CR>
         vnoremap <leader>nmf :'<,'>Neoformat! markdown mdformat<CR>
         " mdformat: for now mdformat mess up Tex syntax, use this as patch
-        nnoremap <leader>nmp :silent! %s/\\\\\([^\\]\)/\\\1/g<CR>
-                    \:silent! %s/\\\([^\\a-zA-Z0-9]\)/\1/g<CR>
-                    \:echo 'Neoformat: mdformat patch applied'<CR>
-        " mdformat: convert #<space> to #_ within code block for vimwiki tag
-        "function! ReplaceHashInCodeBlocks()
-        "    let inside_code = 0
-        "    for lnum in range(1, line('$'))
-        "        let line_text = getline(lnum)
-        "        " Detect the start or end of a code block: supports ``` or ```lang
-        "        if line_text =~ '^\s*```'
-        "            let inside_code = !inside_code
-        "        elseif inside_code
-        "            " Replace '# ' with '#_' globally on this line
-        "            let new_line = substitute(line_text, '# ', '#_', 'g')
-        "            if new_line !=# line_text
-        "                call setline(lnum, new_line)
-        "            endif
-        "        endif
-        "    endfor
-        "endfunction
-        "nnoremap <leader>nmh :call ReplaceHashInCodeBlocks()<CR>
+        autocmd FileType markdown
+            \ nnoremap <leader>nmp :silent! %s/\\\\\([^\\]\)/\\\1/g<CR>
+            \:silent! %s/\\\([^\\a-zA-Z0-9]\)/\1/g<CR>
+            \:echo 'Neoformat: mdformat patch applied'<CR>
+        " mdformat: vim auto-complete expand $HOME, use this as patch to convert it back
+        nnoremap <leader>nmh :%s#\V<C-r>=escape($HOME, '/\')<CR>#\$HOME#g<CR>↵
+        vnoremap <leader>nmh :s#\V<C-r>=escape($HOME, '/')<CR>#$HOME#g<CR>↵
         " Python -------------------------------------------------------------
         " pyment: python docstring creater/formatter (p for python)
         let g:neoformat_python_pyment_google = {
