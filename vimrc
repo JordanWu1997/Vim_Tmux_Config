@@ -2004,9 +2004,11 @@
         " clangformat: C++ formatter (c for C++)
         nnoremap <leader>ncf :Neoformat clangformat<CR>
         vnoremap <leader>ncf :'<,'>Neoformat clangformat<CR>
+        " SQL ----------------------------------------------------------------
         " sqlsparse: SQL formatter (s for SQL)
         nnoremap <leader>nsf :Neoformat! sql sqlformat<CR>
         vnoremap <leader>nsf :'<,'>Neoformat! sql sqlformat<CR>
+        " Markdown -----------------------------------------------------------
         " mdformat: Markdown formatter (m for markdown)
         nnoremap <leader>nmf :Neoformat! markdown mdformat<CR>
         vnoremap <leader>nmf :'<,'>Neoformat! markdown mdformat<CR>
@@ -2018,10 +2020,30 @@
         " mdformat: vim auto-complete expand $HOME, use this as patch to convert it back
         nnoremap <leader>nmh :%s#\V<C-r>=escape($HOME, '/\')<CR>#\$HOME#g<CR>↵
         vnoremap <leader>nmh :s#\V<C-r>=escape($HOME, '/')<CR>#$HOME#g<CR>↵
-        " mdformat: convert current word filepath from (absolute) to (relative)
-        nnoremap <silent> <leader>nm( :let g:path_to_convert = expand('<cfile>')
-                    \<Bar>exe "normal! ci(" . trim(system(printf('realpath -s --relative-to=%s %s',
-                    \shellescape(expand('%:p:h')), shellescape(g:path_to_convert))))<CR><Esc>
+        " mdformat: convert current word filepath from ABSOLUTE to RELATIVE
+        function! ConvertRelativeToAbsolute(char)
+            let l:path = expand('<cfile>')
+            let l:absolute = trim(system('realpath ' . shellescape(l:path)))
+            exe "normal! ci" . a:char . l:absolute
+        endfunction
+        nnoremap <silent> <leader>nma" :call ConvertRelativeToAbsolute('"')<CR>
+        nnoremap <silent> <leader>nma' :call ConvertRelativeToAbsolute("'")<CR>
+        nnoremap <silent> <leader>nma( :call ConvertRelativeToAbsolute('(')<CR>
+        nnoremap <silent> <leader>nmaw :call ConvertRelativeToAbsolute('W')<CR>
+        " mdformat: convert current word filepath from RELATIVE to ABSOLUTE
+        function! ConvertAbsoluteToRelative(char)
+            "let l:path = expand('<cfile>')
+            let l:path = expand('$' . substitute(expand('<cfile>'), '^\$\(\w\+\)', '\1', ''))
+            let l:relpath = trim(system(printf(
+                        \ 'realpath -s --relative-to=%s %s',
+                        \ shellescape(expand('%:p:h')),
+                        \ shellescape(l:path))))
+            exe "normal! ci" . a:char . l:relpath
+        endfunction
+        nnoremap <silent> <leader>nmr" :call ConvertAbsoluteToRelative('"')<CR>
+        nnoremap <silent> <leader>nmr' :call ConvertAbsoluteToRelative("'")<CR>
+        nnoremap <silent> <leader>nmr( :call ConvertAbsoluteToRelative('(')<CR>
+        nnoremap <silent> <leader>nmrw :call ConvertAbsoluteToRelative('W')<CR>
         " Python -------------------------------------------------------------
         " pyment: python docstring creater/formatter (p for python)
         let g:neoformat_python_pyment_google = {
@@ -2335,9 +2357,9 @@
     autocmd BufEnter *.md exe $PANDOCOPENHTMLBROWSER
     " Insert image
     noremap <leader>mi <Esc>i![this_is_an_image]()<Left>
-    noremap <leader>mI <Esc>i<img src="" title="" width="100%" height="100%"/><Esc>38<Left>
+    noremap <leader>mI <Esc>i<img src="" title="" width="100%" height="100%"/><Esc>38<Left>i
     " Insert video in markdown file
-    noremap <leader>mV <Esc>i<video src="" title="" width="100%" height="100%" controls/><Esc>47<Left>
+    noremap <leader>mV <Esc>i<video src="" title="" width="100%" height="100%" controls/><Esc>47<Left>i
     " Insert link
     noremap <leader>ml <Esc>i[this_is_a_link]()<Left>
     " Insert checkbox (also included in VimwikiToggleListItem)
