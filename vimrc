@@ -2018,6 +2018,10 @@
         " mdformat: vim auto-complete expand $HOME, use this as patch to convert it back
         nnoremap <leader>nmh :%s#\V<C-r>=escape($HOME, '/\')<CR>#\$HOME#g<CR>↵
         vnoremap <leader>nmh :s#\V<C-r>=escape($HOME, '/')<CR>#$HOME#g<CR>↵
+        " mdformat: convert current word filepath from (absolute) to (relative)
+        nnoremap <silent> <leader>nm( :let g:path_to_convert = expand('<cfile>')
+                    \<Bar>exe "normal! ci(" . trim(system(printf('realpath -s --relative-to=%s %s',
+                    \shellescape(expand('%:p:h')), shellescape(g:path_to_convert))))<CR><Esc>
         " Python -------------------------------------------------------------
         " pyment: python docstring creater/formatter (p for python)
         let g:neoformat_python_pyment_google = {
@@ -2331,9 +2335,9 @@
     autocmd BufEnter *.md exe $PANDOCOPENHTMLBROWSER
     " Insert image
     noremap <leader>mi <Esc>i![this_is_an_image]()<Left>
-    noremap <leader>mI <Esc>i<img src="" width="100%" height="100%"/><Esc>29<Left>
+    noremap <leader>mI <Esc>i<img src="" title="" width="100%" height="100%"/><Esc>38<Left>
     " Insert video in markdown file
-    noremap <leader>mV <Esc>i<video src="" width="100%" height="100%" controls/><Esc>38<Left>
+    noremap <leader>mV <Esc>i<video src="" title="" width="100%" height="100%" controls/><Esc>47<Left>
     " Insert link
     noremap <leader>ml <Esc>i[this_is_a_link]()<Left>
     " Insert checkbox (also included in VimwikiToggleListItem)
