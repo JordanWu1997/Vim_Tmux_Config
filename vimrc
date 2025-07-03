@@ -2017,9 +2017,29 @@
             \ nnoremap <leader>nmp :silent! %s/\\\\\([^\\]\)/\\\1/g<CR>
             \:silent! %s/\\\([^\\a-zA-Z0-9]\)/\1/g<CR>
             \:echo 'Neoformat: mdformat patch applied'<CR>
-        " mdformat: vim auto-complete expand $HOME, use this as patch to convert it back
-        nnoremap <leader>nmh :%s#\V<C-r>=escape($HOME, '/\')<CR>#\$HOME#g<CR>↵
-        vnoremap <leader>nmh :s#\V<C-r>=escape($HOME, '/')<CR>#$HOME#g<CR>↵
+        " mdformat: toggle env variable expansion
+        function! ToggleEnvPath(char)
+            let l:word = expand('<cfile>')
+            let l:home = $HOME
+            " Expand $HOME to absolute path
+            if l:word =~? '^$HOME\>'
+                " Only strip the $HOME prefix, avoid double substitution
+                let l:subpath = substitute(l:word, '^$HOME', '', '')
+                let l:absolute = l:home . l:subpath
+                let l:result = substitute(l:absolute, '/\+$', '', '')  " clean trailing slashes
+            " Convert /home/yourname to $HOME (only if it starts with full HOME)
+            elseif l:word =~? '^' . escape(l:home, '/')
+                let l:subpath = substitute(l:word, '^' . escape(l:home, '/'), '', '')
+                let l:result = '$HOME' . l:subpath
+            else
+                let l:result = l:word
+            endif
+            execute "normal! ci" . a:char . l:result
+        endfunction
+        nnoremap <silent> <leader>nme" :call ToggleEnvPath('"')<CR>
+        nnoremap <silent> <leader>nme' :call ToggleEnvPath("'")<CR>
+        nnoremap <silent> <leader>nme( :call ToggleEnvPath('(')<CR>
+        nnoremap <silent> <leader>nmew :call ToggleEnvPath('W')<CR>
         " mdformat: convert current word filepath from ABSOLUTE to RELATIVE
         function! ConvertRelativeToAbsolute(char)
             let l:path = expand('<cfile>')
@@ -2032,8 +2052,7 @@
         nnoremap <silent> <leader>nmaw :call ConvertRelativeToAbsolute('W')<CR>
         " mdformat: convert current word filepath from RELATIVE to ABSOLUTE
         function! ConvertAbsoluteToRelative(char)
-            "let l:path = expand('<cfile>')
-            let l:path = expand('$' . substitute(expand('<cfile>'), '^\$\(\w\+\)', '\1', ''))
+            let l:path = expand('<cfile>')
             let l:relpath = trim(system(printf(
                         \ 'realpath -s --relative-to=%s %s',
                         \ shellescape(expand('%:p:h')),
