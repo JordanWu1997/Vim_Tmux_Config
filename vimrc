@@ -2063,6 +2063,36 @@
         nnoremap <silent> <leader>nmr' :call ConvertAbsoluteToRelative("'")<CR>
         nnoremap <silent> <leader>nmr( :call ConvertAbsoluteToRelative('(')<CR>
         nnoremap <silent> <leader>nmrw :call ConvertAbsoluteToRelative('W')<CR>
+        " mdformat: rename file path for both text and file location
+        function! RenameFilePath()
+            " Get file path under cursor or visual selection
+            let l:orig_path = expand('<cfile>')
+            if !filereadable(l:orig_path) && !isdirectory(l:orig_path)
+                echoerr "Not a valid file or directory: " . l:orig_path
+                return
+            endif
+            " Prompt for new path
+            let l:new_path = input('New path: ', l:orig_path, 'file')
+            if empty(l:new_path) || l:orig_path == l:new_path
+                echo "Rename canceled or same name given."
+                return
+            endif
+            " Create destination directory if it doesn't exist
+            let l:new_dir = fnamemodify(l:new_path, ':h')
+            if !isdirectory(l:new_dir)
+                call mkdir(l:new_dir, 'p')
+            endif
+            " Try renaming the file
+            if rename(l:orig_path, l:new_path) == 0
+                " Replace text in buffer (only exact matches)
+                execute '%s#\V' . escape(l:orig_path, '/\.*$^~[]') . '#' . l:new_path . '#g'
+                echo "Renamed successfully."
+            else
+                echoerr "Failed to rename file."
+            endif
+        endfunction
+        nnoremap <leader>nmR :call RenameFilePath()<CR>
+        vnoremap <leader>nmR :<C-u>call RenameFilePath()<CR>
         " Python -------------------------------------------------------------
         " pyment: python docstring creater/formatter (p for python)
         let g:neoformat_python_pyment_google = {
