@@ -2019,105 +2019,6 @@
             \ nnoremap <leader>nmp :silent! %s/\\\\\([^\\]\)/\\\1/g<CR>
             \:silent! %s/\\\([^\\a-zA-Z0-9]\)/\1/g<CR>
             \:echo 'Neoformat: mdformat patch applied'<CR>
-        " mdformat: toggle env variable expansion
-        function! ToggleEnvPath(char)
-            let l:word = expand('<cfile>')
-            let l:home = $HOME
-            " Expand $HOME to absolute path
-            if l:word =~? '^$HOME\>'
-                " Only strip the $HOME prefix, avoid double substitution
-                let l:subpath = substitute(l:word, '^$HOME', '', '')
-                let l:absolute = l:home . l:subpath
-                let l:result = substitute(l:absolute, '/\+$', '', '')  " clean trailing slashes
-            " Convert /home/yourname to $HOME (only if it starts with full HOME)
-            elseif l:word =~? '^' . escape(l:home, '/')
-                let l:subpath = substitute(l:word, '^' . escape(l:home, '/'), '', '')
-                let l:result = '$HOME' . l:subpath
-            else
-                let l:result = l:word
-            endif
-            execute "normal! ci" . a:char . l:result
-        endfunction
-        nnoremap <silent> <leader>nme" :call ToggleEnvPath('"')<CR>
-        nnoremap <silent> <leader>nme' :call ToggleEnvPath("'")<CR>
-        nnoremap <silent> <leader>nme( :call ToggleEnvPath('(')<CR>
-        nnoremap <silent> <leader>nmew :call ToggleEnvPath('W')<CR>
-        " mdformat: convert current word filepath from ABSOLUTE to RELATIVE
-        function! ConvertRelativeToAbsolute(char)
-            let l:path = expand('<cfile>')
-            let l:absolute = trim(system('realpath ' . shellescape(l:path)))
-            exe "normal! ci" . a:char . l:absolute
-        endfunction
-        nnoremap <silent> <leader>nma" :call ConvertRelativeToAbsolute('"')<CR>
-        nnoremap <silent> <leader>nma' :call ConvertRelativeToAbsolute("'")<CR>
-        nnoremap <silent> <leader>nma( :call ConvertRelativeToAbsolute('(')<CR>
-        nnoremap <silent> <leader>nmaw :call ConvertRelativeToAbsolute('W')<CR>
-        " mdformat: convert current word filepath from RELATIVE to ABSOLUTE
-        function! ConvertAbsoluteToRelative(char)
-            let l:path = expand('<cfile>')
-            let l:relpath = trim(system(printf(
-                        \ 'realpath -s --relative-to=%s %s',
-                        \ shellescape(expand('%:p:h')),
-                        \ shellescape(l:path))))
-            exe "normal! ci" . a:char . l:relpath
-        endfunction
-        nnoremap <silent> <leader>nmr" :call ConvertAbsoluteToRelative('"')<CR>
-        nnoremap <silent> <leader>nmr' :call ConvertAbsoluteToRelative("'")<CR>
-        nnoremap <silent> <leader>nmr( :call ConvertAbsoluteToRelative('(')<CR>
-        nnoremap <silent> <leader>nmrw :call ConvertAbsoluteToRelative('W')<CR>
-        " mdformat: rename file path for both text and file location
-        function! RenameFilePath()
-            " Get file path under cursor or visual selection
-            let l:orig_path = expand('<cfile>')
-            if !filereadable(l:orig_path) && !isdirectory(l:orig_path)
-                echoerr "Not a valid file or directory: " . l:orig_path
-                return
-            endif
-            " Prompt for new path
-            let l:new_path = input('New path: ', l:orig_path, 'file')
-            echo ' '
-            if empty(l:new_path) || l:orig_path == l:new_path
-                echo "Rename canceled or same name given."
-                return
-            endif
-            " Create destination directory if it doesn't exist
-            let l:new_dir = fnamemodify(l:new_path, ':h')
-            if !isdirectory(l:new_dir)
-                call mkdir(l:new_dir, 'p')
-            endif
-            " Try renaming the file
-            if rename(l:orig_path, l:new_path) == 0
-                " Replace text in buffer (only exact matches)
-                execute '%s#\V' . escape(l:orig_path, '/\.*$^~[]') . '#' . l:new_path . '#g'
-                echo "Renamed successfully."
-            else
-                echoerr "Failed to rename file."
-            endif
-        endfunction
-        nnoremap <leader>nmR :call RenameFilePath()<CR>
-        vnoremap <leader>nmR :<C-u>call RenameFilePath()<CR>
-        " mdformat: rename file path for both text and file location
-        function! RenameFileAndUpdateLink()
-            " Get file path under cursor
-            let l:old_path = expand('<cfile>')
-            " Prompt user with old_path to edit as new_path
-            let l:new_path = input('New path: ', l:old_path)
-            echo ' '
-            " Cancel if empty or unchanged
-            if empty(l:new_path) || l:new_path ==# l:old_path
-                echo "Rename cancelled."
-                return
-            endif
-            " Run the python script with both arguments
-            let l:cmd = 'python ' . shellescape(s:MARKDOWN_UPDATE_LINK_SCRIPT) .
-                        \ ' ' . shellescape(l:old_path) . ' ' . shellescape(l:new_path)
-            echo system(l:cmd)
-            " Refresh current buffer (optional)
-            checktime
-        endfunction
-        command! RenameFileAndUpdateLink call RenameFileViaPython()
-        nnoremap <leader>nmU :call RenameFileAndUpdateLink()<CR>
-        vnoremap <leader>nmU :<C-u>call RenameFileAndUpdateLink()<CR>
         " Python -------------------------------------------------------------
         " pyment: python docstring creater/formatter (p for python)
         let g:neoformat_python_pyment_google = {
@@ -2447,9 +2348,169 @@
     noremap <leader>mC <Esc>a</span><Esc>
     " Insert HTML table template
     noremap <leader>mT <Esc>:execute('r'.g:MARKDOWN_TABLE_TEMPLATE)<CR>
-    " Send headers to quickfix/location list
-    noremap <leader>mh <Esc>:lvimgrep /^#/ %<CR>
-    noremap <leader>mH <Esc>:vimgrep /^#/ %<CR>
+    " File/Link tools:
+    " -- For
+    "    -- Convert absolute paths between home directory and $HOME
+    "    -- Convert file path between absolute path and relative path
+    "    -- Rename file path and move file to the new file path
+    "    -- Rename file path, move file, and update all links that contains the file
+    "    -- Find all headers in current buffer and send them to location/quickfix list
+    "    -- Find all files/URLs in current buffer and send them to quickfix list
+    " Toggle env variable expansion
+    function! ToggleEnvPath(char)
+        let l:word = expand('<cfile>')
+        let l:home = $HOME
+        " Expand $HOME to absolute path
+        if l:word =~? '^$HOME\>'
+            " Only strip the $HOME prefix, avoid double substitution
+            let l:subpath = substitute(l:word, '^$HOME', '', '')
+            let l:absolute = l:home . l:subpath
+            let l:result = substitute(l:absolute, '/\+$', '', '')  " clean trailing slashes
+        " Convert /home/yourname to $HOME (only if it starts with full HOME)
+        elseif l:word =~? '^' . escape(l:home, '/')
+            let l:subpath = substitute(l:word, '^' . escape(l:home, '/'), '', '')
+            let l:result = '$HOME' . l:subpath
+        else
+            let l:result = l:word
+        endif
+        execute "normal! ci" . a:char . l:result
+    endfunction
+    nnoremap <silent> <leader>mfe" :call ToggleEnvPath('"')<CR>
+    nnoremap <silent> <leader>mfe' :call ToggleEnvPath("'")<CR>
+    nnoremap <silent> <leader>mfe( :call ToggleEnvPath('(')<CR>
+    nnoremap <silent> <leader>mfe) :call ToggleEnvPath('(')<CR>
+    nnoremap <silent> <leader>mfe` :call ToggleEnvPath('`')<CR>
+    nnoremap <silent> <leader>mfew :call ToggleEnvPath('W')<CR>
+    " Convert current word filepath from ABSOLUTE to RELATIVE
+    function! ConvertRelativeToAbsolute(char)
+        let l:path = expand('<cfile>')
+        let l:absolute = trim(system('realpath ' . shellescape(l:path)))
+        exe "normal! ci" . a:char . l:absolute
+    endfunction
+    nnoremap <silent> <leader>mfa" :call ConvertRelativeToAbsolute('"')<CR>
+    nnoremap <silent> <leader>mfa' :call ConvertRelativeToAbsolute("'")<CR>
+    nnoremap <silent> <leader>mfa( :call ConvertRelativeToAbsolute('(')<CR>
+    nnoremap <silent> <leader>mfa) :call ConvertRelativeToAbsolute('(')<CR>
+    nnoremap <silent> <leader>mfa` :call ConvertRelativeToAbsolute('`')<CR>
+    nnoremap <silent> <leader>mfaw :call ConvertRelativeToAbsolute('W')<CR>
+    " Convert current word filepath from RELATIVE to ABSOLUTE
+    function! ConvertAbsoluteToRelative(char)
+        let l:path = expand('<cfile>')
+        let l:relpath = trim(system(printf(
+                    \ 'realpath -s --relative-to=%s %s',
+                    \ shellescape(expand('%:p:h')),
+                    \ shellescape(l:path))))
+        exe "normal! ci" . a:char . l:relpath
+    endfunction
+    nnoremap <silent> <leader>mfr" :call ConvertAbsoluteToRelative('"')<CR>
+    nnoremap <silent> <leader>mfr' :call ConvertAbsoluteToRelative("'")<CR>
+    nnoremap <silent> <leader>mfr( :call ConvertAbsoluteToRelative('(')<CR>
+    nnoremap <silent> <leader>mfr) :call ConvertAbsoluteToRelative('(')<CR>
+    nnoremap <silent> <leader>mfr` :call ConvertAbsoluteToRelative('`')<CR>
+    nnoremap <silent> <leader>mfrw :call ConvertAbsoluteToRelative('W')<CR>
+    " Rename file path for both text and file location
+    function! RenameFilePath()
+        " Get file path under cursor or visual selection
+        let l:orig_path = expand('<cfile>')
+        if !filereadable(l:orig_path) && !isdirectory(l:orig_path)
+            echoerr "Not a valid file or directory: " . l:orig_path
+            return
+        endif
+        " Prompt for new path
+        let l:new_path = input('New path: ', l:orig_path, 'file')
+        echo ' '
+        if empty(l:new_path) || l:orig_path == l:new_path
+            echo "Rename canceled or same name given."
+            return
+        endif
+        " Create destination directory if it doesn't exist
+        let l:new_dir = fnamemodify(l:new_path, ':h')
+        if !isdirectory(l:new_dir)
+            call mkdir(l:new_dir, 'p')
+        endif
+        " Try renaming the file
+        if rename(l:orig_path, l:new_path) == 0
+            " Replace text in buffer (only exact matches)
+            execute '%s#\V' . escape(l:orig_path, '/\.*$^~[]') . '#' . l:new_path . '#g'
+            echo "Renamed successfully."
+        else
+            echoerr "Failed to rename file."
+        endif
+    endfunction
+    nnoremap <leader>mfR :call RenameFilePath()<CR>
+    vnoremap <leader>mfR :<C-u>call RenameFilePath()<CR>
+    " Rename file path and update links contains renamed file path
+    function! RenameFileAndUpdateLink()
+        " Get file path under cursor
+        let l:old_path = expand('<cfile>')
+        " Prompt user with old_path to edit as new_path
+        let l:new_path = input('New path: ', l:old_path)
+        echo ' '
+        " Cancel if empty or unchanged
+        if empty(l:new_path) || l:new_path ==# l:old_path
+            echo "Rename cancelled."
+            return
+        endif
+        " Run the python script with both arguments
+        let l:cmd = 'python ' . shellescape(s:MARKDOWN_UPDATE_LINK_SCRIPT) .
+                    \ ' ' . shellescape(l:old_path) . ' ' . shellescape(l:new_path)
+        echo system(l:cmd)
+        " Refresh current buffer (optional)
+        checktime
+    endfunction
+    command! RenameFileAndUpdateLink call RenameFileViaPython()
+    nnoremap <leader>mfU :call RenameFileAndUpdateLink()<CR>
+    vnoremap <leader>mfU :<C-u>call RenameFileAndUpdateLink()<CR>
+    " Find all filepath and urls in current file and sent them to quickfix list
+    function! FindFilepathsAndURLs()
+        " Enable regex Engine for complex regex pattern matching
+        set re=1
+        " Clear the quickfix list
+        call setqflist([])
+        " Define the regex pattern for filepaths and URLs
+        let l:pattern = '\v((\.\.?|~)?\/)?([a-zA-Z0-9._@%+=:,~-]+\/)*[a-zA-Z0-9._@%+=:,~-]+\.[a-zA-Z0-9]+|https?:\/\/[a-zA-Z0-9._~@%+=:,/?#&$!*-]+'
+        " Search the buffer and collect matches
+        let l:matches = []
+        for lnum in range(1, line('$'))
+            let line_text = getline(lnum)
+            let start = 0
+            while 1
+                let match = matchstrpos(line_text, l:pattern, start)
+                if empty(match[0])
+                    break
+                endif
+                let match_text = match[0]
+                let match_pos = match[1]
+                let end_pos = match[2]
+                " Skip partial matches that start mid-word
+                if match_pos > 0 && line_text[match_pos - 1] =~ '\k'
+                    let start = match_pos + 1
+                    continue
+                endif
+                " Add result to matches
+                call add(l:matches, {
+                      \ 'filename': expand('%:p'),
+                      \ 'lnum': lnum,
+                      \ 'col': match_pos + 1,
+                      \ 'text': match_text
+                      \ })
+                let start = end_pos
+            endwhile
+        endfor
+        " Restore regex engine
+        set re=0
+        " Add to quickfix list
+        if empty(l:matches)
+            echo "No file paths or URLs found."
+        else
+            call setqflist(l:matches, 'r')
+            copen
+        endif
+    endfunction
+    nnoremap <leader>mff :call FindFilepathsAndURLs()<CR>
+    " Find all headers to quickfix/location list
+    noremap <leader>mfh <Esc>:lvimgrep /^#/ %<CR>
+    noremap <leader>mfH <Esc>:vimgrep /^#/ %<CR>
 
 " LanguageTool ---------------------------------------------------------------
     noremap <leader>LC <Esc>:LanguageToolCheck<CR>
