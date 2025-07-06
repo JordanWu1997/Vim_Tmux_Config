@@ -194,6 +194,8 @@
     let g:MARKDOWN_TABLE_TEMPLATE = s:TEMPLATE_DIR . 'table.html'
     " Vimwiki Template file
     let g:WIKI_TEMPLATE_DIR = expand('$HOME/Documents/KNOWLEDGE_BASE/resources/template/')
+    " Markdown rename and update link script
+    let g:MARKDOWN_UPDATE_LINK_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/bin/rename_file_and_update_md_link.py')
     " Language Tool CLI jar file
     let g:languagetool_jar = '/opt/LanguageTool-5.9/languagetool-commandline.jar'
 
@@ -2073,6 +2075,7 @@
             endif
             " Prompt for new path
             let l:new_path = input('New path: ', l:orig_path, 'file')
+            echo ' '
             if empty(l:new_path) || l:orig_path == l:new_path
                 echo "Rename canceled or same name given."
                 return
@@ -2093,6 +2096,28 @@
         endfunction
         nnoremap <leader>nmR :call RenameFilePath()<CR>
         vnoremap <leader>nmR :<C-u>call RenameFilePath()<CR>
+        " mdformat: rename file path for both text and file location
+        function! RenameFileAndUpdateLink()
+            " Get file path under cursor
+            let l:old_path = expand('<cfile>')
+            " Prompt user with old_path to edit as new_path
+            let l:new_path = input('New path: ', l:old_path)
+            echo ' '
+            " Cancel if empty or unchanged
+            if empty(l:new_path) || l:new_path ==# l:old_path
+                echo "Rename cancelled."
+                return
+            endif
+            " Run the python script with both arguments
+            let l:cmd = 'python3 ' . shellescape(g:MARKDOWN_UPDATE_LINK_SCRIPT) .
+                        \ ' ' . shellescape(l:old_path) . ' ' . shellescape(l:new_path)
+            echo system(l:cmd)
+            " Refresh current buffer (optional)
+            checktime
+        endfunction
+        command! RenameFileAndUpdateLink call RenameFileViaPython()
+        nnoremap <leader>nmU :call RenameFileAndUpdateLink()<CR>
+        vnoremap <leader>nmU :<C-u>call RenameFileAndUpdateLink()<CR>
         " Python -------------------------------------------------------------
         " pyment: python docstring creater/formatter (p for python)
         let g:neoformat_python_pyment_google = {
