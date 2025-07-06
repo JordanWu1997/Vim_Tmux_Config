@@ -195,7 +195,7 @@
     " Vimwiki Template file
     let g:WIKI_TEMPLATE_DIR = expand('$HOME/Documents/KNOWLEDGE_BASE/resources/template/')
     " Markdown rename and update link script
-    let g:MARKDOWN_UPDATE_LINK_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/bin/rename_file_and_update_md_link.py')
+    let s:MARKDOWN_UPDATE_LINK_SCRIPT = expand('/home/jordan/Desktop/Vim_Tmux_Config/bin/rename_file_and_update_md_link.py')
     " Language Tool CLI jar file
     let g:languagetool_jar = '/opt/LanguageTool-5.9/languagetool-commandline.jar'
 
@@ -2109,7 +2109,7 @@
                 return
             endif
             " Run the python script with both arguments
-            let l:cmd = 'python3 ' . shellescape(g:MARKDOWN_UPDATE_LINK_SCRIPT) .
+            let l:cmd = 'python ' . shellescape(s:MARKDOWN_UPDATE_LINK_SCRIPT) .
                         \ ' ' . shellescape(l:old_path) . ' ' . shellescape(l:new_path)
             echo system(l:cmd)
             " Refresh current buffer (optional)
