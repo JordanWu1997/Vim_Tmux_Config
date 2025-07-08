@@ -195,7 +195,7 @@
     " Vimwiki Template file
     let g:WIKI_TEMPLATE_DIR = expand('$HOME/Documents/KNOWLEDGE_BASE/resources/template/')
     " Markdown rename and update link script
-    let s:MARKDOWN_UPDATE_LINK_SCRIPT = expand('/home/jordan/Desktop/Vim_Tmux_Config/bin/rename_file_and_update_md_link.py')
+    let s:MARKDOWN_UPDATE_LINK_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/bin/rename_file_and_update_md_link.py')
     " Language Tool CLI jar file
     let g:languagetool_jar = '/opt/LanguageTool-5.9/languagetool-commandline.jar'
 
@@ -2461,33 +2461,47 @@
     command! RenameFileAndUpdateLink call RenameFileViaPython()
     nnoremap <leader>mfU :call RenameFileAndUpdateLink()<CR>
     vnoremap <leader>mfU :<C-u>call RenameFileAndUpdateLink()<CR>
-    " Find all filepath and urls in current file and sent them to quickfix list
-    function! FindFilepathsAndURLs()
+    "Find only HTTP/HTTPS websites
+    function! FindWebsitesOnly()
+        call setqflist([])
+        let l:pattern = '\vhttps?:\/\/[a-zA-Z0-9._~@%+=:,/?#&$!*\-]+'
+        call s:CollectMatches(l:pattern, 0)
+    endfunction
+    " Find only file paths (non-HTTP/HTTPS URLs)
+    function! FindFilepathsOnly()
+        call setqflist([])
+        let l:pattern = '\v((\$[A-Z_][A-Z0-9_]*|~|\.{1,2})?\/)?([a-zA-Z0-9 ._@%+=:,~$!\-]+\/)+[a-zA-Z0-9 ._@%+=:,~$!\-]+\.[a-zA-Z0-9]+'
+        call s:CollectMatches(l:pattern, 1)
+    endfunction
+    " Find both Websites and Filepaths
+    function! FindAllPathsAndWebsites()
+        call setqflist([])
+        let l:pattern = '\v(https?:\/\/[a-zA-Z0-9._~@%+=:,/?#&$!*\-]+)|((\$[A-Z_][A-Z0-9_]*|~|\.{1,2})?\/)?([a-zA-Z0-9 ._@%+=:,~$!\-]+\/)+[a-zA-Z0-9 ._@%+=:,~$!\-]+\.[a-zA-Z0-9]+'
+        call s:CollectMatches(l:pattern, 0)
+    endfunction
+    " Find regex pattern and sent them to quickfix list
+    function! s:CollectMatches(pattern, skip_http)
         " Enable regex Engine for complex regex pattern matching
         set re=1
-        " Clear the quickfix list
-        call setqflist([])
-        " Define the regex pattern for filepaths and URLs
-        let l:pattern = '\v((\.\.?|~)?\/)?([a-zA-Z0-9._@%+=:,~-]+\/)*[a-zA-Z0-9._@%+=:,~-]+\.[a-zA-Z0-9]+|https?:\/\/[a-zA-Z0-9._~@%+=:,/?#&$!*-]+'
-        " Search the buffer and collect matches
+        " Regex pattern matching
         let l:matches = []
         for lnum in range(1, line('$'))
             let line_text = getline(lnum)
             let start = 0
             while 1
-                let match = matchstrpos(line_text, l:pattern, start)
+                let match = matchstrpos(line_text, a:pattern, start)
                 if empty(match[0])
                     break
                 endif
                 let match_text = match[0]
                 let match_pos = match[1]
                 let end_pos = match[2]
-                " Skip partial matches that start mid-word
-                if match_pos > 0 && line_text[match_pos - 1] =~ '\k'
-                    let start = match_pos + 1
+                " Optionally skip if part of http(s):// URL
+                if a:skip_http && match(match_text, '^https\?://') >= 0
+                    let start = end_pos
                     continue
                 endif
-                " Add result to matches
+                " Update match result
                 call add(l:matches, {
                       \ 'filename': expand('%:p'),
                       \ 'lnum': lnum,
@@ -2501,13 +2515,15 @@
         set re=0
         " Add to quickfix list
         if empty(l:matches)
-            echo "No file paths or URLs found."
+            echo "No matches found."
         else
             call setqflist(l:matches, 'r')
             copen
         endif
     endfunction
-    nnoremap <leader>mff :call FindFilepathsAndURLs()<CR>
+    noremap <leader>mfA :call FindAllPathsAndWebsites()<CR>
+    noremap <leader>mfw :call FindWebsitesOnly()<CR>
+    noremap <leader>mff :call FindFilepathsOnly()<CR>
     " Find all headers to quickfix/location list
     noremap <leader>mfh <Esc>:lvimgrep /^#/ %<CR>
     noremap <leader>mfH <Esc>:vimgrep /^#/ %<CR>
