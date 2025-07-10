@@ -148,19 +148,19 @@ command! -bang Registers call s:fzf_registers(<bang>0)
 " from https://github.com/junegunn/fzf.vim/issues/865
 
 function GoTo(jumpline)
-  let values = split(a:jumpline, ":")
-  execute "e ".values[0]
-  call cursor(str2nr(values[1]), str2nr(values[2]))
-  execute "normal zvzz"
+    let values = split(a:jumpline, ":")
+    execute "e ".values[0]
+    call cursor(str2nr(values[1]), str2nr(values[2]))
+    execute "normal zvzz"
 endfunction
 
 function GetLine(bufnr, lnum)
-  let lines = getbufline(a:bufnr, a:lnum)
-  if len(lines)>0
-    return trim(lines[0])
-  else
-    return ''
-  endif
+    let lines = getbufline(a:bufnr, a:lnum)
+    if len(lines)>0
+        return trim(lines[0])
+    else
+        return ''
+    endif
 endfunction
 
 function Getjumps()
@@ -175,19 +175,19 @@ function Getjumps()
 endfunction
 
 function! Jumps()
-  " Get jumps with filename added
-  let tmp_jump = Getjumps()
-  if(tmp_jump == [])
-        call s:warn('Empty jump list!')
-        return
-  endif
-  let jumps = map(Getjumps(),
-    \ { key, val -> extend(val, {'fname': getbufinfo(val.bufnr)[0].name }) })
+    " Get jumps with filename added
+    let tmp_jump = Getjumps()
+    if(tmp_jump == [])
+          call s:warn('Empty jump list!')
+          return
+    endif
+    let jumps = map(Getjumps(),
+        \ { key, val -> extend(val, {'fname': getbufinfo(val.bufnr)[0].name }) })
 
-  let jumptext = map(copy(jumps), { index, val ->
-      \ (val.fname).':'.(val.lnum).':'.(val.col+1).': '.GetLine(val.bufnr, val.lnum) })
+    let jumptext = map(copy(jumps), { index, val ->
+        \ (val.fname).':'.(val.lnum).':'.(val.col+1).': '.GetLine(val.bufnr, val.lnum) })
 
-  call fzf#run(fzf#vim#with_preview(fzf#wrap({
+    call fzf#run(fzf#vim#with_preview(fzf#wrap({
         \ 'source': jumptext,
         \ 'column': 1,
         \ 'options': ['--delimiter', ':', '--bind', 'alt-a:select-all,alt-d:deselect-all', '--preview-window', '+{2}-/2'],
@@ -202,16 +202,16 @@ command! FZFJumps call Jumps()
 " from https://github.com/junegunn/fzf.vim/issues/865
 
 function! Changes()
-  let changes  = reverse(copy(getchangelist()[0]))
-  if(changes == [])
+    let changes  = reverse(copy(getchangelist()[0]))
+    if(changes == [])
         call s:warn('Empty change list!')
         return
-  endif
+    endif
 
-  let changetext = map(copy(changes), { index, val ->
-      \ expand('%').':'.(val.lnum).':'.(val.col+1).': '.GetLine(bufnr('%'), val.lnum) })
+    let changetext = map(copy(changes), { index, val ->
+        \ expand('%').':'.(val.lnum).':'.(val.col+1).': '.GetLine(bufnr('%'), val.lnum) })
 
-  call fzf#run(fzf#vim#with_preview(fzf#wrap({
+    call fzf#run(fzf#vim#with_preview(fzf#wrap({
         \ 'source': changetext,
         \ 'column': 1,
         \ 'options': ['--delimiter', ':', '--bind', 'alt-a:select-all,alt-d:deselect-all', '--preview-window', '+{2}-/2'],
@@ -226,17 +226,69 @@ command! FZFChanges call Changes()
 " from https://www.reddit.com/r/neovim/comments/mlqyca/fzf_buffer_delete/
 
 function! s:list_buffers()
-  redir => list
-  silent ls
-  redir END
-  return split(list, "\n")
+    redir => list
+    silent ls
+    redir END
+    return split(list, "\n")
 endfunction
 
 function! s:delete_buffers(lines)
-  execute 'bwipeout' join(map(a:lines, {_, line -> split(line)[0]}))
+    execute 'bwipeout' join(map(a:lines, {_, line -> split(line)[0]}))
 endfunction
 
 command! FZFBD call fzf#run(fzf#wrap({
     \ 'source': s:list_buffers(),
     \ 'sink*': { lines -> s:delete_buffers(lines) },
     \ 'options': '--multi --bind V:select-all'}))
+
+" ============================================================================
+" FZF Insert markdown link
+" ============================================================================
+
+" Insert markdown link from root
+function! s:InsertMarkdownLinkFromRoot()
+    " Step 1: Find root directory with index.md
+    let l:current = expand('%:p:h')
+    let l:root = l:current
+    while !empty(l:root) && !filereadable(l:root . '/index.md')
+        let l:parent = fnamemodify(l:root, ':h')
+        if l:parent == l:root
+            echoerr "index.md not found in any parent directory"
+            return
+        endif
+        let l:root = l:parent
+    endwhile
+    " Step 2: Find all markdown files under root except index.md
+    let l:cmd = 'find ' . shellescape(l:root) . " -type f -name '*.md' ! -name 'index.md'"
+    let l:md_files = systemlist(l:cmd)
+    if empty(l:md_files)
+        echo "No markdown files found."
+        return
+    endif
+    " Step 3: Use lambda to extract selected[0]
+    let l:Callback = { selected_list -> s:InsertMarkdownLink(selected_list[0]) }
+    " Step 4: Run fzf
+    call fzf#run(fzf#vim#with_preview(fzf#wrap({
+        \ 'source': l:md_files,
+        \ 'sink*': l:Callback,
+        \ 'options': '--prompt "Link> "'})))
+endfunction
+
+" Insert markdown link
+function! s:InsertMarkdownLink(selected) abort
+    " Current file directory
+    let l:current_dir = expand('%:p:h')
+    let l:absolute_target = fnamemodify(a:selected, ':p')
+    " Relative path from current file to target
+    let l:rel_path = fnamemodify(fnamemodify(l:absolute_target, ':~:.'), ':.')
+    " Use system 'realpath --relative-to' for more reliable cross-dir calculation
+    let l:rel_path = system('realpath --relative-to=' . shellescape(l:current_dir) . ' ' . shellescape(l:absolute_target))
+    let l:rel_path = substitute(l:rel_path, '\n\+$', '', '')  " remove trailing newline
+    " Markdown filename (without extension)
+    let l:filename = fnamemodify(a:selected, ':t:r')
+    " Final markdown link
+    let l:markdown = '[' . l:filename . '](' . l:rel_path . ')'
+    call feedkeys("i" . l:markdown . "\<Esc>", 'n')
+endfunction
+
+command! FZFMDInsert call s:InsertMarkdownLinkFromRoot()<CR>

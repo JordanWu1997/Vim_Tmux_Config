@@ -1521,6 +1521,8 @@
     exec 'source ' . s:FZF_PATCH
     nnoremap <leader>fcl :FZFChanges<CR>
     nnoremap <leader>fjl :FZFJumps<CR>
+    " Add patch for markdown link insertion
+    nnoremap <leader>fmi :FZFMDInsert<CR>
     " FZF replacement
     nnoremap <leader>'' :FZFBuffers<CR>
     nnoremap <leader>bD :FZFBD<CR>
@@ -2527,6 +2529,8 @@
     " Find all headers to quickfix/location list
     noremap <leader>mfh <Esc>:lvimgrep /^#/ %<CR>
     noremap <leader>mfH <Esc>:vimgrep /^#/ %<CR>
+    " Insert markdown link to current file
+    noremap <leader>mfi :FZFMDInsert<CR>
 
 " LanguageTool ---------------------------------------------------------------
     noremap <leader>LC <Esc>:LanguageToolCheck<CR>
