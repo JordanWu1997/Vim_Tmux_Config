@@ -178,8 +178,8 @@
     let s:CTAGSBIN = '$HOME/Desktop/Vim_Tmux_Config/bin/vwtags.py'
     " FZF patches for change/jump list
     let s:FZF_PATCH = '$HOME/Desktop/Vim_Tmux_Config/vim/patch/fzf_patch.vim'
-    " Python that has jedi, pynvim and packages installed for completion
-    let s:PYTHON_FOR_COMPLETION = '/usr/bin/python' "$CONDA_PYTHON_EXE
+    " Python provider for jedi, pynvim and other python packages
+    let g:python3_host_prog = '/usr/bin/python' "$CONDA_PYTHON_EXE
     " Template Directory
     let s:TEMPLATE_DIR = '$HOME/Desktop/Vim_Tmux_Config/share/'
     " Python skeleton file (template)
@@ -1077,6 +1077,7 @@
         " Vim-hexokinase only works in termguicolors
         if !USING_WAL_THEME
             " Paint hex colors in color code background color
+            " NOTE: go is required to install hexokinase
             Plug 'rrethy/vim-hexokinase', {
                         \ 'do': 'make hexokinase', 'on':'HexokinaseToggle' }
         endif
@@ -1673,6 +1674,8 @@
     " Insert mode only
     " Wrap current word with pair e.g. ()test -> (test)
     let g:AutoPairsShortcutFastWrap = '<M-w>'
+    " HTML patch
+    autocmd FileType html let b:AutoPairs = AutoPairsDefine({'<!--': '-->'})
 
 " Vim-whichkey ---------------------------------------------------------------
     " Whichkey layout
@@ -2192,8 +2195,6 @@
         set completeopt-=preview
         " Enable deoplete at startup
         let g:deoplete#enable_at_startup = 1
-        " Python that uses to install jedi
-        let g:python3_host_prog = s:PYTHON_FOR_COMPLETION
         " Maximum length for completion
         let g:deoplete#sources#jedi#statement_length = 30
         " Ignore case for deoplete
