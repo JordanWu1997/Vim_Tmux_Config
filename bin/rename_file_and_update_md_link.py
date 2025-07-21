@@ -58,4 +58,5 @@ def main():
     update_markdown_links(abs_old_path, abs_new_path, root_dir)
 
 
-main()
+if __name__ == '__main__':
+    main()

@@ -2532,6 +2532,8 @@
     noremap <leader>mfH <Esc>:vimgrep /^#/ %<CR>
     " Insert markdown link to current file
     noremap <leader>mfi :FZFMDInsert<CR>
+    " Insert pandoc style footnote
+    noremap <leader><bar> :<Esc>i[^]<Left>
 
 " LanguageTool ---------------------------------------------------------------
     noremap <leader>LC <Esc>:LanguageToolCheck<CR>
