@@ -1193,8 +1193,8 @@
 " [Language] -----------------------------------------------------------------
     " Language Tool
     Plug 'dpelle/vim-LanguageTool', { 'on': 'LanguageToolCheck' }
-    "" Spell/Tone Tool
-    "Plug 'preservim/vim-wordy'
+    " Word identifier (e.g., weak, weasel, puffery, redunant, etc.)
+    Plug 'preservim/vim-wordy'
 
 " [I3 syntax highlight] ------------------------------------------------------
     " I3 configuration syntax highlight
