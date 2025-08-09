@@ -244,6 +244,9 @@ bind C-S-l confirm-before -p "clear scrollback history? (y/n)" "clear-history \;
 bind -n Home send Escape "OH"
 bind -n End send Escape "OF"
 
+# Customization mode (added in tmux 3.2a, defaults: <prefix> + [C])
+bind M-C customize-mode -Z
+
 # ============================================================================
 # TMUX statusline / titlebar
 # ============================================================================
