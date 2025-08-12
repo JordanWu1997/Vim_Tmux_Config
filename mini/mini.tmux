@@ -45,9 +45,6 @@ set -g main-pane-width "50%"
 # Do not close TMUX after closing current session
 set -g detach-on-destroy off
 
-# Copy mode keybindings (options: vi/emacs, default: emacs)
-set -g mode-keys vi
-
 # Statusline keybindings (options: vi/emacs, default: emacs)
 set -g status-keys vi
 
@@ -68,6 +65,9 @@ set -g mouse on
 # ============================================================================
 # TMUX buffer and copymode
 # ============================================================================
+
+# Copy mode keybindings (options: vi/emacs, default: emacs)
+set -g mode-keys vi
 
 # Clipboard is set to "on" for gnome-terminal, but MUST be set to "external"
 # for kitty or other terminal emulator supports set-clipboard
