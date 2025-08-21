@@ -136,6 +136,9 @@ bind -n C-j select-pane -D
 bind -n C-k select-pane -U
 bind -n C-l select-pane -R
 
+# Find window (defaults to <prefix> + [f])
+unbind f; bind F command-prompt "find-window -Z -- '%%'"
+
 # Vimium-like key for session switch
 bind -r j switch-client -n
 bind -r k switch-client -p
@@ -246,6 +249,9 @@ bind -n End send Escape "OF"
 
 # Customization mode (added in tmux 3.2a, defaults: <prefix> + [C])
 bind M-C customize-mode -Z
+
+# List all environment variables
+bind E show-environment -g
 
 # ============================================================================
 # TMUX statusline / titlebar

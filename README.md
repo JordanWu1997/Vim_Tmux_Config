@@ -910,6 +910,7 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 - [Plug-in] tmux-open (open TMUX context easily in TMUX copy mode)
 - [Plug-in] tmux-logging (logging and screen capturing for TMUX)
 - [Plug-in] tmux-transient-status (TMUX statusline auto-hiding)
+- [Plug-in] tmux-fingers (copy-paste in TMUX with vimium-like hints)
 
 </details>
 
@@ -1093,6 +1094,7 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 - https://github.com/gotbletu/dotfiles_v2/blob/master/normal_user/tmux/.tmux.conf
 - https://waylonwalker.com/tmux-copy-mode/
 - https://github.com/tmux/tmux/wiki/Advanced-Use
+- https://github.com/Morantron/tmux-fingers
 
 </details>
 </details>
