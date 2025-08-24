@@ -316,6 +316,8 @@
     " Insert date (to date/to sec)
     nnoremap <leader>idd <Esc>i<C-r>=strftime('%F')<CR>
     nnoremap <leader>ids <Esc>i<C-r>=strftime('%Y-%m-%d %H:%M:%S')<CR>
+    " Copy current file path to clipbaord
+    noremap <leader>yp :let @*=expand("%:p")<CR>
 
 " Save/Load file hotkey ------------------------------------------------------
     " NOTE:
