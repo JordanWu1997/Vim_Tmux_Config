@@ -69,6 +69,9 @@ set listchars=eol:↵,tab:»·,trail:╳,extends:»,precedes:«,nbsp:␣
 " Ctags
 set tags=./.tags,.tags;/           " use ctag -o .tags -R . to generate file tags
 
+" Python3 host (for ALE)
+let g:python3_host_prog = '/usr/bin/python' "$CONDA_PYTHON_EXE
+
 " ============================================================================
 " Backup settings
 " ============================================================================
