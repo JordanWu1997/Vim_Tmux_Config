@@ -5,6 +5,7 @@
 ### Basics
 
 - Comment: `%%`
+- Escape sequece: `""`, e.g., `"(ESCAPE)"`
 - Diagram Type:
   - Flowchart: `graph <DIRECTION>`
     - `TD` (Top to Down)
@@ -86,7 +87,7 @@ gantt
   %% Feature 2
   section Feature 2
   Data Collection/Cleaning: active,b1, 2025-08-25, 2w
-  Model Finetuning: b2, after b1, 1w
+  "Model Fine-tuning (maybe "not")": b2, after b1, 1w
   Module Optimization: after b2, 1w
 
   %% Platform

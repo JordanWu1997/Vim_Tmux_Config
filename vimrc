@@ -1527,7 +1527,7 @@
     " Add patch for markdown link insertion
     nnoremap <leader>fmi :FZFMDInsert<CR>
     " FZF replacement
-    nnoremap <leader>'' :FZFBuffers<CR>
+    nnoremap <leader>'  :FZFBuffers<CR>
     nnoremap <leader>bD :FZFBD<CR>
     nnoremap <leader>mk :FZFMarks<CR>
     nnoremap <leader>g; :FZFChanges<CR>
