@@ -2168,6 +2168,9 @@
         " Move through hunks in current buffer
         nmap <leader>gj <Plug>(GitGutterNextHunk)zz
         nmap <leader>gk <Plug>(GitGutterPrevHunk)zz
+        " Move through hunks in current buffer (h for hunk)
+        nmap ]h <Plug>(GitGutterNextHunk)zz
+        nmap [h <Plug>(GitGutterPrevHunk)zz
     endif
 
 " Vim-Unimpaired -------------------------------------------------------------
@@ -2388,8 +2391,10 @@
     nnoremap <silent> <leader>mfew :call ToggleEnvPath('W')<CR>
     " Convert current word filepath from ABSOLUTE to RELATIVE
     function! ConvertRelativeToAbsolute(char)
-        let l:path = expand('<cfile>')
-        let l:absolute = trim(system('realpath ' . shellescape(l:path)))
+        let l:path = expand('<cfile>:p') " :p expand ~ as $HOME
+        let l:absolute = trim(system(printf(
+                    \ 'realpath %s',
+                    \ shellescape(l:path))))
         exe "normal! ci" . a:char . l:absolute
     endfunction
     nnoremap <silent> <leader>mfa" :call ConvertRelativeToAbsolute('"')<CR>
