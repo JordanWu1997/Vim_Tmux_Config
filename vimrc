@@ -796,8 +796,8 @@
         if &ft != 'diff'
             let b:curcol = col('.')
             let b:curline = line('.')
-            silent! %s/\s\+$//
-            silent! %s/\(\s*\n\)\+\%$//
+            keeppatterns silent! %s/\s\+$//
+            keeppatterns silent! %s/\(\s*\n\)\+\%$//
             call cursor(b:curline, b:curcol)
         endif
     endfunction
@@ -1778,7 +1778,7 @@
         nmap <leader>wcr <Esc>:Calendar<CR>
         " Template
         nmap <Leader>wtI :call <SID>VimwikiInsertTemplate()<CR>
-        nmap <leader>wcd <Esc>:%s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g<CR>
+        nmap <leader>wcd <Esc>:keeppatterns %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g<CR>
     endif
     " Function to list and select templates using fzf
     function! s:VimwikiInsertTemplate() abort
@@ -2021,10 +2021,14 @@
         " mdformat: Markdown formatter (m for markdown)
         nnoremap <leader>nmf :Neoformat! markdown mdformat<CR>
         vnoremap <leader>nmf :'<,'>Neoformat! markdown mdformat<CR>
-        " mdformat: for now mdformat mess up Tex syntax, use this as patch
+        " mdformat: for now mdformat messes up following syntax, use this as patch
+        " -- 1. Tex (e.g., \parameter -> \\paramter)
+        " -- 2. Markdown bulleted list with checkboxes (e.g., [X] -> [x])
         autocmd FileType markdown
-            \ nnoremap <leader>nmp :silent! %s/\\\\\([^\\]\)/\\\1/g<CR>
-            \:silent! %s/\\\([^\\a-zA-Z0-9]\)/\1/g<CR>
+            \ nnoremap <leader>nmp
+            \ :keeppatterns silent! %s/\\\\\([^\\]\)/\\\1/g<CR>
+            \:keeppatterns silent! %s/\\\([^\\a-zA-Z0-9]\)/\1/g<CR>
+            \:keeppatterns silent! %s/\[x\]/\[X\]/g<CR>
             \:echo 'Neoformat: mdformat patch applied'<CR>
         " Python -------------------------------------------------------------
         " pyment: python docstring creater/formatter (p for python)
@@ -2254,7 +2258,7 @@
 " Python skeleton (add python skeleton for new python .py file) --------------
     if USING_PYTHON_SKELETON
         exec 'autocmd BufNewFile *.py 0r' s:PYTHON_SKELETON
-        exec 'autocmd BufNewFile *.py :silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g'
+        exec 'autocmd BufNewFile *.py :keeppatterns silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g'
     endif
 
 " ============================================================================
@@ -2272,7 +2276,7 @@
 " Bash -----------------------------------------------------------------------
     if USING_BASH_TEMPLATE
         exec 'autocmd BufNewFile *.sh 0r' s:BASH_TEMPLATE
-        exec 'autocmd BufNewFile *.sh :silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g'
+        exec 'autocmd BufNewFile *.sh :keeppatterns silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g'
     endif
 
 " LaTex ----------------------------------------------------------------------
@@ -2324,7 +2328,7 @@
     " Load template file when new file created
     if USING_MARKDOWN_TEMPLATE
         exec 'autocmd BufNewFile *.md 0r' s:MARKDOWN_TEMPLATE
-        exec 'autocmd BufNewFile *.md :silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g'
+        exec 'autocmd BufNewFile *.md :keeppatterns silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g'
     endif
     " Pandoc: export markdown file as html
     " -- To pack resources e.g. image to single HTML file
