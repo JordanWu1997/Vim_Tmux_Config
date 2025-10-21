@@ -408,6 +408,8 @@
 " Word -----------------------------------------------------------------------
     noremap <leader>w- :set iskeyword-=_<CR>
     noremap <leader>w= :set iskeyword+=_<CR>
+    noremap <leader>wn :%s///n<Left><Left><Left>
+    noremap <leader>wN :%s///ng<Left><Left><Left><Left>
 
 " Spell check ----------------------------------------------------------------
     " NOTE:
@@ -2024,9 +2026,9 @@
         " mdformat: for now mdformat messes up following syntax, use this as patch
         " -- 1. Tex (e.g., \parameter -> \\paramter)
         " -- 2. Markdown bulleted list with checkboxes (e.g., [X] -> [x])
-        autocmd FileType markdown
-            \ nnoremap <leader>nmp
-            \ :keeppatterns silent! %s/\\\\\([^\\]\)/\\\1/g<CR>
+        nnoremap <leader>nmf
+            \ :Neoformat! markdown mdformat<CR>
+            \:keeppatterns silent! %s/\\\\\([^\\]\)/\\\1/g<CR>
             \:keeppatterns silent! %s/\\\([^\\a-zA-Z0-9]\)/\1/g<CR>
             \:keeppatterns silent! %s/\[x\]/\[X\]/g<CR>
             \:echo 'Neoformat: mdformat patch applied'<CR>
