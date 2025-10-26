@@ -194,6 +194,8 @@
     let g:MARKDOWN_TABLE_TEMPLATE = s:TEMPLATE_DIR . 'table.html'
     " Vimwiki Template file
     let g:WIKI_TEMPLATE_DIR = expand('$HOME/Documents/KNOWLEDGE_BASE/resources/template/')
+    " Jrnl journal file
+    let g:JRNL_COLLECT_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/bin/collect_jrnl_journal.py')
     " Markdown rename and update link script
     let s:MARKDOWN_UPDATE_LINK_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/bin/rename_file_and_update_md_link.py')
     " Language Tool CLI jar file
@@ -2547,6 +2549,9 @@
     noremap <leader>mfi :FZFMDInsert<CR>
     " Insert pandoc style footnote
     noremap <leader><bar> :<Esc>i[^]<Left>
+
+" Jrnl -----------------------------------------------------------------------
+    nnoremap <leader>mfj :execute 'r !' . g:JRNL_COLLECT_SCRIPT<CR>
 
 " LanguageTool ---------------------------------------------------------------
     noremap <leader>LC <Esc>:LanguageToolCheck<CR>
