@@ -2,18 +2,27 @@
 # -*- coding:utf-8 -*-
 # vim: set fileencoding=utf-8
 """
-CLI Tool jrnl
+
+# CLI Tool jrnl
 
 - Refernces
-    - https://github.com/jrnl-org/jrnl?tab=readme-ov-file
-    - https://jrnl.sh/en/stable/reference-config-file/
-    - https://jrnl.sh/en/stable/formats/
+  - https://github.com/jrnl-org/jrnl?tab=readme-ov-file
+  - https://jrnl.sh/en/stable/reference-config-file/
+  - https://jrnl.sh/en/stable/formats/
 - Configuration
-    - ~/.config/jrnl/jrnl.yaml
+  - ~/.config/jrnl/jrnl.yaml
 - Usage
-    - Add journal: jrnl <JOURNAL_TO_WRITE>
-    - Edit journal (on today): jrnl --edit (-on today):
-    - Expot journal (on today): jrnl --format markdown (-on today):
+  - Add journal: jrnl \<JOURNAL_TO_WRITE>
+  - Edit journal (on today): jrnl --edit (-on today)
+  - Expot journal (on today): jrnl --format markdown (-on today)
+- Alias for SHELL e.g., BASH, FISH, etc.
+  ```sh
+  alias jj='jrnl'
+  alias jl='jrnl --format markdown -on today'
+  alias je='jrnl --edit -on today'
+  alias jL='jrnl --format markdown'
+  alias jE='jrnl --edit'
+  ```
 """
 
 import argparse
