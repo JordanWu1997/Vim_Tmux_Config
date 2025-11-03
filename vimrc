@@ -1312,7 +1312,7 @@
         let g:lightline.component_expand = {
             \ 'buffers': 'lightline#bufferline#buffers' }
         " Tabline (bufferline plugin)
-        let g:lightline#bufferline#show_number = 0
+        let g:lightline#bufferline#show_number = 4
         let g:lightline#bufferline#shorten_path = 1
         let g:lightline#bufferline#min_buffer_count = 2
         let g:lightline#bufferline#min_tab_count = 2
