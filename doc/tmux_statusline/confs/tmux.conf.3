@@ -1,0 +1,71 @@
+# Statusline
+set -g status on
+set -g status-interval 1
+set -g status-keys vi
+set -g status-position bottom
+set -g status-justify absolute-centre
+set -g status-bg default
+set -g status-style '#{?pane_in_mode,fg=colour3,#{?synchronize-panes,fg=colour3,fg=colour2}}'
+
+# Command line
+set -g message-command-style bg=colour3,fg=colour0,bold
+
+# Message line
+set -g message-style bg=colour3,fg=colour0,bold
+
+# Left statusline
+set -g status-left-length 40
+set -g status-left-style default
+set -g status-left '#[bg=colour2,fg=colour15,bold]#{?pane_in_mode,#[bg=colour3],#{?synchronize-panes,#[bg=colour1],#[bg=colour2]}} #S '
+set -ag status-left '#{prefix_highlight}'
+
+# Central window statusline
+setw -g window-status-separator ' '
+setw -g window-status-style fg=colour8
+setw -g window-status-format '#{?monitor-activity,(,}#I:#W#{?window_flags,#{window_flags},}#{?monitor-activity,),}'
+setw -g window-status-last-style fg=colour8,bold
+setw -g window-status-current-style fg=colour15,bold
+setw -g window-status-current-format '#{?pane_in_mode,#[fg=colour3],#{?synchronize-panes,#[fg=colour1],#[fg=colour2]}}[#{?monitor-activity,(,}#I:#W#{?window_flags,#{window_flags},}#{?monitor-activity,),}]'
+
+# Right statusline
+set -g status-right-length 40
+set -g status-right-style default
+set -g status-right '#{prefix_highlight}'
+set -ag status-right '#[bg=colour2,fg=colour15,bold]#{?pane_in_mode,#[bg=colour3],#{?synchronize-panes,#[bg=colour1],#[bg=colour2]}} #S '
+
+# Pane boarder statusline (TMUX version >= 2.3 required)
+# NOTE: TMUX does not detect neovim CWD change, which is solved in neovim 0.10
+# -- https://github.com/neovim/neovim/issues/21771
+set -g pane-border-status off # options: top/bottom/off
+set -g pane-border-style '#{?synchronize-panes,fg=colour1,fg=colour15}'
+set -g pane-active-border-style '#{?pane_in_mode,fg=colour3,#{?synchronize-panes,fg=colour1,fg=colour2}}',bold
+set -g pane-border-lines heavy # options: single/double/heavy/simple/number
+set -gq pane-border-indicators colour # options: off/colour/arrows/both
+set -g pane-border-format ' #{pane_index} '
+set -ag pane-border-format '#{pane_current_command} '
+set -ag pane-border-format '#{pane_current_path} '
+
+# Copy mode (includes: buffer, search, etc)
+set -g mode-style bg=colour3,fg=colour0,bold
+
+# Terminal emulator window title
+set -g set-titles on
+set -g set-titles-string '[TMUX] #H/#S/#I:#W [TMUX]'
+
+# ============================================================================
+# TMUX plugins (Add after set -g @plugin 'tmux-plugins/tpm')
+# ============================================================================
+
+# TMUX prefix highlight
+set -g @plugin 'tmux-plugins/tmux-prefix-highlight'
+set -g @prefix_highlight_empty_prompt ' #H '
+set -g @prefix_highlight_empty_attr 'fg=colour2,bold'
+set -g @prefix_highlight_prefix_prompt '#H'
+set -g @prefix_highlight_bg 'colour15'
+set -g @prefix_highlight_fg 'colour0,bold'
+set -g @prefix_highlight_show_copy_mode 'on'
+set -g @prefix_highlight_copy_prompt '#H'
+set -g @prefix_highlight_copy_mode_attr 'fg=colour3,bold'
+set -g @prefix_highlight_show_sync_mode 'on'
+set -g @prefix_highlight_sync_prompt '#H'
+set -g @prefix_highlight_sync_mode_attr 'fg=colour1,bold'
