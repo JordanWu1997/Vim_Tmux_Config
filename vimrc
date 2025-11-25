@@ -1135,6 +1135,8 @@
     if USING_CODING_TOOL_PLUG
         " SQL DB
         Plug 'tpope/vim-dadbod'
+        Plug 'kristijanhusak/vim-dadbod-ui'
+        Plug 'kristijanhusak/vim-dadbod-completion' "Optional
     endif
 
 " [LSP] ----------------------------------------------------------------------
