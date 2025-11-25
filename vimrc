@@ -1140,8 +1140,8 @@
     endif
 
 " [LSP] ----------------------------------------------------------------------
-   " Language Server Protocol (LSP)
-   if USING_LSP && USING_VIM8
+    " Language Server Protocol (LSP)
+    if USING_LSP && USING_VIM8
         Plug 'prabirshrestha/vim-lsp'
         Plug 'mattn/vim-lsp-settings'
         Plug 'prabirshrestha/asyncomplete.vim'
@@ -2262,9 +2262,20 @@
                 \ <Esc>:split<CR>:terminal python -m pdb '%:p'<space>
 
 " Python skeleton (add python skeleton for new python .py file) --------------
+    " NOTE: Here we don't use simply use BufNewFile since vim-lsp-settings
+    " sometimes reload flile twice which makes the action called twice
+    function! s:InsertPythonSkeleton() abort
+        " Check if the buffer is empty and is a new file since
+        if line('$') == 1 && empty(getline(1))
+            " Read the skeleton content from your variable/file
+            exec '0r' s:PYTHON_SKELETON
+            " Update the timestamp
+            keeppatterns silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g
+        endif
+    endfunction
+    " Replace your current exec lines with this single autocommand call
     if USING_PYTHON_SKELETON
-        exec 'autocmd BufNewFile *.py 0r' s:PYTHON_SKELETON
-        exec 'autocmd BufNewFile *.py :keeppatterns silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g'
+        autocmd BufNewFile *.py call s:InsertPythonSkeleton()
     endif
 
 " ============================================================================
@@ -2280,9 +2291,17 @@
     let fortran_do_enddo = 1
 
 " Bash -----------------------------------------------------------------------
+    function! s:InsertBashTemplate() abort
+        " Check if the buffer is empty and is a new file since
+        if line('$') == 1 && empty(getline(1))
+            " Read the skeleton content from your variable/file
+            exec '0r' s:BASH_TEMPLATE
+            " Update the timestamp
+            keeppatterns silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g
+        endif
+    endfunction
     if USING_BASH_TEMPLATE
-        exec 'autocmd BufNewFile *.sh 0r' s:BASH_TEMPLATE
-        exec 'autocmd BufNewFile *.sh :keeppatterns silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g'
+        autocmd BufNewFile *.sh call s:InsertBashTemplate()
     endif
 
 " LaTex ----------------------------------------------------------------------
@@ -2297,8 +2316,17 @@
         autocmd BufEnter *.tex noremap <leader><F4> :LLPStartPreview<CR>
     endif
     " Load template file when new file created
+    function! s:InsertTexTemplate() abort
+        " Check if the buffer is empty and is a new file since
+        if line('$') == 1 && empty(getline(1))
+            " Read the skeleton content from your variable/file
+            exec '0r' s:TEX_TEMPLATE
+            " Update the timestamp
+            keeppatterns silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g
+        endif
+    endfunction
     if USING_TEX_TEMPLATE
-        exec 'autocmd BufNewFile *.tex 0r' s:TEX_TEMPLATE
+        autocmd BufNewFile *.tex call s:InsertTexTemplate()
     endif
 
 " Markdown -------------------------------------------------------------------
@@ -2332,9 +2360,17 @@
     let $MARPOPENHTMLBROWSER = 'noremap <leader>mP :!'. s:WEBBROWSER .' %:r.html &<CR>'
     autocmd BufEnter *.md exe $MARPOPENHTMLBROWSER
     " Load template file when new file created
+    function! s:InsertMarkdownTemplate() abort
+        " Check if the buffer is empty and is a new file since
+        if line('$') == 1 && empty(getline(1))
+            " Read the skeleton content from your variable/file
+            exec '0r' s:MARKDOWN_TEMPLATE
+            " Update the timestamp
+            keeppatterns silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g
+        endif
+    endfunction
     if USING_MARKDOWN_TEMPLATE
-        exec 'autocmd BufNewFile *.md 0r' s:MARKDOWN_TEMPLATE
-        exec 'autocmd BufNewFile *.md :keeppatterns silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g'
+        autocmd BufNewFile *.md call s:InsertMarkdownTemplate()
     endif
     " Pandoc: export markdown file as html
     " -- To pack resources e.g. image to single HTML file
@@ -2640,6 +2676,9 @@
         let g:lsp_preview_float = 1
         let g:lsp_preview_keep_focus = 1
         let g:lsp_hover_ui = 'preview'
+        " Print out log from vim-lsp-settings plugin
+        "let g:lsp_log_verbose = 1
+        "let g:lsp_log_file = expand('~/vim-lsp.log')
         " Manage LSP server
         nmap <buffer> <leader>LM :LspManageServers<CR>
         nmap <buffer> <leader>LI :LspInstallServer<CR>
@@ -2652,9 +2691,9 @@
         " Enable/Disable LSP server (in all buffers)
         nmap <leader>Le :call EnableLSP()<CR>
         nmap <leader>Ld :call DisableLSP()<CR>
-        " Enable/Disable LSP server (in current buffer)
-        nmap <buffer> <leader>eL :call EnableLSP()<CR>
-        nmap <buffer> <leader>dL :call DisableLSP()<CR>
+        "" Enable/Disable LSP server (in current buffer)
+        "nmap <buffer> <leader>eL :call EnableLSP()<CR>
+        "nmap <buffer> <leader>dL :call DisableLSP()<CR>
         " Enable LSP
         function! EnableLSP()
             setlocal signcolumn=yes
