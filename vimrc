@@ -2637,28 +2637,28 @@
     map <leader>or :AIR<CR>
 
 " Codeium --------------------------------------------------------------------
-    " NOTE: Codeium Chat uses web browser as front-end UI but it doest not work
-    " well OTB. Find $HOME/.config/nvim/plugged/codeium.vim/autoload/codeium.vim
-    " Change let l:browser = codeium#command#BrowserCommand() to whatever web
-    " browser you like e.g. let l:browser = 'brave-browser --new-window'
-    if USING_LSP && USING_VIM8
-        " Disable Codeium at startup
-        let g:codeium_enabled = v:false
-        " Remove all Codeium default keybindings
-        let g:codeium_disable_bindings = 1
-        " Disable the <Tab> binding
-        let g:codeium_no_map_tab = 1
-        " Keybindings
-        map <leader>cm :CodeiumToggle<CR>
-        map <leader>ct :call codeium#Chat()<CR>
-        imap <script><silent><nowait><expr> <C-]> codeium#Accept()
-        imap <script><silent><nowait><expr> <C-e> codeium#AcceptNextLine()
-        imap <script><silent><nowait><expr> <C-f> codeium#AcceptNextWord()
-        imap <M-j> <Cmd>call codeium#CycleCompletions(1)<CR>
-        imap <M-k> <Cmd>call codeium#CycleCompletions(-1)<CR>
-        imap <C-\> <Cmd>call codeium#Clear()<CR>
-        imap <C-/> <Cmd>call codeium#Complete()<CR>
-    endif
+    "" NOTE: Codeium Chat uses web browser as front-end UI but it doest not work
+    "" well OTB. Find $HOME/.config/nvim/plugged/codeium.vim/autoload/codeium.vim
+    "" Change let l:browser = codeium#command#BrowserCommand() to whatever web
+    "" browser you like e.g. let l:browser = 'brave-browser --new-window'
+    "if USING_LSP && USING_VIM8
+    "    " Disable Codeium at startup
+    "    let g:codeium_enabled = v:false
+    "    " Remove all Codeium default keybindings
+    "    let g:codeium_disable_bindings = 1
+    "    " Disable the <Tab> binding
+    "    let g:codeium_no_map_tab = 1
+    "    " Keybindings
+    "    map <leader>cm :CodeiumToggle<CR>
+    "    map <leader>ct :call codeium#Chat()<CR>
+    "    imap <script><silent><nowait><expr> <C-]> codeium#Accept()
+    "    imap <script><silent><nowait><expr> <C-e> codeium#AcceptNextLine()
+    "    imap <script><silent><nowait><expr> <C-f> codeium#AcceptNextWord()
+    "    imap <M-j> <Cmd>call codeium#CycleCompletions(1)<CR>
+    "    imap <M-k> <Cmd>call codeium#CycleCompletions(-1)<CR>
+    "    imap <C-\> <Cmd>call codeium#Clear()<CR>
+    "    imap <C-/> <Cmd>call codeium#Complete()<CR>
+    "endif
 
 " LeetCode -------------------------------------------------------------------
     "let g:leetcode_browser = 'firefox'
@@ -2704,7 +2704,7 @@
         function! DisableLSP()
             setlocal signcolumn=no
             call lsp#disable()
-            map <buffer> K :execute "help " . expand("<cword>")<CR>
+            nmap <buffer> K :execute "help " . expand("<cword>")<CR>
         endfunction
         " Load LSP settings and keybindings
         function! s:on_lsp_buffer_enabled() abort
@@ -2713,6 +2713,7 @@
             setlocal signcolumn=yes
             if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
             " LSP keybindings
+            nmap <buffer> K  <plug>(lsp-hover)
             nmap <buffer> gd <plug>(lsp-definition)
             nmap <buffer> g/ <plug>(lsp-document-symbol-search)
             nmap <buffer> g? <plug>(lsp-workspace-symbol-search)
@@ -2729,9 +2730,9 @@
             " Load LSP diagnostics to location list
             nmap <buffer> <leader>ee :LspDocumentDiagnostics<CR>
             " Rename variable
-            map <buffer> <leader>re <plug>(lsp-rename)
+            nmap <buffer> <leader>re <plug>(lsp-rename)
             " Format w/ LSP server
-            map <buffer> <leader>Lf :LspDocumentRangeFormat<CR>
+            nmap <buffer> <leader>Lf :LspDocumentRangeFormat<CR>
             " Close pop-up window without opening a new line
             inoremap <expr> <CR>
                         \ pumvisible() ? asyncomplete#close_popup() : "\<CR>"
