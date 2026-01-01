@@ -1,0 +1,48 @@
+# --- Binary and Executable Files ---
+*.exe
+*.bin
+*.out
+*.app
+*.dmg
+*.iso
+
+# --- Large Data & Compressed Files ---
+*.zip
+*.tar
+*.gz
+*.7z
+*.rar
+*.pdf
+*.sqlite
+*.db
+*.csv
+*.log
+
+# --- Media Files (Images, Audio, Video) ---
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.svg
+*.ico
+*.mp4
+*.mov
+*.mp3
+*.wav
+*.flac
+
+# --- Compiled/Generated Code ---
+*.pyc
+*.o
+*.obj
+*.class
+*.dll
+*.so
+
+# --- Web/Node Junk ---
+*.min.js
+*.min.css
+*.map
+.next/
+.nuxt/
+vendor/
