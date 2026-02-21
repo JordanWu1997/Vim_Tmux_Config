@@ -327,6 +327,8 @@
     " -- :f <new-filename> (Save current file with new filename)
     " -- :earlier Nf (Undo to last N file change)
     " -- :later Nf (Redo to N file change)
+    " -- :w with sudo (same as :SudaWrite from lambdalisue/suda.vim)
+    "command! W silent execute 'w !sudo tee ' . shellescape(expand('%')) . ' > /dev/null' | edit!
 
     noremap <leader>qq :q<CR>
     noremap <leader>q! :q!<CR>
@@ -341,9 +343,9 @@
 " Macro ----------------------------------------------------------------------
     " NOTE:
     " Edit register visually [https://thoughtbot.com/blog/how-to-edit-an-existing-vim-macro]
-    "    1. :let @q='
-    "    2. <Ctrl-r><Ctrl-r>q
-    "    3. Add closing quote ' and <Enter> to finish editing
+    " -- 1. :let @q='
+    " -- 2. <Ctrl-r><Ctrl-r>q
+    " -- 3. Add closing quote ' and <Enter> to finish editing
 
     " Apply macro to all selected lines
     " -- From https://github.com/stoeffel/.dotfiles/blob/master/vim/visual-at.vim

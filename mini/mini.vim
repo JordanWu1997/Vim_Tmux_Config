@@ -137,6 +137,9 @@ nnoremap Y y$
 vnoremap K :m '<-2<CR>gv=gv
 vnoremap J :m '>+1<CR>gv=gv
 
+" W command: write with sudo permission
+command! W silent execute 'w !sudo tee ' . shellescape(expand('%')) . ' > /dev/null' | edit!
+
 " ============================================================================
 " Filetype settings
 " ============================================================================
