@@ -1468,6 +1468,14 @@
     " -- if focus on fzf floating window is stolen, press <C-w>w severals time
     "    to cycle focus back
 
+    " Override the default :Rg command
+    " --max-filesize 10M: skips files larger than 10 Megabytes
+    " --no-binary: ensures binary files are skipped
+    command! -bang -nargs=* FZFRg
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always --smart-case --max-filesize 10M --no-binary -- '.shellescape(<q-args>), 1,
+      \   fzf#vim#with_preview(), <bang>0)
+
     " Fish is not fully compatible for fzf.vim, change to bash for convenience
     let $SHELL = '/bin/bash'
     " Add prefix FZF to all fzf commands
