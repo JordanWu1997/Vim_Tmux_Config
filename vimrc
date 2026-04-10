@@ -2038,10 +2038,12 @@
         nnoremap <leader>nmf :Neoformat! markdown mdformat<CR>
         vnoremap <leader>nmf :'<,'>Neoformat! markdown mdformat<CR>
         " mdformat: for now mdformat messes up following syntax, use this as patch
-        " -- 1. Tex (e.g., \parameter -> \\paramter)
-        " -- 2. Markdown bulleted list with checkboxes (e.g., [X] -> [x])
+        " -- 1. Link URL (e.g., 中文連結 -> %E4%B8%AD%E6%96%87%E9%80%A3%E7%B5%90)
+        " -- 2. Tex (e.g., \parameter -> \\paramter)
+        " -- 3. Markdown bulleted list with checkboxes (e.g., [X] -> [x])
         nnoremap <leader>nmf
             \ :Neoformat! markdown mdformat<CR>
+            \:silent! %!python3 -c "import sys, urllib.parse; sys.stdout.write(urllib.parse.unquote(sys.stdin.read()))"<CR>
             \:keeppatterns silent! %s/\\\\\([^\\]\)/\\\1/g<CR>
             \:keeppatterns silent! %s/\\\([^\\a-zA-Z0-9]\)/\1/g<CR>
             \:keeppatterns silent! %s/\[x\]/\[X\]/g<CR>
