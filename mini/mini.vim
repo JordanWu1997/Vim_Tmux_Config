@@ -140,6 +140,14 @@ vnoremap J :m '>+1<CR>gv=gv
 " W command: write with sudo permission
 command! W silent execute 'w !sudo tee ' . shellescape(expand('%')) . ' > /dev/null' | edit!
 
+"" Clipboard w/ xsel
+"" Use xsel as clipboard, it is recommended if
+"" -- you see -clipboard in `vim --version`
+"" -- you want to sync clipboard with remote SSH server using X-forward
+"vnoremap y :w !xsel -ib<CR><CR>
+"nnoremap yy :.w !xsel -ib<CR><CR>
+"nnoremap p :read !xsel -ob<CR>
+
 " ============================================================================
 " Filetype settings
 " ============================================================================

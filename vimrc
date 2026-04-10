@@ -321,6 +321,14 @@
     " Copy current file path to clipbaord
     noremap <leader>yp :let @*=expand("%:p")<CR>
 
+" Clipboard w/ xsel ----------------------------------------------------------
+    " Use xsel as clipboard, it is recommended if
+    " -- you see -clipboard in vim --version
+    " -- you want to sync clipboard with remote SSH server using X-forward
+    "vnoremap y :w !xsel -ib<CR><CR>
+    "nnoremap yy :.w !xsel -ib<CR><CR>
+    "nnoremap p :read !xsel -ob<CR>
+
 " Save/Load file hotkey ------------------------------------------------------
     " NOTE:
     " -- ZZ (Quit and save if there's change in file without confirmation)

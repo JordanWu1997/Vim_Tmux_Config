@@ -14,9 +14,9 @@
 # TMUX general settings
 # ============================================================================
 
-# Set prefix [Ctrl]+[a], [Ctrl]+[b] (default: [Ctrl]+[b])
-set -g prefix C-a
-set -g prefix2 C-b
+# Set prefix: [Ctrl]+[b] (default: [Ctrl]+[b]), prefix2: [Ctrl]+[a]
+set -g prefix C-b
+set -g prefix2 C-a
 
 # Window settings
 set -g base-index 1
@@ -92,9 +92,12 @@ bind = choose-buffer
 bind -T copy-mode-vi v send -X begin-selection
 bind -T copy-mode-vi C-v send -X rectangle-toggle \; send -X begin-selection
 bind -T copy-mode-vi y send -X copy-selection-and-cancel
+# For sync clipboard with xsel (for desktop and remote SSH server X-forwarding)
 #bind -T copy-mode-vi y send -X copy-pipe-and-canel "xsel --input --clipboard"
 #bind -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel \
 #    "xsel --inputi --follow --primary | xsel --input --clipboard"
+## Map 'p' to paste from xsel (optional, but keeps it consistent with your Vim setup)
+#bind-key p run "xsel -ob | tmux load-buffer - ; tmux paste-buffer"
 
 # Quick enter copy mode for screen scrolling
 #bind \; copy-mode
