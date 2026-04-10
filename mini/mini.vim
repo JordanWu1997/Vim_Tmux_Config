@@ -113,6 +113,44 @@ if !isdirectory(&undodir)
 endif
 
 " ============================================================================
+" Clipboard
+" ============================================================================
+
+"" Use xsel as clipboard, it is recommended if
+"" -- you see -clipboard in `vim --version`
+"" -- you want to sync clipboard with remote SSH server using X-forward
+"" However, you may feel some laggy during clipboard actions
+"
+"" 1. Hijack 'y' (Yank)
+"nnoremap y :set operatorfunc=Xsel_Yank<CR>g@
+"vnoremap y "xy:call system('xsel -ib', getreg('x'))<CR>
+"nnoremap yy "xyy:call system('xsel -ib', getreg('x'))<CR>
+"
+"" 2. Hijack 'd' (Delete/Cut)
+"nnoremap d :set operatorfunc=Xsel_Delete<CR>g@
+"vnoremap d "xy:call system('xsel -ib', getreg('x'))<CR>gv"_d
+"nnoremap dd "xyy:call system('xsel -ib', getreg('x'))<CR>"_dd
+"nnoremap D "xy$:call system('xsel -ib', getreg('x'))<CR>"_d$
+"
+"" 3. Hijack 'p' (Paste)
+"" This pulls from xsel into the x register then pastes
+"nnoremap p :let @x=system('xsel -ob')<CR>"xp
+"vnoremap p <Esc>:let @x=system('xsel -ob')<CR>gv"xp
+"
+"function! Xsel_Yank(type)
+"    " Yank the motion into @x and send to system
+"    silent execute "normal! `[v` ]\"xy"
+"    call system('xsel -ib', getreg('x'))
+"endfunction
+"
+"function! Xsel_Delete(type)
+"    " Yank the motion into @x, send to system, then delete to black hole
+"    silent execute "normal! `[v` ]\"xy"
+"    call system('xsel -ib', getreg('x'))
+"    silent execute "normal! `[v` ]\"_d"
+"endfunction
+
+" ============================================================================
 " Keybindings
 " ============================================================================
 
@@ -139,14 +177,6 @@ vnoremap J :m '>+1<CR>gv=gv
 
 " W command: write with sudo permission
 command! W silent execute 'w !sudo tee ' . shellescape(expand('%')) . ' > /dev/null' | edit!
-
-"" Clipboard w/ xsel
-"" Use xsel as clipboard, it is recommended if
-"" -- you see -clipboard in `vim --version`
-"" -- you want to sync clipboard with remote SSH server using X-forward
-"vnoremap y :w !xsel -ib<CR><CR>
-"nnoremap yy :.w !xsel -ib<CR><CR>
-"nnoremap p :read !xsel -ob<CR>
 
 " ============================================================================
 " Filetype settings
