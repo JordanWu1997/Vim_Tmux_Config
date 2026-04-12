@@ -200,6 +200,11 @@
     let s:MARKDOWN_UPDATE_LINK_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/bin/rename_file_and_update_md_link.py')
     " Language Tool CLI jar file
     let g:languagetool_jar = '/opt/LanguageTool-5.9/languagetool-commandline.jar'
+    " Vim-AI
+    let s:VIM_AI_ENDPOINT_URL = "http://localhost:11434/v1/chat/completions"
+    let s:VIM_AI_MODEL = "gemma4:e2b"
+    let s:VIM_AI_TEMPERATURE = 0.3
+    let s:VIM_AI_NUM_CTX = 8192
 
 " TERMGUI color --------------------------------------------------------------
     " Ctermcolors only support max 256 color
@@ -2616,15 +2621,13 @@
     noremap <leader>Lc <Esc>:LanguageToolClear<CR>
 
 " Vim-AI ---------------------------------------------------------------------
-    let s:vim_ai_endpoint_url = "http://localhost:11434/v1/chat/completions"
-    let s:vim_ai_model = "qwen2.5-coder:1.5b"
-    let s:vim_ai_temperature = 0.3
     let s:vim_ai_chat_config = #{
         \  engine: "chat",
         \  options: #{
-        \    model: s:vim_ai_model,
-        \    temperature: s:vim_ai_temperature,
-        \    endpoint_url: s:vim_ai_endpoint_url,
+        \    model: s:VIM_AI_MODEL,
+        \    endpoint_url: s:VIM_AI_ENDPOINT_URL,
+        \    temperature: s:VIM_AI_TEMPERATURE,
+        \    num_ctx: s:VIM_AI_NUM_CTX,
         \    auth_type: 'none',
         \    max_tokens: 0,
         \    request_timeout: 90,
@@ -2636,9 +2639,10 @@
     let s:vim_ai_edit_config = #{
         \  engine: "chat",
         \  options: #{
-        \    model: s:vim_ai_model,
-        \    temperature: s:vim_ai_temperature,
-        \    endpoint_url: s:vim_ai_endpoint_url,
+        \    model: s:VIM_AI_MODEL,
+        \    endpoint_url: s:VIM_AI_ENDPOINT_URL,
+        \    temperature: s:VIM_AI_TEMPERATURE,
+        \    num_ctx: s:VIM_AI_NUM_CTX,
         \    auth_type: 'none',
         \    max_tokens: 0,
         \    request_timeout: 90,
