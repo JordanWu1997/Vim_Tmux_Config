@@ -334,6 +334,57 @@
     "nnoremap yy :.w !xsel -ib<CR><CR>
     "nnoremap p :read !xsel -ob<CR>
 
+" Clipboard w/ xclip ---------------------------------------------------------
+    " Captures a screenshot to ./figures and inserts a resized HTML link
+    " -- Requires system packages: flameshot, xclip
+    function! CaptureAndPasteImage()
+        " Ensure the current markdown file is saved
+        if expand('%:p') == ''
+            echoerr "Please save the file first to determine the directory path!"
+            return
+        endif
+        " Define directories
+        let l:current_dir = expand('%:p:h')
+        let l:fig_dir = l:current_dir . '/figures'
+        " Create the figures directory if it does not exist
+        if !isdirectory(l:fig_dir)
+            call mkdir(l:fig_dir, 'p')
+        endif
+        " Generate filename
+        let l:filename = strftime('%Y%m%d_%H%M%S') . '.png'
+        let l:filepath = l:fig_dir . '/' . l:filename
+        let l:relpath = 'figures/' . l:filename
+        " Trigger Flameshot in GUI mode and redirect raw output to the file
+        " Vim will pause execution here until you finish selecting your screenshot
+        let l:cmd = 'flameshot gui -r > ' . shellescape(l:filepath)
+        call system(l:cmd)
+        " Verify the file was created and is not empty (in case you hit 'Esc' to cancel)
+        if getfsize(l:filepath) > 0
+            " Prompt the user for a width ratio
+            call inputsave()
+            let l:width = input('Enter width (e.g., 50%, 400px, or leave blank for 100%): ')
+            call inputrestore()
+            " Default to 100% if the user just presses Enter
+            if l:width == ''
+                let l:width = '100%'
+            endif
+            " Construct the HTML image tag
+            let l:img_tag = '<img src="' . l:relpath . '" width="' . l:width . '" alt="Screenshot">'
+            " Insert the tag at the cursor position
+            execute "normal! a" . l:img_tag . "\<Esc>"
+            " Clear the command line and confirm
+            redraw
+            echo "Screenshot captured and pasted at " . l:width . " width!"
+        else
+            " Clean up the empty file if you canceled Flameshot
+            call system('rm ' . shellescape(l:filepath))
+            redraw
+            echo "Screenshot canceled."
+        endif
+    endfunction
+    " Map the function to a shortcut, for example, <Leader>f (for flameshot)
+    nnoremap <leader>P :call CaptureAndPasteImage()<CR>
+
 " Save/Load file hotkey ------------------------------------------------------
     " NOTE:
     " -- ZZ (Quit and save if there's change in file without confirmation)
