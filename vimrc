@@ -334,57 +334,6 @@
     "nnoremap yy :.w !xsel -ib<CR><CR>
     "nnoremap p :read !xsel -ob<CR>
 
-" Clipboard w/ xclip ---------------------------------------------------------
-    " Captures a screenshot to ./figures and inserts a resized HTML link
-    " -- Requires system packages: flameshot, xclip
-    function! CaptureAndPasteImage()
-        " Ensure the current markdown file is saved
-        if expand('%:p') == ''
-            echoerr "Please save the file first to determine the directory path!"
-            return
-        endif
-        " Define directories
-        let l:current_dir = expand('%:p:h')
-        let l:fig_dir = l:current_dir . '/figures'
-        " Create the figures directory if it does not exist
-        if !isdirectory(l:fig_dir)
-            call mkdir(l:fig_dir, 'p')
-        endif
-        " Generate filename
-        let l:filename = strftime('%Y%m%d_%H%M%S') . '.png'
-        let l:filepath = l:fig_dir . '/' . l:filename
-        let l:relpath = 'figures/' . l:filename
-        " Trigger Flameshot in GUI mode and redirect raw output to the file
-        " Vim will pause execution here until you finish selecting your screenshot
-        let l:cmd = 'flameshot gui -r > ' . shellescape(l:filepath)
-        call system(l:cmd)
-        " Verify the file was created and is not empty (in case you hit 'Esc' to cancel)
-        if getfsize(l:filepath) > 0
-            " Prompt the user for a width ratio
-            call inputsave()
-            let l:width = input('Enter width (e.g., 50%, 400px, or leave blank for 100%): ')
-            call inputrestore()
-            " Default to 100% if the user just presses Enter
-            if l:width == ''
-                let l:width = '100%'
-            endif
-            " Construct the HTML image tag
-            let l:img_tag = '<img src="' . l:relpath . '" width="' . l:width . '" alt="Screenshot">'
-            " Insert the tag at the cursor position
-            execute "normal! a" . l:img_tag . "\<Esc>"
-            " Clear the command line and confirm
-            redraw
-            echo "Screenshot captured and pasted at " . l:width . " width!"
-        else
-            " Clean up the empty file if you canceled Flameshot
-            call system('rm ' . shellescape(l:filepath))
-            redraw
-            echo "Screenshot canceled."
-        endif
-    endfunction
-    " Map the function to a shortcut, for example, <Leader>f (for flameshot)
-    nnoremap <leader>P :call CaptureAndPasteImage()<CR>
-
 " Save/Load file hotkey ------------------------------------------------------
     " NOTE:
     " -- ZZ (Quit and save if there's change in file without confirmation)
@@ -2593,7 +2542,7 @@
     command! RenameFileAndUpdateLink call RenameFileViaPython()
     nnoremap <leader>mfU :call RenameFileAndUpdateLink()<CR>
     vnoremap <leader>mfU :<C-u>call RenameFileAndUpdateLink()<CR>
-    "Find only HTTP/HTTPS websites
+    " Find only HTTP/HTTPS websites
     function! FindWebsitesOnly()
         call setqflist([])
         let l:pattern = '\vhttps?:\/\/[a-zA-Z0-9._~@%+=:,/?#&$!*\-]+'
@@ -2653,6 +2602,97 @@
             copen
         endif
     endfunction
+    " Captures a screenshot to ./figures and inserts a resized HTML link
+    " -- Requires system packages: flameshot, xclip
+    function! CaptureAndPasteImage()
+        " Ensure the current markdown file is saved
+        if expand('%:p') == ''
+            echoerr "Please save the file first to determine the directory path!"
+            return
+        endif
+        " Define directories
+        let l:current_dir = expand('%:p:h')
+        let l:fig_dir = l:current_dir . '/figures'
+        " Create the figures directory if it does not exist
+        if !isdirectory(l:fig_dir)
+            call mkdir(l:fig_dir, 'p')
+        endif
+        " Generate filename
+        let l:filename = strftime('%Y%m%d_%H%M%S') . '.png'
+        let l:filepath = l:fig_dir . '/' . l:filename
+        let l:relpath = 'figures/' . l:filename
+        " Trigger Flameshot in GUI mode and redirect raw output to the file
+        " Vim will pause execution here until you finish selecting your screenshot
+        let l:cmd = 'flameshot gui -r > ' . shellescape(l:filepath)
+        call system(l:cmd)
+        " Verify the file was created and is not empty (in case you hit 'Esc' to cancel)
+        if getfsize(l:filepath) > 0
+            " Prompt the user for a width ratio
+            call inputsave()
+            let l:width = input('Enter width (e.g., 50%, 400px, or leave blank for 100%): ')
+            call inputrestore()
+            " Default to 100% if the user just presses Enter
+            if l:width == ''
+                let l:width = '100%'
+            endif
+            " Construct the HTML image tag
+            let l:img_tag = '<img src="' . l:relpath . '" width="' . l:width . '" alt="Screenshot">'
+            " Insert the tag at the cursor position
+            execute "normal! a" . l:img_tag . "\<Esc>"
+            " Clear the command line and confirm
+            redraw
+            echo "Screenshot captured and pasted at " . l:width . " width!"
+        else
+            " Clean up the empty file if you canceled Flameshot
+            call system('rm ' . shellescape(l:filepath))
+            redraw
+            echo "Screenshot canceled."
+        endif
+    endfunction
+    " Safely move the current markdown file and its 'figures' directory
+    function! MoveNote()
+        " 1. Ensure the current file is saved
+        update
+        " 2. Gather current paths
+        let l:old_file = expand('%:p')
+        let l:old_dir = expand('%:p:h')
+        let l:old_figures = l:old_dir . '/figures'
+        " 3. Prompt for the new destination
+        call inputsave()
+        let l:new_file = input('Move note to (full or relative path): ', l:old_file, 'file')
+        call inputrestore()
+        " Abort if empty or unchanged
+        if l:new_file == '' || l:new_file == l:old_file
+            redraw | echo "Move canceled."
+            return
+        endif
+        " 4. Resolve absolute paths for the destination
+        let l:new_file = fnamemodify(l:new_file, ':p')
+        let l:new_dir = fnamemodify(l:new_file, ':p:h')
+        let l:new_figures = l:new_dir . '/figures'
+        " 5. Create new directory if it doesn't exist
+        if !isdirectory(l:new_dir)
+            call mkdir(l:new_dir, 'p')
+        endif
+        " 6. Move the Markdown file
+        call system('mv ' . shellescape(l:old_file) . ' ' . shellescape(l:new_file))
+        " 7. Move the figures directory to follow the note
+        if isdirectory(l:old_figures)
+            if !isdirectory(l:new_figures)
+                " Standard move if no figures folder exists at destination
+                call system('mv ' . shellescape(l:old_figures) . ' ' . shellescape(l:new_figures))
+            else
+                " Safe merge if a figures folder already exists at destination (avoids overwriting)
+                call system('cp -n ' . shellescape(l:old_figures) . '/* ' . shellescape(l:new_figures) . '/ && rm -rf ' . shellescape(l:old_figures))
+            endif
+        endif
+        " 8. Swap the Vim buffer to the new file location
+        execute 'edit ' . fnameescape(l:new_file)
+        execute 'bwipeout ' . fnameescape(l:old_file)
+        " Summary
+        redraw | echo "Moved note and figures successfully to: " . l:new_dir
+    endfunction
+    " Keybindings
     noremap <leader>mfA :call FindAllPathsAndWebsites()<CR>
     noremap <leader>mfw :call FindWebsitesOnly()<CR>
     noremap <leader>mff :call FindFilepathsOnly()<CR>
@@ -2663,6 +2703,10 @@
     noremap <leader>mfi :FZFMDInsert<CR>
     " Insert pandoc style footnote
     noremap <leader><bar> :<Esc>i[^]<Left>
+    " Create a Vim command to trigger the function
+    nnoremap <leader>mfm :call MoveNote()<CR>
+    " Captures a screenshot to ./figures and inserts a resized HTML link
+    nnoremap <leader>mfp :call CaptureAndPasteImage()<CR>
 
 " Jrnl -----------------------------------------------------------------------
     nnoremap <leader>mfj :execute 'r !' . g:JRNL_COLLECT_SCRIPT<CR>
