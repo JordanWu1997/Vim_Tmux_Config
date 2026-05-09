@@ -2080,7 +2080,7 @@
         vnoremap <leader>nmf :'<,'>Neoformat! markdown mdformat<CR>
         " mdformat: for now mdformat messes up following syntax, use this as patch
         " -- 1. Link URL (e.g., 中文連結 -> %E4%B8%AD%E6%96%87%E9%80%A3%E7%B5%90)
-        " -- 2. Tex (e.g., \parameter -> \\paramter)
+        " -- 2. Tex (e.g., $\parameter$ -> $\\paramter$)
         " -- 3. Markdown bulleted list with checkboxes (e.g., [X] -> [x])
         nnoremap <leader>nmf
             \ :Neoformat! markdown mdformat<CR>

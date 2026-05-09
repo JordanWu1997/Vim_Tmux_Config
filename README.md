@@ -1095,6 +1095,7 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 - https://waylonwalker.com/tmux-copy-mode/
 - https://github.com/tmux/tmux/wiki/Advanced-Use
 - https://github.com/Morantron/tmux-fingers
+- https://raw.githubusercontent.com/micahkepe/dotfiles/refs/heads/main/tmux/tmux-worktreeizer.sh
 
 </details>
 </details>
