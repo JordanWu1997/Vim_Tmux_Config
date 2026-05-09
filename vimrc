@@ -1747,9 +1747,6 @@
         \   'path': '~/Documents/KNOWLEDGE_BASE/', 'syntax': 'markdown', 'ext': '.md',
         \   'diary_rel_path': 'diary'
         \ },
-        \ {
-        \   'path': '~/PC-POP-OS/Documents/KNOWLEDGE_BASE/', 'syntax': 'markdown', 'ext': '.md'
-        \ },
         \ ]
         " Fold according to header
         let g:vimwiki_folding = 'expr'

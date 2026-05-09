@@ -8,6 +8,7 @@ import urllib.parse
 
 
 def fix_math_blocks(text):
+
     # Pattern to match both block ($$) and inline ($) math
     pattern = re.compile(r'(\$\$.*?\$\$|\$.*?\$)', re.DOTALL)
 
@@ -28,6 +29,7 @@ def fix_math_blocks(text):
 
 
 def main():
+
     # Read the text passed from Vim
     text = sys.stdin.read()
 
@@ -38,8 +40,8 @@ def main():
     text = fix_math_blocks(text)
 
     # Goal 3: Standardize checkboxes
-    # (Note: Change this to text.replace('[X]', '[x]') if you prefer lowercase)
-    text = text.replace('[x]', '[X]')
+    # (Note: Change this to text.replace('- [X]', '- [x]') if you prefer lowercase)
+    text = text.replace('- [x]', '- [X]')
 
     # Return the patched text back to Vim
     sys.stdout.write(text)
