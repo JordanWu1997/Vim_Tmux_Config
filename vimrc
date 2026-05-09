@@ -192,8 +192,10 @@
     let g:WIKI_TEMPLATE_DIR = expand('$HOME/Documents/KNOWLEDGE_BASE/resources/template/')
     " Jrnl journal file
     let g:JRNL_COLLECT_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/bin/collect_jrnl_journal.py')
-    " Markdown rename and update link script
+    " Markdown rename and update link script (for vimwiki)
     let s:MARKDOWN_UPDATE_LINK_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/bin/rename_file_and_update_md_link.py')
+    " Patch for markdown formatter (mdformat)
+    let g:MDFORMAT_PATCH_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/bin/mdformat_patch.py')
     " Language Tool CLI jar file
     let g:languagetool_jar = '/opt/LanguageTool-5.9/languagetool-commandline.jar'
     " Vim-AI
@@ -736,7 +738,7 @@
 
 " Abbreviation settings ------------------------------------------------------
     " NOTE:
-    " -- :abbclear : Clear abbreviation
+    " -- :abclear : Clear abbreviation
 
     " Show abbreviate in vim
     noremap <leader>ab :abbreviate<CR>
@@ -1741,7 +1743,13 @@
         let g:vimwiki_key_mappings = { 'all_maps': 0, }
         " Vimwiki Settings
         let g:vimwiki_list = [
-        \ {'path': '~/Documents/KNOWLEDGE_BASE/', 'syntax': 'markdown', 'ext': '.md'},
+        \ {
+        \   'path': '~/Documents/KNOWLEDGE_BASE/', 'syntax': 'markdown', 'ext': '.md',
+        \   'diary_rel_path': 'diary'
+        \ },
+        \ {
+        \   'path': '~/PC-POP-OS/Documents/KNOWLEDGE_BASE/', 'syntax': 'markdown', 'ext': '.md'
+        \ },
         \ ]
         " Fold according to header
         let g:vimwiki_folding = 'expr'
@@ -2076,11 +2084,9 @@
         " -- 3. Markdown bulleted list with checkboxes (e.g., [X] -> [x])
         nnoremap <leader>nmf
             \ :Neoformat! markdown mdformat<CR>
-            \:silent! %!python3 -c "import sys, urllib.parse; sys.stdout.write(urllib.parse.unquote(sys.stdin.read()))"<CR>
-            \:keeppatterns silent! %s/\\\\\([^\\]\)/\\\1/g<CR>
-            \:keeppatterns silent! %s/\\\([^\\a-zA-Z0-9]\)/\1/g<CR>
-            \:keeppatterns silent! %s/\[x\]/\[X\]/g<CR>
-            \:echo 'Neoformat: mdformat patch applied'<CR>
+            \ :execute 'silent! %!python3 ' . g:MDFORMAT_PATCH_SCRIPT<CR>
+            \ :echo 'Neoformat: mdformat and Python patch applied'<CR>
+
         " Python -------------------------------------------------------------
         " pyment: python docstring creater/formatter (p for python)
         let g:neoformat_python_pyment_google = {
