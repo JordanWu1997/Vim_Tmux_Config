@@ -162,6 +162,10 @@ bind -r M-k resize-pane -U 1
 bind -r M-l resize-pane -R 1
 bind -r M-h resize-pane -L 1
 
+# Vim-like key for maximize/minimize pane in vertical direction
+bind M-J resize-pane -D 10000
+bind M-K resize-pane -U 10000
+
 # Manipulate mark pane (mark: <prefix> + [m])
 bind -r M-\; swap-pane
 bind -r M-| join-pane -h
