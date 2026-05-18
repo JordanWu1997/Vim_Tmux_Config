@@ -35,11 +35,10 @@ BEGIN {
     }
 
     # 2. Precise Char Sum Offset Calculation
-    # Length of actual text plus padding spaces
-    #char_offset = length(s_name) + 2 + length(host) + 2
-    char_offset = 10
+    char_offset = length(s_name) + 2 + length(host) + 2
 
-    # 3. Space Calculation
+    # 3. Space Calculation (Using half the total client width)
+    usable_width = width / 2
     required_space = (win_count * window_multiplier) + char_offset
 
     if (required_space > width) {

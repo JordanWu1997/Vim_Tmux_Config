@@ -51,10 +51,10 @@ BEGIN {
     else                     { date_str = d_full }
 
     # 3. Precise Char Sum Offset Calculation
-    #char_offset = length(date_str) + 2 + length(s_name) + 2
-    char_offset = 10
+    char_offset = length(date_str) + 2 + length(s_name) + 2
 
-    # 4. Space Validation Check
+    # 4. Space Validation Check (Using half the total client width)
+    usable_width = width / 2
     required_space = (win_count * window_multiplier) + char_offset
 
     if (required_space > width) {
