@@ -17,7 +17,7 @@ awk -v width="$CLIENT_WIDTH" \
     -v host="$HOSTNAME" '
 BEGIN {
     # Approx width multiplier per window element
-    window_multiplier = 12
+    window_multiplier = 15
 
     # 1. Colors for Left Status
     if (prefix == "1") {
@@ -35,8 +35,15 @@ BEGIN {
         h_fg = "colour2";  h_bg = "default"
     }
 
+    host_offset = length(host)
+    if (host_len <= 5)       { host_offset = 5 }
+    else if (host_len <= 8)  { host_offset = 8 }
+    else if (host_len <= 11) { host_offset = 11 }
+    else if (host_len <= 14) { host_offset = 14 }
+    else                     { host_offset = 16 }
+
     # 2. Precise Char Sum Offset Calculation
-    char_offset = length(s_name) + 2 + length(host) + 2
+    char_offset = length(s_name) + 2 + host_offset + 2 + 4
 
     # 3. Space Calculation (Using half the total client width)
     usable_width = width / 2

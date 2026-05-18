@@ -10,8 +10,9 @@ HOSTNAME="$7"
 
 # Fetch system time structures
 D_SHORT=$(date +"%H:%M")
-D_MED=$(date +"%d %H:%M")
-D_LONG=$(date +"%m-%d %H:%M")
+D_BRIEF=$(date +"%d %H:%M")
+D_MED=$(date +"%m-%d %H:%M")
+D_LONG=$(date +"%y-%m-%d %H:%M")
 D_FULL=$(date +"%Y-%m-%d %H:%M")
 
 awk -v width="$CLIENT_WIDTH" \
@@ -22,11 +23,12 @@ awk -v width="$CLIENT_WIDTH" \
     -v s_name="$SESSION_NAME" \
     -v host="$HOSTNAME" \
     -v d_short="$D_SHORT" \
+    -v d_brief="$D_BRIEF" \
     -v d_med="$D_MED" \
     -v d_long="$D_LONG" \
     -v d_full="$D_FULL" '
 BEGIN {
-    window_multiplier = 12
+    window_multiplier = 15
 
     # 1. Colors for Right Status
     if (prefix == "1") {
@@ -47,8 +49,9 @@ BEGIN {
     # 2. Hostname length logic for target time variant string
     host_len = length(host)
     if (host_len <= 5)       { date_str = d_short }
-    else if (host_len <= 12) { date_str = d_med }
-    else if (host_len <= 15) { date_str = d_long }
+    else if (host_len <= 8)  { date_str = d_brief }
+    else if (host_len <= 11) { date_str = d_med }
+    else if (host_len <= 14) { date_str = d_long }
     else                     { date_str = d_full }
 
     # 3. Precise Char Sum Offset Calculation
