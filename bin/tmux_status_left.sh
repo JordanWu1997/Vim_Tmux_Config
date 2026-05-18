@@ -21,7 +21,8 @@ BEGIN {
 
     # 1. Colors for Left Status
     if (prefix == "1") {
-        s_fg = "colour0";  s_bg = "colour15"
+        #s_fg = "colour0";  s_bg = "colour15"
+        s_fg = "colour232";  s_bg = "colour15"
         h_fg = "colour15"; h_bg = "default"
     } else if (in_mode == "1") {
         s_fg = "colour15"; s_bg = "colour3"
