@@ -231,21 +231,21 @@ Backup for my Vim and TMUX configuration
 
   - __Vim/Gvim__
 
-    1. Copy `vimrc` to `$HOME/` (current user's home)
+    1. Copy `vim/vimrc` to `$HOME/` (current user's home)
     2. Rename `vimrc` to `.vimrc`
 
     ```bash
-    cp vimrc $HOME/.vimrc
+    cp vim/vimrc $HOME/.vimrc
     ```
 
   - __Neovim__
 
-    1. Copy `vimrc` to `$HOME/.config/nvim/` (create one if not exists)
+    1. Copy `vim/vimrc` to `$HOME/.config/nvim/` (create one if not exists)
     2. Rename `vimrc` to `init.vim`
 
     ```bash
     mkdir -p $HOME/.config/nvim
-    cp vimrc $HOME/.config/nvim/init.vim
+    cp vim/vimrc $HOME/.config/nvim/init.vim
     ```
 
 - Minimal (original vim-only)
