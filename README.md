@@ -430,7 +430,7 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
   " Add python skeleton file for new created .py python file
   let USING_PYTHON_SKELETON = 1
   " Python Skeleton file
-  let s:PYTHON_SKELETON = '$HOME/Desktop/Vim_Tmux_Config/share/skeleton.py'
+  let s:PYTHON_SKELETON = '$HOME/Desktop/Vim_Tmux_Config/vim/share/templates/skeleton.py'
   ```
 
 - GUI support

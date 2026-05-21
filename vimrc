@@ -175,13 +175,13 @@
     " Web browser for markdown preview
     let s:WEBBROWSER = $BROWSER
     " Ctag generator for vimwiki plugins
-    let s:CTAGSBIN = '$HOME/Desktop/Vim_Tmux_Config/bin/vwtags.py'
+    let s:CTAGSBIN = '$HOME/Desktop/Vim_Tmux_Config/vim/bin/vwtags.py'
     " FZF patches for change/jump list
     let s:FZF_PATCH = '$HOME/Desktop/Vim_Tmux_Config/vim/patch/fzf_patch.vim'
     " Python provider for jedi, pynvim and other python packages
     let g:python3_host_prog = '/usr/bin/python' "$CONDA_PYTHON_EXE
     " Template Directory
-    let s:TEMPLATE_DIR = '$HOME/Desktop/Vim_Tmux_Config/share/'
+    let s:TEMPLATE_DIR = '$HOME/Desktop/Vim_Tmux_Config/vim/share/templates/'
     " Python skeleton file (template)
     let s:PYTHON_SKELETON = s:TEMPLATE_DIR . 'skeleton.py'
     " Tex template file
@@ -191,11 +191,11 @@
     " Vimwiki Template file
     let g:WIKI_TEMPLATE_DIR = expand('$HOME/Documents/KNOWLEDGE_BASE/resources/template/')
     " Jrnl journal file
-    let g:JRNL_COLLECT_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/bin/collect_jrnl_journal.py')
+    let g:JRNL_COLLECT_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/vim/bin/collect_jrnl_journal.py')
     " Markdown rename and update link script (for vimwiki)
-    let s:MARKDOWN_UPDATE_LINK_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/bin/rename_file_and_update_md_link.py')
+    let s:MARKDOWN_UPDATE_LINK_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/vim/bin/rename_file_and_update_md_link.py')
     " Patch for markdown formatter (mdformat)
-    let g:MDFORMAT_PATCH_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/bin/mdformat_patch.py')
+    let g:MDFORMAT_PATCH_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/vim/bin/mdformat_patch.py')
     " Language Tool CLI jar file
     let g:languagetool_jar = '/opt/LanguageTool-5.9/languagetool-commandline.jar'
     " Vim-AI

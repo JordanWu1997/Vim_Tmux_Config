@@ -57,7 +57,7 @@ set -g display-time 3000
 set -g display-panes-time 3000
 set -g escape-time 0
 set -g repeat-time 450
-set -g history-limit 30000
+set -g history-limit 100000
 set -g focus-events on
 set -g extended-keys on
 set -g mouse on
@@ -108,6 +108,10 @@ bind -T copy-mode-vi C-[ send -X cancel
 # TMUX session/pane/window option
 # ============================================================================
 
+# Merge session with another one (e.g. move all windows to another session)
+bind M-t command-prompt -p "Session to merge with: " \
+   "run-shell 'yes | head -n #{session_windows} | xargs -I {} -n 1 tmux movew -t %%'"
+
 # Switch to last pane
 bind -r ` last-pane
 bind -r \; last-pane
@@ -132,6 +136,10 @@ unbind \"; bind \" split-window -v -c "#{pane_current_path}"
 # Split full window
 bind | split-window -fh -c "#{pane_current_path}"
 bind _ split-window -fv -c "#{pane_current_path}"
+
+# Select pane with pane number display [Not work in TMUX version < 2.0]
+bind q display-panes -d 0
+#bind \' display-panes -d 0
 
 # Change focus
 bind -n C-h select-pane -L
@@ -259,6 +267,9 @@ bind M-C customize-mode -Z
 
 # List all environment variables
 bind E show-environment -g
+
+# Copy current session name to clipboard
+bind M-Y run-shell "tmux display-message -p '#{session_name}' | xsel -i; tmux display-message 'Current session name copied to clipboard!'"
 
 # ============================================================================
 # TMUX statusline / titlebar
