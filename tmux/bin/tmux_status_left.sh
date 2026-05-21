@@ -45,7 +45,7 @@ BEGIN {
     else                     { host_offset = 16 }
 
     # 2. Precise Char Sum Offset Calculation
-    char_offset = length(s_name) + 2 + host_offset + 2 + 4
+    char_offset = length(s_name) + 2 + host_offset + 2
 
     # 3. Space Calculation (Using half the total client width)
     usable_width = width / 2
