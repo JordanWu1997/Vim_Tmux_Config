@@ -40,13 +40,13 @@ BEGIN {
         s_fg = "colour232";    s_bg = "colour15"
     } else if (in_mode == "1") {
         t_fg = "colour3";  t_bg = "default"
-        s_fg = "colour15"; s_bg = "colour3"
+        s_fg = "colour232"; s_bg = "colour3"
     } else if (sync == "1") {
         t_fg = "colour1";  t_bg = "default"
         s_fg = "colour15"; s_bg = "colour1"
     } else {
         t_fg = "colour2";  t_bg = "default"
-        s_fg = "colour15"; s_bg = "colour2"
+        s_fg = "colour232"; s_bg = "colour2"
     }
 
     # 2. Hostname length logic for target time variant string

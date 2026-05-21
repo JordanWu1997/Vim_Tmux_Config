@@ -27,13 +27,13 @@ BEGIN {
         s_fg = "colour232";  s_bg = "colour15"
         h_fg = "colour15"; h_bg = "default"
     } else if (in_mode == "1") {
-        s_fg = "colour15"; s_bg = "colour3"
+        s_fg = "colour232"; s_bg = "colour3"
         h_fg = "colour3";  h_bg = "default"
     } else if (sync == "1") {
         s_fg = "colour15"; s_bg = "colour1"
         h_fg = "colour1";  h_bg = "default"
     } else {
-        s_fg = "colour15"; s_bg = "colour2"
+        s_fg = "colour232"; s_bg = "colour2"
         h_fg = "colour2";  h_bg = "default"
     }
 
