@@ -7,6 +7,7 @@ PANE_IN_MODE="$4"
 SYNCHRONIZE_PANES="$5"
 SESSION_NAME="$6"
 HOSTNAME="$7"
+WINDOW_MULTIPLIER="$8"
 
 awk -v width="$CLIENT_WIDTH" \
     -v win_count="$SESSION_WINDOWS" \
@@ -14,10 +15,11 @@ awk -v width="$CLIENT_WIDTH" \
     -v in_mode="$PANE_IN_MODE" \
     -v sync="$SYNCHRONIZE_PANES" \
     -v s_name="$SESSION_NAME" \
-    -v host="$HOSTNAME" '
+    -v host="$HOSTNAME" \
+    -v window_multiplier="$WINDOW_MULTIPLIER" '
 BEGIN {
     # Approx width multiplier per window element
-    window_multiplier = 15
+    #window_multiplier = 10
 
     # 1. Colors for Left Status
     if (prefix == "1") {

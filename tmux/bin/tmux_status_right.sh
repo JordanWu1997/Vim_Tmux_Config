@@ -7,6 +7,7 @@ PANE_IN_MODE="$4"
 SYNCHRONIZE_PANES="$5"
 SESSION_NAME="$6"
 HOSTNAME="$7"
+WINDOW_MULTIPLIER="$8"
 
 # Fetch system time structures
 D_SHORT=$(date +"%H:%M")
@@ -26,9 +27,11 @@ awk -v width="$CLIENT_WIDTH" \
     -v d_brief="$D_BRIEF" \
     -v d_med="$D_MED" \
     -v d_long="$D_LONG" \
-    -v d_full="$D_FULL" '
+    -v d_full="$D_FULL" \
+    -v window_multiplier="$WINDOW_MULTIPLIER" '
 BEGIN {
-    window_multiplier = 15
+    # Approx width multiplier per window element
+    #window_multiplier = 10
 
     # 1. Colors for Right Status
     if (prefix == "1") {
