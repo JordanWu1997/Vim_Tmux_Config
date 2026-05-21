@@ -97,6 +97,14 @@ Backup for my Vim and TMUX configuration
 </details>
 </details>
 
+## Project Structure
+
+- `vim/`: Centralized Vim/Neovim configurations, scripts, and templates.
+- `tmux/`: Centralized Tmux configurations, status line scripts, and snippets.
+- `mini/`: Minimal, portable configurations for quick setups.
+- `bin/`: General-purpose installation and maintenance scripts.
+- `share/`: Global configurations (git, ignore) and shared assets.
+
 ## Part 1 - Vim/Gvim/Neovim
 
 <details open>
@@ -845,11 +853,11 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 
    - __TMUX__ (full)
 
-     1. Copy `tmux.conf` to $HOME (current user's home)
+     1. Copy `tmux/tmux.conf` to $HOME (current user's home)
      2. Rename `tmux.conf` to `.tmux.conf`
 
      ```bash
-     cp tmux.conf $HOME/.tmux.conf
+     cp tmux/tmux.conf $HOME/.tmux.conf
      ```
 
    - __TMUX__ (minimal)
