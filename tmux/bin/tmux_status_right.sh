@@ -35,9 +35,8 @@ BEGIN {
 
     # 1. Colors for Right Status
     if (prefix == "1") {
-        t_fg = "colour15"; t_bg = "default"
-        #s_fg = "colour0";    s_bg = "colour15"
-        s_fg = "colour232";    s_bg = "colour15"
+        t_fg = "colour7"; t_bg = "default"
+        s_fg = "colour232"; s_bg = "colour7"
     } else if (in_mode == "1") {
         t_fg = "colour3";  t_bg = "default"
         s_fg = "colour232"; s_bg = "colour3"
