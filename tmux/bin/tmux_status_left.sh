@@ -37,6 +37,8 @@ BEGIN {
     }
 
     host_offset = length(host)
+    host_len = length(host)
+
     if (host_len <= 5)       { host_offset = 5 }
     else if (host_len <= 8)  { host_offset = 8 }
     else if (host_len <= 11) { host_offset = 11 }
@@ -44,7 +46,7 @@ BEGIN {
     else                     { host_offset = 16 }
 
     # 2. Precise Char Sum Offset Calculation
-    char_offset = length(s_name) + 2 + host_offset + 2
+    char_offset = length(s_name) + 2 + host_offset + 2 + 2
 
     # 3. Space Calculation (Using half the total client width)
     usable_width = width / 2
