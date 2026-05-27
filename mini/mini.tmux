@@ -91,9 +91,15 @@ bind = choose-buffer
 # -- TMUX version >= 2.5
 bind -T copy-mode-vi v send -X begin-selection
 bind -T copy-mode-vi C-v send -X rectangle-toggle \; send -X begin-selection
-bind -T copy-mode-vi y send -X copy-selection-and-cancel
+bind -T copy-mode-vi y send -X copy-selection-and-cancel \; display-message "Yanked: #{buffer_sample}"
+
+# Yank current working directory (Prefix + Y)
+bind Y run-shell "printf '%s' '#{pane_current_path}' | xsel -i -b; tmux set-buffer '#{pane_current_path}'" \; display-message "Yanked PWD: #{pane_current_path}"
+# Yank current session name (Alt/Option + Shift + y)
+bind M-Y run-shell "printf '%s' '#{session_name}' | xsel -i -b; tmux set-buffer '#{session_name}'" \; display-message "Yanked session name: #{session_name}"
+
 # For sync clipboard with xsel (for desktop and remote SSH server X-forwarding)
-#bind -T copy-mode-vi y send -X copy-pipe-and-canel "xsel --input --clipboard"
+#bind -T copy-mode-vi y send -X copy-pipe-and-cancel "xsel --input --clipboard"
 #bind -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel \
 #    "xsel --inputi --follow --primary | xsel --input --clipboard"
 ## Map 'p' to paste from xsel (optional, but keeps it consistent with your Vim setup)
@@ -237,10 +243,10 @@ bind T clock-mode
 # tmux -f /dev/null -L temp start-server \; list-keys > ~/.tmux.reset.conf
 
 # Toggle mouse mode
-bind M set mouse \; display-message "set mouse"
+bind M set mouse \; display-message "Mouse mode: #{?mouse,ON,OFF}"
 
 # Toggle pane input synchronization
-bind C-s setw synchronize-panes
+bind C-s setw synchronize-panes \; display-message "Sync panes: #{?synchronize-panes,ON,OFF}"
 
 # Toggle activity monitoring
 bind N set monitor-activity \; display-message "set monitor-activity"
@@ -267,9 +273,6 @@ bind M-C customize-mode -Z
 
 # List all environment variables
 bind E show-environment -g
-
-# Copy current session name to clipboard
-bind M-Y run-shell "tmux display-message -p '#{session_name}' | xsel -i; tmux display-message 'Current session name copied to clipboard!'"
 
 # ============================================================================
 # TMUX statusline / titlebar
