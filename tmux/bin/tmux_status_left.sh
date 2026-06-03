@@ -8,6 +8,7 @@ SYNCHRONIZE_PANES="$5"
 SESSION_NAME="$6"
 HOSTNAME="$7"
 WINDOW_MULTIPLIER="$8"
+STATUS_COLLAPSE_WIDTH="$9"
 
 awk -v width="$CLIENT_WIDTH" \
     -v win_count="$SESSION_WINDOWS" \
@@ -16,7 +17,8 @@ awk -v width="$CLIENT_WIDTH" \
     -v sync="$SYNCHRONIZE_PANES" \
     -v s_name="$SESSION_NAME" \
     -v host="$HOSTNAME" \
-    -v window_multiplier="$WINDOW_MULTIPLIER" '
+    -v window_multiplier="$WINDOW_MULTIPLIER" \
+    -v collapse_width="$STATUS_COLLAPSE_WIDTH" '
 BEGIN {
     # Approx width multiplier per window element
     #window_multiplier = 10
@@ -43,16 +45,18 @@ BEGIN {
     else if (host_len <= 8)  { host_offset = 8 }
     else if (host_len <= 11) { host_offset = 11 }
     else if (host_len <= 14) { host_offset = 14 }
-    else                     { host_offset = 16 }
+    else if (host_len <= 16) { host_offset = 16 }
+    else                     { host_offset = 19 }
 
     # 2. Precise Char Sum Offset Calculation
     char_offset = length(s_name) + 2 + host_offset + 2 + 2
 
     # 3. Space Calculation (Using half the total client width)
     usable_width = width / 2
-    required_space = (win_count * window_multiplier) + char_offset
+    required_space = (win_count * window_multiplier) / 2 + char_offset
+    collapsed = (width < collapse_width) || (required_space > usable_width)
 
-    if (required_space > width) {
+    if (collapsed) {
         # Drop hostname block to save space if getting crowded
         s_block = "#[fg=" s_fg ",bg=" s_bg ",bold] " s_name " "
         print s_block

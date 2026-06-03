@@ -8,13 +8,14 @@ SYNCHRONIZE_PANES="$5"
 SESSION_NAME="$6"
 HOSTNAME="$7"
 WINDOW_MULTIPLIER="$8"
-
+STATUS_COLLAPSE_WIDTH="$9"
 # Fetch system time structures
 D_SHORT=$(date +"%H:%M")
 D_BRIEF=$(date +"%d %H:%M")
 D_MED=$(date +"%m-%d %H:%M")
 D_LONG=$(date +"%y-%m-%d %H:%M")
 D_FULL=$(date +"%Y-%m-%d %H:%M")
+D_EXTREME=$(date +"%Y-%m-%d %H:%M:%S")
 
 awk -v width="$CLIENT_WIDTH" \
     -v win_count="$SESSION_WINDOWS" \
@@ -28,7 +29,9 @@ awk -v width="$CLIENT_WIDTH" \
     -v d_med="$D_MED" \
     -v d_long="$D_LONG" \
     -v d_full="$D_FULL" \
-    -v window_multiplier="$WINDOW_MULTIPLIER" '
+    -v d_extreme="$D_EXTREME" \
+    -v window_multiplier="$WINDOW_MULTIPLIER" \
+    -v collapse_width="$STATUS_COLLAPSE_WIDTH" '
 BEGIN {
     # Approx width multiplier per window element
     #window_multiplier = 10
@@ -54,16 +57,18 @@ BEGIN {
     else if (host_len <= 8)  { date_str = d_brief }
     else if (host_len <= 11) { date_str = d_med }
     else if (host_len <= 14) { date_str = d_long }
-    else                     { date_str = d_full }
+    else if (host_len <= 16) { date_str = d_full }
+    else                     { date_str = d_extreme }
 
     # 3. Precise Char Sum Offset Calculation
     char_offset = length(date_str) + 2 + length(s_name) + 2 + 2
 
     # 4. Space Validation Check (Using half the total client width)
     usable_width = width / 2
-    required_space = (win_count * window_multiplier) + char_offset
+    required_space = (win_count * window_multiplier) / 2 + char_offset
+    collapsed = (width < collapse_width) || (required_space > usable_width)
 
-    if (required_space > width) {
+    if (collapsed) {
         # Near Full/No space layout placeholder
         sess_block = "#[fg=" s_fg ",bg=" s_bg ",bold] " s_name " "
         print sess_block
