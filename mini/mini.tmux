@@ -107,8 +107,8 @@ bind M-Y run-shell "printf '%s' '#{session_name}' | xsel -i -b; tmux set-buffer 
 
 # Quick enter copy mode for screen scrolling
 #bind \; copy-mode
-#bind -T copy-mode-vi \; send -X cancel
-bind -T copy-mode-vi C-[ send -X cancel
+#bind -T copy-mode-vi \; send-keys -X cancel
+bind -T copy-mode-vi C-[ send-keys -X cancel
 
 # ============================================================================
 # TMUX session/pane/window option
@@ -246,7 +246,7 @@ bind T clock-mode
 bind M set mouse \; display-message "Mouse mode: #{?mouse,ON,OFF}"
 
 # Toggle pane input synchronization
-bind C-s setw synchronize-panes \; display-message "Sync panes: #{?synchronize-panes,ON,OFF}"
+bind C-s setw synchronize-panes #\; display-message "Sync panes: #{?synchronize-panes,ON,OFF}"
 
 # Toggle activity monitoring
 bind N set monitor-activity \; display-message "set monitor-activity"
@@ -265,8 +265,8 @@ bind C-l send-keys 'C-l'
 bind C-S-l confirm-before -p "clear scrollback history? (y/n)" "clear-history \; display-message 'scrollback history cleared'"
 
 # Let Home/End work in TMUX
-bind -n Home send Escape "OH"
-bind -n End send Escape "OF"
+bind -n Home send-keys Escape "OH"
+bind -n End send-keys Escape "OF"
 
 # Customization mode (added in tmux 3.2a, defaults: <prefix> + [C])
 bind M-C customize-mode -Z
