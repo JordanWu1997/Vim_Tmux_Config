@@ -69,6 +69,9 @@ set -g mouse on
 # Copy mode keybindings (options: vi/emacs, default: emacs)
 set -g mode-keys vi
 
+# Vim-like search in copy mode (//? search downward/upward)
+bind-key / copy-mode\; send-keys '/'
+bind-key ? copy-mode\; send-keys '?'
 # Clipboard is set to "on" for gnome-terminal, but MUST be set to "external"
 # for kitty or other terminal emulator supports set-clipboard
 # -- https://github.com/tmux/tmux/wiki/Clipboard
@@ -93,17 +96,31 @@ bind -T copy-mode-vi v send -X begin-selection
 bind -T copy-mode-vi C-v send -X rectangle-toggle \; send -X begin-selection
 bind -T copy-mode-vi y send -X copy-selection-and-cancel \; display-message "Yanked: #{buffer_sample}"
 
-# Yank current working directory (Prefix + Y)
-bind Y run-shell "printf '%s' '#{pane_current_path}' | xsel -i -b; tmux set-buffer '#{pane_current_path}'" \; display-message "Yanked PWD: #{pane_current_path}"
-# Yank current session name (Alt/Option + Shift + y)
-bind M-Y run-shell "printf '%s' '#{session_name}' | xsel -i -b; tmux set-buffer '#{session_name}'" \; display-message "Yanked session name: #{session_name}"
-
 # For sync clipboard with xsel (for desktop and remote SSH server X-forwarding)
 #bind -T copy-mode-vi y send -X copy-pipe-and-cancel "xsel --input --clipboard"
 #bind -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel \
 #    "xsel --inputi --follow --primary | xsel --input --clipboard"
 ## Map 'p' to paste from xsel (optional, but keeps it consistent with your Vim setup)
 #bind-key p run "xsel -ob | tmux load-buffer - ; tmux paste-buffer"
+
+# Yank current working directory (Prefix + Y)
+bind Y run-shell "printf '%s' '#{pane_current_path}' | xsel -i -b; tmux set-buffer '#{pane_current_path}'" \; display-message "Yanked PWD: #{pane_current_path}"
+# Yank current session name (Alt/Option + Shift + y)
+bind M-Y run-shell "printf '%s' '#{session_name}' | xsel -i -b; tmux set-buffer '#{session_name}'" \; display-message "Yanked session name: #{session_name}"
+# Yank current command line like tmux-yank (Prefix + y)
+bind y run-shell "\
+    tmux send-keys C-a; \
+    sleep 0.15; \
+    tmux copy-mode; \
+    tmux send-keys -X begin-selection; \
+    tmux send-keys -X -N 150 cursor-down; \
+    tmux send-keys -X end-of-line; \
+    tmux send-keys -X previous-word; \
+    tmux send-keys -X next-word-end; \
+    tmux send-keys -X copy-pipe-and-cancel 'xsel -i -b'; \
+    tmux send-keys C-e; \
+    tmux display-message 'Command line copied!' \
+"
 
 # Quick enter copy mode for screen scrolling
 #bind \; copy-mode
@@ -130,6 +147,21 @@ bind -r Bspace last-window
 # Switch to last session
 bind -r M-Bspace switch-client -l
 
+# Kill session
+bind M-x confirm-before -p "Kill session #S? (y/n)" kill-session
+
+# Create session (or jump to it if it already exists), fallback to "scratch"
+bind M-c command-prompt -p "New session name (default: scratch):" \
+    "run-shell 'NAME=\"%%\"; NAME=\"\${NAME:-scratch}\"; tmux new-session -d -s \"\$NAME\" 2>/dev/null; tmux switch-client -t \"\$NAME\"'"
+
+# Move window to session (create if needed), fallback to "scratch"
+bind M-@ command-prompt -p "New session for window (default: scratch):" \
+    "run-shell 'NAME=\"%%\"; NAME=\"\${NAME:-scratch}\"; if ! tmux has-session -t \"\$NAME\" 2>/dev/null; then tmux new-session -d -s \"\$NAME\" && tmux move-window -k -t \"\$NAME:\"; else tmux move-window -t \"\$NAME:\"; fi; tmux switch-client -t \"\$NAME\"'"
+
+# Merge session with another one (e.g. move all windows to another session)
+bind M-t command-prompt -p "Session to merge with: " \
+   "run-shell 'yes | head -n #{session_windows} | xargs -I {} -n 1 tmux movew -t %%'"
+
 # Create/Kill window
 bind C new-window -c "#{pane_current_path}"
 bind X confirm-before -p "kill window #W? (y/n)" "kill-window"
@@ -147,6 +179,10 @@ bind _ split-window -fv -c "#{pane_current_path}"
 bind q display-panes -d 0
 #bind \' display-panes -d 0
 
+# Select window with index
+bind Q list-windows -F '(#I) #W'\; command-prompt -p window: "send-keys Escape; select-window -t ':%%'"
+#unbind \"; bind \" list-windows -F '(#I) #W'\; command-prompt -p window: "send-keys Escape; select-window -t ':%%'"
+
 # Change focus
 bind -n C-h select-pane -L
 bind -n C-j select-pane -D
@@ -157,8 +193,10 @@ bind -n C-l select-pane -R
 unbind f; bind F command-prompt "find-window -Z -- '%%'"
 
 # Vimium-like key for session switch
-bind -r j switch-client -n
-bind -r k switch-client -p
+#bind -r j switch-client -n
+#bind -r k switch-client -p
+bind j switch-client -n
+bind k switch-client -p
 
 # Vimium-like key for window select
 bind -r l select-window -t +1
@@ -194,7 +232,7 @@ bind Enter display-popup -w 85% -h 85% -d "#{pane_current_path}"
 # ============================================================================
 # TMUX miscellaneous
 # ============================================================================
-# NOTE: Update $DISPLAY in TMUX session
+# NOTE: Update $DISPLAY, $XAUTHORITY in TMUX session
 #
 # (1) For bash shell, add following function to ~/.bashrc
 #
@@ -205,6 +243,17 @@ bind Enter display-popup -w 85% -h 85% -d "#{pane_current_path}"
 #    echo "UPDATE_TMUX_DISPLAY: $LAST_DISPLAY (OLD) -> $DISPLAY (NEW)"
 #}
 #
+## Update XAUTHORITY (Critical for X11 authentication)
+# function tmux_update_xauth {
+#    local new_xauth
+#    new_xauth=$(tmux show-env 2>/dev/null | sed -n 's/^XAUTHORITY=//p')
+#    if [ -n "$new_xauth" ]; then
+#        local old_xauth="$XAUTHORITY"
+#        export XAUTHORITY="$new_xauth"
+#        echo "Updated XAUTHORITY: $old_xauth -> $XAUTHORITY"
+#    fi
+#}
+#
 # (2) For fish shell, add following function to ~/.config/fish/config.fish
 #
 ## Update TMUX display (e.g. localhost:XX -> localhost:XX)
@@ -212,6 +261,16 @@ bind Enter display-popup -w 85% -h 85% -d "#{pane_current_path}"
 #    set LAST_DISPLAY $DISPLAY
 #    set DISPLAY (tmux show-env | sed -n 's/^DISPLAY=//p')
 #    echo "UPDATE_TMUX_DISPLAY: $LAST_DISPLAY (OLD) -> $DISPLAY (NEW)"
+#end
+#
+## Update XAUTHORITY (Critical for X11 authentication)
+#function tmux_update_xauth
+#    set -l new_xauth (tmux show-env | sed -n 's/^XAUTHORITY=//p')
+#    if test -n "$new_xauth"
+#        set -l old_xauth $XAUTHORITY
+#        set -gx XAUTHORITY $new_xauth
+#        echo "Updated XAUTHORITY: $old_xauth -> $XAUTHORITY"
+#    end
 #end
 #
 # NOTE: Hang running process onto TMUX session w/ reptyr
@@ -246,7 +305,7 @@ bind T clock-mode
 bind M set mouse \; display-message "Mouse mode: #{?mouse,ON,OFF}"
 
 # Toggle pane input synchronization
-bind C-s setw synchronize-panes #\; display-message "Sync panes: #{?synchronize-panes,ON,OFF}"
+bind C-s setw synchronize-panes \; display-message "Sync panes: #{?synchronize-panes,ON,OFF}"
 
 # Toggle activity monitoring
 bind N set monitor-activity \; display-message "set monitor-activity"
@@ -269,7 +328,7 @@ bind -n Home send-keys Escape "OH"
 bind -n End send-keys Escape "OF"
 
 # Customization mode (added in tmux 3.2a, defaults: <prefix> + [C])
-bind M-C customize-mode -Z
+bind M-S-c customize-mode -Z
 
 # List all environment variables
 bind E show-environment -g
