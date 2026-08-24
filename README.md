@@ -115,17 +115,17 @@ Backup for my Vim and TMUX configuration
 <details open>
 <summary>Click to expand!</summary>
 
-- [x] Use **_interchangeable configuration_** for various vim-family e.g. vim, gvim, and neovim
-- [x] Integrate **_useful vim-plugin_** e.g. auto-pair parentheses, auto-popup completion, etc.
-- [x] Integrate **_various color theme_** for better syntax highlighting e.g. gruvbox, nord, etc.
-- [x] Integrate **_Vim with TMUX_** for both pane/split and clipboard to work together smoothly
-- [x] Map built-in/plugin-in function to keys that are easier to remember systematically
-- [x] Add **_IDE-like features for python_** e.g. linter, formatter, analyzer, etc.
-- [x] Add **_IDE-like features using LSP_** e.g. linter, formatter, analyzer, etc.
-- [x] Add **_Markdown features_** e.g. preview, folding, wiki-style markdown writer, etc.
-- [x] Add **_Latex features_** e.g. real-time preview, compilation, etc.
-- [x] Try to minimize loading time while keeping maximal functionality/variety
-- [x] Also offer Minimal **_cross-platform configuration_** (`./mini/mini.vim`) for both UNIX-like system and Windows system
+- [X] Use **_interchangeable configuration_** for various vim-family e.g. vim, gvim, and neovim
+- [X] Integrate **_useful vim-plugin_** e.g. auto-pair parentheses, auto-popup completion, etc.
+- [X] Integrate **_various color theme_** for better syntax highlighting e.g. gruvbox, nord, etc.
+- [X] Integrate **_Vim with TMUX_** for both pane/split and clipboard to work together smoothly
+- [X] Map built-in/plugin-in function to keys that are easier to remember systematically
+- [X] Add **_IDE-like features for python_** e.g. linter, formatter, analyzer, etc.
+- [X] Add **_IDE-like features using LSP_** e.g. linter, formatter, analyzer, etc.
+- [X] Add **_Markdown features_** e.g. preview, folding, wiki-style markdown writer, etc.
+- [X] Add **_Latex features_** e.g. real-time preview, compilation, etc.
+- [X] Try to minimize loading time while keeping maximal functionality/variety
+- [X] Also offer Minimal **_cross-platform configuration_** (`./mini/mini.vim`) for both UNIX-like system and Windows system
 
 </details>
 
@@ -818,11 +818,11 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 <details open>
 <summary>Click to expand!</summary>
 
-- [x] Primary keybinding prefix is remapped from "Ctrl+b" to **_"Ctrl+a"_**, but **_"Ctrl+b"_** still works as secondary keybinding prefix
-- [x] Commands related to pane and split are remapped to my **_vim-like key mapping_** to keep things consistent
-- [x] Add **_new status line theme_** to make press of bindkey (prefix) more eye-catching
-- [x] Add **_clipboard sharing_** between vim, system, and TMUX (through xsel or xclip)
-- [x] Also offer **_minimal configuration_** (`./mini/mini.tmux`) on UNIX-like system
+- [X] Primary keybinding prefix is remapped from "Ctrl+b" to **_"Ctrl+a"_**, but **_"Ctrl+b"_** still works as secondary keybinding prefix
+- [X] Commands related to pane and split are remapped to my **_vim-like key mapping_** to keep things consistent
+- [X] Add **_new status line theme_** to make press of bindkey (prefix) more eye-catching
+- [X] Add **_clipboard sharing_** between vim, system, and TMUX (through xsel or xclip)
+- [X] Also offer **_minimal configuration_** (`./mini/mini.tmux`) on UNIX-like system
 
 </details>
 
@@ -985,7 +985,6 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 
 | TMUX-Mode |        Key Mapping         |               Function                |              Description              |                               Note                                |
 | :-------: | :------------------------: | :-----------------------------------: | :-----------------------------------: | :---------------------------------------------------------------: |
-|  Normal   |       `[BK]`+`[Tab]`       |            Show all panes             |            Show all panes             |                                                                   |
 |  Normal   |   `[BK]`+`[Shift]`+`[5]`   |        Split pane horizontally        |        Split pane horizontally        |           Default key is `[BK]`+`[Shift]`+`[5]` (`[%]`)           |
 |  Normal   |   `[BK]`+`[Shift]`+`[']`   |         Split pane vertically         |         Split pane vertically         |           Default key is `[BK]`+`[Shift]`+`[']` (`["]`)           |
 |  Normal   |   `[BK]`+`[Shift]`+`[\]`   | Split pane horizontally (full window) | Split pane horizontally (full window) |           `[Shift]`+`[\]` just \| for horizontal split            |
@@ -1031,7 +1030,7 @@ vim --startuptime /tmp/startup.log FILE_TO_TEST +q && vim /tmp/startup.log
 |  Normal   | `[BK]`+`[Shift]`+`[i]` |        Install plugins        |              Install plugins              |      tpm       |
 |  Normal   | `[BK]`+`[Shift]`+`[u]` |        Update plugins         |              Update plugins               |      tpm       |
 |  Normal   | `[BK]`+`[Shift]`+`[i]` |       Uninstall plugins       |             Uninstall plugins             |      tpm       |
-|  Normal   |     `[BK]`+`[F3]`      |       Sidebar file-tree       |             Sidebar file-tree             |  tmux-sidebar  |
+|  Normal   |     `[BK]`+`[Tab]`     |       Sidebar file-tree       |             Sidebar file-tree             |  tmux-sidebar  |
 |  Normal   | `[BK]`+`[Alt]`+`[s/r]` |   Save/Load current session   |         Save/Load current session         | tmux-resurrect |
 |  Normal   |  `[BK]`+`[Alt]`+`[d]`  |       Search for digit        |   Enter copy mode and search for digit    |  tmux-copycat  |
 |  Normal   |  `[BK]`+`[Alt]`+`[f]`  |        Search for file        |    Enter copy mode and search for file    |  tmux-copycat  |
