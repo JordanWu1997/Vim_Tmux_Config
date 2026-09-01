@@ -1806,42 +1806,7 @@
         nmap <leader>wtG <Esc>:VimwikiGenerateTagLinks<CR>
         " Calendar plug-in
         nmap <leader>wcr <Esc>:Calendar<CR>
-        " Template
-        nmap <Leader>wtI :call <SID>VimwikiInsertTemplate()<CR>
-        nmap <leader>wcd <Esc>:keeppatterns %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g<CR>
     endif
-    " Function to list and select templates using fzf
-    function! s:VimwikiInsertTemplate() abort
-        " Check if template directory exists
-        if !isdirectory(g:WIKI_TEMPLATE_DIR)
-            echoerr "Template directory doesn't exist: " . g:WIKI_TEMPLATE_DIR
-            return
-        endif
-        " Get list of template files
-        let l:templates = split(globpath(g:WIKI_TEMPLATE_DIR, '*.md'), '\n')
-        " Extract template names for display
-        let l:template_names = map(copy(l:templates), 'fnamemodify(v:val, ":t:r")')
-        " Create dictionary mapping display names to full paths
-        let l:template_dict = {}
-        let l:index = 0
-        while l:index < len(l:templates)
-            let l:template_dict[l:template_names[l:index]] = l:templates[l:index]
-            let l:index += 1
-        endwhile
-        " Show selection menu using fzf
-        call fzf#run({
-            \ 'source': l:template_names,
-            \ 'sink': function('s:VimwikiReadSelectedTemplate', [l:template_dict]),
-            \ 'down': '25%'
-            \ })
-    endfunction
-    " Function to read and insert the selected template
-    function! s:VimwikiReadSelectedTemplate(template_dict, template_name) abort
-        let l:template_path = a:template_dict[a:template_name]
-        let l:template_content = readfile(l:template_path)
-        " Insert template content at cursor position
-        call append(line('.') - 1, l:template_content)
-    endfunction
 
 " Goyo -----------------------------------------------------------------------
     if USING_EXTRA_PLUG
@@ -2359,10 +2324,16 @@
     " Markdown previewer [no extra vim plugin needed]
     " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
     " Google-chrome extension is needed for markdown viewer
-    if USING_GUI_SOFTWARE && !USING_VIM8
-        let $OPENBROWSER = 'noremap <leader><F4> :!'. s:WEBBROWSER .' %:p &<CR>'
-        autocmd BufEnter *.md echom '[Press Space+F4 to Preview .md File]'
-        autocmd BufEnter *.md exe $OPENBROWSER
+    if USING_GUI_SOFTWARE
+        if !USING_VIM8
+            let $OPENBROWSER = 'noremap <leader><F4> :!'. s:WEBBROWSER .' %:p &<CR>'
+            autocmd BufEnter *.md echom '[Press Space+F4 to Preview .md File]'
+            autocmd BufEnter *.md exe $OPENBROWSER
+        else
+            let $OPENBROWSER = 'noremap <leader><S-F4> :!'. s:WEBBROWSER .' %:p &<CR>'
+            autocmd BufEnter *.md echom '[Press Space+F4 to Preview .md File]'
+            autocmd BufEnter *.md exe $OPENBROWSER
+        endif
     endif
     " Synchronous markdown previewer (markdown-preview plugin)
     if USING_GUI_SOFTWARE && USING_VIM8
