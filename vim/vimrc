@@ -1764,6 +1764,8 @@
                     \ }
         "" Disable shorten URL
         "let g:vimwiki_url_maxsave = 0
+        " Disable table auto formatting (just format using mdformat instead)
+        let g:vimwiki_table_auto_fmt = 0
         " Global wiki mappings (start with w)
         nmap <leader>wI <Plug>VimwikiIndex
         nmap <leader>wD <Plug>VimwikiDeleteFile
