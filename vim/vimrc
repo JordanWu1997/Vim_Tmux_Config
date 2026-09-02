@@ -1764,7 +1764,7 @@
                     \ }
         "" Disable shorten URL
         "let g:vimwiki_url_maxsave = 0
-        " Global wiki mappings (start with v)
+        " Global wiki mappings (start with w)
         nmap <leader>wI <Plug>VimwikiIndex
         nmap <leader>wD <Plug>VimwikiDeleteFile
         nmap <leader>wR <Plug>VimwikiRenameFile
@@ -1796,8 +1796,6 @@
         nmap <leader>wdp <Esc>:VimwikiDiaryPrevDay<CR>
         nmap <C-Up>      <Esc>:VimwikiDiaryPrevDay<CR>
         nmap <C-Down>    <Esc>:VimwikiDiaryNextDay<CR>
-        " Highlight current word
-        nmap <leader>wcw <Esc>:VimwikiCurrentWordToggle<CR>
         " Search in vimwiki
         nmap <leader>w/  <Esc>:VimwikiSearch<space>
         nmap <leader>wt/ <Esc>:VimwikiSearchTags<space>
@@ -2331,7 +2329,7 @@
             autocmd BufEnter *.md exe $OPENBROWSER
         else
             let $OPENBROWSER = 'noremap <leader><S-F4> :!'. s:WEBBROWSER .' %:p &<CR>'
-            autocmd BufEnter *.md echom '[Press Space+F4 to Preview .md File]'
+            "autocmd BufEnter *.md echom '[Press Space+F4 to Preview .md File]'
             autocmd BufEnter *.md exe $OPENBROWSER
         endif
     endif
@@ -2348,7 +2346,7 @@
         autocmd BufEnter *.md setlocal scrolloff=999
     endif
     " The rest of block has been packed up as vim-markdown-tools plug-in
-    let g:md_tools_use_template = 0
+    let g:md_tools_use_template = g:USING_MARKDOWN_TEMPLATE
 
 " Jrnl -----------------------------------------------------------------------
     nnoremap <leader>mfj :execute 'r !' . g:JRNL_COLLECT_SCRIPT<CR>
