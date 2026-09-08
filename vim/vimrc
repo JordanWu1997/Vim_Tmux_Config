@@ -1774,7 +1774,7 @@
         nmap <leader><CR> <Plug>VimwikiFollowLink
         nmap <leader><Backspace> <Plug>VimwikiGoBackLink
         " Backlinks
-        nmap <leader>w<Backspace> <Esc>:VimwikiBacklinks<CR>
+        nmap <leader>wb <Esc>:VimwikiBacklinks<CR>
         nmap <leader>wyy <Esc>:VimwikiPasteLink<CR>jddk:echo 'Current Link Yanked'<CR>
         " Goto markdown file (create one if there is no one)
         nmap <leader>w<CR> <Plug>VimwikiGoto
@@ -1898,9 +1898,9 @@
         " Stop caching marked file in hidden buffers
         let g:markbar_cache_with_hidden_buffers = v:false
         " Peekaboo-like markbar (remap vim built-in ' key)
-        nmap ` <Plug>OpenMarkbarPeekabooApostrophe
+        nmap ' <Plug>OpenMarkbarPeekabooApostrophe
         " Peekaboo-like markbar (remap vim built-in ` key)
-        nmap ' <Plug>OpenMarkbarPeekabooBacktick
+        nmap ` <Plug>OpenMarkbarPeekabooBacktick
     endif
 
 " Easymotion -----------------------------------------------------------------
