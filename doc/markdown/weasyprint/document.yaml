@@ -1,0 +1,217 @@
+pdf-engine: weasyprint
+
+metadata:
+  lang: zh-TW
+
+variables:
+  papersize: a4
+  header-includes: |
+    <style>
+    /* ============================================================
+       Page geometry  ── geometry{left=2.75,right=2.75,top=2.70,bottom=2.05}
+       ============================================================ */
+    @page {
+      size: A4;
+      margin: 2.70cm 2.75cm 2.05cm 2.75cm;
+
+      /* \cfoot{\fontsize{9}{11}\selectfont\thepage} + footskip=1.05cm */
+      @bottom-center {
+        content: counter(page);
+        font-family: "Noto Sans CJK TC", sans-serif;
+        font-size: 9pt;
+        line-height: 11pt;
+        vertical-align: top;
+        padding-top: 0.62cm;   /* ≈ footskip 1.05cm minus one line */
+      }
+    }
+
+    /* ============================================================
+       Base text  ── 11pt, linestretch 1.08, parindent 0, parskip 0.48em
+       ============================================================ */
+    /* NOTE: pandoc's standalone HTML template ships its own stylesheet
+       (body{max-width:36em;padding:50px}, html{font-size:20px}, a
+       @media print block...). These resets neutralise it; without them
+       the page picks up a huge top margin and a narrow text column. */
+    html {
+      font-size: 11pt;
+      line-height: 1.296;          /* LaTeX baselineskip 1.2 × linestretch 1.08 */
+      background: #fff;
+      color: #000;
+    }
+
+    body {
+      font-family: "Noto Sans CJK TC", sans-serif;
+      font-size: 11pt;
+      line-height: 1.296;
+      text-align: justify;
+      hyphens: auto;
+      margin: 0;
+      padding: 0;                  /* override template */
+      max-width: none;             /* override template */
+      background: none;
+      color: #000;
+    }
+
+    p {
+      margin: 0 0 0.48em 0;        /* \parskip */
+      text-indent: 0;              /* \parindent=0pt */
+      orphans: 2;
+      widows: 2;
+    }
+
+    /* ============================================================
+       Headings  ── \titleformat / \titlespacing
+       ============================================================ */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+      break-after: avoid;
+      break-inside: avoid;
+      text-align: left;
+      -webkit-hyphens: none;
+      hyphens: none;
+    }
+
+    h1 { font-size: 16pt;   line-height: 1.19;  margin: 13pt 0 8pt 0; }
+    h2 { font-size: 12.5pt; line-height: 1.20;  margin: 10pt 0 6pt 0; }
+    h3 { font-size: 11.5pt; line-height: 1.22;  margin:  9pt 0 5pt 0; }
+
+    /* \titleformat{\paragraph}[runin] — emulated: heading stays on the
+       same line as the paragraph that follows it. */
+    h4 {
+      display: inline;
+      font-size: 11pt;
+      line-height: 1.18;
+    }
+    h4::after { content: "\2002\2002"; }   /* ≈ 0.6em gap */
+    h4 + p { display: inline; }
+    h4 + p::after { content: ""; display: block; margin-bottom: 0.48em; }
+
+    h5, h6 { font-size: 11pt; margin: 8pt 0 0.3em 0; }
+
+    /* ============================================================
+       Lists  ── enumitem settings; CSS has no 4-level cap, so all
+       nine label styles are reachable and deeper nesting still works.
+       ============================================================ */
+    ul, ol {
+      margin: 4pt 0;               /* topsep */
+      padding-left: 2.2em;         /* leftmargin */
+    }
+    li { margin-bottom: 1.5pt; }   /* itemsep */
+    li > p { margin: 0; }          /* parsep=0pt */
+    li > p + p { margin-top: 0.48em; }
+    ul ul, ul ol, ol ul, ol ol { margin-top: 1.5pt; margin-bottom: 0; }
+
+    ul                { list-style-type: disc; }
+    ul ul             { list-style-type: circle; }
+    ul ul ul          { list-style-type: "\2013\2002"; }   /* – */
+    ul ul ul ul       { list-style-type: "\00B7\2002"; }   /* · */
+    ul ul ul ul ul    { list-style-type: "\2217\2002"; }   /* ∗ */
+    ul ul ul ul ul ul { list-style-type: "\22C4\2002"; }   /* ⋄ */
+    ul ul ul ul ul ul ul          { list-style-type: disc; }
+    ul ul ul ul ul ul ul ul       { list-style-type: circle; }
+    ul ul ul ul ul ul ul ul ul    { list-style-type: "\2013\2002"; }
+
+    /* (a) (b) markers: @counter-style, because ::marker{content:...}
+       crashes WeasyPrint 70. */
+    @counter-style paren-alpha {
+      system: extends lower-alpha; prefix: "("; suffix: ") ";
+    }
+
+    ol                { list-style-type: decimal; }
+    ol ol             { list-style-type: paren-alpha; }
+    ol ol ol          { list-style-type: lower-roman; }
+    ol ol ol ol       { list-style-type: upper-alpha; }
+    ol ol ol ol ol    { list-style-type: decimal; }
+    ol ol ol ol ol ol { list-style-type: paren-alpha; }
+    ol ol ol ol ol ol ol       { list-style-type: lower-roman; }
+    ol ol ol ol ol ol ol ol    { list-style-type: upper-alpha; }
+    ol ol ol ol ol ol ol ol ol { list-style-type: decimal; }
+
+    /* ============================================================
+       Tables  ── booktabs look, tabcolsep 8pt, arraystretch 1.26
+       ============================================================ */
+    table {
+      border-collapse: collapse;
+      display: table;              /* template sets display:block */
+      width: auto;                 /* content width, like tabular */
+      margin: 0.7em auto;
+      font-size: 11pt;
+      border-top: 1.4pt solid currentColor;      /* \toprule */
+      border-bottom: 1.4pt solid currentColor;   /* \bottomrule */
+    }
+    thead { border-bottom: 0.7pt solid currentColor; }  /* \midrule */
+    th, td {
+      padding: 3.6pt 8pt;        /* arraystretch ≈ vertical, tabcolsep = horizontal */
+      border: none;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { font-weight: 700; }
+    caption { font-size: 10pt; margin-bottom: 0.3em; caption-side: top; }
+    tr, thead { break-inside: avoid; }
+
+    /* ============================================================
+       Code, quotes, rules, figures
+       ============================================================ */
+    code, pre, kbd, samp {
+      font-family: "Noto Sans Mono CJK TC", monospace;
+    }
+    code { font-size: 0.92em; }
+    div.sourceCode { margin: 0; overflow: visible; }
+    /* template uses text-indent:-5em/padding-left:5em for line numbers;
+       WeasyPrint keeps the padding but not the outdent -> 5em gutter */
+    pre > code.sourceCode > span { text-indent: 0; padding-left: 0; }
+    pre {
+      font-size: 9.5pt;
+      padding: 0.55em 0.75em;
+      line-height: 1.32;
+      background: #f4f3ef;
+      border: 0.5pt solid #e0ded7;
+      margin: 0.5em 0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      break-inside: avoid;
+      text-align: left;
+    }
+    pre code { font-size: inherit; background: none; padding: 0; }
+
+    blockquote {
+      margin: 0.5em 0;
+      padding-left: 0.9em;
+      border-left: 2.5pt solid #d0cec9;
+      color: #3c3836;
+    }
+
+    hr { border: none; border-top: 0.6pt solid #d0cec9; margin: 1em 0; }
+
+    figure { margin: 0.8em 0; text-align: center; break-inside: avoid; }
+    figcaption { font-size: 10pt; margin-top: 0.3em; }
+    img { max-width: 100%; }
+
+    a { color: #076678; text-decoration: none; }
+
+    /* ============================================================
+       Colour classes  ── same names as the Lua filter, so
+       [text]{.red} / [text]{.bg-yellow} work here too.
+       Raw <span style="..."> in the markdown also works unchanged.
+       ============================================================ */
+    .red    { color: #cc241d; }
+    .green  { color: #98971a; }
+    .yellow { color: #d79921; }
+    .blue   { color: #458588; }
+    .purple { color: #b16286; }
+    .aqua   { color: #689d6a; }
+    .orange { color: #d65d0e; }
+    .gray   { color: #928374; }
+
+    .bg-red    { background-color: #fbb1ad; }
+    .bg-green  { background-color: #d7d88f; }
+    .bg-yellow { background-color: #d79921; }
+    .bg-blue   { background-color: #a9cbcb; }
+    .bg-purple { background-color: #e0b8cf; }
+    .bg-aqua   { background-color: #b5d9b0; }
+    .bg-orange { background-color: #f3b98a; }
+    .bg-gray   { background-color: #d5d0c6; }
+
+    mark { background-color: #d79921; color: inherit; }
+    </style>

@@ -3,9 +3,7 @@
 ## Installation
 
 ```sh
-apt install texlive-xetex
-apt install texlive-lang-chinese
-apt install fonts-noto-cjk
+apt install Weasyprint
 ```
 
 ## Usage
