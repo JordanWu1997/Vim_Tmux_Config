@@ -1,0 +1,105 @@
+<h1 id="mermaid">Mermaid</h1>
+<h2 id="syntax">Syntax</h2>
+<h3 id="basics">Basics</h3>
+<ul>
+<li>Comment: <code>%%</code></li>
+<li>Escape sequece: <code>""</code>, e.g., <code>"(ESCAPE)"</code></li>
+<li>Diagram Type:
+<ul>
+<li>Flowchart: <code>graph &lt;DIRECTION&gt;</code>
+<ul>
+<li><code>TD</code> (Top to Down)</li>
+<li><code>LR</code> (Left to Right)</li>
+</ul></li>
+<li>Sequence Diagram: <code>sequenceDiagram</code></li>
+<li>Gantt Chart: <code>gantt</code></li>
+</ul></li>
+<li>Link and Arrows:
+<ul>
+<li><code>--&gt;</code>: Standard arrow</li>
+<li><code>&lt;--&gt;</code>: Bi-direction arrow</li>
+<li><code>-.-&gt;</code>: Dotted line</li>
+<li><code>==&gt;</code>: Think line</li>
+<li><code>---</code>: Open link</li>
+</ul></li>
+</ul>
+<h3 id="node-shapes-table-made-by-gemini">Node Shapes (table made by Gemini)</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 18%" />
+<col style="width: 31%" />
+<col style="width: 32%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Shape</th>
+<th style="text-align: left;">Syntax</th>
+<th style="text-align: left;">Appearance</th>
+<th style="text-align: left;">Common Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Rectangle</strong></td>
+<td style="text-align: left;"><code>[Text]</code></td>
+<td style="text-align: left;">A standard box.</td>
+<td style="text-align: left;">General process steps, tasks, or actions.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Rounded Rectangle</strong></td>
+<td style="text-align: left;"><code>(Text)</code></td>
+<td style="text-align: left;">A box with rounded corners.</td>
+<td style="text-align: left;">Events or start/end points.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Circle</strong></td>
+<td style="text-align: left;"><code>((Text))</code></td>
+<td style="text-align: left;">A perfect circle.</td>
+<td style="text-align: left;">Start or end point of a process.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Rhombus (Diamond)</strong></td>
+<td style="text-align: left;"><code>{Text}</code></td>
+<td style="text-align: left;">A diamond or rhombus shape.</td>
+<td style="text-align: left;"><strong>Decision points</strong>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Asymmetric (Flag)</strong></td>
+<td style="text-align: left;"><code>&gt;Text]</code></td>
+<td style="text-align: left;">A box with one side cut off at an angle.</td>
+<td style="text-align: left;">Terminal or output points.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Hexagon</strong></td>
+<td style="text-align: left;"><code>{{Text}}</code></td>
+<td style="text-align: left;">A six-sided polygon.</td>
+<td style="text-align: left;">Initial or final points.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Cylinder (Database)</strong></td>
+<td style="text-align: left;"><code>[(Text)]</code></td>
+<td style="text-align: left;">A cylindrical shape.</td>
+<td style="text-align: left;"><strong>Database</strong> or data storage.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Subroutine</strong></td>
+<td style="text-align: left;"><code>[[Text]]</code></td>
+<td style="text-align: left;">A rectangle with vertical lines.</td>
+<td style="text-align: left;">A predefined process or subroutine.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Trapeze</strong></td>
+<td style="text-align: left;"><code>[\Text\]</code> or <code>[/Text/]</code></td>
+<td style="text-align: left;">A trapezoid.</td>
+<td style="text-align: left;">Manual operations or input/output.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="exercises">Exercises</h2>
+<h3 id="flowchart">Flowchart</h3>
+<p><img src="https://mermaid.ink/img/Z3JhcGggTFIKCiAgICBBW1N0YXJ0XSAtLT4gQntJcyBpdCByYWluaW5nP307CiAgICBCIC0tIFllcyAtLT4gQ1tUYWtlIGFuIHVtYnJlbGxhXTsKICAgIEMgLS0-IERbR28gb3V0c2lkZV07CiAgICBCIC0tIE5vIC0tPiBEOwogICAgRCAtLT4gRVtFbmRdOw==?bgColor=!white&amp;type=png" /></p>
+<h3 id="sequence-diagram">Sequence Diagram</h3>
+<p><img src="https://mermaid.ink/img/c2VxdWVuY2VEaWFncmFtCgogICAgcGFydGljaXBhbnQgVXNlcgogICAgcGFydGljaXBhbnQgQnJvd3NlcgogICAgcGFydGljaXBhbnQgU2VydmVyCgogICAgVXNlci0-PkJyb3dzZXI6IFJlcXVlc3RzIHBhZ2UKICAgIGFjdGl2YXRlIEJyb3dzZXIKICAgIEJyb3dzZXItPj5TZXJ2ZXI6IEhUVFAgR0VUIHJlcXVlc3QKICAgIGFjdGl2YXRlIFNlcnZlcgogICAgU2VydmVyLS0-PkJyb3dzZXI6IFNlbmRzIEhUTUwKICAgIGRlYWN0aXZhdGUgU2VydmVyCiAgICBCcm93c2VyLS0-PlVzZXI6IERpc3BsYXlzIHBhZ2UKICAgIGRlYWN0aXZhdGUgQnJvd3Nlcg==?bgColor=!white&amp;type=png" /></p>
+<h3 id="gantt-chart">Gantt Chart</h3>
+<p><img src="https://mermaid.ink/img/Z2FudHQKCiAgJSUgQ29uZmlncwogIHRpdGxlIFBPQyBUaW1lbGluZQogIGRhdGVmb3JtYXQgWVlZWS1NTS1ERAogIGF4aXNGb3JtYXQgJW0vJWQKICB0aWNrSW50ZXJ2YWwgMXdlZWsKICBleGNsdWRlcyB3ZWVrZW5kcwoKICAlJSBGZWF0dXJlIDEKICBzZWN0aW9uIEZlYXR1cmUgMQogIERhdGEgQ29sbGVjdGlvbjogZG9uZSwgYTEsIDIwMjUtMDgtMjUsIDF3CiAgTW9kZWwgVHJhaW5pbmcvVGVzdGluZzogYWN0aXZlLCBhMiwgYWZ0ZXIgYTEsIDJ3CiAgTW9kdWxlIE9wdGltaXphdGlvbjogYWZ0ZXIgYTIsIDF3CgogICUlIEZlYXR1cmUgMgogIHNlY3Rpb24gRmVhdHVyZSAyCiAgRGF0YSBDb2xsZWN0aW9uL0NsZWFuaW5nOiBhY3RpdmUsYjEsIDIwMjUtMDgtMjUsIDJ3CiAgIk1vZGVsIEZpbmUtdHVuaW5nIChtYXliZSAibm90IikiOiBiMiwgYWZ0ZXIgYjEsIDF3CiAgTW9kdWxlIE9wdGltaXphdGlvbjogYWZ0ZXIgYjIsIDF3CgogICUlIFBsYXRmb3JtCiAgc2VjdGlvbiBQbGF0Zm9ybQogIEN1c3RvbWl6YXRpb246IGFjdGl2ZSwgYzEsIDIwMjUtMDgtMjUsIDR3CiAgSW50ZWdyYXRpb246IGFjdGl2ZSwgZDEsIDIwMjUtMDktMDEsIDF3?bgColor=!white&amp;type=png" /></p>
