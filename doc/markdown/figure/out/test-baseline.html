@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>example</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<h1 id="pandoc-image-rendering-test">Pandoc Image Rendering Test</h1>
+<blockquote>
+<p><strong>Demonstration:</strong> Standard Markdown syntax vs. HTML <code>&lt;img&gt;</code> tag syntax in Pandoc exports.</p>
+<p>Test image: <code>./figures/SolarSystemPosters_NASA_2130.jpg</code></p>
+</blockquote>
+<hr />
+<h2 id="example-a-standard-markdown-image-syntax">Example A: Standard Markdown Image Syntax</h2>
+<p>This image is embedded using standard Markdown syntax. Pandoc parses it into a native <code>Image</code> node in its AST, so every writer knows how to render it.</p>
+<figure>
+<img src="./figures/SolarSystemPosters_NASA_2130.jpg" title="Standard Markdown Image" alt="" /><figcaption>Sample Placeholder Image</figcaption>
+</figure>
+<ul>
+<li><strong>Source:</strong> <code>![Alt](./figures/SolarSystemPosters_NASA_2130.jpg "Title")</code></li>
+<li><strong>AST node:</strong> <code>Image ("",[],[]) [Str "Sample..."] ("./figures/...","fig:Standard Markdown Image")</code></li>
+<li><strong>Expected output:</strong> renders in HTML, PDF, DOCX, EPUB, and LaTeX.</li>
+<li><strong>Note:</strong> because the image sits alone in its own paragraph, the <code>implicit_figures</code> extension turns it into a figure and promotes the alt text to a caption. Disable with <code>-f markdown-implicit_figures</code>.</li>
+<li><strong>Limitation:</strong> no way to set width, height, id, or class.</li>
+</ul>
+<hr />
+<h2 id="example-b-html-img-tag-syntax">Example B: HTML <code>&lt;img&gt;</code> Tag Syntax</h2>
+<p>This image is embedded using an HTML <code>&lt;img&gt;</code> tag with custom styling.</p>
+<p><img src="./figures/SolarSystemPosters_NASA_2130.jpg" alt="Sample HTML Image" width="300" height="150" style="border: 1px solid black;" /></p>
+<ul>
+<li><strong>AST node:</strong> <code>RawInline (Format "html") "&lt;img src=... /&gt;"</code> — <strong>not</strong> an <code>Image</code> node.</li>
+<li><strong>Expected output in HTML export:</strong> rendered correctly, attributes and inline CSS intact.</li>
+<li><strong>Expected output in PDF / DOCX / LaTeX export:</strong> <strong>silently dropped.</strong> Raw HTML is passed through only to HTML-family writers; all other writers discard <code>RawInline</code>/<code>RawBlock</code> content whose format they don’t recognize.</li>
+<li><strong>Clarification:</strong> it is <em>dropped</em>, not converted to plain text. You only get literal visible text (<code>&amp;lt;img src=...&amp;gt;</code>) if you disable raw HTML parsing entirely with <code>-f markdown-raw_html</code>, which escapes the tag instead of storing it as raw HTML.</li>
+<li><strong>Diagnostic:</strong> run <code>pandoc example.md -t native | grep -i rawinline</code> to see the node Pandoc actually built.</li>
+</ul>
+<hr />
+<h2 id="example-c-markdown-image-syntax-with-pandoc-attribute-blocks">Example C: Markdown Image Syntax with Pandoc Attribute Blocks</h2>
+<p>The recommended fix. Pandoc’s <code>link_attributes</code> extension lets you attach an identifier, classes, and key/value attributes to a native image — giving you the sizing control of an HTML tag while keeping a real <code>Image</code> node that every writer understands.</p>
+<h3 id="c1-absolute-pixel-dimensions">C1 — Absolute pixel dimensions</h3>
+<figure>
+<img src="./figures/SolarSystemPosters_NASA_2130.jpg" id="fig:solar-px" class="bordered" width="300" height="150" alt="" /><figcaption>Sized with pixels</figcaption>
+</figure>
+<h3 id="c2-relative-width-scales-to-text-block-page-width">C2 — Relative width (scales to text block / page width)</h3>
+<figure>
+<img src="./figures/SolarSystemPosters_NASA_2130.jpg" id="fig:solar-pct" style="width:60.0%" alt="" /><figcaption>Sized at 60% of the text width</figcaption>
+</figure>
+<h3 id="c3-inline-image-no-figure-or-caption">C3 — Inline image, no figure or caption</h3>
+<p>Text flowing around a small inline image <img src="./figures/SolarSystemPosters_NASA_2130.jpg" style="width:1.2em" /> that sits in the middle of a sentence. An image with empty alt text and surrounding text on the same line never becomes a figure.</p>
+<ul>
+<li><strong>HTML:</strong> <code>&lt;img src="..." id="fig:solar-px" class="bordered" width="300" height="150" alt="..." /&gt;</code></li>
+<li><strong>LaTeX/PDF:</strong> <code>\includegraphics[width=3.125in,height=1.5625in]{./figures/...}</code> (px are converted at 96 dpi; use <code>--dpi=150</code> to change the assumption)</li>
+<li><strong>DOCX:</strong> a real embedded picture, sized correctly.</li>
+<li><strong>Percent widths</strong> become <code>width="60%"</code> in HTML and <code>width=0.6\textwidth</code> in LaTeX.</li>
+<li><strong>Styling:</strong> the <code>.bordered</code> class reaches HTML and DOCX (as a custom style); inline CSS has no LaTeX equivalent, so borders in PDF need a template or a filter.</li>
+</ul>
+<hr />
+<h2 id="example-d-html-img-tag-syntax-rescued-by-a-lua-filter">Example D: HTML <code>&lt;img&gt;</code> Tag Syntax Rescued by a Lua Filter</h2>
+<p>The same raw HTML as Example B, but this document is converted with <code>--lua-filter=raw-img.lua</code>. The filter intercepts <code>RawInline</code>/<code>RawBlock</code> nodes whose format is <code>html</code> and whose text contains an <code>&lt;img&gt;</code> tag, re-parses them through Pandoc’s HTML reader, and returns genuine <code>Image</code> nodes into the AST.</p>
+<p><img src="./figures/SolarSystemPosters_NASA_2130.jpg" alt="Rescued by Lua filter" width="400" height="200" style="border: 2px dashed navy;" /></p>
+<p align="center">
+<img src="./figures/SolarSystemPosters_NASA_2130.jpg" alt="Inside a block-level HTML wrapper" width="250" />
+</p>
+<ul>
+<li><strong>Without the filter:</strong> both images vanish from PDF, DOCX, and LaTeX.</li>
+<li><strong>With the filter:</strong> both survive everywhere, keeping <code>src</code>, <code>alt</code>, <code>width</code>, and <code>height</code>.</li>
+<li><strong>Second case:</strong> the <code>&lt;p align="center"&gt;</code> wrapper makes the whole thing a <code>RawBlock</code>, so the filter must handle <code>RawBlock</code> as well as <code>RawInline</code> — a common oversight.</li>
+<li><strong>Lost in translation:</strong> the <code>style</code> attribute is carried into HTML output but ignored by LaTeX and DOCX, since inline CSS has no counterpart in those formats.</li>
+<li><strong>Idempotent for HTML:</strong> the reconstructed <code>Image</code> node renders back to an <code>&lt;img&gt;</code> tag, so running the filter on HTML output changes nothing meaningful.</li>
+</ul>
+<hr />
+<h2 id="expected-results-matrix">Expected Results Matrix</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Example</th>
+<th>Syntax</th>
+<th style="text-align: center;">HTML</th>
+<th style="text-align: center;">PDF / LaTeX</th>
+<th style="text-align: center;">DOCX</th>
+<th>Sizing control</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td><code>![alt](src)</code></td>
+<td style="text-align: center;">yes</td>
+<td style="text-align: center;">yes</td>
+<td style="text-align: center;">yes</td>
+<td>none</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>raw <code>&lt;img&gt;</code></td>
+<td style="text-align: center;">yes</td>
+<td style="text-align: center;"><strong>dropped</strong></td>
+<td style="text-align: center;"><strong>dropped</strong></td>
+<td>HTML only</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td><code>![alt](src){...}</code></td>
+<td style="text-align: center;">yes</td>
+<td style="text-align: center;">yes</td>
+<td style="text-align: center;">yes</td>
+<td>px, in, cm, %</td>
+</tr>
+<tr class="even">
+<td>D</td>
+<td>raw <code>&lt;img&gt;</code> + Lua filter</td>
+<td style="text-align: center;">yes</td>
+<td style="text-align: center;">yes</td>
+<td style="text-align: center;">yes</td>
+<td>px, % via filter</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="verification-commands">Verification Commands</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co"># Inspect the AST — see Image vs RawInline for yourself</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="ex">pandoc</span> example.md -t native <span class="kw">|</span> <span class="fu">head</span> -60</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="co"># Baseline conversions (Examples B and D images will be missing from PDF/DOCX)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="ex">pandoc</span> example.md -s -o out/test-baseline.html</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="ex">pandoc</span> example.md -s -o out/test-baseline.pdf</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="ex">pandoc</span> example.md -s -o out/test-baseline.docx</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="co"># With the filter (all four examples survive)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="ex">pandoc</span> example.md -s --lua-filter=raw-img.lua -o out/test-filtered.pdf</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="ex">pandoc</span> example.md -s --lua-filter=raw-img.lua -o out/test-filtered.docx</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a><span class="co"># Show the escaping behaviour when raw_html is disabled</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a><span class="ex">pandoc</span> example.md -f markdown-raw_html -t html <span class="kw">|</span> <span class="fu">grep</span> -i <span class="st">&quot;&amp;lt;img&quot;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a><span class="co"># Single self-contained HTML with images base64-inlined</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a><span class="ex">pandoc</span> example.md -s --embed-resources --lua-filter=raw-img.lua -o out/test-embedded.html</span></code></pre></div>
+<p>If your images live outside the working directory, add <code>--resource-path=.:figures:assets</code> so Pandoc can resolve the relative paths.</p>
+</body>
+</html>
