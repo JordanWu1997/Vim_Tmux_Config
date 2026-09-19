@@ -4,6 +4,7 @@
 
 ```sh
 apt install Weasyprint
+  apt install fonts-noto-cjk
 ```
 
 ## Usage: Convert Markdown to PDF
