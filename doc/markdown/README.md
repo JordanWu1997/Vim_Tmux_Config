@@ -23,6 +23,19 @@
 
 ## Collection
 
+### Export self-contained HTML
+
+Export one single, fully self-contained HTML files with images embeded
+
+- For pandoc 2.9
+  ```
+  pandoc <INPUT_MARKDOWN> -o <OUTPUT_HTML> -f markdown --standalone --self-contained
+  ```
+- For newer pandoc
+  ```
+  pandoc <INPUT_MARKDOWN> -o <OUTPUT_HTML> -f markdown --standalone --embed-resources
+  ```
+
 ### Citation
 
 1. Add YAML Frontmatter
@@ -48,8 +61,10 @@ bibliography: references.bib
 
 3. Citation Style File (`./citations/apa.csl`)
 
+4. Enable citation w/ `pandoc-citeproc` (Installation: `sudo apt install pandoc-citeproc`)
+
 ```sh
-pandoc <INPUT_MARKDOWN> -o <OUTPUT_FILE> -f markdown --cite --csl apa.csl
+pandoc <INPUT_MARKDOWN> -o <OUTPUT_FILE> -f markdown --filter pandoc-citeproc --csl apa.csl
 ```
 
 ### Formatting and HTML Tags
