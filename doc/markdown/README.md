@@ -38,34 +38,33 @@ Export one single, fully self-contained HTML files with images embeded
 
 ### Citation
 
-1. Add YAML Frontmatter
-
-```yaml
----
-bibliography: references.bib
----
-```
-
-2. Reference Biography File
-
-```bib
-@book{Russell2010,
-  author = "Russell, Stuart J. and Norvig, Peter",
-  title = "Artificial Intelligence: A Modern Approach",
-  year = "2010",
-  publisher = "Prentice Hall",
-  address = "Upper Saddle River, NJ",
-  edition = "3rd"
-}
-```
-
-3. Citation Style File (`./citations/apa.csl`)
-
-4. Enable citation w/ `pandoc-citeproc` (Installation: `sudo apt install pandoc-citeproc`)
-
-```sh
-pandoc <INPUT_MARKDOWN> -o <OUTPUT_FILE> -f markdown --filter pandoc-citeproc --csl apa.csl
-```
+- Requirements
+  ```sh
+  apt install pandoc-citeproc
+  ```
+- Usage
+  1. Add YAML Frontmatter
+     ```yaml
+     ---
+     bibliography: references.bib
+     ---
+     ```
+  2. Reference Biography File
+     ```bib
+     @book{Russell2010,
+       author = "Russell, Stuart J. and Norvig, Peter",
+       title = "Artificial Intelligence: A Modern Approach",
+       year = "2010",
+       publisher = "Prentice Hall",
+       address = "Upper Saddle River, NJ",
+       edition = "3rd"
+     }
+     ```
+  3. Citation Style File (`./citations/apa.csl`)
+  4. Enable citation w/ `pandoc-citeproc`
+     ```sh
+     pandoc <INPUT_MARKDOWN> -o <OUTPUT_FILE> -f markdown --filter pandoc-citeproc --csl apa.csl
+     ```
 
 ### Formatting and HTML Tags
 
