@@ -22,27 +22,37 @@ set -g prefix2 C-a
 set -g base-index 1
 set -g renumber-windows on
 
-# Allow window to be renamed by TMUX but not by pane process
+# ONLY allow window to be named manually
 set -g automatic-rename off
-set -g allow-rename on
+set -g allow-rename off
 
 # Window option
 setw -g pane-base-index 1
 setw -g aggressive-resize on
 
-# Window status monitoring: (status: activity/bell/silence, options: on/off)
+# Window monitoring: mark a window in the statusline when something happens
+# -- activity: window printed output     (flag: #)
+# -- bell:     window rang the bell      (flag: !)
+# -- silence:  window had no output for N seconds, 0 = off (flag: ~)
+# NOTE: the pane watcher below sends a quiet-screen reminder after 15 seconds.
 setw -g monitor-activity off
 setw -g monitor-bell off
+setw -g monitor-silence 0
 
-# Alert by ringing bell (off), sending visual-message (on), or both (both)
-set -g visual-activity off # when monitor-activity is on, triggered by activity-action
-set -g visual-bell off # when monitor-bell is on, triggered by bell-action
+# How to alert when a monitored window triggers
+# -- off: ring bell only, on: show message only, both: bell + message
+set -g visual-activity off
+set -g visual-bell off
+set -g visual-silence off
+
+# Remove any leftover silence hook so reloading this file resets it
+set-hook -gu alert-silence
 
 # Master pane size
 set -g main-pane-height "50%"
 set -g main-pane-width "50%"
 
-# Do not close TMUX after closing current session
+# Switch to another session after current session closed
 set -g detach-on-destroy off
 
 # Statusline keybindings (options: vi/emacs, default: emacs)
@@ -86,12 +96,12 @@ bind = choose-buffer
 # -- https://superuser.com/questions/395158/tmux-copy-mode-select-text-block
 # -- https://unix.stackexchange.com/questions/131011/use-system-clipboard-in-vi-copy-mode-in-tmux
 
-# -- TMUX version < 2.5
+# -- TMUX version < 2.4
 #bind-key -t vi-copy 'v' begin-selection
 #bind-key -t vi-copy 'C-v' rectangle-toggle
 #bind-key -t vi-copy 'y' copy-selection
 
-# -- TMUX version >= 2.5
+# -- TMUX version >= 2.4
 bind -T copy-mode-vi v send -X begin-selection
 bind -T copy-mode-vi C-v send -X rectangle-toggle \; send -X begin-selection
 bind -T copy-mode-vi y send -X copy-selection-and-cancel \; display-message "Yanked: #{buffer_sample}"
@@ -104,9 +114,9 @@ bind -T copy-mode-vi y send -X copy-selection-and-cancel \; display-message "Yan
 #bind-key p run "xsel -ob | tmux load-buffer - ; tmux paste-buffer"
 
 # Yank current working directory (Prefix + Y)
-bind Y run-shell "printf '%s' '#{pane_current_path}' | xsel -i -b; tmux set-buffer '#{pane_current_path}'" \; display-message "Yanked PWD: #{pane_current_path}"
-# Yank current session name (Alt/Option + Shift + y)
-bind M-Y run-shell "printf '%s' '#{session_name}' | xsel -i -b; tmux set-buffer '#{session_name}'" \; display-message "Yanked session name: #{session_name}"
+bind Y run-shell "printf '%s' #{q:pane_current_path} | xsel -i -b; tmux set-buffer -- #{q:pane_current_path}" \; display-message "Yanked PWD: #{pane_current_path}"
+# Yank current session name (Prefix + Alt/Option + Shift + y)
+bind M-Y run-shell "printf '%s' #{q:session_name} | xsel -i -b; tmux set-buffer -- #{q:session_name}" \; display-message "Yanked session name: #{session_name}"
 # Yank current command line like tmux-yank (Prefix + y)
 bind y run-shell "\
     tmux send-keys C-a; \
@@ -289,7 +299,7 @@ bind Enter display-popup -w 85% -h 85% -d "#{pane_current_path}"
 #    2. In target terminal, use reptyr <PID> to restore process in target terminal
 #    3. In original terminal, close the shell where process was running on
 
-# Disable scrollback clearing
+# Disable application alternate-screen handling (e.g., scrollback clearing)
 set -g alternate-screen off
 
 # Setup load change of .tmux.conf
@@ -327,10 +337,10 @@ bind C-S-l confirm-before -p "clear scrollback history? (y/n)" "clear-history \;
 bind -n Home send-keys Escape "OH"
 bind -n End send-keys Escape "OF"
 
-# Customization mode (added in tmux 3.2a, defaults: <prefix> + [C])
+# Customization mode (added in tmux 3.2, defaults: <prefix> + [C])
 bind M-S-c customize-mode -Z
 
-# List all environment variables
+# List glob tmux environment variables
 bind E show-environment -g
 
 # ============================================================================
