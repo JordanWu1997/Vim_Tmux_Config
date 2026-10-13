@@ -1,39 +1,41 @@
 #!/bin/sh
-# Watch a tmux pane; alert once its visible text stops changing.
+# Watch one pane's visible screen and notify once after a quiet interval.
+# This detects inactivity, not agent completion.
 # Usage: tmux_watch_pane.sh <pane_id> [quiet_seconds]
-# Stops when window option @watch is unset (<prefix> + N)
-pane=$1; quiet=${2:-15}; step=3
-tmux setw -t "$pane" @watch $$          # one watcher per window
-last=; still=0; alerted=0
-while [ "$(tmux show -wqv -t "$pane" @watch 2>/dev/null)" = "$$" ]; do
-    cur=$(tmux capture-pane -p -t "$pane" | cksum)
-    if [ "$cur" = "$last" ]; then
-        still=$((still + step))
-    else
-        last=$cur; still=0; alerted=0
-        # Attention is acknowledged by the jump key or by turning watch off.
-        # Screen output alone may arrive before the user sees the alert.
-    fi
-    # A turn-completion event suppresses the idle fallback for that same screen,
-    # including when the user acknowledges the event before this poll runs.
-    event_screen=$(tmux show -wqv -t "$pane" @watch_event_screen 2>/dev/null)
-    if [ -n "$event_screen" ]; then
-        if [ "$cur" = "$event_screen" ]; then
-            alerted=1
-        else
-            tmux setw -u -t "$pane" @watch_event_screen
-        fi
-    fi
-    if [ "$still" -ge "$quiet" ] && [ "$alerted" = 0 ]; then
+pane=${1:-}
+quiet=${2:-15}
+step=3
+case $quiet in ''|*[!0-9]*|0) exit 2 ;; esac
+[ -n "$pane" ] || exit 2
+
+[ "$(tmux show -pqv -t "$pane" @watch 2>/dev/null)" = on ] || exit 0
+tmux set-option -p -t "$pane" @watch_pid "$$" || exit 1
+tmux set-option -p -u -t "$pane" @watch_quiet
+
+last=
+changed_at=$(date +%s)
+alerted=0
+while [ "$(tmux show -pqv -t "$pane" @watch 2>/dev/null)" = on ] &&
+      [ "$(tmux show -pqv -t "$pane" @watch_pid 2>/dev/null)" = "$$" ]; do
+    screen=$(tmux capture-pane -p -t "$pane" 2>/dev/null) || break
+    cur=$(printf '%s' "$screen" | cksum)
+    now=$(date +%s)
+    if [ "$cur" != "$last" ]; then
+        last=$cur
+        changed_at=$now
+        alerted=0
+        tmux set-option -p -u -t "$pane" @watch_quiet
+    elif [ "$alerted" = 0 ] && [ $((now - changed_at)) -ge "$quiet" ]; then
         alerted=1
-        # A completion hook takes precedence over the idle heuristic, and an
-        # unread alert must not be sent repeatedly after intermittent output.
-        if [ -z "$(tmux show -wqv -t "$pane" @watch_done 2>/dev/null)" ]; then
-            tmux setw -t "$pane" @watch_done idle
-            name=$(tmux display -p -t "$pane" '#{session_name}:#{window_index} #{window_name}')
-            tmux display-message "Watch: $name is idle"
-            command -v notify-send >/dev/null && notify-send -a tmux "Agent idle" "$name"
-        fi
+        tmux set-option -p -t "$pane" @watch_quiet on
+        name=$(tmux display-message -p -t "$pane" '#{session_name}:#{window_index}.#{pane_index} #{window_name}')
+        tmux display-message "Screen quiet: $name"
+        "$(dirname "$0")/tmux_notify.sh" 'Pane screen quiet' "$name: no visible change for $quiet seconds"
     fi
     sleep "$step"
 done
+
+# Pane options disappear automatically when their pane closes.
+if [ "$(tmux show -pqv -t "$pane" @watch_pid 2>/dev/null)" = "$$" ]; then
+    tmux set-option -p -u -t "$pane" @watch_pid
+fi
