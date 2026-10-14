@@ -6,11 +6,11 @@ LIST_ONLY=false
 
 show_usage() {
     echo "Usage: $0 [OPTIONS]"
-    echo "Find git repository and open modified files in vim"
+    echo "Open files with unstaged Git changes in Vim for GitGutter hunk staging"
     echo ""
     echo "Options:"
     echo "  -p, --prompt     Prompt for each file before opening"
-    echo "  -l, --list-only  Only list modified files, do not open in vim"
+    echo "  -l, --list-only  Only list changed files, do not open in vim"
     echo "  -h, --help       Show this help message"
 }
 
@@ -39,23 +39,7 @@ parse_args() {
 }
 
 find_git_root() {
-    local current_dir="$(pwd)"
-
-    while [[ "$current_dir" != "/" ]]; do
-        if [[ -d "$current_dir/.git" ]]; then
-            echo "$current_dir"
-            return 0
-        fi
-        current_dir="$(dirname "$current_dir")"
-    done
-
-    # Check root directory
-    if [[ -d "/.git" ]]; then
-        echo "/"
-        return 0
-    fi
-
-    return 1
+    git rev-parse --show-toplevel 2>/dev/null
 }
 
 open_files_in_vim() {
@@ -70,7 +54,10 @@ open_files_in_vim() {
     if [[ "$PROMPT_MODE" == true ]]; then
         for file in "${files[@]}"; do
             while true; do
-                read -p "Open '$file' in vim? (y/n/q): " response
+                if ! IFS= read -r -p "Open '$file' in vim? (y/n/q): " response; then
+                    echo "Input ended."
+                    return 1
+                fi
                 case "${response,,}" in
                     y|yes)
                         files_to_open+=("$file")
@@ -105,9 +92,10 @@ open_files_in_vim() {
 
     # Open files in vim
     if command -v vim >/dev/null 2>&1; then
-        vim "${files[@]}"
+        vim -c 'GitGutterEnable' -- "${files[@]}"
     else
         echo "Error: vim not found. Make sure vim is installed and in your PATH." >&2
+        return 1
     fi
 }
 
@@ -120,15 +108,15 @@ main() {
         echo "Found git repository at: $git_root"
         cd "$git_root" || exit 1
 
-        echo "Running git diff --name-only..."
-        local diff_output
-        if diff_output=$(git diff --name-only 2>/dev/null); then
-            if [[ -n "$diff_output" ]]; then
-                # Convert to array
-                local files=()
-                while IFS= read -r line; do
-                    [[ -n "$line" ]] && files+=("$line")
-                done <<< "$diff_output"
+        local diff_file
+        diff_file=$(mktemp) || return 1
+        trap 'rm -f -- "$diff_file"' EXIT
+
+        echo "Running git diff --name-only for unstaged changes..."
+        if git diff --name-only --diff-filter=d -z -- > "$diff_file"; then
+            local files=()
+            mapfile -d '' -t files < "$diff_file"
+            if [[ ${#files[@]} -gt 0 ]]; then
 
                 echo "Found ${#files[@]} modified file(s):"
                 printf '  %s\n' "${files[@]}"
