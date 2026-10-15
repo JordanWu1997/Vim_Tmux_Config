@@ -82,10 +82,13 @@ set -g mode-keys vi
 # Vim-like search in copy mode (//? search downward/upward)
 bind-key / copy-mode\; send-keys '/'
 bind-key ? copy-mode\; send-keys '?'
-# Clipboard is set to "on" for gnome-terminal, but MUST be set to "external"
-# for kitty or other terminal emulator supports set-clipboard
-# -- https://github.com/tmux/tmux/wiki/Clipboard
-set -g set-clipboard external
+
+# set-clipboard option
+# -- For gnome-terminal, it should be set to "on"
+# -- For kitty or other terminal emulator supports OSC 52, it should be set to "external"
+#    -- https://github.com/tmux/tmux/wiki/Clipboard
+# NOTE: But since the keybindings  are remapped w/ sel, it can be just set to off
+set -g set-clipboard off
 
 # Set Copy/Paste Mode
 bind [ copy-mode
@@ -104,7 +107,8 @@ bind = choose-buffer
 # -- TMUX version >= 2.4
 bind -T copy-mode-vi v send -X begin-selection
 bind -T copy-mode-vi C-v send -X rectangle-toggle \; send -X begin-selection
-bind -T copy-mode-vi y send -X copy-selection-and-cancel \; display-message "Yanked: #{buffer_sample}"
+# NOTE: After copying, copy-selection stays in copy mode while copy-selection-and-cancel leaves copy mode
+bind -T copy-mode-vi y send -X copy-selection \; display-message "Yanked: #{buffer_sample}"
 
 # For sync clipboard with xsel (for desktop and remote SSH server X-forwarding)
 #bind -T copy-mode-vi y send -X copy-pipe-and-cancel "xsel --input --clipboard"
@@ -140,10 +144,6 @@ bind -T copy-mode-vi C-[ send-keys -X cancel
 # ============================================================================
 # TMUX session/pane/window option
 # ============================================================================
-
-# Merge session with another one (e.g. move all windows to another session)
-bind M-t command-prompt -p "Session to merge with: " \
-   "run-shell 'yes | head -n #{session_windows} | xargs -I {} -n 1 tmux movew -t %%'"
 
 # Switch to last pane
 bind -r ` last-pane
