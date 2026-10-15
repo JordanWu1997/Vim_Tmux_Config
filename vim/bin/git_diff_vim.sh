@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Default behavior: open all files
+# Default behavior: open only tracked files with unstaged changes
 PROMPT_MODE=false
 LIST_ONLY=false
+INCLUDE_UNTRACKED=false
 
 show_usage() {
     echo "Usage: $0 [OPTIONS]"
@@ -10,7 +11,8 @@ show_usage() {
     echo ""
     echo "Options:"
     echo "  -p, --prompt     Prompt for each file before opening"
-    echo "  -l, --list-only  Only list changed files, do not open in vim"
+    echo "  -l, --list-only  Only list files, do not open in Vim"
+    echo "  -u, --untracked  Also open untracked files (disabled by default)"
     echo "  -h, --help       Show this help message"
 }
 
@@ -23,6 +25,10 @@ parse_args() {
                 ;;
             -l|--list-only)
                 LIST_ONLY=true
+                shift
+                ;;
+            -u|--untracked)
+                INCLUDE_UNTRACKED=true
                 shift
                 ;;
             -h|--help)
@@ -114,11 +120,18 @@ main() {
 
         echo "Running git diff --name-only for unstaged changes..."
         if git diff --name-only --diff-filter=d -z -- > "$diff_file"; then
+            if [[ "$INCLUDE_UNTRACKED" == true ]]; then
+                if ! git ls-files --others --exclude-standard -z -- >> "$diff_file"; then
+                    echo "Error: Failed to list untracked files" >&2
+                    return 1
+                fi
+            fi
+
             local files=()
             mapfile -d '' -t files < "$diff_file"
             if [[ ${#files[@]} -gt 0 ]]; then
 
-                echo "Found ${#files[@]} modified file(s):"
+                echo "Found ${#files[@]} file(s):"
                 printf '  %s\n' "${files[@]}"
 
                 if [[ "$LIST_ONLY" != true ]]; then
@@ -126,7 +139,7 @@ main() {
                     open_files_in_vim "${files[@]}"
                 fi
             else
-                echo "No modified files found."
+                echo "No files found."
             fi
         else
             echo "Error: Failed to run git diff" >&2
