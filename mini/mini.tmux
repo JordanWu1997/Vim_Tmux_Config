@@ -110,12 +110,13 @@ bind -T copy-mode-vi C-v send -X rectangle-toggle \; send -X begin-selection
 # NOTE: After copying, copy-selection stays in copy mode while copy-selection-and-cancel leaves copy mode
 bind -T copy-mode-vi y send -X copy-selection \; display-message "Yanked: #{buffer_sample}"
 
-# For sync clipboard with xsel (for desktop and remote SSH server X-forwarding)
-#bind -T copy-mode-vi y send -X copy-pipe-and-cancel "xsel --input --clipboard"
-#bind -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel \
-#    "xsel --inputi --follow --primary | xsel --input --clipboard"
+## For sync clipboard with xsel (for desktop and remote SSH server w/ X-forwarding)
+#bind -T copy-mode-vi y send -X copy-pipe-and-cancel "xsel --input --clipboard" \; display-message "Yanked: #{buffer_sample}"
+#bind -T copy-mode-vi Y send -X copy-pipe "xsel --input --clipboard" \; display-message "Yanked: #{buffer_sample}"
+#bind -T copy-mode-vi MouseDragEnd1Pane send -X copy-pipe-and-cancel \
+#   "xsel --inputi --follow --primary | xsel --input --clipboard" \; display-message "Yanked: #{buffer_sample}"
 ## Map 'p' to paste from xsel (optional, but keeps it consistent with your Vim setup)
-#bind-key p run "xsel -ob | tmux load-buffer - ; tmux paste-buffer"
+#bind p run "xsel -ob | tmux load-buffer - ; tmux paste-buffer"
 
 # Yank current working directory (Prefix + Y)
 bind Y run-shell "printf '%s' #{q:pane_current_path} | xsel -i -b; tmux set-buffer -- #{q:pane_current_path}" \; display-message "Yanked PWD: #{pane_current_path}"
