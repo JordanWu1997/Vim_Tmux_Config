@@ -500,32 +500,32 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 - Most leader key related key mapping is mapped by which-key plugins which will show useful hints when leader key
   and following keys are pressed. Table below includes some frequently used key mappings.
 
-| `[LK]` + |  Function   |   Description   |
-| :------: | :---------: | :-------------: |
-|   `a`    |     Arg     |  Built-in arg   |
-|   `b`    |   Buffer    | Built-in buffer |
-|   `c`    |  Commenter  |    Commenter    |
-|   `d`    |    Diff     |  Built-in diff  |
-|   `e`    |  Loc-list   | Location list / Linter / External command |
-|   `f`    |     Fzf     |  File-browser   |
-|   `h/j/k/l`  | Easymotion  | Quick move      |
-|   `i`    |   Insert    |  Insert date    |
-|   `g`    |     Git     |       Git       |
-|   `m`    | Mark/Manual |  Built-in mark  |
-|   `n`    |  Neoformat  |    Neoformat    |
-|   `o`    |   vim-ai    |  Local AI (Ollama) |
-|   `p`    |   Python    |     Python      |
-|   `q`    | Quit/Quickfix | Quit, quickfix list |
-|   `r`    | Register/Resize | Registers, resize, Rg |
-|   `s`    |    Spell    | Built-in spell  |
-|   `t`    |     Tab     |  Built-in tab   |
-|   `w`    | Write/Wiki/Wrap | Save, note-taking, wrap |
-|   `x`    | TMUX send   | Send text to a TMUX pane |
-|   `y`    |    Yank     |  Yank manager, copy path/reference |
-| `Shift`+`d` | Debugger | vimspector |
+|  `[LK]` +   |     Function     |                      Description                      |
+| :---------: | :--------------: | :---------------------------------------------------: |
+|     `a`     |       Arg        |                     Built-in arg                      |
+|     `b`     |      Buffer      |                    Built-in buffer                    |
+|     `c`     |    Commenter     |                       Commenter                       |
+|     `d`     |       Diff       |                     Built-in diff                     |
+|     `e`     |     Loc-list     |       Location list / Linter / External command       |
+|     `f`     |       Fzf        |                     File-browser                      |
+|  `h/j/k/l`  |    Easymotion    |                      Quick move                       |
+|     `i`     |      Insert      |                      Insert date                      |
+|     `g`     |       Git        |                          Git                          |
+|     `m`     |   Mark/Manual    |                     Built-in mark                     |
+|     `n`     |    Neoformat     |                       Neoformat                       |
+|     `o`     |      vim-ai      |                   Local AI (Ollama)                   |
+|     `p`     |      Python      |                        Python                         |
+|     `q`     |  Quit/Quickfix   |                  Quit, quickfix list                  |
+|     `r`     | Register/Resize  |                 Registers, resize, Rg                 |
+|     `s`     |      Spell       |                    Built-in spell                     |
+|     `t`     |       Tab        |                     Built-in tab                      |
+|     `w`     | Write/Wiki/Wrap  |                Save, note-taking, wrap                |
+|     `x`     |    TMUX send     |               Send text to a TMUX pane                |
+|     `y`     |       Yank       |           Yank manager, copy path/reference           |
+| `Shift`+`d` |     Debugger     |                      vimspector                       |
 | `Shift`+`l` | LSP/LanguageTool | `L`+`[e/d/s/M/I/S/R/f]` LSP, `L`+`[C/c]` LanguageTool |
-| `s`+`l`  | Statusline  |   Status line   |
-| `c`+`s`  | Colorscheme |  Color scheme   |
+|   `s`+`l`   |    Statusline    |                      Status line                      |
+|   `c`+`s`   |   Colorscheme    |                     Color scheme                      |
 
 - Group names above are also shown in the which-key pop-up (`g:which_key_map`)
 
