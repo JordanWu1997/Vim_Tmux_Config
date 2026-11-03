@@ -178,7 +178,8 @@
     " Directory of this vimrc (.../Vim_Tmux_Config/vim), symlinks resolved.
     " -- When this file was copied (e.g. to ~/.vimrc) instead of symlinked,
     "    fall back to the usual clone location.
-    let s:vimrc_dir = resolve(expand('<sfile>:p:h'))
+    " (resolve the file, not its directory: ~/.vimrc -> .../vim/vimrc)
+    let s:vimrc_dir = fnamemodify(resolve(expand('<sfile>:p')), ':h')
     if !isdirectory(s:vimrc_dir . '/share/templates')
         let s:vimrc_dir = expand('$HOME/Desktop/Vim_Tmux_Config/vim')
     endif
@@ -500,8 +501,10 @@
     " -- tmux must not delay Esc either: 'escape-time 0' in tmux.conf
     set ttimeout ttimeoutlen=10
     if exists('+signcolumn')
-        set signcolumn=yes " Always show sign column: no text shift when LSP
-                           " diagnostics or gitgutter signs appear
+        " Sign column only when a buffer has signs (LSP diagnostics,
+        " gitgutter hunks, vimspector breakpoints); text shifts right by two
+        " columns when the first sign appears. Use 'yes' to keep it always.
+        set signcolumn=auto
     endif
 
 " Vim only settings ----------------------------------------------------------
@@ -525,8 +528,11 @@
     "    (usually the project/repo root), so :FZFFiles, :FZFRg, :terminal,
     "    and gf on repo-relative paths (e.g. printed by an agent) all start
     "    from the root. Toggle with <leader>ac when per-file cwd is wanted.
+    " -- <leader>cd: one-off :cd to the current buffer's directory (global,
+    "    for all windows); go back with :cd - or :cd <path>
     set noautochdir " Do not change working directory to buffer file directory
     noremap <leader>ac :set autochdir!<CR>:echo 'autochdir=' . &autochdir<CR>
+    nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 
 " Auto-reload files changed outside vim (e.g. edited by an agent) ------------
     " NOTE:
@@ -2487,7 +2493,14 @@
         let g:acp_enableAtStartup = 1
         " Toggle autocomplpop function
         let g:AutoCompPop_is_open = 1
+        " -- In LSP buffers it toggles the asyncomplete pop-up instead (see
+        "    LspCompletionPopupToggle() in the LSP section)
         function! AutoCompPopToggle()
+            if get(b:, 'asyncomplete_enable', 0)
+                        \ && exists('*LspCompletionPopupToggle')
+                call LspCompletionPopupToggle()
+                return
+            endif
             if g:AutoCompPop_is_open
                 AcpDisable
                 echo 'AutoCompletionPop Disabled'
@@ -3295,6 +3308,17 @@
                         \ 'completor': function('asyncomplete#sources#file#completor') }))
         endfunction
         autocmd vimrc User asyncomplete_setup call s:RegisterCompletionSources()
+        " Toggle the automatic pop-up (all LSP buffers); while off, complete
+        " on demand with <C-x><C-o>. Key: <leader>` in an LSP buffer (the
+        " same key toggles autocomplpop in other buffers)
+        function! LspCompletionPopupToggle() abort
+            let g:asyncomplete_auto_popup = !get(g:, 'asyncomplete_auto_popup', 1)
+            echo 'LSP completion pop-up ' . (g:asyncomplete_auto_popup
+                        \ ? 'Enabled' : 'Disabled (<C-x><C-o> on demand)')
+        endfunction
+        if !s:on('extra')
+            noremap <leader>` :call LspCompletionPopupToggle()<CR>
+        endif
 
 " Vim-LSP keys and buffer setup ----------------------------------------------
         " Manage LSP server
@@ -3340,7 +3364,7 @@
             nmap <buffer> K <plug>(lsp-hover)
         endfunction
         " Disable LSP
-        " -- signcolumn stays on (set globally), so text does not shift
+        " -- signcolumn=auto (set globally) hides the column once signs are gone
         " -- K: python buffers fall back to pydoc ('keywordprg' from the
         "    python filetype plugin), other buffers to :help <word>
         function! DisableLSP()
@@ -3367,7 +3391,6 @@
         function! s:on_lsp_buffer_enabled() abort
             " LSP settings
             setlocal omnifunc=lsp#complete
-            setlocal signcolumn=yes
             if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
             " LSP keybindings
             nmap <buffer> K  <plug>(lsp-hover)

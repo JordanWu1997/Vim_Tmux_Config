@@ -126,7 +126,8 @@ Backup for my Vim and TMUX configuration
 - [X] Add **_Markdown features_** e.g. preview, folding, wiki-style markdown writer, etc.
 - [X] Add **_Latex features_** e.g. real-time preview, compilation, etc.
 - [X] Try to minimize loading time while keeping maximal functionality/variety
-- [X] Keep **_all user settings in four dictionaries_** at the top of `vim/vimrc` (`g:vimrc_features`, `g:vimrc_paths`, `g:vimrc_tools`, `g:vimrc_tmux`), with optional per-machine overrides in a git-ignored `vim/local.vim`
+- [X] Keep **_all user settings in four dictionaries_** at the top of `vim/vimrc` (`g:vimrc_features`, `g:vimrc_paths`,
+      `g:vimrc_tools`, `g:vimrc_tmux`), with optional per-machine overrides in a git-ignored `vim/local.vim`
 - [X] Also offer Minimal **_cross-platform configuration_** (`./mini/mini.vim`) for both UNIX-like system and Windows system
 
 </details>
@@ -374,6 +375,22 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 # Or, inside vim/neovim (vim-startuptime plugin)
 :StartupTime
 ```
+
+- Performance notes (measured, see `doc/reports/`)
+
+  - Startup: about 65 ms (python file) / 120 ms (markdown note) in neovim
+  - Heavy plugins are lazy-loaded: git tools, LSP servers, vim-test, vimspector, tagbar, mundo, etc.
+  - Markdown/vimwiki header folds are computed __on the first fold key__ in a note (`zc`, `zo`, `za`, `zM`,
+    `zR`, `zi`, `zj`, `zk`, `zx`, ...; same behaviour, buffer-local wrappers) and kept as manual folds
+    (`g:vimwiki_folding = 'custom'` + `VimwikiFoldsUpdate()` in vimrc). Opening, switching and typing never compute
+    folds. vimwiki's `expr` folding recomputed every line on each keystroke and buffer switch (about 100 ms per
+    switch into a 1200-line note); computing them on open instead cost about 0.5 s per open.
+    Once used, folds refresh on save, on reload and when a changed note is shown again; `zx` recomputes them
+  - AutoComplPop does not pop up in markdown/vimwiki (prose); `[Ctrl]`+`[n/p]` still complete
+  - Neovim inside TMUX (no flicker, no lost keys):
+    - `ttimeoutlen=10`: `Esc` then `j`/`k` is no longer read as `[Alt]`+`[j/k]` (window resize)
+    - `nolazyredraw` (neovim only) and `noshowcmd`: one screen update per key instead of five, so the cursor
+      no longer jumps to the bottom-right corner and back. Use `:set showcmd` to see pending keys temporarily
 
 #### 2. Plugin Usage Configuration (Vim)
 
@@ -632,23 +649,25 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 |    N     |   `[LK]`+`[q]`+`[t]`   |    TMUX pane output to quickfix list    | every `file:line[:col]` (and `@file:L12`) found in the last 300 lines of the target TMUX pane | e.g. agent or pytest output; only existing files are kept |
 
 ##### 7. Miscellaneous Function Key Mapping
-| VIM-Mode |        Key Mapping         |                Function                |                     Description                     |                    Note                    |
-| :------: | :------------------------: | :------------------------------------: | :-------------------------------------------------: | :----------------------------------------: |
-|    I     |        `[k]`+`[j]`         |     Esc (escape form insert mode)      |            Esc (escape form insert mode)            |                                            |
-|    I     |   `[Ctrl]`+`[g]`+`[d/t]`   |      Insert date / date and time       |       Insert 2026-11-03 / 2026-11-03 10:20:30       | `[LK]`+`[i]`+`[d]`+`[d/s]` in normal mode  |
-|    N     |           `[x]`            | Delete character (black-hole register) |  Delete character without replacing the clipboard   |         Visual-mode `x` still cuts         |
-|   N/V    | `[LK]`+`[w]`+`[a/Shift-a]` |     Write all / write all and quit     |                 `:wall` / `:wqall`                  |  `[LK]`+`[w]`+`[a]`+`[!]` force write all  |
-|   N/V    |    `[LK]`+`[y]`+`[p/r]`    |    Copy file path / file reference     | Full path, or `@path:L12` (visual: `@path:L12-L30`) |  Copied to `+` and `*`; for agent prompts  |
-|   N/V    |      `[Shift]`+`[k]`       |     Search current word in manual      |            Search current word in manual            |                                            |
-|   N/V    |       `[Alt]`+`[/]`        |        Toggle search highlight         |               On/Off search highlight               |                                            |
-|   N/V    |     `[LK]`+`[w]`+`[p]`     |            Toggle line wrap            |                  On/Off line wrap                   |            Here wp for (w)ra(p)            |
-|   N/V    |     `[LK]`+`[c]`+`[l]`     |     Toggle list characters show-up     |           On/Off list characters show-up            |       Here cl for (c)haracter (l)ist       |
-|   N/V    |     `[LK]`+`[m]`+`[k]`     |           Show all vim marks           |                 Show all vim marks                  |            Here mk for (m)ar(k)            |
-|   N/V    |     `[LK]`+`[r]`+`[r]`     |         Show all vim registers         |               Show all vim registers                |          Here re for (r)egiste(r)          |
-|   N/V    |     `[LK]`+`[a]`+`[b]`     |        Show all vim abbreviates        |              Show all vim abbreviates               |         Here ab for (a)(b)breviate         |
-|   N/V    |    `[LK]`+`[c]`+`[h/v]`    |   Toggle Horizontal/Vertical cursor    |          On/Off Horizontal/Vertical cursor          |                                            |
-|   N/V    |    `[LK]`+`[g]`+`[o/i]`    |          Show all cursor jump          |                Show all cursor jump                 | `[g/Ctrl]`+`[o/i]` jump backwards/forwards |
-|   N/V    |    `[LK]`+`[g]`+`[;/,]`    |          Show all file change          |                Show all file change                 |  `[g]`+`[;/,]` go to earlier/later change  |
+
+| VIM-Mode |        Key Mapping         |                Function                |                     Description                     |                          Note                           |
+| :------: | :------------------------: | :------------------------------------: | :-------------------------------------------------: | :-----------------------------------------------------: |
+|    I     |        `[k]`+`[j]`         |     Esc (escape form insert mode)      |            Esc (escape form insert mode)            |                                                         |
+|    I     |   `[Ctrl]`+`[g]`+`[d/t]`   |      Insert date / date and time       |       Insert 2026-11-03 / 2026-11-03 10:20:30       |        `[LK]`+`[i]`+`[d]`+`[d/s]` in normal mode        |
+|    N     |           `[x]`            | Delete character (black-hole register) |  Delete character without replacing the clipboard   |               Visual-mode `x` still cuts                |
+|   N/V    | `[LK]`+`[w]`+`[a/Shift-a]` |     Write all / write all and quit     |                 `:wall` / `:wqall`                  |        `[LK]`+`[w]`+`[a]`+`[!]` force write all         |
+|   N/V    |    `[LK]`+`[y]`+`[p/r]`    |    Copy file path / file reference     | Full path, or `@path:L12` (visual: `@path:L12-L30`) |        Copied to `+` and `*`; for agent prompts         |
+|    N     |     `[LK]`+`[c]`+`[d]`     |    Change directory to current file    |    `:cd` to the buffer's directory (all windows)    | `[LK]`+`[a]`+`[c]` toggles autochdir; `:cd -` goes back |
+|   N/V    |      `[Shift]`+`[k]`       |     Search current word in manual      |            Search current word in manual            |                                                         |
+|   N/V    |       `[Alt]`+`[/]`        |        Toggle search highlight         |               On/Off search highlight               |                                                         |
+|   N/V    |     `[LK]`+`[w]`+`[p]`     |            Toggle line wrap            |                  On/Off line wrap                   |                  Here wp for (w)ra(p)                   |
+|   N/V    |     `[LK]`+`[c]`+`[l]`     |     Toggle list characters show-up     |           On/Off list characters show-up            |             Here cl for (c)haracter (l)ist              |
+|   N/V    |     `[LK]`+`[m]`+`[k]`     |           Show all vim marks           |                 Show all vim marks                  |                  Here mk for (m)ar(k)                   |
+|   N/V    |     `[LK]`+`[r]`+`[r]`     |         Show all vim registers         |               Show all vim registers                |                Here re for (r)egiste(r)                 |
+|   N/V    |     `[LK]`+`[a]`+`[b]`     |        Show all vim abbreviates        |              Show all vim abbreviates               |               Here ab for (a)(b)breviate                |
+|   N/V    |    `[LK]`+`[c]`+`[h/v]`    |   Toggle Horizontal/Vertical cursor    |          On/Off Horizontal/Vertical cursor          |                                                         |
+|   N/V    |    `[LK]`+`[g]`+`[o/i]`    |          Show all cursor jump          |                Show all cursor jump                 |       `[g/Ctrl]`+`[o/i]` jump backwards/forwards        |
+|   N/V    |    `[LK]`+`[g]`+`[;/,]`    |          Show all file change          |                Show all file change                 |        `[g]`+`[;/,]` go to earlier/later change         |
 
 </details>
 
