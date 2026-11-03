@@ -145,6 +145,13 @@
     " Use vim or neovim (Auto-detect)
     let USING_NEOVIM = has('nvim')
     let USING_VIM = !USING_NEOVIM
+    " Not compatible with vi [No need for neovim, which is always nocompatible]
+    " -- MUST be the first option: setting 'nocompatible' resets other options
+    "    (e.g. shortmess, cpoptions) to Vim defaults, which would undo any
+    "    option set before it. Also enables line continuation (\) below.
+    if USING_VIM
+        set nocompatible
+    endif
     " Check if vim version >= 8.0 (also for neovim >= 0.5)
     let USING_VIM8 = 1
     " Customize vim theme (Include colortheme and statusline)
@@ -332,8 +339,11 @@
     " Copy current file path to clipboard
     " -- @+ is CLIPBOARD (Ctrl+Shift+V in terminal, e.g. paste into an agent
     "    pane), @* is PRIMARY (middle click). Set both to cover both pastes.
-    " -- One line on purpose: no line continuation before 'set nocompatible'
     noremap <leader>yp :let @+ = expand('%:p') <bar> let @* = @+ <bar> echo 'Yanked path: ' . @+<CR>
+    " Copy file reference for agent prompts: @path:L12 (visual: @path:L12-L30)
+    " -- Path is relative to the working directory (repo root, noautochdir)
+    nnoremap <leader>yr :let @+ = '@' . expand('%:.') . ':L' . line('.') <bar> let @* = @+ <bar> echo 'Yanked: ' . @+<CR>
+    xnoremap <leader>yr :<C-u>let @+ = '@' . expand('%:.') . ':L' . line("'<") . '-L' . line("'>") <bar> let @* = @+ <bar> echo 'Yanked: ' . @+<CR>
 
 " Clipboard w/ xsel ----------------------------------------------------------
     " Use xsel as clipboard, it is recommended if
@@ -359,8 +369,10 @@
     noremap <leader>ww :call RemoveTrailingWhitespace()<CR>:w<CR>
     noremap <leader>w! :call RemoveTrailingWhitespace()<CR>:w!<CR>
     noremap <leader>wq :call RemoveTrailingWhitespace()<CR>:wq<CR>
+    " -- wa: write all and stay, wA: write all and quit, wa!: force write all
     noremap <leader>wa! :wall!<CR>
-    noremap <leader>wa :wqall<CR>
+    noremap <leader>wa :wall<CR>
+    noremap <leader>wA :wqall<CR>
 
 " Macro ----------------------------------------------------------------------
     " NOTE:
@@ -416,7 +428,7 @@
 
 " Vim only settings ----------------------------------------------------------
     if USING_VIM
-        set nocompatible " Not compatible with vi [No need for neovim]
+        " NOTE: 'set nocompatible' moved to the top of the file
         set ttyfast      " Faster redrawing. [Removed in neovim]
     endif
 
@@ -462,6 +474,7 @@
     " NOTE:
     " -- [g] for good, [w] for wrong, [a] for add, [r] for remove
     set nospell " Vim built-in spell check
+    set spelllang=en,cjk " English; cjk: do not mark Chinese/Japanese/Korean
     noremap <leader>sl :set spell!<CR>
     noremap <leader>sag <Esc>zg
     noremap <leader>saw <Esc>zw
@@ -843,11 +856,18 @@
 " Function - autoremove whitespace in end of line ----------------------------
     " -- Remove trailing whitespace when writing a buffer, but not for diff files
     " -- From Vigil <vim5632@rainslide.net>
+    " -- Markdown/vimwiki: keep exactly two trailing spaces after text (a hard
+    "    line break in markdown); other trailing whitespace is still removed
     function! RemoveTrailingWhitespace()
         if &ft != 'diff'
             let b:curcol = col('.')
             let b:curline = line('.')
-            keeppatterns silent! %s/\s\+$//
+            if &ft ==# 'markdown' || &ft ==# 'vimwiki'
+                keeppatterns silent! %s/^\s\+$//
+                keeppatterns silent! %s/\S\zs\s\+$/\=submatch(0) ==# '  ' ? '  ' : ''/
+            else
+                keeppatterns silent! %s/\s\+$//
+            endif
             keeppatterns silent! %s/\(\s*\n\)\+\%$//
             call cursor(b:curline, b:curcol)
         endif
@@ -1037,7 +1057,8 @@
 " [Vim Neovim communication] -------------------------------------------------
     " Help communicate between vim and neovim [needed for deoplete.nvim]
     " Pynvim must be installed first [/usr/bin/python -m pip install pynvim]
-    if USING_VIM
+    " -- Only loaded for the legacy deoplete setup (USING_LSP = 0) in vim
+    if USING_VIM && USING_PYTHON_COMPLETION
         Plug 'roxma/vim-hug-neovim-rpc'
     endif
 
@@ -1082,16 +1103,18 @@
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
     " Code and files fuzzy finder and previewer for vim (vim plugin)
     Plug 'junegunn/fzf.vim'
-    " Enhanced previewer for fzf (fuzzy finder)
-    Plug 'chengzeyi/fzf-preview.vim'
 
 " [Vim useful functions] -----------------------------------------------------
     " Sudo write/read files in vim
     Plug 'lambdalisue/suda.vim', { 'on': 'SudaWrite' }
-    " System Man usage
-    Plug 'vim-utils/vim-man', { 'on': 'Man' }
-    " Search results counter
-    Plug 'vim-scripts/IndexedSearch'
+    " System Man usage [Neovim has :Man built in, so only needed for vim]
+    if USING_VIM
+        Plug 'vim-utils/vim-man', { 'on': 'Man' }
+    endif
+    " Session file kept up to date (:Obsess), so tmux-resurrect can restore
+    " vim splits/tabs (@resurrect-strategy-[n]vim 'session' in tmux.conf)
+    " -- Not lazy: it must be loaded when a restored Session.vim is sourced
+    Plug 'tpope/vim-obsession'
     " Large file options
     Plug 'vim-scripts/LargeFile'
     " Code commenter
@@ -1239,6 +1262,21 @@
                             \ { 'do': ':autocmd VimEnter * UpdateRemotePlugins' }
         endif
     endif
+    " Test runner (pytest, unittest and other languages); lazy-loaded on the
+    " :Test* commands, output goes to a tmux pane (see Part 7)
+    Plug 'vim-test/vim-test', { 'on': [ 'TestNearest', 'TestFile',
+                \ 'TestClass', 'TestSuite', 'TestLast', 'TestVisit' ] }
+    " Graphical debugger (Debug Adapter Protocol, python via debugpy)
+    " -- Requires python3 support (vim: +python3, neovim: pynvim)
+    " -- Lazy-loaded on its commands and on the <leader>D keys (Part 7)
+    Plug 'puremourning/vimspector', { 'on': [
+                \ 'VimspectorInstall', 'VimspectorUpdate', 'VimspectorReset',
+                \ 'VimspectorEval', 'VimspectorWatch', 'VimspectorShowOutput',
+                \ 'VimspectorBreakpoints',
+                \ '<Plug>VimspectorContinue', '<Plug>VimspectorToggleBreakpoint',
+                \ '<Plug>VimspectorStepOver', '<Plug>VimspectorStepInto',
+                \ '<Plug>VimspectorStepOut', '<Plug>VimspectorRestart',
+                \ '<Plug>VimspectorBalloonEval' ] }
 
 " [Fortran coding] -----------------------------------------------------------
     " Fortran syntax support
@@ -1290,9 +1328,9 @@
                 \ 'AIRedo', 'AINewChat' ] }
 
 " [Codeium] ------------------------------------------------------------------
-    Plug 'Exafunction/codeium.vim',
-                \ { 'branch': 'main',
-                \ 'on': ['CodeiumToggle', 'CodeiumEnable']}
+    ""Plug 'Exafunction/codeium.vim',
+    "            \ { 'branch': 'main',
+    "            \ 'on': ['CodeiumToggle', 'CodeiumEnable']}
 
 " [LeetCode] -----------------------------------------------------------------
     "Plug 'ianding1/leetcode.vim'
@@ -1925,8 +1963,10 @@
         " Beginning/end of paragraph
         "   When there's no empty line between the paragraphs
         "   and each paragraph starts with indentation
-        let g:limelight_bop = '^\s'
-        let g:limelight_eop = '\ze\n^\s'
+        " -- Disabled: markdown/notes separate paragraphs with blank lines,
+        "    which is Limelight's default, so these would dim the wrong text
+        "let g:limelight_bop = '^\s'
+        "let g:limelight_eop = '\ze\n^\s'
         " Highlighting priority (default: 10)
         "   Set it to -1 not to overrule hlsearch
         let g:limelight_priority = -1
@@ -2255,6 +2295,11 @@
         noremap <leader>gC :Git commit<CR>
         noremap <leader>gR :Git reset<space>
         noremap <leader>gB :Git blame<CR>
+        " Side-by-side diff of current file vs index (review agent edits:
+        " dp/do put/get a hunk, ]c/[c next/prev change)
+        noremap <leader>gv :Gvdiffsplit<CR>
+        " 3-way merge for a file with conflicts (ours | working | theirs)
+        noremap <leader>gm :Gvdiffsplit!<CR>
     endif
 
 " GitGutter ------------------------------------------------------------------
@@ -2416,6 +2461,7 @@
     "autocmd vimrc FileType python
                 "\ noremap <buffer> <leader>pb Oimport pdb; pdb.set_trace()<Esc>
     " %:p for current file in full path
+    " -- s:PYTHON_DEBUGGER: ipdb if installed (nicer prompt), otherwise pdb
     autocmd vimrc FileType python
                 \ noremap <buffer> <leader>pB
                 \ <Esc>:split<CR>:terminal python -m pdb '%:p'<space>
@@ -2646,15 +2692,23 @@
         "nmap <buffer> <leader>dL :call DisableLSP()<CR>
         " Enable LSP
         function! EnableLSP()
-            setlocal signcolumn=yes
+            call s:ActivateProjectVenv()
+            let g:lsp_user_enabled = 1
             call lsp#enable()
             nmap <buffer> K <plug>(lsp-hover)
         endfunction
         " Disable LSP
+        " -- signcolumn stays on (set globally), so text does not shift
+        " -- K: python buffers fall back to pydoc ('keywordprg' from the
+        "    python filetype plugin), other buffers to :help <word>
         function! DisableLSP()
-            setlocal signcolumn=no
+            let g:lsp_user_enabled = 0
             call lsp#disable()
-            nmap <buffer> K :execute "help " . expand("<cword>")<CR>
+            if &filetype ==# 'python'
+                silent! nunmap <buffer> K
+            else
+                nmap <buffer> K :execute "help " . expand("<cword>")<CR>
+            endif
             " Let autocomplpop pop up again in buffers that LSP had taken over
             for l:buf in getbufinfo()
                 if getbufvar(l:buf.bufnr, 'lsp_acp_off', 0)
@@ -2693,6 +2747,9 @@
             nmap <buffer> <leader>re <plug>(lsp-rename)
             " Format w/ LSP server
             nmap <buffer> <leader>Lf :LspDocumentRangeFormat<CR>
+            " Code action (quick fix, organize imports, ...) [a for action]
+            nmap <buffer> <leader>La <plug>(lsp-code-action)
+            xmap <buffer> <leader>La :LspCodeAction<CR>
             " Close pop-up window without opening a new line
             " -- <buffer>: only in LSP buffers. auto-pairs also maps <CR> per
             "    buffer, so keep its newline handling (AutoPairsReturn)
@@ -2737,7 +2794,11 @@
         highlight FoldColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
         highlight LineNr        cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
         highlight OverLength    cterm=bold   ctermfg=15   ctermbg=9    gui=bold   guifg=#ffffff guibg=#ff0000
-        highlight Pmenu         cterm=bold   ctermfg=8    ctermbg=NONE gui=bold   guifg=#808080 guibg=NONE
+        " Completion menu: own background + visible selection (was transparent)
+        highlight Pmenu         cterm=NONE   ctermfg=250  ctermbg=236  gui=NONE   guifg=#bcbcbc guibg=#303030
+        highlight PmenuSel      cterm=bold   ctermfg=235  ctermbg=108  gui=bold   guifg=#262626 guibg=#87af87
+        highlight PmenuSbar     cterm=NONE   ctermfg=NONE ctermbg=238  gui=NONE   guifg=NONE    guibg=#444444
+        highlight PmenuThumb    cterm=NONE   ctermfg=NONE ctermbg=246  gui=NONE   guifg=NONE    guibg=#949494
         highlight SignColumn    cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
         highlight UnlimitLength cterm=NONE   ctermfg=NONE ctermbg=NONE gui=NONE   guifg=NONE    guibg=NONE
     endfunction
