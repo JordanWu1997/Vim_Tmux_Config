@@ -251,6 +251,10 @@
                 \     'url': 'http://localhost:11434/v1/chat/completions',
                 \     'model': 'gemma4:e2b', 'temperature': 0.3,
                 \     'num_ctx': 8192 },
+                \ 'llamacpp': {
+                \     'url': 'http://localhost:8081/v1/chat/completions',
+                \     'model': 'local-llamacpp', 'temperature': 0.3,
+                \     'num_ctx': 131072 },
                 \ 'vimwiki_ctags': g:vimrc_paths.bin . 'vwtags.py',
                 \ 'mdformat_patch': g:vimrc_paths.bin . 'mdformat_patch.py',
                 \ 'jrnl_collect': g:vimrc_paths.bin . 'collect_jrnl_journal.py',
