@@ -96,11 +96,24 @@ open_files_in_vim() {
         files=("${files_to_open[@]}")
     fi
 
-    # Open files in vim
-    if command -v vim >/dev/null 2>&1; then
-        vim -c 'GitGutterEnable' -- "${files[@]}"
+    # Open files in vim/neovim
+    # -- Use $EDITOR when it is a vim-family editor (vim, nvim, gvim, ...),
+    #    otherwise fall back to nvim, then vim (+GitGutterEnable is vim syntax)
+    local editor=""
+    case "$(basename -- "${EDITOR%% *}" 2>/dev/null)" in
+        vim|nvim|gvim|vim.basic|vim.gtk3|mvim) editor="${EDITOR%% *}" ;;
+    esac
+    if [[ -z "$editor" ]]; then
+        if command -v nvim >/dev/null 2>&1; then
+            editor="nvim"
+        elif command -v vim >/dev/null 2>&1; then
+            editor="vim"
+        fi
+    fi
+    if [[ -n "$editor" ]] && command -v "$editor" >/dev/null 2>&1; then
+        "$editor" -c 'GitGutterEnable' -- "${files[@]}"
     else
-        echo "Error: vim not found. Make sure vim is installed and in your PATH." >&2
+        echo "Error: vim/nvim not found. Make sure one is installed and in your PATH." >&2
         return 1
     fi
 }
