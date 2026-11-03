@@ -443,6 +443,14 @@
     set updatetime=500  " Idle time (ms) for CursorHold: auto-reload of agent
                         " edits, gitgutter refresh, swap write (default 4000)
     set shortmess-=S    " Show search count [n/m] (replaces IndexedSearch)
+    " Key-code timeout: how long Esc may wait for the rest of a key sequence
+    " -- A terminal sends Alt+j as Esc followed by j. With the default (nvim 50
+    "    ms, polyglot 100 ms), pressing Esc and then j/k quickly was read as
+    "    <A-j>/<A-k> (resize window / completion keys), so the first j/k after
+    "    leaving insert mode did not move and the window jumped. Real Alt keys
+    "    arrive as one chunk (~0 ms), so 10 ms keeps them working.
+    " -- tmux must not delay Esc either: 'escape-time 0' in tmux.conf
+    set ttimeout ttimeoutlen=10
     if exists('+signcolumn')
         set signcolumn=yes " Always show sign column: no text shift when LSP
                            " diagnostics or gitgutter signs appear
@@ -457,6 +465,10 @@
 " Neovim only settings -------------------------------------------------------
     if USING_NEOVIM
         set inccommand=nosplit " Enable incremental command without split pane
+        " No lazyredraw in neovim: with it, nvim sends each key's screen
+        " update in several pieces (5 cursor hide/show per j instead of 1),
+        " which shows as cursor/screen flicker inside tmux. Vim keeps it.
+        set nolazyredraw
     endif
 
 " Working directory ----------------------------------------------------------
@@ -1792,7 +1804,11 @@
     set laststatus=2  " Always display the statusline in all windows
     set showtabline=2 " Always show the tabline, even if there is only one tab
     set cmdheight=1   " Size of command line height
-    set showcmd       " This line must be added AFTER statusline option
+    " No pending-key display (showcmd): drawing it moved the cursor to the
+    " bottom-right corner and back on every key, which flickered in neovim
+    " inside tmux. The leader key still shows the which-key menu.
+    " -- Use ':set showcmd' to see pending keys (e.g. 2d, "a) temporarily
+    set noshowcmd     " This line must be added AFTER statusline option
 
 " Keymapping for bufferline --------------------------------------------------
     " NOTE:
@@ -2137,8 +2153,69 @@
         \   'diary_rel_path': 'diary'
         \ },
         \ ]
-        " Fold according to header
-        let g:vimwiki_folding = 'expr'
+        " Fold according to header (computed once, kept as manual folds)
+        " NOTE:
+        " -- With 'expr', vimwiki recomputes VimwikiFoldLevel() for every line
+        "    on each keystroke (Vim) and every time a note enters a window:
+        "    ~100 ms per switch into a 1200-line note, 6x slower typing.
+        " -- 'custom' stops vimwiki from (re)setting folds; s:VimwikiFolds()
+        "    computes the same header folds with VimwikiFoldLevel() once, then
+        "    switches the window to manual, so switching/typing cost nothing.
+        " -- Folds are refreshed on save (:w), on reload (e.g. agent edit), and
+        "    when the note is shown again after it changed. Closed folds stay
+        "    closed across refreshes. Between saves folds may be a bit stale.
+        let g:vimwiki_folding = 'custom'
+        function! VimwikiFoldsUpdate(force) abort
+            if &filetype !=# 'vimwiki' || &diff
+                return
+            endif
+            if !a:force && get(w:, 'vw_fold_buf', -1) == bufnr('')
+                        \ && get(w:, 'vw_fold_tick', -1) == b:changedtick
+                return
+            endif
+            let l:view = winsaveview()
+            let l:fen = &l:foldenable
+            " Remember closed folds (start lines) to restore after refresh
+            let l:closed = []
+            if get(w:, 'vw_fold_buf', -1) == bufnr('')
+                let l:lnum = 1
+                while l:lnum <= line('$')
+                    let l:start = foldclosed(l:lnum)
+                    if l:start != -1
+                        call add(l:closed, l:start)
+                        let l:lnum = foldclosedend(l:lnum) + 1
+                    else
+                        let l:lnum += 1
+                    endif
+                endwhile
+            endif
+            setlocal foldtext=VimwikiFoldText()
+            setlocal foldexpr=VimwikiFoldLevel(v:lnum)
+            setlocal foldmethod=expr
+            " zx computes the folds now (and applies 'foldlevel')
+            silent! normal! zx
+            setlocal foldmethod=manual
+            if get(w:, 'vw_fold_buf', -1) == bufnr('')
+                silent! normal! zR
+                for l:start in l:closed
+                    silent! execute l:start . 'foldclose'
+                endfor
+            endif
+            let &l:foldenable = l:fen
+            let w:vw_fold_buf = bufnr('')
+            let w:vw_fold_tick = b:changedtick
+            call winrestview(l:view)
+        endfunction
+        " On FileType (first load, reload) the window is not ready yet, so
+        " compute right after the current command, in the same window
+        function! s:VimwikiFoldsLater() abort
+            let l:win = win_getid()
+            call timer_start(0, {-> win_execute(l:win,
+                        \ 'call VimwikiFoldsUpdate(0)', 'silent!')})
+        endfunction
+        autocmd vimrc FileType vimwiki call s:VimwikiFoldsLater()
+        autocmd vimrc BufWinEnter * call VimwikiFoldsUpdate(0)
+        autocmd vimrc BufWritePost * call VimwikiFoldsUpdate(1)
         " Set all markdown filetype to vimwiki
         let g:vimwiki_global_ext = 1
         " Keep markdown file ext (.md) when generating link
@@ -2355,6 +2432,11 @@
             endif
         endfunction
         autocmd vimrc BufEnter * call s:AcpBufferSync()
+        " No automatic pop-up while writing prose in notes (keyword pop-ups
+        " on every word are distracting and cost ~5 ms + redraw per key);
+        " <C-n>/<C-p> still complete on demand
+        autocmd vimrc FileType markdown,vimwiki
+                    \ let b:acp_off = 1 | call s:AcpBufferSync()
         " Disable autocomplpop for python file [use deoplete instead]
         if USING_PYTHON_COMPLETION
             autocmd vimrc FileType python
