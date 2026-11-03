@@ -299,7 +299,8 @@
     " Stop delete/change/replace overwriting current register
     "nnoremap d "_d
     "nnoremap x "_x
-    nnoremap r "_r
+    " NOTE: r (replace char) never writes to a register, so no mapping needed
+    "nnoremap r "_r
     " Move selection block up/down in visual mode
     vnoremap K :move '<-2<CR>gv=gv
     vnoremap J :move '>+1<CR>gv=gv
@@ -328,8 +329,11 @@
     " Insert date (to date/to sec)
     nnoremap <leader>idd <Esc>i<C-r>=strftime('%F')<CR>
     nnoremap <leader>ids <Esc>i<C-r>=strftime('%Y-%m-%d %H:%M:%S')<CR>
-    " Copy current file path to clipbaord
-    noremap <leader>yp :let @*=expand("%:p")<CR>
+    " Copy current file path to clipboard
+    " -- @+ is CLIPBOARD (Ctrl+Shift+V in terminal, e.g. paste into an agent
+    "    pane), @* is PRIMARY (middle click). Set both to cover both pastes.
+    " -- One line on purpose: no line continuation before 'set nocompatible'
+    noremap <leader>yp :let @+ = expand('%:p') <bar> let @* = @+ <bar> echo 'Yanked path: ' . @+<CR>
 
 " Clipboard w/ xsel ----------------------------------------------------------
     " Use xsel as clipboard, it is recommended if
@@ -394,6 +398,8 @@
 
 " General Vim settings -------------------------------------------------------
     set exrc            " Search vimrc file in current directory
+    set secure          " Restrict commands in local exrc files (see :h secure)
+                        " -- Neovim >= 0.9 also asks you to :trust them first
     set timeoutlen=300  " Timeout for entering combined key (millisecond)
     set confirm         " Ask for confirmation before leaving vim
     set modifiable      " Make current buffer modifiable
@@ -507,7 +513,9 @@
     set ignorecase " Close case sensitive [Needed for smartcase]
     set smartcase  " Case sensitive if search contains uppercase letter
     " Turn off search highlight until next search/match
-    noremap <silent><C-[> :nohlsearch<CR><Esc>
+    " -- Normal mode only: in visual mode ':' adds a range ('<,'>) and
+    "    :nohlsearch fails with E481 (No range allowed)
+    nnoremap <silent><C-[> :nohlsearch<CR><Esc>
     noremap <M-/> :set nohlsearch!<CR>
 
 " Line number settings -------------------------------------------------------
@@ -779,13 +787,19 @@
     endif
 
 " Better backup, swap and undos storage --------------------------------------
+    " NOTE:
+    " -- Trailing // makes vim build swap/backup names from the full path
+    "    (e.g. %home%me%repo%pkg%__init__.py.swp), so files with the same
+    "    name in different directories do not collide.
+    " -- // in backupdir needs Vim >= 8.1.0251 or Neovim >= 0.5
+    let s:BACKUP_FULLPATH = (has('nvim-0.5') || has('patch-8.1.0251')) ? '//' : ''
     if USING_NEOVIM
         " Directory to place swap files
-        set directory=~/.config/nvim/dirs/tmp
+        set directory=~/.config/nvim/dirs/tmp//
         " Make backup files
         set backup
         " Where to put backup files
-        set backupdir=~/.config/nvim/dirs/backups
+        let &backupdir = expand('~/.config/nvim/dirs/backups') . s:BACKUP_FULLPATH
         " Persistent undoes - undo after re-opening
         set undofile
         set undodir=~/.config/nvim/dirs/undos
@@ -801,11 +815,11 @@
         endif
     else
         " Directory to place swap files
-        set directory=~/.vim/dirs/tmp
+        set directory=~/.vim/dirs/tmp//
         " Make backup files
         set backup
         " Where to put backup files
-        set backupdir=~/.vim/dirs/backups
+        let &backupdir = expand('~/.vim/dirs/backups') . s:BACKUP_FULLPATH
         " Persistent undoes - undo after re-opening
         set undofile
         set undodir=~/.vim/dirs/undos
@@ -933,16 +947,19 @@
 " Set customized terminal mode key mapping -----------------------------------
     if USING_VIM8
         " Map key to enter terminal mode
+        " NOTE: <leader>tt opens a nested tmux session 'scratch'. Inside tmux,
+        " $TMUX is set and tmux refuses to nest ('sessions should be nested
+        " with care'), so unset it for this command only (env -u TMUX).
         if USING_NEOVIM
             noremap <F12> :split<CR>:terminal<CR>i
             noremap <leader>tm :split<CR>:terminal<CR>i
             noremap <leader>tr :split<CR>:terminal ranger<CR>
-            noremap <leader>tt :split<CR>:terminal tmux new-session -A -s scratch<CR>
+            noremap <leader>tt :split<CR>:terminal env -u TMUX tmux new-session -A -s scratch<CR>
         else
             noremap <F12> :terminal<CR>
             noremap <leader>tm :terminal<CR>
             noremap <leader>tr :terminal ranger<CR>
-            noremap <leader>tt :terminal tmux new-session -A -s scratch<CR>
+            noremap <leader>tt :terminal env -u TMUX tmux new-session -A -s scratch<CR>
         endif
         " Map key to go back from terminal mode to normal mode
         " Do not use Esc (which conflicts with fzf window) but <C-\><C-n>
@@ -1026,17 +1043,20 @@
 
 " [Vim theme] ----------------------------------------------------------------
     if USING_CUSTOMIZED_THEME
+        " NOTE: Colorschemes are not lazy-loaded. vim-plug's 'on' only accepts
+        " commands (Uppercase) or <Plug> maps, and it ignores 'on' for repos
+        " without a plugin/ directory (colorschemes have only colors/ and
+        " autoload/), so they are just added to runtimepath at no real cost.
         " Wal (Autocolorcheme based on wallpaper) [ONLY work with cterm color]
-        Plug 'dylanaraps/wal.vim', { 'on': 'colorscheme wal' }
+        Plug 'dylanaraps/wal.vim'
         " Color theme (Monokai - high contrast)
-        Plug 'patstockwell/vim-monokai-tasty',
-                    \ { 'on': 'colorscheme vim-monokai-tasty' }
+        Plug 'patstockwell/vim-monokai-tasty'
         " Color theme (Gruvbox - low contrast)
-        Plug 'morhetz/gruvbox', { 'on': 'colorscheme gruvbox' }
+        Plug 'morhetz/gruvbox'
         " Color theme (Srcery - low contrast)
-        Plug 'srcery-colors/srcery-vim' ", { 'on': 'colorscheme srcery' }
+        Plug 'srcery-colors/srcery-vim'
         " Color theme (Nord - cold color lower contrast)
-        Plug 'arcticicestudio/nord-vim', { 'on': 'colorscheme nord' }
+        Plug 'arcticicestudio/nord-vim'
         " Color theme (Dracula - medium contrast)
         Plug 'dracula/vim', { 'as': 'dracula'}
         " Lightline (status line)
@@ -1164,6 +1184,9 @@
     Plug 'christoomey/vim-tmux-navigator'
 
 " [Git] ----------------------------------------------------------------------
+    " NOTE: Git tools are NOT loaded at startup. They load the first time one
+    " of the commands below is used (or a <leader>g... key that calls one).
+    " The statusline branch does not need fugitive (see LightlineGitbranch).
     if USING_CODING_TOOL_PLUG
         " Git integration (Git functions in vim command line)
         Plug 'tpope/vim-fugitive'
@@ -1235,7 +1258,7 @@
             " installation. Make sure you have nodejs and yarn installed
             Plug 'iamcco/markdown-preview.nvim',
                         \ { 'do': { -> mkdp#util#install() },
-                        \ 'for': [ 'markdown', 'vim-plug' ] }
+                        \ 'for': [ 'markdown', 'vim-plug', 'vimwiki' ] }
         endif
     endif
     " My vim markdown function collection
@@ -1580,11 +1603,12 @@
     nnoremap <leader>fag :FZFAg<CR>
     nnoremap <leader>frg :FZFRg<CR>
     nnoremap <leader>frG :FZFRG<CR>
-    " Git command (requires fugitive.vim plugin)
+    " Git command (Commits/BCommits require fugitive.vim, which is lazy-loaded,
+    " so load it first; GFiles only needs the git executable)
     nnoremap <leader>fgf :FZFGFiles<CR>
     nnoremap <leader>fgs :FZFGFiles?<CR>
-    nnoremap <leader>fgc :FZFBCommits<CR>
-    nnoremap <leader>fgC :FZFCommits<CR>
+    nnoremap <leader>fgc :call <SID>LoadGitPlugin('vim-fugitive')<CR>:FZFBCommits<CR>
+    nnoremap <leader>fgC :call <SID>LoadGitPlugin('vim-fugitive')<CR>:FZFCommits<CR>
     " History
     nnoremap <leader>fhs :FZFHistory<CR>
     nnoremap <leader>fh: :FZFHistory:<CR>
@@ -2236,18 +2260,25 @@
         noremap <leader>ghd :GitGutterEnable<CR>:GitGutterDisable<CR>
                     \:GitGutterSignsDisable<CR>:GitGutterLineHighlightsDisable<CR>
         " GitGutter hunk: diff preview
-        nmap <leader>gq :GitGutterQuickFix<CR>
-        nmap <leader>gP <Plug>(GitGutterPreviewHunk)
-        nmap <leader>gF :GitGutterFold<CR>
+        nnoremap <leader>gq :GitGutterQuickFix<CR>
+        nnoremap <silent> <leader>gP
+                    \ :<C-u>call <SID>GitGutterRun('GitGutterPreviewHunk', 0)<CR>
+        nnoremap <leader>gF :GitGutterFold<CR>
         " GitGutter action: add/restore
-        nmap <leader>ga <Plug>(GitGutterStageHunk)
-        nmap <leader>gr <Plug>(GitGutterUndoHunk)
+        nnoremap <silent> <leader>ga
+                    \ :<C-u>call <SID>GitGutterRun('GitGutterStageHunk', 0)<CR>
+        nnoremap <silent> <leader>gr
+                    \ :<C-u>call <SID>GitGutterRun('GitGutterUndoHunk', 0)<CR>
         " Move through hunks in current buffer
-        nmap <leader>gj <Plug>(GitGutterNextHunk)zz
-        nmap <leader>gk <Plug>(GitGutterPrevHunk)zz
+        nnoremap <silent> <leader>gj
+                    \ :<C-u>call <SID>GitGutterRun('GitGutterNextHunk', v:count1)<CR>zz
+        nnoremap <silent> <leader>gk
+                    \ :<C-u>call <SID>GitGutterRun('GitGutterPrevHunk', v:count1)<CR>zz
         " Move through hunks in current buffer (h for hunk)
-        nmap ]h <Plug>(GitGutterNextHunk)zz
-        nmap [h <Plug>(GitGutterPrevHunk)zz
+        nnoremap <silent> ]h
+                    \ :<C-u>call <SID>GitGutterRun('GitGutterNextHunk', v:count1)<CR>zz
+        nnoremap <silent> [h
+                    \ :<C-u>call <SID>GitGutterRun('GitGutterPrevHunk', v:count1)<CR>zz
     endif
 
 " Vim-Unimpaired -------------------------------------------------------------
@@ -2539,14 +2570,15 @@
         "let g:lsp_log_verbose = 1
         "let g:lsp_log_file = expand('~/vim-lsp.log')
         " Manage LSP server
-        nmap <buffer> <leader>LM :LspManageServers<CR>
-        nmap <buffer> <leader>LI :LspInstallServer<CR>
-        nmap <buffer> <leader>LS :LspStopServer<space>
-        nmap <buffer> <leader>LR
-            \ :lua vim.lsp.stop_client(vim.lsp.get_active_clients())<CR>
-            \:setlocal signcolumn=yes<CR>:call lsp#enable()<CR>
+        nmap <leader>LM :LspManageServers<CR>
+        nmap <leader>LI :LspInstallServer<CR>
+        nmap <leader>LS :LspStopServer<space>
+        " Restart: stop all servers (!), then re-enable vim-lsp, which starts
+        " servers again for every loaded buffer (vim-lsp API, vim + neovim)
+        nmap <leader>LR :LspStopServer!<CR>
+                    \:call lsp#disable()<CR>:call EnableLSP()<CR>
         " Show LSP server status
-        nmap <buffer> <leader>Ls :LspStatus<CR>
+        nmap <leader>Ls :LspStatus<CR>
         " Enable/Disable LSP server (in all buffers)
         nmap <leader>Le :call EnableLSP()<CR>
         nmap <leader>Ld :call DisableLSP()<CR>
