@@ -97,7 +97,7 @@
     " Fedora repo is for Fedora 25 and higher version. For now, Seb just used
     " AppImage directly from neovim website
 
-    " Python-completion dependence [Legacy: only used when USING_LSP = 0]
+    " Python-completion dependence [Legacy: only used when g:vimrc_features.lsp = 0]
     " -- jedi-vim: pip install jedi
     " -- deoplete: pip install pynvim neovim
     " -- ipython : pip install ipython (version >= 7.2)
@@ -139,92 +139,137 @@
 " ============================================================================
 " Vim and Neovim settings (***MUST-READ SECTION***)
 " ============================================================================
-" Select vim-plug to load, set guicolor (real color) support, and etc.
+" Everything you may want to change lives here, in four dictionaries:
+" -- g:vimrc_features : feature switches (1 = load the plugins AND their
+"                       settings/keys, 0 = drop the whole group)
+" -- g:vimrc_paths    : directories (computed once, absolute)
+" -- g:vimrc_tools    : external programs, scripts and tool settings
+" -- g:vimrc_tmux     : tmux pane integration
+" Conventions used in the rest of this file:
+" -- Conditions:  if s:on('lsp') ... endif
+" -- Values:      g:vimrc_features.fancy_symbols, g:vimrc_paths.templates, ...
+"                 (also inside mappings, which run outside this script)
+" -- Plugin options (g:<plugin>_...) are set in the plugin's own section,
+"    from these dictionaries, never here.
+" -- Machine-specific values go in vim/local.vim (untracked, optional,
+"    see vim/local.vim.example). It is sourced first; any key it sets in the
+"    dictionaries below overrides the default (one level deep: a nested
+"    dict such as g:vimrc_tools.ollama must be given in full).
 
-" Options for my vim/neovim configuration ------------------------------------
-    " Use vim or neovim (Auto-detect)
-    let USING_NEOVIM = has('nvim')
-    let USING_VIM = !USING_NEOVIM
+" Encoding (must come before any non-ASCII text in this file) ----------------
+    " Neovim is always utf-8; for vim this also sets how this file is read
+    set encoding=utf-8
+    scriptencoding utf-8
+
+" Editor detection (computed, not set by hand) -------------------------------
     " Not compatible with vi [No need for neovim, which is always nocompatible]
     " -- MUST be the first option: setting 'nocompatible' resets other options
     "    (e.g. shortmess, cpoptions) to Vim defaults, which would undo any
     "    option set before it. Also enables line continuation (\) below.
-    if USING_VIM
+    if !has('nvim')
         set nocompatible
     endif
-    " Check if vim version >= 8.0 (also for neovim >= 0.5)
-    let USING_VIM8 = 1
-    " Customize vim theme (Include colortheme and statusline)
-    let USING_CUSTOMIZED_THEME = 1
-    " Fancy symbols (Mainly affect lightline and nerdtree icon)
-    let USING_FANCY_SYMBOLS = 0
-    " Wal theme support (Xresources colortheme support, check pywal)
-    let USING_WAL_THEME = 0
-    " Extra vim-plug (Include easymotion, yankring, autocomplpop, and etc.)
-    let USING_EXTRA_PLUG = 1
-    " Coding tools vim-plug (Include syntax support, git function, and etc.)
-    let USING_CODING_TOOL_PLUG = 1
-    " Language Server Protocol (LSP) (Include completion, linting and etc.)
-    let USING_LSP = 1
-    " Python Completion (Use deoplete and jedi, neovim is recommended)
-    let USING_PYTHON_COMPLETION = !USING_LSP
-    " Support of external gui software (e.g. Okular, Google-chrome, and etc.)
-    let USING_GUI_SOFTWARE = 1
-    " Add python skeleton file to newly created .py python file
-    let USING_PYTHON_SKELETON = 1
-    " Add tex template file to newly created .tex tex file
-    let USING_TEX_TEMPLATE = 1
-    " Add bash template file to newly created .sh bash file
-    let USING_BASH_TEMPLATE = 1
-    " Add markdown template file to newly created .md markdown file
-    let USING_MARKDOWN_TEMPLATE = 0
+    " Neovim (1) or vim (0)
+    let g:vimrc_is_nvim = has('nvim')
+    " Vim >= 8.0 or neovim >= 0.5: terminal, polyglot, LSP, markdown preview
+    let g:vimrc_is_vim8 = has('nvim-0.5') || (!has('nvim') && v:version >= 800)
 
-" Variables for vim/neovim or plug-in ----------------------------------------
-    " Web browser for markdown preview
-    let s:WEBBROWSER = $BROWSER
-    " Ctag generator for vimwiki plugins
-    let s:CTAGSBIN = '$HOME/Desktop/Vim_Tmux_Config/vim/bin/vwtags.py'
-    " FZF patches for change/jump list
-    let s:FZF_PATCH = '$HOME/Desktop/Vim_Tmux_Config/vim/patch/fzf_patch.vim'
-    " Python provider for jedi, pynvim and other python packages
-    let g:python3_host_prog = '/usr/bin/python' "$CONDA_PYTHON_EXE
-    " Template Directory
-    let s:TEMPLATE_DIR = '$HOME/Desktop/Vim_Tmux_Config/vim/share/templates/'
-    " Python skeleton file (template)
-    let s:PYTHON_SKELETON = s:TEMPLATE_DIR . 'skeleton.py'
-    " Tex template file
-    let s:TEX_TEMPLATE = s:TEMPLATE_DIR . 'template.tex'
-    " Bash template file
-    let s:BASH_TEMPLATE = s:TEMPLATE_DIR . 'bash_template.sh'
-    " Vimwiki Template file
-    let g:WIKI_TEMPLATE_DIR = expand('$HOME/Documents/KNOWLEDGE_BASE/resources/template/')
-    " Jrnl journal file
-    let g:JRNL_COLLECT_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/vim/bin/collect_jrnl_journal.py')
-    " Patch for markdown formatter (mdformat)
-    let g:MDFORMAT_PATCH_SCRIPT = expand('$HOME/Desktop/Vim_Tmux_Config/vim/bin/mdformat_patch.py')
-    " Language Tool CLI jar file
-    let g:languagetool_jar = '/opt/LanguageTool-5.9/languagetool-commandline.jar'
-    " Vim-AI
-    let s:VIM_AI_ENDPOINT_URL = "http://localhost:11434/v1/chat/completions"
-    let s:VIM_AI_MODEL = "gemma4:e2b"
-    let s:VIM_AI_TEMPERATURE = 0.3
-    let s:VIM_AI_NUM_CTX = 8192
-    " Tmux pane used by <leader>x (send), <leader>qt (capture) and vim-test
-    " -- '{last}' is the previously active pane; change with <leader>xt
-    let g:tmux_send_target = '{last}'
-    " Number of scrollback lines read by <leader>qt
-    let g:tmux_capture_lines = 300
-    " Python language servers for vim-lsp-settings (:LspInstallServer)
-    let g:lsp_settings_filetype_python = ['pyright-langserver', 'ruff']
-    " Python debugger used by <leader>pB (ipdb if installed, else pdb)
-    let s:PYTHON_DEBUGGER = executable('ipdb3') || executable('ipdb') ? 'ipdb' : 'pdb'
+" Configuration directory and local overrides --------------------------------
+    " Directory of this vimrc (.../Vim_Tmux_Config/vim), symlinks resolved.
+    " -- When this file was copied (e.g. to ~/.vimrc) instead of symlinked,
+    "    fall back to the usual clone location.
+    let s:vimrc_dir = resolve(expand('<sfile>:p:h'))
+    if !isdirectory(s:vimrc_dir . '/share/templates')
+        let s:vimrc_dir = expand('$HOME/Desktop/Vim_Tmux_Config/vim')
+    endif
+    " Optional machine-specific overrides (git-ignored)
+    if filereadable(s:vimrc_dir . '/local.vim')
+        execute 'source' fnameescape(s:vimrc_dir . '/local.vim')
+    endif
+
+" Feature switches -----------------------------------------------------------
+    " -- theme             : colorschemes + lightline status/tab line
+    " -- fancy_symbols     : nerd-font icons (lightline, nerdtree)
+    " -- wal_theme         : pywal (Xresources) colors, cterm only
+    " -- extra             : vimwiki, goyo, startify, yankring, easymotion,
+    "                        peekaboo, markbar, autocomplpop, hexokinase, ...
+    " -- coding            : polyglot, neoformat, git tools, indent guides,
+    "                        multi-cursor, dadbod
+    " -- lsp               : vim-lsp (servers start only on <leader>Le)
+    " -- python_tools      : vim-test (<leader>pt*) and vimspector (<leader>D*)
+    " -- gui_apps          : external viewers (browser preview, zathura)
+    " -- python_skeleton, tex_template, bash_template, markdown_template :
+    "                        template inserted into newly created files
+    " NOTE: no trailing "comments inside \-continued lines (they break the
+    "       statement), so the descriptions are above.
+    let g:vimrc_features = extend({
+                \ 'theme': 1, 'fancy_symbols': 0, 'wal_theme': 0,
+                \ 'extra': 1, 'coding': 1, 'lsp': 1, 'python_tools': 1,
+                \ 'gui_apps': 1, 'python_skeleton': 1, 'tex_template': 1,
+                \ 'bash_template': 1, 'markdown_template': 0,
+                \ }, get(g:, 'vimrc_features', {}))
+    " Derived (not a switch): legacy deoplete/jedi completion when LSP is off
+    let g:vimrc_features.legacy_python_completion = !g:vimrc_features.lsp
+    " Feature test used in conditions below
+    function! s:on(feature) abort
+        return get(g:vimrc_features, a:feature, 0)
+    endfunction
+
+" Paths ----------------------------------------------------------------------
+    " -- vim            : this directory (vim/ in the repository)
+    " -- templates      : templates for new files (skeleton.py, ...)
+    " -- bin            : helper scripts
+    " -- wiki_templates : note templates (vim-markdown-tools)
+    let g:vimrc_paths = extend({
+                \ 'vim': s:vimrc_dir,
+                \ 'templates': s:vimrc_dir . '/share/templates/',
+                \ 'bin': s:vimrc_dir . '/bin/',
+                \ }, get(g:, 'vimrc_paths', {}))
+    let g:vimrc_paths.wiki_templates = get(g:vimrc_paths, 'wiki_templates',
+                \ g:vimrc_paths.wiki . 'resources/template/')
+
+" External tools -------------------------------------------------------------
+    " -- browser            : markdown preview ($BROWSER)
+    " -- python3_host       : python for neovim/vim python plugins (pynvim)
+    " -- python_lsp_servers : vim-lsp-settings servers (:LspInstallServer)
+    " -- python_debugger    : <leader>pB (ipdb if installed, else pdb)
+    " -- languagetool_jar   : LanguageTool command-line jar
+    " -- ollama             : vim-ai endpoint/model (local Ollama)
+    " -- vimwiki_ctags, mdformat_patch, jrnl_collect : helper scripts in bin/
+    let g:vimrc_tools = extend({
+                \ 'browser': $BROWSER,
+                \ 'python3_host': '/usr/bin/python',
+                \ 'python_lsp_servers': ['pylsp-all'],
+                \ 'python_debugger': executable('ipdb3') || executable('ipdb')
+                \                    ? 'ipdb' : 'pdb',
+                \ 'languagetool_jar':
+                \     '/opt/LanguageTool-5.9/languagetool-commandline.jar',
+                \ 'ollama': {
+                \     'url': 'http://localhost:11434/v1/chat/completions',
+                \     'model': 'gemma4:e2b', 'temperature': 0.3,
+                \     'num_ctx': 8192 },
+                \ 'vimwiki_ctags': g:vimrc_paths.bin . 'vwtags.py',
+                \ 'mdformat_patch': g:vimrc_paths.bin . 'mdformat_patch.py',
+                \ 'jrnl_collect': g:vimrc_paths.bin . 'collect_jrnl_journal.py',
+                \ }, get(g:, 'vimrc_tools', {}))
+    " Python provider must be known before plugins load
+    let g:python3_host_prog = g:vimrc_tools.python3_host
+
+" Tmux integration -----------------------------------------------------------
+    " -- target        : pane for <leader>x (send), <leader>qt (capture) and
+    "                    vim-test; '{last}' = previously active pane, change
+    "                    it with <leader>xt
+    " -- capture_lines : scrollback lines read by <leader>qt
+    let g:vimrc_tmux = extend({
+                \ 'target': '{last}', 'capture_lines': 300,
+                \ }, get(g:, 'vimrc_tmux', {}))
 
 " TERMGUI color --------------------------------------------------------------
     " Ctermcolors only support max 256 color
     " Termguicolors can support HTML color code
 
     " Wal colortheme does not work well with termguicolors
-    if has('termguicolors') && !USING_WAL_THEME
+    if has('termguicolors') && !s:on('wal_theme')
         set termguicolors
     endif
     " 256 term color support in vim TUI
@@ -333,6 +378,7 @@
     noremap <leader><Tab> :jumps<CR>
     noremap <leader><S-Tab> :jumps<CR>
     " Show change list
+    " -- Normal mode: replaced by the fzf version (Part 3, 'FZF replacement')
     noremap <leader>g; :changes<CR>
     noremap <leader>g, :changes<CR>
     " Diff mode (vimdiff or nvim -d)
@@ -430,7 +476,7 @@
     set timeoutlen=300  " Timeout for entering combined key (millisecond)
     set confirm         " Ask for confirmation before leaving vim
     set modifiable      " Make current buffer modifiable
-    set encoding=utf-8  " Unicode display support
+    " NOTE: encoding/scriptencoding are set at the top of this file
     set notildeop       " Not make ~ a operator like gu, gU, and etc.
     set lazyredraw      " Only redraw when necessary.
     set shell=/bin/bash " Set default shell for vim/neovim (for navigator)
@@ -457,13 +503,13 @@
     endif
 
 " Vim only settings ----------------------------------------------------------
-    if USING_VIM
+    if !g:vimrc_is_nvim
         " NOTE: 'set nocompatible' moved to the top of the file
         set ttyfast      " Faster redrawing. [Removed in neovim]
     endif
 
 " Neovim only settings -------------------------------------------------------
-    if USING_NEOVIM
+    if g:vimrc_is_nvim
         set inccommand=nosplit " Enable incremental command without split pane
         " No lazyredraw in neovim: with it, nvim sends each key's screen
         " update in several pieces (5 cursor hide/show per j instead of 1),
@@ -707,6 +753,7 @@
     noremap <leader>be :edit<space>
     " Delete buffer
     noremap <leader>bd :bdelete<CR>
+    " -- Normal mode: replaced by the fzf version (Part 3, 'FZF replacement')
     noremap <leader>bD :bdelete<space>
     noremap <leader>b' :bdelete#<CR>
     noremap <leader>b" :bnext<CR>:bdelete#<CR>
@@ -761,6 +808,7 @@
     " Keymapping for quickfix list
     noremap <leader>qg :vimgrep<space>
     noremap <leader>qd :cdo<space>
+    " -- Normal mode: replaced by the fzf version (Part 3, 'FZF replacement')
     noremap <leader>qo :call QuickfixListToggle()<CR>
     noremap <leader>qj :cnext<CR>zz
     noremap <leader>qk :cprev<CR>zz
@@ -786,8 +834,8 @@
 
 " Function - tmux pane output to quickfix list -------------------------------
     " NOTE:
-    " -- <leader>qt reads the last g:tmux_capture_lines lines of the tmux
-    "    pane g:tmux_send_target (default: last active pane, e.g. the agent or
+    " -- <leader>qt reads the last g:vimrc_tmux.capture_lines lines of the tmux
+    "    pane g:vimrc_tmux.target (default: last active pane, e.g. the agent or
     "    pytest pane) and puts every 'file:line[:col]' reference into the
     "    quickfix list. Also understands '@file:L12' (from <leader>yr).
     " -- Only files that exist (relative to cwd or project root) are kept.
@@ -798,8 +846,8 @@
             return
         endif
         let l:lines = systemlist('tmux capture-pane -p -J -S -'
-                    \ . g:tmux_capture_lines . ' -t '
-                    \ . shellescape(g:tmux_send_target))
+                    \ . g:vimrc_tmux.capture_lines . ' -t '
+                    \ . shellescape(g:vimrc_tmux.target))
         if v:shell_error
             echohl WarningMsg | echo 'tmux capture-pane failed: '
                         \ . join(l:lines) | echohl None
@@ -834,15 +882,15 @@
                             \ 'text': trim(l:line) })
             endwhile
         endfor
-        call setqflist([], ' ', { 'title': 'tmux ' . g:tmux_send_target,
+        call setqflist([], ' ', { 'title': 'tmux ' . g:vimrc_tmux.target,
                     \ 'items': l:items })
         if empty(l:items)
             echo 'No file:line references found in tmux pane '
-                        \ . g:tmux_send_target
+                        \ . g:vimrc_tmux.target
         else
             copen
             echo len(l:items) . ' references from tmux pane '
-                        \ . g:tmux_send_target
+                        \ . g:vimrc_tmux.target
         endif
     endfunction
     noremap <leader>qt :call <SID>TmuxPaneToQuickfix()<CR>
@@ -861,6 +909,7 @@
     endfunction
     " Keymapping for location list
     noremap <leader>eg :lvimgrep<space>
+    " -- Normal mode: replaced by the fzf version (Part 3, 'FZF replacement')
     noremap <leader>eo :call LocationListToggle()<CR>
     noremap <leader>ej :lnext<CR>zz
     noremap <leader>ek :lprev<CR>zz
@@ -875,6 +924,7 @@
     "    -- '< : Beginning of last visual selection (> for end)
 
     " Show marks in vim [Also check markbar plugin]
+    " -- Normal mode: replaced by the fzf version (Part 3, 'FZF replacement')
     noremap <leader>mk :marks<CR>
     noremap <leader>md :delmarks<space>
     noremap <leader>mdd :delmarks!<CR>
@@ -909,7 +959,7 @@
     " -- https://vi.stackexchange.com/questions/17063/exclude-file-pattern-from-keeping-it-in-viminfo-history
     set viminfo+=r/tmp,
     " Change viminfo file location from default $HOME/.viminfo
-    if USING_NEOVIM
+    if g:vimrc_is_nvim
         set viminfo+=n~/.config/nvim/dirs/viminfo
     else
         set viminfo+=n~/.vim/dirs/viminfo
@@ -922,7 +972,7 @@
     "    name in different directories do not collide.
     " -- // in backupdir needs Vim >= 8.1.0251 or Neovim >= 0.5
     let s:BACKUP_FULLPATH = (has('nvim-0.5') || has('patch-8.1.0251')) ? '//' : ''
-    if USING_NEOVIM
+    if g:vimrc_is_nvim
         " Directory to place swap files
         set directory=~/.config/nvim/dirs/tmp//
         " Make backup files
@@ -1081,12 +1131,12 @@
     " -- In terminal buffer, :bd! to kill terminal buffer
 
 " Set customized terminal mode key mapping -----------------------------------
-    if USING_VIM8
+    if g:vimrc_is_vim8
         " Map key to enter terminal mode
         " NOTE: <leader>tt opens a nested tmux session 'scratch'. Inside tmux,
         " $TMUX is set and tmux refuses to nest ('sessions should be nested
         " with care'), so unset it for this command only (env -u TMUX).
-        if USING_NEOVIM
+        if g:vimrc_is_nvim
             noremap <F12> :split<CR>:terminal<CR>i
             noremap <leader>tm :split<CR>:terminal<CR>i
             noremap <leader>tr :split<CR>:terminal ranger<CR>
@@ -1121,7 +1171,7 @@
 " ============================================================================
 " Text is pasted with tmux bracketed paste (paste-buffer -p), so multi-line
 " code arrives as one block in IPython, shells and agent prompts.
-" Target pane: g:tmux_send_target (default '{last}' = previously active pane)
+" Target pane: g:vimrc_tmux.target (default '{last}' = previously active pane)
     " NOTE:
     " -- <leader>xx: send current line / visual selection, then Enter
     " -- <leader>xc: send current '# %%' cell (IPython/Jupyter style), then
@@ -1136,12 +1186,12 @@
             echohl WarningMsg | echo 'Not inside tmux' | echohl None
             return 0
         endif
-        let l:target = shellescape(g:tmux_send_target)
+        let l:target = shellescape(g:vimrc_tmux.target)
         call system('tmux load-buffer -b vim_send -', a:text)
         call system('tmux paste-buffer -d -p -b vim_send -t ' . l:target)
         if v:shell_error
             echohl WarningMsg | echo 'tmux: cannot paste to pane '
-                        \ . g:tmux_send_target | echohl None
+                        \ . g:vimrc_tmux.target | echohl None
             return 0
         endif
         for l:i in range(a:enter)
@@ -1189,10 +1239,10 @@
         echo join(systemlist('tmux list-panes -s -F "#{pane_id}  '
                     \ . '#{window_index}.#{pane_index}  #{pane_current_command}'
                     \ . '  #{pane_current_path}"'), "\n")
-        let l:target = input('tmux target pane: ', g:tmux_send_target)
+        let l:target = input('tmux target pane: ', g:vimrc_tmux.target)
         if !empty(l:target)
-            let g:tmux_send_target = l:target
-            redraw | echo 'tmux target pane: ' . g:tmux_send_target
+            let g:vimrc_tmux.target = l:target
+            redraw | echo 'tmux target pane: ' . g:vimrc_tmux.target
         endif
     endfunction
     nnoremap <silent> <leader>xx
@@ -1214,7 +1264,7 @@
 " Vim-plug (plug-manager). Here curl must be installed first -----------------
     " Setup Vim-Plug path for neovim or vim
     let vim_plug_just_installed = 0
-    if USING_NEOVIM
+    if g:vimrc_is_nvim
         let vim_plug_path = expand('~/.config/nvim/autoload/plug.vim')
     else
         let vim_plug_path = expand('~/.vim/autoload/plug.vim')
@@ -1224,7 +1274,7 @@
     if !filereadable(vim_plug_path)
         echo 'Installing Vim-plug...'
         echo ''
-        if USING_NEOVIM
+        if g:vimrc_is_nvim
             silent !mkdir -p ~/.config/nvim/autoload
             silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
                         \ 'https://raw.githubusercontent.com/junegunn/
@@ -1251,7 +1301,7 @@
 " Declare plug directory -----------------------------------------------------
     " This needs to be here, so vim-plug knows we are declaring the plugins we
     " want to use
-    if USING_NEOVIM
+    if g:vimrc_is_nvim
         call plug#begin("~/.config/nvim/plugged")
     else
         call plug#begin("~/.vim/plugged")
@@ -1263,13 +1313,13 @@
 " [Vim Neovim communication] -------------------------------------------------
     " Help communicate between vim and neovim [needed for deoplete.nvim]
     " Pynvim must be installed first [/usr/bin/python -m pip install pynvim]
-    " -- Only loaded for the legacy deoplete setup (USING_LSP = 0) in vim
-    if USING_VIM && USING_PYTHON_COMPLETION
+    " -- Only loaded for the legacy deoplete setup (g:vimrc_features.lsp = 0) in vim
+    if !g:vimrc_is_nvim && s:on('legacy_python_completion')
         Plug 'roxma/vim-hug-neovim-rpc'
     endif
 
 " [Vim theme] ----------------------------------------------------------------
-    if USING_CUSTOMIZED_THEME
+    if s:on('theme')
         " NOTE: Colorschemes are not lazy-loaded. vim-plug's 'on' only accepts
         " commands (Uppercase) or <Plug> maps, and it ignores 'on' for repos
         " without a plugin/ directory (colorschemes have only colors/ and
@@ -1293,7 +1343,7 @@
     endif
 
 " [File/Code browsing] -------------------------------------------------------
-    if USING_FANCY_SYMBOLS
+    if s:on('fancy_symbols')
         " Nerdtree and other vim-plug powerline symbols support
         Plug 'ryanoasis/vim-devicons'
         " More highlight in nertree
@@ -1314,7 +1364,7 @@
     " Sudo write/read files in vim
     Plug 'lambdalisue/suda.vim', { 'on': 'SudaWrite' }
     " System Man usage [Neovim has :Man built in, so only needed for vim]
-    if USING_VIM
+    if !g:vimrc_is_nvim
         Plug 'vim-utils/vim-man', { 'on': 'Man' }
     endif
     " Session file kept up to date (:Obsess), so tmux-resurrect can restore
@@ -1345,7 +1395,7 @@
     Plug 'dstein64/vim-startuptime', { 'on': 'StartupTime' }
 
 " [Vim extra functions] ------------------------------------------------------
-    if USING_EXTRA_PLUG
+    if s:on('extra')
         " Goyo (Distraction-free mode)
         Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
         " Limelight (Light-off tool with goyo)
@@ -1371,7 +1421,7 @@
         " Auto pop-up completion options from vim
         Plug 'vim-scripts/AutoComplPop'
         " Vim-hexokinase only works in termguicolors
-        if !USING_WAL_THEME
+        if !s:on('wal_theme')
             " Paint hex colors in color code background color
             " NOTE: go is required to install hexokinase
             Plug 'rrethy/vim-hexokinase', {
@@ -1380,11 +1430,11 @@
     endif
 
 " [Vim coding tools] ---------------------------------------------------------
-    if USING_CODING_TOOL_PLUG
-        if USING_VIM8
+    if s:on('coding')
+        if g:vimrc_is_vim8
             " Additional language packs
             Plug 'sheerun/vim-polyglot'
-            if !USING_LSP
+            if !s:on('lsp')
                 " Multiple language syntax and lint support
                 Plug 'dense-analysis/ale', { 'on': 'ALEToggle' }
             endif
@@ -1416,7 +1466,7 @@
     " NOTE: Git tools are NOT loaded at startup. They load the first time one
     " of the commands below is used (or a <leader>g... key that calls one).
     " The statusline branch does not need fugitive (see LightlineGitbranch).
-    if USING_CODING_TOOL_PLUG
+    if s:on('coding')
         " Git integration (Git functions in vim command line)
         Plug 'tpope/vim-fugitive', { 'on': [
                     \ 'G', 'Git', 'Gclog', 'Gllog', 'Gcd', 'Glcd',
@@ -1435,7 +1485,7 @@
     endif
 
 " [DB] -----------------------------------------------------------------------
-    if USING_CODING_TOOL_PLUG
+    if s:on('coding')
         " SQL DB
         Plug 'tpope/vim-dadbod'
         Plug 'kristijanhusak/vim-dadbod-ui'
@@ -1444,15 +1494,17 @@
 
 " [LSP] ----------------------------------------------------------------------
     " Language Server Protocol (LSP)
-    if USING_LSP && USING_VIM8
+    if s:on('lsp') && g:vimrc_is_vim8
         Plug 'prabirshrestha/vim-lsp'
         Plug 'mattn/vim-lsp-settings'
         Plug 'prabirshrestha/asyncomplete.vim'
         Plug 'prabirshrestha/asyncomplete-lsp.vim'
+        " File path completion source for asyncomplete (LSP buffers)
+        Plug 'prabirshrestha/asyncomplete-file.vim'
     endif
 
 " [Python coding] ------------------------------------------------------------
-    if USING_PYTHON_COMPLETION && !USING_LSP
+    if s:on('legacy_python_completion')
         " Yet Another Remote Plugin Framework for Neovim [needed for deoplete]
         Plug 'roxma/nvim-yarp', { 'for': 'python' }
         " Front end of completion (python and etc.)
@@ -1468,21 +1520,24 @@
                             \ { 'do': ':autocmd VimEnter * UpdateRemotePlugins' }
         endif
     endif
-    " Test runner (pytest, unittest and other languages); lazy-loaded on the
-    " :Test* commands, output goes to a tmux pane (see Part 7)
-    Plug 'vim-test/vim-test', { 'on': [ 'TestNearest', 'TestFile',
-                \ 'TestClass', 'TestSuite', 'TestLast', 'TestVisit' ] }
-    " Graphical debugger (Debug Adapter Protocol, python via debugpy)
-    " -- Requires python3 support (vim: +python3, neovim: pynvim)
-    " -- Lazy-loaded on its commands and on the <leader>D keys (Part 7)
-    Plug 'puremourning/vimspector', { 'on': [
-                \ 'VimspectorInstall', 'VimspectorUpdate', 'VimspectorReset',
-                \ 'VimspectorEval', 'VimspectorWatch', 'VimspectorShowOutput',
-                \ 'VimspectorBreakpoints',
-                \ '<Plug>VimspectorContinue', '<Plug>VimspectorToggleBreakpoint',
-                \ '<Plug>VimspectorStepOver', '<Plug>VimspectorStepInto',
-                \ '<Plug>VimspectorStepOut', '<Plug>VimspectorRestart',
-                \ '<Plug>VimspectorBalloonEval' ] }
+    " Python tools (g:vimrc_features.python_tools)
+    if s:on('python_tools')
+        " Test runner (pytest, unittest and other languages); lazy-loaded on the
+        " :Test* commands, output goes to a tmux pane (see Part 7)
+        Plug 'vim-test/vim-test', { 'on': [ 'TestNearest', 'TestFile',
+                    \ 'TestClass', 'TestSuite', 'TestLast', 'TestVisit' ] }
+        " Graphical debugger (Debug Adapter Protocol, python via debugpy)
+        " -- Requires python3 support (vim: +python3, neovim: pynvim)
+        " -- Lazy-loaded on its commands and on the <leader>D keys (Part 7)
+        Plug 'puremourning/vimspector', { 'on': [
+                    \ 'VimspectorInstall', 'VimspectorUpdate', 'VimspectorReset',
+                    \ 'VimspectorEval', 'VimspectorWatch', 'VimspectorShowOutput',
+                    \ 'VimspectorBreakpoints',
+                    \ '<Plug>VimspectorContinue', '<Plug>VimspectorToggleBreakpoint',
+                    \ '<Plug>VimspectorStepOver', '<Plug>VimspectorStepInto',
+                    \ '<Plug>VimspectorStepOut', '<Plug>VimspectorRestart',
+                    \ '<Plug>VimspectorBalloonEval' ] }
+    endif
 
 " [Fortran coding] -----------------------------------------------------------
     " Fortran syntax support
@@ -1495,7 +1550,7 @@
     Plug 'alvan/vim-closetag', { 'for': [ 'html', 'markdown'] }
 
 " [LaTex] --------------------------------------------------------------------
-    if USING_GUI_SOFTWARE
+    if s:on('gui_apps')
         " Asynchronous Tex file -> PDF file preview (pdf reader is needed)
         Plug 'xuhdev/vim-latex-live-preview',
                     \ { 'for': [ 'plaintex', 'context', 'tex'] }
@@ -1504,8 +1559,8 @@
     Plug 'vim-latex/vim-latex', { 'for': [ 'plaintex', 'context', 'tex'] }
 
 " [Markdown] -----------------------------------------------------------------
-    if USING_GUI_SOFTWARE
-        if USING_VIM8
+    if s:on('gui_apps')
+        if g:vimrc_is_vim8
             " Synchronous markdown file previewer
             " NOTE: For now, the hook function is not working. You have to
             " enter :call mkdp#util#install() by yourself after plug
@@ -1748,7 +1803,7 @@
     endfunction
 
 " Conditional lightline status/tab line --------------------------------------
-    if USING_CUSTOMIZED_THEME
+    if s:on('theme')
         " Toggle lightline tabline
         noremap <leader>slte :set showtabline=2<CR>:echo "TABLINE ENABLED"<CR>
         noremap <leader>sltd :set showtabline=0<CR>:echo "TABLINE DISABLED"<CR>
@@ -1785,7 +1840,7 @@
                     \ . ' rev-parse --abbrev-ref HEAD 2>/dev/null')
         let b:lightline_git_branch = v:shell_error ? '' : get(l:out, 0, '')
     endfunction
-    if USING_CUSTOMIZED_THEME
+    if s:on('theme')
         autocmd vimrc BufEnter * call LightlineGitbranchCache(0)
         autocmd vimrc FocusGained * call LightlineGitbranchCache(1)
     endif
@@ -1928,12 +1983,15 @@
     nnoremap <leader>fft :FZFFiletypes<CR>
     nnoremap <leader>fht :FZFHelptags<CR>
     " Add patch for jump/change list
-    exec 'source ' . s:FZF_PATCH
+    execute 'source' fnameescape(g:vimrc_paths.vim . '/patch/fzf_patch.vim')
     nnoremap <leader>fcl :FZFChanges<CR>
     nnoremap <leader>fjl :FZFJumps<CR>
     " Add patch for markdown link insertion
     nnoremap <leader>fmi :FZFMDInsert<CR>
     " FZF replacement
+    " -- These replace, in normal mode only, keys defined earlier for the
+    "    built-in lists (<leader>bD, eo, g;, mk, qo); the built-in versions
+    "    still apply in visual/operator-pending mode
     nnoremap <leader>'  :FZFBuffers<CR>
     nnoremap <leader>bD :FZFBD<CR>
     nnoremap <leader>mk :FZFMarks<CR>
@@ -2143,7 +2201,7 @@
 " Vim extra functions settings, edit them as you wish.
 
 " Vimwiki --------------------------------------------------------------------
-    if USING_EXTRA_PLUG
+    if s:on('extra')
         " Disable all local mappings then remap needed ones
         let g:vimwiki_key_mappings = { 'all_maps': 0, }
         " Vimwiki Settings
@@ -2153,17 +2211,21 @@
         \   'diary_rel_path': 'diary'
         \ },
         \ ]
-        " Fold according to header (computed once, kept as manual folds)
+        " Fold according to header (computed on first use, kept as manual folds)
         " NOTE:
         " -- With 'expr', vimwiki recomputes VimwikiFoldLevel() for every line
         "    on each keystroke (Vim) and every time a note enters a window:
         "    ~100 ms per switch into a 1200-line note, 6x slower typing.
-        " -- 'custom' stops vimwiki from (re)setting folds; s:VimwikiFolds()
-        "    computes the same header folds with VimwikiFoldLevel() once, then
-        "    switches the window to manual, so switching/typing cost nothing.
-        " -- Folds are refreshed on save (:w), on reload (e.g. agent edit), and
-        "    when the note is shown again after it changed. Closed folds stay
-        "    closed across refreshes. Between saves folds may be a bit stale.
+        " -- 'custom' stops vimwiki from (re)setting folds. Notes open with
+        "    manual folding and no folds (folding is off anyway: nofoldenable),
+        "    so opening, switching and typing cost nothing.
+        " -- The first fold key in a note (zc zo za zM zR zi zj zk zx ...)
+        "    computes the same header folds with VimwikiFoldLevel() (about
+        "    0.5 s for a 1200-line note, once per window), then runs as usual.
+        "    zx / zX recompute the folds (e.g. after editing headers).
+        " -- Once computed, folds are refreshed on save (:w), on reload (e.g.
+        "    agent edit) and when the changed note is shown again. Closed folds
+        "    stay closed across refreshes. Between saves they may be stale.
         let g:vimwiki_folding = 'custom'
         function! VimwikiFoldsUpdate(force) abort
             if &filetype !=# 'vimwiki' || &diff
@@ -2206,16 +2268,40 @@
             let w:vw_fold_tick = b:changedtick
             call winrestview(l:view)
         endfunction
-        " On FileType (first load, reload) the window is not ready yet, so
-        " compute right after the current command, in the same window
+        " Folds already computed in this window for this buffer?
+        function! s:VimwikiFoldsComputed() abort
+            return get(w:, 'vw_fold_buf', -1) == bufnr('')
+        endfunction
+        " Fold key wrapper: compute folds first (zx/zX: always), then run key
+        function! s:VimwikiFoldKey(key, count) abort
+            call VimwikiFoldsUpdate(a:key =~# '^z[xX]$')
+            execute 'normal! ' . (a:count ? a:count : '') . a:key
+        endfunction
+        " Buffer-local wrappers for the fold keys in notes (same behaviour)
+        function! s:VimwikiFoldKeys() abort
+            setlocal foldmethod=manual foldtext=VimwikiFoldText()
+            for l:key in ['za', 'zA', 'zc', 'zC', 'zo', 'zO', 'zv', 'zx', 'zX',
+                        \ 'zm', 'zM', 'zr', 'zR', 'zn', 'zN', 'zi', 'zj', 'zk',
+                        \ '[z', ']z']
+                execute printf('nnoremap <buffer><silent> %s '
+                            \ . ':<C-u>call <SID>VimwikiFoldKey(%s, v:count)<CR>',
+                            \ l:key, string(l:key))
+            endfor
+        endfunction
+        " On reload (FileType again) the window is not ready yet: refresh
+        " right after the current command, only where folds are in use
         function! s:VimwikiFoldsLater() abort
             let l:win = win_getid()
             call timer_start(0, {-> win_execute(l:win,
-                        \ 'call VimwikiFoldsUpdate(0)', 'silent!')})
+                        \ 'if get(w:, "vw_fold_buf", -1) == bufnr("")'
+                        \ . ' | call VimwikiFoldsUpdate(0) | endif', 'silent!')})
         endfunction
-        autocmd vimrc FileType vimwiki call s:VimwikiFoldsLater()
-        autocmd vimrc BufWinEnter * call VimwikiFoldsUpdate(0)
-        autocmd vimrc BufWritePost * call VimwikiFoldsUpdate(1)
+        autocmd vimrc FileType vimwiki call s:VimwikiFoldKeys()
+                    \ | call s:VimwikiFoldsLater()
+        autocmd vimrc BufWinEnter *
+                    \ if s:VimwikiFoldsComputed() | call VimwikiFoldsUpdate(0) | endif
+        autocmd vimrc BufWritePost *
+                    \ if s:VimwikiFoldsComputed() | call VimwikiFoldsUpdate(1) | endif
         " Set all markdown filetype to vimwiki
         let g:vimwiki_global_ext = 1
         " Keep markdown file ext (.md) when generating link
@@ -2227,7 +2313,7 @@
                     \ 'sro':'&&&' ,
                     \ 'kind2scope':{'h':'header'},
                     \ 'sort':0,
-                    \ 'ctagsbin': s:CTAGSBIN,
+                    \ 'ctagsbin': g:vimrc_tools.vimwiki_ctags,
                     \ 'ctagsargs': 'markdown'
                     \ }
         "" Disable shorten URL
@@ -2277,12 +2363,12 @@
     endif
 
 " Goyo -----------------------------------------------------------------------
-    if USING_EXTRA_PLUG
+    if s:on('extra')
         noremap <leader>gy :Goyo<CR>
     endif
 
 " Limelight ------------------------------------------------------------------
-    if USING_EXTRA_PLUG
+    if s:on('extra')
         " Color name (:help cterm-colors) or ANSI code
         let g:limelight_conceal_ctermfg = 'gray'
         let g:limelight_conceal_ctermfg = 240
@@ -2308,8 +2394,8 @@
     endif
 
 " YankRing -------------------------------------------------------------------
-    if USING_EXTRA_PLUG
-        if USING_NEOVIM
+    if s:on('extra')
+        if g:vimrc_is_nvim
             let g:yankring_history_dir = '~/.config/nvim/'
             " Fix for yankring and neovim problem when system has non-text
             " things copied in clipboard
@@ -2345,7 +2431,7 @@
 
 " Peekaboo -------------------------------------------------------------------
     " Remap '"', '@' (Normal mode) and '<C-r>' (Insert mode) for register viewer
-    if USING_EXTRA_PLUG
+    if s:on('extra')
         let g:peekaboo_window = 'vert bo 40new'
         let g:peekaboo_prefix = ''
         let g:peekaboo_compact = 0
@@ -2353,7 +2439,7 @@
 
 " Markbar --------------------------------------------------------------------
     " Remap ''', '`' (Normal mode) for mark viewer
-    if USING_EXTRA_PLUG
+    if s:on('extra')
         " width of a vertical split markbar
         let g:markbar_width = 40
         let g:markbar_peekaboo_width = 40
@@ -2376,7 +2462,7 @@
     endif
 
 " Easymotion -----------------------------------------------------------------
-    if USING_EXTRA_PLUG
+    if s:on('extra')
         " Move up and down not back to start of line
         set nostartofline
         " Disable default mappings
@@ -2394,7 +2480,7 @@
     endif
 
 " AutoComplPop ---------------------------------------------------------------
-    if USING_EXTRA_PLUG
+    if s:on('extra')
         " Enable autocomplpop at startup
         let g:acp_enableAtStartup = 1
         " Toggle autocomplpop function
@@ -2419,7 +2505,9 @@
         "    lock), so s:acp_locked makes sure we lock at most once.
         let s:acp_locked = 0
         function! s:AcpBufferSync() abort
-            if !exists(':AcpLock')
+            " Only real file buffers change the state: neovim floats (e.g. LSP
+            " docs) briefly enter a scratch buffer, which must not unpause it
+            if !exists(':AcpLock') || &buftype !=# ''
                 return
             endif
             let l:want_off = get(b:, 'acp_off', 0)
@@ -2438,7 +2526,7 @@
         autocmd vimrc FileType markdown,vimwiki
                     \ let b:acp_off = 1 | call s:AcpBufferSync()
         " Disable autocomplpop for python file [use deoplete instead]
-        if USING_PYTHON_COMPLETION
+        if s:on('legacy_python_completion')
             autocmd vimrc FileType python
                         \ let b:acp_off = 1 | call s:AcpBufferSync()
         endif
@@ -2448,7 +2536,7 @@
     " Auto completion pop-up, use Ctrl+[e/y] to close/select completion
 
     " [Double quotation matters here, DO NOT change to single quotation]
-    if USING_EXTRA_PLUG
+    if s:on('extra')
         inoremap <expr><S-tab> pumvisible() ? "\<C-p>" : "\<S-tab>"
         inoremap <expr><tab>   pumvisible() ? "\<C-n>" : "\<tab>"
         inoremap <expr><C-k>   pumvisible() ? "\<C-p>" : "\<C-k>"
@@ -2460,13 +2548,13 @@
     endif
 
 " Tasklist -------------------------------------------------------------------
-    if USING_EXTRA_PLUG
+    if s:on('extra')
         noremap <leader>tl :TaskList<CR>
     endif
 
 " Hexokinase -----------------------------------------------------------------
     " -- For compling, golang must be installed [sudo dnf install golang]
-    if USING_EXTRA_PLUG
+    if s:on('extra')
         " All possible values for hexokinase pattern
         let g:Hexokinase_optInPatterns = 'full_hex,triple_hex,rgb,rgba,hsl,hsla,colour_names'
         " Set highlighter for hexokinase
@@ -2484,8 +2572,8 @@
     "    -- pip install mypy   # type checker
     "    -- pip install flake8 # error and style linter
     "    -- pip install pylint # error and style linter
-    if USING_CODING_TOOL_PLUG && !USING_LSP
-        if USING_NEOVIM
+    if s:on('coding') && !s:on('lsp')
+        if g:vimrc_is_nvim
             let g:ale_use_neovim_diagnostics_api = 1
         endif
         let g:ale_enabled = 0
@@ -2499,7 +2587,7 @@
     endif
 
 " Neoformat ------------------------------------------------------------------
-    if USING_CODING_TOOL_PLUG
+    if s:on('coding')
         " C++ ----------------------------------------------------------------
         " clangformat: C++ formatter (c for C++)
         nnoremap <leader>ncf :Neoformat clangformat<CR>
@@ -2519,7 +2607,7 @@
         " -- 3. Markdown bulleted list with checkboxes (e.g., [X] -> [x])
         nnoremap <leader>nmf
             \ :Neoformat! markdown mdformat<CR>
-            \ :execute 'silent! %!python3 ' . g:MDFORMAT_PATCH_SCRIPT<CR>
+            \ :execute 'silent! %!python3 ' . g:vimrc_tools.mdformat_patch<CR>
             \ :echo 'Neoformat: mdformat and Python patch applied'<CR>
 
         " Python -------------------------------------------------------------
@@ -2568,14 +2656,14 @@
     endif
 
 " Rainbow parentheses --------------------------------------------------------
-    if USING_CODING_TOOL_PLUG
+    if s:on('coding')
         " Don't enable when start up
         let g:rainbow_active = 0
         noremap <leader>rb :RainbowToggle<CR>
     endif
 
 " Indentline -----------------------------------------------------------------
-    if USING_CODING_TOOL_PLUG
+    if s:on('coding')
         let g:indentLine_showFirstIndentLevel = 1
         let g:indentLine_fileTypeExclude = ['text', 'markdown', 'latex']
         let g:indentLine_bufTypeExclude = ['help', 'terminal']
@@ -2583,7 +2671,7 @@
     endif
 
 " Indent guides --------------------------------------------------------------
-    if USING_CODING_TOOL_PLUG
+    if s:on('coding')
         let g:indent_guides_enable_on_vim_startup = 0
         let g:indent_guides_start_level = 1
         let g:indent_guides_guide_size = 4
@@ -2604,7 +2692,7 @@
     " -- <count>iI	Inner Indentation level (no lines above/below).
 
 " Multiple-cursors -----------------------------------------------------------
-    if USING_CODING_TOOL_PLUG
+    if s:on('coding')
         let g:VM_default_mappings = 0
         let g:VM_leader = '<space>'
         let g:VM_maps = {}
@@ -2633,7 +2721,7 @@
 " Vim-fugitive ---------------------------------------------------------------
     " -- :G Summary for current git repository
     " -- Lazy-loaded: the first :Git/:G... command (or <leader>g key) loads it
-    if USING_CODING_TOOL_PLUG
+    if s:on('coding')
         noremap <leader>gd :Git diff %<CR>
         noremap <leader>gD :Git diff<CR>
         noremap <leader>gs :Git<CR>
@@ -2656,7 +2744,7 @@
     " -- Hunk keys (<leader>g[j/k/a/r/P], ]h, [h) load gitgutter and enable it
     "    for the CURRENT buffer only on first use, then do their action
     " -- <leader>gg toggles it for all buffers, <leader>gb for current buffer
-    if USING_CODING_TOOL_PLUG
+    if s:on('coding')
         " Disable all gitgutter key mappings
         let g:gitgutter_map_keys = 0
         " Disable gitgutter at start (enable per buffer on demand)
@@ -2736,7 +2824,7 @@
 " Vim-Unimpaired -------------------------------------------------------------
     " -- [: previous, ]:next
     " -- a:arg, b:buffer, l:locationlist, q:quickfix
-    if USING_CODING_TOOL_PLUG
+    if s:on('coding')
         nmap [e [l
         nmap ]e ]l
         nmap [E [L
@@ -2751,7 +2839,7 @@
 " Deoplete -------------------------------------------------------------------
     " Front end for python completion
     " Pynvim is needed [Installation: pip3 install --user pynvim]
-    if USING_PYTHON_COMPLETION && !USING_LSP
+    if s:on('legacy_python_completion')
         " Needed so deoplete can auto select the first suggestion
         set completeopt+=noinsert
         " Comment this line to enable autocompletion preview window
@@ -2776,7 +2864,7 @@
     " All these mappings work only for python code [All should start with 'p']
     " jedi is needed [Installation: pip3 install --user jedi]
     " jedi-vim remaps K to open python documents
-    if USING_PYTHON_COMPLETION && !USING_LSP
+    if s:on('legacy_python_completion')
         " Disable autocompletion (using deoplete instead)
         let g:jedi#completions_enabled = 0
         " Use split instead of buffer
@@ -2809,66 +2897,70 @@
     "autocmd vimrc FileType python
                 "\ noremap <buffer> <leader>pb Oimport pdb; pdb.set_trace()<Esc>
     " %:p for current file in full path
-    " -- s:PYTHON_DEBUGGER: ipdb if installed (nicer prompt), otherwise pdb
+    " -- g:vimrc_tools.python_debugger: ipdb if installed (nicer prompt), else pdb
     autocmd vimrc FileType python
                 \ execute 'noremap <buffer> <leader>pB'
-                \ . ' <Esc>:split<CR>:terminal python -m ' . s:PYTHON_DEBUGGER
+                \ . ' <Esc>:split<CR>:terminal python -m ' . g:vimrc_tools.python_debugger
                 \ . " '%:p'<space>"
 
 " Python test (vim-test) -----------------------------------------------------
-    " NOTE:
-    " -- <leader>pt[n/f/l/s/v]: test nearest/file/last/suite, visit last test
-    "    file (p for python/pytest; vim-test also supports other languages)
-    " -- Inside tmux, the test command runs in the tmux pane
-    "    g:tmux_send_target (default: last active pane, should be a shell),
-    "    like a test terminal next to vim. Outside tmux: vim/neovim terminal.
-    " -- vim-test is lazy-loaded on the first :Test* command
-    function! s:TestTmuxPane(cmd) abort
-        call TmuxSendText('cd ' . shellescape(getcwd()) . ' && ' . a:cmd, 1)
-    endfunction
-    let g:test#custom_strategies = { 'tmuxpane': function('s:TestTmuxPane') }
-    if !empty($TMUX)
-        let g:test#strategy = 'tmuxpane'
-    elseif USING_NEOVIM
-        let g:test#strategy = 'neovim'
-    else
-        let g:test#strategy = 'vimterminal'
+    if s:on('python_tools')
+        " NOTE:
+        " -- <leader>pt[n/f/l/s/v]: test nearest/file/last/suite, visit last test
+        "    file (p for python/pytest; vim-test also supports other languages)
+        " -- Inside tmux, the test command runs in the tmux pane
+        "    g:vimrc_tmux.target (default: last active pane, should be a shell),
+        "    like a test terminal next to vim. Outside tmux: vim/neovim terminal.
+        " -- vim-test is lazy-loaded on the first :Test* command
+        function! s:TestTmuxPane(cmd) abort
+            call TmuxSendText('cd ' . shellescape(getcwd()) . ' && ' . a:cmd, 1)
+        endfunction
+        let g:test#custom_strategies = { 'tmuxpane': function('s:TestTmuxPane') }
+        if !empty($TMUX)
+            let g:test#strategy = 'tmuxpane'
+        elseif g:vimrc_is_nvim
+            let g:test#strategy = 'neovim'
+        else
+            let g:test#strategy = 'vimterminal'
+        endif
+        let g:test#python#runner = 'pytest'
+        nnoremap <leader>ptn :TestNearest<CR>
+        nnoremap <leader>ptf :TestFile<CR>
+        nnoremap <leader>ptl :TestLast<CR>
+        nnoremap <leader>pts :TestSuite<CR>
+        nnoremap <leader>ptv :TestVisit<CR>
     endif
-    let g:test#python#runner = 'pytest'
-    nnoremap <leader>ptn :TestNearest<CR>
-    nnoremap <leader>ptf :TestFile<CR>
-    nnoremap <leader>ptl :TestLast<CR>
-    nnoremap <leader>pts :TestSuite<CR>
-    nnoremap <leader>ptv :TestVisit<CR>
 
 " Python debugger (vimspector) -----------------------------------------------
-    " NOTE:
-    " -- One-time setup: :VimspectorInstall debugpy
-    " -- Per project: :VimspectorPythonConfig copies a launch configuration
-    "    (vim/share/templates/vimspector.json) to <project root>/.vimspector.json
-    " -- <leader>D[b/c/n/i/o/r/q/e]: toggle breakpoint, continue (or start),
-    "    step over/into/out, restart, quit (reset), evaluate word/selection
-    " -- Lazy-loaded on the first <leader>D key or :Vimspector* command
-    let s:VIMSPECTOR_TEMPLATE = s:TEMPLATE_DIR . 'vimspector.json'
-    function! s:VimspectorPythonConfig() abort
-        let l:target = ProjectRoot() . '/.vimspector.json'
-        if filereadable(l:target)
-            echo 'Already exists: ' . l:target
-            return
-        endif
-        call writefile(readfile(expand(s:VIMSPECTOR_TEMPLATE)), l:target)
-        echo 'Created ' . l:target
-    endfunction
-    command! VimspectorPythonConfig call s:VimspectorPythonConfig()
-    nmap <leader>Db <Plug>VimspectorToggleBreakpoint
-    nmap <leader>Dc <Plug>VimspectorContinue
-    nmap <leader>Dn <Plug>VimspectorStepOver
-    nmap <leader>Di <Plug>VimspectorStepInto
-    nmap <leader>Do <Plug>VimspectorStepOut
-    nmap <leader>Dr <Plug>VimspectorRestart
-    nnoremap <leader>Dq :VimspectorReset<CR>
-    nmap <leader>De <Plug>VimspectorBalloonEval
-    xmap <leader>De <Plug>VimspectorBalloonEval
+    if s:on('python_tools')
+        " NOTE:
+        " -- One-time setup: :VimspectorInstall debugpy
+        " -- Per project: :VimspectorPythonConfig copies a launch configuration
+        "    (vim/share/templates/vimspector.json) to <project root>/.vimspector.json
+        " -- <leader>D[b/c/n/i/o/r/q/e]: toggle breakpoint, continue (or start),
+        "    step over/into/out, restart, quit (reset), evaluate word/selection
+        " -- Lazy-loaded on the first <leader>D key or :Vimspector* command
+        let s:VIMSPECTOR_TEMPLATE = g:vimrc_paths.templates . 'vimspector.json'
+        function! s:VimspectorPythonConfig() abort
+            let l:target = ProjectRoot() . '/.vimspector.json'
+            if filereadable(l:target)
+                echo 'Already exists: ' . l:target
+                return
+            endif
+            call writefile(readfile(expand(s:VIMSPECTOR_TEMPLATE)), l:target)
+            echo 'Created ' . l:target
+        endfunction
+        command! VimspectorPythonConfig call s:VimspectorPythonConfig()
+        nmap <leader>Db <Plug>VimspectorToggleBreakpoint
+        nmap <leader>Dc <Plug>VimspectorContinue
+        nmap <leader>Dn <Plug>VimspectorStepOver
+        nmap <leader>Di <Plug>VimspectorStepInto
+        nmap <leader>Do <Plug>VimspectorStepOut
+        nmap <leader>Dr <Plug>VimspectorRestart
+        nnoremap <leader>Dq :VimspectorReset<CR>
+        nmap <leader>De <Plug>VimspectorBalloonEval
+        xmap <leader>De <Plug>VimspectorBalloonEval
+    endif
 
 " Python skeleton (add python skeleton for new python .py file) --------------
     " NOTE: Here we don't use simply use BufNewFile since vim-lsp-settings
@@ -2877,13 +2969,13 @@
         " Check if the buffer is empty and is a new file
         if line('$') == 1 && empty(getline(1))
             " Read the skeleton content from your variable/file
-            exec '0r' s:PYTHON_SKELETON
+            execute '0r' fnameescape(g:vimrc_paths.templates . 'skeleton.py')
             " Update the timestamp
             keeppatterns silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g
         endif
     endfunction
     " Replace your current exec lines with this single autocommand call
-    if USING_PYTHON_SKELETON
+    if s:on('python_skeleton')
         autocmd vimrc BufNewFile *.py call s:InsertPythonSkeleton()
     endif
 
@@ -2904,12 +2996,12 @@
         " Check if the buffer is empty and is a new file
         if line('$') == 1 && empty(getline(1))
             " Read the skeleton content from your variable/file
-            exec '0r' s:BASH_TEMPLATE
+            execute '0r' fnameescape(g:vimrc_paths.templates . 'bash_template.sh')
             " Update the timestamp
             keeppatterns silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g
         endif
     endfunction
-    if USING_BASH_TEMPLATE
+    if s:on('bash_template')
         autocmd vimrc BufNewFile *.sh call s:InsertBashTemplate()
     endif
 
@@ -2920,7 +3012,7 @@
     " LaTex real-time viewer with GUI pdf file manager
     " -- <buffer>: <leader><F4> is the previewer of the CURRENT file type
     "    (tex here, markdown below), so the two never override each other
-    if USING_GUI_SOFTWARE
+    if s:on('gui_apps')
         let g:livepreview_previewer = 'zathura'
         let g:livepreview_engine = 'pdflatex'
         autocmd vimrc FileType plaintex,context,tex
@@ -2933,12 +3025,12 @@
         " Check if the buffer is empty and is a new file
         if line('$') == 1 && empty(getline(1))
             " Read the skeleton content from your variable/file
-            exec '0r' s:TEX_TEMPLATE
+            execute '0r' fnameescape(g:vimrc_paths.templates . 'template.tex')
             " Update the timestamp
             keeppatterns silent! %s/YYYY-mm-DD HH:MM:SS/\=strftime("%Y-%m-%d %T")/g
         endif
     endfunction
-    if USING_TEX_TEMPLATE
+    if s:on('tex_template')
         autocmd vimrc BufNewFile *.tex call s:InsertTexTemplate()
     endif
 
@@ -2977,16 +3069,16 @@
     " Markdown previewer [no extra vim plugin needed]
     " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
     " Google-chrome extension is needed for markdown viewer
-    if USING_GUI_SOFTWARE && !USING_VIM8
+    if s:on('gui_apps') && !g:vimrc_is_vim8
         autocmd vimrc FileType markdown,vimwiki call s:MarkdownPreviewHint()
         autocmd vimrc FileType markdown,vimwiki
                     \ execute 'noremap <buffer> <leader><F4> :!'
-                    \ . s:WEBBROWSER . ' %:p &<CR>'
+                    \ . g:vimrc_tools.browser . ' %:p &<CR>'
     endif
     " Synchronous markdown previewer (markdown-preview plugin)
-    if USING_GUI_SOFTWARE && USING_VIM8
+    if s:on('gui_apps') && g:vimrc_is_vim8
         " Web browser used to preview
-        let g:mkdp_browser = s:WEBBROWSER
+        let g:mkdp_browser = g:vimrc_tools.browser
         " Close browser after markdown file is close
         let g:mkdp_auto_close = 0
         " Show url of markdown previewer
@@ -2997,49 +3089,33 @@
         autocmd vimrc FileType markdown,vimwiki setlocal scrolloff=999
     endif
     " The rest of block has been packed up as vim-markdown-tools plug-in
-    let g:md_tools_use_template = g:USING_MARKDOWN_TEMPLATE
+    let g:md_tools_use_template = g:vimrc_features.markdown_template
+    " Note templates (<leader>mfI), read by vim-markdown-tools
+    let g:WIKI_TEMPLATE_DIR = g:vimrc_paths.wiki_templates
 
 " Jrnl -----------------------------------------------------------------------
-    nnoremap <leader>mfj :execute 'r !' . g:JRNL_COLLECT_SCRIPT<CR>
+    nnoremap <leader>mfj :execute 'r !' . g:vimrc_tools.jrnl_collect<CR>
 
 " LanguageTool ---------------------------------------------------------------
+    " Command-line jar (LanguageTool <= 5.9 for vim-LanguageTool)
+    let g:languagetool_jar = g:vimrc_tools.languagetool_jar
     noremap <leader>LC <Esc>:LanguageToolCheck<CR>
     noremap <leader>Lc <Esc>:LanguageToolClear<CR>
 
 " Vim-AI ---------------------------------------------------------------------
-    let s:vim_ai_chat_config = #{
-        \  engine: "chat",
-        \  options: #{
-        \    model: s:VIM_AI_MODEL,
-        \    endpoint_url: s:VIM_AI_ENDPOINT_URL,
-        \    temperature: s:VIM_AI_TEMPERATURE,
-        \    num_ctx: s:VIM_AI_NUM_CTX,
-        \    auth_type: 'none',
-        \    max_tokens: 0,
-        \    request_timeout: 90,
-        \  },
-        \  ui: #{
-        \    code_syntax_enabled: 1,
-        \  },
-        \}
-    let s:vim_ai_edit_config = #{
-        \  engine: "chat",
-        \  options: #{
-        \    model: s:VIM_AI_MODEL,
-        \    endpoint_url: s:VIM_AI_ENDPOINT_URL,
-        \    temperature: s:VIM_AI_TEMPERATURE,
-        \    num_ctx: s:VIM_AI_NUM_CTX,
-        \    auth_type: 'none',
-        \    max_tokens: 0,
-        \    request_timeout: 90,
-        \  },
-        \  ui: #{
-        \    paste_mode: 1,
-        \  },
-        \}
-    let g:vim_ai_chat = s:vim_ai_chat_config
-    let g:vim_ai_complete = s:vim_ai_edit_config
-    let g:vim_ai_edit = s:vim_ai_edit_config
+    " Chat and edit/complete share the Ollama settings (g:vimrc_tools.ollama)
+    let s:vim_ai_options = {
+                \ 'model': g:vimrc_tools.ollama.model,
+                \ 'endpoint_url': g:vimrc_tools.ollama.url,
+                \ 'temperature': g:vimrc_tools.ollama.temperature,
+                \ 'num_ctx': g:vimrc_tools.ollama.num_ctx,
+                \ 'auth_type': 'none', 'max_tokens': 0, 'request_timeout': 90,
+                \ }
+    let g:vim_ai_chat = { 'engine': 'chat', 'options': copy(s:vim_ai_options),
+                \ 'ui': { 'code_syntax_enabled': 1 } }
+    let g:vim_ai_edit = { 'engine': 'chat', 'options': copy(s:vim_ai_options),
+                \ 'ui': { 'paste_mode': 1 } }
+    let g:vim_ai_complete = g:vim_ai_edit
     " Keybindings
     " -- oi: inline complete (:AI), oo: chat (:AIChat), oe: edit (:AIEdit),
     "    or: redo last AI command (:AIRedo)
@@ -3053,7 +3129,7 @@
     "" well OTB. Find $HOME/.config/nvim/plugged/codeium.vim/autoload/codeium.vim
     "" Change let l:browser = codeium#command#BrowserCommand() to whatever web
     "" browser you like e.g. let l:browser = 'brave-browser --new-window'
-    "if USING_LSP && USING_VIM8
+    "if s:on('lsp') && g:vimrc_is_vim8
     "    " Disable Codeium at startup
     "    let g:codeium_enabled = v:false
     "    " Remove all Codeium default keybindings
@@ -3086,15 +3162,139 @@
     " -- LSP is DISABLED at startup: no language server starts until you ask
     "    with <leader>Le (enable in all buffers), <leader>Ld disables again
     " -- Server management keys (<leader>L[M/I/S/R/s]) work in every buffer
-    if USING_LSP && USING_VIM8
+    if s:on('lsp') && g:vimrc_is_vim8
         " Disable LSP at startup
         let g:lsp_auto_enable = 0
+        " Python servers installed/used by vim-lsp-settings
+        let g:lsp_settings_filetype_python = g:vimrc_tools.python_lsp_servers
         let g:lsp_preview_float = 1
         let g:lsp_preview_keep_focus = 1
-        let g:lsp_hover_ui = 'preview'
+        " Hover (K) as a floating popup at the cursor (was a preview split)
+        let g:lsp_hover_ui = 'float'
+        " Alt keys used to scroll LSP floats (<M-e/y/g/G>, see below):
+        " terminal vim (not neovim) receives Alt+key as Esc + key, so teach it
+        " these key codes. With ttimeoutlen=10 only a real Alt press (both
+        " bytes at once) matches; Esc then e typed by hand stays two keys.
+        if !g:vimrc_is_nvim && !has('gui_running')
+            for s:key in ['e', 'y', 'g', 'G']
+                execute 'set <M-' . s:key . ">=\<Esc>" . s:key
+            endfor
+        endif
+        " Neovim: show LSP floats (hover, signature) from their first line.
+        " vim-lsp leaves the float's cursor on its last line and the float
+        " inherits 'scrolloff' (10), so long docs opened scrolled to the end.
+        if g:vimrc_is_nvim
+            " Hover float (g:lsp_hover_ui = 'float') and preview float
+            " (signature help) are tracked separately by vim-lsp
+            function! s:LspFloatTop(...) abort
+                for l:winid in [
+                            \ lsp#internal#document_hover#under_cursor#getpreviewwinid(),
+                            \ lsp#ui#vim#output#getpreviewwinid()]
+                    if l:winid > 0 && nvim_win_is_valid(l:winid)
+                        call setwinvar(l:winid, '&scrolloff', 0)
+                        call win_execute(l:winid, 'normal! gg')
+                    endif
+                endfor
+            endfunction
+            " Now, and once more right after the float is filled
+            autocmd vimrc User lsp_float_opened call s:LspFloatTop()
+                        \ | call timer_start(0, function('s:LspFloatTop'))
+        endif
         " Print out log from vim-lsp-settings plugin
         "let g:lsp_log_verbose = 1
         "let g:lsp_log_file = expand('~/vim-lsp.log')
+
+" Completion while LSP is on (asyncomplete) ----------------------------------
+        " NOTE:
+        " -- asyncomplete runs only in LSP buffers (other buffers keep
+        "    AutoComplPop), with three sources: LSP, words from all open
+        "    buffers, and file paths (e.g. ./src/<...>)
+        " -- deoplete-like menu: the first item is pre-selected (not inserted),
+        "    so its signature/docs float shows at once; <CR> accepts it,
+        "    <Tab>/<S-Tab>/<C-j>/<C-k> move, <C-e> closes the menu
+        " -- Function argument hint (signature help) appears ~0.2 s after ( or ,
+        let g:asyncomplete_enable_for_all = 0
+        let g:asyncomplete_auto_completeopt = 0
+        " 'completeopt' for the pre-selected menu, only while inserting in an
+        " LSP buffer (restored on leaving insert mode, so <C-n> elsewhere is
+        " unchanged)
+        let s:lsp_completeopt = 'menuone,noinsert'
+        autocmd vimrc InsertEnter *
+                    \ if get(b:, 'asyncomplete_enable', 0)
+                    \ | let s:saved_completeopt = &completeopt
+                    \ | let &completeopt = s:lsp_completeopt | endif
+        autocmd vimrc InsertLeave *
+                    \ if exists('s:saved_completeopt')
+                    \ | let &completeopt = s:saved_completeopt
+                    \ | unlet s:saved_completeopt | endif
+        " Words from all open buffers (like deoplete's buffer source)
+        " -- Cached per buffer, refreshed on enter, insert leave and write,
+        "    only when the buffer changed; the word being typed is excluded
+        let s:buffer_words = {}
+        function! s:BufferWordsRefresh(bufnr) abort
+            if getbufvar(a:bufnr, '&buftype') !=# ''
+                        \ || !getbufvar(a:bufnr, '&buflisted')
+                return
+            endif
+            let l:tick = getbufvar(a:bufnr, 'changedtick')
+            let l:cache = get(s:buffer_words, a:bufnr, {})
+            if get(l:cache, 'tick', -1) == l:tick
+                return
+            endif
+            let l:lines = getbufline(a:bufnr, 1, '$')
+            let l:words = {}
+            if len(l:lines) <= 20000
+                for l:word in split(join(l:lines, "\n"), '\W\+')
+                    if len(l:word) > 2
+                        let l:words[l:word] = 1
+                    endif
+                endfor
+            endif
+            let s:buffer_words[a:bufnr] = {'tick': l:tick, 'words': l:words}
+        endfunction
+        function! s:BufferWordsCompletor(opt, ctx) abort
+            let l:kw = matchstr(a:ctx['typed'], '\w\+$')
+            if len(l:kw) < 2
+                return
+            endif
+            call s:BufferWordsRefresh(bufnr(''))
+            let l:seen = {l:kw : 1}
+            let l:items = []
+            for l:bufnr in [bufnr('')] + filter(keys(s:buffer_words),
+                        \ 'v:val != bufnr("") && bufexists(str2nr(v:val))')
+                for l:word in keys(get(get(s:buffer_words, l:bufnr, {}),
+                            \ 'words', {}))
+                    if !has_key(l:seen, l:word)
+                        let l:seen[l:word] = 1
+                        call add(l:items, {'word': l:word, 'menu': '[buffer]'})
+                    endif
+                endfor
+            endfor
+            call asyncomplete#complete(a:opt['name'], a:ctx,
+                        \ a:ctx['col'] - len(l:kw), l:items)
+        endfunction
+        " -- Only while LSP is on (g:lsp_user_enabled, set by EnableLSP())
+        autocmd vimrc BufEnter,InsertLeave,BufWritePost *
+                    \ if get(g:, 'lsp_user_enabled', 0)
+                    \ | call s:BufferWordsRefresh(bufnr('')) | endif
+        autocmd vimrc BufWipeout *
+                    \ if has_key(s:buffer_words, expand('<abuf>'))
+                    \ | call remove(s:buffer_words, expand('<abuf>')) | endif
+        " Register the buffer-word and file-path sources (LSP source comes
+        " from asyncomplete-lsp; lower priority = listed after LSP items,
+        " and a word already offered by LSP is not repeated)
+        function! s:RegisterCompletionSources() abort
+            call asyncomplete#register_source({
+                        \ 'name': 'buffer', 'allowlist': ['*'], 'priority': -1,
+                        \ 'completor': function('s:BufferWordsCompletor') })
+            call asyncomplete#register_source(
+                        \ asyncomplete#sources#file#get_source_options({
+                        \ 'name': 'file', 'allowlist': ['*'], 'priority': 10,
+                        \ 'completor': function('asyncomplete#sources#file#completor') }))
+        endfunction
+        autocmd vimrc User asyncomplete_setup call s:RegisterCompletionSources()
+
+" Vim-LSP keys and buffer setup ----------------------------------------------
         " Manage LSP server
         nmap <leader>LM :LspManageServers<CR>
         nmap <leader>LI :LspInstallServer<CR>
@@ -3108,9 +3308,6 @@
         " Enable/Disable LSP server (in all buffers)
         nmap <leader>Le :call EnableLSP()<CR>
         nmap <leader>Ld :call DisableLSP()<CR>
-        "" Enable/Disable LSP server (in current buffer)
-        "nmap <buffer> <leader>eL :call EnableLSP()<CR>
-        "nmap <buffer> <leader>dL :call DisableLSP()<CR>
         " Use the project's virtualenv for language servers (and :terminal,
         " :!, vim-test) when vim was not started inside one
         " -- Looks for .venv, venv, env with bin/python at the project root
@@ -3134,6 +3331,10 @@
             call s:ActivateProjectVenv()
             let g:lsp_user_enabled = 1
             call lsp#enable()
+            " Index words of all loaded buffers for buffer-word completion
+            for l:buf in getbufinfo({'buflisted': 1, 'bufloaded': 1})
+                call s:BufferWordsRefresh(l:buf.bufnr)
+            endfor
             nmap <buffer> K <plug>(lsp-hover)
         endfunction
         " Disable LSP
@@ -3151,6 +3352,7 @@
             " Let autocomplpop pop up again in buffers that LSP had taken over
             for l:buf in getbufinfo()
                 if getbufvar(l:buf.bufnr, 'lsp_acp_off', 0)
+                    call setbufvar(l:buf.bufnr, 'asyncomplete_enable', 0)
                     call setbufvar(l:buf.bufnr, 'acp_off', 0)
                     call setbufvar(l:buf.bufnr, 'lsp_acp_off', 0)
                 endif
@@ -3175,11 +3377,17 @@
             nmap <buffer> gy <plug>(lsp-type-definition)
             nmap <buffer> [g <plug>(lsp-previous-diagnostic)
             nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-            "" Scroll LSP hover page (for g:lsp_hover_ui = 'floating')
-            "nnoremap <buffer> <expr><M-e> lsp#scroll(+4)
-            "nnoremap <buffer> <expr><M-y> lsp#scroll(-4)
-            "nnoremap <buffer> <expr><M-G> lsp#scroll(+100000)
-            "nnoremap <buffer> <expr><M-g> lsp#scroll(-100000)
+            " Scroll the LSP float/popup without entering it: hover (K) in
+            " normal mode, completion docs and argument hint in insert mode
+            " -- Alt+e/y: down/up 4 lines, Alt+G/g: end/start
+            " -- (a 2nd K does not focus the float: it closes it in neovim
+            "    and vim popups cannot be focused)
+            for s:mode in ['n', 'i']
+                execute s:mode . 'noremap <buffer><expr> <M-e> lsp#scroll(+4)'
+                execute s:mode . 'noremap <buffer><expr> <M-y> lsp#scroll(-4)'
+                execute s:mode . 'noremap <buffer><expr> <M-G> lsp#scroll(+100000)'
+                execute s:mode . 'noremap <buffer><expr> <M-g> lsp#scroll(-100000)'
+            endfor
             " Load LSP diagnostics to location list
             nmap <buffer> <leader>ee :LspDocumentDiagnostics<CR>
             " Rename variable
@@ -3200,7 +3408,10 @@
                 inoremap <buffer><expr> <CR>
                             \ pumvisible() ? asyncomplete#close_popup() : "\<CR>"
             endif
-            " asyncomplete pops up here, so pause autocomplpop in this buffer
+            " asyncomplete pops up here (LSP + buffer words + file paths),
+            " so pause autocomplpop in this buffer
+            call asyncomplete#enable_for_buffer()
+            call s:BufferWordsRefresh(bufnr(''))
             let b:acp_off = 1
             let b:lsp_acp_off = 1
             if exists('*s:AcpBufferSync')
@@ -3244,8 +3455,8 @@
 
 " Vim colorscheme ------------------------------------------------------------
     " Customized colorscheme settings
-    if USING_CUSTOMIZED_THEME
-        if USING_WAL_THEME
+    if s:on('theme')
+        if s:on('wal_theme')
             " Option 1 - Direct read Xcolor from wal
             "source $HOME/.cache/wal/colors-wal.vim
             " Option 2 - Use wal vim plugin [Recommended]
@@ -3258,12 +3469,12 @@
                 " Startup color theme
                 colorscheme dracula
                 " Startup lightline style
-                call LightlineStyle('dracula', USING_FANCY_SYMBOLS, 1)
+                call LightlineStyle('dracula', g:vimrc_features.fancy_symbols, 1)
             else
                 " Startup color theme
                 colorscheme gruvbox
                 " Startup lightline style
-                call LightlineStyle('gruvbox', USING_FANCY_SYMBOLS, 1)
+                call LightlineStyle('gruvbox', g:vimrc_features.fancy_symbols, 1)
             endif
         endif
         " Call customized color palette
@@ -3276,28 +3487,28 @@
     " Colorscheme shortcut
     nnoremap <leader>csD :colorscheme default<CR>:set termguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
-                \:call LightlineStyle('default', USING_FANCY_SYMBOLS, 0)<CR>
+                \:call LightlineStyle('default', g:vimrc_features.fancy_symbols, 0)<CR>
                 \:call LightlineReload()<CR>:echo 'default colorscheme'<CR>
     nnoremap <leader>csg :colorscheme gruvbox<CR>:set termguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
-                \:call LightlineStyle('gruvbox', USING_FANCY_SYMBOLS, 1)<CR>
+                \:call LightlineStyle('gruvbox', g:vimrc_features.fancy_symbols, 1)<CR>
                 \:call CustomizedColorPalette()<CR>
                 \:call LightlineReload()<CR>:echo 'gruvbox colorscheme'<CR>
     nnoremap <leader>csv :colorscheme vim-monokai-tasty<CR>:set termguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
-                \:call LightlineStyle('deus', USING_FANCY_SYMBOLS, 0)<CR>
+                \:call LightlineStyle('deus', g:vimrc_features.fancy_symbols, 0)<CR>
                 \:call LightlineReload()<CR>:echo 'monokai colorscheme'<CR>
     nnoremap <leader>css :colorscheme srcery<CR>:set termguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
-                \:call LightlineStyle('srcery_drk', USING_FANCY_SYMBOLS, 1)<CR>
+                \:call LightlineStyle('srcery_drk', g:vimrc_features.fancy_symbols, 1)<CR>
                 \:call LightlineReload()<CR>:echo 'srcery colorscheme'<CR>
     nnoremap <leader>csn :colorscheme nord<CR>:set termguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
-                \:call LightlineStyle('nord', USING_FANCY_SYMBOLS, 1)<CR>
+                \:call LightlineStyle('nord', g:vimrc_features.fancy_symbols, 1)<CR>
                 \:call LightlineReload()<CR>:echo 'nord colorscheme'<CR>
     nnoremap <leader>csd :colorscheme dracula<CR>:set termguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
-                \:call LightlineStyle('dracula', USING_FANCY_SYMBOLS, 1)<CR>
+                \:call LightlineStyle('dracula', g:vimrc_features.fancy_symbols, 1)<CR>
                 \:call LightlineReload()<CR>:echo 'dracula colorscheme'<CR>
     nnoremap <leader>csw :colorscheme wal<CR>:set notermguicolors<CR>
                 \:call CustomizedColorPalette()<CR>
