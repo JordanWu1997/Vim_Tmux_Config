@@ -3,7 +3,8 @@
 " ============================================================================
 " Fisa-vim-config
 " http://fisadev.github.io/fisa-vim-config/
-" Modified [Vim]/[Neovim] version: >= [8.2]/[v0.4.4]
+" Modified [Vim]/[Neovim] version: >= [8.2]/[v0.5]
+" -- Tested with Vim 9.1 and Neovim 0.9.5
 " by Kuan-Hsien Wu, Sheng-Jun Lin
 " ============================================================================
 " This vim configuration is for both vim and neovim
@@ -39,14 +40,14 @@
     " (3) [No needs for kitty] set terminal font to "DroidSansMono Nerd Font"
 
 " NOTE: Vim plugin support ---------------------------------------------------
-    " If curl is installed, vim-plug (vim-plugin manger) should automatically
+    " If curl is installed, vim-plug (vim-plugin manager) should automatically
     " run all installation at your first time loading vim.
 
     " If vim-plug somehow not working automatically or if you want manual
     " installation, in vim command mode, type :PlugInstall
 
 " NOTE: Vim features support -------------------------------------------------
-    " In Fedora, vim is complied without clipboard and python3/dyn features,
+    " In Fedora, vim is compiled without clipboard and python3/dyn features,
 
     " For those feature support, you can try either recompile vim from source
     " codes or [Recommended] just install gvim (gui-vim) from Fedora instead.
@@ -80,14 +81,14 @@
     "    -- (2) :Neoformat pyment # Add description of function/class
     "    -- (3) :Neoformat yapf   # Format to PEP8 standard
 
-    " Example: SQL formater
+    " Example: SQL formatter
     " -- Installation: sqlformat in sqlparse:
     "    -- pip install sqlparse
 
     " Example: Markdown formatter
     " -- Installation: mdformat
     "    -- pip install mdformat
-    " -- [Optional] Installatoin: plug-ins for mdformat
+    " -- [Optional] Installation: plug-ins for mdformat
     "    -- pip install mdformat-deflist mdformat-footnote mdformat-frontmatter
     "    -- pip install mdformat-simple-breaks mdformat-tables mdformat-wikilink
 
@@ -96,7 +97,7 @@
     " Fedora repo is for Fedora 25 and higher version. For now, Seb just used
     " AppImage directly from neovim website
 
-    " Python-completion dependence
+    " Python-completion dependence [Legacy: only used when USING_LSP = 0]
     " -- jedi-vim: pip install jedi
     " -- deoplete: pip install pynvim neovim
     " -- ipython : pip install ipython (version >= 7.2)
@@ -106,7 +107,7 @@
 
 " NOTE: clangd (C++ completion, formatter, linter and etc.) ------------------
     " To make clangd detected used libraries
-    " -- Standard Libarary
+    " -- Standard Library
     "    -- Copy ./share/clangd as $HOME/.clangd
     "    -- Note that You may need to check the C++ path in ./share/clangd
     " -- Library outside current project (requires CMAKE):
@@ -114,7 +115,7 @@
     "    -- In CMakeLists.txt, Add set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 " NOTE: LanguageTool (Grammar Checker) ---------------------------------------
-    " -- Instatll LanguageTool (for now, scrip only works with version up to 5.9
+    " -- Install LanguageTool (for now, script only works with version up to 5.9)
     "    -- wget https://languagetool.org/download/archive/LanguageTool-5.9.zip
     "    -- unzip LanguageTool-5.9.zip
 
@@ -127,7 +128,7 @@
 " NOTE: Keyboard key repeat time settings ------------------------------------
     " Speed up/down key repeat time for pressing key
     " -- e.g. jjjjjjjj, kkkkkkkkkk, wwwwwwwwwww
-    " Use Xset to set key repeat
+    " Use Xset to set key repeat [X11 only; in sway use input * repeat_rate]
     " --      xset [repeat rate] [start repeat time (ms)] [repeat rate (/sec)]
     " -- e.g. xset     r rate              300                    40
 
@@ -136,7 +137,7 @@
     " -- :edit scp://user@remote_machine//path_to_file
 
 " ============================================================================
-" Vim and Neovim settings (***MUST-READ SESSION***)
+" Vim and Neovim settings (***MUST-READ SECTION***)
 " ============================================================================
 " Select vim-plug to load, set guicolor (real color) support, and etc.
 
@@ -156,7 +157,7 @@
     let USING_EXTRA_PLUG = 1
     " Coding tools vim-plug (Include syntax support, git function, and etc.)
     let USING_CODING_TOOL_PLUG = 1
-    " Language Server Protocal (LSP) (Include completion, linting and etc.)
+    " Language Server Protocol (LSP) (Include completion, linting and etc.)
     let USING_LSP = 1
     " Python Completion (Use deoplete and jedi, neovim is recommended)
     let USING_PYTHON_COMPLETION = !USING_LSP
@@ -243,7 +244,7 @@
     " -- Ctrl+[q/v]: Insert-special-keys mode
     "    -- Usage: insert u2713 to insert unicode character u+2713
 
-    " Map exit insert mode (Esc/Ctrl+[) to ii, kj
+    " Map exit insert mode (Esc/Ctrl+[) to kj (ii is disabled)
     " -- Use Ctrl+[q/v] to escape for 'ii' word (e.g. ascii)
     "imap ii <Esc>
     imap kj <Esc>
@@ -507,7 +508,7 @@
     " -- z+[m/r]: More/Reduce fold level
     " -- z+[M/R/i]: Maximize/Remove/Invert all folds
     " -- z+[j/k]: Jump to next/prev fold
-    " -- z+[n/N/i]: Diable/Enable/Toggle foldenable
+    " -- z+[n/N/i]: Disable/Enable/Toggle foldenable
 
     " Default fold settings
     set nofoldenable
@@ -568,12 +569,6 @@
     noremap <silent><A-h> :vertical resize -2<CR>
     noremap <silent><A-j> :resize +2<CR>
     noremap <silent><A-k> :resize -2<CR>
-    " Resize window to fraction
-    function! ResizeWidthToFraction(fraction)
-        let total_width = &columns
-        let target_width = float2nr(total_width * a:fraction)
-        execute 'vertical resize ' . target_width
-    endfunction
     " Resize width to fraction
     function! ResizeWidthToFraction(fraction)
         let total_width = &columns
@@ -988,7 +983,7 @@
 " ****************************************************************************
 
 " [Vim Neovim communication] -------------------------------------------------
-    " Help communicate beteen vim and neovim [needed for deoplete.nvim]
+    " Help communicate between vim and neovim [needed for deoplete.nvim]
     " Pynvim must be installed first [/usr/bin/python -m pip install pynvim]
     if USING_VIM
         Plug 'roxma/vim-hug-neovim-rpc'
@@ -1167,7 +1162,7 @@
         Plug 'Shougo/deoplete.nvim', { 'for': 'python' }
         " Python autocompletion
         Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
-        " Just to add go-to-definition and similar features, autocompeletion
+        " Just to add go-to-definition and similar features, autocompletion
         " from this plugin is disabled
         Plug 'davidhalter/jedi-vim', { 'for': 'python' }
         " Update for the first time usage
@@ -1214,15 +1209,17 @@
 " [Language] -----------------------------------------------------------------
     " Language Tool
     Plug 'dpelle/vim-LanguageTool', { 'on': 'LanguageToolCheck' }
-    " Word identifier (e.g., weak, weasel, puffery, redunant, etc.)
+    " Word identifier (e.g., weak, weasel, puffery, redundant, etc.)
     Plug 'preservim/vim-wordy'
 
 " [I3 syntax highlight] ------------------------------------------------------
     " I3 configuration syntax highlight
     Plug 'PotatoesMaster/i3-vim-syntax', { 'for': 'i3' }
 
-" [Ollma] --------------------------------------------------------------------
-    Plug 'madox2/vim-ai', { 'on': [ 'AI', 'AIE', 'AIC' ] }
+" [Ollama] -------------------------------------------------------------------
+    " AIE/AIC are short forms of :AIEdit/:AIChat; AIRedo is used by <leader>or
+    Plug 'madox2/vim-ai', { 'on': [ 'AI', 'AIE', 'AIC', 'AIEdit', 'AIChat',
+                \ 'AIRedo', 'AINewChat' ] }
 
 " [Codeium] ------------------------------------------------------------------
     Plug 'Exafunction/codeium.vim',
@@ -1414,9 +1411,9 @@
         noremap <leader>slsd :call lightline#disable()<CR>:set showmode<CR>
                     \:set laststatus=2<CR>:echo "LIGHTLINE DISABLED"<CR>
         " Toggle all lightline status/tab line
-        noremap <leader>slae :call lightline#enable()<CR>:set showmode<CR>
+        noremap <leader>slae :call lightline#enable()<CR>:set noshowmode<CR>
                     \:set showtabline=2<CR>:set laststatus=2<CR>
-                    \:echo "STATUSLINE/TABLINE DISABLED"<CR>
+                    \:echo "STATUSLINE/TABLINE ENABLED"<CR>
         noremap <leader>slad :call lightline#disable()<CR>:set showmode<CR>
                     \:set showtabline=0<CR>:set laststatus=0<CR>
                     \:echo "STATUSLINE/TABLINE DISABLED"<CR>
@@ -1574,7 +1571,7 @@
     let g:NERDTreeShowHidden = 0
     " Disable bookmark label in nerdtree
     let g:NERDTreeMinimalUI = 0
-    " Don;t show these file types
+    " Don't show these file types
     let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
     let g:NERDTreeMouseMode = 3
     let g:NERDTreeDirArrows = ''
@@ -1593,7 +1590,7 @@
     noremap <F3> :silent! NERDTreeToggle<CR>
     " Open NERDTree with the current file selected
     noremap <leader><F3> :silent! NERDTreeFind<CR>
-    " Tagbar location
+    " NERDTree location
     noremap <leader>ntl :let g:NERDTreeWinPos = 'left'<CR>
     noremap <leader>ntr :let g:NERDTreeWinPos = 'right'<CR>
 
@@ -1750,7 +1747,7 @@
         let g:vimwiki_folding = 'expr'
         " Set all markdown filetype to vimwiki
         let g:vimwiki_global_ext = 1
-        " Keep markdwon file ext (.md) when generating link
+        " Keep markdown file ext (.md) when generating link
         let g:vimwiki_markdown_link_ext = 1
         " Create tagbar type for vimwiki
         let g:tagbar_type_vimwiki = {
@@ -1790,7 +1787,7 @@
         nmap <leader>\ <Esc>:VimwikiToggleListItem<CR>
         " Add HTML tag that assigns text background color
         nmap <leader>wcc <Esc>:VimwikiColorize<CR>
-        " Diary mappings (start with v and then d)
+        " Diary mappings (start with w and then d)
         nmap <leader>wdG <Plug>VimwikiDiaryGenerateLinks
         nmap <leader>wdI <Plug>VimwikiDiaryIndex
         nmap <leader>wdd <Plug>VimwikiMakeDiaryNote
@@ -1949,7 +1946,7 @@
     endif
 
 " Pop-up window selection ----------------------------------------------------
-    " AUto completion pop-up, use Ctrl+[e/y] to close/select completion
+    " Auto completion pop-up, use Ctrl+[e/y] to close/select completion
 
     " [Double quotation matters here, DO NOT change to single quotation]
     if USING_EXTRA_PLUG
@@ -2014,8 +2011,9 @@
         vnoremap <leader>nsf :'<,'>Neoformat! sql sqlformat<CR>
         " Markdown -----------------------------------------------------------
         " mdformat: Markdown formatter (m for markdown)
-        nnoremap <leader>nmf :Neoformat! markdown mdformat<CR>
+        " -- Visual mode: format selection only (patch below is NOT applied)
         vnoremap <leader>nmf :'<,'>Neoformat! markdown mdformat<CR>
+        " -- Normal mode: format whole buffer, then apply the patch below
         " mdformat: for now mdformat messes up following syntax, use this as patch
         " -- 1. Link URL (e.g., 中文連結 -> %E4%B8%AD%E6%96%87%E9%80%A3%E7%B5%90)
         " -- 2. Tex (e.g., $\parameter$ -> $\\paramter$)
@@ -2026,7 +2024,7 @@
             \ :echo 'Neoformat: mdformat and Python patch applied'<CR>
 
         " Python -------------------------------------------------------------
-        " pyment: python docstring creater/formatter (p for python)
+        " pyment: python docstring creator/formatter (p for python)
         let g:neoformat_python_pyment_google = {
                 \ 'exe': 'pyment',
                 \ 'args': ['-', '-o "google"', '-w'],
@@ -2043,7 +2041,7 @@
                 \ 'stdin': 1,
                 \ }
         let g:neoformat_enabled_python = ['pyment_google', 'pyment_javadoc']
-        " pyment: python docstring creater/formatter
+        " pyment: python docstring creator/formatter
         nnoremap <leader>nptt :Neoformat pyment<CR>
         nnoremap <leader>nptg :Neoformat pyment_google<CR>
         nnoremap <leader>nptj :Neoformat pyment_javadoc<CR>
@@ -2061,7 +2059,7 @@
 
 " Rainbow parentheses --------------------------------------------------------
     if USING_CODING_TOOL_PLUG
-        " Don;t enable when start up
+        " Don't enable when start up
         let g:rainbow_active = 0
         noremap <leader>rb :RainbowToggle<CR>
     endif
@@ -2128,7 +2126,7 @@
     if USING_CODING_TOOL_PLUG
         " Disable all gitgutter key mappings
         let g:gitgutter_map_keys = 0
-        " Enable gitgutter at start
+        " Disable gitgutter at start (enable per buffer on demand)
         let g:gitgutter_enabled = 0
         " Enable gitgutter sign highlight at start
         let g:gitgutter_signs = 1
@@ -2252,9 +2250,9 @@
 
 " Python skeleton (add python skeleton for new python .py file) --------------
     " NOTE: Here we don't use simply use BufNewFile since vim-lsp-settings
-    " sometimes reload flile twice which makes the action called twice
+    " sometimes reload file twice which makes the action called twice
     function! s:InsertPythonSkeleton() abort
-        " Check if the buffer is empty and is a new file since
+        " Check if the buffer is empty and is a new file
         if line('$') == 1 && empty(getline(1))
             " Read the skeleton content from your variable/file
             exec '0r' s:PYTHON_SKELETON
@@ -2306,7 +2304,7 @@
     endif
     " Load template file when new file created
     function! s:InsertTexTemplate() abort
-        " Check if the buffer is empty and is a new file since
+        " Check if the buffer is empty and is a new file
         if line('$') == 1 && empty(getline(1))
             " Read the skeleton content from your variable/file
             exec '0r' s:TEX_TEMPLATE
@@ -2386,10 +2384,12 @@
     let g:vim_ai_complete = s:vim_ai_edit_config
     let g:vim_ai_edit = s:vim_ai_edit_config
     " Keybindings
+    " -- oi: inline complete (:AI), oo: chat (:AIChat), oe: edit (:AIEdit),
+    "    or: redo last AI command (:AIRedo)
     map <leader>oi :AI<space>
     map <leader>oo :AIC<space>
     map <leader>oe :AIE<space>
-    map <leader>or :AIR<CR>
+    map <leader>or :AIRedo<CR>
 
 " Codeium --------------------------------------------------------------------
     "" NOTE: Codeium Chat uses web browser as front-end UI but it doest not work
@@ -2425,6 +2425,10 @@
 " ============================================================================
 
 " Vim-LSP --------------------------------------------------------------------
+    " NOTE:
+    " -- LSP is DISABLED at startup: no language server starts until you ask
+    "    with <leader>Le (enable in all buffers), <leader>Ld disables again
+    " -- Server management keys (<leader>L[M/I/S/R/s]) work in every buffer
     if USING_LSP && USING_VIM8
         " Disable LSP at startup
         let g:lsp_auto_enable = 0
@@ -2501,7 +2505,7 @@
     endif
 
 " ============================================================================
-" Part 9 - Colorscheme and other color settings (Plugin settings and mappings)
+" Part 10 - Colorscheme and other color settings (Plugin settings and mappings)
 " ============================================================================
 " Set colorscheme (syntax highlight), color assignment, and etc.
 
