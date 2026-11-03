@@ -1667,7 +1667,7 @@
             \           [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
             \ 'right': [ [ 'percent' ],
             \            [ 'lineinfo' ],
-            \            [ 'lspstatus', 'githunks', 'spell',
+            \            [ 'context', 'spell',
             \              'fileformat', 'fileencoding', 'filetype' ] ] }
         " Inactive statusline
         let g:lightline.inactive = {
@@ -1684,8 +1684,7 @@
             \ 'fileformat': 'LightlineFileformat',
             \ 'fileencoding': 'LightlineFileencoding',
             \ 'filetype': 'LightlineFiletype',
-            \ 'lspstatus': 'LightlineLspStatus',
-            \ 'githunks': 'LightlineGitHunks' }
+            \ 'context': 'LightlineContext' }
         " Fancy symbol for statusline separator
         if a:fancy
             let g:lightline.separator = { 'left': "", "right": "" }
@@ -1768,12 +1767,28 @@
             return winwidth(0) > 85 ? (&spell ? &spelllang : '') : ''
         endfunction
         " Hide for small window
+        " -- Only when unusual (not unix / not utf-8), e.g. a dos file
         function! LightlineFileformat()
-            return winwidth(0) > 75 ? &fileformat : ''
+            return winwidth(0) > 75 && &fileformat !=# 'unix' ? &fileformat : ''
         endfunction
         " Hide for small window
         function! LightlineFileencoding()
-            return winwidth(0) > 60 ? (&fileencoding !=# '' ? &fileencoding : 'NO FE') : ''
+            return winwidth(0) > 60 && &fileencoding !=# ''
+                        \ && &fileencoding !=# 'utf-8' ? &fileencoding : ''
+        endfunction
+        " One context item, the most important for what you are doing:
+        " diff mode > search highlight on > git hunks > LSP
+        function! LightlineContext()
+            for l:Item in [function('LightlineDiffCount'),
+                        \ function('LightlineSearchCount'),
+                        \ function('LightlineGitHunks'),
+                        \ function('LightlineLspStatus')]
+                let l:text = l:Item()
+                if l:text !=# ''
+                    return l:text
+                endif
+            endfor
+            return ''
         endfunction
         " Hide for small window
         function! LightlineFiletype()
@@ -1797,15 +1812,87 @@
             endfor
             return empty(l:running) ? 'LSP' : 'LSP:' . join(l:running, ',')
         endfunction
-        " Git hunk summary '+added ~modified -removed' (only when gitgutter
-        " is already loaded and enabled for this buffer; never loads it)
+        " Git hunks 'hunk 3/12': hunks starting at or above the cursor / all
+        " hunks (only when gitgutter is already loaded and enabled for this
+        " buffer; never loads it). Totals: :GitGutterQuickFix or the signs
         function! LightlineGitHunks()
             if winwidth(0) <= 90 || !exists('*GitGutterGetHunkSummary')
                 return ''
             endif
-            let [l:a, l:m, l:r] = GitGutterGetHunkSummary()
-            return (l:a + l:m + l:r) == 0 ? ''
-                        \ : printf('+%d ~%d -%d', l:a, l:m, l:r)
+            " hunk = [from_start, from_count, to_start, to_count]
+            let l:hunks = gitgutter#hunk#hunks(bufnr(''))
+            if empty(l:hunks)
+                return ''
+            endif
+            let l:line = line('.')
+            let l:cur = len(filter(copy(l:hunks), 'max([1, v:val[2]]) <= l:line'))
+            return printf('hunk %d/%d', l:cur, len(l:hunks))
+        endfunction
+        " Search matches 'search 3/27' while search highlight is on (after
+        " /, ?, *, #, n, N; gone after :noh or <Alt-/>)
+        " -- searchcount() (Vim 8.1.1270+ / Neovim 0.5+) stops at 999
+        "    matches ('>999') or after 20 ms ('?'), so huge files stay fast
+        " -- Cached until the cursor, the text or the pattern changes
+        function! LightlineSearchCount()
+            if !&hlsearch || !v:hlsearch || empty(@/) || winwidth(0) <= 30
+                        \ || !exists('*searchcount')
+                return ''
+            endif
+            let l:key = [bufnr(''), b:changedtick, @/, line('.'), col('.')]
+            if get(s:, 'searchcount_key', []) !=# l:key
+                let s:searchcount_key = l:key
+                let l:sc = {}
+                try
+                    let l:sc = searchcount({'recompute': 1, 'maxcount': 999,
+                                \ 'timeout': 20})
+                catch
+                endtry
+                if empty(l:sc) || l:sc.total == 0
+                    let s:searchcount_text = ''
+                else
+                    let l:max = '>' . l:sc.maxcount
+                    let s:searchcount_text = printf('search %s/%s',
+                                \ l:sc.current > l:sc.maxcount ? l:max : l:sc.current,
+                                \ l:sc.incomplete == 2 ? l:max
+                                \ : l:sc.total . (l:sc.incomplete == 1 ? '?' : ''))
+                endif
+            endif
+            return s:searchcount_text
+        endfunction
+        " Diff hunks 'diff 2/7' in diff mode (vimdiff, git_diff_vim.sh,
+        " fugitive :Gdiffsplit): hunks starting at or above the cursor / all
+        " hunks, the same hunks ]c and [c jump between
+        " -- Hunk starts are found once per change of any diffed buffer
+        "    (diff_hlID() per line: ~7-11 ms per 1000 lines) and cached in
+        "    b:diffcount_starts; while typing in insert mode the last count
+        "    is kept, and it is updated after leaving insert mode
+        function! LightlineDiffCount()
+            if !&diff || winwidth(0) <= 30
+                return ''
+            endif
+            let l:ticks = map(filter(range(1, winnr('$')),
+                        \ 'getwinvar(v:val, "&diff")'),
+                        \ 'getbufvar(winbufnr(v:val), "changedtick")')
+            let l:key = [winnr('$'), l:ticks]
+            if get(b:, 'diffcount_key', []) !=# l:key
+                        \ && !(mode() =~# '^[iR]' && exists('b:diffcount_starts'))
+                let l:starts = []
+                let l:prev = 0
+                for l:lnum in range(1, line('$') + 1)
+                    let l:in = l:lnum <= line('$') && diff_hlID(l:lnum, 1) != 0
+                    " Lines deleted on this side show as filler above l:lnum
+                    " (lines added after the last line count from the last line)
+                    if (l:in || diff_filler(l:lnum) > 0) && !l:prev
+                        call add(l:starts, min([l:lnum, line('$')]))
+                    endif
+                    let l:prev = l:in
+                endfor
+                let b:diffcount_starts = l:starts
+                let b:diffcount_key = l:key
+            endif
+            let l:line = line('.')
+            return printf('diff %d/%d', len(filter(copy(b:diffcount_starts),
+                        \ 'v:val <= l:line')), len(b:diffcount_starts))
         endfunction
 
     endfunction
