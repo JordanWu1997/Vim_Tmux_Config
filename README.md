@@ -126,6 +126,7 @@ Backup for my Vim and TMUX configuration
 - [X] Add **_Markdown features_** e.g. preview, folding, wiki-style markdown writer, etc.
 - [X] Add **_Latex features_** e.g. real-time preview, compilation, etc.
 - [X] Try to minimize loading time while keeping maximal functionality/variety
+- [X] Keep **_all user settings in four dictionaries_** at the top of `vim/vimrc` (`g:vimrc_features`, `g:vimrc_paths`, `g:vimrc_tools`, `g:vimrc_tmux`), with optional per-machine overrides in a git-ignored `vim/local.vim`
 - [X] Also offer Minimal **_cross-platform configuration_** (`./mini/mini.vim`) for both UNIX-like system and Windows system
 
 </details>
@@ -188,12 +189,12 @@ Backup for my Vim and TMUX configuration
 
 3. Requirement for Python Completion
 
-   - __Default: Language Server Protocol (LSP)__ (`USING_LSP = 1`)
+   - __Default: Language Server Protocol (LSP)__ (`g:vimrc_features.lsp = 1`)
 
      - Language servers are installed per filetype by `vim-lsp-settings`
      - Open a `.py` file and run `:LspInstallServer` (or `[LK]`+`[Shift]`+`[l]`+`[Shift]`+`[i]`)
      - Python servers are set to __pyright__ (type checking) + __ruff__ (lint, quick fixes):
-       `let g:lsp_settings_filetype_python = ['pyright-langserver', 'ruff']`; run `:LspInstallServer` once for each
+       (`g:vimrc_tools.python_lsp_servers = ['pyright-langserver', 'ruff']`); run `:LspInstallServer` once for each
      - LSP is __disabled at startup__ (no server runs) until you press `[LK]`+`[Shift]`+`[l]`+`[e]`
      - When vim was not started inside a virtualenv, enabling LSP activates `.venv`, `venv` or `env` found at the
        project (git) root, so the servers, `:terminal` and tests see the project packages
@@ -207,7 +208,7 @@ Backup for my Vim and TMUX configuration
      # Debugger (vimspector), once in vim:  :VimspectorInstall debugpy
      ```
 
-   - __[Legacy] deoplete + jedi__ (only when `USING_LSP = 0`), requires packages below
+   - __[Legacy] deoplete + jedi__ (only when `g:vimrc_features.lsp = 0`), requires packages below
 
    - __ipython__ (version >= __7.20__) [python consoler]
 
@@ -261,36 +262,41 @@ Backup for my Vim and TMUX configuration
    - __xsel__ [clipboard sync with TMUX], __ctags__ [tagbar]
    - __nodejs__ and __yarn__ [markdown-preview.nvim], __go__ [vim-hexokinase]
    - __mdformat__, __isort__, __yapf__, __pyment__, __sqlparse__, __clang-format__ [neoformat formatters]
-   - __Ollama__ [vim-ai, endpoint and model set in `Variables for vim/neovim or plug-in`]
-   - __LanguageTool 5.9__ [vim-LanguageTool, jar path `g:languagetool_jar`]
+   - __Ollama__ [vim-ai, endpoint and model in `g:vimrc_tools.ollama`]
+   - __LanguageTool 5.9__ [vim-LanguageTool, jar path in `g:vimrc_tools.languagetool_jar`]
    - `bin/install.sh` installs the main dependencies on Fedora
 
 #### 2. Copy Configuration File (Vim)
 
-- NOTE: the full vimrc loads scripts, templates and the fzf patch from
-  `$HOME/Desktop/Vim_Tmux_Config` (see `Variables for vim/neovim or plug-in` in vimrc),
-  so clone this repository there, or change those paths. A symlink keeps the vimrc in sync:
-  `ln -s $HOME/Desktop/Vim_Tmux_Config/vim/vimrc $HOME/.vimrc`
+- Full (recommended: symlink, so `git pull` updates your config)
 
-- Full
+  - The vimrc finds the repository from its own (resolved) location and loads scripts, templates and the fzf
+    patch from `vim/` next to it. With a symlink, the repository can be cloned anywhere.
 
   - __Vim/Gvim__
 
-    1. Copy `vim/vimrc` to `$HOME/` (current user's home)
-    2. Rename `vimrc` to `.vimrc`
-
     ```bash
-    cp vim/vimrc $HOME/.vimrc
+    ln -s "$PWD/vim/vimrc" $HOME/.vimrc            # run in the repository root
     ```
 
   - __Neovim__
 
-    1. Copy `vim/vimrc` to `$HOME/.config/nvim/` (create one if not exists)
-    2. Rename `vimrc` to `init.vim`
-
     ```bash
     mkdir -p $HOME/.config/nvim
-    cp vim/vimrc $HOME/.config/nvim/init.vim
+    ln -s "$PWD/vim/vimrc" $HOME/.config/nvim/init.vim
+    ```
+
+  - Copying instead of linking also works (`cp vim/vimrc $HOME/.vimrc` or `.../init.vim`), but a copied file
+    cannot see the repository, so it falls back to `$HOME/Desktop/Vim_Tmux_Config/vim`. Clone the repository
+    there when you copy.
+
+- Machine-specific settings (optional)
+
+  - Copy the example and keep only what differs on this machine (python provider, wiki location, Ollama model,
+    feature switches, ...). The file is git-ignored; see [Plugin Usage Configuration](#2-plugin-usage-configuration-vim)
+
+    ```bash
+    cp vim/local.vim.example vim/local.vim
     ```
 
 - Minimal (original vim-only)
@@ -334,6 +340,20 @@ Backup for my Vim and TMUX configuration
      :PlugInstall
      ```
 
+- After pulling updates of this repository (the plugin list may change)
+
+  ```vim
+  :PlugInstall   " install newly added plugins
+  :PlugClean     " remove plugins no longer in the list
+  ```
+
+- One-time setup of optional language tools (see Python requirements above)
+
+  ```vim
+  :LspInstallServer pyls-pall    " in a .py file, also: ruff
+  :VimspectorInstall debugpy     " only for the graphical debugger
+  ```
+
 </details>
 
 ### Section 3 - Plugin Usage (Vim)
@@ -359,77 +379,46 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 
 - For more details, check sections in vimrc
 
-- Plugin usage can be configured in the first section of `vimrc` file
+- All settings you may want to change are at the top of `vim/vimrc` ("Vim and Neovim settings (MUST-READ SECTION)"),
+  in four dictionaries. The rest of the file only reads them:
+
+  | Dictionary         | Content                                                                                                  |
+  | ------------------ | -------------------------------------------------------------------------------------------------------- |
+  | `g:vimrc_features` | Feature switches: `1` loads a group of plugins **and** their settings/keys, `0` drops the whole group    |
+  | `g:vimrc_paths`    | Directories, computed once as absolute paths (`vim`, `templates`, `bin`, `wiki`, `wiki_templates`)       |
+  | `g:vimrc_tools`    | External programs, helper scripts and tool settings (browser, python provider, LSP servers, Ollama, ...) |
+  | `g:vimrc_tmux`     | TMUX integration (`target` pane, `capture_lines`)                                                        |
+
+- __Machine-specific values__ go in `vim/local.vim` (git-ignored, optional; copy `vim/local.vim.example`).
+  It is sourced first; every key it sets overrides the default, all other defaults stay. Merging is one level
+  deep, so a nested dict such as `ollama` must be given in full.
 
   ```vim
-  " ============================================================================
-  " Vim and Neovim settings
-  " ============================================================================
-  " Select vim-plug to load, set GUI color (real color) support, etc.
-  " Assign 0 to disable plug option
+  " vim/local.vim
+  let g:vimrc_features = { 'fancy_symbols': 1, 'python_tools': 0 }
+  let g:vimrc_paths = { 'wiki': expand('~/Notes/') }
+  let g:vimrc_tools = { 'python3_host': expand('~/miniconda3/bin/python') }
   ```
 
-- Detect using neovim or not (automatic detection)
+- Editor detection is automatic (`g:vimrc_is_nvim`, `g:vimrc_is_vim8` = Vim >= 8.0 or Neovim >= 0.5). If you
+  copy the vimrc instead of symlinking it, the configuration directory falls back to
+  `$HOME/Desktop/Vim_Tmux_Config/vim`.
 
-  - Neovim is better for loading tons of plugins
-  - Neovim configuration path is different from vim
-  - If using vim, `vim-hug-neovim-rpc` plug will be loaded to bridge vim and neovim
+- Feature switches (`g:vimrc_features`, default in brackets)
 
-  ```vim
-  " Use vim or neovim (Auto-detect)
-  let USING_NEOVIM = has('nvim')
-  let USING_VIM = !USING_NEOVIM
-  ```
-
-- Check if using vim 8.0 or higher
-
-  - If vim version is less than 8.0, some function is not available (e.g. terminal)
-  - Required for
-    - [Built-in] terminal mode
-    - [Plug-in] vim-polyglot (multi-language support)
-    - [Plug-in] ale (multi-languages syntax highlight)
-
-  ```vim
-  " Check if vim version >= 8.0 (also for neovim >= 0.5)
-  let USING_VIM8 = 1
-  ```
-
-- Customize vim color scheme
-
-  - For fancy symbol support, nerd font is needed (check https://github.com/ryanoasis/nerd-fonts )
-  - For pywal theme support, pywal is needed (check https://github.com/dylanaraps/pywal ),
-    also remember to change the directory path to your $HOME/.cache/wal
-
-  ```vim
-  " Customize vim theme (Include colorscheme and statusline)
-  let USING_CUSTOMIZED_THEME = 1
-  " Fancy symbols (Mainly affect lightline and nerdtree icon)
-  let USING_FANCY_SYMBOLS = 0
-  " Wal theme support (Xresources colortheme support, check pywal)
-  "let USING_WAL_THEME = isdirectory('/home/jordankhwu/.cache/wal')
-  let USING_WAL_THEME = 0
-  ```
-
-- Extra vim-plug
-
-  - Extra plug for productivity (or enhance vim-built in function)
-  - Including
-    - [Plug-in] goyo (distraction-free editor)
-    - [Plug-in] limelight (light-off with goyo)
-    - [Plug-in] vim-startify (start page for empty buffer)
-    - [Plug-in] vimwiki (markdown wiki in vim)
-    - [Plug-in] yankring (clipboard history)
-    - [Plug-in] vim-peekaboo (vim register viewer/manager)
-    - [Plug-in] vim-markbar (vim mark viewer/manager)
-    - [Plug-in] vim-easymotion (physical movement)
-    - [Plug-in] AutoComplPop (auto-completion pop-up)
-    - [Plug-in] FixedTaskList (find TODO tag in vim)
-    - [Plug-in] vim-hexokinase (hex color code color highlight support)
-
-  ```vim
-  " Extra vim-plug (Include easymotion, yankring, autocolpop, etc.)
-  let USING_EXTRA_PLUG = 1
-  ```
+| Key                                                | Default | Plugins and settings it controls                                                                                                                                        |
+| -------------------------------------------------- | :-----: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `theme`                                            |    1    | Colorschemes (gruvbox, dracula, nord, srcery, monokai, wal) + lightline status/tab line                                                                                 |
+| `fancy_symbols`                                    |    0    | Nerd-font icons in lightline and NERDTree (needs a [nerd font](https://github.com/ryanoasis/nerd-fonts))                                                                |
+| `wal_theme`                                        |    0    | [pywal](https://github.com/dylanaraps/pywal) colors (cterm only, disables `termguicolors`)                                                                              |
+| `extra`                                            |    1    | goyo, limelight, vim-startify, vimwiki, calendar, yankring, vim-peekaboo, vim-markbar, vim-easymotion, AutoComplPop, FixedTaskList, vim-hexokinase                      |
+| `coding`                                           |    1    | vim-polyglot, neoformat, rainbow, indentLine, vim-indent-guides, vim-indent-object, vim-visual-multi, vim-fugitive, vim-gitgutter, vim-dadbod; ale only when `lsp` is 0 |
+| `lsp`                                              |    1    | vim-lsp, vim-lsp-settings, asyncomplete (+ asyncomplete-lsp, asyncomplete-file); servers start only on `[LK]`+`[Shift]`+`[l]`+`[e]`                                     |
+| `python_tools`                                     |    1    | vim-test (`[LK]`+`[p]`+`[t]`+`[*]`) and vimspector (`[LK]`+`[Shift]`+`[d]`+`[*]`)                                                                                       |
+| `gui_apps`                                         |    1    | External viewers: markdown-preview (browser), vim-latex-live-preview (zathura)                                                                                          |
+| `python_skeleton`, `tex_template`, `bash_template` |    1    | Template from `vim/share/templates/` for new `.py`, `.tex`, `.sh` files                                                                                                 |
+| `markdown_template`                                |    0    | Note template for new `.md` files (vim-markdown-tools)                                                                                                                  |
+| `legacy_python_completion`                         | derived | Not a switch: `!lsp`. Loads deoplete + jedi-vim (and vim-hug-neovim-rpc in vim)                                                                                         |
 
 - Coding tool vim-plug
 
@@ -451,74 +440,29 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
   - Git tools are __not loaded at startup__: fugitive loads on the first `:Git`/`:G...` command,
     gitgutter on the first gitgutter command or hunk key (`]h`, `[h`, `[LK]`+`[g]`+`[j/k/a/r/Shift-p]`).
     The statusline branch comes from a cached `git rev-parse` and does not load any git plugin.
+  - LSP plugins are loaded, but __LSP is disabled at startup__ (`g:lsp_auto_enable = 0`): no language server
+    runs until `[LK]`+`[Shift]`+`[l]`+`[e]`. While LSP is on in a buffer, autocomplpop is paused there.
+  - Completion while LSP is on (deoplete-like): asyncomplete with three sources: LSP, __words from all open
+    buffers__ (`[buffer]`) and __file paths__ (`[file]`, e.g. `./src/`). The first item is pre-selected (not
+    inserted), so its signature/docs float shows at once; `[Enter]` accepts it, `[Tab]`/`[Shift]`+`[Tab]` or
+    `[Ctrl]`+`[j/k]` move, `[Ctrl]`+`[e]` closes the menu. Function argument hints (signature help) appear about
+    0.2 s after `(` or `,`. Hover (`[Shift]`+`[k]`) is a floating popup at the cursor. Scroll any LSP float (hover, completion docs, argument
+    hint) without leaving your buffer: `[Alt]`+`[e/y]` down/up 4 lines, `[Alt]`+`[Shift]`+`[g]` / `[Alt]`+`[g]` end/start
+    (normal and insert mode, LSP buffers).
+  - Always loaded: vim-obsession (`:Obsess` keeps `Session.vim` updated for tmux-resurrect).
 
-  ```vim
-  " Coding tools vim-plug (Include syntax support, git function, etc.)
-  let USING_CODING_TOOL_PLUG = 1
-  ```
+- Paths and tools (`g:vimrc_paths`, `g:vimrc_tools`)
 
-- Language Server Protocol (LSP)
-
-  - [Plug-in] vim-lsp, vim-lsp-settings, asyncomplete.vim, asyncomplete-lsp.vim
-  - Plugins are loaded, but __LSP is disabled at startup__ (`g:lsp_auto_enable = 0`), so no language
-    server starts until you ask: `[LK]`+`[Shift]`+`[l]`+`[e]` to enable, `[LK]`+`[Shift]`+`[l]`+`[d]` to disable
-  - While LSP is enabled in a buffer, autocomplpop is paused there (asyncomplete shows the pop-up)
-
-  ```vim
-  " Language Server Protocol (LSP) (Include completion, linting and etc.)
-  let USING_LSP = 1
-  ```
-
-- Python completion vim-plug [Legacy, only when `USING_LSP = 0`]
-
-  - Tools for python completion
-  - Requirements must be satisfied (check python completion preparation at the first session)
-  - Including
-    - [Plug-in] nvim-yarp (yet another remote plugin framework for neovim)
-    - [Plug-in] vim-hug-neovim-rpc (plugin bridge from neovim to vim)
-    - [Plug-in] deoplete-jedi (python completion)
-    - [Plug-in] jedi-vim (definition and feature finder)
-
-  ```vim
-  " Python Completion (Use deoplete and jedi, neovim is recommended)
-  let USING_PYTHON_COMPLETION = !USING_LSP
-  " Python provider for jedi, pynvim and other python packages
-  let g:python3_host_prog = '/usr/bin/python'
-  ```
-
-- Python skeleton file
-
-  - Add preset python skeleton file for new created `.py` python file
-  - If you use different skeleton file, please change `s:PYTHON_SKELETON` variable
-
-  ```vim
-  " Add python skeleton file for new created .py python file
-  let USING_PYTHON_SKELETON = 1
-  " Python Skeleton file
-  let s:PYTHON_SKELETON = s:TEMPLATE_DIR . 'skeleton.py'
-  ```
-
-- Other template files (`vim/share/templates/`) for newly created files
-
-  ```vim
-  let USING_TEX_TEMPLATE = 1      " .tex
-  let USING_BASH_TEMPLATE = 1     " .sh
-  let USING_MARKDOWN_TEMPLATE = 0 " .md (handled by vim-markdown-tools)
-  ```
-
-- GUI support
-
-  - Functions for external GUI software
-  - Requires
-    - Latex previewer
-    - Markdown previewer
-
-  ```vim
-  " Support of external GUI software (e.g. Okular, Google-chrome, etc.)
-  let USING_GUI_SOFTWARE = 1
-  " Web browser for markdown preview (uses $BROWSER environment variable)
-  let s:WEBBROWSER = $BROWSER
-  ```
+| Key                                      | Default                                                 | Used by                                                       |
+| ---------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------- |
+| `g:vimrc_paths.wiki`                     | `~/Documents/KNOWLEDGE_BASE/`                           | vimwiki root; `wiki_templates` = `<wiki>/resources/template/` |
+| `g:vimrc_tools.browser`                  | `$BROWSER`                                              | markdown preview                                              |
+| `g:vimrc_tools.python3_host`             | `/usr/bin/python`                                       | `g:python3_host_prog` (pynvim, vimspector, vim-ai)            |
+| `g:vimrc_tools.python_lsp_servers`       | `['pyright-langserver', 'ruff']`                        | `g:lsp_settings_filetype_python`                              |
+| `g:vimrc_tools.python_debugger`          | `ipdb` if installed, else `pdb`                         | `[LK]`+`[p]`+`[Shift]`+`[b]`                                  |
+| `g:vimrc_tools.languagetool_jar`         | `/opt/LanguageTool-5.9/languagetool-commandline.jar`    | vim-LanguageTool                                              |
+| `g:vimrc_tools.ollama`                   | `url`, `model` (`gemma4:e2b`), `temperature`, `num_ctx` | vim-ai                                                        |
+| `g:vimrc_tmux.target` / `.capture_lines` | `{last}` / `300`                                        | `[LK]`+`[x]`+`[*]`, `[LK]`+`[q]`+`[t]`, vim-test              |
 
 </details>
 
@@ -594,25 +538,25 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 
 ##### 1. Fn-key Key Mapping
 
-| VIM-Mode |   Key Mapping    |            Function             |           Description           |                       Note                        |
-| :------: | :--------------: | :-----------------------------: | :-----------------------------: | :-----------------------------------------------: |
-|   N/V    |      `[F1]`      |          Vim help page          |    Vim help page (help.txt)     |                 Built-in function                 |
-|   N/V    |      `[F3]`      |         Toggle NerdTree         |     On/Off NerdTree plugin      |                                                   |
-|   N/V    |  `[LK]`+`[F3]`   |      NerdTree current file      |   Show current file location    |                                                   |
-|   N/V    |      `[F4]`      |          Toggle Tagbar          |      On/Off Tagbar plugin       |                                                   |
-|   N/V    |  `[LK]`+`[F4]`   |    Markdown/Latex previewer     |      Open external Viewer       | Only in markdown/vimwiki or tex buffers (buffer-local) |
-|   N/V    | (`[LK]`)+`[F5]`  |  Toggle (Rel)/Abs line number   |   On/Off rel/abs line number    |                                                   |
-|   N/V    |      `[F6]`      |  Toggle fold column (short-4)   |  On/Off fold column (short-4)   |        For easier code fold visualization         |
-|   N/V    |  `[LK]`+`[F6]`   |   Toggle fold column (long-8)   |   On/Off fold column (long-8)   |        For easier code fold visualization         |
-|   N/V    |      `[F7]`      |     Toggle show line border     |  On/Off highlight 79th column   | VIM recommends at most 78 characters for one line |
-|   N/V    |  `[LK]`+`[F7]`   |     Toggle show line border     | On/Off highlight characters from 79th | VIM recommends at most 78 characters for one line |
-|   N/V    |      `[F8]`      |    Toggle highlight comment     |  On/Off highlight code comment  | Assign brighter color to comment to highlight it  |
-|   N/V    |  `[LK]`+`[F8]`   |      Toggle highlight fold      |    On/Off highlight vim fold    | Assign brighter color to comment to highlight it  |
-|   N/V    |      `[F9]`      | Toggle indent highlight (line)  | On/Off indent highlight (line)  |                                                   |
-|   N/V    |  `[LK]`+`[F9]`   | Toggle indent highlight (block) | On/Off indent highlight (block) |                                                   |
-|   N/V    | (`[LK]`)+`[F10]` |     (Load)/Save vim view        |      Load/Save vim view         | Folds, cursor, etc. (`:mkview`); for splits use `[Ctrl]`+`[s]` (`:mksession`) |
-|   N/V    | (`[LK]`)+`[F11]` |  (Off)/On synchronized cursor   |   Off/On synchronized cursor    |   Need to execute in every pane to synchronize    |
-|   N/V    | (`[LK]`)+`[F12]` |   (Exit)/Enter terminal mode    |    Exit/Enter terminal mode     |                                                   |
+| VIM-Mode |   Key Mapping    |            Function             |              Description              |                                     Note                                      |
+| :------: | :--------------: | :-----------------------------: | :-----------------------------------: | :---------------------------------------------------------------------------: |
+|   N/V    |      `[F1]`      |          Vim help page          |       Vim help page (help.txt)        |                               Built-in function                               |
+|   N/V    |      `[F3]`      |         Toggle NerdTree         |        On/Off NerdTree plugin         |                                                                               |
+|   N/V    |  `[LK]`+`[F3]`   |      NerdTree current file      |      Show current file location       |                                                                               |
+|   N/V    |      `[F4]`      |          Toggle Tagbar          |         On/Off Tagbar plugin          |                                                                               |
+|   N/V    |  `[LK]`+`[F4]`   |    Markdown/Latex previewer     |         Open external Viewer          |            Only in markdown/vimwiki or tex buffers (buffer-local)             |
+|   N/V    | (`[LK]`)+`[F5]`  |  Toggle (Rel)/Abs line number   |      On/Off rel/abs line number       |                                                                               |
+|   N/V    |      `[F6]`      |  Toggle fold column (short-4)   |     On/Off fold column (short-4)      |                      For easier code fold visualization                       |
+|   N/V    |  `[LK]`+`[F6]`   |   Toggle fold column (long-8)   |      On/Off fold column (long-8)      |                      For easier code fold visualization                       |
+|   N/V    |      `[F7]`      |     Toggle show line border     |     On/Off highlight 79th column      |               VIM recommends at most 78 characters for one line               |
+|   N/V    |  `[LK]`+`[F7]`   |     Toggle show line border     | On/Off highlight characters from 79th |               VIM recommends at most 78 characters for one line               |
+|   N/V    |      `[F8]`      |    Toggle highlight comment     |     On/Off highlight code comment     |               Assign brighter color to comment to highlight it                |
+|   N/V    |  `[LK]`+`[F8]`   |      Toggle highlight fold      |       On/Off highlight vim fold       |               Assign brighter color to comment to highlight it                |
+|   N/V    |      `[F9]`      | Toggle indent highlight (line)  |    On/Off indent highlight (line)     |                                                                               |
+|   N/V    |  `[LK]`+`[F9]`   | Toggle indent highlight (block) |    On/Off indent highlight (block)    |                                                                               |
+|   N/V    | (`[LK]`)+`[F10]` |      (Load)/Save vim view       |          Load/Save vim view           | Folds, cursor, etc. (`:mkview`); for splits use `[Ctrl]`+`[s]` (`:mksession`) |
+|   N/V    | (`[LK]`)+`[F11]` |  (Off)/On synchronized cursor   |      Off/On synchronized cursor       |                 Need to execute in every pane to synchronize                  |
+|   N/V    | (`[LK]`)+`[F12]` |   (Exit)/Enter terminal mode    |       Exit/Enter terminal mode        |                                                                               |
 
 </details>
 
@@ -635,16 +579,16 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 
 ##### 2. Split/Window Key Mapping
 
-| VIM-Mode |             Key Mapping              |             Function              |            Description             |                            Note                             |
-| :------: | :----------------------------------: | :-------------------------------: | :--------------------------------: | :---------------------------------------------------------: |
-|   N/V    |        `[Ctrl]`+`[w]`+`[s/v]`        | Add new split Horizontal/Vertical | Add new split Horizontal/Vertical  |                                                             |
-|   N/V    |         `[Ctrl]`+`[h/j/k/l]`         |      Move between vim splits      |   Move between splits (L/D/U/R)    | With plugin, you can move between TMUX panes and VIM splits |
-|   N/V    |      `[Ctrl]`+`[w]`+`[h/j/k/l]`      |      Move between vim splits      |   Move between splits (L/D/U/R)    |                                                             |
-|   N/V    | `[Ctrl]`+`[w]`+`[Shift]`+`[h/j/k/l]` |   Move current split (L/D/U/R)    |    Move current split (L/D/U/R)    |                                                             |
-|   N/V    |    `[Ctrl]`+`[w]`+`[Shift]`+`[t]`    |   Move current split to new tab   |   Move current split to new tab    |                                                             |
-|   N/V    |         `[Alt]`+`[h/j/k/l]`          |     Resize current split size     |     Resize current split size      |                                                             |
-|   N/V    |         `[Ctrl]`+`[w]`+`[=]`         |      Re-split splits equally      |      Re-split splits equally       |            Here =(equal sign) for equally split             |
-|   N/V    |    `[LK]`+`[r]`+`[w/h]`+`[2/3/4]`    | Resize split width/height | Resize current split to 1/2, 1/3, 1/4 of screen width/height | e.g. for VIM terminal pane resize |
+| VIM-Mode |             Key Mapping              |             Function              |                         Description                          |                            Note                             |
+| :------: | :----------------------------------: | :-------------------------------: | :----------------------------------------------------------: | :---------------------------------------------------------: |
+|   N/V    |        `[Ctrl]`+`[w]`+`[s/v]`        | Add new split Horizontal/Vertical |              Add new split Horizontal/Vertical               |                                                             |
+|   N/V    |         `[Ctrl]`+`[h/j/k/l]`         |      Move between vim splits      |                Move between splits (L/D/U/R)                 | With plugin, you can move between TMUX panes and VIM splits |
+|   N/V    |      `[Ctrl]`+`[w]`+`[h/j/k/l]`      |      Move between vim splits      |                Move between splits (L/D/U/R)                 |                                                             |
+|   N/V    | `[Ctrl]`+`[w]`+`[Shift]`+`[h/j/k/l]` |   Move current split (L/D/U/R)    |                 Move current split (L/D/U/R)                 |                                                             |
+|   N/V    |    `[Ctrl]`+`[w]`+`[Shift]`+`[t]`    |   Move current split to new tab   |                Move current split to new tab                 |                                                             |
+|   N/V    |         `[Alt]`+`[h/j/k/l]`          |     Resize current split size     |                  Resize current split size                   |                                                             |
+|   N/V    |         `[Ctrl]`+`[w]`+`[=]`         |      Re-split splits equally      |                   Re-split splits equally                    |            Here =(equal sign) for equally split             |
+|   N/V    |    `[LK]`+`[r]`+`[w/h]`+`[2/3/4]`    |     Resize split width/height     | Resize current split to 1/2, 1/3, 1/4 of screen width/height |              e.g. for VIM terminal pane resize              |
 
 ##### 3. Code Folding Key Mapping
 
@@ -679,33 +623,32 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 
 ##### 6. Quickfix/Location List Key Mapping
 
-| VIM-Mode |      Key Mapping       |                Function                 |                 Description                 |                 Note                 |
-| :------: | :--------------------: | :-------------------------------------: | :-----------------------------------------: | :----------------------------------: |
-|    N     |  `[LK]`+`[q/e]`+`[g]`  | call built-in vimgrep/lvimgrep function | search like grep and store results in lists |                                      |
-|    N     |  `[LK]`+`[q/e]`+`[o]`  |   toggle quickfix/location list pane    |     toggle quickfix/location list pane      | built-in: copen/cclose, lopen/lclose |
-|    N     | `[LK]`+`[q/e]`+`[j/k]` | go to next/prev quickfix/location item  |   go to next/prev quickfix/location item    |  built-in: cnext/cprev, lnext/lprev  |
-|    N     |   `[LK]`+`[q]`+`[d]`   |   call cdo for items in quickfix list   |     call cdo for items in quickfix list     | like argdo, bdo for args and buffers |
-|    N     |   `[LK]`+`[q]`+`[t]`   | TMUX pane output to quickfix list | every `file:line[:col]` (and `@file:L12`) found in the last 300 lines of the target TMUX pane | e.g. agent or pytest output; only existing files are kept |
+| VIM-Mode |      Key Mapping       |                Function                 |                                          Description                                          |                           Note                            |
+| :------: | :--------------------: | :-------------------------------------: | :-------------------------------------------------------------------------------------------: | :-------------------------------------------------------: |
+|    N     |  `[LK]`+`[q/e]`+`[g]`  | call built-in vimgrep/lvimgrep function |                          search like grep and store results in lists                          |                                                           |
+|    N     |  `[LK]`+`[q/e]`+`[o]`  |   toggle quickfix/location list pane    |                              toggle quickfix/location list pane                               |           built-in: copen/cclose, lopen/lclose            |
+|    N     | `[LK]`+`[q/e]`+`[j/k]` | go to next/prev quickfix/location item  |                            go to next/prev quickfix/location item                             |            built-in: cnext/cprev, lnext/lprev             |
+|    N     |   `[LK]`+`[q]`+`[d]`   |   call cdo for items in quickfix list   |                              call cdo for items in quickfix list                              |           like argdo, bdo for args and buffers            |
+|    N     |   `[LK]`+`[q]`+`[t]`   |    TMUX pane output to quickfix list    | every `file:line[:col]` (and `@file:L12`) found in the last 300 lines of the target TMUX pane | e.g. agent or pytest output; only existing files are kept |
 
 ##### 7. Miscellaneous Function Key Mapping
-
-| VIM-Mode |     Key Mapping      |             Function              |            Description            |                    Note                    |
-| :------: | :------------------: | :-------------------------------: | :-------------------------------: | :----------------------------------------: |
-|    I     |     `[k]`+`[j]`      |   Esc (escape form insert mode)   |   Esc (escape form insert mode)   |                                            |
-|    I     |  `[Ctrl]`+`[g]`+`[d/t]` |   Insert date / date and time   |   Insert 2026-11-03 / 2026-11-03 10:20:30 |    `[LK]`+`[i]`+`[d]`+`[d/s]` in normal mode |
-|    N     |        `[x]`         | Delete character (black-hole register) | Delete character without replacing the clipboard | Visual-mode `x` still cuts |
-|   N/V    | `[LK]`+`[w]`+`[a/Shift-a]` | Write all / write all and quit | `:wall` / `:wqall` | `[LK]`+`[w]`+`[a]`+`[!]` force write all |
-|   N/V    |  `[LK]`+`[y]`+`[p/r]`  | Copy file path / file reference | Full path, or `@path:L12` (visual: `@path:L12-L30`) | Copied to `+` and `*`; for agent prompts |
-|   N/V    |   `[Shift]`+`[k]`    |   Search current word in manual   |   Search current word in manual   |                                            |
-|   N/V    |    `[Alt]`+`[/]`     |      Toggle search highlight      |      On/Off search highlight      |                                            |
-|   N/V    |  `[LK]`+`[w]`+`[p]`  |         Toggle line wrap          |         On/Off line wrap          |            Here wp for (w)ra(p)            |
-|   N/V    |  `[LK]`+`[c]`+`[l]`  |  Toggle list characters show-up   |  On/Off list characters show-up   |       Here cl for (c)haracter (l)ist       |
-|   N/V    |  `[LK]`+`[m]`+`[k]`  |        Show all vim marks         |        Show all vim marks         |            Here mk for (m)ar(k)            |
-|   N/V    |  `[LK]`+`[r]`+`[r]`  |      Show all vim registers       |      Show all vim registers       |          Here re for (r)egiste(r)          |
-|   N/V    |  `[LK]`+`[a]`+`[b]`  |     Show all vim abbreviates      |     Show all vim abbreviates      |         Here ab for (a)(b)breviate         |
-|   N/V    | `[LK]`+`[c]`+`[h/v]` | Toggle Horizontal/Vertical cursor | On/Off Horizontal/Vertical cursor |                                            |
-|   N/V    | `[LK]`+`[g]`+`[o/i]` |       Show all cursor jump        |       Show all cursor jump        | `[g/Ctrl]`+`[o/i]` jump backwards/forwards |
-|   N/V    | `[LK]`+`[g]`+`[;/,]` |       Show all file change        |       Show all file change        |  `[g]`+`[;/,]` go to earlier/later change  |
+| VIM-Mode |        Key Mapping         |                Function                |                     Description                     |                    Note                    |
+| :------: | :------------------------: | :------------------------------------: | :-------------------------------------------------: | :----------------------------------------: |
+|    I     |        `[k]`+`[j]`         |     Esc (escape form insert mode)      |            Esc (escape form insert mode)            |                                            |
+|    I     |   `[Ctrl]`+`[g]`+`[d/t]`   |      Insert date / date and time       |       Insert 2026-11-03 / 2026-11-03 10:20:30       | `[LK]`+`[i]`+`[d]`+`[d/s]` in normal mode  |
+|    N     |           `[x]`            | Delete character (black-hole register) |  Delete character without replacing the clipboard   |         Visual-mode `x` still cuts         |
+|   N/V    | `[LK]`+`[w]`+`[a/Shift-a]` |     Write all / write all and quit     |                 `:wall` / `:wqall`                  |  `[LK]`+`[w]`+`[a]`+`[!]` force write all  |
+|   N/V    |    `[LK]`+`[y]`+`[p/r]`    |    Copy file path / file reference     | Full path, or `@path:L12` (visual: `@path:L12-L30`) |  Copied to `+` and `*`; for agent prompts  |
+|   N/V    |      `[Shift]`+`[k]`       |     Search current word in manual      |            Search current word in manual            |                                            |
+|   N/V    |       `[Alt]`+`[/]`        |        Toggle search highlight         |               On/Off search highlight               |                                            |
+|   N/V    |     `[LK]`+`[w]`+`[p]`     |            Toggle line wrap            |                  On/Off line wrap                   |            Here wp for (w)ra(p)            |
+|   N/V    |     `[LK]`+`[c]`+`[l]`     |     Toggle list characters show-up     |           On/Off list characters show-up            |       Here cl for (c)haracter (l)ist       |
+|   N/V    |     `[LK]`+`[m]`+`[k]`     |           Show all vim marks           |                 Show all vim marks                  |            Here mk for (m)ar(k)            |
+|   N/V    |     `[LK]`+`[r]`+`[r]`     |         Show all vim registers         |               Show all vim registers                |          Here re for (r)egiste(r)          |
+|   N/V    |     `[LK]`+`[a]`+`[b]`     |        Show all vim abbreviates        |              Show all vim abbreviates               |         Here ab for (a)(b)breviate         |
+|   N/V    |    `[LK]`+`[c]`+`[h/v]`    |   Toggle Horizontal/Vertical cursor    |          On/Off Horizontal/Vertical cursor          |                                            |
+|   N/V    |    `[LK]`+`[g]`+`[o/i]`    |          Show all cursor jump          |                Show all cursor jump                 | `[g/Ctrl]`+`[o/i]` jump backwards/forwards |
+|   N/V    |    `[LK]`+`[g]`+`[;/,]`    |          Show all file change          |                Show all file change                 |  `[g]`+`[;/,]` go to earlier/later change  |
 
 </details>
 
@@ -718,62 +661,62 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 
 - Note: Fzf is needed for file browsing
 
-| VIM-Mode |           Key Mapping           |               Function                |              Description              |                  Note                   |
-| :------: | :-----------------------------: | :-----------------------------------: | :-----------------------------------: | :-------------------------------------: |
-|   N/V    |             `[F3]`              |            Toggle Nerdtree            |        On/Off NerdTree plugin         |                                         |
-|   N/V    |          `[LK]`+`[F3]`          |        Nerdtree Current Files         |      Show current file location       |                                         |
-|    N     |             `[s/v]`             |    Open file in split/vsplit pane     |    Open file in split/vsplit pane     |            In NERDTree pane             |
-|    N     |        (`[Shift]`)+`[t]`        |    Open file in new tab (silently)    |    Open file in new tab (silently)    |            In NERDTree pane             |
-|    N     |          `[g]`+`[s/v]`          |   Preview file in split/vsplit pane   |   Preview file in split/vsplit pane   |            In NERDTree pane             |
-|    N     |           `[c]`+`[d]`           |    Change pwd to selected location    |    Change pwd to selected location    |            In NERDTree pane             |
-|    N     | `[Shift]`+`[c]`+`[Shift]`+`[d]` | Change tree root to selected location | Change tree root to selected location |            In NERDTree pane             |
-|    N     |       (`[Shift]`)+`[o/x]`       |    Open/Close folds (recursively)     |    Open/Close folds (recursively)     |            In NERDTree pane             |
-|   N/V    |       `[LK]`+`[u]`+`[t]`        |            Toggle Undotree            |  On/Off Undotree (visualizer) plugin  |    vim-mundo (undo tree visualizer)     |
-|   N/V    |             `[F4]`              |             Toggle Tagbar             |         On/Off Tagbar plugin          |                                         |
-|    N     |              `[p]`              |      Preview tags within Tagbar       |      Preview tags within Tagbar       |             In Tagbar pane              |
-|    N     |              `[d]`              |        Show definition of tags        |        Show definition of tags        |             In Tagbar pane              |
-|    N     |              `[o]`              |             Toggle folds              |             Toggle folds              |             In Tagbar pane              |
+| VIM-Mode |           Key Mapping            |                 Function                 |               Description                |                        Note                         |
+| :------: | :------------------------------: | :--------------------------------------: | :--------------------------------------: | :-------------------------------------------------: |
+|   N/V    |              `[F3]`              |             Toggle Nerdtree              |          On/Off NerdTree plugin          |                                                     |
+|   N/V    |          `[LK]`+`[F3]`           |          Nerdtree Current Files          |        Show current file location        |                                                     |
+|    N     |             `[s/v]`              |      Open file in split/vsplit pane      |      Open file in split/vsplit pane      |                  In NERDTree pane                   |
+|    N     |        (`[Shift]`)+`[t]`         |     Open file in new tab (silently)      |     Open file in new tab (silently)      |                  In NERDTree pane                   |
+|    N     |          `[g]`+`[s/v]`           |    Preview file in split/vsplit pane     |    Preview file in split/vsplit pane     |                  In NERDTree pane                   |
+|    N     |           `[c]`+`[d]`            |     Change pwd to selected location      |     Change pwd to selected location      |                  In NERDTree pane                   |
+|    N     | `[Shift]`+`[c]`+`[Shift]`+`[d]`  |  Change tree root to selected location   |  Change tree root to selected location   |                  In NERDTree pane                   |
+|    N     |       (`[Shift]`)+`[o/x]`        |      Open/Close folds (recursively)      |      Open/Close folds (recursively)      |                  In NERDTree pane                   |
+|   N/V    |        `[LK]`+`[u]`+`[t]`        |             Toggle Undotree              |   On/Off Undotree (visualizer) plugin    |          vim-mundo (undo tree visualizer)           |
+|   N/V    |              `[F4]`              |              Toggle Tagbar               |           On/Off Tagbar plugin           |                                                     |
+|    N     |              `[p]`               |        Preview tags within Tagbar        |        Preview tags within Tagbar        |                   In Tagbar pane                    |
+|    N     |              `[d]`               |         Show definition of tags          |         Show definition of tags          |                   In Tagbar pane                    |
+|    N     |              `[o]`               |               Toggle folds               |               Toggle folds               |                   In Tagbar pane                    |
 |    N     | `[LK]`+`[f]`+`[f]`+`[s/Shift-s]` | List files under current/input directory | List files under current/input directory | Current directory = where vim started (noautochdir) |
-|    N     |    `[LK]`+`[f]`+`[l]`+`[c]`     |      Locate files matched input       |    Locate files matched input name    |        Use system locate command        |
-|    N     |    `[LK]`+`[f]`+`[r]`+`[g]`     |     Find files with input pattern     |   Find files matched input pattern    |       Use system ripgrep command        |
-|    N     |    `[LK]`+`[f]`+`[r]`+`[r]`     |  Find pattern from project root       |   Rg from the git root (`:FZFRgRoot`) |  Works when vim started in a subfolder  |
-|    N     |    `[LK]`+`[f]`+`[f]`+`[t]`     |   Select file type for current file   |   Select file type for current file   |                                         |
-|    N     |    `[LK]`+`[f]`+`[c]`+`[d]`     |      Show all command in vim now      |      Show all command in vim now      |                                         |
-|    N     |    `[LK]`+`[f]`+`[m]`+`[p]`     |     Show all normal mode mapping      |     Show all normal mode mapping      |                                         |
-|    N     |    `[LK]`+`[f]`+`[h]`+`[t]`     |     Show all helptags in vim-help     |     Show all helptags in vim-help     |                                         |
-|    N     |    `[LK]`+`[f]`+`[q]`+`[l]`     |      Show build-in quickfix list      |      Show build-in quickfix list      |            vim quickfix list            |
-|    N     |    `[LK]`+`[f]`+`[e]`+`[l]`     |      Show build-in location list      |      Show build-in location list      |            vim location list            |
-|    N     |    `[LK]`+`[f]`+`[c]`+`[l]`     |       Show build-in change list       |       Show build-in change list       | `./vim/patch/fzf_patch.vim` is required |
-|    N     |    `[LK]`+`[f]`+`[j]`+`[l]`     |        Show build-in jump list        |        Show build-in jump list        | `./vim/patch/fzf_patch.vim` is required |
+|    N     |     `[LK]`+`[f]`+`[l]`+`[c]`     |        Locate files matched input        |     Locate files matched input name      |              Use system locate command              |
+|    N     |     `[LK]`+`[f]`+`[r]`+`[g]`     |      Find files with input pattern       |     Find files matched input pattern     |             Use system ripgrep command              |
+|    N     |     `[LK]`+`[f]`+`[r]`+`[r]`     |      Find pattern from project root      |   Rg from the git root (`:FZFRgRoot`)    |        Works when vim started in a subfolder        |
+|    N     |     `[LK]`+`[f]`+`[f]`+`[t]`     |    Select file type for current file     |    Select file type for current file     |                                                     |
+|    N     |     `[LK]`+`[f]`+`[c]`+`[d]`     |       Show all command in vim now        |       Show all command in vim now        |                                                     |
+|    N     |     `[LK]`+`[f]`+`[m]`+`[p]`     |       Show all normal mode mapping       |       Show all normal mode mapping       |                                                     |
+|    N     |     `[LK]`+`[f]`+`[h]`+`[t]`     |      Show all helptags in vim-help       |      Show all helptags in vim-help       |                                                     |
+|    N     |     `[LK]`+`[f]`+`[q]`+`[l]`     |       Show build-in quickfix list        |       Show build-in quickfix list        |                  vim quickfix list                  |
+|    N     |     `[LK]`+`[f]`+`[e]`+`[l]`     |       Show build-in location list        |       Show build-in location list        |                  vim location list                  |
+|    N     |     `[LK]`+`[f]`+`[c]`+`[l]`     |        Show build-in change list         |        Show build-in change list         |       `./vim/patch/fzf_patch.vim` is required       |
+|    N     |     `[LK]`+`[f]`+`[j]`+`[l]`     |         Show build-in jump list          |         Show build-in jump list          |       `./vim/patch/fzf_patch.vim` is required       |
 
 ##### 2. Python Coding Key Mapping
 
 - Note: Jedi is needed for python code analysis (Check https://github.com/davidhalter/jedi )
 - Note: All below functions only work in .py files (keys are buffer-local to python buffers)
-- Note: `[LK]`+`[p]`+`[n/a/d/m]` (jedi) only exist when `USING_LSP = 0`; with LSP use `[g]`+`[r/d]` and `[Shift]`+`[k]` (Sheet 4)
+- Note: `[LK]`+`[p]`+`[n/a/d/m]` (jedi) only exist when `g:vimrc_features.lsp = 0`; with LSP use `[g]`+`[r/d]` and `[Shift]`+`[k]` (Sheet 4)
 
-| VIM-Mode |          Key Mapping           |           Function            |            Description            |                        Note                         |
-| :------: | :----------------------------: | :---------------------------: | :-------------------------------: | :-------------------------------------------------: |
-|   N/V    |        `[Shift]`+`[k]`         |  Search current word in doc   | Search current word in python doc |                                                     |
-|   N/V    |       `[LK]`+`[p]`+`[n]`       | Find current word occurrences |   Find current word occurrences   |                 Here p for (p)ython                 |
-|   N/V    |       `[LK]`+`[p]`+`[a]`       | Find current word assignment  |   Find current word assignment    |                                                     |
-|   N/V    |       `[LK]`+`[p]`+`[d]`       | Show current word definition  |   Show current word definition    |                                                     |
-|   N/V    |       `[LK]`+`[p]`+`[m]`       |   Show current word init.py   |     Show current word init.py     |                                                     |
-|   N/V    |  `[LK]`+`[p]`+`[Shift]`+`[m]`  |   Show input module init.py   |     Show input module init.py     |                                                     |
-|    N     |    `[LK]`+`[n]`+`[p]`+`[i]`    |  Run import module formatter  | Run isort formatter (for modules) | isort needs to be installed. Here n for (n)eoformat |
-|    N     |    `[LK]`+`[n]`+`[p]`+`[y]`    |      Run code formatter       | Run yapf formatter (for formats)  |             yapf needs to be installed              |
-|    N     | `[LK]`+`[n]`+`[p]`+`[r/Shift-r]` |  Run ruff format / ruff imports | Format code / sort imports with ruff |             ruff needs to be installed              |
-|   N/V    | `[LK]`+`[n]`+`[p]`+`[t]`+`[t]` |  Run pyment (default: reST)   |    Run pyment (default: reST)     |            pyment needs to be installed             |
-|   N/V    | `[LK]`+`[n]`+`[p]`+`[t]`+`[g]` |      Run pyment (google)      |     Run pyment (google style)     |            pyment needs to be installed             |
-|   N/V    | `[LK]`+`[n]`+`[p]`+`[t]`+`[j]` |     Run pyment (javadoc)      |    Run pyment (javadoc style)     |            pyment needs to be installed             |
-|   N/V    | `[LK]`+`[n]`+`[p]`+`[t]`+`[n]` |     Run pyment (numpydoc)     |    Run pyment (numpydoc style)    |            pyment needs to be installed             |
-|   N/V    |       `[LK]`+`[p]`+`[b]`       |    Insert pdb trace start     |      Insert pdb trace start       |           pdb is python built-in debugger           |
-|   N/V    |  `[LK]`+`[p]`+`[Shift]`+`[b]`  | Run pdb in new terminal pane  |   Run pdb in new terminal pane    |       Uses ipdb when installed, otherwise pdb       |
-|    N     |  `[LK]`+`[p]`+`[t]`+`[n/f/l/s/v]` | Run tests (vim-test)        | Test nearest/file/last/suite, visit last test file | Runs in TMUX pane (`[LK]`+`[x]`+`[t]` to choose), pytest |
-|    N     |       `[LK]`+`[Shift]`+`[d]`+`[b/c]`      | Debugger: breakpoint / continue | Toggle breakpoint / start or continue | vimspector; `:VimspectorPythonConfig` creates `.vimspector.json` |
-|    N     |     `[LK]`+`[Shift]`+`[d]`+`[n/i/o]`     | Debugger: step over/into/out | Step over/into/out                | vimspector                                          |
-|   N/V    |    `[LK]`+`[Shift]`+`[d]`+`[r/q/e]`      | Debugger: restart/quit/evaluate | Restart, reset (quit), evaluate word or selection | vimspector                                  |
-|    N     |              `[Shift]`+`[k]`              | Python documentation         | pydoc when LSP is off, LSP hover when on |                                         |
+| VIM-Mode |           Key Mapping            |            Function             |                    Description                     |                               Note                               |
+| :------: | :------------------------------: | :-----------------------------: | :------------------------------------------------: | :--------------------------------------------------------------: |
+|   N/V    |         `[Shift]`+`[k]`          |   Search current word in doc    |         Search current word in python doc          |                                                                  |
+|   N/V    |        `[LK]`+`[p]`+`[n]`        |  Find current word occurrences  |           Find current word occurrences            |                       Here p for (p)ython                        |
+|   N/V    |        `[LK]`+`[p]`+`[a]`        |  Find current word assignment   |            Find current word assignment            |                                                                  |
+|   N/V    |        `[LK]`+`[p]`+`[d]`        |  Show current word definition   |            Show current word definition            |                                                                  |
+|   N/V    |        `[LK]`+`[p]`+`[m]`        |    Show current word init.py    |             Show current word init.py              |                                                                  |
+|   N/V    |   `[LK]`+`[p]`+`[Shift]`+`[m]`   |    Show input module init.py    |             Show input module init.py              |                                                                  |
+|    N     |     `[LK]`+`[n]`+`[p]`+`[i]`     |   Run import module formatter   |         Run isort formatter (for modules)          |       isort needs to be installed. Here n for (n)eoformat        |
+|    N     |     `[LK]`+`[n]`+`[p]`+`[y]`     |       Run code formatter        |          Run yapf formatter (for formats)          |                    yapf needs to be installed                    |
+|    N     | `[LK]`+`[n]`+`[p]`+`[r/Shift-r]` | Run ruff format / ruff imports  |        Format code / sort imports with ruff        |                    ruff needs to be installed                    |
+|   N/V    |  `[LK]`+`[n]`+`[p]`+`[t]`+`[t]`  |   Run pyment (default: reST)    |             Run pyment (default: reST)             |                   pyment needs to be installed                   |
+|   N/V    |  `[LK]`+`[n]`+`[p]`+`[t]`+`[g]`  |       Run pyment (google)       |             Run pyment (google style)              |                   pyment needs to be installed                   |
+|   N/V    |  `[LK]`+`[n]`+`[p]`+`[t]`+`[j]`  |      Run pyment (javadoc)       |             Run pyment (javadoc style)             |                   pyment needs to be installed                   |
+|   N/V    |  `[LK]`+`[n]`+`[p]`+`[t]`+`[n]`  |      Run pyment (numpydoc)      |            Run pyment (numpydoc style)             |                   pyment needs to be installed                   |
+|   N/V    |        `[LK]`+`[p]`+`[b]`        |     Insert pdb trace start      |               Insert pdb trace start               |                 pdb is python built-in debugger                  |
+|   N/V    |   `[LK]`+`[p]`+`[Shift]`+`[b]`   |  Run pdb in new terminal pane   |            Run pdb in new terminal pane            |             Uses ipdb when installed, otherwise pdb              |
+|    N     | `[LK]`+`[p]`+`[t]`+`[n/f/l/s/v]` |      Run tests (vim-test)       | Test nearest/file/last/suite, visit last test file |     Runs in TMUX pane (`[LK]`+`[x]`+`[t]` to choose), pytest     |
+|    N     |  `[LK]`+`[Shift]`+`[d]`+`[b/c]`  | Debugger: breakpoint / continue |       Toggle breakpoint / start or continue        | vimspector; `:VimspectorPythonConfig` creates `.vimspector.json` |
+|    N     | `[LK]`+`[Shift]`+`[d]`+`[n/i/o]` |  Debugger: step over/into/out   |                 Step over/into/out                 |                            vimspector                            |
+|   N/V    | `[LK]`+`[Shift]`+`[d]`+`[r/q/e]` | Debugger: restart/quit/evaluate | Restart, reset (quit), evaluate word or selection  |                            vimspector                            |
+|    N     |         `[Shift]`+`[k]`          |      Python documentation       |      pydoc when LSP is off, LSP hover when on      |                                                                  |
 
 ##### 3. Miscellaneous Function Key Mapping
 
@@ -809,26 +752,26 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 
 - Coding tool (Note: "let using_coding_tool_plug = 1" must be set in vimrc)
 
-| VIM-Mode |          Key Mapping           |            Function             |                    Description                     |                             Note                             |
-| :------: | :----------------------------: | :-----------------------------: | :------------------------------------------------: | :----------------------------------------------------------: |
-|    N     |         `[Alt]`+`[n]`          |     Enter visual-multi mode     |     Enter visual-multi mode with selected word     | Press `]`/`[` for next/prev match; q to skip, Q to remove region |
-|    N     |         `[Alt]`+`[a]`          |     Enter visual-multi mode     |   Enter visual-multi mode with all selected word   | Press `]`/`[` for next/prev match; q to skip, Q to remove region |
-|    N     |   `[Alt]`+`[Shift]`+`[j/k]`    |    Add vertical multi-cursor    |  Enter visual-multi mode and add vertical cursor   |                                                              |
-|   N/V    |       `[LK]`+`[e]`+`[e]`       |           Toggle ALE            |                     On/Off ALE                     | Only when `USING_LSP = 0`, disabled at startup. With LSP: diagnostics to location list |
-|   N/V    |      `[LK]`+`[e]`+`[j/k]`      | Go to Next/Prev location item   |   Go to Next/Prev ALE/LSP result (location list)   |                Here e for location list                      |
-|   N/V    |       `[LK]`+`[g]`+`[g/b]`     |        Toggle GitGutter         |        On/Off GitGutter (all/current buffer)       |       Not loaded at startup, loads on first use              |
-|   N/V    |  `[LK]`+`[g]`+`[h]`+`[s/l/n]`  |   Toggle GitGutter highlight    | Toggle GitGutter highlight symbol/line/line number |                                                              |
-|   N/V    | `[LK]`+`[g]`+`[j/k]`, `]h`/`[h` | Go to Next/Prev git hunks | Go to Next/Prev git hunks (count works, e.g. 3]h) | Enables gitgutter for current buffer on first use |
-|   N/V    |  `[LK]`+`[g]`+`[Shift]`+`[p]`  |  Hunk preview (before changed)  |           Hunk preview (before changed)            |                     Here p for (p)review                     |
-|   N/V    |  `[LK]`+`[g]`+`[Shift]`+`[f]`  |    Fold all unchanged lines     |              Fold all unchanged lines              |                                                              |
-|   N/V    |       `[LK]`+`[g]`+`[a]`       |       Stage current hunk        |            Stage current hunk (git add)            |                     Here a for git (a)dd                     |
-|   N/V    |       `[LK]`+`[g]`+`[r]`       |      Restore current hunk       |         Restore current hunk (git restore)         |                   Here r for git (r)estore                   |
-|   N/V    |       `[LK]`+`[g]`+`[s]`       | Show status of current git repo |          Show status of current git repo           |                   Here s for git (s)tatus                    |
-|   N/V    | `[LK]`+`[g]`+(`[Shift]`)+`[d]` |  Git diff (all) unstaged files  |           Git diff (all) unstaged files            |                                                              |
-|   N/V    |  `[LK]`+`[g]`+`[Shift]`+`[a]`  |      Git add current file       |              Git add current file                  |                          fugitive                            |
-|   N/V    |  `[LK]`+`[g]`+`[Shift]`+`[c]`  |    Git commit staged files      |             Git commit staged files                |   fugitive; `[LK]`+`[g]`+`[c/l]` git log to quickfix/loclist |
-|   N/V    |  `[LK]`+`[g]`+`[Shift]`+`[b]`  |     Git blame current file      |               Git blame current file               |                                                              |
-|   N/V    |       `[LK]`+`[g]`+`[v/m]`     | Side-by-side diff / 3-way merge |  `:Gvdiffsplit` / `:Gvdiffsplit!` (conflicts)      | Review agent edits: `dp`/`do` put/get hunk, `]c`/`[c` next/prev |
+| VIM-Mode |           Key Mapping           |            Function             |                    Description                     |                                               Note                                                |
+| :------: | :-----------------------------: | :-----------------------------: | :------------------------------------------------: | :-----------------------------------------------------------------------------------------------: |
+|    N     |          `[Alt]`+`[n]`          |     Enter visual-multi mode     |     Enter visual-multi mode with selected word     |                 Press `]`/`[` for next/prev match; q to skip, Q to remove region                  |
+|    N     |          `[Alt]`+`[a]`          |     Enter visual-multi mode     |   Enter visual-multi mode with all selected word   |                 Press `]`/`[` for next/prev match; q to skip, Q to remove region                  |
+|    N     |    `[Alt]`+`[Shift]`+`[j/k]`    |    Add vertical multi-cursor    |  Enter visual-multi mode and add vertical cursor   |                                                                                                   |
+|   N/V    |       `[LK]`+`[e]`+`[e]`        |           Toggle ALE            |                     On/Off ALE                     | Only when `g:vimrc_features.lsp = 0`, disabled at startup. With LSP: diagnostics to location list |
+|   N/V    |      `[LK]`+`[e]`+`[j/k]`       |  Go to Next/Prev location item  |   Go to Next/Prev ALE/LSP result (location list)   |                                     Here e for location list                                      |
+|   N/V    |      `[LK]`+`[g]`+`[g/b]`       |        Toggle GitGutter         |       On/Off GitGutter (all/current buffer)        |                             Not loaded at startup, loads on first use                             |
+|   N/V    |  `[LK]`+`[g]`+`[h]`+`[s/l/n]`   |   Toggle GitGutter highlight    | Toggle GitGutter highlight symbol/line/line number |                                                                                                   |
+|   N/V    | `[LK]`+`[g]`+`[j/k]`, `]h`/`[h` |    Go to Next/Prev git hunks    | Go to Next/Prev git hunks (count works, e.g. 3\]h) |                         Enables gitgutter for current buffer on first use                         |
+|   N/V    |  `[LK]`+`[g]`+`[Shift]`+`[p]`   |  Hunk preview (before changed)  |           Hunk preview (before changed)            |                                       Here p for (p)review                                        |
+|   N/V    |  `[LK]`+`[g]`+`[Shift]`+`[f]`   |    Fold all unchanged lines     |              Fold all unchanged lines              |                                                                                                   |
+|   N/V    |       `[LK]`+`[g]`+`[a]`        |       Stage current hunk        |            Stage current hunk (git add)            |                                       Here a for git (a)dd                                        |
+|   N/V    |       `[LK]`+`[g]`+`[r]`        |      Restore current hunk       |         Restore current hunk (git restore)         |                                     Here r for git (r)estore                                      |
+|   N/V    |       `[LK]`+`[g]`+`[s]`        | Show status of current git repo |          Show status of current git repo           |                                      Here s for git (s)tatus                                      |
+|   N/V    | `[LK]`+`[g]`+(`[Shift]`)+`[d]`  |  Git diff (all) unstaged files  |           Git diff (all) unstaged files            |                                                                                                   |
+|   N/V    |  `[LK]`+`[g]`+`[Shift]`+`[a]`   |      Git add current file       |                Git add current file                |                                             fugitive                                              |
+|   N/V    |  `[LK]`+`[g]`+`[Shift]`+`[c]`   |     Git commit staged files     |              Git commit staged files               |                    fugitive; `[LK]`+`[g]`+`[c/l]` git log to quickfix/loclist                     |
+|   N/V    |  `[LK]`+`[g]`+`[Shift]`+`[b]`   |     Git blame current file      |               Git blame current file               |                                                                                                   |
+|   N/V    |      `[LK]`+`[g]`+`[v/m]`       | Side-by-side diff / 3-way merge |    `:Gvdiffsplit` / `:Gvdiffsplit!` (conflicts)    |                  Review agent edits: `dp`/`do` put/get hunk, `]c`/`[c` next/prev                  |
 
 </details>
 
@@ -839,29 +782,29 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 
 - LSP server management
 
-| VIM-Mode |       Key Mapping        |         Function          |                Description                |                     Note                     |
-| :------: | :----------------------: | :-----------------------: | :---------------------------------------: | :------------------------------------------: |
-|    N     |        `[LK]`+`[Shift]`+`[l]`+`[s]`         |  Show LSP server status   |          Show LSP server status           |                                              |
-|    N     |   `[LK]`+`[Shift]`+`[l]`+`[Shift]`+`[m]`    |     Manage LSP server     | Manage LSP server (install, remove, etc.) |                                              |
-|    N     |   `[LK]`+`[Shift]`+`[l]`+`[Shift]`+`[i]`    |    Install LSP server     |  Install LSP server for current filetype  |                                              |
-|    N     |       `[LK]`+`[Shift]`+`[l]`+`[e/d]`        | Enable/Disable LSP server |         Enable/Disable LSP server         | LSP is disabled by default: no server starts until enabled |
-|    N     |  `[LK]`+`[Shift]`+`[l]`+`[Shift]`+`[s/r]`   |  Stop/Restart LSP server  | Stop server (input name) / restart all servers |                                         |
-|    N     |        `[LK]`+`[Shift]`+`[l]`+`[f]`         |     Run LSP formatter     |             Run LSP formatter             |            Only in LSP buffers               |
+| VIM-Mode |               Key Mapping                |         Function          |                  Description                   |                            Note                            |
+| :------: | :--------------------------------------: | :-----------------------: | :--------------------------------------------: | :--------------------------------------------------------: |
+|    N     |       `[LK]`+`[Shift]`+`[l]`+`[s]`       |  Show LSP server status   |             Show LSP server status             |                                                            |
+|    N     |  `[LK]`+`[Shift]`+`[l]`+`[Shift]`+`[m]`  |     Manage LSP server     |   Manage LSP server (install, remove, etc.)    |                                                            |
+|    N     |  `[LK]`+`[Shift]`+`[l]`+`[Shift]`+`[i]`  |    Install LSP server     |    Install LSP server for current filetype     |                                                            |
+|    N     |      `[LK]`+`[Shift]`+`[l]`+`[e/d]`      | Enable/Disable LSP server |           Enable/Disable LSP server            | LSP is disabled by default: no server starts until enabled |
+|    N     | `[LK]`+`[Shift]`+`[l]`+`[Shift]`+`[s/r]` |  Stop/Restart LSP server  | Stop server (input name) / restart all servers |                                                            |
+|    N     |       `[LK]`+`[Shift]`+`[l]`+`[f]`       |     Run LSP formatter     |               Run LSP formatter                |                    Only in LSP buffers                     |
 
 - LSP server tool
 
-| VIM-Mode |    Key Mapping     |               Function                |                Description                 |                Note                |
-| :------: | :----------------: | :-----------------------------------: | :----------------------------------------: | :--------------------------------: |
-|    N     | `[LK]`+`[e]`+`[e]` | Send LSP diagnostics to location list |   Send LSP diagnostics to location list    |                                    |
-|    N     | `[LK]`+`[r]`+`[e]` |  Rename variable across current file  |  Rename current word across current file   |                                    |
-|   N/V    | `[LK]`+`[Shift]`+`[l]`+`[a]` |  Code action  |  Quick fix, organize imports, etc. (menu)  |         Only in LSP buffers        |
-|    N     |  `[Shift]`+`[k]`   | Show information in a hovering window |   Show information in a hovering window    |   Same as `[Shift]`+`[k]` in vim   |
-|    N     |   `[[\]]`+`[g]`    |  Go to previous/next LSP diagnostic   |     Go to previous/next LSP diagnostic     |   Includes warnings, errors etc.   |
-|    N     |    `[g]`+`[d]`     |     Go to current word definition     |       Go to current word definition        |                                    |
-|    N     |    `[g]`+`[i]`     |   Go to current word implementation   |     Go to current word implementation      |      Not supported for python      |
-|    N     |    `[g]`+`[y]`     |  Go to current word type definition   |     Go to current word type definition     |      Not supported for python      |
-|    N     |    `[g]`+`[r]`     |     Find current word references      | Find current word references (occurrences) | Results are saved to quickfix list |
-|    N     |    `[g]`+`[/]`     |             Symbol search             |      Search variable, function, etc.       |                                    |
+| VIM-Mode |         Key Mapping          |               Function                |                Description                 |                Note                |
+| :------: | :--------------------------: | :-----------------------------------: | :----------------------------------------: | :--------------------------------: |
+|    N     |      `[LK]`+`[e]`+`[e]`      | Send LSP diagnostics to location list |   Send LSP diagnostics to location list    |                                    |
+|    N     |      `[LK]`+`[r]`+`[e]`      |  Rename variable across current file  |  Rename current word across current file   |                                    |
+|   N/V    | `[LK]`+`[Shift]`+`[l]`+`[a]` |              Code action              |  Quick fix, organize imports, etc. (menu)  |        Only in LSP buffers         |
+|    N     |       `[Shift]`+`[k]`        | Show information in a hovering window |   Show information in a hovering window    |   Same as `[Shift]`+`[k]` in vim   |
+|    N     |        `[[\]]`+`[g]`         |  Go to previous/next LSP diagnostic   |     Go to previous/next LSP diagnostic     |   Includes warnings, errors etc.   |
+|    N     |         `[g]`+`[d]`          |     Go to current word definition     |       Go to current word definition        |                                    |
+|    N     |         `[g]`+`[i]`          |   Go to current word implementation   |     Go to current word implementation      |      Not supported for python      |
+|    N     |         `[g]`+`[y]`          |  Go to current word type definition   |     Go to current word type definition     |      Not supported for python      |
+|    N     |         `[g]`+`[r]`          |     Find current word references      | Find current word references (occurrences) | Results are saved to quickfix list |
+|    N     |         `[g]`+`[/]`          |             Symbol search             |      Search variable, function, etc.       |                                    |
 
 </details>
 </details>
