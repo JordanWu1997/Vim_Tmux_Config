@@ -235,6 +235,14 @@
     " Default leaderkey '\'
     let mapleader = ' '
 
+" Vimrc autocommand group ----------------------------------------------------
+    " All autocommands in this file are registered with 'autocmd vimrc ...'.
+    " The group is cleared here, so sourcing this file again (e.g. :source
+    " $MYVIMRC) does not register every autocommand a second time.
+    augroup vimrc
+        autocmd!
+    augroup END
+
 " Map insert mode key --------------------------------------------------------
     " NOTE:
     " -- Ctrl+o: Execute single normal mode operation
@@ -412,8 +420,27 @@
     endif
 
 " Working directory ----------------------------------------------------------
-    set autochdir " Change working directory to current buffer file directory
-    noremap <leader>ac :set autochdir!<CR>
+    " NOTE:
+    " -- Default off: keep the working directory where vim was launched
+    "    (usually the project/repo root), so :FZFFiles, :FZFRg, :terminal,
+    "    and gf on repo-relative paths (e.g. printed by an agent) all start
+    "    from the root. Toggle with <leader>ac when per-file cwd is wanted.
+    set noautochdir " Do not change working directory to buffer file directory
+    noremap <leader>ac :set autochdir!<CR>:echo 'autochdir=' . &autochdir<CR>
+
+" Auto-reload files changed outside vim (e.g. edited by an agent) ------------
+    " NOTE:
+    " -- autoread reloads a changed file only when vim checks timestamps;
+    "    unmodified buffers are reloaded silently, modified ones still ask.
+    " -- checktime triggers that check on focus/buffer switch and when idle
+    "    (CursorHold, after 'updatetime' ms). tmux needs 'focus-events on'.
+    set autoread
+    autocmd vimrc FocusGained,BufEnter,CursorHold,CursorHoldI *
+                \ if getcmdwintype() ==# '' | silent! checktime | endif
+    autocmd vimrc FileChangedShellPost *
+                \ echohl WarningMsg |
+                \ echomsg 'File changed on disk, reloaded: ' . expand('<afile>') |
+                \ echohl None
 
 " Line wrap ------------------------------------------------------------------
     set nowrap " Line wrap for small monitor or display window
@@ -926,6 +953,14 @@
         tnoremap <C-j> <C-\><C-n><C-w>j
         tnoremap <C-k> <C-\><C-n><C-w>k
         tnoremap <C-l> <C-\><C-n><C-w>l
+        " fzf.vim runs in a terminal buffer (filetype fzf), where Ctrl+j/k
+        " move the selection. Map the 4 keys back to themselves in fzf
+        " buffers only, so they reach fzf instead of switching windows.
+        autocmd vimrc FileType fzf
+                    \ tnoremap <buffer> <C-h> <C-h>|
+                    \ tnoremap <buffer> <C-j> <C-j>|
+                    \ tnoremap <buffer> <C-k> <C-k>|
+                    \ tnoremap <buffer> <C-l> <C-l>
     endif
 
 " ============================================================================
@@ -1259,13 +1294,13 @@
 
 " Filetype-dependent tab key settings ----------------------------------------
     " PEP8 recommendation for tab settings
-    autocmd FileType python
+    autocmd vimrc FileType python
                 \ setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=-1
     " CPP
-    autocmd FileType cpp
+    autocmd vimrc FileType cpp
                 \ setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=-1
-    " Markdown (also vimwiki)
-    autocmd BufEnter *.md
+    " Markdown (also vimwiki: g:vimwiki_global_ext makes every .md a vimwiki)
+    autocmd vimrc FileType markdown,vimwiki
                 \ setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=-1
 
 " ============================================================================
@@ -1417,6 +1452,30 @@
         noremap <leader>slad :call lightline#disable()<CR>:set showmode<CR>
                     \:set showtabline=0<CR>:set laststatus=0<CR>
                     \:echo "STATUSLINE/TABLINE DISABLED"<CR>
+    endif
+
+" Function - git branch for statusline (without loading git plugins) --------
+    " NOTE:
+    " -- Runs 'git rev-parse --abbrev-ref HEAD' once per buffer (first time
+    "    it is shown) and again when vim regains focus, e.g. after an agent
+    "    switched branch/worktree in another tmux pane. Result is cached in
+    "    b:lightline_git_branch. Detached HEAD shows 'HEAD'.
+    function! LightlineGitbranchCache(force) abort
+        if &buftype !=# '' || (!a:force && exists('b:lightline_git_branch'))
+            return
+        endif
+        let l:dir = expand('%:p:h')
+        if empty(l:dir) || !isdirectory(l:dir) || !executable('git')
+            let b:lightline_git_branch = ''
+            return
+        endif
+        let l:out = systemlist('git -C ' . shellescape(l:dir)
+                    \ . ' rev-parse --abbrev-ref HEAD 2>/dev/null')
+        let b:lightline_git_branch = v:shell_error ? '' : get(l:out, 0, '')
+    endfunction
+    if USING_CUSTOMIZED_THEME
+        autocmd vimrc BufEnter * call LightlineGitbranchCache(0)
+        autocmd vimrc FocusGained * call LightlineGitbranchCache(1)
     endif
 
 " Function - reload lightline ------------------------------------------------
@@ -1701,7 +1760,7 @@
     " Wrap current word with pair e.g. ()test -> (test)
     let g:AutoPairsShortcutFastWrap = '<M-w>'
     " HTML patch
-    autocmd FileType html let b:AutoPairs = AutoPairsDefine({'<!--': '-->'})
+    autocmd vimrc FileType html let b:AutoPairs = AutoPairsDefine({'<!--': '-->'})
 
 " Vim-whichkey ---------------------------------------------------------------
     " Whichkey layout
@@ -1830,8 +1889,8 @@
         "   Set it to -1 not to overrule hlsearch
         let g:limelight_priority = -1
         " Integration with goyo
-        autocmd! User GoyoEnter Limelight
-        autocmd! User GoyoLeave Limelight!
+        autocmd vimrc User GoyoEnter Limelight
+        autocmd vimrc User GoyoLeave Limelight!
     endif
 
 " YankRing -------------------------------------------------------------------
@@ -1939,9 +1998,30 @@
         endfunction
         " Toggle autocomplpop
         noremap <leader>` :call AutoCompPopToggle()<CR>
+        " Pause autocomplpop in buffers that have another completion engine
+        " -- b:acp_off = 1 is set for python (deoplete) or when LSP is enabled
+        "    in the buffer (asyncomplete), so two pop-ups never compete.
+        " -- AcpLock/AcpUnlock pause/resume autocomplpop globally (counted
+        "    lock), so s:acp_locked makes sure we lock at most once.
+        let s:acp_locked = 0
+        function! s:AcpBufferSync() abort
+            if !exists(':AcpLock')
+                return
+            endif
+            let l:want_off = get(b:, 'acp_off', 0)
+            if l:want_off && !s:acp_locked
+                silent! AcpLock
+                let s:acp_locked = 1
+            elseif !l:want_off && s:acp_locked
+                silent! AcpUnlock
+                let s:acp_locked = 0
+            endif
+        endfunction
+        autocmd vimrc BufEnter * call s:AcpBufferSync()
         " Disable autocomplpop for python file [use deoplete instead]
         if USING_PYTHON_COMPLETION
-            autocmd FileType python let g:acp_enableAtStartup = 0
+            autocmd vimrc FileType python
+                        \ let b:acp_off = 1 | call s:AcpBufferSync()
         endif
     endif
 
@@ -2078,9 +2158,9 @@
         let g:indent_guides_start_level = 1
         let g:indent_guides_guide_size = 4
         let g:indent_guides_auto_colors = 0
-        autocmd VimEnter,Colorscheme *
+        autocmd vimrc VimEnter,Colorscheme *
                     \ :highlight IndentGuidesOdd  guibg='#303030' ctermbg=7
-        autocmd VimEnter,Colorscheme *
+        autocmd vimrc VimEnter,Colorscheme *
                     \ :highlight IndentGuidesEven guibg='#24242d' ctermbg=8
         noremap <leader><F9> :IndentGuidesToggle<CR>
     endif
@@ -2200,7 +2280,7 @@
         " Maximum length for completion
         let g:deoplete#sources#jedi#statement_length = 30
         " Ignore case for deoplete
-        autocmd FileType python call deoplete#custom#option({
+        autocmd vimrc FileType python call deoplete#custom#option({
         \   'ignore_case': v:true,
         \   'smart_case': v:true,
         \})
@@ -2230,22 +2310,24 @@
         " Find variable assignments (Goto function)
         let g:jedi#goto_assignments_command = '<leader>pa'
         " Open python module [show __init__.py]
-        autocmd FileType python noremap <leader>pM :Pyimport<space>
-        autocmd FileType python
-                    \ noremap <leader>pm
+        " -- <buffer>: only in python buffers (FileType autocmd)
+        autocmd vimrc FileType python noremap <buffer> <leader>pM :Pyimport<space>
+        autocmd vimrc FileType python
+                    \ noremap <buffer> <leader>pm
                     \ :execute ":Pyimport " . expand('<cword>')<CR>
     endif
 
 " Python debug (add python breakpoints) --------------------------------------
-    " Python built-in pdb debugge
-    autocmd FileType python
-                \ noremap <leader>pb Obreakpoint()<Esc>
+    " NOTE: <buffer> keeps these keys in python buffers only
+    " Python built-in pdb debugger
+    autocmd vimrc FileType python
+                \ noremap <buffer> <leader>pb Obreakpoint()<Esc>
     "" Python built-in pdb debugger (for python < 3.7)
-    "autocmd FileType python
-                "\ noremap <leader>pb Oimport pdb; pdb.set_trace()<Esc>
+    "autocmd vimrc FileType python
+                "\ noremap <buffer> <leader>pb Oimport pdb; pdb.set_trace()<Esc>
     " %:p for current file in full path
-    autocmd FileType python
-                \ noremap <leader>pB
+    autocmd vimrc FileType python
+                \ noremap <buffer> <leader>pB
                 \ <Esc>:split<CR>:terminal python -m pdb '%:p'<space>
 
 " Python skeleton (add python skeleton for new python .py file) --------------
@@ -2262,7 +2344,7 @@
     endfunction
     " Replace your current exec lines with this single autocommand call
     if USING_PYTHON_SKELETON
-        autocmd BufNewFile *.py call s:InsertPythonSkeleton()
+        autocmd vimrc BufNewFile *.py call s:InsertPythonSkeleton()
     endif
 
 " ============================================================================
@@ -2279,7 +2361,7 @@
 
 " Bash -----------------------------------------------------------------------
     function! s:InsertBashTemplate() abort
-        " Check if the buffer is empty and is a new file since
+        " Check if the buffer is empty and is a new file
         if line('$') == 1 && empty(getline(1))
             " Read the skeleton content from your variable/file
             exec '0r' s:BASH_TEMPLATE
@@ -2288,19 +2370,23 @@
         endif
     endfunction
     if USING_BASH_TEMPLATE
-        autocmd BufNewFile *.sh call s:InsertBashTemplate()
+        autocmd vimrc BufNewFile *.sh call s:InsertBashTemplate()
     endif
 
 " LaTex ----------------------------------------------------------------------
     " Set spell check for LaTex files
-    autocmd FileType plaintex,context,tex setlocal spell
-    autocmd FileType plaintex,context,tex setlocal updatetime=10000 " Unit: ms
+    autocmd vimrc FileType plaintex,context,tex setlocal spell
+    autocmd vimrc FileType plaintex,context,tex setlocal updatetime=10000 " Unit: ms
     " LaTex real-time viewer with GUI pdf file manager
+    " -- <buffer>: <leader><F4> is the previewer of the CURRENT file type
+    "    (tex here, markdown below), so the two never override each other
     if USING_GUI_SOFTWARE
         let g:livepreview_previewer = 'zathura'
         let g:livepreview_engine = 'pdflatex'
-        autocmd BufEnter *.tex echom '[Press Space+F4 to Preview .tex File]'
-        autocmd BufEnter *.tex noremap <leader><F4> :LLPStartPreview<CR>
+        autocmd vimrc FileType plaintex,context,tex
+                    \ echom '[Press Space+F4 to Preview .tex File]'
+        autocmd vimrc FileType plaintex,context,tex
+                    \ noremap <buffer> <leader><F4> :LLPStartPreview<CR>
     endif
     " Load template file when new file created
     function! s:InsertTexTemplate() abort
@@ -2313,19 +2399,32 @@
         endif
     endfunction
     if USING_TEX_TEMPLATE
-        autocmd BufNewFile *.tex call s:InsertTexTemplate()
+        autocmd vimrc BufNewFile *.tex call s:InsertTexTemplate()
     endif
 
 " Markdown -------------------------------------------------------------------
+    " NOTE: g:vimwiki_global_ext = 1 makes every .md file filetype 'vimwiki',
+    " so markdown settings use FileType markdown,vimwiki (also covers
+    " .markdown files) instead of BufEnter *.md. Settings are applied once
+    " per buffer, so later changes (e.g. <leader>so0) are kept.
     " Set spell check for markdown files
-    autocmd BufEnter *.md setlocal spell
+    autocmd vimrc FileType markdown,vimwiki setlocal spell
+    " Show preview hint once per buffer (a .md buffer gets FileType twice:
+    " markdown first, then vimwiki)
+    function! s:MarkdownPreviewHint() abort
+        if !get(b:, 'md_preview_hint_shown', 0)
+            let b:md_preview_hint_shown = 1
+            echom '[Press Space+F4 to Preview .md File]'
+        endif
+    endfunction
     " Markdown previewer [no extra vim plugin needed]
     " From https://krehwell.com/blog/Open%20Markdown%20Previewer%20Through%20Vim
     " Google-chrome extension is needed for markdown viewer
     if USING_GUI_SOFTWARE && !USING_VIM8
-        let $OPENBROWSER = 'noremap <leader><F4> :!'. s:WEBBROWSER .' %:p &<CR>'
-        autocmd BufEnter *.md echom '[Press Space+F4 to Preview .md File]'
-        autocmd BufEnter *.md exe $OPENBROWSER
+        autocmd vimrc FileType markdown,vimwiki call s:MarkdownPreviewHint()
+        autocmd vimrc FileType markdown,vimwiki
+                    \ execute 'noremap <buffer> <leader><F4> :!'
+                    \ . s:WEBBROWSER . ' %:p &<CR>'
     endif
     " Synchronous markdown previewer (markdown-preview plugin)
     if USING_GUI_SOFTWARE && USING_VIM8
@@ -2335,9 +2434,10 @@
         let g:mkdp_auto_close = 0
         " Show url of markdown previewer
         let g:mkdp_echo_preview_url = 1
-        autocmd BufEnter *.md echom '[Press Space+F4 to Preview .md File]'
-        autocmd BufEnter *.md nmap <leader><F4> <Plug>MarkdownPreviewToggle<CR>
-        autocmd BufEnter *.md setlocal scrolloff=999
+        autocmd vimrc FileType markdown,vimwiki call s:MarkdownPreviewHint()
+        autocmd vimrc FileType markdown,vimwiki
+                    \ nmap <buffer> <leader><F4> <Plug>MarkdownPreviewToggle
+        autocmd vimrc FileType markdown,vimwiki setlocal scrolloff=999
     endif
     " The rest of block has been packed up as vim-markdown-tools plug-in
     let g:md_tools_use_template = g:USING_MARKDOWN_TEMPLATE
