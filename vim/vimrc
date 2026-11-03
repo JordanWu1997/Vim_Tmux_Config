@@ -219,11 +219,13 @@
     " -- vim            : this directory (vim/ in the repository)
     " -- templates      : templates for new files (skeleton.py, ...)
     " -- bin            : helper scripts
+    " -- wiki           : vimwiki root (notes, diary)
     " -- wiki_templates : note templates (vim-markdown-tools)
     let g:vimrc_paths = extend({
                 \ 'vim': s:vimrc_dir,
                 \ 'templates': s:vimrc_dir . '/share/templates/',
                 \ 'bin': s:vimrc_dir . '/bin/',
+                \ 'wiki': expand('~/Documents/KNOWLEDGE_BASE/'),
                 \ }, get(g:, 'vimrc_paths', {}))
     let g:vimrc_paths.wiki_templates = get(g:vimrc_paths, 'wiki_templates',
                 \ g:vimrc_paths.wiki . 'resources/template/')
@@ -3042,12 +3044,12 @@
     " Set spell check for markdown files
     autocmd vimrc FileType markdown,vimwiki setlocal spell
     " Prose layout for notes (code keeps the global nowrap)
-    " -- wrap at word boundaries, keep indentation of wrapped list items
+    " -- DISABLED: wrap at word boundaries, keep indentation of wrapped list items
     " -- j/k move by screen line; with a count (5j) by real line, so
     "    relative line numbers still work. <leader>wp still toggles wrap.
     " -- no end-of-line marker (eol:↵) in notes; trailing spaces still shown
     autocmd vimrc FileType markdown,vimwiki
-                \ setlocal wrap linebreak breakindent
+                \ setlocal nowrap linebreak breakindent
     autocmd vimrc FileType markdown,vimwiki
                 \ nnoremap <buffer><expr> j v:count ? 'j' : 'gj'|
                 \ nnoremap <buffer><expr> k v:count ? 'k' : 'gk'|
