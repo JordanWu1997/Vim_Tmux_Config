@@ -209,6 +209,15 @@
     let s:VIM_AI_MODEL = "gemma4:e2b"
     let s:VIM_AI_TEMPERATURE = 0.3
     let s:VIM_AI_NUM_CTX = 8192
+    " Tmux pane used by <leader>x (send), <leader>qt (capture) and vim-test
+    " -- '{last}' is the previously active pane; change with <leader>xt
+    let g:tmux_send_target = '{last}'
+    " Number of scrollback lines read by <leader>qt
+    let g:tmux_capture_lines = 300
+    " Python language servers for vim-lsp-settings (:LspInstallServer)
+    let g:lsp_settings_filetype_python = ['pyright-langserver', 'ruff']
+    " Python debugger used by <leader>pB (ipdb if installed, else pdb)
+    let s:PYTHON_DEBUGGER = executable('ipdb3') || executable('ipdb') ? 'ipdb' : 'pdb'
 
 " TERMGUI color --------------------------------------------------------------
     " Ctermcolors only support max 256 color
@@ -270,6 +279,9 @@
     inoremap . .<C-g>u
     inoremap ? ?<C-g>u
     inoremap ! !<C-g>u
+    " Insert date/date+time in insert mode (<C-g>s/S are vim-surround)
+    inoremap <C-g>d <C-r>=strftime('%F')<CR>
+    inoremap <C-g>t <C-r>=strftime('%Y-%m-%d %H:%M:%S')<CR>
 
 " Map normal/visual/operator-pending mode key --------------------------------
     " NOTE:
@@ -304,8 +316,11 @@
     " Make Y yank to the EOL instead of whole line just like what D does
     nnoremap Y y$
     " Stop delete/change/replace overwriting current register
+    " -- x uses the black-hole register: with clipboard=unnamedplus, x would
+    "    otherwise replace the system clipboard (e.g. text copied from a
+    "    browser or agent). Visual-mode x still cuts as usual.
     "nnoremap d "_d
-    "nnoremap x "_x
+    nnoremap x "_x
     " NOTE: r (replace char) never writes to a register, so no mapping needed
     "nnoremap r "_r
     " Move selection block up/down in visual mode
@@ -425,6 +440,13 @@
     set virtualedit=none " Cursor can only be positioned where there is a char
     "set dictionary+=/usr/share/dict/words " Dictionary for word completion
     set tags=./.tags,.tags;/ " use ctag -o .tags -R . to generate file tags
+    set updatetime=500  " Idle time (ms) for CursorHold: auto-reload of agent
+                        " edits, gitgutter refresh, swap write (default 4000)
+    set shortmess-=S    " Show search count [n/m] (replaces IndexedSearch)
+    if exists('+signcolumn')
+        set signcolumn=yes " Always show sign column: no text shift when LSP
+                           " diagnostics or gitgutter signs appear
+    endif
 
 " Vim only settings ----------------------------------------------------------
     if USING_VIM
@@ -731,6 +753,88 @@
     noremap <leader>qj :cnext<CR>zz
     noremap <leader>qk :cprev<CR>zz
 
+" Function - project root (git executable only, no git plugin) ---------------
+    " Returns the git top-level directory of the current file (or of the
+    " working directory for unnamed buffers), or the working directory when
+    " not inside a git repository. Used by <leader>qt, :FZFRgRoot and LSP.
+    function! ProjectRoot() abort
+        let l:dir = expand('%:p:h')
+        if empty(l:dir) || !isdirectory(l:dir)
+            let l:dir = getcwd()
+        endif
+        if executable('git')
+            let l:out = systemlist('git -C ' . shellescape(l:dir)
+                        \ . ' rev-parse --show-toplevel 2>/dev/null')
+            if !v:shell_error && !empty(l:out) && isdirectory(l:out[0])
+                return l:out[0]
+            endif
+        endif
+        return getcwd()
+    endfunction
+
+" Function - tmux pane output to quickfix list -------------------------------
+    " NOTE:
+    " -- <leader>qt reads the last g:tmux_capture_lines lines of the tmux
+    "    pane g:tmux_send_target (default: last active pane, e.g. the agent or
+    "    pytest pane) and puts every 'file:line[:col]' reference into the
+    "    quickfix list. Also understands '@file:L12' (from <leader>yr).
+    " -- Only files that exist (relative to cwd or project root) are kept.
+    " -- Then use <leader>qj/qk (or ]q/[q) to jump, <leader>qo to toggle.
+    function! s:TmuxPaneToQuickfix() abort
+        if empty($TMUX) || !executable('tmux')
+            echohl WarningMsg | echo 'Not inside tmux' | echohl None
+            return
+        endif
+        let l:lines = systemlist('tmux capture-pane -p -J -S -'
+                    \ . g:tmux_capture_lines . ' -t '
+                    \ . shellescape(g:tmux_send_target))
+        if v:shell_error
+            echohl WarningMsg | echo 'tmux capture-pane failed: '
+                        \ . join(l:lines) | echohl None
+            return
+        endif
+        let l:root = ProjectRoot()
+        " path (with or without extension, e.g. vim/vimrc) + :line[:col]
+        let l:pat = '\v[~@`"''([]?\zs[[:alnum:]_./~-]*[[:alnum:]_-]:L?\d+%(:\d+)?'
+        let l:items = []
+        let l:seen = {}
+        for l:line in l:lines
+            let l:start = 0
+            while 1
+                let l:ref = matchstr(l:line, l:pat, l:start)
+                if empty(l:ref)
+                    break
+                endif
+                let l:start = matchend(l:line, l:pat, l:start)
+                let l:parts = matchlist(l:ref, '\v^(.{-}):L?(\d+)%(:(\d+))?$')
+                let l:file = expand(l:parts[1])
+                if !filereadable(l:file) && filereadable(l:root . '/' . l:file)
+                    let l:file = l:root . '/' . l:file
+                endif
+                let l:key = fnamemodify(l:file, ':p') . ':' . l:parts[2]
+                if !filereadable(l:file) || has_key(l:seen, l:key)
+                    continue
+                endif
+                let l:seen[l:key] = 1
+                call add(l:items, { 'filename': l:file,
+                            \ 'lnum': str2nr(l:parts[2]),
+                            \ 'col': str2nr(l:parts[3]),
+                            \ 'text': trim(l:line) })
+            endwhile
+        endfor
+        call setqflist([], ' ', { 'title': 'tmux ' . g:tmux_send_target,
+                    \ 'items': l:items })
+        if empty(l:items)
+            echo 'No file:line references found in tmux pane '
+                        \ . g:tmux_send_target
+        else
+            copen
+            echo len(l:items) . ' references from tmux pane '
+                        \ . g:tmux_send_target
+        endif
+    endfunction
+    noremap <leader>qt :call <SID>TmuxPaneToQuickfix()<CR>
+
 " Location list settings -----------------------------------------------------
     " Function to toggle location list pane
     let g:location_list_is_open = 0
@@ -999,6 +1103,96 @@
                     \ tnoremap <buffer> <C-k> <C-k>|
                     \ tnoremap <buffer> <C-l> <C-l>
     endif
+
+" ============================================================================
+" Send text to a tmux pane (REPL, test runner, agent prompt)
+" ============================================================================
+" Text is pasted with tmux bracketed paste (paste-buffer -p), so multi-line
+" code arrives as one block in IPython, shells and agent prompts.
+" Target pane: g:tmux_send_target (default '{last}' = previously active pane)
+    " NOTE:
+    " -- <leader>xx: send current line / visual selection, then Enter
+    " -- <leader>xc: send current '# %%' cell (IPython/Jupyter style), then
+    "    move to the next cell (like Shift+Enter in VS Code interactive window)
+    " -- <leader>xy: paste line/selection WITHOUT Enter (e.g. into an agent
+    "    prompt, to edit before submitting)
+    " -- <leader>xt: choose target pane (lists panes; '{last}', '%3', ':.1')
+
+    " Send text to target pane; enter = number of Enter keys after paste
+    function! TmuxSendText(text, enter) abort
+        if empty($TMUX) || !executable('tmux')
+            echohl WarningMsg | echo 'Not inside tmux' | echohl None
+            return 0
+        endif
+        let l:target = shellescape(g:tmux_send_target)
+        call system('tmux load-buffer -b vim_send -', a:text)
+        call system('tmux paste-buffer -d -p -b vim_send -t ' . l:target)
+        if v:shell_error
+            echohl WarningMsg | echo 'tmux: cannot paste to pane '
+                        \ . g:tmux_send_target | echohl None
+            return 0
+        endif
+        for l:i in range(a:enter)
+            call system('tmux send-keys -t ' . l:target . ' Enter')
+        endfor
+        return 1
+    endfunction
+    " Lines of the last visual selection (characterwise selection is cut to
+    " the selected columns; blockwise is sent as whole lines)
+    function! s:VisualSelectionText() abort
+        let [l:l1, l:c1] = [line("'<"), col("'<")]
+        let [l:l2, l:c2] = [line("'>"), col("'>")]
+        let l:lines = getline(l:l1, l:l2)
+        if visualmode() ==# 'v' && !empty(l:lines)
+            let l:last = l:lines[-1]
+            let l:c2 = l:c2 - 1 + len(matchstr(l:last, '\%' . l:c2 . 'c.'))
+            let l:lines[-1] = l:last[: l:c2 - 1]
+            let l:lines[0] = l:lines[0][l:c1 - 1 :]
+        endif
+        return join(l:lines, "\n")
+    endfunction
+    " Python blocks need an extra Enter when the last line is indented
+    function! s:EnterCount(text) abort
+        let l:nonblank = filter(split(a:text, "\n"), 'v:val =~# ''\S''')
+        return !empty(l:nonblank) && l:nonblank[-1] =~# '^\s' ? 2 : 1
+    endfunction
+    " Send current '# %%' cell and jump to the next cell
+    function! s:TmuxSendCell() abort
+        let l:marker = '^\s*#\s*%%'
+        let l:start = search(l:marker, 'bcnW')
+        let l:end = search(l:marker, 'nW')
+        let l:first = l:start ? l:start + 1 : 1
+        let l:last = l:end ? l:end - 1 : line('$')
+        let l:text = join(getline(l:first, l:last), "\n")
+        if TmuxSendText(l:text, s:EnterCount(l:text)) && l:end
+            call cursor(l:end + 1, 1)
+        endif
+    endfunction
+    " Choose target pane
+    function! s:TmuxChooseTarget() abort
+        if empty($TMUX)
+            echohl WarningMsg | echo 'Not inside tmux' | echohl None
+            return
+        endif
+        echo join(systemlist('tmux list-panes -s -F "#{pane_id}  '
+                    \ . '#{window_index}.#{pane_index}  #{pane_current_command}'
+                    \ . '  #{pane_current_path}"'), "\n")
+        let l:target = input('tmux target pane: ', g:tmux_send_target)
+        if !empty(l:target)
+            let g:tmux_send_target = l:target
+            redraw | echo 'tmux target pane: ' . g:tmux_send_target
+        endif
+    endfunction
+    nnoremap <silent> <leader>xx
+                \ :<C-u>call TmuxSendText(getline('.'), <SID>EnterCount(getline('.')))<CR>
+    xnoremap <silent> <leader>xx
+                \ :<C-u>call TmuxSendText(<SID>VisualSelectionText(),
+                \ <SID>EnterCount(<SID>VisualSelectionText()))<CR>
+    nnoremap <silent> <leader>xc :<C-u>call <SID>TmuxSendCell()<CR>
+    nnoremap <silent> <leader>xy :<C-u>call TmuxSendText(getline('.'), 0)<CR>
+    xnoremap <silent> <leader>xy
+                \ :<C-u>call TmuxSendText(<SID>VisualSelectionText(), 0)<CR>
+    nnoremap <leader>xt :call <SID>TmuxChooseTarget()<CR>
 
 " ============================================================================
 " Vim-plug initialization (Get vim-plug by curl)
@@ -1398,7 +1592,8 @@
             \           [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
             \ 'right': [ [ 'percent' ],
             \            [ 'lineinfo' ],
-            \            [ 'spell', 'fileformat', 'fileencoding', 'filetype' ] ] }
+            \            [ 'lspstatus', 'githunks', 'spell',
+            \              'fileformat', 'fileencoding', 'filetype' ] ] }
         " Inactive statusline
         let g:lightline.inactive = {
             \ 'left': [ [ 'absolutepath', 'modified' ] ],
@@ -1413,7 +1608,9 @@
             \ 'spell': 'LightlineSpell',
             \ 'fileformat': 'LightlineFileformat',
             \ 'fileencoding': 'LightlineFileencoding',
-            \ 'filetype': 'LightlineFiletype' }
+            \ 'filetype': 'LightlineFiletype',
+            \ 'lspstatus': 'LightlineLspStatus',
+            \ 'githunks': 'LightlineGitHunks' }
         " Fancy symbol for statusline separator
         if a:fancy
             let g:lightline.separator = { 'left': "", "right": "" }
@@ -1510,6 +1707,30 @@
         " Hide for small window
         function! LightlineLineinfo()
             return winwidth(0) > 35 ? printf("%3d:%-2d", line('.'), col('.')) : ''
+        endfunction
+        " LSP state (only after <leader>Le): 'LSP' = enabled, server names
+        " when running for this buffer, e.g. 'LSP:pyright-langserver'
+        function! LightlineLspStatus()
+            if winwidth(0) <= 90 || !get(g:, 'lsp_user_enabled', 0)
+                return ''
+            endif
+            let l:running = []
+            for l:name in lsp#get_allowed_servers()
+                if lsp#get_server_status(l:name) ==# 'running'
+                    call add(l:running, l:name)
+                endif
+            endfor
+            return empty(l:running) ? 'LSP' : 'LSP:' . join(l:running, ',')
+        endfunction
+        " Git hunk summary '+added ~modified -removed' (only when gitgutter
+        " is already loaded and enabled for this buffer; never loads it)
+        function! LightlineGitHunks()
+            if winwidth(0) <= 90 || !exists('*GitGutterGetHunkSummary')
+                return ''
+            endif
+            let [l:a, l:m, l:r] = GitGutterGetHunkSummary()
+            return (l:a + l:m + l:r) == 0 ? ''
+                        \ : printf('+%d ~%d -%d', l:a, l:m, l:r)
         endfunction
 
     endfunction
@@ -1621,6 +1842,12 @@
       \ call fzf#vim#grep(
       \   'rg --column --line-number --no-heading --color=always --smart-case --max-filesize 10M --no-binary -- '.shellescape(<q-args>), 1,
       \   fzf#vim#with_preview(), <bang>0)
+    " Same as :FZFRg, but always searches from the project (git) root,
+    " even when vim was started in a subdirectory (see ProjectRoot())
+    command! -bang -nargs=* FZFRgRoot
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always --smart-case --max-filesize 10M --no-binary -- '.shellescape(<q-args>), 1,
+      \   fzf#vim#with_preview({ 'dir': ProjectRoot() }), <bang>0)
 
     " Fish is not fully compatible for fzf.vim, change to bash for convenience
     let $SHELL = '/bin/bash'
@@ -1659,6 +1886,7 @@
     nnoremap <leader>fag :FZFAg<CR>
     nnoremap <leader>frg :FZFRg<CR>
     nnoremap <leader>frG :FZFRG<CR>
+    nnoremap <leader>frr :FZFRgRoot<CR>
     " Git command (Commits/BCommits require fugitive.vim, which is lazy-loaded,
     " so load it first; GFiles only needs the git executable)
     nnoremap <leader>fgf :FZFGFiles<CR>
@@ -1850,6 +2078,33 @@
     " Map space key to normal/visual mode
     vnoremap <silent><leader> :<C-u>WhichKeyVisual '<space>'<CR>
     nnoremap <silent><leader> :<C-u>WhichKey '<space>'<CR>
+    " Group names shown in the leader menu (labels only, keys are unchanged;
+    " keys without a label are still listed with their command)
+    let g:which_key_map = {
+                \ 'a': { 'name': '+args/autochdir' },
+                \ 'b': { 'name': '+buffer' },
+                \ 'c': { 'name': '+comment/cursor/colorscheme' },
+                \ 'd': { 'name': '+diff' },
+                \ 'e': { 'name': '+loclist/lint/external' },
+                \ 'f': { 'name': '+fzf' },
+                \ 'g': { 'name': '+git (lazy)/goyo/jumps' },
+                \ 'i': { 'name': '+insert date' },
+                \ 'm': { 'name': '+mark/man/markdown' },
+                \ 'n': { 'name': '+neoformat' },
+                \ 'o': { 'name': '+AI (ollama)' },
+                \ 'p': { 'name': '+python/test' },
+                \ 'q': { 'name': '+quit/quickfix' },
+                \ 'r': { 'name': '+register/resize/rg' },
+                \ 's': { 'name': '+spell/scrolloff/statusline' },
+                \ 't': { 'name': '+tab/terminal' },
+                \ 'u': { 'name': '+undotree' },
+                \ 'w': { 'name': '+write/wiki/wrap' },
+                \ 'x': { 'name': '+tmux send' },
+                \ 'y': { 'name': '+yank/path' },
+                \ 'D': { 'name': '+debugger' },
+                \ 'L': { 'name': '+LSP/LanguageTool' },
+                \ }
+    silent! call which_key#register('<Space>', 'g:which_key_map')
 
 " Vim-current-word -----------------------------------------------------------
     " Disable highlight current word and twin words at start
@@ -2217,6 +2472,17 @@
         nnoremap <leader>npi :Neoformat isort<CR>
         " yapf: python code formatter
         nnoremap <leader>npy :Neoformat yapf<CR>
+        " ruff: fast python formatter + linter [pip install ruff]
+        " -- npr: format (black-compatible), npR: sort imports (isort rules)
+        " -- --exit-zero: remaining lint findings must not count as failure
+        let g:neoformat_python_ruffimport = {
+                \ 'exe': 'ruff',
+                \ 'args': ['check', '--select', 'I', '--fix', '--exit-zero',
+                \          '-q', '-'],
+                \ 'stdin': 1,
+                \ }
+        nnoremap <leader>npr :Neoformat ruff<CR>
+        nnoremap <leader>npR :Neoformat ruffimport<CR>
     endif
 
 " Rainbow parentheses --------------------------------------------------------
@@ -2463,8 +2729,64 @@
     " %:p for current file in full path
     " -- s:PYTHON_DEBUGGER: ipdb if installed (nicer prompt), otherwise pdb
     autocmd vimrc FileType python
-                \ noremap <buffer> <leader>pB
-                \ <Esc>:split<CR>:terminal python -m pdb '%:p'<space>
+                \ execute 'noremap <buffer> <leader>pB'
+                \ . ' <Esc>:split<CR>:terminal python -m ' . s:PYTHON_DEBUGGER
+                \ . " '%:p'<space>"
+
+" Python test (vim-test) -----------------------------------------------------
+    " NOTE:
+    " -- <leader>pt[n/f/l/s/v]: test nearest/file/last/suite, visit last test
+    "    file (p for python/pytest; vim-test also supports other languages)
+    " -- Inside tmux, the test command runs in the tmux pane
+    "    g:tmux_send_target (default: last active pane, should be a shell),
+    "    like a test terminal next to vim. Outside tmux: vim/neovim terminal.
+    " -- vim-test is lazy-loaded on the first :Test* command
+    function! s:TestTmuxPane(cmd) abort
+        call TmuxSendText('cd ' . shellescape(getcwd()) . ' && ' . a:cmd, 1)
+    endfunction
+    let g:test#custom_strategies = { 'tmuxpane': function('s:TestTmuxPane') }
+    if !empty($TMUX)
+        let g:test#strategy = 'tmuxpane'
+    elseif USING_NEOVIM
+        let g:test#strategy = 'neovim'
+    else
+        let g:test#strategy = 'vimterminal'
+    endif
+    let g:test#python#runner = 'pytest'
+    nnoremap <leader>ptn :TestNearest<CR>
+    nnoremap <leader>ptf :TestFile<CR>
+    nnoremap <leader>ptl :TestLast<CR>
+    nnoremap <leader>pts :TestSuite<CR>
+    nnoremap <leader>ptv :TestVisit<CR>
+
+" Python debugger (vimspector) -----------------------------------------------
+    " NOTE:
+    " -- One-time setup: :VimspectorInstall debugpy
+    " -- Per project: :VimspectorPythonConfig copies a launch configuration
+    "    (vim/share/templates/vimspector.json) to <project root>/.vimspector.json
+    " -- <leader>D[b/c/n/i/o/r/q/e]: toggle breakpoint, continue (or start),
+    "    step over/into/out, restart, quit (reset), evaluate word/selection
+    " -- Lazy-loaded on the first <leader>D key or :Vimspector* command
+    let s:VIMSPECTOR_TEMPLATE = s:TEMPLATE_DIR . 'vimspector.json'
+    function! s:VimspectorPythonConfig() abort
+        let l:target = ProjectRoot() . '/.vimspector.json'
+        if filereadable(l:target)
+            echo 'Already exists: ' . l:target
+            return
+        endif
+        call writefile(readfile(expand(s:VIMSPECTOR_TEMPLATE)), l:target)
+        echo 'Created ' . l:target
+    endfunction
+    command! VimspectorPythonConfig call s:VimspectorPythonConfig()
+    nmap <leader>Db <Plug>VimspectorToggleBreakpoint
+    nmap <leader>Dc <Plug>VimspectorContinue
+    nmap <leader>Dn <Plug>VimspectorStepOver
+    nmap <leader>Di <Plug>VimspectorStepInto
+    nmap <leader>Do <Plug>VimspectorStepOut
+    nmap <leader>Dr <Plug>VimspectorRestart
+    nnoremap <leader>Dq :VimspectorReset<CR>
+    nmap <leader>De <Plug>VimspectorBalloonEval
+    xmap <leader>De <Plug>VimspectorBalloonEval
 
 " Python skeleton (add python skeleton for new python .py file) --------------
     " NOTE: Here we don't use simply use BufNewFile since vim-lsp-settings
@@ -2545,6 +2867,23 @@
     " per buffer, so later changes (e.g. <leader>so0) are kept.
     " Set spell check for markdown files
     autocmd vimrc FileType markdown,vimwiki setlocal spell
+    " Prose layout for notes (code keeps the global nowrap)
+    " -- wrap at word boundaries, keep indentation of wrapped list items
+    " -- j/k move by screen line; with a count (5j) by real line, so
+    "    relative line numbers still work. <leader>wp still toggles wrap.
+    " -- no end-of-line marker (eol:↵) in notes; trailing spaces still shown
+    autocmd vimrc FileType markdown,vimwiki
+                \ setlocal wrap linebreak breakindent
+    autocmd vimrc FileType markdown,vimwiki
+                \ nnoremap <buffer><expr> j v:count ? 'j' : 'gj'|
+                \ nnoremap <buffer><expr> k v:count ? 'k' : 'gk'|
+                \ xnoremap <buffer><expr> j v:count ? 'j' : 'gj'|
+                \ xnoremap <buffer><expr> k v:count ? 'k' : 'gk'
+    if has('nvim-0.5') || has('patch-8.2.2518')
+        " 'listchars' is window/buffer-local only in these versions
+        autocmd vimrc FileType markdown,vimwiki
+                    \ let &l:listchars = substitute(&g:listchars, 'eol:[^,]*,\=', '', '')
+    endif
     " Show preview hint once per buffer (a .md buffer gets FileType twice:
     " markdown first, then vimwiki)
     function! s:MarkdownPreviewHint() abort
@@ -2690,6 +3029,24 @@
         "" Enable/Disable LSP server (in current buffer)
         "nmap <buffer> <leader>eL :call EnableLSP()<CR>
         "nmap <buffer> <leader>dL :call DisableLSP()<CR>
+        " Use the project's virtualenv for language servers (and :terminal,
+        " :!, vim-test) when vim was not started inside one
+        " -- Looks for .venv, venv, env with bin/python at the project root
+        function! s:ActivateProjectVenv() abort
+            if !empty($VIRTUAL_ENV)
+                return
+            endif
+            let l:root = ProjectRoot()
+            for l:name in ['.venv', 'venv', 'env']
+                let l:venv = l:root . '/' . l:name
+                if executable(l:venv . '/bin/python')
+                    let $VIRTUAL_ENV = l:venv
+                    let $PATH = l:venv . '/bin:' . $PATH
+                    echomsg 'Activated virtualenv: ' . l:venv
+                    return
+                endif
+            endfor
+        endfunction
         " Enable LSP
         function! EnableLSP()
             call s:ActivateProjectVenv()
