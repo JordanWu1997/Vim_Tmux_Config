@@ -1189,10 +1189,20 @@
     " The statusline branch does not need fugitive (see LightlineGitbranch).
     if USING_CODING_TOOL_PLUG
         " Git integration (Git functions in vim command line)
-        Plug 'tpope/vim-fugitive'
+        Plug 'tpope/vim-fugitive', { 'on': [
+                    \ 'G', 'Git', 'Gclog', 'Gllog', 'Gcd', 'Glcd',
+                    \ 'Gedit', 'Gsplit', 'Gvsplit', 'Gtabedit', 'Gpedit',
+                    \ 'Gdiffsplit', 'Gvdiffsplit', 'Ghdiffsplit',
+                    \ 'Gread', 'Gwrite', 'Gwq', 'Ggrep', 'Glgrep',
+                    \ 'GMove', 'GRename', 'GDelete', 'GRemove', 'GBrowse' ] }
         " GitGutter (enhanced signify), also with git integration
-        Plug 'airblade/vim-gitgutter',
-                    \ { 'on': ['GitGutterToggle', 'GitGutterEnable'] }
+        Plug 'airblade/vim-gitgutter', { 'on': [
+                    \ 'GitGutterToggle', 'GitGutterEnable', 'GitGutterDisable',
+                    \ 'GitGutterBufferToggle', 'GitGutterBufferEnable',
+                    \ 'GitGutterBufferDisable', 'GitGutterQuickFix',
+                    \ 'GitGutterFold', 'GitGutterSignsToggle',
+                    \ 'GitGutterLineHighlightsToggle',
+                    \ 'GitGutterLineNrHighlightsToggle' ] }
     endif
 
 " [DB] -----------------------------------------------------------------------
@@ -1432,8 +1442,16 @@
             endif
         endfunction
         " Hide for small window
+        " -- Use fugitive if it is already loaded, otherwise use the cached
+        "    branch from LightlineGitbranchCache() (no git plugin needed)
         function! LightlineGitbranch()
-            return winwidth(0) > 80 ? FugitiveHead() : ''
+            if winwidth(0) <= 80
+                return ''
+            endif
+            if exists('*FugitiveHead')
+                return FugitiveHead()
+            endif
+            return get(b:, 'lightline_git_branch', '')
         endfunction
         " Hide for small window
         function! LightlineSpell()
@@ -2212,8 +2230,21 @@
         let g:VM_maps["Remove Region"] = 'Q'
     endif
 
+" Function - load git plugins on demand --------------------------------------
+    " Fugitive and GitGutter are lazy-loaded (see [Git] in plugin list).
+    " Keys that use functions/<Plug> maps (not commands) call this first.
+    function! s:LoadGitPlugin(name) abort
+        let l:guard = { 'vim-fugitive': 'g:loaded_fugitive',
+                    \   'vim-gitgutter': 'g:loaded_gitgutter' }
+        if !has_key(g:plugs, a:name) || exists(get(l:guard, a:name, ''))
+            return
+        endif
+        call plug#load(a:name)
+    endfunction
+
 " Vim-fugitive ---------------------------------------------------------------
     " -- :G Summary for current git repository
+    " -- Lazy-loaded: the first :Git/:G... command (or <leader>g key) loads it
     if USING_CODING_TOOL_PLUG
         noremap <leader>gd :Git diff %<CR>
         noremap <leader>gD :Git diff<CR>
@@ -2227,6 +2258,11 @@
     endif
 
 " GitGutter ------------------------------------------------------------------
+    " NOTE:
+    " -- Lazy-loaded and disabled at startup (g:gitgutter_enabled = 0)
+    " -- Hunk keys (<leader>g[j/k/a/r/P], ]h, [h) load gitgutter and enable it
+    "    for the CURRENT buffer only on first use, then do their action
+    " -- <leader>gg toggles it for all buffers, <leader>gb for current buffer
     if USING_CODING_TOOL_PLUG
         " Disable all gitgutter key mappings
         let g:gitgutter_map_keys = 0
@@ -2245,9 +2281,32 @@
         " Use Esc key to quit preview pane
         let g:gitgutter_close_preview_on_escape = 1
         " Assign color to GitGutter group
-        highlight GitGutterAdd    cterm=bold ctermfg=10 ctermbg=NONE gui=bold guifg=#009900 guibg=NONE
-        highlight GitGutterChange cterm=bold ctermfg=11 ctermbg=NONE gui=bold guifg=#bbbb00 guibg=NONE
-        highlight GitGutterDelete cterm=bold ctermfg=9  ctermbg=NONE gui=bold guifg=#ff2222 guibg=NONE
+        " -- Re-applied on every ColorScheme event, since :colorscheme clears
+        "    highlights (and some themes, e.g. gruvbox, link GitGutter groups)
+        function! s:GitGutterHighlight() abort
+            highlight GitGutterAdd    cterm=bold ctermfg=10 ctermbg=NONE gui=bold guifg=#009900 guibg=NONE
+            highlight GitGutterChange cterm=bold ctermfg=11 ctermbg=NONE gui=bold guifg=#bbbb00 guibg=NONE
+            highlight GitGutterDelete cterm=bold ctermfg=9  ctermbg=NONE gui=bold guifg=#ff2222 guibg=NONE
+        endfunction
+        call s:GitGutterHighlight()
+        autocmd vimrc ColorScheme * call s:GitGutterHighlight()
+        " Load gitgutter and enable it for current buffer (synchronously, so
+        " hunks are ready for the jump/stage action that follows)
+        function! s:GitGutterEnsure() abort
+            call s:LoadGitPlugin('vim-gitgutter')
+            if !gitgutter#utility#getbufvar(bufnr(''), 'enabled', 0)
+                let l:async = get(g:, 'gitgutter_async', 1)
+                let g:gitgutter_async = 0
+                GitGutterBufferEnable
+                let g:gitgutter_async = l:async
+            endif
+        endfunction
+        " Run a gitgutter hunk command after s:GitGutterEnsure()
+        " -- count is passed to NextHunk/PrevHunk (e.g. 3]h)
+        function! s:GitGutterRun(cmd, count) abort
+            call s:GitGutterEnsure()
+            execute (a:count > 1 ? a:count : '') . a:cmd
+        endfunction
         " GitGutter toggle
         noremap <leader>gg :GitGutterToggle<CR>
         noremap <leader>gb :GitGutterBufferToggle<CR>
@@ -2596,6 +2655,16 @@
             setlocal signcolumn=no
             call lsp#disable()
             nmap <buffer> K :execute "help " . expand("<cword>")<CR>
+            " Let autocomplpop pop up again in buffers that LSP had taken over
+            for l:buf in getbufinfo()
+                if getbufvar(l:buf.bufnr, 'lsp_acp_off', 0)
+                    call setbufvar(l:buf.bufnr, 'acp_off', 0)
+                    call setbufvar(l:buf.bufnr, 'lsp_acp_off', 0)
+                endif
+            endfor
+            if exists('*s:AcpBufferSync')
+                call s:AcpBufferSync()
+            endif
         endfunction
         " Load LSP settings and keybindings
         function! s:on_lsp_buffer_enabled() abort
@@ -2625,8 +2694,22 @@
             " Format w/ LSP server
             nmap <buffer> <leader>Lf :LspDocumentRangeFormat<CR>
             " Close pop-up window without opening a new line
-            inoremap <expr> <CR>
-                        \ pumvisible() ? asyncomplete#close_popup() : "\<CR>"
+            " -- <buffer>: only in LSP buffers. auto-pairs also maps <CR> per
+            "    buffer, so keep its newline handling (AutoPairsReturn)
+            if exists('*AutoPairsReturn') && exists('b:autopairs_enabled')
+                inoremap <buffer><silent><expr> <CR> pumvisible()
+                            \ ? asyncomplete#close_popup()
+                            \ : "\<CR>\<C-r>=AutoPairsReturn()\<CR>"
+            else
+                inoremap <buffer><expr> <CR>
+                            \ pumvisible() ? asyncomplete#close_popup() : "\<CR>"
+            endif
+            " asyncomplete pops up here, so pause autocomplpop in this buffer
+            let b:acp_off = 1
+            let b:lsp_acp_off = 1
+            if exists('*s:AcpBufferSync')
+                call s:AcpBufferSync()
+            endif
         endfunction
         " Install LSP server
         augroup lsp_install
