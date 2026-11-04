@@ -438,9 +438,10 @@
     "    pane), @* is PRIMARY (middle click). Set both to cover both pastes.
     noremap <leader>yp :let @+ = expand('%:p') <bar> let @* = @+ <bar> echo 'Yanked path: ' . @+<CR>
     " Copy file reference for agent prompts: @path:L12 (visual: @path:L12-L30)
-    " -- Path is relative to the working directory (repo root, noautochdir)
-    nnoremap <leader>yr :let @+ = '@' . expand('%:.') . ':L' . line('.') <bar> let @* = @+ <bar> echo 'Yanked: ' . @+<CR>
-    xnoremap <leader>yr :<C-u>let @+ = '@' . expand('%:.') . ':L' . line("'<") . '-L' . line("'>") <bar> let @* = @+ <bar> echo 'Yanked: ' . @+<CR>
+    " -- Path is relative to the project (git) root, where the agent runs;
+    "    a path with spaces is quoted: @"my dir/a.py":L12 (same as <leader>xr)
+    nnoremap <silent> <leader>yr :<C-u>call <SID>YankRef(line('.'), line('.'))<CR>
+    xnoremap <silent> <leader>yr :<C-u>call <SID>YankRef(line("'<"), line("'>"))<CR>
 
 " Clipboard w/ xsel ----------------------------------------------------------
     " Use xsel as clipboard, it is recommended if
@@ -676,7 +677,9 @@
     "    (vim-obsession) when vim starts inside tmux in a git root
     " -- Skipped for: diff mode (mergetool/difftool), files outside the
     "    directory or inside .git (commit messages, agent editor temp files),
-    "    and vim started with --cmd 'let g:vimrc_no_session = 1' (tmux popups)
+    "    stdin/-q/-t/-c/+cmd starts (pipes, quickfix, man pages), and vim
+    "    started with --cmd 'let g:vimrc_no_session = 1' (tmux popups)
+    " -- Not restored when its files are open in another vim (swap files)
     " -- A restored session ('vim -S') resumes tracking by itself
     " -- An existing Session.vim is never overwritten: plain 'vim' (no file
     "    arguments) restores it; 'vim file' leaves it alone (:Obsess to
@@ -696,7 +699,60 @@
             return
         endif
         call mkdir(fnamemodify(l:exclude, ':h'), 'p')
-        call writefile(['Session.vim'], l:exclude, 'a')
+        " Start on a new line when the file does not end with a newline
+        let l:old = filereadable(l:exclude) ? readfile(l:exclude, 'b') : []
+        call writefile((!empty(l:old) && l:old[-1] !=# '' ? [''] : [])
+                    \ + ['Session.vim'], l:exclude, 'a')
+    endfunction
+    " Files of a Session.vim that another running vim has open (it has a
+    " swap file for them), e.g. a second vim started in the same repo
+    " -- Swap files are found by name: 'directory' ends in // (full path with
+    "    % for /), see the backup/swap settings
+    function! s:SessionFilesInUse(session) abort
+        let l:dirs = filter(map(split(&directory, ','), 'expand(v:val)'),
+                    \ 'v:val =~# "//$"')
+        let l:in_use = []
+        for l:line in readfile(a:session)
+            let l:m = matchlist(l:line, '\v^%(badd \+\d+|edit|balt) (.+)$')
+            if empty(l:m)
+                continue
+            endif
+            " Session files escape spaces etc. with a backslash
+            let l:file = fnamemodify(substitute(l:m[1], '\\\(.\)', '\1', 'g'), ':p')
+            for l:dir in l:dirs
+                for l:ext in ['.swp', '.swo', '.swn']
+                    let l:swap = l:dir . substitute(l:file, '/', '%', 'g') . l:ext
+                    if !filereadable(l:swap)
+                        continue
+                    endif
+                    let l:pid = get(swapinfo(l:swap), 'pid', 0)
+                    if l:pid > 0 && l:pid != getpid()
+                                \ && (!isdirectory('/proc') || isdirectory('/proc/' . l:pid))
+                                \ && index(l:in_use, l:file) < 0
+                        call add(l:in_use, l:file)
+                    endif
+                endfor
+            endfor
+        endfor
+        return l:in_use
+    endfunction
+    " Vim started without a file, stdin, quickfix file, tag or command, so
+    " restoring/recording a session cannot replace what was asked for
+    " (cmd | vim -, vim -q, vim -t, vim -c / +cmd, MANPAGER='nvim +Man!')
+    " -- With file arguments only the start options count (vim +42 file.py
+    "    is not a plain start either)
+    function! s:CleanStart() abort
+        for l:arg in get(v:, 'argv', [])[1:]
+            if l:arg ==# '--'
+                break
+            endif
+            " -q/-t/-c with or without a joined value (-qerrors.err, -tTag)
+            if l:arg ==# '-' || l:arg =~# '^-[qtc]' || l:arg =~# '^+'
+                return 0
+            endif
+        endfor
+        return argc() > 0 || (bufname('') ==# '' && line('$') == 1
+                    \ && getline(1) ==# '' && !&modified && empty(getqflist()))
     endfunction
     function! s:AutoSession() abort
         if !s:on('auto_session') || empty($TMUX) || &diff
@@ -714,11 +770,21 @@
                 return
             endif
         endfor
+        if !s:CleanStart()
+            return
+        endif
         let l:session = l:cwd . '/Session.vim'
         if filereadable(l:session)
             if argc() > 0
                 echomsg 'Session.vim exists here: not tracking this vim'
                             \ . ' (:source Session.vim restores it, :Obsess replaces it)'
+                return
+            endif
+            let l:in_use = s:SessionFilesInUse(l:session)
+            if !empty(l:in_use)
+                echomsg 'Session.vim not restored: ' . len(l:in_use)
+                            \ . ' of its files are open in another vim (e.g. '
+                            \ . fnamemodify(l:in_use[0], ':~:.') . ')'
                 return
             endif
             " Restores the layout; the file resumes tracking (Obsession)
@@ -1044,15 +1110,33 @@
     " -- Only files that exist (relative to cwd or project root) are kept.
     "    Project files come first; library frames are dropped when there are
     "    project ones.
-    " -- Then use <leader>qj/qk (or ]q/[q) to jump, <leader>qo to toggle.
-    function! s:TmuxPaneToQuickfix() abort
+    " -- <leader>qT does the same with the run pane (test and <leader>px
+    "    output): run_target, else a shell pane in vim's window
+    " -- Then use <leader>qj/qk (or ]q/[q) to jump, <leader>qo to browse the
+    "    list with fzf (:copen / :cclose open and close the window).
+    function! s:TmuxPaneToQuickfix(which) abort
         if empty($TMUX) || !executable('tmux')
             echohl WarningMsg | echo 'Not inside tmux' | echohl None
             return
         endif
+        if a:which ==# 'run'
+            " The pane the last test/run went to (also while it sits at a
+            " pdb prompt), else run_target, else a shell pane in vim's window
+            let l:pane = get(s:, 'last_run_pane', '')
+            if empty(l:pane) || empty(s:TmuxPaneCommand(l:pane))
+                let l:pane = !empty(g:vimrc_tmux.run_target)
+                            \ ? g:vimrc_tmux.run_target : s:TmuxFindRunPane(0)
+            endif
+            if empty(l:pane)
+                echohl WarningMsg | echo 'No run pane yet (run a test, or <leader>xT)'
+                echohl None
+                return
+            endif
+        else
+            let l:pane = g:vimrc_tmux.target
+        endif
         let l:lines = systemlist('tmux capture-pane -p -J -S -'
-                    \ . g:vimrc_tmux.capture_lines . ' -t '
-                    \ . shellescape(g:vimrc_tmux.target))
+                    \ . g:vimrc_tmux.capture_lines . ' -t ' . shellescape(l:pane))
         if v:shell_error
             echohl WarningMsg | echo 'tmux capture-pane failed: '
                         \ . join(l:lines) | echohl None
@@ -1065,6 +1149,7 @@
         let l:pat_tb = '\vFile "([^"]+)", line (\d+)'
         " pdb/ipdb current frame: > /path/x.py(42)func()
         let l:pat_pdb = '\v^\>\s+(\S+)\((\d+)\)'
+        let l:pat_quoted = '\v\@"([^"]+)":L(\d+)'
         let l:items = []
         let l:seen = {}
         for l:line in l:lines
@@ -1078,6 +1163,16 @@
                 let l:start = matchend(l:line, l:pat, l:start)
                 let l:parts = matchlist(l:ref, '\v^(.{-}):L?(\d+)%(:(\d+))?$')
                 call add(l:refs, l:parts[1:3])
+            endwhile
+            " Quoted @reference (path with spaces): @"my dir/a.py":L12
+            let l:start = 0
+            while 1
+                let l:m = matchlist(l:line, l:pat_quoted, l:start)
+                if empty(l:m)
+                    break
+                endif
+                let l:start = matchend(l:line, l:pat_quoted, l:start)
+                call add(l:refs, [l:m[1], l:m[2], ''])
             endwhile
             for l:p in [l:pat_tb, l:pat_pdb]
                 let l:m = matchlist(l:line, l:p)
@@ -1110,18 +1205,19 @@
             let l:items = l:own + filter(l:items,
                         \ 'index(l:own, v:val) < 0 && v:val.filename !~# l:lib')
         endif
-        call setqflist([], ' ', { 'title': 'tmux ' . g:vimrc_tmux.target,
+        call setqflist([], ' ', { 'title': 'tmux ' . l:pane,
                     \ 'items': l:items })
         if empty(l:items)
             echo 'No file:line references found in tmux pane '
-                        \ . g:vimrc_tmux.target
+                        \ . l:pane
         else
             copen
             echo len(l:items) . ' references from tmux pane '
-                        \ . g:vimrc_tmux.target
+                        \ . l:pane
         endif
     endfunction
-    noremap <leader>qt :call <SID>TmuxPaneToQuickfix()<CR>
+    nnoremap <silent> <leader>qt :<C-u>call <SID>TmuxPaneToQuickfix('target')<CR>
+    nnoremap <silent> <leader>qT :<C-u>call <SID>TmuxPaneToQuickfix('run')<CR>
 
 " Location list settings -----------------------------------------------------
     " Function to toggle location list pane
@@ -1418,6 +1514,12 @@
     "    from the project root, with the project virtualenv if any
     " -- <leader>pl: run the last <leader>px command again
 
+    function! s:TmuxLeaveCopyMode(pane) abort
+        if trim(system('tmux display-message -p -t ' . shellescape(a:pane)
+                    \ . ' "#{pane_in_mode}"')) ==# '1'
+            call system('tmux send-keys -t ' . shellescape(a:pane) . ' -X cancel')
+        endif
+    endfunction
     " Send text to target pane; enter = number of Enter keys after paste
     " -- Optional 3rd argument: pane (default g:vimrc_tmux.target)
     function! TmuxSendText(text, enter, ...) abort
@@ -1428,10 +1530,7 @@
         let l:pane = a:0 ? a:1 : g:vimrc_tmux.target
         let l:target = shellescape(l:pane)
         " Leave copy mode first, or the Enter below would only exit it
-        if trim(system('tmux display-message -p -t ' . l:target
-                    \ . ' "#{pane_in_mode}"')) ==# '1'
-            call system('tmux send-keys -t ' . l:target . ' -X cancel')
-        endif
+        call s:TmuxLeaveCopyMode(l:pane)
         call system('tmux load-buffer -b vim_send -', a:text)
         call system('tmux paste-buffer -d -p -b vim_send -t ' . l:target)
         if v:shell_error
@@ -1489,8 +1588,20 @@
         let l:target = input(l:label, g:vimrc_tmux[a:key])
         if !empty(l:target) || a:key ==# 'run_target'
             let g:vimrc_tmux[a:key] = l:target
+            if a:key ==# 'run_target'
+                let s:run_auto = 0
+                " <leader>qT reads the newly chosen pane, not the previous one
+                unlet! s:last_run_pane
+            endif
             redraw | echo l:label . g:vimrc_tmux[a:key]
         endif
+    endfunction
+    " Program running in a pane ('' when the pane does not exist, e.g. no
+    " {last} pane yet or a closed pane)
+    function! s:TmuxPaneCommand(pane) abort
+        let l:prog = trim(system('tmux display-message -p -t '
+                    \ . shellescape(a:pane) . ' "#{pane_current_command}"'))
+        return v:shell_error ? '' : fnamemodify(l:prog, ':t')
     endfunction
     " Pane for commands (tests, run file): run_target, else target
     function! TmuxRunPane() abort
@@ -1499,8 +1610,9 @@
     endfunction
     let s:shells = ['bash', 'zsh', 'fish', 'sh', 'dash', 'ksh', 'tcsh']
     " A shell pane in vim's tmux window for commands: an idle shell pane
-    " (not vim's own), else offer to split one below vim; '' if none
-    function! s:TmuxFindRunPane() abort
+    " (not vim's own), else (split = 1) offer to split one below vim; '' if
+    " none
+    function! s:TmuxFindRunPane(split) abort
         for l:line in systemlist('tmux list-panes -t ' . shellescape($TMUX_PANE)
                     \ . ' -F "#{pane_id} #{pane_current_command}"')
             let [l:id, l:prog] = split(l:line . ' ?')[0:1]
@@ -1508,6 +1620,9 @@
                 return l:id
             endif
         endfor
+        if !a:split
+            return ''
+        endif
         if confirm('No shell pane in this tmux window for tests/runs. Split one below vim?',
                     \ "&Yes\n&No", 1) != 1
             return ''
@@ -1522,35 +1637,46 @@
     " Send a shell command to the run pane, only if that pane runs a shell
     " (so a test command is never typed into an agent or REPL prompt)
     " -- run_target empty and the target pane is not a shell (e.g. the agent
-    "    you used last): a shell pane in this window becomes the run pane
-    "    (found, or split after asking) and is remembered in run_target
+    "    you used last) or does not exist (vim alone in its window): a shell
+    "    pane in this window becomes the run pane (found, or split after
+    "    asking) and is remembered in run_target
+    " -- A run pane picked that way that was closed since is picked again;
+    "    one you set with <leader>xT is never replaced
     function! TmuxRunCommand(cmd) abort
         if empty($TMUX) || !executable('tmux')
             echohl WarningMsg | echo 'Not inside tmux' | echohl None
             return 0
         endif
-        let l:pane = TmuxRunPane()
-        let l:prog = trim(system('tmux display-message -p -t '
-                    \ . shellescape(l:pane) . ' "#{pane_current_command}"'))
-        if v:shell_error
-            echohl WarningMsg | echo 'tmux: no pane ' . l:pane | echohl None
-            return 0
+        if get(s:, 'run_auto', 0)
+                    \ && empty(s:TmuxPaneCommand(g:vimrc_tmux.run_target))
+            let g:vimrc_tmux.run_target = ''
+            let s:run_auto = 0
         endif
-        if index(s:shells, fnamemodify(l:prog, ':t')) < 0
-            let l:found = empty(g:vimrc_tmux.run_target) ? s:TmuxFindRunPane() : ''
+        let l:pane = TmuxRunPane()
+        let l:prog = s:TmuxPaneCommand(l:pane)
+        if index(s:shells, l:prog) < 0
+            let l:found = empty(g:vimrc_tmux.run_target) ? s:TmuxFindRunPane(1) : ''
             if empty(l:found)
                 redraw
                 echohl WarningMsg
-                echo 'tmux pane ' . l:pane . ' runs ' . l:prog
+                echo empty(l:prog) ? 'tmux: no pane ' . l:pane
+                            \ . ': not sent (choose a pane with <leader>xT)'
+                            \ : 'tmux pane ' . l:pane . ' runs ' . l:prog
                             \ . ', not a shell: not sent (choose a pane with <leader>xT)'
                 echohl None
                 return 0
             endif
             let g:vimrc_tmux.run_target = l:found
+            let s:run_auto = 1
             let l:pane = l:found
             redraw
             echomsg 'Run pane: ' . l:pane . ' (change with <leader>xT)'
         endif
+        " Clear a half-typed command at the prompt (end of line, kill to
+        " start: bash, zsh, fish), so it is not glued to this one
+        call s:TmuxLeaveCopyMode(l:pane)
+        call system('tmux send-keys -t ' . shellescape(l:pane) . ' C-e C-u')
+        let s:last_run_pane = l:pane
         return TmuxSendText(a:cmd, 1, l:pane)
     endfunction
     " Prefix that runs a command with a virtualenv, since the tmux pane's
@@ -1558,15 +1684,15 @@
     " -- Order: a venv chosen with :ProjectVenv {dir}, else the current
     "    file's project venv (so repo B never runs with repo A's venv), else
     "    vim's active one
-    function! TmuxVenvPrefix() abort
+    function! RunVenv() abort
         if get(g:, 'vimrc_venv_pinned', 0) && !empty($VIRTUAL_ENV)
-            let l:venv = $VIRTUAL_ENV
-        else
-            let l:venv = ProjectVenv()
-            if empty(l:venv)
-                let l:venv = $VIRTUAL_ENV
-            endif
+            return $VIRTUAL_ENV
         endif
+        let l:venv = ProjectVenv()
+        return empty(l:venv) ? $VIRTUAL_ENV : l:venv
+    endfunction
+    function! TmuxVenvPrefix() abort
+        let l:venv = RunVenv()
         return empty(l:venv) ? '' : 'env VIRTUAL_ENV=' . shellescape(l:venv)
                     \ . ' PATH=' . shellescape(l:venv . '/bin') . ':"$PATH" '
     endfunction
@@ -1608,14 +1734,30 @@
         return stridx(l:full, l:root . '/') == 0 ? l:full[len(l:root) + 1 :]
                     \ : fnamemodify(l:full, ':~')
     endfunction
+    " '@file:L12' / '@file:L12-L30'; a path with spaces is quoted:
+    " '@"my dir/a.py":L12' (<leader>qt reads both forms back)
+    function! s:FileRef(path, l1, l2) abort
+        let l:path = s:RefPath(a:path)
+        return '@' . (l:path =~# '\s' ? '"' . l:path . '"' : l:path)
+                    \ . ':L' . a:l1 . (a:l2 > a:l1 ? '-L' . a:l2 : '')
+    endfunction
+    " <leader>yr: the reference to the clipboard (+ and *)
+    function! s:YankRef(l1, l2) abort
+        if expand('%') ==# ''
+            echohl WarningMsg | echo 'Buffer has no file' | echohl None
+            return
+        endif
+        let @+ = s:FileRef(expand('%'), a:l1, a:l2)
+        let @* = @+
+        echo 'Yanked: ' . @+
+    endfunction
     " Paste '@file:L12' / '@file:L12-L30' into the target pane, no Enter
     function! s:TmuxSendRef(l1, l2) abort
         if expand('%') ==# ''
             echohl WarningMsg | echo 'Buffer has no file' | echohl None
             return
         endif
-        let l:ref = '@' . s:RefPath(expand('%')) . ':L' . a:l1
-                    \ . (a:l2 > a:l1 ? '-L' . a:l2 : '') . ' '
+        let l:ref = s:FileRef(expand('%'), a:l1, a:l2) . ' '
         if TmuxSendText(l:ref, 0)
             echo 'Sent ' . l:ref . 'to tmux pane ' . g:vimrc_tmux.target
         endif
@@ -1629,8 +1771,8 @@
         endif
         let l:lines = []
         for l:item in l:items
-            call add(l:lines, '@' . s:RefPath(bufname(l:item.bufnr))
-                        \ . ':L' . l:item.lnum . ': '
+            call add(l:lines, s:FileRef(bufname(l:item.bufnr), l:item.lnum, 0)
+                        \ . ': '
                         \ . (empty(l:item.type) ? '' : '[' . l:item.type . '] ')
                         \ . substitute(trim(l:item.text), '\n', ' ', 'g'))
         endfor
@@ -1648,13 +1790,14 @@
     nnoremap <silent> <leader>xy :<C-u>call TmuxSendText(getline('.'), 0)<CR>
     xnoremap <silent> <leader>xy
                 \ :<C-u>call TmuxSendText(<SID>VisualSelectionText(), 0)<CR>
-    nnoremap <leader>xt :call <SID>TmuxChooseTarget('target')<CR>
-    nnoremap <leader>xT :call <SID>TmuxChooseTarget('run_target')<CR>
-    nnoremap <silent> <leader>xd :call <SID>TmuxSendDiagnostics()<CR>
+    " <C-u>: a count (2<leader>xd) must not run the action several times
+    nnoremap <leader>xt :<C-u>call <SID>TmuxChooseTarget('target')<CR>
+    nnoremap <leader>xT :<C-u>call <SID>TmuxChooseTarget('run_target')<CR>
+    nnoremap <silent> <leader>xd :<C-u>call <SID>TmuxSendDiagnostics()<CR>
     nnoremap <silent> <leader>xr :<C-u>call <SID>TmuxSendRef(line('.'), line('.'))<CR>
     xnoremap <silent> <leader>xr :<C-u>call <SID>TmuxSendRef(line("'<"), line("'>"))<CR>
-    nnoremap <silent> <leader>px :call <SID>TmuxRunFile()<CR>
-    nnoremap <silent> <leader>pl :call <SID>TmuxRunLast()<CR>
+    nnoremap <silent> <leader>px :<C-u>call <SID>TmuxRunFile()<CR>
+    nnoremap <silent> <leader>pl :<C-u>call <SID>TmuxRunLast()<CR>
 
 " ============================================================================
 " Vim-plug initialization (Get vim-plug by curl)
@@ -2654,6 +2797,16 @@
         execute a:cmd
     endfunction
     function! s:ToggleFormatOnSave() abort
+        " Only where the format-on-save autocmd runs (coding switch, filetypes
+        " in g:vimrc_format_on_save_ft)
+        if index(get(g:, 'vimrc_format_on_save_ft', []), &filetype) < 0
+            echohl WarningMsg
+            echo 'format on save not available for filetype ''' . &filetype . ''''
+                        \ . (s:on('coding') ? ' (' . join(g:vimrc_format_on_save_ft, ', ') . ')'
+                        \ : ' (needs the coding switch)')
+            echohl None
+            return
+        endif
         let b:format_on_save = !get(b:, 'format_on_save', s:on('format_on_save'))
         echo 'format on save (this buffer)=' . (b:format_on_save ? 'on' : 'off')
     endfunction
@@ -3215,9 +3368,13 @@
         vnoremap <leader>nn :'<,'>Neoformat<CR>
         " Format on save (off by default: g:vimrc_features.format_on_save;
         " per buffer: <leader>Tf sets b:format_on_save)
+        " -- By filetype, so scripts without an extension count too
         " -- silent!: no error when the formatter is not installed
-        autocmd vimrc BufWritePre *.py,*.sh,*.bash,*.lua,*.json,*.yaml,*.yml,*.toml
-                    \ if get(b:, 'format_on_save', s:on('format_on_save'))
+        let g:vimrc_format_on_save_ft = ['python', 'sh', 'bash', 'lua', 'json',
+                    \ 'yaml', 'toml']
+        autocmd vimrc BufWritePre *
+                    \ if index(g:vimrc_format_on_save_ft, &filetype) >= 0
+                    \ && get(b:, 'format_on_save', s:on('format_on_save'))
                     \ | silent! undojoin | silent! Neoformat | endif
     endif
 
@@ -3462,12 +3619,38 @@
     "" Python built-in pdb debugger (for python < 3.7)
     "autocmd vimrc FileType python
                 "\ noremap <buffer> <leader>pb Oimport pdb; pdb.set_trace()<Esc>
-    " %:p for current file in full path
-    " -- g:vimrc_tools.python_debugger: ipdb if installed (nicer prompt), else pdb
+    " <leader>pB: debug the current file in a terminal split; the command is
+    " left on the command line to add script arguments, then Enter
+    " -- Same virtualenv as tests and <leader>px (TmuxVenvPrefix), from the
+    "    project root
+    " -- Debugger: ipdb if the venv has it, else pdb; without a venv
+    "    g:vimrc_tools.python_debugger (ipdb if installed, else pdb)
+    function! s:PythonDebugCmd() abort
+        let l:venv = RunVenv()
+        if !empty(l:venv)
+            let l:dbg = executable(l:venv . '/bin/ipdb') ? 'ipdb' : 'pdb'
+        else
+            " python3 must be able to import it (an ipdb command on PATH can
+            " come from pipx, outside the system python3)
+            let l:dbg = g:vimrc_tools.python_debugger
+            if l:dbg !=# 'pdb'
+                call system('python3 -c ' . shellescape('import ' . l:dbg))
+                if v:shell_error
+                    let l:dbg = 'pdb'
+                endif
+            endif
+        endif
+        " :terminal expands % and #, so escape them in paths
+        " Vim runs a :terminal command without a shell unless ++shell (and
+        " opens its own window); Neovim runs it through 'shell'
+        return escape('terminal ' . (g:vimrc_is_nvim ? '' : '++shell ')
+                    \ . 'cd ' . shellescape(ProjectRoot()) . ' && '
+                    \ . TmuxVenvPrefix() . 'python3 -m ' . l:dbg . ' '
+                    \ . shellescape(expand('%:p')), '%#')
+    endfunction
     autocmd vimrc FileType python
-                \ execute 'noremap <buffer> <leader>pB'
-                \ . ' <Esc>:split<CR>:terminal python -m ' . g:vimrc_tools.python_debugger
-                \ . " '%:p'<space>"
+                \ noremap <buffer> <leader>pB
+                \ :<C-u>update<C-r>=g:vimrc_is_nvim ? ' <bar> split' : ''<CR><CR>:<C-r>=<SID>PythonDebugCmd()<CR><space>
 
 " Python test (vim-test) -----------------------------------------------------
     if s:on('python_tools')
@@ -4117,7 +4300,7 @@
         endfunction
         " Enable LSP
         " -- Features follow g:vimrc_lsp (:LspFeature, <leader>Lt*)
-        function! EnableLSP()
+        function! EnableLSP() abort
             call s:ActivateProjectVenv()
             let g:lsp_user_enabled = 1
             call s:LspFeaturesRegister()
@@ -4135,7 +4318,7 @@
         " -- signcolumn=auto (set globally) hides the column once signs are gone
         " -- K: python buffers fall back to pydoc ('keywordprg' from the
         "    python filetype plugin), other buffers to :help <word>
-        function! DisableLSP()
+        function! DisableLSP() abort
             let g:lsp_user_enabled = 0
             call lsp#disable()
             if &filetype ==# 'python'
