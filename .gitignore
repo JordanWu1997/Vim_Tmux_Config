@@ -46,3 +46,6 @@
 .next/
 .nuxt/
 vendor/
+
+# --- Editor sessions (vim-obsession, auto_session in vim/vimrc) ---
+Session.vim
