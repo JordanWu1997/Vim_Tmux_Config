@@ -423,21 +423,21 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 
 - Feature switches (`g:vimrc_features`, default in brackets)
 
-| Key                                                | Default | Plugins and settings it controls                                                                                                                                        |
-| -------------------------------------------------- | :-----: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `theme`                                            |    1    | Colorschemes (gruvbox, dracula, nord, srcery, monokai, wal) + lightline status/tab line                                                                                 |
-| `fancy_symbols`                                    |    0    | Nerd-font icons in lightline and NERDTree (needs a [nerd font](https://github.com/ryanoasis/nerd-fonts))                                                                |
-| `wal_theme`                                        |    0    | [pywal](https://github.com/dylanaraps/pywal) colors (cterm only, disables `termguicolors`)                                                                              |
-| `extra`                                            |    1    | goyo, limelight, vim-startify, vimwiki, calendar, yankring, vim-peekaboo, vim-markbar, vim-easymotion, AutoComplPop, FixedTaskList, vim-hexokinase                      |
-| `coding`                                           |    1    | vim-polyglot, neoformat, rainbow, indentLine, vim-indent-guides, vim-indent-object, vim-visual-multi, vim-fugitive, vim-gitgutter, vim-dadbod; ale only when `lsp` is 0 |
-| `lsp`                                              |    1    | vim-lsp, vim-lsp-settings, asyncomplete (+ asyncomplete-lsp, asyncomplete-file); servers start only on `[LK]`+`[Shift]`+`[l]`+`[e]`                                     |
-| `python_tools`                                     |    1    | vim-test (`[LK]`+`[p]`+`[t]`+`[*]`) and vimspector (`[LK]`+`[Shift]`+`[d]`+`[*]`)                                                                                       |
-| `gui_apps`                                         |    1    | External viewers: markdown-preview (browser), vim-latex-live-preview (zathura)                                                                                          |
-| `python_skeleton`, `tex_template`, `bash_template` |    1    | Template from `vim/share/templates/` for new `.py`, `.tex`, `.sh` files                                                                                                 |
-| `markdown_template`                                |    0    | Note template for new `.md` files (vim-markdown-tools)                                                                                                                  |
-| `format_on_save`                                   |    0    | Neoformat on save for python (ruff), sh, lua, json, yaml, toml; per buffer `[LK]`+`[Shift]`+`[t]`+`[f]` |
-| `auto_session`                                     |    1    | Inside TMUX, `:Obsess` keeps a `Session.vim` in the git root vim started in, so tmux-resurrect restores vim |
-| `legacy_python_completion`                         | derived | Not a switch: `!lsp`. Loads deoplete + jedi-vim (and vim-hug-neovim-rpc in vim)                                                                                         |
+| Key                                                | Default | Plugins and settings it controls                                                                                                                                                                                                |
+| -------------------------------------------------- | :-----: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `theme`                                            |    1    | Colorschemes (gruvbox, dracula, nord, srcery, monokai, wal) + lightline status/tab line                                                                                                                                         |
+| `fancy_symbols`                                    |    0    | Nerd-font icons in lightline and NERDTree (needs a [nerd font](https://github.com/ryanoasis/nerd-fonts))                                                                                                                        |
+| `wal_theme`                                        |    0    | [pywal](https://github.com/dylanaraps/pywal) colors (cterm only, disables `termguicolors`)                                                                                                                                      |
+| `extra`                                            |    1    | goyo, limelight, vim-startify, vimwiki, calendar, yankring, vim-peekaboo, vim-markbar, vim-easymotion, AutoComplPop, FixedTaskList, vim-hexokinase                                                                              |
+| `coding`                                           |    1    | vim-polyglot, neoformat, rainbow, indentLine, vim-indent-guides, vim-indent-object, vim-visual-multi, vim-fugitive, vim-gitgutter, vim-dadbod; ale only when `lsp` is 0                                                         |
+| `lsp`                                              |    1    | vim-lsp, vim-lsp-settings, asyncomplete (+ asyncomplete-lsp, asyncomplete-file); servers start only on `[LK]`+`[Shift]`+`[l]`+`[e]`                                                                                             |
+| `python_tools`                                     |    1    | vim-test (`[LK]`+`[p]`+`[t]`+`[*]`) and vimspector (`[LK]`+`[Shift]`+`[d]`+`[*]`)                                                                                                                                               |
+| `gui_apps`                                         |    1    | External viewers: markdown-preview (browser), vim-latex-live-preview (zathura)                                                                                                                                                  |
+| `python_skeleton`, `tex_template`, `bash_template` |    1    | Template from `vim/share/templates/` for new `.py`, `.tex`, `.sh` files                                                                                                                                                         |
+| `markdown_template`                                |    0    | Note template for new `.md` files (vim-markdown-tools)                                                                                                                                                                          |
+| `format_on_save`                                   |    0    | Neoformat on save for python (ruff), sh, lua, json, yaml, toml; per buffer `[LK]`+`[Shift]`+`[t]`+`[f]`                                                                                                                         |
+| `auto_session`                                     |    1    | Inside TMUX, `:Obsess` keeps a `Session.vim` in the git root vim started in, so tmux-resurrect restores vim. An existing one is restored by plain `vim` and never overwritten by `vim file`; it is added to `.git/info/exclude` |
+| `legacy_python_completion`                         | derived | Not a switch: `!lsp`. Loads deoplete + jedi-vim (and vim-hug-neovim-rpc in vim)                                                                                                                                                 |
 
 - Coding tool vim-plug
 
@@ -472,19 +472,18 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 
 - Paths and tools (`g:vimrc_paths`, `g:vimrc_tools`)
 
-| Key                                      | Default                                                 | Used by                                                       |
-| ---------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------- |
-| `g:vimrc_paths.wiki`                     | `~/Documents/KNOWLEDGE_BASE/`                           | vimwiki root; `wiki_templates` = `<wiki>/resources/template/` |
-| `g:vimrc_tools.browser`                  | `$BROWSER`                                              | markdown preview                                              |
-| `g:vimrc_tools.python3_host`             | `/usr/bin/python`                                       | `g:python3_host_prog` (pynvim, vimspector, vim-ai)            |
-| `g:vimrc_tools.python_lsp_servers`       | `['pyright-langserver', 'ruff']`                        | `g:lsp_settings_filetype_python`                              |
-| `g:vimrc_tools.python_debugger`          | `ipdb` if installed, else `pdb`                         | `[LK]`+`[p]`+`[Shift]`+`[b]`                                  |
-| `g:vimrc_tools.languagetool_jar`         | `/opt/LanguageTool-5.9/languagetool-commandline.jar`    | vim-LanguageTool                                              |
-| `g:vimrc_tools.ollama`                   | `url`, `model` (`gemma4:e2b`), `temperature`, `num_ctx` | vim-ai                                                        |
-| `g:vimrc_tmux.target` / `.capture_lines` | `{last}` / `300`                                        | `[LK]`+`[x]`+`[*]`, `[LK]`+`[q]`+`[t]`, vim-test              |
-| `g:vimrc_tmux.run_target`                | `''` (= `target`)                                       | vim-test, `[LK]`+`[p]`+`[x/l]` (sent only if the pane runs a shell) |
-| `g:vimrc_lsp`                            | all `1`: `diagnostics`, `virtual_text`, `completion`, `signature`, `references`, `code_action`, `inlay_hints`, `doc_preview` | LSP features when LSP starts; `:LspFeature`, `[LK]`+`[Shift]`+`[l]`+`[t]`+`[*]` |
-
+| Key                                      | Default                                                                                                                      | Used by                                                                                                                                                                                               |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `g:vimrc_paths.wiki`                     | `~/Documents/KNOWLEDGE_BASE/`                                                                                                | vimwiki root; `wiki_templates` = `<wiki>/resources/template/`                                                                                                                                         |
+| `g:vimrc_tools.browser`                  | `$BROWSER`                                                                                                                   | markdown preview                                                                                                                                                                                      |
+| `g:vimrc_tools.python3_host`             | `/usr/bin/python`                                                                                                            | `g:python3_host_prog` (pynvim, vimspector, vim-ai)                                                                                                                                                    |
+| `g:vimrc_tools.python_lsp_servers`       | `['pyright-langserver', 'ruff']`                                                                                             | `g:lsp_settings_filetype_python`                                                                                                                                                                      |
+| `g:vimrc_tools.python_debugger`          | `ipdb` if installed, else `pdb`                                                                                              | `[LK]`+`[p]`+`[Shift]`+`[b]`                                                                                                                                                                          |
+| `g:vimrc_tools.languagetool_jar`         | `/opt/LanguageTool-5.9/languagetool-commandline.jar`                                                                         | vim-LanguageTool                                                                                                                                                                                      |
+| `g:vimrc_tools.ollama`                   | `url`, `model` (`gemma4:e2b`), `temperature`, `num_ctx`                                                                      | vim-ai                                                                                                                                                                                                |
+| `g:vimrc_tmux.target` / `.capture_lines` | `{last}` / `300`                                                                                                             | `[LK]`+`[x]`+`[*]` (send, `@` references, diagnostics), `[LK]`+`[q]`+`[t]`                                                                                                                            |
+| `g:vimrc_tmux.run_target`                | `''` (= `target`)                                                                                                            | vim-test, `[LK]`+`[p]`+`[x/l]`; sent only if the pane runs a shell. Empty and the target is not a shell (e.g. the agent): a shell pane in vim's window is used (or split after asking) and remembered |
+| `g:vimrc_lsp`                            | all `1`: `diagnostics`, `virtual_text`, `completion`, `signature`, `references`, `code_action`, `inlay_hints`, `doc_preview` | LSP features when LSP starts; `:LspFeature`, `[LK]`+`[Shift]`+`[l]`+`[t]`+`[*]`                                                                                                                       |
 </details>
 
 ### Section 4 - Key Mapping (Vim)
@@ -578,7 +577,26 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 |   N/V    |  `[LK]`+`[F9]`   | Toggle indent highlight (block) |    On/Off indent highlight (block)    |                                                                               |
 |   N/V    | (`[LK]`)+`[F10]` |      (Load)/Save vim view       |          Load/Save vim view           | Folds, cursor, etc. (`:mkview`); for splits use `[Ctrl]`+`[s]` (`:mksession`) |
 |   N/V    | (`[LK]`)+`[F11]` |  (Off)/On synchronized cursor   |      Off/On synchronized cursor       |                 Need to execute in every pane to synchronize                  |
-|   N/V    | (`[LK]`)+`[F12]` |   (Exit)/Enter terminal mode    |       Exit/Enter terminal mode        |                                                                               |
+
+- Toggle group (`[LK]`+`[Shift]`+`[t]`): every toggle echoes its new state; the older keys above still work
+
+| VIM-Mode |          Key Mapping           |           Function            |                                   Note                                   |
+| :------: | :----------------------------: | :---------------------------: | :----------------------------------------------------------------------: |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[w]`  |           Line wrap           |                        Same as `[LK]`+`[w]`+`[p]`                        |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[s]`  |          Spell check          |                        Same as `[LK]`+`[s]`+`[l]`                        |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[l]`  |    List (show tabs/spaces)    |                        Same as `[LK]`+`[c]`+`[l]`                        |
+|    N     | `[LK]`+`[Shift]`+`[t]`+`[c/v]` |  Cursor line / cursor column  |                       Same as `[LK]`+`[c]`+`[h/v]`                       |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[e]`  |           expandtab           |                        Same as `[LK]`+`[e]`+`[t]`                        |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[p]`  |             paste             |                   Same as `[LK]`+`[y]`+`[Shift]`+`[p]`                   |
+|    N     | `[LK]`+`[Shift]`+`[t]`+`[n/r]` | Line number / relative number |                         Same as (`[LK]`)+`[F5]`                          |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[a]`  |           autochdir           |                        Same as `[LK]`+`[a]`+`[c]`                        |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[f]`  | Format on save (this buffer)  |                     Default: `format_on_save` switch                     |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[k]`  |       Completion pop-up       | autocomplpop, or the LSP pop-up in LSP buffers; same as `[LK]`+`` [`] `` |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[b]`  |      Rainbow parentheses      |                        Same as `[LK]`+`[r]`+`[b]`                        |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[g]`  |       Goyo (focus mode)       |                        Same as `[LK]`+`[g]`+`[y]`                        |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[t]`  |            Tagbar             |                              Same as `[F4]`                              |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[d]`  |           ALE lint            |    Only when LSP is off (`lsp` switch 0); same as `[LK]`+`[e]`+`[e]`     |
+|   N/V    |        (`[LK]`)+`[F12]`        |  (Exit)/Enter terminal mode   |                         Exit/Enter terminal mode                         |
 
 </details>
 
@@ -743,6 +761,7 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 |    N     |    `[LK]`+`[p]`+`[v/Shift-v]`    | Activate / deactivate venv in vim | `:ProjectVenv` (project `.venv`/`venv`/`env`, or `:ProjectVenv {dir}`) / `:ProjectVenv!` |              No LSP needed; `:!`, `:terminal`, tests and LSP servers started later use it              |
 |    N     |   `[LK]`+`[x]`+`[Shift]`+`[t]`   |       Choose TMUX run pane        |                       Pane for tests and run file (empty = target)                       |                                `[LK]`+`[x]`+`[t]` chooses the send pane                                |
 |    N     |        `[LK]`+`[x]`+`[d]`        |     Send diagnostics to agent     |                     Location list as `@file:L12: message`, no Enter                      |                           Load LSP diagnostics first with `[LK]`+`[e]`+`[e]`                           |
+|   N/V    |        `[LK]`+`[x]`+`[r]`        |   Send file reference to agent    |       `@file:L12` (visual: `@file:L12-L30`) into the target pane, no Enter       |            Like `[LK]`+`[y]`+`[r]` but pasted directly; path from the git root                                 |
 |    N     |  `[LK]`+`[Shift]`+`[d]`+`[b/c]`  |  Debugger: breakpoint / continue  |                          Toggle breakpoint / start or continue                           |                    vimspector; `:VimspectorPythonConfig` creates `.vimspector.json`                    |
 |    N     | `[LK]`+`[Shift]`+`[d]`+`[n/i/o]` |   Debugger: step over/into/out    |                                    Step over/into/out                                    |                                               vimspector                                               |
 |   N/V    | `[LK]`+`[Shift]`+`[d]`+`[r/q/e]` |  Debugger: restart/quit/evaluate  |                    Restart, reset (quit), evaluate word or selection                     |                                               vimspector                                               |
