@@ -17,7 +17,14 @@
     cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
 [merge]
     tool = nvimdiff
+    # Conflict markers also show the common ancestor (|||||||), git >= 2.35
+    conflictstyle = zdiff3
+[rerere]
+    # Remember conflict resolutions and reuse them (rebase/merge again)
+    enabled = true
 [mergetool]
     prompt = true
+    keepBackup = false
 [mergetool "nvimdiff"]
-    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\" \"$MERGED\" -c 'wincmd w' -c 'wincmd J'"
+    # LOCAL | BASE | REMOTE on top, MERGED full width below (cursor there)
+    cmd = "nvim -d \"$LOCAL\" \"$BASE\" \"$REMOTE\" \"$MERGED\" -c 'wincmd b' -c 'wincmd J'"
