@@ -112,8 +112,8 @@ function! s:fzf_location_list(bang) abort
                 \ }, a:bang))
 endfunction
 
-command! -bang Quickfix call s:fzf_quickfix(<bang>0)
-command! -bang LocationList call s:fzf_location_list(<bang>0)
+command! -bang FZFQuickFix call s:fzf_quickfix(<bang>0)
+command! -bang FZFLocList call s:fzf_location_list(<bang>0)
 
 function! s:fzf_yank_register(line) abort
     call setreg('"', getreg(a:line[7]))
@@ -291,4 +291,4 @@ function! s:InsertMarkdownLink(selected) abort
     call feedkeys("i" . l:markdown . "\<Esc>", 'n')
 endfunction
 
-command! FZFMDInsert call s:InsertMarkdownLinkFromRoot()<CR>
+command! FZFMDInsert call s:InsertMarkdownLinkFromRoot()

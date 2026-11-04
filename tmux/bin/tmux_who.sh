@@ -40,11 +40,11 @@ FULL_CMD=$(ps -o args= -p "$PID" | xargs)
 
 # Handle Daemonized processes (No TTY)
 if [[ "$RAW_TTY" == "?" ]]; then
-    PPID=$(ps -o ppid= -p "$PID" | xargs)
+    PARENT_PID=$(ps -o ppid= -p "$PID" | xargs)
     echo -e "\n ${YELLOW}▲ PROCESS IS DAEMONIZED (No TTY)${RESET}"
     echo -e "   PID ${BOLD}$PID${RESET} (${CYAN}$CMD_NAME${RESET}) is running in the background."
     echo -e "   It is entirely detached from any Tmux window."
-    echo -e "   • Parent PID: ${BOLD}$PPID${RESET} ($(ps -o comm= -p "$PPID" | xargs))"
+    echo -e "   • Parent PID: ${BOLD}$PARENT_PID${RESET} ($(ps -o comm= -p "$PARENT_PID" | xargs))"
     exit 0
 fi
 

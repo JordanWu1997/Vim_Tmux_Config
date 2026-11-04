@@ -118,7 +118,7 @@ bind -T copy-mode-vi y send -X copy-selection \; display-message "Yanked: #{buff
 #bind -T copy-mode-vi y send -X copy-pipe-and-cancel "xsel --input --clipboard" \; display-message "Yanked: #{buffer_sample}"
 #bind -T copy-mode-vi Y send -X copy-pipe "xsel --input --clipboard" \; display-message "Yanked: #{buffer_sample}"
 #bind -T copy-mode-vi MouseDragEnd1Pane send -X copy-pipe-and-cancel \
-#   "xsel --inputi --follow --primary | xsel --input --clipboard" \; display-message "Yanked: #{buffer_sample}"
+#   "xsel --input --follow --primary | xsel --input --clipboard" \; display-message "Yanked: #{buffer_sample}"
 ## Map 'p' to paste from xsel (optional, but keeps it consistent with your Vim setup)
 #bind p run "xsel -ob | tmux load-buffer - ; tmux paste-buffer"
 

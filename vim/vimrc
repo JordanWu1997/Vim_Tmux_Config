@@ -536,7 +536,8 @@
     "    for all windows); go back with :cd - or :cd <path>
     set noautochdir " Do not change working directory to buffer file directory
     noremap <leader>ac :set autochdir!<CR>:echo 'autochdir=' . &autochdir<CR>
-    nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
+    nnoremap <leader>cd :if &buftype ==# '' && isdirectory(expand('%:p:h'))
+                \ \| cd %:p:h \| pwd \| else \| echo 'No file directory for this buffer' \| endif<CR>
 
 " Auto-reload files changed outside vim (e.g. edited by an agent) ------------
     " NOTE:
@@ -1734,7 +1735,7 @@
         " Part 5 - Lightline component modules -------------------------------
         " Truncate file path for small window or long filename
         function! LightlineFileName()
-            if expand('%t') == ''
+            if expand('%:t') ==# ''
                 return '[No Name]'
             elseif strlen(expand('%:t')) >= 35
                 return expand('%:t')
@@ -3633,7 +3634,7 @@
     " Transparent background shortcut
     nnoremap <leader>cst :highlight Normal cterm=NONE ctermfg=NONE ctermbg=NONE
                 \ gui=NONE guifg=NONE guibg=NONE<CR>
-                \:echo 'transparent background'<CR><CR>
+                \:echo 'transparent background'<CR>
 
 " ============================================================================
 " End of Vim configuration, automatically reload current config after saving
