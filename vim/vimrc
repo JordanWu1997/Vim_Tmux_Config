@@ -670,6 +670,34 @@
     noremap <F10> :mkview<CR>
     noremap <leader><F10> :loadview<CR>
     noremap <C-s> :mksession<space>
+    " Automatic session for tmux-resurrect (g:vimrc_features.auto_session)
+    " -- tmux-resurrect restores vim with 'vim -S' only when the pane's
+    "    directory has a Session.vim, so keep one up to date with :Obsess
+    "    (vim-obsession) when vim starts inside tmux in a git root
+    " -- Skipped for: diff mode (mergetool/difftool), files outside the
+    "    directory or inside .git (commit messages, agent editor temp files),
+    "    and vim started with --cmd 'let g:vimrc_no_session = 1' (tmux popups)
+    " -- A restored session ('vim -S') resumes tracking by itself
+    " -- Stop tracking in this vim: :Obsess! (also deletes Session.vim)
+    function! s:AutoSession() abort
+        if !s:on('auto_session') || empty($TMUX) || &diff
+                    \ || exists('g:this_obsession') || exists('g:vimrc_no_session')
+                    \ || !exists(':Obsess')
+            return
+        endif
+        let l:cwd = getcwd()
+        if !isdirectory(l:cwd . '/.git') && !filereadable(l:cwd . '/.git')
+            return
+        endif
+        for l:arg in argv()
+            let l:path = fnamemodify(l:arg, ':p')
+            if stridx(l:path, l:cwd . '/') != 0 || l:path =~# '/\.git/'
+                return
+            endif
+        endfor
+        silent! Obsess
+    endfunction
+    autocmd vimrc VimEnter * call s:AutoSession()
 
 " Fold settings --------------------------------------------------------------
     " NOTE:
@@ -802,8 +830,15 @@
     " Delete all other buffers
     " -- https://stackoverflow.com/questions/4545275/vim-close-all-buffers-but-this-one
     noremap <leader>bo :%bd\|e#\|bd#<cr>
-    " Undo buffer to last save
-    noremap <leader>bu :edit!<CR>
+    " Undo buffer to last save (asks first when there are unsaved changes)
+    function! s:RevertBuffer() abort
+        if &modified && confirm('Discard unsaved changes in '
+                    \ . expand('%:t') . '?', "&Yes\n&No", 2) != 1
+            return
+        endif
+        edit!
+    endfunction
+    noremap <silent> <leader>bu :<C-u>call <SID>RevertBuffer()<CR>
     " Navigate through buffers
     noremap <leader>b0 :bfirst<CR>
     noremap <leader>b$ :blast<CR>
@@ -2952,7 +2987,8 @@
         endif
         let g:ale_enabled = 0
         let g:ale_disable_lsp = 1
-        let g:ale_linters = { 'python': ['mypy', 'isort', 'yapf', 'flake8'] }
+        let g:ale_linters = { 'python': ['mypy', 'isort', 'yapf', 'flake8'],
+                    \ 'sh': ['shellcheck'] }
         " ALE use location list for output, instead of quickfix list
         let g:ale_set_loclist = 1
         let g:ale_set_quickfix = 0
@@ -3001,7 +3037,9 @@
                 \ 'args': ['-', '-o "numpydoc"', '-w'],
                 \ 'stdin': 1,
                 \ }
-        let g:neoformat_enabled_python = ['pyment_google', 'pyment_javadoc']
+        " Plain :Neoformat (and <leader>nn, format on save) formats the code
+        " with ruff; docstrings stay on the explicit pyment keys below
+        let g:neoformat_enabled_python = ['ruff']
         " pyment: python docstring creator/formatter
         nnoremap <leader>nptt :Neoformat pyment<CR>
         nnoremap <leader>nptg :Neoformat pyment_google<CR>
@@ -3027,6 +3065,23 @@
                 \ }
         nnoremap <leader>npr :Neoformat ruff<CR>
         nnoremap <leader>npR :Neoformat ruffimport<CR>
+        " Other languages ----------------------------------------------------
+        " Formatters used by plain :Neoformat (first one installed wins)
+        " -- sh: shfmt | lua: stylua | json/yaml/toml: prettier, taplo
+        let g:neoformat_enabled_sh = ['shfmt']
+        let g:neoformat_enabled_lua = ['stylua']
+        let g:neoformat_enabled_json = ['prettier', 'jq']
+        let g:neoformat_enabled_yaml = ['prettier']
+        let g:neoformat_enabled_toml = ['taplo']
+        " Format whole buffer / selection with the filetype's default formatter
+        nnoremap <leader>nn :Neoformat<CR>
+        vnoremap <leader>nn :'<,'>Neoformat<CR>
+        " Format on save (off by default: g:vimrc_features.format_on_save;
+        " per buffer: <leader>Tf sets b:format_on_save)
+        " -- silent!: no error when the formatter is not installed
+        autocmd vimrc BufWritePre *.py,*.sh,*.bash,*.lua,*.json,*.yaml,*.yml,*.toml
+                    \ if get(b:, 'format_on_save', s:on('format_on_save'))
+                    \ | silent! undojoin | silent! Neoformat | endif
     endif
 
 " Rainbow parentheses --------------------------------------------------------
