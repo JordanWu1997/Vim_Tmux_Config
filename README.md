@@ -126,8 +126,8 @@ Backup for my Vim and TMUX configuration
 - [X] Add **_Markdown features_** e.g. preview, folding, wiki-style markdown writer, etc.
 - [X] Add **_Latex features_** e.g. real-time preview, compilation, etc.
 - [X] Try to minimize loading time while keeping maximal functionality/variety
-- [X] Keep **_all user settings in four dictionaries_** at the top of `vim/vimrc` (`g:vimrc_features`, `g:vimrc_paths`,
-      `g:vimrc_tools`, `g:vimrc_tmux`), with optional per-machine overrides in a git-ignored `vim/local.vim`
+- [X] Keep **_all user settings in five dictionaries_** at the top of `vim/vimrc` (`g:vimrc_features`, `g:vimrc_paths`,
+      `g:vimrc_tools`, `g:vimrc_tmux`, `g:vimrc_lsp`), with optional per-machine overrides in a git-ignored `vim/local.vim`
 - [X] Also offer Minimal **_cross-platform configuration_** (`./mini/mini.vim`) for both UNIX-like system and Windows system
 
 </details>
@@ -159,7 +159,7 @@ Backup for my Vim and TMUX configuration
 
    - __Vim__
 
-     - version >= __8.2__
+     - version >= __9.1__
      - clipboard option is on (+clipboard) [for sharing system clipboard]
      - python3 option is on (+python3/dyn) [for python completion]
 
@@ -170,7 +170,7 @@ Backup for my Vim and TMUX configuration
 
    - __Gvim__
 
-     - version >= __8.2__
+     - version >= __9.1__
      - gvim already shipped with clipboard and python3 options
 
      ```bash
@@ -180,7 +180,7 @@ Backup for my Vim and TMUX configuration
 
    - __Neovim__
 
-     - version >= __0.5__
+     - version >= __0.9__
      - neovim already shipped with clipboard and python3 options
 
      ```bash
@@ -194,8 +194,8 @@ Backup for my Vim and TMUX configuration
 
      - Language servers are installed per filetype by `vim-lsp-settings`
      - Open a `.py` file and run `:LspInstallServer` (or `[LK]`+`[Shift]`+`[l]`+`[Shift]`+`[i]`)
-     - Python servers are set to __pyright__ (type checking) + __ruff__ (lint, quick fixes):
-       (`g:vimrc_tools.python_lsp_servers = ['pyright-langserver', 'ruff']`); run `:LspInstallServer` once for each
+     - Python server is __pylsp-all__ (`g:vimrc_tools.python_lsp_servers = ['pylsp-all']`); run
+       `:LspInstallServer pylsp-all` once in a `.py` file
      - LSP is __disabled at startup__ (no server runs) until you press `[LK]`+`[Shift]`+`[l]`+`[e]`
      - When vim was not started inside a virtualenv, enabling LSP activates `.venv`, `venv` or `env` found at the
        project (git) root, so the servers, `:terminal` and tests see the project packages
@@ -293,11 +293,14 @@ Backup for my Vim and TMUX configuration
 
 - Machine-specific settings (optional)
 
-  - Copy the example and keep only what differs on this machine (python provider, wiki location, Ollama model,
-    feature switches, ...). The file is git-ignored; see [Plugin Usage Configuration](#2-plugin-usage-configuration-vim)
+  - Create `vim/local.vim` and set only what differs on this machine (python provider, wiki location, Ollama
+    model, feature switches, ...). It is git-ignored and read before the defaults; see
+    [Plugin Usage Configuration](#2-plugin-usage-configuration-vim)
 
-    ```bash
-    cp vim/local.vim.example vim/local.vim
+    ```vim
+    " vim/local.vim (example)
+    let g:vimrc_features = { 'python_tools': 0 }
+    let g:vimrc_paths = { 'wiki': expand('~/Notes/') }
     ```
 
 - Minimal (original vim-only)
@@ -351,7 +354,7 @@ Backup for my Vim and TMUX configuration
 - One-time setup of optional language tools (see Python requirements above)
 
   ```vim
-  :LspInstallServer pyls-pall    " in a .py file, also: ruff
+  :LspInstallServer pylsp-all    " in a .py file
   :VimspectorInstall debugpy     " only for the graphical debugger
   ```
 
@@ -397,7 +400,7 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 - For more details, check sections in vimrc
 
 - All settings you may want to change are at the top of `vim/vimrc` ("Vim and Neovim settings (MUST-READ SECTION)"),
-  in four dictionaries. The rest of the file only reads them:
+  in five dictionaries. The rest of the file only reads them:
 
   | Dictionary         | Content                                                                                                  |
   | ------------------ | -------------------------------------------------------------------------------------------------------- |
@@ -405,8 +408,9 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
   | `g:vimrc_paths`    | Directories, computed once as absolute paths (`vim`, `templates`, `bin`, `wiki`, `wiki_templates`)       |
   | `g:vimrc_tools`    | External programs, helper scripts and tool settings (browser, python provider, LSP servers, Ollama, ...) |
   | `g:vimrc_tmux`     | TMUX integration (`target`/`run_target` pane, `capture_lines`)                                                        |
+  | `g:vimrc_lsp`      | Which LSP features are on when LSP starts (all `1`); switch them at run time with `:LspFeature`         |
 
-- __Machine-specific values__ go in `vim/local.vim` (git-ignored, optional; copy `vim/local.vim.example`).
+- __Machine-specific values__ go in `vim/local.vim` (git-ignored, optional; create it and set only what differs).
   It is sourced first; every key it sets overrides the default, all other defaults stay. Merging is one level
   deep, so a nested dict such as `ollama` must be given in full.
 
@@ -423,21 +427,21 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 
 - Feature switches (`g:vimrc_features`, default in brackets)
 
-| Key                                                | Default | Plugins and settings it controls                                                                                                                                                                                                |
-| -------------------------------------------------- | :-----: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `theme`                                            |    1    | Colorschemes (gruvbox, dracula, nord, srcery, monokai, wal) + lightline status/tab line                                                                                                                                         |
-| `fancy_symbols`                                    |    0    | Nerd-font icons in lightline and NERDTree (needs a [nerd font](https://github.com/ryanoasis/nerd-fonts))                                                                                                                        |
-| `wal_theme`                                        |    0    | [pywal](https://github.com/dylanaraps/pywal) colors (cterm only, disables `termguicolors`)                                                                                                                                      |
-| `extra`                                            |    1    | goyo, limelight, vim-startify, vimwiki, calendar, yankring, vim-peekaboo, vim-markbar, vim-easymotion, AutoComplPop, FixedTaskList, vim-hexokinase                                                                              |
-| `coding`                                           |    1    | vim-polyglot, neoformat, rainbow, indentLine, vim-indent-guides, vim-indent-object, vim-visual-multi, vim-fugitive, vim-gitgutter, vim-dadbod; ale only when `lsp` is 0                                                         |
-| `lsp`                                              |    1    | vim-lsp, vim-lsp-settings, asyncomplete (+ asyncomplete-lsp, asyncomplete-file); servers start only on `[LK]`+`[Shift]`+`[l]`+`[e]`                                                                                             |
-| `python_tools`                                     |    1    | vim-test (`[LK]`+`[p]`+`[t]`+`[*]`) and vimspector (`[LK]`+`[Shift]`+`[d]`+`[*]`)                                                                                                                                               |
-| `gui_apps`                                         |    1    | External viewers: markdown-preview (browser), vim-latex-live-preview (zathura)                                                                                                                                                  |
-| `python_skeleton`, `tex_template`, `bash_template` |    1    | Template from `vim/share/templates/` for new `.py`, `.tex`, `.sh` files                                                                                                                                                         |
-| `markdown_template`                                |    0    | Note template for new `.md` files (vim-markdown-tools)                                                                                                                                                                          |
-| `format_on_save`                                   |    0    | Neoformat on save for python (ruff), sh, lua, json, yaml, toml; per buffer `[LK]`+`[Shift]`+`[t]`+`[f]`                                                                                                                         |
-| `auto_session`                                     |    1    | Inside TMUX, `:Obsess` keeps a `Session.vim` in the git root vim started in, so tmux-resurrect restores vim. An existing one is restored by plain `vim` and never overwritten by `vim file`; it is added to `.git/info/exclude` |
-| `legacy_python_completion`                         | derived | Not a switch: `!lsp`. Loads deoplete + jedi-vim (and vim-hug-neovim-rpc in vim)                                                                                                                                                 |
+| Key                                                | Default | Plugins and settings it controls                                                                                                                                                                                                                                                                                                   |
+| -------------------------------------------------- | :-----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `theme`                                            |    1    | Colorschemes (gruvbox, dracula, nord, srcery, monokai, wal) + lightline status/tab line                                                                                                                                                                                                                                            |
+| `fancy_symbols`                                    |    0    | Nerd-font icons in lightline and NERDTree (needs a [nerd font](https://github.com/ryanoasis/nerd-fonts))                                                                                                                                                                                                                           |
+| `wal_theme`                                        |    0    | [pywal](https://github.com/dylanaraps/pywal) colors (cterm only, disables `termguicolors`)                                                                                                                                                                                                                                         |
+| `extra`                                            |    1    | goyo, limelight, vim-startify, vimwiki, calendar, yankring, vim-peekaboo, vim-markbar, vim-easymotion, AutoComplPop, FixedTaskList, vim-hexokinase                                                                                                                                                                                 |
+| `coding`                                           |    1    | vim-polyglot, neoformat, rainbow, indentLine, vim-indent-guides, vim-indent-object, vim-visual-multi, vim-fugitive, vim-gitgutter, vim-dadbod; ale only when `lsp` is 0                                                                                                                                                            |
+| `lsp`                                              |    1    | vim-lsp, vim-lsp-settings, asyncomplete (+ asyncomplete-lsp, asyncomplete-file); servers start only on `[LK]`+`[Shift]`+`[l]`+`[e]`                                                                                                                                                                                                |
+| `python_tools`                                     |    1    | vim-test (`[LK]`+`[p]`+`[t]`+`[*]`) and vimspector (`[LK]`+`[Shift]`+`[d]`+`[*]`)                                                                                                                                                                                                                                                  |
+| `gui_apps`                                         |    1    | External viewers: markdown-preview (browser), vim-latex-live-preview (zathura)                                                                                                                                                                                                                                                     |
+| `python_skeleton`, `tex_template`, `bash_template` |    1    | Template from `vim/share/templates/` for new `.py`, `.tex`, `.sh` files                                                                                                                                                                                                                                                            |
+| `markdown_template`                                |    0    | Note template for new `.md` files (vim-markdown-tools)                                                                                                                                                                                                                                                                             |
+| `format_on_save`                                   |    0    | Neoformat on save for python (ruff), sh, lua, json, yaml, toml; per buffer `[LK]`+`[Shift]`+`[t]`+`[f]`                                                                                                                                                                                                                            |
+| `auto_session`                                     |    1    | Inside TMUX, `:Obsess` keeps a `Session.vim` in the git root vim started in, so tmux-resurrect restores vim. An existing one is restored by plain `vim` (not when its files are open in another vim) and never overwritten by `vim file`; pipes, `-q`, `-t`, `-c`/`+cmd` starts are left alone; it is added to `.git/info/exclude` |
+| `legacy_python_completion`                         | derived | Not a switch: `!lsp`. Loads deoplete + jedi-vim (and vim-hug-neovim-rpc in vim)                                                                                                                                                                                                                                                    |
 
 - Coding tool vim-plug
 
@@ -477,13 +481,14 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 | `g:vimrc_paths.wiki`                     | `~/Documents/KNOWLEDGE_BASE/`                                                                                                | vimwiki root; `wiki_templates` = `<wiki>/resources/template/`                                                                                                                                         |
 | `g:vimrc_tools.browser`                  | `$BROWSER`                                                                                                                   | markdown preview                                                                                                                                                                                      |
 | `g:vimrc_tools.python3_host`             | `/usr/bin/python`                                                                                                            | `g:python3_host_prog` (pynvim, vimspector, vim-ai)                                                                                                                                                    |
-| `g:vimrc_tools.python_lsp_servers`       | `['pyright-langserver', 'ruff']`                                                                                             | `g:lsp_settings_filetype_python`                                                                                                                                                                      |
+| `g:vimrc_tools.python_lsp_servers`       | `['pylsp-all']`                                                                                                              | `g:lsp_settings_filetype_python`                                                                                                                                                                      |
 | `g:vimrc_tools.python_debugger`          | `ipdb` if installed, else `pdb`                                                                                              | `[LK]`+`[p]`+`[Shift]`+`[b]`                                                                                                                                                                          |
 | `g:vimrc_tools.languagetool_jar`         | `/opt/LanguageTool-5.9/languagetool-commandline.jar`                                                                         | vim-LanguageTool                                                                                                                                                                                      |
 | `g:vimrc_tools.ollama`                   | `url`, `model` (`gemma4:e2b`), `temperature`, `num_ctx`                                                                      | vim-ai                                                                                                                                                                                                |
 | `g:vimrc_tmux.target` / `.capture_lines` | `{last}` / `300`                                                                                                             | `[LK]`+`[x]`+`[*]` (send, `@` references, diagnostics), `[LK]`+`[q]`+`[t]`                                                                                                                            |
 | `g:vimrc_tmux.run_target`                | `''` (= `target`)                                                                                                            | vim-test, `[LK]`+`[p]`+`[x/l]`; sent only if the pane runs a shell. Empty and the target is not a shell (e.g. the agent): a shell pane in vim's window is used (or split after asking) and remembered |
 | `g:vimrc_lsp`                            | all `1`: `diagnostics`, `virtual_text`, `completion`, `signature`, `references`, `code_action`, `inlay_hints`, `doc_preview` | LSP features when LSP starts; `:LspFeature`, `[LK]`+`[Shift]`+`[l]`+`[t]`+`[*]`                                                                                                                       |
+
 </details>
 
 ### Section 4 - Key Mapping (Vim)
@@ -580,23 +585,23 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 
 - Toggle group (`[LK]`+`[Shift]`+`[t]`): every toggle echoes its new state; the older keys above still work
 
-| VIM-Mode |          Key Mapping           |           Function            |                                   Note                                   |
-| :------: | :----------------------------: | :---------------------------: | :----------------------------------------------------------------------: |
-|    N     |  `[LK]`+`[Shift]`+`[t]`+`[w]`  |           Line wrap           |                        Same as `[LK]`+`[w]`+`[p]`                        |
-|    N     |  `[LK]`+`[Shift]`+`[t]`+`[s]`  |          Spell check          |                        Same as `[LK]`+`[s]`+`[l]`                        |
-|    N     |  `[LK]`+`[Shift]`+`[t]`+`[l]`  |    List (show tabs/spaces)    |                        Same as `[LK]`+`[c]`+`[l]`                        |
-|    N     | `[LK]`+`[Shift]`+`[t]`+`[c/v]` |  Cursor line / cursor column  |                       Same as `[LK]`+`[c]`+`[h/v]`                       |
-|    N     |  `[LK]`+`[Shift]`+`[t]`+`[e]`  |           expandtab           |                        Same as `[LK]`+`[e]`+`[t]`                        |
-|    N     |  `[LK]`+`[Shift]`+`[t]`+`[p]`  |             paste             |                   Same as `[LK]`+`[y]`+`[Shift]`+`[p]`                   |
-|    N     | `[LK]`+`[Shift]`+`[t]`+`[n/r]` | Line number / relative number |                         Same as (`[LK]`)+`[F5]`                          |
-|    N     |  `[LK]`+`[Shift]`+`[t]`+`[a]`  |           autochdir           |                        Same as `[LK]`+`[a]`+`[c]`                        |
-|    N     |  `[LK]`+`[Shift]`+`[t]`+`[f]`  | Format on save (this buffer)  |                     Default: `format_on_save` switch                     |
-|    N     |  `[LK]`+`[Shift]`+`[t]`+`[k]`  |       Completion pop-up       | autocomplpop, or the LSP pop-up in LSP buffers; same as `[LK]`+`` [`] `` |
-|    N     |  `[LK]`+`[Shift]`+`[t]`+`[b]`  |      Rainbow parentheses      |                        Same as `[LK]`+`[r]`+`[b]`                        |
-|    N     |  `[LK]`+`[Shift]`+`[t]`+`[g]`  |       Goyo (focus mode)       |                        Same as `[LK]`+`[g]`+`[y]`                        |
-|    N     |  `[LK]`+`[Shift]`+`[t]`+`[t]`  |            Tagbar             |                              Same as `[F4]`                              |
-|    N     |  `[LK]`+`[Shift]`+`[t]`+`[d]`  |           ALE lint            |    Only when LSP is off (`lsp` switch 0); same as `[LK]`+`[e]`+`[e]`     |
-|   N/V    |        (`[LK]`)+`[F12]`        |  (Exit)/Enter terminal mode   |                         Exit/Enter terminal mode                         |
+| VIM-Mode |          Key Mapping           |           Function            |                                          Note                                           |
+| :------: | :----------------------------: | :---------------------------: | :-------------------------------------------------------------------------------------: |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[w]`  |           Line wrap           |                               Same as `[LK]`+`[w]`+`[p]`                                |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[s]`  |          Spell check          |                               Same as `[LK]`+`[s]`+`[l]`                                |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[l]`  |    List (show tabs/spaces)    |                               Same as `[LK]`+`[c]`+`[l]`                                |
+|    N     | `[LK]`+`[Shift]`+`[t]`+`[c/v]` |  Cursor line / cursor column  |                              Same as `[LK]`+`[c]`+`[h/v]`                               |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[e]`  |           expandtab           |                               Same as `[LK]`+`[e]`+`[t]`                                |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[p]`  |             paste             |                          Same as `[LK]`+`[y]`+`[Shift]`+`[p]`                           |
+|    N     | `[LK]`+`[Shift]`+`[t]`+`[n/r]` | Line number / relative number |                                 Same as (`[LK]`)+`[F5]`                                 |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[a]`  |           autochdir           |                               Same as `[LK]`+`[a]`+`[c]`                                |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[f]`  | Format on save (this buffer)  | Default: `format_on_save` switch; python, sh, bash, lua, json, yaml, toml (by filetype) |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[k]`  |       Completion pop-up       |        autocomplpop, or the LSP pop-up in LSP buffers; same as `[LK]`+`` [`] ``         |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[b]`  |      Rainbow parentheses      |                               Same as `[LK]`+`[r]`+`[b]`                                |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[g]`  |       Goyo (focus mode)       |                               Same as `[LK]`+`[g]`+`[y]`                                |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[t]`  |            Tagbar             |                                     Same as `[F4]`                                      |
+|    N     |  `[LK]`+`[Shift]`+`[t]`+`[d]`  |           ALE lint            |            Only when LSP is off (`lsp` switch 0); same as `[LK]`+`[e]`+`[e]`            |
+|   N/V    |        (`[LK]`)+`[F12]`        |  (Exit)/Enter terminal mode   |                                Exit/Enter terminal mode                                 |
 
 </details>
 
@@ -663,35 +668,35 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 
 ##### 6. Quickfix/Location List Key Mapping
 
-| VIM-Mode |      Key Mapping       |                Function                 |                                                    Description                                                     |                           Note                            |
-| :------: | :--------------------: | :-------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------: |
-|    N     |  `[LK]`+`[q/e]`+`[g]`  | call built-in vimgrep/lvimgrep function |                                    search like grep and store results in lists                                     |                                                           |
-|    N     |  `[LK]`+`[q/e]`+`[o]`  |   toggle quickfix/location list pane    |                                         toggle quickfix/location list pane                                         |           built-in: copen/cclose, lopen/lclose            |
-|    N     | `[LK]`+`[q/e]`+`[j/k]` | go to next/prev quickfix/location item  |                                       go to next/prev quickfix/location item                                       |            built-in: cnext/cprev, lnext/lprev             |
-|    N     |   `[LK]`+`[q]`+`[d]`   |   call cdo for items in quickfix list   |                                        call cdo for items in quickfix list                                         |           like argdo, bdo for args and buffers            |
-|    N     |   `[LK]`+`[q]`+`[t]`   |    TMUX pane output to quickfix list    | every `file:line[:col]`, `@file:L12`, Python traceback and pdb frame in the last 300 lines of the target TMUX pane | e.g. agent or pytest output; only existing files are kept |
+| VIM-Mode |        Key Mapping         |                Function                 |                                                                       Description                                                                        |                                                          Note                                                           |
+| :------: | :------------------------: | :-------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------: |
+|    N     |    `[LK]`+`[q/e]`+`[g]`    | call built-in vimgrep/lvimgrep function |                                                       search like grep and store results in lists                                                        |                                                                                                                         |
+|    N     |    `[LK]`+`[q/e]`+`[o]`    |   browse quickfix/location list (fzf)   |                                                   pick an entry of the quickfix/location list with fzf                                                   |                              `:copen`/`:cclose` (`:lopen`/`:lclose`) open/close the window                              |
+|    N     |   `[LK]`+`[q/e]`+`[j/k]`   | go to next/prev quickfix/location item  |                                                          go to next/prev quickfix/location item                                                          |                                           built-in: cnext/cprev, lnext/lprev                                            |
+|    N     |     `[LK]`+`[q]`+`[d]`     |   call cdo for items in quickfix list   |                                                           call cdo for items in quickfix list                                                            |                                          like argdo, bdo for args and buffers                                           |
+|    N     | `[LK]`+`[q]`+`[t/Shift-t]` |    TMUX pane output to quickfix list    | every `file:line[:col]`, `@file:L12`, Python traceback and pdb frame in the last 300 lines of the target (`t`, agent) / run (`Shift-t`, tests) TMUX pane | `Shift-t`: the pane the last test/run went to (also at a pdb prompt); project files first; only existing files are kept |
 
 ##### 7. Miscellaneous Function Key Mapping
 
-| VIM-Mode |        Key Mapping         |                Function                |                     Description                     |                          Note                           |
-| :------: | :------------------------: | :------------------------------------: | :-------------------------------------------------: | :-----------------------------------------------------: |
-|    I     |        `[k]`+`[j]`         |     Esc (escape form insert mode)      |            Esc (escape form insert mode)            |                                                         |
-|    I     |   `[Ctrl]`+`[g]`+`[d/t]`   |      Insert date / date and time       |       Insert 2026-11-03 / 2026-11-03 10:20:30       |        `[LK]`+`[i]`+`[d]`+`[d/s]` in normal mode        |
-|    N     |           `[x]`            | Delete character (black-hole register) |  Delete character without replacing the clipboard   |               Visual-mode `x` still cuts                |
-|   N/V    | `[LK]`+`[w]`+`[a/Shift-a]` |     Write all / write all and quit     |                 `:wall` / `:wqall`                  |        `[LK]`+`[w]`+`[a]`+`[!]` force write all         |
-|   N/V    |    `[LK]`+`[y]`+`[p/r]`    |    Copy file path / file reference     | Full path, or `@path:L12` (visual: `@path:L12-L30`) |        Copied to `+` and `*`; for agent prompts         |
-|    N     |     `[LK]`+`[c]`+`[d]`     |    Change directory to current file    |    `:cd` to the buffer's directory (all windows)    | `[LK]`+`[a]`+`[c]` toggles autochdir; `:cd -` goes back |
-|    N     |     `[LK]`+`[b]`+`[u]`     |       Revert buffer to last save       | `:edit!`; asks first when there are unsaved changes |                                                         |
-|   N/V    |      `[Shift]`+`[k]`       |     Search current word in manual      |            Search current word in manual            |                                                         |
-|   N/V    |       `[Alt]`+`[/]`        |        Toggle search highlight         |               On/Off search highlight               |                                                         |
-|   N/V    |     `[LK]`+`[w]`+`[p]`     |            Toggle line wrap            |                  On/Off line wrap                   |                  Here wp for (w)ra(p)                   |
-|   N/V    |     `[LK]`+`[c]`+`[l]`     |     Toggle list characters show-up     |           On/Off list characters show-up            |             Here cl for (c)haracter (l)ist              |
-|   N/V    |     `[LK]`+`[m]`+`[k]`     |           Show all vim marks           |                 Show all vim marks                  |                  Here mk for (m)ar(k)                   |
-|   N/V    |     `[LK]`+`[r]`+`[r]`     |         Show all vim registers         |               Show all vim registers                |                Here re for (r)egiste(r)                 |
-|   N/V    |     `[LK]`+`[a]`+`[b]`     |        Show all vim abbreviates        |              Show all vim abbreviates               |               Here ab for (a)(b)breviate                |
-|   N/V    |    `[LK]`+`[c]`+`[h/v]`    |   Toggle Horizontal/Vertical cursor    |          On/Off Horizontal/Vertical cursor          |                                                         |
-|   N/V    |    `[LK]`+`[g]`+`[o/i]`    |          Show all cursor jump          |                Show all cursor jump                 |       `[g/Ctrl]`+`[o/i]` jump backwards/forwards        |
-|   N/V    |    `[LK]`+`[g]`+`[;/,]`    |          Show all file change          |                Show all file change                 |        `[g]`+`[;/,]` go to earlier/later change         |
+| VIM-Mode |        Key Mapping         |                Function                |                              Description                              |                                   Note                                    |
+| :------: | :------------------------: | :------------------------------------: | :-------------------------------------------------------------------: | :-----------------------------------------------------------------------: |
+|    I     |        `[k]`+`[j]`         |     Esc (escape form insert mode)      |                     Esc (escape form insert mode)                     |                                                                           |
+|    I     |   `[Ctrl]`+`[g]`+`[d/t]`   |      Insert date / date and time       |                Insert 2026-11-03 / 2026-11-03 10:20:30                |                 `[LK]`+`[i]`+`[d]`+`[d/s]` in normal mode                 |
+|    N     |           `[x]`            | Delete character (black-hole register) |           Delete character without replacing the clipboard            |                        Visual-mode `x` still cuts                         |
+|   N/V    | `[LK]`+`[w]`+`[a/Shift-a]` |     Write all / write all and quit     |                          `:wall` / `:wqall`                           |                 `[LK]`+`[w]`+`[a]`+`[!]` force write all                  |
+|   N/V    |    `[LK]`+`[y]`+`[p/r]`    |    Copy file path / file reference     | Full path, or `@path:L12` (visual: `@path:L12-L30`) from the git root | Copied to `+` and `*`; a path with spaces is quoted: `@"my dir/a.py":L12` |
+|    N     |     `[LK]`+`[c]`+`[d]`     |    Change directory to current file    |             `:cd` to the buffer's directory (all windows)             |          `[LK]`+`[a]`+`[c]` toggles autochdir; `:cd -` goes back          |
+|    N     |     `[LK]`+`[b]`+`[u]`     |       Revert buffer to last save       |          `:edit!`; asks first when there are unsaved changes          |                                                                           |
+|   N/V    |      `[Shift]`+`[k]`       |     Search current word in manual      |                     Search current word in manual                     |                                                                           |
+|   N/V    |       `[Alt]`+`[/]`        |        Toggle search highlight         |                        On/Off search highlight                        |                                                                           |
+|   N/V    |     `[LK]`+`[w]`+`[p]`     |            Toggle line wrap            |                           On/Off line wrap                            |                           Here wp for (w)ra(p)                            |
+|   N/V    |     `[LK]`+`[c]`+`[l]`     |     Toggle list characters show-up     |                    On/Off list characters show-up                     |                      Here cl for (c)haracter (l)ist                       |
+|   N/V    |     `[LK]`+`[m]`+`[k]`     |           Show all vim marks           |                          Show all vim marks                           |                           Here mk for (m)ar(k)                            |
+|   N/V    |     `[LK]`+`[r]`+`[r]`     |         Show all vim registers         |                        Show all vim registers                         |                         Here re for (r)egiste(r)                          |
+|   N/V    |     `[LK]`+`[a]`+`[b]`     |        Show all vim abbreviates        |                       Show all vim abbreviates                        |                        Here ab for (a)(b)breviate                         |
+|   N/V    |    `[LK]`+`[c]`+`[h/v]`    |   Toggle Horizontal/Vertical cursor    |                   On/Off Horizontal/Vertical cursor                   |                                                                           |
+|   N/V    |    `[LK]`+`[g]`+`[o/i]`    |          Show all cursor jump          |                         Show all cursor jump                          |                `[g/Ctrl]`+`[o/i]` jump backwards/forwards                 |
+|   N/V    |    `[LK]`+`[g]`+`[;/,]`    |          Show all file change          |                         Show all file change                          |                 `[g]`+`[;/,]` go to earlier/later change                  |
 
 </details>
 
@@ -755,13 +760,13 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 |   N/V    |  `[LK]`+`[n]`+`[p]`+`[t]`+`[j]`  |       Run pyment (javadoc)        |                                Run pyment (javadoc style)                                |                                      pyment needs to be installed                                      |
 |   N/V    |  `[LK]`+`[n]`+`[p]`+`[t]`+`[n]`  |       Run pyment (numpydoc)       |                               Run pyment (numpydoc style)                                |                                      pyment needs to be installed                                      |
 |   N/V    |        `[LK]`+`[p]`+`[b]`        |      Insert pdb trace start       |                                  Insert pdb trace start                                  |                                    pdb is python built-in debugger                                     |
-|   N/V    |   `[LK]`+`[p]`+`[Shift]`+`[b]`   |   Run pdb in new terminal pane    |                               Run pdb in new terminal pane                               |                                Uses ipdb when installed, otherwise pdb                                 |
+|   N/V    |   `[LK]`+`[p]`+`[Shift]`+`[b]`   |   Run pdb in new terminal pane    |            Debug current file in a terminal split (add arguments, then Enter)            |           Same venv as tests, from the project root; ipdb if the venv has it, otherwise pdb            |
 |    N     | `[LK]`+`[p]`+`[t]`+`[n/f/l/s/v]` |       Run tests (vim-test)        |                    Test nearest/file/last/suite, visit last test file                    | Runs in TMUX run pane (`[LK]`+`[x]`+`[Shift]`+`[t]`) with project venv; only if that pane runs a shell |
 |    N     |       `[LK]`+`[p]`+`[x/l]`       |   Run current file / run again    |                     Run file from project root in the TMUX run pane                      |                     python3/bash with project venv; only if the pane runs a shell                      |
 |    N     |    `[LK]`+`[p]`+`[v/Shift-v]`    | Activate / deactivate venv in vim | `:ProjectVenv` (project `.venv`/`venv`/`env`, or `:ProjectVenv {dir}`) / `:ProjectVenv!` |              No LSP needed; `:!`, `:terminal`, tests and LSP servers started later use it              |
 |    N     |   `[LK]`+`[x]`+`[Shift]`+`[t]`   |       Choose TMUX run pane        |                       Pane for tests and run file (empty = target)                       |                                `[LK]`+`[x]`+`[t]` chooses the send pane                                |
 |    N     |        `[LK]`+`[x]`+`[d]`        |     Send diagnostics to agent     |                     Location list as `@file:L12: message`, no Enter                      |                           Load LSP diagnostics first with `[LK]`+`[e]`+`[e]`                           |
-|   N/V    |        `[LK]`+`[x]`+`[r]`        |   Send file reference to agent    |       `@file:L12` (visual: `@file:L12-L30`) into the target pane, no Enter       |            Like `[LK]`+`[y]`+`[r]` but pasted directly; path from the git root                                 |
+|   N/V    |        `[LK]`+`[x]`+`[r]`        |   Send file reference to agent    |           `@file:L12` (visual: `@file:L12-L30`) into the target pane, no Enter           |      Like `[LK]`+`[y]`+`[r]` but pasted directly; path from the git root, quoted if it has spaces      |
 |    N     |  `[LK]`+`[Shift]`+`[d]`+`[b/c]`  |  Debugger: breakpoint / continue  |                          Toggle breakpoint / start or continue                           |                    vimspector; `:VimspectorPythonConfig` creates `.vimspector.json`                    |
 |    N     | `[LK]`+`[Shift]`+`[d]`+`[n/i/o]` |   Debugger: step over/into/out    |                                    Step over/into/out                                    |                                               vimspector                                               |
 |   N/V    | `[LK]`+`[Shift]`+`[d]`+`[r/q/e]` |  Debugger: restart/quit/evaluate  |                    Restart, reset (quit), evaluate word or selection                     |                                               vimspector                                               |
@@ -938,7 +943,7 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 
 #### 2. Copy Configuration File (TMUX)
 
-1. Check if TMUX version >= __2.0__
+1. Check if TMUX version >= __3.2__ (popups, hidden variables and pane-border options need it)
 
    ```bash
    # Check TMUX version
@@ -949,11 +954,11 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 
    - __TMUX__ (full)
 
-     1. Copy `tmux/tmux.conf` to $HOME (current user's home)
-     2. Rename `tmux.conf` to `.tmux.conf`
+     - Clone the repository to `~/Desktop/Vim_Tmux_Config`: the config runs its status-bar and helper scripts
+       from `~/Desktop/Vim_Tmux_Config/tmux/bin`. Then link (recommended, `git pull` updates it) or copy:
 
      ```bash
-     cp tmux/tmux.conf $HOME/.tmux.conf
+     ln -s "$HOME/Desktop/Vim_Tmux_Config/tmux/tmux.conf" $HOME/.tmux.conf
      ```
 
    - __TMUX__ (minimal)
@@ -983,8 +988,8 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
      ```bash
      # Open TMUX in terminal
      tmux
-     # In TMUX, press ctrl+b to enter command mode
-     # In command mode
+     # In TMUX, press Ctrl+b, let go, then type : (a command prompt opens at the bottom)
+     # Type this and press Enter:
      source-file ~/.tmux.conf
      ```
 
@@ -1145,26 +1150,28 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 <details open>
 <summary>Click to expand!</summary>
 
-| TMUX-Mode |           Key Mapping            |                    Function                    |                  Description                   |                    Note                     |
-| :-------: | :------------------------------: | :--------------------------------------------: | :--------------------------------------------: | :-----------------------------------------: |
-|  Normal   |      `[BK]`+`[Shift]`+`[/]`      |           Show all TMUX key mappings           |           Show all TMUX key mappings           |                                             |
-|  Normal   |      `[BK]`+`[Shift]`+`[b]`      |            Toggle TMUX status line             |            Toggle TMUX status line             |                                             |
-|  Normal   |      `[BK]`+(`[Alt]`)+`[b]`      |  Set status line position (bottom)/top/bottom  |  Set status line position (bottom)/top/bottom  |                                             |
-|  Normal   |           `[BK]`+`[b]`           |             Toggle TMUX borderline             |             Toggle TMUX borderline             |                                             |
-|  Normal   |      `[BK]`+`[Shift]`+`[r]`      |           Reload TMUX configuration            |           Reload TMUX configuration            |    Run (source) `$HOME/.tmux.conf` file     |
-|  Normal   |           `[BK]`+`[a]`           |               Clear pane output                |               Clear pane output                |         Act like Ctrl-l in terminal         |
-|  Normal   |      `[BK]`+`[Ctrl]`+`[j]`       |            Send Ctrl+j to terminal             |            Send Ctrl+j to terminal             |   Ctrl+j is alternative to enter in shell   |
-|  Normal   |      `[BK]`+`[Ctrl]`+`[h]`       |            Send Ctrl+h to terminal             |            Send Ctrl+h to terminal             |  Ctrl+h is alternative backspace in shell   |
-|  Normal   |      `[BK]`+`[Ctrl]`+`[k]`       |            Send Ctrl+k to terminal             |            Send Ctrl+k to terminal             | Ctrl+k is to delete to end of line in shell |
-|  Normal   |      `[BK]`+`[Ctrl]`+`[l]`       |            Send Ctrl+l to terminal             |            Send Ctrl+l to terminal             |   Ctrl+l is to clear pane output in shell   |
-|  Normal   | `[BK]`+`[Ctrl]`+`[Shift]`+`[l]`  |            Clear scrollback history            |         Clear TMUX scrollback history          |                                             |
-|  Normal   |      `[BK]`+`[Ctrl]`+`[s]`       |       Toggle pane input synchronization        |       Toggle pane input synchronization        |       Synchronize input for all panes       |
-|  Normal   |      `[BK]`+`[Shift]`+`[m]`      |               Toggle mouse usage               |               Toggle mouse usage               |             Mouse usage support             |
-|  Normal   |           `[BK]`+`[m]`           |               Mark current pane                |               Mark current pane                |        Mark pane for following usage        |
-|  Normal   |       `[BK]`+`[Alt]`+`[;]`       |       Swap current pane with marked pane       |       Swap current pane with marked pane       |      Target pane must be marked first       |
-|  Normal   |       `[BK]`+`[Alt]`+`[d]`       |        Open today's diary in a popup          |   vimwiki diary note (nvim, otherwise vim)     |        Quick notes from any pane            |
-|  Normal   | `[BK]`+`[Alt]`+`[Shift]`+`[\/-]` | Move marked pane to right/bottom of focus pane | Move marked pane to right/bottom of focus pane |   Shift+/- just \| for H-dir, _ for V-dir   |
-|  Normal   | `[BK]`+`[Alt]`+`[Shift]`+`[5/']` | Move marked pane to right/bottom of focus pane | Move marked pane to right/bottom of focus pane |   Shift+5/' just % for H-dir, " for V-dir   |
+| TMUX-Mode |           Key Mapping            |                    Function                    |                     Description                      |                                     Note                                     |
+| :-------: | :------------------------------: | :--------------------------------------------: | :--------------------------------------------------: | :--------------------------------------------------------------------------: |
+|  Normal   |      `[BK]`+`[Shift]`+`[/]`      |           Show all TMUX key mappings           |              Show all TMUX key mappings              |                                                                              |
+|  Normal   |      `[BK]`+`[Shift]`+`[n]`      |              Watch pane (on/off)               |   Mark the pane once its screen is quiet for 15 s    | Border `[W]`/`[Q]`, status `~`, desktop notification; e.g. an agent finished |
+|  Normal   |       `[BK]`+`[Alt]`+`[a]`       |      Jump to window that needs attention       | Next window marked by `tmux_notify.sh` (magenta `!`) |    Set by the pane watcher or an agent hook; visiting a window clears it     |
+|  Normal   |      `[BK]`+`[Shift]`+`[b]`      |            Toggle TMUX status line             |               Toggle TMUX status line                |                                                                              |
+|  Normal   |      `[BK]`+(`[Alt]`)+`[b]`      |  Set status line position (bottom)/top/bottom  |     Set status line position (bottom)/top/bottom     |                                                                              |
+|  Normal   |           `[BK]`+`[b]`           |             Toggle TMUX borderline             |                Toggle TMUX borderline                |                                                                              |
+|  Normal   |      `[BK]`+`[Shift]`+`[r]`      |           Reload TMUX configuration            |              Reload TMUX configuration               |                     Run (source) `$HOME/.tmux.conf` file                     |
+|  Normal   |           `[BK]`+`[a]`           |               Clear pane output                |                  Clear pane output                   |                         Act like Ctrl-l in terminal                          |
+|  Normal   |      `[BK]`+`[Ctrl]`+`[j]`       |            Send Ctrl+j to terminal             |               Send Ctrl+j to terminal                |                   Ctrl+j is alternative to enter in shell                    |
+|  Normal   |      `[BK]`+`[Ctrl]`+`[h]`       |            Send Ctrl+h to terminal             |               Send Ctrl+h to terminal                |                   Ctrl+h is alternative backspace in shell                   |
+|  Normal   |      `[BK]`+`[Ctrl]`+`[k]`       |            Send Ctrl+k to terminal             |               Send Ctrl+k to terminal                |                 Ctrl+k is to delete to end of line in shell                  |
+|  Normal   |      `[BK]`+`[Ctrl]`+`[l]`       |            Send Ctrl+l to terminal             |               Send Ctrl+l to terminal                |                   Ctrl+l is to clear pane output in shell                    |
+|  Normal   | `[BK]`+`[Ctrl]`+`[Shift]`+`[l]`  |            Clear scrollback history            |            Clear TMUX scrollback history             |                                                                              |
+|  Normal   |      `[BK]`+`[Ctrl]`+`[s]`       |       Toggle pane input synchronization        |          Toggle pane input synchronization           |                       Synchronize input for all panes                        |
+|  Normal   |      `[BK]`+`[Shift]`+`[m]`      |               Toggle mouse usage               |                  Toggle mouse usage                  |                             Mouse usage support                              |
+|  Normal   |           `[BK]`+`[m]`           |               Mark current pane                |                  Mark current pane                   |                        Mark pane for following usage                         |
+|  Normal   |       `[BK]`+`[Alt]`+`[;]`       |       Swap current pane with marked pane       |          Swap current pane with marked pane          |                       Target pane must be marked first                       |
+|  Normal   |       `[BK]`+`[Alt]`+`[d]`       |         Open today's diary in a popup          |       vimwiki diary note (nvim, otherwise vim)       |                          Quick notes from any pane                           |
+|  Normal   | `[BK]`+`[Alt]`+`[Shift]`+`[\/-]` | Move marked pane to right/bottom of focus pane |    Move marked pane to right/bottom of focus pane    |                   Shift+/- just \| for H-dir, _ for V-dir                    |
+|  Normal   | `[BK]`+`[Alt]`+`[Shift]`+`[5/']` | Move marked pane to right/bottom of focus pane |    Move marked pane to right/bottom of focus pane    |                   Shift+5/' just % for H-dir, " for V-dir                    |
 
 </details>
 </details>
