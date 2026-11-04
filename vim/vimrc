@@ -678,7 +678,26 @@
     "    directory or inside .git (commit messages, agent editor temp files),
     "    and vim started with --cmd 'let g:vimrc_no_session = 1' (tmux popups)
     " -- A restored session ('vim -S') resumes tracking by itself
+    " -- An existing Session.vim is never overwritten: plain 'vim' (no file
+    "    arguments) restores it; 'vim file' leaves it alone (:Obsess to
+    "    replace it with this vim's layout)
+    " -- Session.vim is added to the repo's .git/info/exclude (local, never
+    "    committed) unless git already ignores it
     " -- Stop tracking in this vim: :Obsess! (also deletes Session.vim)
+    function! s:SessionExclude(dir) abort
+        let l:git = 'git -C ' . shellescape(a:dir) . ' '
+        call system(l:git . 'check-ignore -q Session.vim')
+        if !v:shell_error
+            return
+        endif
+        let l:exclude = trim(system(l:git
+                    \ . 'rev-parse --path-format=absolute --git-path info/exclude'))
+        if v:shell_error || empty(l:exclude)
+            return
+        endif
+        call mkdir(fnamemodify(l:exclude, ':h'), 'p')
+        call writefile(['Session.vim'], l:exclude, 'a')
+    endfunction
     function! s:AutoSession() abort
         if !s:on('auto_session') || empty($TMUX) || &diff
                     \ || exists('g:this_obsession') || exists('g:vimrc_no_session')
@@ -695,9 +714,24 @@
                 return
             endif
         endfor
+        let l:session = l:cwd . '/Session.vim'
+        if filereadable(l:session)
+            if argc() > 0
+                echomsg 'Session.vim exists here: not tracking this vim'
+                            \ . ' (:source Session.vim restores it, :Obsess replaces it)'
+                return
+            endif
+            " Restores the layout; the file resumes tracking (Obsession)
+            execute 'silent! source' fnameescape(l:session)
+            call s:SessionExclude(l:cwd)
+            echomsg 'Restored Session.vim (:Obsess! stops tracking and deletes it)'
+            return
+        endif
+        call s:SessionExclude(l:cwd)
         silent! Obsess
     endfunction
-    autocmd vimrc VimEnter * call s:AutoSession()
+    " nested: buffers restored from Session.vim get their filetype autocmds
+    autocmd vimrc VimEnter * nested call s:AutoSession()
 
 " Fold settings --------------------------------------------------------------
     " NOTE:
