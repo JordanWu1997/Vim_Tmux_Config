@@ -269,12 +269,16 @@
     let g:python3_host_prog = g:vimrc_tools.python3_host
 
 " Tmux integration -----------------------------------------------------------
-    " -- target        : pane for <leader>x (send), <leader>qt (capture) and
-    "                    vim-test; '{last}' = previously active pane, change
-    "                    it with <leader>xt
+    " -- target        : pane for <leader>x (send), <leader>xd (diagnostics)
+    "                    and <leader>qt (capture); '{last}' = previously
+    "                    active pane, change it with <leader>xt
+    " -- run_target    : pane for vim-test (<leader>pt*) and <leader>px/pl
+    "                    (run file); '' = same as target, change it with
+    "                    <leader>xT. Commands are only sent when that pane
+    "                    runs a shell, never into an agent or REPL prompt.
     " -- capture_lines : scrollback lines read by <leader>qt
     let g:vimrc_tmux = extend({
-                \ 'target': '{last}', 'capture_lines': 300,
+                \ 'target': '{last}', 'run_target': '', 'capture_lines': 300,
                 \ }, get(g:, 'vimrc_tmux', {}))
 
 " LSP features ---------------------------------------------------------------
@@ -945,7 +949,8 @@
     " NOTE:
     " -- <leader>qt reads the last g:vimrc_tmux.capture_lines lines of the tmux
     "    pane g:vimrc_tmux.target (default: last active pane, e.g. the agent or
-    "    pytest pane) and puts every 'file:line[:col]' reference into the
+    "    pytest pane) and puts every 'file:line[:col]' reference, Python
+    "    traceback line ('File "x.py", line 42') and pdb frame into the
     "    quickfix list. Also understands '@file:L12' (from <leader>yr).
     " -- Only files that exist (relative to cwd or project root) are kept.
     " -- Then use <leader>qj/qk (or ]q/[q) to jump, <leader>qo to toggle.
@@ -965,9 +970,14 @@
         let l:root = ProjectRoot()
         " path (with or without extension, e.g. vim/vimrc) + :line[:col]
         let l:pat = '\v[~@`"''([]?\zs[[:alnum:]_./~-]*[[:alnum:]_-]:L?\d+%(:\d+)?'
+        " Python traceback/logging: File "x.py", line 42
+        let l:pat_tb = '\vFile "([^"]+)", line (\d+)'
+        " pdb/ipdb current frame: > /path/x.py(42)func()
+        let l:pat_pdb = '\v^\>\s+(\S+)\((\d+)\)'
         let l:items = []
         let l:seen = {}
         for l:line in l:lines
+            let l:refs = []
             let l:start = 0
             while 1
                 let l:ref = matchstr(l:line, l:pat, l:start)
@@ -976,20 +986,29 @@
                 endif
                 let l:start = matchend(l:line, l:pat, l:start)
                 let l:parts = matchlist(l:ref, '\v^(.{-}):L?(\d+)%(:(\d+))?$')
-                let l:file = expand(l:parts[1])
+                call add(l:refs, l:parts[1:3])
+            endwhile
+            for l:p in [l:pat_tb, l:pat_pdb]
+                let l:m = matchlist(l:line, l:p)
+                if !empty(l:m)
+                    call add(l:refs, [l:m[1], l:m[2], ''])
+                endif
+            endfor
+            for [l:name, l:lnum, l:col] in l:refs
+                let l:file = expand(l:name)
                 if !filereadable(l:file) && filereadable(l:root . '/' . l:file)
                     let l:file = l:root . '/' . l:file
                 endif
-                let l:key = fnamemodify(l:file, ':p') . ':' . l:parts[2]
+                let l:key = fnamemodify(l:file, ':p') . ':' . l:lnum
                 if !filereadable(l:file) || has_key(l:seen, l:key)
                     continue
                 endif
                 let l:seen[l:key] = 1
                 call add(l:items, { 'filename': l:file,
-                            \ 'lnum': str2nr(l:parts[2]),
-                            \ 'col': str2nr(l:parts[3]),
+                            \ 'lnum': str2nr(l:lnum),
+                            \ 'col': str2nr(l:col),
                             \ 'text': trim(l:line) })
-            endwhile
+            endfor
         endfor
         call setqflist([], ' ', { 'title': 'tmux ' . g:vimrc_tmux.target,
                     \ 'items': l:items })
@@ -1288,19 +1307,27 @@
     " -- <leader>xy: paste line/selection WITHOUT Enter (e.g. into an agent
     "    prompt, to edit before submitting)
     " -- <leader>xt: choose target pane (lists panes; '{last}', '%3', ':.1')
+    " -- <leader>xT: choose run pane (tests and <leader>px/pl), see run_target
+    " -- <leader>xd: paste the location list (LSP diagnostics after <leader>ee,
+    "    or ALE) as '@file:L12: message' lines WITHOUT Enter (agent prompt)
+    " -- <leader>px: run current file in the run pane (python/sh/executable),
+    "    from the project root, with the project virtualenv if any
+    " -- <leader>pl: run the last <leader>px command again
 
     " Send text to target pane; enter = number of Enter keys after paste
-    function! TmuxSendText(text, enter) abort
+    " -- Optional 3rd argument: pane (default g:vimrc_tmux.target)
+    function! TmuxSendText(text, enter, ...) abort
         if empty($TMUX) || !executable('tmux')
             echohl WarningMsg | echo 'Not inside tmux' | echohl None
             return 0
         endif
-        let l:target = shellescape(g:vimrc_tmux.target)
+        let l:pane = a:0 ? a:1 : g:vimrc_tmux.target
+        let l:target = shellescape(l:pane)
         call system('tmux load-buffer -b vim_send -', a:text)
         call system('tmux paste-buffer -d -p -b vim_send -t ' . l:target)
         if v:shell_error
             echohl WarningMsg | echo 'tmux: cannot paste to pane '
-                        \ . g:vimrc_tmux.target | echohl None
+                        \ . l:pane | echohl None
             return 0
         endif
         for l:i in range(a:enter)
@@ -1339,8 +1366,8 @@
             call cursor(l:end + 1, 1)
         endif
     endfunction
-    " Choose target pane
-    function! s:TmuxChooseTarget() abort
+    " Choose target pane (key: 'target' or 'run_target')
+    function! s:TmuxChooseTarget(key) abort
         if empty($TMUX)
             echohl WarningMsg | echo 'Not inside tmux' | echohl None
             return
@@ -1348,10 +1375,98 @@
         echo join(systemlist('tmux list-panes -s -F "#{pane_id}  '
                     \ . '#{window_index}.#{pane_index}  #{pane_current_command}'
                     \ . '  #{pane_current_path}"'), "\n")
-        let l:target = input('tmux target pane: ', g:vimrc_tmux.target)
-        if !empty(l:target)
-            let g:vimrc_tmux.target = l:target
-            redraw | echo 'tmux target pane: ' . g:vimrc_tmux.target
+        let l:label = a:key ==# 'target' ? 'tmux target pane: '
+                    \ : 'tmux run pane (empty = target pane): '
+        let l:target = input(l:label, g:vimrc_tmux[a:key])
+        if !empty(l:target) || a:key ==# 'run_target'
+            let g:vimrc_tmux[a:key] = l:target
+            redraw | echo l:label . g:vimrc_tmux[a:key]
+        endif
+    endfunction
+    " Pane for commands (tests, run file): run_target, else target
+    function! TmuxRunPane() abort
+        return empty(g:vimrc_tmux.run_target) ? g:vimrc_tmux.target
+                    \ : g:vimrc_tmux.run_target
+    endfunction
+    " Send a shell command to the run pane, only if that pane runs a shell
+    " (so a test command is never typed into an agent or REPL prompt)
+    function! TmuxRunCommand(cmd) abort
+        if empty($TMUX) || !executable('tmux')
+            echohl WarningMsg | echo 'Not inside tmux' | echohl None
+            return 0
+        endif
+        let l:pane = TmuxRunPane()
+        let l:prog = trim(system('tmux display-message -p -t '
+                    \ . shellescape(l:pane) . ' "#{pane_current_command}"'))
+        if v:shell_error
+            echohl WarningMsg | echo 'tmux: no pane ' . l:pane | echohl None
+            return 0
+        endif
+        if index(['bash', 'zsh', 'fish', 'sh', 'dash', 'ksh', 'tcsh'],
+                    \ fnamemodify(l:prog, ':t')) < 0
+            echohl WarningMsg
+            echo 'tmux pane ' . l:pane . ' runs ' . l:prog
+                        \ . ', not a shell: not sent (choose a pane with <leader>xT)'
+            echohl None
+            return 0
+        endif
+        return TmuxSendText(a:cmd, 1, l:pane)
+    endfunction
+    " Prefix that runs a command with vim's virtualenv ($VIRTUAL_ENV, e.g.
+    " set by <leader>Le) or the project one, since the tmux pane's shell does
+    " not have it: "env VIRTUAL_ENV=... PATH=.../bin:$PATH "
+    function! TmuxVenvPrefix() abort
+        let l:venv = !empty($VIRTUAL_ENV) ? $VIRTUAL_ENV : ProjectVenv()
+        return empty(l:venv) ? '' : 'env VIRTUAL_ENV=' . shellescape(l:venv)
+                    \ . ' PATH=' . shellescape(l:venv . '/bin') . ':"$PATH" '
+    endfunction
+    " Run the current file in the run pane, from the project root
+    function! s:TmuxRunFile() abort
+        if &buftype !=# '' || expand('%') ==# ''
+            echohl WarningMsg | echo 'Not a file buffer' | echohl None
+            return
+        endif
+        update
+        let l:file = shellescape(expand('%:p'))
+        if &filetype ==# 'python'
+            let l:run = 'python3 ' . l:file
+        elseif &filetype =~# '^\(sh\|bash\|zsh\)$'
+            let l:run = (&filetype ==# 'sh' ? 'bash' : &filetype) . ' ' . l:file
+        elseif executable(expand('%:p'))
+            let l:run = l:file
+        else
+            echohl WarningMsg | echo 'Do not know how to run filetype '
+                        \ . &filetype | echohl None
+            return
+        endif
+        let s:last_run = 'cd ' . shellescape(ProjectRoot()) . ' && '
+                    \ . TmuxVenvPrefix() . l:run
+        call TmuxRunCommand(s:last_run)
+    endfunction
+    function! s:TmuxRunLast() abort
+        if !exists('s:last_run')
+            echo 'Nothing run yet (<leader>px runs the current file)'
+            return
+        endif
+        call TmuxRunCommand(s:last_run)
+    endfunction
+    " Paste location-list entries (LSP diagnostics / ALE) as @file:Lnn lines
+    function! s:TmuxSendDiagnostics() abort
+        let l:items = filter(getloclist(0), 'v:val.valid && v:val.bufnr > 0')
+        if empty(l:items)
+            echo 'Location list is empty (load diagnostics with <leader>ee first)'
+            return
+        endif
+        let l:lines = []
+        for l:item in l:items
+            call add(l:lines, '@' . fnamemodify(bufname(l:item.bufnr), ':.')
+                        \ . ':L' . l:item.lnum . ': '
+                        \ . (empty(l:item.type) ? '' : '[' . l:item.type . '] ')
+                        \ . substitute(trim(l:item.text), '\n', ' ', 'g'))
+        endfor
+        if TmuxSendText(join(l:lines, "\n"), 0)
+            echo len(l:lines) . ' diagnostics sent to tmux pane '
+                        \ . g:vimrc_tmux.target
         endif
     endfunction
     nnoremap <silent> <leader>xx
@@ -1363,7 +1478,11 @@
     nnoremap <silent> <leader>xy :<C-u>call TmuxSendText(getline('.'), 0)<CR>
     xnoremap <silent> <leader>xy
                 \ :<C-u>call TmuxSendText(<SID>VisualSelectionText(), 0)<CR>
-    nnoremap <leader>xt :call <SID>TmuxChooseTarget()<CR>
+    nnoremap <leader>xt :call <SID>TmuxChooseTarget('target')<CR>
+    nnoremap <leader>xT :call <SID>TmuxChooseTarget('run_target')<CR>
+    nnoremap <silent> <leader>xd :call <SID>TmuxSendDiagnostics()<CR>
+    nnoremap <silent> <leader>px :call <SID>TmuxRunFile()<CR>
+    nnoremap <silent> <leader>pl :call <SID>TmuxRunLast()<CR>
 
 " ============================================================================
 " Vim-plug initialization (Get vim-plug by curl)
@@ -2412,14 +2531,14 @@
                 \ 'm': { 'name': '+mark/man/markdown' },
                 \ 'n': { 'name': '+neoformat' },
                 \ 'o': { 'name': '+AI (ollama)' },
-                \ 'p': { 'name': '+python/test' },
+                \ 'p': { 'name': '+python/test/run' },
                 \ 'q': { 'name': '+quit/quickfix' },
                 \ 'r': { 'name': '+register/resize/rg' },
                 \ 's': { 'name': '+spell/scrolloff/statusline' },
                 \ 't': { 'name': '+tab/terminal' },
                 \ 'u': { 'name': '+undotree' },
                 \ 'w': { 'name': '+write/wiki/wrap' },
-                \ 'x': { 'name': '+tmux send' },
+                \ 'x': { 'name': '+tmux send/run pane' },
                 \ 'y': { 'name': '+yank/path' },
                 \ 'D': { 'name': '+debugger' },
                 \ 'L': { 'name': '+LSP/LanguageTool',
@@ -3163,12 +3282,17 @@
         " NOTE:
         " -- <leader>pt[n/f/l/s/v]: test nearest/file/last/suite, visit last test
         "    file (p for python/pytest; vim-test also supports other languages)
-        " -- Inside tmux, the test command runs in the tmux pane
-        "    g:vimrc_tmux.target (default: last active pane, should be a shell),
-        "    like a test terminal next to vim. Outside tmux: vim/neovim terminal.
+        " -- Inside tmux, the test command runs in the tmux run pane
+        "    (g:vimrc_tmux.run_target, else target), like a test terminal next
+        "    to vim, but only if that pane runs a shell (never into an agent
+        "    prompt; choose the pane with <leader>xT). It runs with the project
+        "    virtualenv. Outside tmux: vim/neovim terminal.
+        " -- cd to vim's cwd (not the project root): vim-test builds test paths
+        "    relative to it
         " -- vim-test is lazy-loaded on the first :Test* command
         function! s:TestTmuxPane(cmd) abort
-            call TmuxSendText('cd ' . shellescape(getcwd()) . ' && ' . a:cmd, 1)
+            call TmuxRunCommand('cd ' . shellescape(getcwd()) . ' && '
+                        \ . TmuxVenvPrefix() . a:cmd)
         endfunction
         let g:test#custom_strategies = { 'tmuxpane': function('s:TestTmuxPane') }
         if !empty($TMUX)
