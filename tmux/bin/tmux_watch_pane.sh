@@ -28,9 +28,8 @@ while [ "$(tmux show -pqv -t "$pane" @watch 2>/dev/null)" = on ] &&
     elif [ "$alerted" = 0 ] && [ $((now - changed_at)) -ge "$quiet" ]; then
         alerted=1
         tmux set-option -p -t "$pane" @watch_quiet on
-        name=$(tmux display-message -p -t "$pane" '#{session_name}:#{window_index}.#{pane_index} #{window_name}')
-        tmux display-message "Screen quiet: $name"
-        "$(dirname "$0")/tmux_notify.sh" 'Pane screen quiet' "$name: no visible change for $quiet seconds"
+        # tmux_notify.sh marks the window (@watch_done) and shows the message
+        "$(dirname "$0")/tmux_notify.sh" 'Pane screen quiet' "no visible change for $quiet seconds" "$pane"
     fi
     sleep "$step"
 done
