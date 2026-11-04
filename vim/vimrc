@@ -199,6 +199,11 @@
     " -- lsp               : vim-lsp (servers start only on <leader>Le)
     " -- python_tools      : vim-test (<leader>pt*) and vimspector (<leader>D*)
     " -- gui_apps          : external viewers (browser preview, zathura)
+    " -- format_on_save    : run Neoformat on save for python, sh, lua, json,
+    "                        yaml, toml (needs 'coding'; per buffer: <leader>Tf)
+    " -- auto_session      : inside tmux, keep a Session.vim (:Obsess) in the
+    "                        git root vim was started in, so tmux-resurrect
+    "                        restores vim splits/tabs after a reboot
     " -- python_skeleton, tex_template, bash_template, markdown_template :
     "                        template inserted into newly created files
     " NOTE: no trailing "comments inside \-continued lines (they break the
@@ -208,6 +213,7 @@
                 \ 'extra': 1, 'coding': 1, 'lsp': 1, 'python_tools': 1,
                 \ 'gui_apps': 1, 'python_skeleton': 1, 'tex_template': 1,
                 \ 'bash_template': 1, 'markdown_template': 0,
+                \ 'format_on_save': 0, 'auto_session': 1,
                 \ }, get(g:, 'vimrc_features', {}))
     " Derived (not a switch): legacy deoplete/jedi completion when LSP is off
     let g:vimrc_features.legacy_python_completion = !g:vimrc_features.lsp
@@ -270,6 +276,25 @@
     let g:vimrc_tmux = extend({
                 \ 'target': '{last}', 'capture_lines': 300,
                 \ }, get(g:, 'vimrc_tmux', {}))
+
+" LSP features ---------------------------------------------------------------
+    " State of each LSP feature when LSP starts (<leader>Le). All on; switch
+    " any of them off/on later while LSP runs, without restarting servers:
+    " :LspFeature [name [on|off|toggle]] or <leader>Lt* (see Part 9)
+    " -- diagnostics  : lint results (signs, underline, ]g/[g, <leader>ee)
+    " -- virtual_text : diagnostic message at the end of the line
+    " -- completion   : asyncomplete pop-up (off: AutoComplPop, <C-x><C-o>)
+    " -- signature    : function argument hint while typing ( and ,
+    " -- references   : highlight other uses of the word under the cursor
+    " -- code_action  : 'A>' sign where a code action is available
+    " -- inlay_hints  : inline type/parameter hints (vim 9 only, not neovim)
+    " -- doc_preview  : documentation float next to the completion menu
+    "                   (function signature + docstring of the selected item)
+    let g:vimrc_lsp = extend({
+                \ 'diagnostics': 1, 'virtual_text': 1, 'completion': 1,
+                \ 'signature': 1, 'references': 1, 'code_action': 1,
+                \ 'inlay_hints': 1, 'doc_preview': 1,
+                \ }, get(g:, 'vimrc_lsp', {}))
 
 " TERMGUI color --------------------------------------------------------------
     " Ctermcolors only support max 256 color
@@ -844,6 +869,77 @@
         endif
         return getcwd()
     endfunction
+    " Project virtualenv: .venv, venv or env with bin/python at the project
+    " root, else ''. Used by LSP, vim-test and <leader>px.
+    function! ProjectVenv() abort
+        let l:root = ProjectRoot()
+        for l:name in ['.venv', 'venv', 'env']
+            if executable(l:root . '/' . l:name . '/bin/python')
+                return l:root . '/' . l:name
+            endif
+        endfor
+        return ''
+    endfunction
+    " Activate/deactivate a virtualenv inside vim (no LSP needed)
+    " -- Sets $VIRTUAL_ENV and puts <venv>/bin first in $PATH, so :!, :terminal,
+    "    vim-test, <leader>px and language servers started afterwards use it
+    " -- Language servers already running keep the old one: <leader>LR
+    function! VenvActivate(venv) abort
+        let l:venv = substitute(fnamemodify(a:venv, ':p'), '/\+$', '', '')
+        if !executable(l:venv . '/bin/python')
+            echohl WarningMsg | echo 'Not a virtualenv (no bin/python): '
+                        \ . l:venv | echohl None
+            return 0
+        endif
+        if $VIRTUAL_ENV ==# l:venv
+            return 1
+        endif
+        call VenvDeactivate()
+        let $VIRTUAL_ENV = l:venv
+        let $PATH = l:venv . '/bin:' . $PATH
+        return 1
+    endfunction
+    function! VenvDeactivate() abort
+        if empty($VIRTUAL_ENV)
+            return 0
+        endif
+        let l:bin = $VIRTUAL_ENV . '/bin'
+        let $PATH = join(filter(split($PATH, ':'), 'v:val !=# l:bin'), ':')
+        let $VIRTUAL_ENV = ''
+        silent! unlet $VIRTUAL_ENV
+        return 1
+    endfunction
+    " :ProjectVenv        activate the project virtualenv (.venv/venv/env at
+    "                     the git root), or show the active one
+    " :ProjectVenv {dir}  activate that virtualenv
+    " :ProjectVenv!       deactivate
+    function! s:ProjectVenvCmd(bang, dir) abort
+        let l:lsp_hint = get(g:, 'lsp_user_enabled', 0)
+                    \ ? ' (restart LSP servers with <leader>LR to use it)' : ''
+        if a:bang
+            let l:old = $VIRTUAL_ENV
+            echo VenvDeactivate() ? 'Deactivated virtualenv: ' . l:old . l:lsp_hint
+                        \ : 'No virtualenv active'
+            return
+        endif
+        let l:venv = empty(a:dir) ? ProjectVenv() : a:dir
+        if empty(l:venv)
+            echo (empty($VIRTUAL_ENV) ? 'No virtualenv active'
+                        \ : 'Active virtualenv: ' . $VIRTUAL_ENV)
+                        \ . '; no .venv/venv/env in ' . ProjectRoot()
+            return
+        endif
+        let l:was = $VIRTUAL_ENV
+        if VenvActivate(l:venv)
+            echo ($VIRTUAL_ENV ==# l:was ? 'Active virtualenv: '
+                        \ : 'Activated virtualenv: ') . $VIRTUAL_ENV
+                        \ . ($VIRTUAL_ENV ==# l:was ? '' : l:lsp_hint)
+        endif
+    endfunction
+    command! -bar -bang -nargs=? -complete=dir ProjectVenv
+                \ call s:ProjectVenvCmd(<bang>0, <q-args>)
+    nnoremap <leader>pv :ProjectVenv<CR>
+    nnoremap <leader>pV :ProjectVenv!<CR>
 
 " Function - tmux pane output to quickfix list -------------------------------
     " NOTE:
@@ -1815,7 +1911,9 @@
                     call add(l:running, l:name)
                 endif
             endfor
-            return empty(l:running) ? 'LSP' : 'LSP:' . join(l:running, ',')
+            let l:off = exists('*LspFeaturesOff') ? LspFeaturesOff() : []
+            return (empty(l:running) ? 'LSP' : 'LSP:' . join(l:running, ','))
+                        \ . (empty(l:off) ? '' : ' -' . join(l:off, ' -'))
         endfunction
         " Git hunks 'hunk 3/12': hunks starting at or above the cursor / all
         " hunks (only when gitgutter is already loaded and enabled for this
@@ -2244,6 +2342,54 @@
     " HTML patch
     autocmd vimrc FileType html let b:AutoPairs = AutoPairsDefine({'<!--': '-->'})
 
+" Toggle group (<leader>T) ---------------------------------------------------
+    " One place for on/off switches; every toggle echoes its new state.
+    " The older keys (<leader>wp, <leader>sl, <F5>, ...) still work.
+    " -- Options : Tw wrap, Ts spell, Tl list, Tc cursorline, Tv cursorcolumn,
+    "              Te expandtab, Tp paste, Tn number, Tr relativenumber,
+    "              Ta autochdir
+    " -- Features: Tf format on save (this buffer), Tk completion pop-up,
+    "              Tb rainbow, Tg goyo, Tt tagbar, Td ALE lint
+    function! s:ToggleOption(name) abort
+        execute 'set ' . a:name . '!'
+        echo a:name . '=' . (eval('&' . a:name) ? 'on' : 'off')
+    endfunction
+    function! s:ToggleCommand(cmd) abort
+        if exists(':' . a:cmd) != 2
+            echohl WarningMsg | echo ':' . a:cmd . ' is not available'
+            echohl None
+            return
+        endif
+        execute a:cmd
+    endfunction
+    function! s:ToggleFormatOnSave() abort
+        let b:format_on_save = !get(b:, 'format_on_save', s:on('format_on_save'))
+        echo 'format on save (this buffer)=' . (b:format_on_save ? 'on' : 'off')
+    endfunction
+    function! s:ToggleCompletionPopup() abort
+        if exists('*AutoCompPopToggle')
+            call AutoCompPopToggle()
+        else
+            echo 'completion pop-up toggle not available'
+        endif
+    endfunction
+    for [s:key, s:opt] in [['w', 'wrap'], ['s', 'spell'], ['l', 'list'],
+                \ ['c', 'cursorline'], ['v', 'cursorcolumn'],
+                \ ['e', 'expandtab'], ['p', 'paste'], ['n', 'number'],
+                \ ['r', 'relativenumber'], ['a', 'autochdir']]
+        if exists('+' . s:opt)
+            execute 'nnoremap <silent> <leader>T' . s:key
+                        \ . ' :<C-u>call <SID>ToggleOption(' . string(s:opt) . ')<CR>'
+        endif
+    endfor
+    unlet s:key s:opt
+    nnoremap <silent> <leader>Tf :<C-u>call <SID>ToggleFormatOnSave()<CR>
+    nnoremap <silent> <leader>Tk :<C-u>call <SID>ToggleCompletionPopup()<CR>
+    nnoremap <silent> <leader>Tb :<C-u>call <SID>ToggleCommand('RainbowToggle')<CR>
+    nnoremap <silent> <leader>Tg :<C-u>call <SID>ToggleCommand('Goyo')<CR>
+    nnoremap <silent> <leader>Tt :<C-u>call <SID>ToggleCommand('TagbarToggle')<CR>
+    nnoremap <silent> <leader>Td :<C-u>call <SID>ToggleCommand('ALEToggle')<CR>
+
 " Vim-whichkey ---------------------------------------------------------------
     " Whichkey layout
     let g:which_key_floating_opts = { 'row': '200' }
@@ -2276,7 +2422,9 @@
                 \ 'x': { 'name': '+tmux send' },
                 \ 'y': { 'name': '+yank/path' },
                 \ 'D': { 'name': '+debugger' },
-                \ 'L': { 'name': '+LSP/LanguageTool' },
+                \ 'L': { 'name': '+LSP/LanguageTool',
+                \        't': { 'name': '+LSP feature on/off' } },
+                \ 'T': { 'name': '+toggle' },
                 \ }
     silent! call which_key#register('<Space>', 'g:which_key_map')
 
@@ -3412,6 +3560,222 @@
             noremap <leader>` :call LspCompletionPopupToggle()<CR>
         endif
 
+" LSP features: switch each on/off while LSP runs ----------------------------
+        " NOTE:
+        " -- Start state: g:vimrc_lsp (all on); the current state is kept in
+        "    g:vimrc_lsp, so it also applies after <leader>Ld / <leader>Le
+        " -- :LspFeature                     show the state of every feature
+        "    :LspFeature {name} [on|off]     toggle (or set) one feature
+        "    :LspFeature all {on|off}        everything at once
+        " -- Keys <leader>Lt + d diagnostics, v virtual text, c completion,
+        "    s signature, r references, a code action, i inlay hints,
+        "    p completion doc preview,
+        "    t show state, o all on
+        " -- No server restart: diagnostics are hidden per buffer (kept, so
+        "    they come back at once), completion hands the buffer back to
+        "    AutoComplPop, the others are vim-lsp switches read on each event
+        let s:lsp_feature_names = ['diagnostics', 'virtual_text', 'completion',
+                    \ 'signature', 'references', 'code_action', 'inlay_hints',
+                    \ 'doc_preview']
+        " vim-lsp switch behind each feature (diagnostics/completion: per buffer)
+        let s:lsp_feature_flag = {
+                    \ 'virtual_text': 'lsp_diagnostics_virtual_text_enabled',
+                    \ 'signature': 'lsp_signature_help_enabled',
+                    \ 'references': 'lsp_document_highlight_enabled',
+                    \ 'code_action': 'lsp_document_code_action_signs_enabled',
+                    \ 'inlay_hints': 'lsp_inlay_hints_enabled',
+                    \ 'doc_preview': 'lsp_completion_documentation_enabled' }
+        function! s:LspFeatureSupported(name) abort
+            if a:name ==# 'virtual_text'
+                return lsp#utils#_has_nvim_virtual_text()
+                            \ || lsp#utils#_has_vim_virtual_text()
+            elseif a:name ==# 'inlay_hints'
+                return !has('nvim') && lsp#utils#_has_vim_virtual_text()
+            elseif a:name ==# 'doc_preview'
+                return has('nvim') || exists('*popup_create')
+            elseif a:name ==# 'code_action'
+                return lsp#utils#_has_signs()
+            endif
+            return 1
+        endfunction
+        function! s:LspFeatureOn(name) abort
+            return get(g:vimrc_lsp, a:name, 1) && s:LspFeatureSupported(a:name)
+        endfunction
+        " Features switched off (for the statusline), e.g. ['lint', 'cmp']
+        function! LspFeaturesOff() abort
+            let l:short = {'diagnostics': 'lint', 'completion': 'cmp'}
+            return map(filter(['diagnostics', 'completion'],
+                        \ '!get(g:vimrc_lsp, v:val, 1)'), 'l:short[v:val]')
+        endfunction
+        " Before lsp#enable(): turn every supported switch on, so vim-lsp
+        " registers all features once; they are then filtered by the switch
+        function! s:LspFeaturesRegister() abort
+            for [l:name, l:flag] in items(s:lsp_feature_flag)
+                let g:{l:flag} = s:LspFeatureSupported(l:name)
+            endfor
+        endfunction
+        " Diagnostics and completion for one LSP buffer
+        function! s:LspFeatureApplyBuffer(bufnr) abort
+            if get(g:vimrc_lsp, 'diagnostics', 1)
+                call lsp#enable_diagnostics_for_buffer(a:bufnr)
+            else
+                call lsp#disable_diagnostics_for_buffer(a:bufnr)
+            endif
+            if !getbufvar(a:bufnr, 'vimrc_lsp_buffer', 0)
+                return
+            endif
+            " asyncomplete pops up here (LSP + buffer words + file paths), so
+            " autocomplpop pauses; with completion off it is the other way
+            let l:on = get(g:vimrc_lsp, 'completion', 1)
+            if a:bufnr == bufnr('')
+                execute 'call asyncomplete#' . (l:on ? 'enable' : 'disable')
+                            \ . '_for_buffer()'
+            else
+                call setbufvar(a:bufnr, 'asyncomplete_enable', l:on)
+            endif
+            call setbufvar(a:bufnr, 'acp_off', l:on)
+            call setbufvar(a:bufnr, 'lsp_acp_off', l:on)
+        endfunction
+        " Redraw diagnostics (signs, virtual text) of all buffers
+        function! s:LspDiagnosticsRedraw() abort
+            for l:buf in getbufinfo({'bufloaded': 1})
+                if lsp#internal#diagnostics#state#_is_enabled_for_buffer(l:buf.bufnr)
+                    call lsp#disable_diagnostics_for_buffer(l:buf.bufnr)
+                    call lsp#enable_diagnostics_for_buffer(l:buf.bufnr)
+                endif
+            endfor
+        endfunction
+        " Apply one feature's state everywhere (LSP must be on)
+        function! s:LspFeatureApply(name) abort
+            let l:on = s:LspFeatureOn(a:name)
+            if a:name ==# 'diagnostics' || a:name ==# 'completion'
+                for l:buf in getbufinfo({'bufloaded': 1})
+                    call s:LspFeatureApplyBuffer(l:buf.bufnr)
+                endfor
+                if exists('*s:AcpBufferSync')
+                    call s:AcpBufferSync()
+                endif
+            elseif a:name ==# 'virtual_text'
+                let g:lsp_diagnostics_virtual_text_enabled = l:on
+                if l:on
+                    " vim-lsp redraws (debounced) on a diagnostics update
+                    call s:LspDiagnosticsRedraw()
+                elseif s:LspFeatureSupported(a:name)
+                    " Clear what is shown now; later updates are filtered out
+                    for l:buf in getbufinfo({'bufloaded': 1})
+                        if has('nvim')
+                            call nvim_buf_clear_namespace(l:buf.bufnr,
+                                        \ nvim_create_namespace('vim_lsp_diagnostic_virtual_text'),
+                                        \ 0, -1)
+                        else
+                            for l:type in ['Error', 'Warning', 'Information', 'Hint']
+                                silent! call prop_remove({'all': v:true,
+                                            \ 'type': 'vim_lsp_Lsp' . l:type . '_virtual_text',
+                                            \ 'bufnr': l:buf.bufnr})
+                            endfor
+                        endif
+                    endfor
+                endif
+            else
+                let g:{s:lsp_feature_flag[a:name]} = l:on
+                if l:on || !s:LspFeatureSupported(a:name) | return | endif
+                " Clear what is shown now (vim-lsp would only clear it on the
+                " next InsertEnter/BufLeave)
+                if a:name ==# 'references'
+                    for l:win in getwininfo()
+                        for l:id in getwinvar(l:win.winid, 'lsp_reference_matches', [])
+                            silent! call matchdelete(l:id, l:win.winid)
+                        endfor
+                        call setwinvar(l:win.winid, 'lsp_reference_matches', [])
+                    endfor
+                    if exists('*prop_remove')
+                        for l:buf in getbufinfo({'bufloaded': 1})
+                            silent! call prop_remove({'type': 'vim-lsp-reference-highlight',
+                                        \ 'bufnr': l:buf.bufnr, 'all': v:true})
+                        endfor
+                    endif
+                elseif a:name ==# 'code_action'
+                    call sign_unplace('vim_lsp_document_code_action_signs')
+                elseif a:name ==# 'inlay_hints'
+                    for l:buf in getbufinfo({'bufloaded': 1})
+                        for l:type in ['vim_lsp_inlay_hint_type',
+                                    \ 'vim_lsp_inlay_hint_parameter']
+                            silent! call prop_remove({'type': l:type,
+                                        \ 'bufnr': l:buf.bufnr, 'all': v:true})
+                        endfor
+                    endfor
+                endif
+            endif
+        endfunction
+        function! s:LspFeatureStatus() abort
+            let l:items = []
+            for l:name in s:lsp_feature_names
+                let l:state = get(g:vimrc_lsp, l:name, 1) ? 'on' : 'off'
+                if get(g:, 'lsp_user_enabled', 0) && !s:LspFeatureSupported(l:name)
+                    let l:state = 'n/a'
+                endif
+                call add(l:items, l:name . '=' . l:state)
+            endfor
+            return 'LSP ' . (get(g:, 'lsp_user_enabled', 0) ? 'on' : 'off')
+                        \ . ': ' . join(l:items, '  ')
+        endfunction
+        function! s:LspFeatureCmd(...) abort
+            if a:0 == 0
+                echo s:LspFeatureStatus()
+                return
+            endif
+            let l:names = a:1 ==# 'all' ? s:lsp_feature_names : [a:1]
+            if index(s:lsp_feature_names, a:1) < 0 && a:1 !=# 'all'
+                echohl WarningMsg | echo 'Unknown LSP feature: ' . a:1
+                            \ . ' (' . join(s:lsp_feature_names, ', ') . ', all)'
+                echohl None
+                return
+            endif
+            let l:arg = a:0 > 1 ? a:2 : 'toggle'
+            if index(['on', 'off', 'toggle'], l:arg) < 0
+                echohl WarningMsg | echo 'Use on, off or toggle' | echohl None
+                return
+            endif
+            for l:name in l:names
+                let g:vimrc_lsp[l:name] = l:arg ==# 'toggle'
+                            \ ? !get(g:vimrc_lsp, l:name, 1) : l:arg ==# 'on'
+                if get(g:, 'lsp_user_enabled', 0)
+                    call s:LspFeatureApply(l:name)
+                endif
+            endfor
+            if len(l:names) == 1
+                let l:state = g:vimrc_lsp[l:names[0]] ? 'on' : 'off'
+                if get(g:, 'lsp_user_enabled', 0)
+                            \ && !s:LspFeatureSupported(l:names[0])
+                    let l:state .= ' (not supported in this editor)'
+                endif
+                echo 'LSP ' . l:names[0] . '=' . l:state
+                            \ . (get(g:, 'lsp_user_enabled', 0) ? ''
+                            \ : ' (applies when LSP starts: <leader>Le)')
+            else
+                echo s:LspFeatureStatus()
+            endif
+        endfunction
+        function! s:LspFeatureComplete(arglead, cmdline, cursorpos) abort
+            let l:args = split(a:cmdline)
+            let l:n = len(l:args) - (a:arglead ==# '' ? 0 : 1)
+            let l:list = l:n <= 1 ? s:lsp_feature_names + ['all']
+                        \ : ['on', 'off', 'toggle']
+            return filter(copy(l:list), 'v:val =~# "^" . a:arglead')
+        endfunction
+        command! -bar -nargs=* -complete=customlist,s:LspFeatureComplete LspFeature
+                    \ call s:LspFeatureCmd(<f-args>)
+        for [s:key, s:name] in [['d', 'diagnostics'], ['v', 'virtual_text'],
+                    \ ['c', 'completion'], ['s', 'signature'],
+                    \ ['r', 'references'], ['a', 'code_action'],
+                    \ ['i', 'inlay_hints'], ['p', 'doc_preview']]
+            execute 'nnoremap <silent> <leader>Lt' . s:key
+                        \ . ' :<C-u>LspFeature ' . s:name . '<CR>'
+        endfor
+        unlet s:key s:name
+        nnoremap <silent> <leader>Ltt :<C-u>LspFeature<CR>
+        nnoremap <silent> <leader>Lto :<C-u>LspFeature all on<CR>
+
 " Vim-LSP keys and buffer setup ----------------------------------------------
         " Manage LSP server
         nmap <leader>LM :LspManageServers<CR>
@@ -3427,28 +3791,24 @@
         nmap <leader>Le :call EnableLSP()<CR>
         nmap <leader>Ld :call DisableLSP()<CR>
         " Use the project's virtualenv for language servers (and :terminal,
-        " :!, vim-test) when vim was not started inside one
+        " :!, vim-test) when none is active (same as :ProjectVenv)
         " -- Looks for .venv, venv, env with bin/python at the project root
         function! s:ActivateProjectVenv() abort
-            if !empty($VIRTUAL_ENV)
-                return
+            if empty($VIRTUAL_ENV) && !empty(ProjectVenv())
+                        \ && VenvActivate(ProjectVenv())
+                echomsg 'Activated virtualenv: ' . $VIRTUAL_ENV
             endif
-            let l:root = ProjectRoot()
-            for l:name in ['.venv', 'venv', 'env']
-                let l:venv = l:root . '/' . l:name
-                if executable(l:venv . '/bin/python')
-                    let $VIRTUAL_ENV = l:venv
-                    let $PATH = l:venv . '/bin:' . $PATH
-                    echomsg 'Activated virtualenv: ' . l:venv
-                    return
-                endif
-            endfor
         endfunction
         " Enable LSP
+        " -- Features follow g:vimrc_lsp (:LspFeature, <leader>Lt*)
         function! EnableLSP()
             call s:ActivateProjectVenv()
             let g:lsp_user_enabled = 1
+            call s:LspFeaturesRegister()
             call lsp#enable()
+            for l:name in s:lsp_feature_names
+                call s:LspFeatureApply(l:name)
+            endfor
             " Index words of all loaded buffers for buffer-word completion
             for l:buf in getbufinfo({'buflisted': 1, 'bufloaded': 1})
                 call s:BufferWordsRefresh(l:buf.bufnr)
@@ -3469,6 +3829,7 @@
             endif
             " Let autocomplpop pop up again in buffers that LSP had taken over
             for l:buf in getbufinfo()
+                call setbufvar(l:buf.bufnr, 'vimrc_lsp_buffer', 0)
                 if getbufvar(l:buf.bufnr, 'lsp_acp_off', 0)
                     call setbufvar(l:buf.bufnr, 'asyncomplete_enable', 0)
                     call setbufvar(l:buf.bufnr, 'acp_off', 0)
@@ -3510,7 +3871,9 @@
             " Rename variable
             nmap <buffer> <leader>re <plug>(lsp-rename)
             " Format w/ LSP server
-            nmap <buffer> <leader>Lf :LspDocumentRangeFormat<CR>
+            " -- normal: whole file; visual: selection
+            nmap <buffer> <leader>Lf :LspDocumentFormatSync<CR>
+            xmap <buffer> <leader>Lf <plug>(lsp-document-range-format)
             " Code action (quick fix, organize imports, ...) [a for action]
             nmap <buffer> <leader>La <plug>(lsp-code-action)
             xmap <buffer> <leader>La :LspCodeAction<CR>
@@ -3525,12 +3888,11 @@
                 inoremap <buffer><expr> <CR>
                             \ pumvisible() ? asyncomplete#close_popup() : "\<CR>"
             endif
-            " asyncomplete pops up here (LSP + buffer words + file paths),
-            " so pause autocomplpop in this buffer
-            call asyncomplete#enable_for_buffer()
+            " Diagnostics and completion as set by :LspFeature (completion
+            " on: asyncomplete pops up here and autocomplpop pauses)
+            let b:vimrc_lsp_buffer = 1
+            call s:LspFeatureApplyBuffer(bufnr(''))
             call s:BufferWordsRefresh(bufnr(''))
-            let b:acp_off = 1
-            let b:lsp_acp_off = 1
             if exists('*s:AcpBufferSync')
                 call s:AcpBufferSync()
             endif
