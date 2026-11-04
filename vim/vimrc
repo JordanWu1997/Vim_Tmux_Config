@@ -944,12 +944,27 @@
     endfunction
     " Project virtualenv: .venv, venv or env with bin/python at the project
     " root, else ''. Used by LSP, vim-test and <leader>px.
+    " -- In a git worktree without its own venv (e.g. an agent worktree), the
+    "    main checkout's venv is used
     function! ProjectVenv() abort
         let l:root = ProjectRoot()
-        for l:name in ['.venv', 'venv', 'env']
-            if executable(l:root . '/' . l:name . '/bin/python')
-                return l:root . '/' . l:name
+        let l:roots = [l:root]
+        if executable('git')
+            let l:common = trim(system('git -C ' . shellescape(l:root)
+                        \ . ' rev-parse --path-format=absolute --git-common-dir 2>/dev/null'))
+            if !v:shell_error && l:common =~# '/\.git$'
+                let l:main = fnamemodify(l:common, ':h')
+                if l:main !=# l:root
+                    call add(l:roots, l:main)
+                endif
             endif
+        endif
+        for l:dir in l:roots
+            for l:name in ['.venv', 'venv', 'env']
+                if executable(l:dir . '/' . l:name . '/bin/python')
+                    return l:dir . '/' . l:name
+                endif
+            endfor
         endfor
         return ''
     endfunction
@@ -968,6 +983,7 @@
             return 1
         endif
         call VenvDeactivate()
+        let g:vimrc_venv_pinned = 0
         let $VIRTUAL_ENV = l:venv
         let $PATH = l:venv . '/bin:' . $PATH
         return 1
@@ -984,7 +1000,8 @@
     endfunction
     " :ProjectVenv        activate the project virtualenv (.venv/venv/env at
     "                     the git root), or show the active one
-    " :ProjectVenv {dir}  activate that virtualenv
+    " :ProjectVenv {dir}  activate that virtualenv (also used for tests and
+    "                     <leader>px in every project until :ProjectVenv[!])
     " :ProjectVenv!       deactivate
     function! s:ProjectVenvCmd(bang, dir) abort
         let l:lsp_hint = get(g:, 'lsp_user_enabled', 0)
@@ -1004,6 +1021,9 @@
         endif
         let l:was = $VIRTUAL_ENV
         if VenvActivate(l:venv)
+            " An explicitly chosen venv wins over the project's one for tests
+            " and <leader>px (TmuxVenvPrefix)
+            let g:vimrc_venv_pinned = !empty(a:dir)
             echo ($VIRTUAL_ENV ==# l:was ? 'Active virtualenv: '
                         \ : 'Activated virtualenv: ') . $VIRTUAL_ENV
                         \ . ($VIRTUAL_ENV ==# l:was ? '' : l:lsp_hint)
@@ -1022,6 +1042,8 @@
     "    traceback line ('File "x.py", line 42') and pdb frame into the
     "    quickfix list. Also understands '@file:L12' (from <leader>yr).
     " -- Only files that exist (relative to cwd or project root) are kept.
+    "    Project files come first; library frames are dropped when there are
+    "    project ones.
     " -- Then use <leader>qj/qk (or ]q/[q) to jump, <leader>qo to toggle.
     function! s:TmuxPaneToQuickfix() abort
         if empty($TMUX) || !executable('tmux')
@@ -1079,6 +1101,15 @@
                             \ 'text': trim(l:line) })
             endfor
         endfor
+        " Project files first; library frames (site-packages, stdlib) are
+        " dropped when the output also points into the project, so the first
+        " jump lands in your code, not in pytest or a library
+        let l:lib = '\v/(site|dist)-packages/|/lib/python[0-9.]+/'
+        let l:own = filter(copy(l:items), 'stridx(fnamemodify(v:val.filename, ":p"), l:root . "/") == 0 && v:val.filename !~# l:lib')
+        if !empty(l:own)
+            let l:items = l:own + filter(l:items,
+                        \ 'index(l:own, v:val) < 0 && v:val.filename !~# l:lib')
+        endif
         call setqflist([], ' ', { 'title': 'tmux ' . g:vimrc_tmux.target,
                     \ 'items': l:items })
         if empty(l:items)
@@ -1379,6 +1410,10 @@
     " -- <leader>xT: choose run pane (tests and <leader>px/pl), see run_target
     " -- <leader>xd: paste the location list (LSP diagnostics after <leader>ee,
     "    or ALE) as '@file:L12: message' lines WITHOUT Enter (agent prompt)
+    " -- <leader>xr: paste '@file:L12' (visual: '@file:L12-L30') WITHOUT Enter,
+    "    like <leader>yr but straight into the target pane
+    " -- Paths in @references are relative to the project root (git root)
+    " -- A pane in copy mode (scrolled up) leaves it first, so Enter works
     " -- <leader>px: run current file in the run pane (python/sh/executable),
     "    from the project root, with the project virtualenv if any
     " -- <leader>pl: run the last <leader>px command again
@@ -1392,6 +1427,11 @@
         endif
         let l:pane = a:0 ? a:1 : g:vimrc_tmux.target
         let l:target = shellescape(l:pane)
+        " Leave copy mode first, or the Enter below would only exit it
+        if trim(system('tmux display-message -p -t ' . l:target
+                    \ . ' "#{pane_in_mode}"')) ==# '1'
+            call system('tmux send-keys -t ' . l:target . ' -X cancel')
+        endif
         call system('tmux load-buffer -b vim_send -', a:text)
         call system('tmux paste-buffer -d -p -b vim_send -t ' . l:target)
         if v:shell_error
@@ -1457,8 +1497,33 @@
         return empty(g:vimrc_tmux.run_target) ? g:vimrc_tmux.target
                     \ : g:vimrc_tmux.run_target
     endfunction
+    let s:shells = ['bash', 'zsh', 'fish', 'sh', 'dash', 'ksh', 'tcsh']
+    " A shell pane in vim's tmux window for commands: an idle shell pane
+    " (not vim's own), else offer to split one below vim; '' if none
+    function! s:TmuxFindRunPane() abort
+        for l:line in systemlist('tmux list-panes -t ' . shellescape($TMUX_PANE)
+                    \ . ' -F "#{pane_id} #{pane_current_command}"')
+            let [l:id, l:prog] = split(l:line . ' ?')[0:1]
+            if l:id !=# $TMUX_PANE && index(s:shells, l:prog) >= 0
+                return l:id
+            endif
+        endfor
+        if confirm('No shell pane in this tmux window for tests/runs. Split one below vim?',
+                    \ "&Yes\n&No", 1) != 1
+            return ''
+        endif
+        let l:id = trim(system('tmux split-window -d -v -l 30% -t '
+                    \ . shellescape($TMUX_PANE) . ' -c ' . shellescape(ProjectRoot())
+                    \ . ' -P -F "#{pane_id}"'))
+        if v:shell_error | return '' | endif
+        sleep 400m
+        return l:id
+    endfunction
     " Send a shell command to the run pane, only if that pane runs a shell
     " (so a test command is never typed into an agent or REPL prompt)
+    " -- run_target empty and the target pane is not a shell (e.g. the agent
+    "    you used last): a shell pane in this window becomes the run pane
+    "    (found, or split after asking) and is remembered in run_target
     function! TmuxRunCommand(cmd) abort
         if empty($TMUX) || !executable('tmux')
             echohl WarningMsg | echo 'Not inside tmux' | echohl None
@@ -1471,21 +1536,37 @@
             echohl WarningMsg | echo 'tmux: no pane ' . l:pane | echohl None
             return 0
         endif
-        if index(['bash', 'zsh', 'fish', 'sh', 'dash', 'ksh', 'tcsh'],
-                    \ fnamemodify(l:prog, ':t')) < 0
-            echohl WarningMsg
-            echo 'tmux pane ' . l:pane . ' runs ' . l:prog
-                        \ . ', not a shell: not sent (choose a pane with <leader>xT)'
-            echohl None
-            return 0
+        if index(s:shells, fnamemodify(l:prog, ':t')) < 0
+            let l:found = empty(g:vimrc_tmux.run_target) ? s:TmuxFindRunPane() : ''
+            if empty(l:found)
+                redraw
+                echohl WarningMsg
+                echo 'tmux pane ' . l:pane . ' runs ' . l:prog
+                            \ . ', not a shell: not sent (choose a pane with <leader>xT)'
+                echohl None
+                return 0
+            endif
+            let g:vimrc_tmux.run_target = l:found
+            let l:pane = l:found
+            redraw
+            echomsg 'Run pane: ' . l:pane . ' (change with <leader>xT)'
         endif
         return TmuxSendText(a:cmd, 1, l:pane)
     endfunction
-    " Prefix that runs a command with vim's virtualenv ($VIRTUAL_ENV, e.g.
-    " set by <leader>Le) or the project one, since the tmux pane's shell does
-    " not have it: "env VIRTUAL_ENV=... PATH=.../bin:$PATH "
+    " Prefix that runs a command with a virtualenv, since the tmux pane's
+    " shell does not have vim's: "env VIRTUAL_ENV=... PATH=.../bin:$PATH "
+    " -- Order: a venv chosen with :ProjectVenv {dir}, else the current
+    "    file's project venv (so repo B never runs with repo A's venv), else
+    "    vim's active one
     function! TmuxVenvPrefix() abort
-        let l:venv = !empty($VIRTUAL_ENV) ? $VIRTUAL_ENV : ProjectVenv()
+        if get(g:, 'vimrc_venv_pinned', 0) && !empty($VIRTUAL_ENV)
+            let l:venv = $VIRTUAL_ENV
+        else
+            let l:venv = ProjectVenv()
+            if empty(l:venv)
+                let l:venv = $VIRTUAL_ENV
+            endif
+        endif
         return empty(l:venv) ? '' : 'env VIRTUAL_ENV=' . shellescape(l:venv)
                     \ . ' PATH=' . shellescape(l:venv . '/bin') . ':"$PATH" '
     endfunction
@@ -1519,6 +1600,26 @@
         endif
         call TmuxRunCommand(s:last_run)
     endfunction
+    " Path for @references: relative to the project root (where the agent
+    " runs), else ~-shortened absolute
+    function! s:RefPath(path) abort
+        let l:full = fnamemodify(a:path, ':p')
+        let l:root = ProjectRoot()
+        return stridx(l:full, l:root . '/') == 0 ? l:full[len(l:root) + 1 :]
+                    \ : fnamemodify(l:full, ':~')
+    endfunction
+    " Paste '@file:L12' / '@file:L12-L30' into the target pane, no Enter
+    function! s:TmuxSendRef(l1, l2) abort
+        if expand('%') ==# ''
+            echohl WarningMsg | echo 'Buffer has no file' | echohl None
+            return
+        endif
+        let l:ref = '@' . s:RefPath(expand('%')) . ':L' . a:l1
+                    \ . (a:l2 > a:l1 ? '-L' . a:l2 : '') . ' '
+        if TmuxSendText(l:ref, 0)
+            echo 'Sent ' . l:ref . 'to tmux pane ' . g:vimrc_tmux.target
+        endif
+    endfunction
     " Paste location-list entries (LSP diagnostics / ALE) as @file:Lnn lines
     function! s:TmuxSendDiagnostics() abort
         let l:items = filter(getloclist(0), 'v:val.valid && v:val.bufnr > 0')
@@ -1528,7 +1629,7 @@
         endif
         let l:lines = []
         for l:item in l:items
-            call add(l:lines, '@' . fnamemodify(bufname(l:item.bufnr), ':.')
+            call add(l:lines, '@' . s:RefPath(bufname(l:item.bufnr))
                         \ . ':L' . l:item.lnum . ': '
                         \ . (empty(l:item.type) ? '' : '[' . l:item.type . '] ')
                         \ . substitute(trim(l:item.text), '\n', ' ', 'g'))
@@ -1550,6 +1651,8 @@
     nnoremap <leader>xt :call <SID>TmuxChooseTarget('target')<CR>
     nnoremap <leader>xT :call <SID>TmuxChooseTarget('run_target')<CR>
     nnoremap <silent> <leader>xd :call <SID>TmuxSendDiagnostics()<CR>
+    nnoremap <silent> <leader>xr :<C-u>call <SID>TmuxSendRef(line('.'), line('.'))<CR>
+    xnoremap <silent> <leader>xr :<C-u>call <SID>TmuxSendRef(line("'<"), line("'>"))<CR>
     nnoremap <silent> <leader>px :call <SID>TmuxRunFile()<CR>
     nnoremap <silent> <leader>pl :call <SID>TmuxRunLast()<CR>
 
