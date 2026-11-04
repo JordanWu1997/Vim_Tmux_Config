@@ -1,6 +1,20 @@
 # Vim_Tmux_Config
 
-Backup for my Vim and TMUX configuration
+My Vim/Neovim and tmux setup for Python coding, Markdown notes and working with AI coding agents (Claude Code)
+side by side, plus the scripts and guides that go with it.
+
+## New Here?
+
+Start with the __Getting Started__ guide: install in 5 steps, how the key tables in this README are written
+(`[LK]` = `Space`, `[BK]` = tmux prefix `Ctrl`+`b`), the words you will see, and the keys for your first 15 minutes.
+
+| Guide                     | For                                                         | Files (in `doc/guide/`)                                                                                         |
+| ------------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Getting Started           | First install and first day                                 | [HTML](doc/guide/getting-started.html) · [PDF](doc/guide/getting-started.pdf)                                   |
+| User Guide                | Daily tasks: Python, notes, search, git; every leader key   | [HTML](doc/guide/vim-tmux-user-guide.html) · [PDF](doc/guide/vim-tmux-user-guide.pdf)                           |
+| Agent Workflow Tutorial   | Working with Claude Code next to Vim, step by step          | [HTML](doc/guide/agent-workflow-tutorial.html) · [PDF](doc/guide/agent-workflow-tutorial.pdf)                   |
+
+The rest of this README is reference material: install details, feature switches and the full key tables.
 
 <details open>
 <summary>Click to expand!</summary>
@@ -11,6 +25,7 @@ Backup for my Vim and TMUX configuration
 <summary>Click to expand!</summary>
 
 - [Vim_Tmux_Config](#vim_tmux_config)
+- [New Here?](#new-here)
 - [Table of Contents](#table-of-contents)
 - [Context](#context)
   - [Demo Current Customization](#demo-current-customization)

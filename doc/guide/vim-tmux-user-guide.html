@@ -1,0 +1,879 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vim Tmux User Guide</title>
+<style>
+  :root { --bg:#ffffff; --fg:#1f2328; --muted:#59636e; --line:#d1d9e0; --soft:#f6f8fa; --accent:#0b5cad;
+          --ok:#1a7f37; --warn:#9a6700; --code-bg:#eff1f3; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#30363d; --soft:#161b22; --accent:#4493f8;
+    --ok:#3fb950; --warn:#d29922; --code-bg:#1f2428; } }
+  :root[data-theme="dark"] { --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#30363d; --soft:#161b22;
+    --accent:#4493f8; --ok:#3fb950; --warn:#d29922; --code-bg:#1f2428; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg);
+         font:15px/1.55 -apple-system,"Segoe UI","Noto Sans","DejaVu Sans",Helvetica,Arial,sans-serif; }
+  main { max-width:1000px; margin:0 auto; padding:32px 16px 64px; }
+  h1 { font-size:1.9rem; margin:0 0 4px; line-height:1.2; }
+  h2 { font-size:1.3rem; margin:40px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--line); }
+  h3 { font-size:1.05rem; margin:22px 0 8px; }
+  p, li { max-width:80ch; }
+  .sub { color:var(--muted); margin:0 0 20px; }
+  code, kbd { font:0.86em/1.4 "DejaVu Sans Mono",Menlo,Consolas,monospace; background:var(--code-bg);
+         padding:1px 5px; border-radius:4px; overflow-wrap:anywhere; }
+  pre { background:var(--code-bg); padding:10px 12px; border-radius:6px; overflow-x:auto; font-size:0.84rem; line-height:1.45; }
+  pre code { background:none; padding:0; }
+  .table-wrap { width:100%; overflow-x:auto; margin:10px 0 6px; }
+  table { border-collapse:collapse; width:100%; font-size:0.86rem; }
+  th, td { border:1px solid var(--line); padding:5px 8px; text-align:left; vertical-align:top; }
+  th { background:var(--soft); font-weight:600; }
+  table.keys td:first-child { white-space:nowrap; }
+  table.keys { font-size:0.8rem; }
+  .note { border-left:3px solid var(--accent); background:var(--soft); padding:8px 12px; margin:12px 0; }
+  .warn { border-left-color:var(--warn); }
+  .toc ol { columns:2; column-gap:32px; padding-left:20px; }
+  .muted { color:var(--muted); }
+  ol.steps > li { margin-bottom:6px; }
+  @page { size:A4; margin:13mm 11mm; }
+  @media print { body { font-size:9.5pt; } main { max-width:none; padding:0; }
+    h2 { break-after:avoid; } h3 { break-after:avoid; } tr, .note, pre { break-inside:avoid; }
+    .table-wrap { overflow:visible; } .toc ol { columns:2; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Vim + tmux User Guide</h1>
+<p class="sub">Task-based guide to the configuration in <code>Vim_Tmux_Config</code> (branch <code>main</code>) for Neovim 0.9+ and Vim 9.1 · updated 2026-11-05. Every key in this guide was checked against the live configuration. The appendix lists all 403 normal-mode leader keys.</p>
+
+<div class="toc">
+<h2>Contents</h2>
+<ol>
+  <li>Start here: concepts and your first day</li>
+  <li>Daily layout with tmux</li>
+  <li>Python development</li>
+  <li>Working with coding agents</li>
+  <li>Markdown note-taking</li>
+  <li>Searching and navigating</li>
+  <li>Git workflow</li>
+  <li>Writing LaTeX and other files</li>
+  <li>AI, sessions, terminal and utilities</li>
+  <li>Customizing the configuration</li>
+  <li>Troubleshooting</li>
+  <li>Appendix: every leader key</li>
+</ol>
+</div>
+
+<h2>1. Start here: concepts and your first day</h2>
+<p>Not installed yet? Follow <b>Getting Started</b> (<code>getting-started.html</code>) first: install in 5 steps and the keys for your first 15 minutes. New to Vim or tmux? Read this section, then follow "Your first day" below. The rest of the guide is organised by task, so you can jump to what you need. For working with a coding agent, read the companion <b>Agent Workflow Tutorial</b> (<code>agent-workflow-tutorial.html</code>).</p>
+
+<h3>1.1 How keys are written</h3>
+<div class="table-wrap"><table>
+  <tr><th>In this guide</th><th>Means</th></tr>
+  <tr><td><code>&lt;leader&gt;ffs</code></td><td>Press <kbd>Space</kbd>, then <kbd>f</kbd>, <kbd>f</kbd>, <kbd>s</kbd>, one after another. The leader key is <kbd>Space</kbd>.</td></tr>
+  <tr><td><kbd>Ctrl</kbd>+<kbd>w</kbd></td><td>Hold <kbd>Ctrl</kbd> and press <kbd>w</kbd> at the same time</td></tr>
+  <tr><td>prefix <code>%</code></td><td>tmux: press <kbd>Ctrl</kbd>+<kbd>b</kbd> (or <kbd>Ctrl</kbd>+<kbd>a</kbd>), let go, then press <code>%</code></td></tr>
+  <tr><td><code>:w</code></td><td>A command: in normal mode type <code>:w</code> and press <kbd>Enter</kbd></td></tr>
+  <tr><td><code>gd</code>, <code>]h</code></td><td>Plain keys typed in normal mode, one after another</td></tr>
+</table></div>
+
+<h3>1.2 Words used in this guide</h3>
+<div class="table-wrap"><table>
+  <tr><th>Word</th><th>Meaning</th></tr>
+  <tr><td>Normal / insert / visual mode</td><td>Vim's modes. In <b>normal</b> mode keys are commands; in <b>insert</b> mode (<code>i</code>) they type text; in <b>visual</b> mode (<code>v</code>, <code>V</code>) you select text. <kbd>Esc</kbd> returns to normal mode.</td></tr>
+  <tr><td>Buffer</td><td>A file loaded in Vim. It stays loaded when you switch to another file.</td></tr>
+  <tr><td>Split (window)</td><td>A view inside Vim's screen. Several splits can show the same or different buffers.</td></tr>
+  <tr><td>tmux session / window / pane</td><td>A <b>session</b> is a set of <b>windows</b> (like browser tabs); each window is divided into <b>panes</b>, each running its own program (Vim, a shell, an agent). Sessions keep running after you close the terminal.</td></tr>
+  <tr><td>Quickfix / location list</td><td>A list of file positions (search results, test failures, errors) you step through with one key. The location list is the same thing for one split.</td></tr>
+  <tr><td>LSP</td><td>Language Server Protocol: a background program (e.g. pylsp) that gives completion, go-to-definition and error checking.</td></tr>
+  <tr><td>Hunk</td><td>One block of changed lines compared with git</td></tr>
+  <tr><td>fzf</td><td>A fuzzy finder: a pop-up list you narrow down by typing part of a name; <kbd>Enter</kbd> picks, <kbd>Esc</kbd> cancels.</td></tr>
+  <tr><td>which-key</td><td>The menu that appears when you press <kbd>Space</kbd> and wait, listing the keys that can follow.</td></tr>
+  <tr><td>prefix</td><td>tmux's command key, <kbd>Ctrl</kbd>+<kbd>b</kbd> (or <kbd>Ctrl</kbd>+<kbd>a</kbd>). tmux only reacts to the next key after it.</td></tr>
+  <tr><td>Virtualenv (venv)</td><td>A folder (usually <code>.venv</code>) holding a project's own Python and packages</td></tr>
+</table></div>
+
+<h3>1.3 Your first day</h3>
+<ol class="steps">
+  <li>Open a terminal, run <code>tmux</code>, go to a project (<code>cd ~/code/project</code>) and run <code>nvim</code>.</li>
+  <li>Open a file: <code>&lt;leader&gt;fgf</code> (files tracked by git; outside a git repo use <code>&lt;leader&gt;ffs</code>), type part of its name, <kbd>Enter</kbd>. Open a second one the same way; switch between them with <code>&lt;leader&gt;'</code>.</li>
+  <li>Edit: <code>i</code> to type, <kbd>Esc</kbd> (or <code>kj</code>) to stop, <code>u</code> to undo, <code>&lt;leader&gt;ww</code> to save.</li>
+  <li>Search the project: <code>&lt;leader&gt;frg</code>, type a word, <kbd>Enter</kbd> on a result.</li>
+  <li>Split the tmux window: prefix <code>%</code>. A shell opens on the right; <kbd>Ctrl</kbd>+<kbd>h</kbd> / <kbd>Ctrl</kbd>+<kbd>l</kbd> move between Vim and the shell.</li>
+  <li>In a Python file, press <code>&lt;leader&gt;Le</code> (code intelligence; the first time, install the server first: section 3.1). The statusline now shows <code>LSP</code>. Try <code>K</code> on a function name (documentation) and <code>gd</code> (go to its definition; <kbd>Ctrl</kbd>+<kbd>o</kbd> jumps back).</li>
+  <li>Quit with <code>&lt;leader&gt;qq</code> (closes the current split; repeat for each). With unsaved changes Vim refuses: save first with <code>&lt;leader&gt;ww</code>, or discard with <code>:q!</code>. Leave tmux running with prefix <code>d</code>; come back later with <code>tmux attach</code>.</li>
+</ol>
+<p class="muted">Lost? Press <kbd>Space</kbd> and wait for the which-key menu, or search all keys with <code>&lt;leader&gt;fmp</code>. Section 11 lists common problems.</p>
+
+<h3>1.4 Good to know</h3>
+<ul>
+  <li><b>Leader is <kbd>Space</kbd>.</b> Press it and wait a moment, and the <b>which-key</b> menu lists the groups. Each group is one letter: <code>b</code> buffers, <code>f</code> fzf, <code>g</code> git, <code>p</code> python/tests, <code>w</code> write/wiki, <code>x</code> tmux send/run pane, <code>L</code> LSP, <code>D</code> debugger, <code>T</code> toggles, and so on. Below, <code>&lt;leader&gt;ffs</code> means <kbd>Space</kbd> <kbd>f</kbd> <kbd>f</kbd> <kbd>s</kbd>.</li>
+  <li><b>Things that are off until you ask</b> (to keep startup light):
+    <ul>
+      <li>Language servers start with <code>&lt;leader&gt;Le</code>. Once on, each LSP feature (lint, completion, doc preview, ...) can be switched off and on again separately (section 3.4).</li>
+      <li>Git tools load on your first Git key or <code>:Git</code>.</li>
+      <li>Tests, the debugger, tagbar, the undo tree and others load on first use.</li>
+    </ul></li>
+  <li><b>Toggles live in one group:</b> <code>&lt;leader&gt;T</code> + a letter switches an option or feature and prints its new state, e.g. <code>Tw</code> wrap, <code>Ts</code> spell, <code>Tn</code>/<code>Tr</code> line numbers, <code>Tf</code> format on save. The older keys (<code>&lt;leader&gt;wp</code>, <code>F5</code>, ...) still work.</li>
+  <li><b>Leaving insert mode:</b> <kbd>Esc</kbd>, <kbd>Ctrl</kbd>+<kbd>[</kbd> or <code>kj</code>. In normal mode, <kbd>Esc</kbd> also clears the search highlight.</li>
+  <li><b>Finding keys:</b>
+    <ul>
+      <li>Fuzzy-search all mappings with <code>&lt;leader&gt;fmp</code> and all commands with <code>&lt;leader&gt;fcd</code>.</li>
+      <li>Vim help tags: <code>&lt;leader&gt;fht</code>.</li>
+      <li>Where a key is defined: <code>:verbose nmap &lt;key&gt;</code>.</li>
+    </ul></li>
+  <li><b>The same file works in Vim and Neovim</b> (<code>~/.vimrc</code> or <code>~/.config/nvim/init.vim</code>).</li>
+</ul>
+
+<h2>2. Daily layout with tmux</h2>
+<p>A typical window has Vim on the left, and a shell (tests, REPL) plus a coding agent on the right. The tmux prefix is <kbd>Ctrl</kbd>+<kbd>b</kbd> or <kbd>Ctrl</kbd>+<kbd>a</kbd>, written <b>prefix</b> below.</p>
+<div class="table-wrap"><table>
+  <tr><th>Goal</th><th>Keys</th><th>Notes</th></tr>
+  <tr><td>Move between Vim splits and tmux panes</td><td><kbd>Ctrl</kbd>+<kbd>h/j/k/l</kbd></td><td>One movement model across both (vim-tmux-navigator). Inside a zoomed pane, it stays in Vim.</td></tr>
+  <tr><td>Split pane (keeps the current directory)</td><td>prefix <code>%</code> / <code>"</code>; full width/height: prefix <code>|</code> / <code>_</code></td><td></td></tr>
+  <tr><td>Zoom a pane / a Vim split</td><td>prefix <code>z</code> / <code>&lt;leader&gt;z</code> or <kbd>Ctrl</kbd>+<kbd>w</kbd> <kbd>z</kbd></td><td></td></tr>
+  <tr><td>Resize Vim split</td><td><kbd>Alt</kbd>+<kbd>h/j/k/l</kbd>, or <code>&lt;leader&gt;rw2/rw3/rw4</code>, <code>rh2/rh3/rh4</code> (fraction of the screen)</td><td></td></tr>
+  <tr><td>Scratch shell or session popup</td><td>prefix <kbd>Enter</kbd> (shell here) / prefix <code>g</code> (session <code>scratch</code>)</td><td></td></tr>
+  <tr><td>Quick diary note from anywhere</td><td>prefix <kbd>Alt</kbd>+<kbd>d</kbd></td><td>Opens today's vimwiki diary in a popup</td></tr>
+  <tr><td>Git worktree per task or agent</td><td>prefix <kbd>Alt</kbd>+<kbd>w</kbd> (new window) / <kbd>Alt</kbd>+<kbd>W</kbd> (new session) / <kbd>Alt</kbd>+<kbd>X</kbd> (remove)</td><td>fzf picker for branches and worktrees</td></tr>
+  <tr><td>Watch a pane (agent finished?)</td><td>prefix <code>N</code></td><td>Marks the pane once it has been quiet for 15 s; its window gets a magenta <code>!</code> in the status bar</td></tr>
+  <tr><td>Jump to the window that needs attention</td><td>prefix <kbd>Alt</kbd>+<kbd>a</kbd></td><td>Cycles through windows marked by the watcher or an agent hook (<code>tmux_notify.sh</code>), across sessions; visiting a window clears its mark</td></tr>
+  <tr><td>Paste the system clipboard into a pane</td><td>prefix <code>p</code></td><td>Pastes as typed text (xsel): a multi-line clipboard runs line by line in a shell</td></tr>
+  <tr><td>Pane for tests and "run file"</td><td><code>&lt;leader&gt;xT</code> in Vim</td><td>Usually automatic: if the pane you used last is the agent, the first shell pane in Vim's window becomes the run pane (Vim offers to split one if there is none). Commands go only to a shell, never into an agent or REPL (section 3.5).</td></tr>
+  <tr><td>Keep the Vim layout across reboots</td><td>Automatic: start Vim in the git root, inside tmux</td><td>A <code>Session.vim</code> is kept up to date there; tmux-resurrect restores Vim with its splits and tabs (section 9)</td></tr>
+  <tr><td>Restore saved sessions / clear pane history</td><td>prefix <kbd>Alt</kbd>+<kbd>r</kbd> / <kbd>Alt</kbd>+<kbd>N</kbd></td><td>Both ask first</td></tr>
+</table></div>
+
+<h2>3. Python development</h2>
+<h3>3.1 First-time setup (once per machine)</h3>
+<pre><code>pip install ruff pytest ipdb          # formatter/linter, tests, nicer debugger prompt
+# optional formatters used by &lt;leader&gt;nn: shfmt, stylua, prettier, taplo
+# in vim, in any .py file:
+:LspInstallServer pylsp-all          # the server in g:vimrc_tools.python_lsp_servers
+:VimspectorInstall debugpy            # only if you want the graphical debugger</code></pre>
+
+<h3>3.2 A typical session</h3>
+<ol class="steps">
+  <li>Start Vim from the project root (<code>cd repo &amp;&amp; vim</code>). The working directory stays there (<code>noautochdir</code>), so searches and tests are project-wide.</li>
+  <li>Open files with <code>&lt;leader&gt;fgf</code> (git files) or <code>&lt;leader&gt;ffs</code>. Use <code>&lt;leader&gt;'</code> to switch buffers, or <kbd>Alt</kbd>+<kbd>1..9</kbd> for the numbered buffers in the tabline.</li>
+  <li>Press <code>&lt;leader&gt;Le</code> to enable LSP. If the project has <code>.venv</code>, <code>venv</code> or <code>env</code> and no virtualenv is active, it's activated first. The statusline then shows <code>LSP</code> / <code>LSP:pylsp-all</code> (in windows wider than 90 columns), plus <code>-lint</code> / <code>-cmp</code> when you switched diagnostics or completion off. Without LSP, <code>&lt;leader&gt;pv</code> (<code>:ProjectVenv</code>) activates the virtualenv on its own; <code>&lt;leader&gt;pV</code> deactivates it.</li>
+  <li>Write code. A completion menu pops up automatically with LSP symbols, <b>words from all open buffers</b> (<code>[buffer]</code>) and <b>file paths</b> (<code>[file]</code>). The first item is pre-selected, so its signature and docs show in a float at once. <kbd>Enter</kbd> accepts it; <kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd> or <kbd>Ctrl</kbd>+<kbd>j/k</kbd> choose another; <kbd>Ctrl</kbd>+<kbd>e</kbd> closes the menu (then <kbd>Enter</kbd> for a new line). After typing <code>(</code> or <code>,</code> in a call, the <b>argument hint</b> shows the signature with the current parameter highlighted. Too busy? <code>&lt;leader&gt;Ltp</code> hides the docs float next to the menu, <code>&lt;leader&gt;Lts</code> the argument hint (section 3.4).</li>
+  <li>Format with <code>&lt;leader&gt;nn</code> (ruff for Python, or the filetype's default formatter) or <code>&lt;leader&gt;Lf</code> (language server), and sort imports with <code>&lt;leader&gt;npR</code>. <code>&lt;leader&gt;Tf</code> turns format on save on for this buffer.</li>
+  <li>Run the file with <code>&lt;leader&gt;px</code> or the test under the cursor with <code>&lt;leader&gt;ptn</code>. Both run in the tmux run pane, in the project virtualenv: the pane you used last if it's a shell; if it's the agent, the first shell pane in Vim's window (Vim offers to split one if there is none); or the pane you chose with <code>&lt;leader&gt;xT</code>. A half-typed command at that prompt is cleared first.</li>
+</ol>
+
+<h3>3.3 Keys while LSP is on (only in LSP buffers)</h3>
+<div class="table-wrap"><table>
+  <tr><th>Keys</th><th>Action</th></tr>
+  <tr><td><code>K</code></td><td>Hover documentation in a floating popup at the cursor (closes when you move). Without LSP, <code>K</code> in Python runs pydoc.</td></tr>
+  <tr><td><kbd>Alt</kbd>+<kbd>e</kbd> / <kbd>Alt</kbd>+<kbd>y</kbd>, <kbd>Alt</kbd>+<kbd>G</kbd> / <kbd>Alt</kbd>+<kbd>g</kbd></td><td>Scroll the open LSP float (hover, completion docs, argument hint) down/up 4 lines, or jump to its end/start, without leaving your buffer. Works in normal and insert mode.</td></tr>
+  <tr><td><code>gd</code> / <code>gy</code> / <code>gi</code></td><td>Definition / type definition / implementation</td></tr>
+  <tr><td><code>gr</code></td><td>References, in the quickfix list</td></tr>
+  <tr><td><code>g/</code> / <code>g?</code></td><td>Symbols in this file / in the workspace</td></tr>
+  <tr><td><code>[g</code> / <code>]g</code></td><td>Previous / next diagnostic</td></tr>
+  <tr><td><code>&lt;leader&gt;ee</code></td><td>All diagnostics → location list; <code>&lt;leader&gt;ej/ek</code> to step through</td></tr>
+  <tr><td><code>&lt;leader&gt;re</code></td><td>Rename symbol</td></tr>
+  <tr><td><code>&lt;leader&gt;La</code></td><td>Code actions: quick fix, organize imports (also on a visual selection)</td></tr>
+  <tr><td><code>&lt;leader&gt;Lf</code></td><td>Format with the language server: the whole file, or the visual selection</td></tr>
+  <tr><td><code>&lt;leader&gt;Ls</code> / <code>Ld</code> / <code>LR</code> / <code>LM</code></td><td>Server status / disable LSP / restart servers / manage servers</td></tr>
+</table></div>
+
+<h3>3.4 Switching LSP features on and off</h3>
+<p>Everything is on when LSP starts. Switch a feature off when it gets in the way and back on when you want it; servers keep running. Your choice also holds after <code>&lt;leader&gt;Ld</code> / <code>&lt;leader&gt;Le</code>.</p>
+<div class="table-wrap"><table>
+  <tr><th>Keys</th><th>Feature (<code>:LspFeature</code> name)</th><th>Off means</th></tr>
+  <tr><td><code>&lt;leader&gt;Ltd</code></td><td>Diagnostics / lint (<code>diagnostics</code>)</td><td>No signs, underlines or <code>]g</code>/<code>[g</code>. Only hidden: they come back at once.</td></tr>
+  <tr><td><code>&lt;leader&gt;Ltv</code></td><td>Virtual text (<code>virtual_text</code>)</td><td>No message at the end of the line; signs stay</td></tr>
+  <tr><td><code>&lt;leader&gt;Ltc</code></td><td>Completion (<code>completion</code>)</td><td>No LSP pop-up: AutoComplPop takes over; <kbd>Ctrl</kbd>+<kbd>x</kbd> <kbd>Ctrl</kbd>+<kbd>o</kbd> still asks the server</td></tr>
+  <tr><td><code>&lt;leader&gt;Ltp</code></td><td>Completion doc preview (<code>doc_preview</code>)</td><td>Menu only, no signature/docstring float beside it</td></tr>
+  <tr><td><code>&lt;leader&gt;Lts</code></td><td>Signature help (<code>signature</code>)</td><td>No argument hint after <code>(</code> / <code>,</code></td></tr>
+  <tr><td><code>&lt;leader&gt;Ltr</code></td><td>Reference highlight (<code>references</code>)</td><td>Other uses of the word under the cursor aren't highlighted</td></tr>
+  <tr><td><code>&lt;leader&gt;Lta</code></td><td>Code-action sign (<code>code_action</code>)</td><td>No <code>A&gt;</code> sign</td></tr>
+  <tr><td><code>&lt;leader&gt;Lti</code></td><td>Inlay hints (<code>inlay_hints</code>)</td><td>Vim 9 only; shows <code>n/a</code> in Neovim</td></tr>
+  <tr><td><code>&lt;leader&gt;Ltt</code> / <code>Lto</code></td><td>Show the state of all / everything on</td><td><code>:LspFeature</code> / <code>:LspFeature all on</code></td></tr>
+</table></div>
+<p class="muted">As a command: <code>:LspFeature {name} [on|off|toggle]</code> (Tab completes). Defaults for the next start: <code>g:vimrc_lsp</code> in <code>vim/local.vim</code> (section 10).</p>
+
+<h3>3.5 Testing and running code</h3>
+<div class="table-wrap"><table>
+  <tr><th>Keys</th><th>Action</th></tr>
+  <tr><td><code>&lt;leader&gt;ptn</code> / <code>ptf</code> / <code>pts</code></td><td>Test nearest / file / whole suite (pytest)</td></tr>
+  <tr><td><code>&lt;leader&gt;ptl</code></td><td>Rerun the last test, even from another file</td></tr>
+  <tr><td><code>&lt;leader&gt;ptv</code></td><td>Go back to the last test file</td></tr>
+  <tr><td><code>&lt;leader&gt;px</code> / <code>&lt;leader&gt;pl</code></td><td>Run the current file (python3, bash, or an executable) from the project root / run it again</td></tr>
+  <tr><td><code>&lt;leader&gt;xT</code></td><td>Choose the run pane (empty = the send pane, <code>&lt;leader&gt;xt</code>)</td></tr>
+  <tr><td><code>&lt;leader&gt;qt</code></td><td>Read the pane's output into the quickfix list: every <code>file:line</code>, Python traceback line (<code>File "x.py", line 42</code>) and pdb frame. Your project's files come first; library frames (site-packages, stdlib) are dropped when there are project ones. Then <code>&lt;leader&gt;qj/qk</code>. <code>&lt;leader&gt;qT</code> does the same with the <b>run</b> pane: the pane the last test or run went to, also while it waits at a pdb prompt.</td></tr>
+</table></div>
+<p class="muted">Inside tmux, tests run as <code>cd &lt;cwd&gt; &amp;&amp; env VIRTUAL_ENV=… PATH=…/bin:$PATH &lt;command&gt;</code> in the run pane. The virtualenv is the one you chose with <code>:ProjectVenv {dir}</code>, else the current file's project venv (in a git worktree without one: the main checkout's), else Vim's active one. If the run pane isn't a shell, Vim first looks for a shell pane in its window (or offers to split one below Vim) and remembers it; a run pane you chose yourself that is busy (e.g. still running pytest) is left alone. A pane scrolled up in copy mode is returned to normal first, so the command runs. Outside tmux, tests run in a Vim/Neovim terminal split.</p>
+
+<h3>3.6 Debugging</h3>
+<ul>
+  <li><b>Quick:</b> <code>&lt;leader&gt;pb</code> inserts <code>breakpoint()</code> above the line. <code>&lt;leader&gt;pB</code> opens <code>python3 -m ipdb</code> (or pdb) on the current file in a terminal split, from the project root with the same virtualenv as tests (ipdb if that venv has it); type the arguments, then <kbd>Enter</kbd>.</li>
+  <li><b>Graphical (vimspector):</b>
+    <ol>
+      <li>Run <code>:VimspectorPythonConfig</code> once per project (writes <code>.vimspector.json</code> at the git root).</li>
+      <li><code>&lt;leader&gt;Db</code> toggles a breakpoint, <code>&lt;leader&gt;Dc</code> starts or continues ("current file" or "pytest current file").</li>
+      <li>Step with <code>&lt;leader&gt;Dn</code> / <code>Di</code> / <code>Do</code> (over, into, out).</li>
+      <li><code>&lt;leader&gt;De</code> evaluates the word or selection, <code>&lt;leader&gt;Dr</code> restarts, <code>&lt;leader&gt;Dq</code> quits.</li>
+    </ol></li>
+</ul>
+
+<h3>3.7 REPL and notebook-style cells</h3>
+<ol class="steps">
+  <li>Start <code>ipython</code> in the pane next to Vim, then switch back to Vim. That pane is now <code>{last}</code>, the default target. (Tests and <code>&lt;leader&gt;px</code> refuse to type into it, because it isn't a shell.)</li>
+  <li>Split the script into cells with lines starting <code># %%</code>.</li>
+  <li><code>&lt;leader&gt;xc</code> sends the current cell and jumps to the next one. <code>&lt;leader&gt;xx</code> sends the line or the visual selection. A second Enter is added automatically after indented blocks.</li>
+  <li><code>&lt;leader&gt;xy</code> pastes without Enter, so you can edit in the REPL first.</li>
+</ol>
+
+<h3>3.8 Other Python helpers</h3>
+<ul>
+  <li><b>New files:</b> a new <code>.py</code> file gets the skeleton from <code>vim/share/templates/skeleton.py</code>, with a timestamp.</li>
+  <li><b>Docstrings:</b> <code>&lt;leader&gt;nptg</code> / <code>nptn</code> / <code>nptj</code> generate them with pyment (google / numpy / javadoc style).</li>
+  <li><b>Older formatters:</b> <code>&lt;leader&gt;npy</code> (yapf) and <code>&lt;leader&gt;npi</code> (isort) are still available.</li>
+  <li><b>Line length:</b> <code>F7</code> shows a column at 79 characters; <code>&lt;leader&gt;&lt;F7&gt;</code> highlights characters past it.</li>
+</ul>
+
+<h2>4. Working with coding agents</h2>
+<div class="table-wrap"><table>
+  <tr><th>Situation</th><th>What to do</th></tr>
+  <tr><td>An agent edited a file you have open</td><td>Nothing. It reloads when you return to the Vim pane, enter the buffer, or after half a second idle. If you also changed it, Vim asks first.</td></tr>
+  <tr><td>Tell the agent where to look</td><td>First pin the agent pane once with <code>&lt;leader&gt;xt</code> (enter its id, e.g. <code>%2</code>; see the Agent Workflow Tutorial, section 3). Then <code>&lt;leader&gt;xr</code> (or select lines first) pastes <code>@src/app.py:L40-L58</code> straight into the agent pane, without Enter. Paths start at the git root, where the agent runs. A path with spaces is quoted: <code>@"my dir/a.py":L12</code>. <code>&lt;leader&gt;yr</code> puts the same reference on the clipboard instead; <code>&lt;leader&gt;yp</code> copies the full path.</td></tr>
+  <tr><td>Send text into the agent prompt</td><td>Visual select, <code>&lt;leader&gt;xy</code> (pastes into the target pane without pressing Enter)</td></tr>
+  <tr><td>Hand the agent the current lint errors</td><td><code>&lt;leader&gt;ee</code> (diagnostics → location list), then <code>&lt;leader&gt;xd</code>: pastes <code>@src/app.py:L12: [E] message</code> lines into the agent pane without Enter, so you can add instructions</td></tr>
+  <tr><td>Jump to the files the agent mentioned</td><td><code>&lt;leader&gt;qt</code> (agent pane output → quickfix, tracebacks included), then <code>&lt;leader&gt;qj/qk</code>; <code>&lt;leader&gt;qo</code> browses the list with fzf</td></tr>
+  <tr><td>Agent pane next to a test shell</td><td>Keep <code>&lt;leader&gt;xt</code> on the agent (send, capture). Tests and run file pick the shell pane by themselves the first time (or set it with <code>&lt;leader&gt;xT</code>). A test command is never typed into the agent's prompt.</td></tr>
+  <tr><td>Review its changes in this file</td><td><code>]h</code> / <code>[h</code> jump hunks (gitgutter turns on for this buffer), <code>&lt;leader&gt;gP</code> preview, <code>&lt;leader&gt;ga</code> stage, <code>&lt;leader&gt;gr</code> undo the hunk</td></tr>
+  <tr><td>Side-by-side review</td><td><code>&lt;leader&gt;gv</code>, then <code>do</code> / <code>dp</code> to take or drop hunks, <code>]c</code>/<code>[c</code> to move</td></tr>
+  <tr><td>Review every changed file</td><td><code>vim/bin/git_diff_vim.sh</code> (add <code>-u</code> to include untracked files) opens them all with gitgutter on</td></tr>
+  <tr><td>Parallel agents</td><td>One worktree per agent: prefix <kbd>Alt</kbd>+<kbd>w</kbd>; watch panes with prefix <code>N</code></td></tr>
+</table></div>
+<div class="note">Inside a project, local <code>.exrc</code>/<code>.vimrc</code> files run restricted (<code>secure</code>). Neovim also asks you to <code>:trust</code> them, so a file an agent drops into the repo can't run commands.</div>
+
+<h2>5. Markdown note-taking</h2>
+<p>Every <code>.md</code> file is treated as a vimwiki page (filetype <code>vimwiki</code>). The wiki root is <code>~/Documents/KNOWLEDGE_BASE/</code>, with the diary in <code>diary/</code>.</p>
+<h3>5.1 Daily notes</h3>
+<ol class="steps">
+  <li>prefix <kbd>Alt</kbd>+<kbd>d</kbd> in tmux, or <code>&lt;leader&gt;wdd</code> in Vim, opens today's diary page.</li>
+  <li><code>&lt;leader&gt;mfI</code> inserts a note template; <kbd>Ctrl</kbd>+<kbd>g</kbd> <kbd>d</kbd> / <kbd>t</kbd> in insert mode inserts the date / date and time.</li>
+  <li><kbd>Ctrl</kbd>+<kbd>Up</kbd> / <kbd>Down</kbd> goes to the previous or next diary day; <code>&lt;leader&gt;wdI</code> opens the diary index, and <code>&lt;leader&gt;wdG</code> regenerates its links.</li>
+  <li><code>&lt;leader&gt;mfj</code> collects jrnl entries into the page.</li>
+</ol>
+<h3>5.2 Links, tags and navigation</h3>
+<div class="table-wrap"><table>
+  <tr><th>Keys</th><th>Action</th></tr>
+  <tr><td><code>&lt;leader&gt;wI</code></td><td>Wiki index page</td></tr>
+  <tr><td><code>&lt;leader&gt;&lt;CR&gt;</code> / <code>&lt;leader&gt;&lt;BS&gt;</code></td><td>Follow link (creates the page if missing) / go back</td></tr>
+  <tr><td><code>&lt;leader&gt;mfi</code></td><td>Insert a wiki link by fuzzy search</td></tr>
+  <tr><td><code>&lt;leader&gt;wb</code>, <code>&lt;leader&gt;mfb</code> / <code>mfo</code></td><td>Backlinks (vimwiki) / backlinks and outlinks (markdown-tools)</td></tr>
+  <tr><td><code>&lt;leader&gt;w/</code>, <code>&lt;leader&gt;mfg</code></td><td>Search the wiki / live grep the vault</td></tr>
+  <tr><td><code>&lt;leader&gt;wt/</code>, <code>wtR</code>, <code>wtG</code></td><td>Search tags, rebuild tags, generate tag links</td></tr>
+  <tr><td><code>&lt;leader&gt;wT</code>, <code>wC</code></td><td>Table of contents, check links</td></tr>
+  <tr><td><code>&lt;leader&gt;\</code></td><td>Toggle checkbox</td></tr>
+  <tr><td><code>&lt;leader&gt;wR</code> / <code>wD</code></td><td>Rename / delete the current page (links updated)</td></tr>
+</table></div>
+<h3>5.3 Writing, preview and export</h3>
+<ul>
+  <li><b>Reading and moving:</b> notes wrap at words; <code>j</code>/<code>k</code> move by screen line (<code>5j</code> still moves real lines). The cursor stays centred (<code>scrolloff=999</code>).</li>
+  <li><b>Folding by heading:</b> enable folds with <code>zi</code>, then <code>zc</code>/<code>zo</code>/<code>zM</code>/<code>zR</code>. The first fold key in a note computes the folds (about half a second for a very long note, once). After that they refresh when you save (<code>:w</code>), and <code>zx</code> recomputes them.</li>
+  <li><b>Preview:</b> <code>&lt;leader&gt;&lt;F4&gt;</code> toggles a live preview in the browser (<code>$BROWSER</code>).</li>
+  <li><b>Format:</b> <code>&lt;leader&gt;nmf</code> runs mdformat plus your fix-up patch for CJK links, math and checkboxes.</li>
+  <li><b>Images:</b> <code>&lt;leader&gt;mfp</code> pastes a clipboard image into <code>./figures/</code> and inserts the link; <code>&lt;leader&gt;mfP</code> captures the screen first.</li>
+  <li><b>Export:</b> <code>&lt;leader&gt;mfe1</code> Marp slides, <code>mfe2</code>/<code>mfe3</code> pandoc HTML, <code>mfe4</code> PDF with citations, <code>mfe5</code> docx.</li>
+  <li><b>Writing quality:</b> spell check is on (<code>en,cjk</code>). <code>&lt;leader&gt;sj/sk</code> jump to the next/previous error, and <code>&lt;leader&gt;sag</code> adds a word to the good list. <code>&lt;leader&gt;LC</code> runs LanguageTool (<code>&lt;leader&gt;Lc</code> clears it).</li>
+  <li><b>Focus mode:</b> <code>&lt;leader&gt;gy</code> (Goyo + Limelight).</li>
+  <li><b>Saving:</b> <code>&lt;leader&gt;ww</code> strips trailing spaces and saves, but keeps two-space hard line breaks.</li>
+  <li><b>No pop-ups:</b> there's no automatic completion menu in notes; <kbd>Ctrl</kbd>+<kbd>n</kbd>/<kbd>p</kbd> completes words when you want it.</li>
+</ul>
+
+<h2>6. Searching and navigating</h2>
+<div class="table-wrap"><table>
+  <tr><th>Goal</th><th>Keys</th></tr>
+  <tr><td>Files: all / git-tracked / git status / from a directory</td><td><code>&lt;leader&gt;ffs</code> / <code>fgf</code> / <code>fgs</code> / <code>ffS</code></td></tr>
+  <tr><td>Text in the project (cwd) / from the git root</td><td><code>&lt;leader&gt;frg</code> (or <code>&lt;leader&gt;rg</code>) / <code>&lt;leader&gt;frr</code></td></tr>
+  <tr><td>Lines in this buffer / in all buffers</td><td><code>&lt;leader&gt;fbl</code> / <code>&lt;leader&gt;fgl</code></td></tr>
+  <tr><td>Buffers, windows, recent files, command/search history</td><td><code>&lt;leader&gt;'</code>, <code>fws</code>, <code>fhs</code>, <code>fh:</code>, <code>fh/</code></td></tr>
+  <tr><td>Marks, jumps, changes</td><td><code>&lt;leader&gt;mk</code>, <code>fjl</code>, <code>fcl</code>; <code>'</code> / <code>`</code> open the mark viewer</td></tr>
+  <tr><td>File tree / reveal current file / symbols</td><td><code>F3</code> / <code>&lt;leader&gt;&lt;F3&gt;</code> / <code>F4</code> (tagbar)</td></tr>
+  <tr><td>Jump anywhere on screen</td><td><code>&lt;leader&gt;j/k/h/l</code>, <code>&lt;leader&gt;/</code> (easymotion)</td></tr>
+  <tr><td>Replace word under cursor on this line</td><td><code>gs</code> (part of a word) / <code>gS</code> (whole word)</td></tr>
+  <tr><td>Replace across files</td><td><code>&lt;leader&gt;frg</code>, select results (<kbd>Tab</kbd>, <kbd>Alt</kbd>+<kbd>a</kbd> all) → quickfix, then <code>&lt;leader&gt;qd</code> <code>s/old/new/g | update</code></td></tr>
+  <tr><td>Fzf window keys</td><td><kbd>Ctrl</kbd>+<kbd>t</kbd>/<kbd>s</kbd>/<kbd>v</kbd> open in tab/split/vsplit; <kbd>Alt</kbd>+<kbd>/</kbd> toggles preview</td></tr>
+</table></div>
+
+<h2>7. Git workflow</h2>
+<p>Nothing Git-related loads until you press one of these keys. The statusline branch name comes from a cached <code>git</code> call, with no plugin loaded.</p>
+<div class="table-wrap"><table>
+  <tr><th>Keys</th><th>Action</th></tr>
+  <tr><td><code>&lt;leader&gt;gs</code></td><td>Status (fugitive): <code>s</code>/<code>u</code> stage/unstage, <code>=</code> inline diff, <code>cc</code> commit</td></tr>
+  <tr><td><code>&lt;leader&gt;gd</code> / <code>gD</code> / <code>gv</code></td><td>Diff file / all / side by side</td></tr>
+  <tr><td><code>]h</code> <code>[h</code>, <code>&lt;leader&gt;gj/gk</code></td><td>Next/previous hunk (count works: <code>3]h</code>)</td></tr>
+  <tr><td><code>&lt;leader&gt;ga</code> / <code>gr</code> / <code>gP</code></td><td>Stage / undo / preview hunk</td></tr>
+  <tr><td><code>&lt;leader&gt;gA</code> / <code>gC</code></td><td>Add current file / commit</td></tr>
+  <tr><td><code>&lt;leader&gt;gB</code>, <code>gc</code>, <code>gl</code>, <code>fgc</code>, <code>fgC</code></td><td>Blame, log to quickfix/loclist, fzf commits for buffer/all</td></tr>
+  <tr><td><code>&lt;leader&gt;gm</code></td><td>3-way merge of a conflicted file</td></tr>
+  <tr><td><code>git mergetool</code></td><td>LOCAL | BASE | REMOTE on top, MERGED below (cursor there). With <code>share/gitconfig</code>: conflict markers show the common ancestor (<code>zdiff3</code>), resolutions are remembered (<code>rerere</code>), no <code>.orig</code> files</td></tr>
+  <tr><td><code>&lt;leader&gt;gg</code> / <code>gb</code>, <code>ghs/ghl/ghn</code>, <code>gq</code>, <code>gF</code></td><td>Gitgutter on/off (all/buffer), sign/line/number highlights, hunks to quickfix, fold unchanged lines</td></tr>
+</table></div>
+
+<h2>8. Writing LaTeX and other files</h2>
+<ul>
+  <li><b>LaTeX:</b> a new <code>.tex</code> file gets <code>template.tex</code>. Spell check is on. <code>&lt;leader&gt;&lt;F4&gt;</code> starts a live PDF preview in zathura (pdflatex).</li>
+  <li><b>Shell:</b> a new <code>.sh</code> file gets <code>bash_template.sh</code>.</li>
+  <li><b>Formatters:</b> <code>&lt;leader&gt;ncf</code> clang-format (C/C++), <code>&lt;leader&gt;nsf</code> sqlformat (also on a visual selection).</li>
+  <li><b>SQL databases:</b> vim-dadbod / <code>:DBUI</code>.</li>
+  <li><b>HTML:</b> emmet and auto-closing tags.</li>
+  <li><b>Hex editing:</b> <code>&lt;leader&gt;eho</code> converts to hex, <code>&lt;leader&gt;ehf</code> converts back.</li>
+</ul>
+
+<h2>9. AI, sessions, terminal and utilities</h2>
+<div class="table-wrap"><table>
+  <tr><th>Keys / command</th><th>Action</th></tr>
+  <tr><td><code>&lt;leader&gt;oo</code> / <code>oe</code> / <code>oi</code> / <code>or</code></td><td>Local AI with Ollama (vim-ai): chat / edit selection / complete / redo</td></tr>
+  <tr><td><code>F12</code> or <code>&lt;leader&gt;tm</code>; <code>&lt;leader&gt;tt</code></td><td>Terminal split; tmux session <code>scratch</code> inside Vim. <code>F12</code> in the terminal returns to normal mode.</td></tr>
+  <tr><td><code>&lt;leader&gt;ut</code></td><td>Undo tree (persistent undo survives restarts)</td></tr>
+  <tr><td><code>&lt;leader&gt;ys</code>, <code>"</code> (in normal mode)</td><td>Yank history; register viewer (peekaboo)</td></tr>
+  <tr><td><code>&lt;C-/&gt;</code>, <code>&lt;leader&gt;cc/cu</code></td><td>Toggle / add / remove comment</td></tr>
+  <tr><td><code>ys</code>, <code>cs</code>, <code>ds</code> + text object</td><td>Add / change / delete surrounding quotes and brackets (e.g. <code>ysiw"</code>)</td></tr>
+  <tr><td><kbd>Alt</kbd>+<kbd>n</kbd>, <kbd>Alt</kbd>+<kbd>a</kbd></td><td>Multiple cursors: next match / all matches (<code>]</code> <code>[</code> next/prev, <code>q</code> skip, <code>Q</code> remove)</td></tr>
+  <tr><td><code>Session.vim</code> (automatic)</td><td>Inside tmux, Vim started in a git root keeps <code>Session.vim</code> there up to date, so tmux-resurrect can restore its splits and tabs. If one already exists, plain <code>vim</code> restores it (unless its files are open in another Vim) and <code>vim file</code> leaves it untouched (<code>:Obsess</code> replaces it). Starts with a pipe (<code>cmd | vim -</code>), <code>-q</code>, <code>-t</code>, <code>-c</code> or <code>+cmd</code> (man pages, <code>vim +42 file</code>) are left alone. It's added to the repo's <code>.git/info/exclude</code>, so it never shows in <code>git status</code>. Not for commit messages, merges, diff mode, files outside the folder or the diary popup. <code>:Obsess!</code> stops and deletes it.</td></tr>
+  <tr><td><code>&lt;C-s&gt;</code>, <code>F10</code></td><td>Save a session file by name; save view (folds and cursor)</td></tr>
+  <tr><td><code>&lt;leader&gt;T</code> + letter</td><td>Toggles with feedback: <code>w</code> wrap, <code>s</code> spell, <code>l</code> list, <code>c</code>/<code>v</code> cursor line/column, <code>e</code> expandtab, <code>p</code> paste, <code>n</code>/<code>r</code> numbers, <code>a</code> autochdir, <code>f</code> format on save (python, sh, lua, json, yaml, toml), <code>k</code> completion pop-up, <code>b</code> rainbow, <code>g</code> Goyo, <code>t</code> tagbar, <code>d</code> ALE</td></tr>
+  <tr><td><code>&lt;leader&gt;bu</code></td><td>Revert the buffer to the saved file (asks first if there are unsaved changes)</td></tr>
+  <tr><td><code>&lt;leader&gt;wa</code> / <code>wA</code> / <code>qq</code> / <code>wq</code></td><td>Write all / write all and quit / quit / write and quit</td></tr>
+  <tr><td><code>x</code></td><td>Delete a character without touching the clipboard</td></tr>
+  <tr><td><code>&lt;leader&gt;cs[g/d/n/s/v/D]</code></td><td>Switch colorscheme: gruvbox, dracula, nord, srcery, monokai, default</td></tr>
+</table></div>
+
+<h2>10. Customizing the configuration</h2>
+<ul>
+  <li><b>Everything you may change</b> is at the top of <code>vim/vimrc</code>, in five dictionaries:
+    <ul>
+      <li><code>g:vimrc_features</code>: feature switches. <code>1</code> loads a group of plugins <i>and</i> their settings and keys; <code>0</code> drops the whole group. Keys: <code>theme</code>, <code>fancy_symbols</code>, <code>wal_theme</code>, <code>extra</code>, <code>coding</code>, <code>lsp</code>, <code>python_tools</code>, <code>gui_apps</code>, <code>format_on_save</code> (0), <code>auto_session</code> (1), and the template switches (<code>python_skeleton</code>, <code>tex_template</code>, <code>bash_template</code>, <code>markdown_template</code>).</li>
+      <li><code>g:vimrc_paths</code>: directories (<code>wiki</code> sets the vimwiki root).</li>
+      <li><code>g:vimrc_tools</code>: browser, Python provider, Python language servers, debugger, LanguageTool jar, Ollama settings, helper scripts.</li>
+      <li><code>g:vimrc_tmux</code>: <code>target</code> pane for sending and capturing (<code>&lt;leader&gt;xt</code>), <code>run_target</code> for tests and run file (<code>&lt;leader&gt;xT</code>, empty = <code>target</code>), and <code>capture_lines</code>.</li>
+      <li><code>g:vimrc_lsp</code>: which LSP features are on when LSP starts (all <code>1</code>): <code>diagnostics</code>, <code>virtual_text</code>, <code>completion</code>, <code>doc_preview</code>, <code>signature</code>, <code>references</code>, <code>code_action</code>, <code>inlay_hints</code>.</li>
+    </ul></li>
+  <li><b>Per-machine values:</b> don't edit the tracked file. Create <code>vim/local.vim</code> (git-ignored; it is sourced before the defaults) and set only what differs, e.g. <code>let g:vimrc_features = {'python_tools': 0}</code> or <code>let g:vimrc_lsp = {'virtual_text': 0}</code>. Keys you set override the defaults and everything else stays. A nested dict such as <code>ollama</code> must be given in full.</li>
+  <li><b>Inspect the current values:</b> <code>:echo g:vimrc_features</code> (likewise <code>g:vimrc_paths</code>, <code>g:vimrc_tools</code>, <code>g:vimrc_tmux</code>, <code>g:vimrc_lsp</code>); <code>:LspFeature</code> shows the current LSP feature state.</li>
+  <li><b>Lazy-load rules</b> are in the plugin list (<code>{'on': [...]}</code>, <code>{'for': [...]}</code>). Keep Git tools and LSP lazy to keep startup around 65–120 ms.</li>
+  <li><b>Speed:</b> use <code>:StartupTime</code> or <code>nvim --startuptime log</code>. See <code>doc/reports/</code> for how the config was measured.</li>
+  <li><b>After changing</b>: <code>:source $MYVIMRC</code> is safe, because autocommands are grouped and cleared, so they don't pile up.</li>
+</ul>
+
+<h2>11. Troubleshooting</h2>
+<div class="table-wrap"><table>
+  <tr><th>Symptom</th><th>Cause and fix</th></tr>
+  <tr><td>The first <code>j</code>/<code>k</code> after <kbd>Esc</kbd> resizes the window</td><td>Read as <kbd>Alt</kbd>+<kbd>j</kbd>. Fixed with <code>ttimeoutlen=10</code>. If it comes back, check <code>:set ttimeoutlen?</code> and that tmux has <code>escape-time 0</code>.</td></tr>
+  <tr><td>Flicker in Neovim inside tmux</td><td>Fixed with <code>nolazyredraw</code> (Neovim) and <code>noshowcmd</code>. <code>:set showcmd</code> shows pending keys temporarily.</td></tr>
+  <tr><td>Typed <code>k</code> appears late in insert mode</td><td>The <code>kj</code> escape mapping waits up to 300 ms for a <code>j</code> (by design).</td></tr>
+  <tr><td>No completion, <code>gd</code> doesn't work</td><td>LSP is off: press <code>&lt;leader&gt;Le</code>. Server not installed: <code>&lt;leader&gt;LI</code>. Check with <code>&lt;leader&gt;Ls</code>. Completion switched off? <code>:LspFeature</code> (or <code>-cmp</code> in the statusline).</td></tr>
+  <tr><td>"tmux pane … runs claude, not a shell: not sent"</td><td>No shell pane was found (and you declined the split), or the run pane you chose is busy. Choose a shell pane with <code>&lt;leader&gt;xT</code>.</td></tr>
+  <tr><td>No diagnostics right after <code>&lt;leader&gt;Ld</code> then <code>&lt;leader&gt;Le</code></td><td>The server only resends them after a change: edit or save the file. Also check <code>-lint</code> in the statusline.</td></tr>
+  <tr><td>Tests or LSP use the wrong Python</td><td><code>:ProjectVenv</code> shows the active virtualenv; <code>:ProjectVenv {dir}</code> switches. Running servers keep the old one: <code>&lt;leader&gt;LR</code>.</td></tr>
+  <tr><td><code>Session.vim</code> shows up in <code>git status</code></td><td>It's excluded per repo when Vim creates it; for files created before that, add <code>Session.vim</code> to <code>~/.config/git/ignore</code></td></tr>
+  <tr><td>Vim opened with an old layout</td><td>Plain <code>vim</code> in a git root restores its <code>Session.vim</code>. <code>:Obsess!</code> deletes it, or start with a file name.</td></tr>
+  <tr><td>Folds look outdated in a note</td><td>They refresh on save (<code>:w</code>); <code>zx</code> recomputes them now</td></tr>
+  <tr><td><code>]h</code> does nothing</td><td>No changes against git in this file, or not a git repo</td></tr>
+  <tr><td>Clipboard doesn't reach the other machine over SSH</td><td>Needs X forwarding (<code>ssh -X</code>) and <code>xsel</code>; tmux clipboard sync uses xsel</td></tr>
+  <tr><td>Search or tests start in the wrong folder</td><td>Vim was started in a subfolder. Use <code>&lt;leader&gt;frr</code> (git root), <code>:cd</code>, or <code>&lt;leader&gt;ac</code> to toggle autochdir.</td></tr>
+  <tr><td>Something is slow</td><td><code>:profile start /tmp/p.log | profile func * | profile file *</code>, do the slow action, <code>:profile stop</code></td></tr>
+</table></div>
+
+<h2>12. Appendix: every leader key (normal mode)</h2>
+<p class="muted">Generated on 2026-11-05 from the live mappings (Neovim 0.9.5, all plugins installed) in a Python buffer with the LSP buffer setup applied and in a markdown note: 403 keys. "buffer: python" means the key exists only in LSP/Python buffers; "buffer: markdown" only in notes. The "Runs" column shows the raw command (long ones are cut).</p>
+<h3>&lt;leader&gt;a — Args / autochdir <span class="muted">(14)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;a$</code></td><td><code>:last&lt;CR&gt;:args&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;a0</code></td><td><code>:first&lt;CR&gt;:args&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;aA</code></td><td><code>:argadd </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;aa</code></td><td><code>:argadd %&lt;CR&gt;:args&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ab</code></td><td><code>:abbreviate&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ac</code></td><td><code>:set autochdir!&lt;CR&gt;:echo &#x27;autochdir=&#x27; . &amp;autochdir&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;aD</code></td><td><code>:argdelete </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ad</code></td><td><code>:argdelete %&lt;CR&gt;:args&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ae</code></td><td><code>:argedit </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;agd</code></td><td><code>:argdo </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;an</code></td><td><code>:next&lt;CR&gt;:args&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ap</code></td><td><code>:prev&lt;CR&gt;:args&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;aS</code></td><td><code>:args </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;as</code></td><td><code>:args&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;b — Buffers <span class="muted">(15)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;b&quot;</code></td><td><code>:bnext&lt;CR&gt;:bdelete#&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;b$</code></td><td><code>:blast&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;b&#x27;</code></td><td><code>:bdelete#&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;b0</code></td><td><code>:bfirst&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ba</code></td><td><code>:badd </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;bD</code></td><td><code>:FZFBD&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;bd</code></td><td><code>:bdelete&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;be</code></td><td><code>:edit </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;bfd</code></td><td><code>:bufdo </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;bn</code></td><td><code>:bnext&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;bo</code></td><td><code>:%bd|e#|bd#&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;bp</code></td><td><code>:bprev&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;br</code></td><td><code>&lt;Plug&gt;lightline#bufferline#reset_order()</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;bs</code></td><td><code>:buffers&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;bu</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_RevertBuffer()&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;c — Comment / cursor / colorscheme <span class="muted">(20)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;c$</code></td><td><code>&lt;Plug&gt;NERDCommenterToEOL</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;cA</code></td><td><code>&lt;Plug&gt;NERDCommenterAppend</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ca</code></td><td><code>&lt;Plug&gt;NERDCommenterAltDelims</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;cc</code></td><td><code>&lt;Plug&gt;NERDCommenterComment</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;cd</code></td><td><code>:if &amp;buftype ==# &#x27;&#x27; &amp;&amp; isdirectory(expand(&#x27;%:p:h&#x27;)) | cd %:p:h | pwd | else | echo &#x27;No file directory for this…</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ch</code></td><td><code>:set cursorline!&lt;CR&gt;:echo &#x27;Toggle Cursor Line [Horizontal]&#x27;&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;chk</code></td><td><code>:HexokinaseToggle&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;cl</code></td><td><code>:set list!&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;csD</code></td><td><code>:colorscheme default&lt;CR&gt;:set termguicolors&lt;CR&gt;:call CustomizedColorPalette()&lt;CR&gt;:call LightlineStyle(&#x27;default&#x27;…</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;csd</code></td><td><code>:colorscheme dracula&lt;CR&gt;:set termguicolors&lt;CR&gt;:call CustomizedColorPalette()&lt;CR&gt;:call LightlineStyle(&#x27;dracula&#x27;…</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;csg</code></td><td><code>:colorscheme gruvbox&lt;CR&gt;:set termguicolors&lt;CR&gt;:call CustomizedColorPalette()&lt;CR&gt;:call LightlineStyle(&#x27;gruvbox&#x27;…</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;csn</code></td><td><code>:colorscheme nord&lt;CR&gt;:set termguicolors&lt;CR&gt;:call CustomizedColorPalette()&lt;CR&gt;:call LightlineStyle(&#x27;nord&#x27;, g:vi…</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;css</code></td><td><code>:colorscheme srcery&lt;CR&gt;:set termguicolors&lt;CR&gt;:call CustomizedColorPalette()&lt;CR&gt;:call LightlineStyle(&#x27;srcery_dr…</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;cst</code></td><td><code>:highlight Normal cterm=NONE ctermfg=NONE ctermbg=NONE gui=NONE guifg=NONE guibg=NONE&lt;CR&gt;:echo &#x27;transparent ba…</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;csv</code></td><td><code>:colorscheme vim-monokai-tasty&lt;CR&gt;:set termguicolors&lt;CR&gt;:call CustomizedColorPalette()&lt;CR&gt;:call LightlineStyle…</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;csw</code></td><td><code>:colorscheme wal&lt;CR&gt;:set notermguicolors&lt;CR&gt;:call CustomizedColorPalette()&lt;CR&gt;:call LightlineStyle(&#x27;wal&#x27;, 1, 1…</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;cu</code></td><td><code>&lt;Plug&gt;NERDCommenterUncomment</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;cv</code></td><td><code>:set cursorcolumn!&lt;CR&gt;:echo &#x27;Toggle Cursor Column [Vertical]&#x27;&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;cw</code></td><td><code>:VimCurrentWordToggle&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;cy</code></td><td><code>&lt;Plug&gt;NERDCommenterYank</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;D — Debugger <span class="muted">(8)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;Db</code></td><td><code>&lt;Plug&gt;VimspectorToggleBreakpoint</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Dc</code></td><td><code>&lt;Plug&gt;VimspectorContinue</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;De</code></td><td><code>&lt;Plug&gt;VimspectorBalloonEval</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Di</code></td><td><code>&lt;Plug&gt;VimspectorStepInto</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Dn</code></td><td><code>&lt;Plug&gt;VimspectorStepOver</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Do</code></td><td><code>&lt;Plug&gt;VimspectorStepOut</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Dq</code></td><td><code>:VimspectorReset&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Dr</code></td><td><code>&lt;Plug&gt;VimspectorRestart</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;d — Diff <span class="muted">(9)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;dD</code></td><td><code>:diffoff&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;dd</code></td><td><code>:diffthis&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;dj</code></td><td><code>]c</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;dk</code></td><td><code>[c</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;do</code></td><td><code>:diffget </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;dp</code></td><td><code>:diffput </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ds</code></td><td><code>:diffsplit </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;du</code></td><td><code>:diffupdate&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;dv</code></td><td><code>:vertical diffsplit </code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;e — Location list / lint / external <span class="muted">(10)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;ee</code></td><td><code>:LspDocumentDiagnostics&lt;CR&gt;</code></td><td>buffer: python</td></tr>
+<tr><td><code>&lt;leader&gt;eg</code></td><td><code>:lvimgrep </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ehf</code></td><td><code>:%! xxd -r&lt;CR&gt;:echo &#x27;Hex editor off: TF to original data&#x27;&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;eho</code></td><td><code>:%! xxd&lt;CR&gt;:echo &#x27;Hex editor on: TF to binary data&#x27;&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ej</code></td><td><code>:lnext&lt;CR&gt;zz</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ek</code></td><td><code>:lprev&lt;CR&gt;zz</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;eo</code></td><td><code>:FZFLocList&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;esq</code></td><td><code>:r !seq </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;et</code></td><td><code>:set expandtab!&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ets</code></td><td><code>:r !date&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;f — FZF <span class="muted">(42)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;f&#x27;</code></td><td><code>:FZFMarks&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;f/</code></td><td><code>:FZFLines&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;f?</code></td><td><code>:execute &quot;:FZFLines &quot; . expand(&#x27;&lt;lt&gt;cword&gt;&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fag</code></td><td><code>:FZFAg&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fbd</code></td><td><code>:FZFBD&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fbL</code></td><td><code>:execute &quot;:FZFBLines &quot; . expand(&#x27;&lt;lt&gt;cword&gt;&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fbl</code></td><td><code>:FZFBLines&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fbs</code></td><td><code>:FZFBuffers&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fbT</code></td><td><code>:execute &quot;:FZFBTag &quot; . expand(&#x27;&lt;lt&gt;cword&gt;&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fbt</code></td><td><code>:FZFBTags&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fcd</code></td><td><code>:FZFCommands&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fcl</code></td><td><code>:FZFChanges&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fel</code></td><td><code>:FZFLocList&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ffS</code></td><td><code>:FZFFiles </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ffs</code></td><td><code>:FZFFiles&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fft</code></td><td><code>:FZFFiletypes&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fgC</code></td><td><code>:call &lt;SNR&gt;_LoadGitPlugin(&#x27;vim-fugitive&#x27;)&lt;CR&gt;:FZFCommits&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fgc</code></td><td><code>:call &lt;SNR&gt;_LoadGitPlugin(&#x27;vim-fugitive&#x27;)&lt;CR&gt;:FZFBCommits&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fgf</code></td><td><code>:FZFGFiles&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fgL</code></td><td><code>:execute &quot;:FZFLines &quot; . expand(&#x27;&lt;lt&gt;cword&gt;&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fgl</code></td><td><code>:FZFLines&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fgs</code></td><td><code>:FZFGFiles?&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fgT</code></td><td><code>:execute &quot;:FZFTag &quot; . expand(&#x27;&lt;lt&gt;cword&gt;&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fgt</code></td><td><code>:FZFTags&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fh/</code></td><td><code>:FZFHistory/&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fh:</code></td><td><code>:FZFHistory:&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fhs</code></td><td><code>:FZFHistory&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fht</code></td><td><code>:FZFHelptags&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fjl</code></td><td><code>:FZFJumps&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;flc</code></td><td><code>:FZFLocate </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fmi</code></td><td><code>:FZFMDInsert&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fmk</code></td><td><code>:FZFMarks&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fmp</code></td><td><code>:FZFMaps&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fph</code></td><td><code>:let g:fzf_preview_window = [&#x27;left:50%&#x27;, &#x27;alt-/&#x27;]&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fpj</code></td><td><code>:let g:fzf_preview_window = [&#x27;down:50%&#x27;, &#x27;alt-/&#x27;]&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fpk</code></td><td><code>:let g:fzf_preview_window = [&#x27;up:50%&#x27;, &#x27;alt-/&#x27;]&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fpl</code></td><td><code>:let g:fzf_preview_window = [&#x27;right:50%&#x27;, &#x27;alt-/&#x27;]&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fql</code></td><td><code>:FZFQuickFix&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;frG</code></td><td><code>:FZFRG&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;frg</code></td><td><code>:FZFRg&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;frr</code></td><td><code>:FZFRgRoot&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;fws</code></td><td><code>:FZFWindows&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;g — Git (lazy) / goyo / jumps <span class="muted">(31)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;g,</code></td><td><code>:changes&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;g.</code></td><td><code>:FZFChanges&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;g;</code></td><td><code>:FZFChanges&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gA</code></td><td><code>:Git add %&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ga</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_GitGutterRun(&#x27;GitGutterStageHunk&#x27;, 0)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gB</code></td><td><code>:Git blame&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gb</code></td><td><code>:GitGutterBufferToggle&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gC</code></td><td><code>:Git commit&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gc</code></td><td><code>:Gclog&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gD</code></td><td><code>:Git diff&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gd</code></td><td><code>:Git diff %&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gF</code></td><td><code>:GitGutterFold&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gg</code></td><td><code>:GitGutterToggle&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ghd</code></td><td><code>:GitGutterEnable&lt;CR&gt;:GitGutterDisable&lt;CR&gt;:GitGutterSignsDisable&lt;CR&gt;:GitGutterLineHighlightsDisable&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ghe</code></td><td><code>:GitGutterEnable&lt;CR&gt;:GitGutterSignsEnable&lt;CR&gt;:GitGutterLineHighlightsEnable&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ghl</code></td><td><code>:GitGutterLineHighlightsToggle&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ghn</code></td><td><code>:GitGutterLineNrHighlightsToggle&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ghs</code></td><td><code>:GitGutterSignsToggle&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gi</code></td><td><code>:FZFJumps&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gj</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_GitGutterRun(&#x27;GitGutterNextHunk&#x27;, v:count1)&lt;CR&gt;zz</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gk</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_GitGutterRun(&#x27;GitGutterPrevHunk&#x27;, v:count1)&lt;CR&gt;zz</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gl</code></td><td><code>:Gllog&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gm</code></td><td><code>:Gvdiffsplit!&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;go</code></td><td><code>:FZFJumps&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gP</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_GitGutterRun(&#x27;GitGutterPreviewHunk&#x27;, 0)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gq</code></td><td><code>:GitGutterQuickFix&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gR</code></td><td><code>:Git reset </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gr</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_GitGutterRun(&#x27;GitGutterUndoHunk&#x27;, 0)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gs</code></td><td><code>:Git&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gv</code></td><td><code>:Gvdiffsplit&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;gy</code></td><td><code>:Goyo&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;h — Easymotion <span class="muted">(1)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;h</code></td><td><code>&lt;Plug&gt;(easymotion-linebackward)</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;i — Insert date <span class="muted">(2)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;idd</code></td><td><code>&lt;Esc&gt;i&lt;C-R&gt;=strftime(&#x27;%F&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ids</code></td><td><code>&lt;Esc&gt;i&lt;C-R&gt;=strftime(&#x27;%Y-%m-%d %H:%M:%S&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;j — Easymotion <span class="muted">(1)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;j</code></td><td><code>&lt;Plug&gt;(easymotion-j)</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;k — Easymotion <span class="muted">(1)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;k</code></td><td><code>&lt;Plug&gt;(easymotion-k)</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;L — LSP / LSP features / LanguageTool <span class="muted">(21)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;La</code></td><td><code>&lt;Plug&gt;(lsp-code-action)</code></td><td>buffer: python</td></tr>
+<tr><td><code>&lt;leader&gt;LC</code></td><td><code>&lt;Esc&gt;:LanguageToolCheck&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Lc</code></td><td><code>&lt;Esc&gt;:LanguageToolClear&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Ld</code></td><td><code>:call DisableLSP()&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Le</code></td><td><code>:call EnableLSP()&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Lf</code></td><td><code>:LspDocumentFormatSync&lt;CR&gt;</code></td><td>buffer: python</td></tr>
+<tr><td><code>&lt;leader&gt;LI</code></td><td><code>:LspInstallServer&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;LM</code></td><td><code>:LspManageServers&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;LR</code></td><td><code>:LspStopServer!&lt;CR&gt;:call lsp#disable()&lt;CR&gt;:call EnableLSP()&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;LS</code></td><td><code>:LspStopServer </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Ls</code></td><td><code>:LspStatus&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Lta</code></td><td><code>:&lt;C-U&gt;LspFeature code_action&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Ltc</code></td><td><code>:&lt;C-U&gt;LspFeature completion&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Ltd</code></td><td><code>:&lt;C-U&gt;LspFeature diagnostics&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Lti</code></td><td><code>:&lt;C-U&gt;LspFeature inlay_hints&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Lto</code></td><td><code>:&lt;C-U&gt;LspFeature all on&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Ltp</code></td><td><code>:&lt;C-U&gt;LspFeature doc_preview&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Ltr</code></td><td><code>:&lt;C-U&gt;LspFeature references&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Lts</code></td><td><code>:&lt;C-U&gt;LspFeature signature&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Ltt</code></td><td><code>:&lt;C-U&gt;LspFeature&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Ltv</code></td><td><code>:&lt;C-U&gt;LspFeature virtual_text&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;l — Easymotion <span class="muted">(1)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;l</code></td><td><code>&lt;Plug&gt;(easymotion-lineforward)</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;m — Marks / man / markdown-tools <span class="muted">(58)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;mB</code></td><td><code>&lt;Esc&gt;i```&lt;CR&gt;```&lt;Up&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mb</code></td><td><code>&lt;Esc&gt;i- [ ]</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mC</code></td><td><code>&lt;Esc&gt;a&lt;lt&gt;/span&gt;&lt;Esc&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mc</code></td><td><code>&lt;Esc&gt;i&lt;lt&gt;span style=&quot;color:&quot;&gt;&lt;Esc&gt;F&lt;lt&gt;&lt;Esc&gt;19&lt;Right&gt;i</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;md</code></td><td><code>:delmarks </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;mdd</code></td><td><code>:delmarks!&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;mfA</code></td><td><code>:call MarkdownTools_FindAllPathsAndWebsites()&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfa&quot;</code></td><td><code>:call MarkdownTools_ConvertRelativeToAbsolute(&#x27;&quot;&#x27;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfa&#x27;</code></td><td><code>:call MarkdownTools_ConvertRelativeToAbsolute(&quot;&#x27;&quot;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfa(</code></td><td><code>:call MarkdownTools_ConvertRelativeToAbsolute(&#x27;(&#x27;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfa)</code></td><td><code>:call MarkdownTools_ConvertRelativeToAbsolute(&#x27;(&#x27;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfa`</code></td><td><code>:call MarkdownTools_ConvertRelativeToAbsolute(&#x27;`&#x27;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfaw</code></td><td><code>:call MarkdownTools_ConvertRelativeToAbsolute(&#x27;W&#x27;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfb</code></td><td><code>:call MarkdownTools_FindBacklinks()&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfc</code></td><td><code>:call MarkdownTools_ConvertImgHtmlToMarkdown()&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfd</code></td><td><code>&lt;Esc&gt;:keeppatterns %s/YYYY-mm-DD HH:MM:SS/\=strftime(&quot;%Y-%m-%d %T&quot;)/g&lt;CR&gt;:keeppatterns %s/YYYY-mm-DD/\=strftim…</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfe&quot;</code></td><td><code>:call MarkdownTools_ToggleEnvPath(&#x27;&quot;&#x27;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfe&#x27;</code></td><td><code>:call MarkdownTools_ToggleEnvPath(&quot;&#x27;&quot;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfe(</code></td><td><code>:call MarkdownTools_ToggleEnvPath(&#x27;(&#x27;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfe)</code></td><td><code>:call MarkdownTools_ToggleEnvPath(&#x27;(&#x27;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfe1</code></td><td><code>:!marp % --html&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfe2</code></td><td><code>:!pandoc % -f markdown -t html --standalone --data-dir=$HOME/.pandoc --template=bootstrap_menu.html -o %:r.htm…</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfe3</code></td><td><code>:!pandoc % -f markdown -t html --standalone --data-dir=$HOME/.pandoc --template=bootstrap_menu.html -o %:r.htm…</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfe4</code></td><td><code>:&lt;C-U&gt;&lt;C-R&gt;=&lt;SNR&gt;_GetExportMd2PdfCmd()&lt;CR&gt; --filter pandoc-citeproc </code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfe5</code></td><td><code>:!soffice --headless --infilter=&quot;HTML (StarWriter)&quot; --convert-to &quot;docx:MS Word 2007 XML&quot; %:r.html&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfe`</code></td><td><code>:call MarkdownTools_ToggleEnvPath(&#x27;`&#x27;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfew</code></td><td><code>:call MarkdownTools_ToggleEnvPath(&#x27;W&#x27;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mff</code></td><td><code>:call MarkdownTools_FindFilepathsOnly()&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfg</code></td><td><code>:call MarkdownTools_LiveGrepVault()&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfH</code></td><td><code>:vimgrep /^#/ %&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfh</code></td><td><code>:lvimgrep /^#/ %&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfI</code></td><td><code>:call MarkdownTools_InsertMarkdownTemplate()&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfi</code></td><td><code>:call MarkdownTools_InsertWikiLink()&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfj</code></td><td><code>:execute &#x27;r !&#x27; . g:vimrc_tools.jrnl_collect&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;mfL</code></td><td><code>:call MarkdownTools_LocalizeResources()&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfo</code></td><td><code>:call MarkdownTools_FindOutlinks()&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfP</code></td><td><code>:call MarkdownTools_CaptureAndPasteImage()&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfp</code></td><td><code>:call MarkdownTools_PasteClipboardImage()&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfR</code></td><td><code>:call MarkdownTools_RenameFilePath()&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfr&quot;</code></td><td><code>:call MarkdownTools_ConvertAbsoluteToRelative(&#x27;&quot;&#x27;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfr&#x27;</code></td><td><code>:call MarkdownTools_ConvertAbsoluteToRelative(&quot;&#x27;&quot;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfr(</code></td><td><code>:call MarkdownTools_ConvertAbsoluteToRelative(&#x27;(&#x27;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfr)</code></td><td><code>:call MarkdownTools_ConvertAbsoluteToRelative(&#x27;(&#x27;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfr`</code></td><td><code>:call MarkdownTools_ConvertAbsoluteToRelative(&#x27;`&#x27;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfrw</code></td><td><code>:call MarkdownTools_ConvertAbsoluteToRelative(&#x27;W&#x27;)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mfw</code></td><td><code>:call MarkdownTools_FindWebsitesOnly()&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mI</code></td><td><code>&lt;Esc&gt;i&lt;lt&gt;img src=&quot;&quot; title=&quot;&quot; width=&quot;100%&quot; height=&quot;100%&quot;/&gt;&lt;Esc&gt;38&lt;Left&gt;i</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mi</code></td><td><code>&lt;Esc&gt;i![this_is_an_image]()&lt;Left&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mk</code></td><td><code>:FZFMarks&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ml</code></td><td><code>&lt;Esc&gt;i[this_is_a_link]()&lt;Left&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mM</code></td><td><code>:execute &quot;:Man &quot; . expand(&#x27;&lt;lt&gt;cword&gt;&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;mm</code></td><td><code>:Man </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;mO</code></td><td><code>:exe &#x27;!&#x27;. g:md_tools_browser .&#x27; %:p &amp;&#x27;&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mo</code></td><td><code>:call MarkdownTools_OpenFileOrLink()&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mP</code></td><td><code>:exe &#x27;!&#x27;. g:md_tools_browser .&#x27; %:r.html &amp;&#x27;&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mT</code></td><td><code>:execute(&#x27;r &#x27; . g:md_tools_table_template)&lt;CR&gt;</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mV</code></td><td><code>&lt;Esc&gt;i&lt;lt&gt;video src=&quot;&quot; title=&quot;&quot; width=&quot;100%&quot; height=&quot;100%&quot; controls/&gt;&lt;Esc&gt;47&lt;Left&gt;i</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;mw</code></td><td><code>&lt;Esc&gt;i::&lt;Esc&gt;i</code></td><td>buffer: markdown</td></tr>
+</table></div>
+<h3>&lt;leader&gt;n — Neoformat <span class="muted">(14)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;ncf</code></td><td><code>:Neoformat clangformat&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;nmf</code></td><td><code>:Neoformat! markdown mdformat&lt;CR&gt; :execute &#x27;silent! %!python3 &#x27; . g:vimrc_tools.mdformat_patch&lt;CR&gt; :echo &#x27;Neof…</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;nn</code></td><td><code>:Neoformat&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;npi</code></td><td><code>:Neoformat isort&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;npR</code></td><td><code>:Neoformat ruffimport&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;npr</code></td><td><code>:Neoformat ruff&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;nptg</code></td><td><code>:Neoformat pyment_google&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;nptj</code></td><td><code>:Neoformat pyment_javadoc&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;nptn</code></td><td><code>:Neoformat pyment_numpydoc&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;nptt</code></td><td><code>:Neoformat pyment&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;npy</code></td><td><code>:Neoformat yapf&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;nsf</code></td><td><code>:Neoformat! sql sqlformat&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ntl</code></td><td><code>:let g:NERDTreeWinPos = &#x27;left&#x27;&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ntr</code></td><td><code>:let g:NERDTreeWinPos = &#x27;right&#x27;&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;o — AI (vim-ai) <span class="muted">(4)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;oe</code></td><td><code>:AIE </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;oi</code></td><td><code>:AI </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;oo</code></td><td><code>:AIC </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;or</code></td><td><code>:AIRedo&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;p — Python / tests / run / virtualenv <span class="muted">(11)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;pB</code></td><td><code>:&lt;C-U&gt;update | split&lt;CR&gt;:&lt;C-R&gt;=&lt;SNR&gt;_PythonDebugCmd()&lt;CR&gt;&lt;Space&gt;</code></td><td>buffer: python</td></tr>
+<tr><td><code>&lt;leader&gt;pb</code></td><td><code>Obreakpoint()&lt;Esc&gt;</code></td><td>buffer: python</td></tr>
+<tr><td><code>&lt;leader&gt;pl</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_TmuxRunLast()&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ptf</code></td><td><code>:TestFile&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ptl</code></td><td><code>:TestLast&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ptn</code></td><td><code>:TestNearest&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;pts</code></td><td><code>:TestSuite&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ptv</code></td><td><code>:TestVisit&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;pV</code></td><td><code>:ProjectVenv!&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;pv</code></td><td><code>:ProjectVenv&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;px</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_TmuxRunFile()&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;q — Quit / quickfix <span class="muted">(11)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;q!</code></td><td><code>:q!&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;qa</code></td><td><code>:qall&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;qa!</code></td><td><code>:qall!&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;qd</code></td><td><code>:cdo </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;qg</code></td><td><code>:vimgrep </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;qj</code></td><td><code>:cnext&lt;CR&gt;zz</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;qk</code></td><td><code>:cprev&lt;CR&gt;zz</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;qo</code></td><td><code>:FZFQuickFix&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;qq</code></td><td><code>:q&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;qt</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_TmuxPaneToQuickfix(&#x27;target&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;qT</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_TmuxPaneToQuickfix(&#x27;run&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;r — Registers / resize / rg / rename <span class="muted">(11)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;rb</code></td><td><code>:RainbowToggle&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;re</code></td><td><code>&lt;Plug&gt;(lsp-rename)</code></td><td>buffer: python</td></tr>
+<tr><td><code>&lt;leader&gt;rG</code></td><td><code>:FZFRG&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;rg</code></td><td><code>:FZFRg&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;rh2</code></td><td><code>:call ResizeHeightToFraction(1.0/2.0)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;rh3</code></td><td><code>:call ResizeHeightToFraction(1.0/3.0)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;rh4</code></td><td><code>:call ResizeHeightToFraction(1.0/4.0)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;rr</code></td><td><code>:registers&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;rw2</code></td><td><code>:call ResizeWidthToFraction(1.0/2.0)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;rw3</code></td><td><code>:call ResizeWidthToFraction(1.0/3.0)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;rw4</code></td><td><code>:call ResizeWidthToFraction(1.0/4.0)&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;s — Spell / scrolloff / statusline <span class="muted">(16)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;sag</code></td><td><code>&lt;Esc&gt;zg</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;saw</code></td><td><code>&lt;Esc&gt;zw</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;sj</code></td><td><code>]s</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;sk</code></td><td><code>[s</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;sl</code></td><td><code>:set spell!&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;slad</code></td><td><code>:call lightline#disable()&lt;CR&gt;:set showmode&lt;CR&gt;:set showtabline=0&lt;CR&gt;:set laststatus=0&lt;CR&gt;:echo &quot;STATUSLINE/TAB…</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;slae</code></td><td><code>:call lightline#enable()&lt;CR&gt;:set noshowmode&lt;CR&gt;:set showtabline=2&lt;CR&gt;:set laststatus=2&lt;CR&gt;:echo &quot;STATUSLINE/TA…</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;slsd</code></td><td><code>:call lightline#disable()&lt;CR&gt;:set showmode&lt;CR&gt;:set laststatus=2&lt;CR&gt;:echo &quot;LIGHTLINE DISABLED&quot;&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;slse</code></td><td><code>:call lightline#enable()&lt;CR&gt;:set noshowmode&lt;CR&gt;:set laststatus=2&lt;CR&gt;:echo &quot;LIGHTLINE ENABLED&quot;&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;sltd</code></td><td><code>:set showtabline=0&lt;CR&gt;:echo &quot;TABLINE DISABLED&quot;&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;slte</code></td><td><code>:set showtabline=2&lt;CR&gt;:echo &quot;TABLINE ENABLED&quot;&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;so-</code></td><td><code>:set scrolloff=0&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;so0</code></td><td><code>:set scrolloff=10&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;so=</code></td><td><code>:set scrolloff=999&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;srg</code></td><td><code>&lt;Esc&gt;zug</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;srw</code></td><td><code>&lt;Esc&gt;zuw</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;T — Toggles (echo new state) <span class="muted">(16)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;Ta</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_ToggleOption(&#x27;autochdir&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Tb</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_ToggleCommand(&#x27;RainbowToggle&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Tc</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_ToggleOption(&#x27;cursorline&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Td</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_ToggleCommand(&#x27;ALEToggle&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Te</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_ToggleOption(&#x27;expandtab&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Tf</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_ToggleFormatOnSave()&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Tg</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_ToggleCommand(&#x27;Goyo&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Tk</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_ToggleCompletionPopup()&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Tl</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_ToggleOption(&#x27;list&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Tn</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_ToggleOption(&#x27;number&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Tp</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_ToggleOption(&#x27;paste&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Tr</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_ToggleOption(&#x27;relativenumber&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Ts</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_ToggleOption(&#x27;spell&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Tt</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_ToggleCommand(&#x27;TagbarToggle&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Tv</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_ToggleOption(&#x27;cursorcolumn&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Tw</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_ToggleOption(&#x27;wrap&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;t — Tabs / terminal / tagbar <span class="muted">(21)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;t$</code></td><td><code>:tablast&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;t0</code></td><td><code>:tabfirst&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ta</code></td><td><code>:tabnew </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;tbd</code></td><td><code>:tabdo </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;tD</code></td><td><code>:tabclose </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;td</code></td><td><code>:tabclose&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;te</code></td><td><code>:tabedit </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;tf</code></td><td><code>:tabfind </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;tgl</code></td><td><code>:let g:tagbar_position = &#x27;leftabove vertical&#x27;&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;tgr</code></td><td><code>:let g:tagbar_position = &#x27;botright vertical&#x27;&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;tl</code></td><td><code>:TaskList&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;tm</code></td><td><code>:split&lt;CR&gt;:terminal&lt;CR&gt;i</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;tN</code></td><td><code>:execute &#x27;silent! tabmove &#x27; . (tabpagenr()+1)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;tn</code></td><td><code>:tabnext&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;tO</code></td><td><code>:tab ball&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;to</code></td><td><code>:tabonly&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;tP</code></td><td><code>:execute &#x27;silent! tabmove &#x27; . (tabpagenr()-2)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;tp</code></td><td><code>:tabprevious&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;tr</code></td><td><code>:split&lt;CR&gt;:terminal ranger&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ts</code></td><td><code>:tabs&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;tt</code></td><td><code>:split&lt;CR&gt;:terminal env -u TMUX tmux new-session -A -s scratch&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;u — Undo tree <span class="muted">(1)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;ut</code></td><td><code>:MundoToggle&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;w — Write / wiki / wrap <span class="muted">(32)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;w!</code></td><td><code>:call RemoveTrailingWhitespace()&lt;CR&gt;:w!&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;w-</code></td><td><code>:set iskeyword-=_&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;w/</code></td><td><code>&lt;Esc&gt;:VimwikiSearch </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;w&lt;CR&gt;</code></td><td><code>&lt;Plug&gt;VimwikiGoto</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;w=</code></td><td><code>:set iskeyword+=_&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wA</code></td><td><code>:wqall&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wa</code></td><td><code>:wall&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wa!</code></td><td><code>:wall!&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wb</code></td><td><code>&lt;Esc&gt;:VimwikiBacklinks&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wC</code></td><td><code>&lt;Esc&gt;:VimwikiCheckLinks&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wcc</code></td><td><code>&lt;Esc&gt;:VimwikiColorize&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wcr</code></td><td><code>&lt;Esc&gt;:Calendar&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wD</code></td><td><code>&lt;Plug&gt;VimwikiDeleteFile</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wdd</code></td><td><code>&lt;Plug&gt;VimwikiMakeDiaryNote</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wdG</code></td><td><code>&lt;Plug&gt;VimwikiDiaryGenerateLinks</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wdI</code></td><td><code>&lt;Plug&gt;VimwikiDiaryIndex</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wdn</code></td><td><code>&lt;Esc&gt;:VimwikiDiaryNextDay&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wdp</code></td><td><code>&lt;Esc&gt;:VimwikiDiaryPrevDay&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wI</code></td><td><code>&lt;Plug&gt;VimwikiIndex</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wN</code></td><td><code>:%s///ng&lt;Left&gt;&lt;Left&gt;&lt;Left&gt;&lt;Left&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wn</code></td><td><code>:%s///n&lt;Left&gt;&lt;Left&gt;&lt;Left&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wp</code></td><td><code>:set wrap!&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wq</code></td><td><code>:call RemoveTrailingWhitespace()&lt;CR&gt;:wq&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wR</code></td><td><code>&lt;Plug&gt;VimwikiRenameFile</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ws</code></td><td><code>&lt;Plug&gt;VimwikiUISelect</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wT</code></td><td><code>&lt;Esc&gt;:VimwikiTOC&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wt/</code></td><td><code>&lt;Esc&gt;:VimwikiSearchTags </code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wtG</code></td><td><code>&lt;Esc&gt;:VimwikiGenerateTagLinks&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wtR</code></td><td><code>&lt;Esc&gt;:VimwikiRebuildTags&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wtt</code></td><td><code>&lt;Esc&gt;:VimwikiTable&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ww</code></td><td><code>:call RemoveTrailingWhitespace()&lt;CR&gt;:w&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;wyy</code></td><td><code>&lt;Esc&gt;:VimwikiPasteLink&lt;CR&gt;jddk:echo &#x27;Current Link Yanked&#x27;&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;x — Send to tmux pane / run pane <span class="muted">(7)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;xc</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_TmuxSendCell()&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;xd</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_TmuxSendDiagnostics()&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;xr</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_TmuxSendRef(line(&#x27;.&#x27;), line(&#x27;.&#x27;))&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;xT</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_TmuxChooseTarget(&#x27;run_target&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;xt</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_TmuxChooseTarget(&#x27;target&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;xx</code></td><td><code>:&lt;C-U&gt;call TmuxSendText(getline(&#x27;.&#x27;), &lt;SNR&gt;_EnterCount(getline(&#x27;.&#x27;)))&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;xy</code></td><td><code>:&lt;C-U&gt;call TmuxSendText(getline(&#x27;.&#x27;), 0)&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;y — Yank / path <span class="muted">(5)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;yC</code></td><td><code>:YRClear&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;yP</code></td><td><code>:set paste!&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;yp</code></td><td><code>:let @+ = expand(&#x27;%:p&#x27;) | let @* = @+ | echo &#x27;Yanked path: &#x27; . @+&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;yr</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_YankRef(line(&#x27;.&#x27;), line(&#x27;.&#x27;))&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;ys</code></td><td><code>:YRShow&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;z — Maximize <span class="muted">(1)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;z</code></td><td><code>:MaximizerToggle&lt;CR&gt;</code></td><td>global</td></tr>
+</table></div>
+<h3>&lt;leader&gt;… — Other (non-letter keys) <span class="muted">(19)</span></h3>
+<div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
+<tr><td><code>&lt;leader&gt;&quot;</code></td><td><code>&lt;Plug&gt;(choosewin)</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;&#x27;</code></td><td><code>:FZFBuffers&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;/</code></td><td><code>&lt;Plug&gt;(easymotion-sn)</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;&lt;BS&gt;</code></td><td><code>&lt;Plug&gt;VimwikiGoBackLink</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;&lt;CR&gt;</code></td><td><code>&lt;Plug&gt;VimwikiFollowLink</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;&lt;F10&gt;</code></td><td><code>:loadview&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;&lt;F11&gt;</code></td><td><code>:set nocursorbind&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;&lt;F3&gt;</code></td><td><code>:silent! NERDTreeFind&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;&lt;F4&gt;</code></td><td><code>&lt;Plug&gt;MarkdownPreviewToggle</code></td><td>buffer: markdown</td></tr>
+<tr><td><code>&lt;leader&gt;&lt;F5&gt;</code></td><td><code>:set number!&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;&lt;F6&gt;</code></td><td><code>:call FoldColumnToggleLong()&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;&lt;F7&gt;</code></td><td><code>:call OverlengthToggle()&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;&lt;F8&gt;</code></td><td><code>:call FoldHighlightToggle()&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;&lt;F9&gt;</code></td><td><code>:IndentGuidesToggle&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;&lt;S-Tab&gt;</code></td><td><code>:jumps&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;&lt;Tab&gt;</code></td><td><code>:jumps&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;\</code></td><td><code>&lt;Esc&gt;:VimwikiToggleListItem&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;`</code></td><td><code>:call AutoCompPopToggle()&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;|</code></td><td><code>:&lt;Esc&gt;i[^]&lt;Left&gt;</code></td><td>buffer: markdown</td></tr>
+</table></div>
+</main>
+</body>
+</html>

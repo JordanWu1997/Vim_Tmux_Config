@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Getting Started</title>
+<style>
+  :root { --bg:#ffffff; --fg:#1f2328; --muted:#59636e; --line:#d1d9e0; --soft:#f6f8fa; --accent:#0b5cad;
+          --ok:#1a7f37; --warn:#9a6700; --code-bg:#eff1f3; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#30363d; --soft:#161b22; --accent:#4493f8;
+    --ok:#3fb950; --warn:#d29922; --code-bg:#1f2428; } }
+  :root[data-theme="dark"] { --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#30363d; --soft:#161b22;
+    --accent:#4493f8; --ok:#3fb950; --warn:#d29922; --code-bg:#1f2428; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg);
+         font:15px/1.55 -apple-system,"Segoe UI","Noto Sans","DejaVu Sans",Helvetica,Arial,sans-serif; }
+  main { max-width:1000px; margin:0 auto; padding:32px 16px 64px; }
+  h1 { font-size:1.9rem; margin:0 0 4px; line-height:1.2; }
+  h2 { font-size:1.3rem; margin:40px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--line); }
+  h3 { font-size:1.05rem; margin:22px 0 8px; }
+  p, li { max-width:80ch; }
+  .sub { color:var(--muted); margin:0 0 20px; }
+  code, kbd { font:0.86em/1.4 "DejaVu Sans Mono",Menlo,Consolas,monospace; background:var(--code-bg);
+         padding:1px 5px; border-radius:4px; overflow-wrap:anywhere; }
+  pre { background:var(--code-bg); padding:10px 12px; border-radius:6px; overflow-x:auto; font-size:0.84rem; line-height:1.45; }
+  pre code { background:none; padding:0; }
+  .table-wrap { width:100%; overflow-x:auto; margin:10px 0 6px; }
+  table { border-collapse:collapse; width:100%; font-size:0.86rem; }
+  th, td { border:1px solid var(--line); padding:5px 8px; text-align:left; vertical-align:top; }
+  th { background:var(--soft); font-weight:600; }
+  table.keys td:first-child { white-space:nowrap; }
+  table.keys { font-size:0.8rem; }
+  .note { border-left:3px solid var(--accent); background:var(--soft); padding:8px 12px; margin:12px 0; }
+  .warn { border-left-color:var(--warn); }
+  .toc ol { columns:2; column-gap:32px; padding-left:20px; }
+  .muted { color:var(--muted); }
+  ol.steps > li { margin-bottom:6px; }
+  @page { size:A4; margin:13mm 11mm; }
+  @media print { body { font-size:9.5pt; } main { max-width:none; padding:0; }
+    h2 { break-after:avoid; } h3 { break-after:avoid; } tr, .note, pre { break-inside:avoid; }
+    .table-wrap { overflow:visible; } .toc ol { columns:2; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Getting Started with Vim + tmux</h1>
+<p class="sub">For new users of the configuration in <code>Vim_Tmux_Config</code> · 2026-11-05. Next steps: the <b>User Guide</b> (<code>vim-tmux-user-guide</code>) and the <b>Agent Workflow Tutorial</b> (<code>agent-workflow-tutorial</code>).</p>
+<p>New to Vim, tmux or this configuration? Start here: install it, learn
+how keys are written, and try the keys you need on day one. The other
+guides and the README are for later.</p>
+<h2>What You Get</h2>
+<ul>
+<li><strong>Vim/Neovim</strong> set up like a light IDE for Python: file
+search, completion, go-to-definition, linting, formatting, tests and a
+debugger. Most of it stays off until you ask for it, so Vim starts
+fast.</li>
+<li><strong>tmux</strong> (a terminal "window manager") with Vim-like
+keys, so one terminal holds your editor, a shell and a coding agent next
+to each other.</li>
+<li><strong>Vim and tmux work together</strong>: the same keys move
+between Vim splits and tmux panes, Vim sends code or file references to
+another pane, and reads test or agent output back.</li>
+<li><strong>Notes</strong> in Markdown (vimwiki), with a daily diary,
+links, preview and export.</li>
+</ul>
+<h2>What You Need</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Tool</th>
+<th>Version</th>
+<th>Check with</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Neovim (or Vim)</td>
+<td>0.9+ (9.1+)</td>
+<td><code>nvim --version</code></td>
+</tr>
+<tr class="even">
+<td>tmux</td>
+<td>3.2+</td>
+<td><code>tmux -V</code></td>
+</tr>
+<tr class="odd">
+<td>git, curl</td>
+<td>any</td>
+<td><code>git --version</code></td>
+</tr>
+<tr class="even">
+<td>Python 3 (for Python work)</td>
+<td>3.8+</td>
+<td><code>python3 --version</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Optional extras (installed later, see "Preparation for Dependence" in
+the <a
+href="../../README.md#1-preparation-for-dependence-vim">README</a>):
+<code>fzf</code>, <code>ripgrep</code>, <code>xsel</code> (clipboard),
+<code>ruff</code>, <code>pytest</code>, Node.js (some language
+servers).</p>
+<h2>Install in 5 Steps</h2>
+<ol type="1">
+<li><p>Clone the repository <strong>to this exact place</strong> (the
+tmux status bar and some keys look for their scripts here):</p>
+<div class="sourceCode"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="op">&lt;</span>this-repository-url<span class="op">&gt;</span> ~/Desktop/Vim_Tmux_Config</span>
+<span><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/Desktop/Vim_Tmux_Config</span></code></pre></div></li>
+<li><p>Link the config files, so a later <code>git pull</code> updates
+them. If you already have these files, move them away first (e.g.
+<code>mv ~/.tmux.conf ~/.tmux.conf.bak</code>), or <code>ln -s</code>
+stops with "File exists":</p>
+<div class="sourceCode"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.config/nvim</span>
+<span><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> <span class="st">&quot;</span><span class="va">$PWD</span><span class="st">/vim/vimrc&quot;</span> ~/.config/nvim/init.vim   <span class="co"># Neovim</span></span>
+<span><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> <span class="st">&quot;</span><span class="va">$PWD</span><span class="st">/vim/vimrc&quot;</span> ~/.vimrc                  <span class="co"># Vim (optional)</span></span>
+<span><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> <span class="st">&quot;</span><span class="va">$PWD</span><span class="st">/tmux/tmux.conf&quot;</span> ~/.tmux.conf         <span class="co"># tmux</span></span></code></pre></div></li>
+<li><p>Start tmux: <code>tmux</code>. The first start downloads the tmux
+plugins by itself (give it a minute). You should see a status bar along
+the bottom. If tmux was already running before step 2, run
+<code>tmux kill-server</code> first (this closes all tmux sessions),
+then <code>tmux</code>.</p></li>
+<li><p>Start Neovim: <code>nvim</code>. The first start downloads the
+Vim plugins into a split window; wait until it says
+<code>Finished</code>. Then type <code>:qa</code> and press
+<code>Enter</code> to quit, and start <code>nvim</code> again.</p></li>
+<li><p>Optional, for Python:
+<code>pip install --user ruff pytest ipdb</code> (or install them in
+your project's virtualenv; plain <code>pip install</code> may refuse
+with "externally-managed-environment"), then open any <code>.py</code>
+file in Neovim and run
+<code>:LspInstallServer pylsp-all</code>.</p></li>
+</ol>
+<h2>How to Read the Key Tables</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Written as</th>
+<th>Means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>[LK]</code></td>
+<td>The Vim <strong>leader key</strong> = <code>Space</code></td>
+</tr>
+<tr class="even">
+<td><code>[BK]</code> or "prefix"</td>
+<td>The tmux <strong>prefix</strong> = <code>Ctrl</code>+<code>b</code>
+(or <code>Ctrl</code>+<code>a</code>). Press it, let go, then press the
+next key</td>
+</tr>
+<tr class="odd">
+<td><code>[LK]</code>+<code>[f]</code>+<code>[g]</code>+<code>[f]</code></td>
+<td>Press the keys <strong>one after another</strong>:
+<code>Space</code>, <code>f</code>, <code>g</code>, <code>f</code></td>
+</tr>
+<tr class="even">
+<td><code>[Ctrl]</code>+<code>[w]</code></td>
+<td>Hold <code>Ctrl</code> and press <code>w</code> at the same
+time</td>
+</tr>
+<tr class="odd">
+<td><code>[Shift]</code>+<code>[l]</code></td>
+<td>Capital <code>L</code></td>
+</tr>
+<tr class="even">
+<td><code>[Alt]</code>+<code>[d]</code></td>
+<td>Hold <code>Alt</code> and press <code>d</code></td>
+</tr>
+<tr class="odd">
+<td>N / V / I (VIM-Mode)</td>
+<td>The key works in Normal / Visual / Insert mode</td>
+</tr>
+<tr class="even">
+<td><code>&lt;leader&gt;ffs</code> (in the guides)</td>
+<td>Same as
+<code>[LK]</code>+<code>[f]</code>+<code>[f]</code>+<code>[s]</code></td>
+</tr>
+<tr class="odd">
+<td><code>:w</code></td>
+<td>Type <code>:w</code> in Normal mode and press
+<code>Enter</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Stuck? In Vim press <code>Space</code> and wait: a menu (which-key)
+lists what comes next. In tmux, prefix <code>?</code> lists every key.
+<code>Esc</code> (or typing <code>kj</code>) always gets you back to
+Vim's normal mode.</p>
+<h2>Words You Will See</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Word</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Buffer</td>
+<td>A file opened in Vim (it stays open even when it isn't on
+screen)</td>
+</tr>
+<tr class="even">
+<td>Split</td>
+<td>Vim's screen divided into several views (Vim also calls them
+windows)</td>
+</tr>
+<tr class="odd">
+<td>Session / window / pane (tmux)</td>
+<td>A tmux <strong>session</strong> holds <strong>windows</strong> (like
+browser tabs); a window is divided into <strong>panes</strong>, each
+running its own program</td>
+</tr>
+<tr class="even">
+<td>Normal / Insert mode</td>
+<td>In Normal mode keys are commands; in Insert mode they type text
+(<code>i</code> to insert, <code>Esc</code> to leave)</td>
+</tr>
+<tr class="odd">
+<td>Quickfix list</td>
+<td>A list of file positions (search hits, test failures, errors) you
+can jump through</td>
+</tr>
+<tr class="even">
+<td>LSP</td>
+<td>Language server: the program that gives completion, go-to-definition
+and error checking</td>
+</tr>
+<tr class="odd">
+<td>Agent</td>
+<td>An AI coding assistant running in a terminal pane, e.g. Claude
+Code</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Your First 15 Minutes</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr class="header">
+<th>Do this</th>
+<th>Keys</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Open a file by name</td>
+<td><code>[LK]</code>+<code>[f]</code>+<code>[g]</code>+<code>[f]</code>
+(git files) or
+<code>[LK]</code>+<code>[f]</code>+<code>[f]</code>+<code>[s]</code>
+(all files)</td>
+</tr>
+<tr class="even">
+<td>Search text in the project</td>
+<td><code>[LK]</code>+<code>[f]</code>+<code>[r]</code>+<code>[g]</code></td>
+</tr>
+<tr class="odd">
+<td>Switch between open files</td>
+<td><code>[LK]</code>+<code>[']</code></td>
+</tr>
+<tr class="even">
+<td>Show the file tree</td>
+<td><code>[F3]</code></td>
+</tr>
+<tr class="odd">
+<td>Leave Insert mode</td>
+<td><code>Esc</code> or <code>kj</code></td>
+</tr>
+<tr class="even">
+<td>Save / quit</td>
+<td><code>[LK]</code>+<code>[w]</code>+<code>[w]</code> /
+<code>[LK]</code>+<code>[q]</code>+<code>[q]</code> (or <code>:w</code>,
+<code>:q</code>)</td>
+</tr>
+<tr class="odd">
+<td>Comment a line</td>
+<td><code>[Ctrl]</code>+<code>[/]</code></td>
+</tr>
+<tr class="even">
+<td>Turn on code intelligence (Python)</td>
+<td><code>[LK]</code>+<code>[Shift]</code>+<code>[l]</code>+<code>[e]</code>,
+then <code>[g]</code>+<code>[d]</code> goes to a definition</td>
+</tr>
+<tr class="odd">
+<td>Split the tmux window left/right, top/bottom</td>
+<td>prefix <code>%</code> / prefix <code>"</code></td>
+</tr>
+<tr class="even">
+<td>Move between Vim splits and tmux panes</td>
+<td><code>[Ctrl]</code>+<code>[h/j/k/l]</code> (left/down/up/right)</td>
+</tr>
+<tr class="odd">
+<td>Zoom a pane / new tmux window / next window</td>
+<td>prefix <code>z</code> / prefix <code>c</code> / prefix
+<code>n</code></td>
+</tr>
+<tr class="even">
+<td>Leave tmux running in the background</td>
+<td>prefix <code>d</code> (come back with <code>tmux attach</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Where to Go Next</h2>
+<ul>
+<li><strong>User guide</strong>: <a
+href="vim-tmux-user-guide.html">vim-tmux-user-guide.html</a> (also
+<code>.pdf</code>), task by task: Python, notes, search, git, and every
+leader key.</li>
+<li><strong>Agent workflow tutorial</strong>: <a
+href="agent-workflow-tutorial.html">agent-workflow-tutorial.html</a>
+(also <code>.pdf</code>), a hands-on walkthrough of working with Claude
+Code next to Vim, with examples.</li>
+<li><strong>The <a href="../../README.md">README</a></strong>: install
+details, feature switches and the full key tables.</li>
+</ul>
+
+</main>
+</body>
+</html>
