@@ -414,9 +414,10 @@
     noremap <leader><Tab> :jumps<CR>
     noremap <leader><S-Tab> :jumps<CR>
     " Show change list
-    " -- Normal mode: replaced by the fzf version (Part 3, 'FZF replacement')
-    noremap <leader>g; :changes<CR>
-    noremap <leader>g, :changes<CR>
+    " -- Replaced by the fzf version (Part 3, 'FZF replacement'); the old
+    "    one only remained in visual mode, where it fails (E481), so it is off
+    "noremap <leader>g; :changes<CR>
+    "noremap <leader>g, :changes<CR>
     " Diff mode (vimdiff or nvim -d)
     noremap <leader>dd :diffthis<CR>
     noremap <leader>dD :diffoff<CR>
@@ -507,9 +508,16 @@
     vnoremap <leader>euq :!uniq<CR>
 
 " General Vim settings -------------------------------------------------------
-    set exrc            " Search vimrc file in current directory
+    " Project-local .vimrc/.exrc/.nvimrc in the current directory
+    " -- Neovim >= 0.9 asks you to :trust each file before sourcing it
+    " -- Vim: 'secure' only restricts files NOT owned by you, and files an
+    "    agent writes in the project are owned by you, so exrc stays off
+    if has('nvim-0.9')
+        set exrc
+    else
+        set noexrc
+    endif
     set secure          " Restrict commands in local exrc files (see :h secure)
-                        " -- Neovim >= 0.9 also asks you to :trust them first
     set timeoutlen=300  " Timeout for entering combined key (millisecond)
     set confirm         " Ask for confirmation before leaving vim
     set modifiable      " Make current buffer modifiable
@@ -923,8 +931,9 @@
     noremap <leader>be :edit<space>
     " Delete buffer
     noremap <leader>bd :bdelete<CR>
-    " -- Normal mode: replaced by the fzf version (Part 3, 'FZF replacement')
-    noremap <leader>bD :bdelete<space>
+    " -- Replaced by the fzf version (Part 3, 'FZF replacement'); the old
+    "    one only remained in visual mode, where it fails (E481), so it is off
+    "noremap <leader>bD :bdelete<space>
     noremap <leader>b' :bdelete#<CR>
     noremap <leader>b" :bnext<CR>:bdelete#<CR>
     " Delete all other buffers
@@ -985,8 +994,9 @@
     " Keymapping for quickfix list
     noremap <leader>qg :vimgrep<space>
     noremap <leader>qd :cdo<space>
-    " -- Normal mode: replaced by the fzf version (Part 3, 'FZF replacement')
-    noremap <leader>qo :call QuickfixListToggle()<CR>
+    " -- Replaced by the fzf version (Part 3, 'FZF replacement'); the old
+    "    one only remained in visual mode, where it fails (E481), so it is off
+    "noremap <leader>qo :call QuickfixListToggle()<CR>
     noremap <leader>qj :cnext<CR>zz
     noremap <leader>qk :cprev<CR>zz
 
@@ -1233,8 +1243,9 @@
     endfunction
     " Keymapping for location list
     noremap <leader>eg :lvimgrep<space>
-    " -- Normal mode: replaced by the fzf version (Part 3, 'FZF replacement')
-    noremap <leader>eo :call LocationListToggle()<CR>
+    " -- Replaced by the fzf version (Part 3, 'FZF replacement'); the old
+    "    one only remained in visual mode, where it fails (E481), so it is off
+    "noremap <leader>eo :call LocationListToggle()<CR>
     noremap <leader>ej :lnext<CR>zz
     noremap <leader>ek :lprev<CR>zz
 
@@ -1248,8 +1259,9 @@
     "    -- '< : Beginning of last visual selection (> for end)
 
     " Show marks in vim [Also check markbar plugin]
-    " -- Normal mode: replaced by the fzf version (Part 3, 'FZF replacement')
-    noremap <leader>mk :marks<CR>
+    " -- Replaced by the fzf version (Part 3, 'FZF replacement'); the old
+    "    one only remained in visual mode, where it fails (E481), so it is off
+    "noremap <leader>mk :marks<CR>
     noremap <leader>md :delmarks<space>
     noremap <leader>mdd :delmarks!<CR>
 
@@ -1500,6 +1512,8 @@
     " -- <leader>xx: send current line / visual selection, then Enter
     " -- <leader>xc: send current '# %%' cell (IPython/Jupyter style), then
     "    move to the next cell (like Shift+Enter in VS Code interactive window)
+    " -- xx/xc refuse a target pane running an agent (s:agents), so an Enter
+    "    never answers its permission prompt; use <leader>xy there
     " -- <leader>xy: paste line/selection WITHOUT Enter (e.g. into an agent
     "    prompt, to edit before submitting)
     " -- <leader>xt: choose target pane (lists panes; '{last}', '%3', ':.1')
@@ -1529,6 +1543,17 @@
         endif
         let l:pane = a:0 ? a:1 : g:vimrc_tmux.target
         let l:target = shellescape(l:pane)
+        " Never press Enter in an agent pane: it could answer a permission
+        " prompt (e.g. <leader>xx while the target is {last} = the agent)
+        if a:enter > 0
+            let l:prog = s:TmuxPaneCommand(l:pane)
+            if index(s:agents, l:prog) >= 0
+                echohl WarningMsg | echo 'tmux pane ' . l:pane . ' runs ' . l:prog
+                            \ . ': not sent (no Enter into an agent; <leader>xy pastes without Enter)'
+                echohl None
+                return 0
+            endif
+        endif
         " Leave copy mode first, or the Enter below would only exit it
         call s:TmuxLeaveCopyMode(l:pane)
         call system('tmux load-buffer -b vim_send -', a:text)
@@ -1609,6 +1634,9 @@
                     \ : g:vimrc_tmux.run_target
     endfunction
     let s:shells = ['bash', 'zsh', 'fish', 'sh', 'dash', 'ksh', 'tcsh']
+    " Coding agents (pane_current_command): text is pasted, never with Enter
+    " -- 'node': Claude Code installed with npm shows as node
+    let s:agents = ['claude', 'node', 'codex', 'aider', 'gemini']
     " A shell pane in vim's tmux window for commands: an idle shell pane
     " (not vim's own), else (split = 1) offer to split one below vim; '' if
     " none
@@ -2574,9 +2602,11 @@
     nnoremap <leader>fbL :execute ":FZFBLines " . expand('<cword>')<CR>
     nnoremap <leader>fgl :FZFLines<CR>
     nnoremap <leader>fgL :execute ":FZFLines " . expand('<cword>')<CR>
-    " Line in global buffer
-    nnoremap <leader>f/  :FZFLines<CR>
-    nnoremap <leader>f?  :execute ":FZFLines " . expand('<cword>')<CR>
+    " Lines, following vim search keys: / current buffer, ? all buffers,
+    " * word under cursor (current buffer, like vim's *)
+    nnoremap <leader>f/  :FZFBLines<CR>
+    nnoremap <leader>f?  :FZFLines<CR>
+    nnoremap <leader>f*  :execute ":FZFBLines " . expand('<cword>')<CR>
     " Tag in local/global buffer
     nnoremap <leader>fbt :FZFBTags<CR>
     nnoremap <leader>fbT :execute ":FZFBTag " . expand('<cword>')<CR>
@@ -2622,13 +2652,13 @@
     nnoremap <leader>fmi :FZFMDInsert<CR>
     " FZF replacement
     " -- These replace, in normal mode only, keys defined earlier for the
-    "    built-in lists (<leader>bD, eo, g;, mk, qo); the built-in versions
-    "    still apply in visual/operator-pending mode
+    "    built-in lists (<leader>bD, eo, g;, g,, mk, qo); the built-in versions
+    "    are commented out where they are defined
     nnoremap <leader>'  :FZFBuffers<CR>
     nnoremap <leader>bD :FZFBD<CR>
     nnoremap <leader>mk :FZFMarks<CR>
     nnoremap <leader>g; :FZFChanges<CR>
-    nnoremap <leader>g. :FZFChanges<CR>
+    nnoremap <leader>g, :FZFChanges<CR>
     nnoremap <leader>gi :FZFJumps<CR>
     nnoremap <leader>go :FZFJumps<CR>
     nnoremap <leader>rg :FZFRg<CR>
@@ -3762,7 +3792,14 @@
 " LaTex ----------------------------------------------------------------------
     " Set spell check for LaTex files
     autocmd vimrc FileType plaintex,context,tex setlocal spell
-    autocmd vimrc FileType plaintex,context,tex setlocal updatetime=10000 " Unit: ms
+    " Slower CursorHold (10 s) in tex buffers only: 'updatetime' is global,
+    " so it is switched on BufEnter and other buffers keep the default
+    " (auto-reload of agent edits, gitgutter refresh)
+    let s:updatetime = &updatetime
+    autocmd vimrc FileType plaintex,context,tex
+                \ let b:vimrc_updatetime = 10000 | let &updatetime = 10000
+    autocmd vimrc BufEnter *
+                \ let &updatetime = get(b:, 'vimrc_updatetime', s:updatetime)
     " LaTex real-time viewer with GUI pdf file manager
     " -- <buffer>: <leader><F4> is the previewer of the CURRENT file type
     "    (tex here, markdown below), so the two never override each other

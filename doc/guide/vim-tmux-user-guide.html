@@ -478,11 +478,12 @@
 <tr><td><code>&lt;leader&gt;et</code></td><td><code>:set expandtab!&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;ets</code></td><td><code>:r !date&lt;CR&gt;</code></td><td>global</td></tr>
 </table></div>
-<h3>&lt;leader&gt;f — FZF <span class="muted">(42)</span></h3>
+<h3>&lt;leader&gt;f — FZF <span class="muted">(43)</span></h3>
 <div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
 <tr><td><code>&lt;leader&gt;f&#x27;</code></td><td><code>:FZFMarks&lt;CR&gt;</code></td><td>global</td></tr>
-<tr><td><code>&lt;leader&gt;f/</code></td><td><code>:FZFLines&lt;CR&gt;</code></td><td>global</td></tr>
-<tr><td><code>&lt;leader&gt;f?</code></td><td><code>:execute &quot;:FZFLines &quot; . expand(&#x27;&lt;lt&gt;cword&gt;&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;f*</code></td><td><code>:execute &quot;:FZFBLines &quot; . expand(&#x27;&lt;lt&gt;cword&gt;&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;f/</code></td><td><code>:FZFBLines&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;f?</code></td><td><code>:FZFLines&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;fag</code></td><td><code>:FZFAg&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;fbd</code></td><td><code>:FZFBD&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;fbL</code></td><td><code>:execute &quot;:FZFBLines &quot; . expand(&#x27;&lt;lt&gt;cword&gt;&#x27;)&lt;CR&gt;</code></td><td>global</td></tr>
@@ -523,10 +524,9 @@
 <tr><td><code>&lt;leader&gt;frr</code></td><td><code>:FZFRgRoot&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;fws</code></td><td><code>:FZFWindows&lt;CR&gt;</code></td><td>global</td></tr>
 </table></div>
-<h3>&lt;leader&gt;g — Git (lazy) / goyo / jumps <span class="muted">(31)</span></h3>
+<h3>&lt;leader&gt;g — Git (lazy) / goyo / jumps <span class="muted">(30)</span></h3>
 <div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
-<tr><td><code>&lt;leader&gt;g,</code></td><td><code>:changes&lt;CR&gt;</code></td><td>global</td></tr>
-<tr><td><code>&lt;leader&gt;g.</code></td><td><code>:FZFChanges&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;g,</code></td><td><code>:FZFChanges&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;g;</code></td><td><code>:FZFChanges&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;gA</code></td><td><code>:Git add %&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;ga</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_GitGutterRun(&#x27;GitGutterStageHunk&#x27;, 0)&lt;CR&gt;</code></td><td>global</td></tr>
