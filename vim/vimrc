@@ -2206,6 +2206,22 @@
     autocmd vimrc FileType markdown,vimwiki
                 \ setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=-1
 
+" Reopen a file at the last cursor position ----------------------------------
+    " NOTE:
+    " -- Neovim has no such default, and Vim's defaults.vim (which has it) is
+    "    not loaded when a vimrc exists
+    " -- Uses the '" mark from viminfo/shada (files under /tmp are excluded
+    "    by 'viminfo' r/tmp), and opens folds at the cursor (zv)
+    " -- Skipped for commit/rebase messages (always start at the top) and
+    "    diff mode; 'vim +42 file', sessions and quickfix jumps still win,
+    "    as they move the cursor after this
+    " -- Here, after plug#end() turned on filetype detection, so 'filetype'
+    "    is already set when this runs
+    autocmd vimrc BufReadPost *
+                \ if &filetype !~# '^\(gitcommit\|gitrebase\|hgcommit\|svn\)$'
+                \   && !&diff && line("'\"") >= 1 && line("'\"") <= line('$')
+                \ | execute 'normal! g`"zv' | endif
+
 " ============================================================================
 " Part 2 - Vim-theme settings (Plugins settings and mappings)
 " ============================================================================
@@ -2692,16 +2708,15 @@
     " Don't show these file types
     let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
     let g:NERDTreeMouseMode = 3
-    let g:NERDTreeDirArrows = ''
     " Set NERDTree dir arrow symbols
     let g:NERDTreeDirArrowExpandable = '►'
     let g:NERDTreeDirArrowCollapsible = '▼'
     " Set NERDTree open split
     let g:NERDTreeMapOpenSplit = 's'
     let g:NERDTreeMapOpenVSplit = 'v'
-    " Set NERDTree open preview
-    let g:NERDTreeletPreviewSplit = 'gs'
-    let g:NERDTreeletPreviewVSplit = 'gv'
+    " Set NERDTree open preview (open in a split, cursor stays in NERDTree)
+    let g:NERDTreeMapPreviewSplit = 'gs'
+    let g:NERDTreeMapPreviewVSplit = 'gv'
     " Toggle NERDTree Zoom
     let g:NERDTreeMapToggleZoom = 'zz'
     " Toggle NERDTree display pane
