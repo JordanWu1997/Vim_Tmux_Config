@@ -72,6 +72,8 @@ The rest of this README is reference material: install details, feature switches
       - [Key Mapping Sheet 2 - Copy-mode Key Mapping (TMUX)](#key-mapping-sheet-2---copy-mode-key-mapping-tmux)
       - [Key Mapping Sheet 3 - Plugin Key Mapping (TMUX)](#key-mapping-sheet-3---plugin-key-mapping-tmux)
       - [Key Mapping Sheet 4 - Miscellaneous (TMUX)](#key-mapping-sheet-4---miscellaneous-tmux)
+    - [Section 5 - Troubleshooting (TMUX)](#section-5---troubleshooting-tmux)
+      - [Laggy Vim/Ranger in TMUX - Large Scrollback History (TMUX)](#laggy-vimranger-in-tmux---large-scrollback-history-tmux)
     - [Reference for Setup (TMUX)](#reference-for-setup-tmux)
 
 </details>
@@ -1179,7 +1181,8 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 |  Normal   |      `[BK]`+`[Ctrl]`+`[h]`       |            Send Ctrl+h to terminal             |               Send Ctrl+h to terminal                |                   Ctrl+h is alternative backspace in shell                   |
 |  Normal   |      `[BK]`+`[Ctrl]`+`[k]`       |            Send Ctrl+k to terminal             |               Send Ctrl+k to terminal                |                 Ctrl+k is to delete to end of line in shell                  |
 |  Normal   |      `[BK]`+`[Ctrl]`+`[l]`       |            Send Ctrl+l to terminal             |               Send Ctrl+l to terminal                |                   Ctrl+l is to clear pane output in shell                    |
-|  Normal   | `[BK]`+`[Ctrl]`+`[Shift]`+`[l]`  |            Clear scrollback history            |            Clear TMUX scrollback history             |                                                                              |
+|  Normal   | `[BK]`+`[Ctrl]`+`[Shift]`+`[l]`  |            Clear scrollback history            |            Clear TMUX scrollback history             |                 Asks y/n, shows the pane's history length                    |
+|  Normal   |  `[BK]`+`[Ctrl]`+`[Alt]`+`[l]`   |    Clear scrollback history of many panes      |   Menu: all apps or one app (nvim, ranger, ...)      |      Whole server, shows lines/panes per app; see Troubleshooting below      |
 |  Normal   |      `[BK]`+`[Ctrl]`+`[s]`       |       Toggle pane input synchronization        |          Toggle pane input synchronization           |                       Synchronize input for all panes                        |
 |  Normal   |      `[BK]`+`[Shift]`+`[m]`      |               Toggle mouse usage               |                  Toggle mouse usage                  |                             Mouse usage support                              |
 |  Normal   |           `[BK]`+`[m]`           |               Mark current pane                |                  Mark current pane                   |                        Mark pane for following usage                         |
@@ -1189,6 +1192,51 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 |  Normal   | `[BK]`+`[Alt]`+`[Shift]`+`[5/']` | Move marked pane to right/bottom of focus pane |    Move marked pane to right/bottom of focus pane    |                   Shift+5/' just % for H-dir, " for V-dir                    |
 
 </details>
+</details>
+
+### Section 5 - Troubleshooting (TMUX)
+
+<details open>
+<summary>Click to expand!</summary>
+
+#### Laggy Vim/Ranger in TMUX - Large Scrollback History (TMUX)
+
+- **Symptom**: moving between lines in vim/neovim (or in ranger, htop, ...)
+  feels laggy **only inside TMUX**; the same app outside TMUX, or in a fresh
+  server (`tmux -L clean -f /dev/null`), is fast. It gets worse the longer
+  the server runs.
+- **Root cause**:
+  - `set -g alternate-screen off` (kept on purpose, so app output stays in
+    the scrollback) makes full-screen apps (vim, ranger, htop,
+    intel_gpu_top, ...) draw on the normal screen, so their redraws are
+    pushed into the pane's scrollback history.
+  - With `history-limit 100000`, panes grow to tens of thousands of lines
+    each (some panes created under an older limit even had 160k+).
+  - The TMUX server is single-threaded: many panes with huge histories, plus
+    panes that never stop redrawing (intel_gpu_top, `journalctl -f`, loops
+    in python), slow down every other pane.
+  - Check it with:
+    `tmux list-panes -a -F '#{history_size} #{pane_id} #{session_name}:#{window_index} #{pane_current_command}' | sort -n | tail`
+- **Solution** (keep `alternate-screen off`, clean history instead):
+  - Clear current pane: `[BK]`+`[Ctrl]`+`[Shift]`+`[l]` (the prompt shows the
+    pane's history length).
+  - Clear many panes at once: `[BK]`+`[Ctrl]`+`[Alt]`+`[l]` opens a menu of
+    all apps or one app, with lines/panes per app, then asks y/n. From a
+    shell: `tmux/bin/tmux_clear_all_history.sh` (`--yes [app]` skips asking).
+  - Auto-clean in the background: `tmux/bin/tmux_history_autoclean.sh`,
+    started by `tmux.conf`, clears panes running the listed apps once their
+    history is over the limit. Panes in copy mode are skipped. Settings
+    (global options, applied without restart):
+
+    ```tmux
+    set -g @history_autoclean_apps 'vim nvim ranger htop btop intel_gpu_top'  # '' = off
+    set -g @history_autoclean_limit 5000      # lines
+    set -g @history_autoclean_interval 60     # seconds between checks
+    ```
+
+  - The app name is what runs in the pane **now** (`pane_current_command`);
+    history left by an app that already exited counts under the shell.
+
 </details>
 
 ### Reference for Setup (TMUX)
