@@ -3365,10 +3365,35 @@
         " -- 1. Link URL (e.g., 中文連結 -> %E4%B8%AD%E6%96%87%E9%80%A3%E7%B5%90)
         " -- 2. Tex (e.g., $\parameter$ -> $\\paramter$)
         " -- 3. Markdown bulleted list with checkboxes (e.g., [X] -> [x])
-        nnoremap <leader>nmf
-            \ :Neoformat! markdown mdformat<CR>
-            \ :execute 'silent! %!python3 ' . g:vimrc_tools.mdformat_patch<CR>
-            \ :echo 'Neoformat: mdformat and Python patch applied'<CR>
+        " -- The patch only decodes non-ASCII escapes (%20 stays), only
+        "    touches math and checkboxes outside code (see the script)
+        " -- Safe: the buffer is replaced only when the patch succeeds (an
+        "    error is shown instead), cursor/view are kept, and mdformat +
+        "    patch are one undo step
+        function! s:MdformatWithPatch() abort
+            let l:view = winsaveview()
+            Neoformat! markdown mdformat
+            let l:lines = getline(1, '$')
+            let l:out = systemlist('python3 '
+                        \ . shellescape(g:vimrc_tools.mdformat_patch), l:lines)
+            if v:shell_error
+                echohl ErrorMsg
+                echo 'mdformat patch failed (buffer kept as mdformat left it): '
+                            \ . get(l:out, -1, '')
+                echohl None
+                return
+            endif
+            if l:out !=# l:lines
+                silent! undojoin
+                call setline(1, l:out)
+                if len(l:out) < len(l:lines)
+                    silent execute (len(l:out) + 1) . ',$delete _'
+                endif
+            endif
+            call winrestview(l:view)
+            echo 'Neoformat: mdformat and Python patch applied'
+        endfunction
+        nnoremap <silent> <leader>nmf :<C-u>call <SID>MdformatWithPatch()<CR>
 
         " Python -------------------------------------------------------------
         " pyment: python docstring creator/formatter (p for python)
