@@ -411,21 +411,21 @@
     noremap <Tab> <C-i>
     noremap <S-Tab> <C-o>
     " Show jump list
-    noremap <leader><Tab> :jumps<CR>
-    noremap <leader><S-Tab> :jumps<CR>
+    nnoremap <leader><Tab> :jumps<CR>
+    nnoremap <leader><S-Tab> :jumps<CR>
     " Show change list
     " -- Replaced by the fzf version (Part 3, 'FZF replacement'); the old
     "    one only remained in visual mode, where it fails (E481), so it is off
     "noremap <leader>g; :changes<CR>
     "noremap <leader>g, :changes<CR>
     " Diff mode (vimdiff or nvim -d)
-    noremap <leader>dd :diffthis<CR>
-    noremap <leader>dD :diffoff<CR>
-    noremap <leader>ds :diffsplit<space>
-    noremap <leader>dv :vertical diffsplit<space>
+    nnoremap <leader>dd :diffthis<CR>
+    nnoremap <leader>dD :diffoff<CR>
+    nnoremap <leader>ds :diffsplit<space>
+    nnoremap <leader>dv :vertical diffsplit<space>
     noremap <leader>do :diffget<space>
     noremap <leader>dp :diffput<space>
-    noremap <leader>du :diffupdate<CR>
+    nnoremap <leader>du :diffupdate<CR>
     noremap <leader>dj ]c
     noremap <leader>dk [c
     " Inline substitution (press & to repeat last substitution action)
@@ -437,7 +437,7 @@
     " Copy current file path to clipboard
     " -- @+ is CLIPBOARD (Ctrl+Shift+V in terminal, e.g. paste into an agent
     "    pane), @* is PRIMARY (middle click). Set both to cover both pastes.
-    noremap <leader>yp :let @+ = expand('%:p') <bar> let @* = @+ <bar> echo 'Yanked path: ' . @+<CR>
+    nnoremap <leader>yp :let @+ = expand('%:p') <bar> let @* = @+ <bar> echo 'Yanked path: ' . @+<CR>
     " Copy file reference for agent prompts: @path:L12 (visual: @path:L12-L30)
     " -- Path is relative to the project (git) root, where the agent runs;
     "    a path with spaces is quoted: @"my dir/a.py":L12 (same as <leader>xr)
@@ -461,17 +461,17 @@
     " -- :w with sudo (same as :SudaWrite from lambdalisue/suda.vim)
     "command! W silent execute 'w !sudo tee ' . shellescape(expand('%')) . ' > /dev/null' | edit!
 
-    noremap <leader>qq :q<CR>
-    noremap <leader>q! :q!<CR>
-    noremap <leader>qa :qall<CR>
-    noremap <leader>qa! :qall!<CR>
+    nnoremap <leader>qq :q<CR>
+    nnoremap <leader>q! :q!<CR>
+    nnoremap <leader>qa :qall<CR>
+    nnoremap <leader>qa! :qall!<CR>
     noremap <leader>ww :call RemoveTrailingWhitespace()<CR>:w<CR>
     noremap <leader>w! :call RemoveTrailingWhitespace()<CR>:w!<CR>
     noremap <leader>wq :call RemoveTrailingWhitespace()<CR>:wq<CR>
     " -- wa: write all and stay, wA: write all and quit, wa!: force write all
-    noremap <leader>wa! :wall!<CR>
-    noremap <leader>wa :wall<CR>
-    noremap <leader>wA :wqall<CR>
+    nnoremap <leader>wa! :wall!<CR>
+    nnoremap <leader>wa :wall<CR>
+    nnoremap <leader>wA :wqall<CR>
 
 " Macro ----------------------------------------------------------------------
     " NOTE:
@@ -573,7 +573,7 @@
     " -- <leader>cd: one-off :cd to the current buffer's directory (global,
     "    for all windows); go back with :cd - or :cd <path>
     set noautochdir " Do not change working directory to buffer file directory
-    noremap <leader>ac :set autochdir!<CR>:echo 'autochdir=' . &autochdir<CR>
+    nnoremap <leader>ac :set autochdir!<CR>:echo 'autochdir=' . &autochdir<CR>
     nnoremap <leader>cd :if &buftype ==# '' && isdirectory(expand('%:p:h'))
                 \ \| cd %:p:h \| pwd \| else \| echo 'No file directory for this buffer' \| endif<CR>
 
@@ -593,11 +593,11 @@
 
 " Line wrap ------------------------------------------------------------------
     set nowrap " Line wrap for small monitor or display window
-    noremap <leader>wp :set wrap!<CR>
+    nnoremap <leader>wp :set wrap!<CR>
 
 " Word -----------------------------------------------------------------------
-    noremap <leader>w- :set iskeyword-=_<CR>
-    noremap <leader>w= :set iskeyword+=_<CR>
+    nnoremap <leader>w- :set iskeyword-=_<CR>
+    nnoremap <leader>w= :set iskeyword+=_<CR>
     noremap <leader>wn :%s///n<Left><Left><Left>
     noremap <leader>wN :%s///ng<Left><Left><Left><Left>
 
@@ -606,7 +606,7 @@
     " -- [g] for good, [w] for wrong, [a] for add, [r] for remove
     set nospell " Vim built-in spell check
     set spelllang=en,cjk " English; cjk: do not mark Chinese/Japanese/Korean
-    noremap <leader>sl :set spell!<CR>
+    nnoremap <leader>sl :set spell!<CR>
     noremap <leader>sag <Esc>zg
     noremap <leader>saw <Esc>zw
     noremap <leader>srg <Esc>zug
@@ -621,30 +621,30 @@
 " Show special characters ----------------------------------------------------
     set list " Show character in list
     set listchars=eol:↵,tab:»·,trail:╳,extends:»,precedes:«,nbsp:␣
-    noremap <leader>cl :set list!<CR>
+    nnoremap <leader>cl :set list!<CR>
 
 " Cursor settings ------------------------------------------------------------
     set ruler          " Show cursor position in status line
     set cursorline     " Show horizontal line
     set nocursorcolumn " Show vertical line (laggy sometimes)
     " Toggle cursor line/column indicator (horizontal/vertical)
-    noremap <leader>ch :set cursorline!<CR>
+    nnoremap <leader>ch :set cursorline!<CR>
                 \:echo 'Toggle Cursor Line [Horizontal]'<CR>
-    noremap <leader>cv :set cursorcolumn!<CR>
+    nnoremap <leader>cv :set cursorcolumn!<CR>
                 \:echo 'Toggle Cursor Column [Vertical]'<CR>
     " Synchronize cursor between files
     " Must be executed in all files that you want to synchronize cursors
-    noremap <F11> :set cursorbind<CR>
-    noremap <leader><F11> :set nocursorbind<CR>
+    nnoremap <F11> :set cursorbind<CR>
+    nnoremap <leader><F11> :set nocursorbind<CR>
 
 " Display settings -----------------------------------------------------------
     set title             " Let vim change terminal title
     set display+=lastline " Show line as much as possible
     set scrolloff=10      " Keep cursor 10 lines away from top and bottom
     " Change scroll off
-    noremap <leader>so0 :set scrolloff=10<CR>
-    noremap <leader>so- :set scrolloff=0<CR>
-    noremap <leader>so= :set scrolloff=999<CR>
+    nnoremap <leader>so0 :set scrolloff=10<CR>
+    nnoremap <leader>so- :set scrolloff=0<CR>
+    nnoremap <leader>so= :set scrolloff=999<CR>
 
 " Search settings ------------------------------------------------------------
     " NOTE:
@@ -660,15 +660,15 @@
     " -- Normal mode only: in visual mode ':' adds a range ('<,'>) and
     "    :nohlsearch fails with E481 (No range allowed)
     nnoremap <silent><C-[> :nohlsearch<CR><Esc>
-    noremap <M-/> :set nohlsearch!<CR>
+    nnoremap <M-/> :set nohlsearch!<CR>
 
 " Line number settings -------------------------------------------------------
     set numberwidth=4    " Set fixed width to number column
     set norelativenumber " Do not show relative line number
     set number           " Show absolute line number
     " Toggle absolute/relative line number
-    noremap <leader><F5> :set number!<CR>
-    noremap <F5> :set relativenumber!<CR>
+    nnoremap <leader><F5> :set number!<CR>
+    nnoremap <F5> :set relativenumber!<CR>
 
 " View/Session settings ------------------------------------------------------
     " NOTE:
@@ -676,9 +676,9 @@
     "    -- viewoptions: folds,cursor,curdir
     " -- Session (save more info and can be stored anywhere),
     "    -- sessionoptions: blank,buffers,curdir,folds,help,tabpages,winsize,terminal
-    noremap <F10> :mkview<CR>
-    noremap <leader><F10> :loadview<CR>
-    noremap <C-s> :mksession<space>
+    nnoremap <F10> :mkview<CR>
+    nnoremap <leader><F10> :loadview<CR>
+    nnoremap <C-s> :mksession<space>
     " Automatic session for tmux-resurrect (g:vimrc_features.auto_session)
     " -- tmux-resurrect restores vim with 'vim -S' only when the pane's
     "    directory has a Session.vim, so keep one up to date with :Obsess
@@ -871,10 +871,10 @@
     set splitbelow
     set splitright
     " Resize window
-    noremap <silent><A-l> :vertical resize +2<CR>
-    noremap <silent><A-h> :vertical resize -2<CR>
-    noremap <silent><A-j> :resize +2<CR>
-    noremap <silent><A-k> :resize -2<CR>
+    nnoremap <silent><A-l> :vertical resize +2<CR>
+    nnoremap <silent><A-h> :vertical resize -2<CR>
+    nnoremap <silent><A-j> :resize +2<CR>
+    nnoremap <silent><A-k> :resize -2<CR>
     " Resize width to fraction
     function! ResizeWidthToFraction(fraction)
         let total_width = &columns
@@ -896,49 +896,49 @@
 
 " Tab (window container) settings --------------------------------------------
     " List tabs
-    noremap <leader>ts :tabs<CR>
+    nnoremap <leader>ts :tabs<CR>
     " Open new tab in background
-    noremap <leader>ta :tabnew<space>
+    nnoremap <leader>ta :tabnew<space>
     " Open new tab in foreground
-    noremap <leader>te :tabedit<space>
-    noremap <leader>tf :tabfind<space>
+    nnoremap <leader>te :tabedit<space>
+    nnoremap <leader>tf :tabfind<space>
     " Close tab
-    noremap <leader>td :tabclose<CR>
-    noremap <leader>tD :tabclose<space>
+    nnoremap <leader>td :tabclose<CR>
+    nnoremap <leader>tD :tabclose<space>
     " Navigate through tabs
-    noremap <leader>t0 :tabfirst<CR>
-    noremap <leader>t$ :tablast<CR>
-    noremap <leader>tn :tabnext<CR>
-    noremap <leader>tp :tabprevious<CR>
+    nnoremap <leader>t0 :tabfirst<CR>
+    nnoremap <leader>t$ :tablast<CR>
+    nnoremap <leader>tn :tabnext<CR>
+    nnoremap <leader>tp :tabprevious<CR>
     " Swap tabs
-    noremap <leader>tN :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
-    noremap <leader>tP :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
+    nnoremap <leader>tN :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
+    nnoremap <leader>tP :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
     " Merge into one tab
-    noremap <leader>to :tabonly<CR>
+    nnoremap <leader>to :tabonly<CR>
     " Split buffers into individual tabs
-    noremap <leader>tO :tab ball<CR>
+    nnoremap <leader>tO :tab ball<CR>
     "Action for all tabs (tabdo)
-    noremap <leader>tbd :tabdo<space>
+    nnoremap <leader>tbd :tabdo<space>
 
 " Buffer settings ------------------------------------------------------------
     " Switch buffers without saving
     set hidden
     " List all buffers
-    noremap <leader>bs :buffers<CR>
+    nnoremap <leader>bs :buffers<CR>
     " Add buffer in background
-    noremap <leader>ba :badd<space>
+    nnoremap <leader>ba :badd<space>
     " Add buffer in foreground (use :edit! to give up all changes)
-    noremap <leader>be :edit<space>
+    nnoremap <leader>be :edit<space>
     " Delete buffer
-    noremap <leader>bd :bdelete<CR>
+    nnoremap <leader>bd :bdelete<CR>
     " -- Replaced by the fzf version (Part 3, 'FZF replacement'); the old
     "    one only remained in visual mode, where it fails (E481), so it is off
     "noremap <leader>bD :bdelete<space>
-    noremap <leader>b' :bdelete#<CR>
-    noremap <leader>b" :bnext<CR>:bdelete#<CR>
+    nnoremap <leader>b' :bdelete#<CR>
+    nnoremap <leader>b" :bnext<CR>:bdelete#<CR>
     " Delete all other buffers
     " -- https://stackoverflow.com/questions/4545275/vim-close-all-buffers-but-this-one
-    noremap <leader>bo :%bd\|e#\|bd#<cr>
+    nnoremap <leader>bo :%bd\|e#\|bd#<cr>
     " Undo buffer to last save (asks first when there are unsaved changes)
     function! s:RevertBuffer() abort
         if &modified && confirm('Discard unsaved changes in '
@@ -949,35 +949,35 @@
     endfunction
     noremap <silent> <leader>bu :<C-u>call <SID>RevertBuffer()<CR>
     " Navigate through buffers
-    noremap <leader>b0 :bfirst<CR>
-    noremap <leader>b$ :blast<CR>
-    noremap <leader>bp :bprev<CR>
-    noremap <leader>bn :bnext<CR>
-    noremap <C-PageUp> :bprev<CR>
-    noremap <C-PageDown> :bnext<CR>
+    nnoremap <leader>b0 :bfirst<CR>
+    nnoremap <leader>b$ :blast<CR>
+    nnoremap <leader>bp :bprev<CR>
+    nnoremap <leader>bn :bnext<CR>
+    nnoremap <C-PageUp> :bprev<CR>
+    nnoremap <C-PageDown> :bnext<CR>
     " Actions for all buffers (bufdo)
-    noremap <leader>bfd :bufdo<space>
+    nnoremap <leader>bfd :bufdo<space>
 
 " Args settings --------------------------------------------------------------
     " List args
-    noremap <leader>as :args<CR>
+    nnoremap <leader>as :args<CR>
     " Reset args with new input arguments
-    noremap <leader>aS :args<space>
+    nnoremap <leader>aS :args<space>
     " Add file to args in background
-    noremap <leader>aa :argadd %<CR>:args<CR>
-    noremap <leader>aA :argadd<space>
+    nnoremap <leader>aa :argadd %<CR>:args<CR>
+    nnoremap <leader>aA :argadd<space>
     " Add file to args and edit in foreground
-    noremap <leader>ae :argedit<space>
+    nnoremap <leader>ae :argedit<space>
     " Delete file from args
-    noremap <leader>ad :argdelete %<CR>:args<CR>
-    noremap <leader>aD :argdelete<space>
+    nnoremap <leader>ad :argdelete %<CR>:args<CR>
+    nnoremap <leader>aD :argdelete<space>
     " Navigate through args
-    noremap <leader>a0 :first<CR>:args<CR>
-    noremap <leader>a$ :last<CR>:args<CR>
-    noremap <leader>an :next<CR>:args<CR>
-    noremap <leader>ap :prev<CR>:args<CR>
+    nnoremap <leader>a0 :first<CR>:args<CR>
+    nnoremap <leader>a$ :last<CR>:args<CR>
+    nnoremap <leader>an :next<CR>:args<CR>
+    nnoremap <leader>ap :prev<CR>:args<CR>
     " Do actions to all files in args
-    noremap <leader>agd :argdo<space>
+    nnoremap <leader>agd :argdo<space>
 
 " Quickfix list settings -----------------------------------------------------
     " Function to toggle quickfix list pane
@@ -992,13 +992,13 @@
         endif
     endfunction
     " Keymapping for quickfix list
-    noremap <leader>qg :vimgrep<space>
-    noremap <leader>qd :cdo<space>
+    nnoremap <leader>qg :vimgrep<space>
+    nnoremap <leader>qd :cdo<space>
     " -- Replaced by the fzf version (Part 3, 'FZF replacement'); the old
     "    one only remained in visual mode, where it fails (E481), so it is off
     "noremap <leader>qo :call QuickfixListToggle()<CR>
-    noremap <leader>qj :cnext<CR>zz
-    noremap <leader>qk :cprev<CR>zz
+    nnoremap <leader>qj :cnext<CR>zz
+    nnoremap <leader>qk :cprev<CR>zz
 
 " Function - project root (git executable only, no git plugin) ---------------
     " Returns the git top-level directory of the current file (or of the
@@ -1242,12 +1242,12 @@
         endif
     endfunction
     " Keymapping for location list
-    noremap <leader>eg :lvimgrep<space>
+    nnoremap <leader>eg :lvimgrep<space>
     " -- Replaced by the fzf version (Part 3, 'FZF replacement'); the old
     "    one only remained in visual mode, where it fails (E481), so it is off
     "noremap <leader>eo :call LocationListToggle()<CR>
-    noremap <leader>ej :lnext<CR>zz
-    noremap <leader>ek :lprev<CR>zz
+    nnoremap <leader>ej :lnext<CR>zz
+    nnoremap <leader>ek :lprev<CR>zz
 
 " Marks settings -------------------------------------------------------------
     " NOTE:
@@ -1262,8 +1262,8 @@
     " -- Replaced by the fzf version (Part 3, 'FZF replacement'); the old
     "    one only remained in visual mode, where it fails (E481), so it is off
     "noremap <leader>mk :marks<CR>
-    noremap <leader>md :delmarks<space>
-    noremap <leader>mdd :delmarks!<CR>
+    nnoremap <leader>md :delmarks<space>
+    nnoremap <leader>mdd :delmarks!<CR>
 
 " Registers settings ---------------------------------------------------------
     " NOTE:
@@ -1274,7 +1274,7 @@
     "    -- "/ : Last search
 
     " Show registers in vim [Also check peekaboo plugin]
-    noremap <leader>rr :registers<CR>
+    nnoremap <leader>rr :registers<CR>
     " Command that wipe out all registers
     command! WipeReg for i in range(34,122) |
                 \ silent! call setreg(nr2char(i), []) | endfor
@@ -1284,7 +1284,7 @@
     " -- :abclear : Clear abbreviation
 
     " Show abbreviate in vim
-    noremap <leader>ab :abbreviate<CR>
+    nnoremap <leader>ab :abbreviate<CR>
 
 " Viminfo settings -----------------------------------------------------------
     " NOTE:
@@ -1473,15 +1473,15 @@
         " $TMUX is set and tmux refuses to nest ('sessions should be nested
         " with care'), so unset it for this command only (env -u TMUX).
         if g:vimrc_is_nvim
-            noremap <F12> :split<CR>:terminal<CR>i
-            noremap <leader>tm :split<CR>:terminal<CR>i
-            noremap <leader>tr :split<CR>:terminal ranger<CR>
-            noremap <leader>tt :split<CR>:terminal env -u TMUX tmux new-session -A -s scratch<CR>
+            nnoremap <F12> :split<CR>:terminal<CR>i
+            nnoremap <leader>tm :split<CR>:terminal<CR>i
+            nnoremap <leader>tr :split<CR>:terminal ranger<CR>
+            nnoremap <leader>tt :split<CR>:terminal env -u TMUX tmux new-session -A -s scratch<CR>
         else
-            noremap <F12> :terminal<CR>
-            noremap <leader>tm :terminal<CR>
-            noremap <leader>tr :terminal ranger<CR>
-            noremap <leader>tt :terminal env -u TMUX tmux new-session -A -s scratch<CR>
+            nnoremap <F12> :terminal<CR>
+            nnoremap <leader>tm :terminal<CR>
+            nnoremap <leader>tr :terminal ranger<CR>
+            nnoremap <leader>tt :terminal env -u TMUX tmux new-session -A -s scratch<CR>
         endif
         " Map key to go back from terminal mode to normal mode
         " Do not use Esc (which conflicts with fzf window) but <C-\><C-n>
@@ -2193,7 +2193,7 @@
     set shiftwidth=4   " number of space of auto-indent length
     set softtabstop=-1 " number of space that tab while editing
                        " negative value -> adopt shiftwidth value
-    noremap <leader>et :set expandtab!<CR>
+    nnoremap <leader>et :set expandtab!<CR>
 
 " Filetype-dependent tab key settings ----------------------------------------
     " PEP8 recommendation for tab settings
@@ -2465,8 +2465,8 @@
 " Conditional lightline status/tab line --------------------------------------
     if s:on('theme')
         " Toggle lightline tabline
-        noremap <leader>slte :set showtabline=2<CR>:echo "TABLINE ENABLED"<CR>
-        noremap <leader>sltd :set showtabline=0<CR>:echo "TABLINE DISABLED"<CR>
+        nnoremap <leader>slte :set showtabline=2<CR>:echo "TABLINE ENABLED"<CR>
+        nnoremap <leader>sltd :set showtabline=0<CR>:echo "TABLINE DISABLED"<CR>
         " Toggle lightline statusline
         noremap <leader>slse :call lightline#enable()<CR>:set noshowmode<CR>
                     \:set laststatus=2<CR>:echo "LIGHTLINE ENABLED"<CR>
@@ -2690,16 +2690,16 @@
     " Toggle NERDTree Zoom
     let g:NERDTreeMapToggleZoom = 'zz'
     " Toggle NERDTree display pane
-    noremap <F3> :silent! NERDTreeToggle<CR>
+    nnoremap <F3> :silent! NERDTreeToggle<CR>
     " Open NERDTree with the current file selected
-    noremap <leader><F3> :silent! NERDTreeFind<CR>
+    nnoremap <leader><F3> :silent! NERDTreeFind<CR>
     " NERDTree location
-    noremap <leader>ntl :let g:NERDTreeWinPos = 'left'<CR>
-    noremap <leader>ntr :let g:NERDTreeWinPos = 'right'<CR>
+    nnoremap <leader>ntl :let g:NERDTreeWinPos = 'left'<CR>
+    nnoremap <leader>ntr :let g:NERDTreeWinPos = 'right'<CR>
 
 " Mundo ----------------------------------------------------------------------
     " Toggle undotree
-    noremap <leader>ut :MundoToggle<CR>
+    nnoremap <leader>ut :MundoToggle<CR>
 
 " Tagbar ---------------------------------------------------------------------
     " Tagbar pane
@@ -2718,10 +2718,10 @@
     let g:tagbar_map_zoomwin = 'zz'
     let g:tagbar_map_showproto = 'd'
     " Toggle tagbar display
-    noremap <F4> :TagbarToggle<CR>
+    nnoremap <F4> :TagbarToggle<CR>
     " Tagbar location
-    noremap <leader>tgl :let g:tagbar_position = 'leftabove vertical'<CR>
-    noremap <leader>tgr :let g:tagbar_position = 'botright vertical'<CR>
+    nnoremap <leader>tgl :let g:tagbar_position = 'leftabove vertical'<CR>
+    nnoremap <leader>tgr :let g:tagbar_position = 'botright vertical'<CR>
 
 " ============================================================================
 " Part 4 - Vim useful functions settings (Plugins settings and mappings)
@@ -2734,7 +2734,7 @@
 
     " Open offline manual in system
     noremap <leader>mm :Man<space>
-    noremap <leader>mM :execute ":Man " . expand('<cword>')<CR>
+    nnoremap <leader>mM :execute ":Man " . expand('<cword>')<CR>
 
 " LargeFile ------------------------------------------------------------------
     " Large file size in MB
@@ -2905,7 +2905,7 @@
 " Vim-current-word -----------------------------------------------------------
     " Disable highlight current word and twin words at start
     let g:vim_current_word#enabled = 0
-    map <leader>cw :VimCurrentWordToggle<CR>
+    nmap <leader>cw :VimCurrentWordToggle<CR>
 
 " Vim-Tmux-navigator ---------------------------------------------------------
     " Disable navigator when TMUX pane is zoomed
@@ -3086,7 +3086,7 @@
 
 " Goyo -----------------------------------------------------------------------
     if s:on('extra')
-        noremap <leader>gy :Goyo<CR>
+        nnoremap <leader>gy :Goyo<CR>
     endif
 
 " Limelight ------------------------------------------------------------------
@@ -3146,9 +3146,9 @@
         let g:yankring_replace_n_pkey = 'yp'
         let g:yankring_replace_n_nkey = 'yn'
         " Yankring history
-        noremap <leader>ys :YRShow<CR>
-        noremap <leader>yC :YRClear<CR>
-        noremap <leader>yP :set paste!<CR>
+        nnoremap <leader>ys :YRShow<CR>
+        nnoremap <leader>yC :YRClear<CR>
+        nnoremap <leader>yP :set paste!<CR>
     endif
 
 " Peekaboo -------------------------------------------------------------------
@@ -3226,7 +3226,7 @@
             endif
         endfunction
         " Toggle autocomplpop
-        noremap <leader>` :call AutoCompPopToggle()<CR>
+        nnoremap <leader>` :call AutoCompPopToggle()<CR>
         " Pause autocomplpop in buffers that have another completion engine
         " -- b:acp_off = 1 is set for python (deoplete) or when LSP is enabled
         "    in the buffer (asyncomplete), so two pop-ups never compete.
@@ -3278,7 +3278,7 @@
 
 " Tasklist -------------------------------------------------------------------
     if s:on('extra')
-        noremap <leader>tl :TaskList<CR>
+        nnoremap <leader>tl :TaskList<CR>
     endif
 
 " Hexokinase -----------------------------------------------------------------
@@ -3288,7 +3288,7 @@
         let g:Hexokinase_optInPatterns = 'full_hex,triple_hex,rgb,rgba,hsl,hsla,colour_names'
         " Set highlighter for hexokinase
         let g:Hexokinase_highlighters = [ 'backgroundfull' ]
-        noremap <leader>chk :HexokinaseToggle<CR>
+        nnoremap <leader>chk :HexokinaseToggle<CR>
     endif
 
 " ============================================================================
@@ -3312,8 +3312,8 @@
         " ALE use location list for output, instead of quickfix list
         let g:ale_set_loclist = 1
         let g:ale_set_quickfix = 0
-        noremap <leader>ee :ALEToggle<CR>
-        noremap <leader>ei :ALEInfo<CR>
+        nnoremap <leader>ee :ALEToggle<CR>
+        nnoremap <leader>ei :ALEInfo<CR>
     endif
 
 " Neoformat ------------------------------------------------------------------
@@ -3412,7 +3412,7 @@
     if s:on('coding')
         " Don't enable when start up
         let g:rainbow_active = 0
-        noremap <leader>rb :RainbowToggle<CR>
+        nnoremap <leader>rb :RainbowToggle<CR>
     endif
 
 " Indentline -----------------------------------------------------------------
@@ -3420,7 +3420,7 @@
         let g:indentLine_showFirstIndentLevel = 1
         let g:indentLine_fileTypeExclude = ['text', 'markdown', 'latex']
         let g:indentLine_bufTypeExclude = ['help', 'terminal']
-        noremap <F9> :IndentLinesToggle<CR>
+        nnoremap <F9> :IndentLinesToggle<CR>
     endif
 
 " Indent guides --------------------------------------------------------------
@@ -3433,7 +3433,7 @@
                     \ :highlight IndentGuidesOdd  guibg='#303030' ctermbg=7
         autocmd vimrc VimEnter,Colorscheme *
                     \ :highlight IndentGuidesEven guibg='#24242d' ctermbg=8
-        noremap <leader><F9> :IndentGuidesToggle<CR>
+        nnoremap <leader><F9> :IndentGuidesToggle<CR>
     endif
 
 " Indent object --------------------------------------------------------------
@@ -3486,9 +3486,9 @@
         noremap <leader>gB :Git blame<CR>
         " Side-by-side diff of current file vs index (review agent edits:
         " dp/do put/get a hunk, ]c/[c next/prev change)
-        noremap <leader>gv :Gvdiffsplit<CR>
+        nnoremap <leader>gv :Gvdiffsplit<CR>
         " 3-way merge for a file with conflicts (ours | working | theirs)
-        noremap <leader>gm :Gvdiffsplit!<CR>
+        nnoremap <leader>gm :Gvdiffsplit!<CR>
     endif
 
 " GitGutter ------------------------------------------------------------------
@@ -3542,15 +3542,15 @@
             execute (a:count > 1 ? a:count : '') . a:cmd
         endfunction
         " GitGutter toggle
-        noremap <leader>gg :GitGutterToggle<CR>
-        noremap <leader>gb :GitGutterBufferToggle<CR>
+        nnoremap <leader>gg :GitGutterToggle<CR>
+        nnoremap <leader>gb :GitGutterBufferToggle<CR>
         " GitGutter highlight toggle
-        noremap <leader>ghs :GitGutterSignsToggle<CR>
-        noremap <leader>ghl :GitGutterLineHighlightsToggle<CR>
-        noremap <leader>ghn :GitGutterLineNrHighlightsToggle<CR>
-        noremap <leader>ghe :GitGutterEnable<CR>:GitGutterSignsEnable<CR>
+        nnoremap <leader>ghs :GitGutterSignsToggle<CR>
+        nnoremap <leader>ghl :GitGutterLineHighlightsToggle<CR>
+        nnoremap <leader>ghn :GitGutterLineNrHighlightsToggle<CR>
+        nnoremap <leader>ghe :GitGutterEnable<CR>:GitGutterSignsEnable<CR>
                     \:GitGutterLineHighlightsEnable<CR>
-        noremap <leader>ghd :GitGutterEnable<CR>:GitGutterDisable<CR>
+        nnoremap <leader>ghd :GitGutterEnable<CR>:GitGutterDisable<CR>
                     \:GitGutterSignsDisable<CR>:GitGutterLineHighlightsDisable<CR>
         " GitGutter hunk: diff preview
         nnoremap <leader>gq :GitGutterQuickFix<CR>
@@ -3913,7 +3913,7 @@
     map <leader>oi :AI<space>
     map <leader>oo :AIC<space>
     map <leader>oe :AIE<space>
-    map <leader>or :AIRedo<CR>
+    nmap <leader>or :AIRedo<CR>
 
 " Codeium --------------------------------------------------------------------
     "" NOTE: Codeium Chat uses web browser as front-end UI but it doest not work
@@ -4093,7 +4093,7 @@
                         \ ? 'Enabled' : 'Disabled (<C-x><C-o> on demand)')
         endfunction
         if !s:on('extra')
-            noremap <leader>` :call LspCompletionPopupToggle()<CR>
+            nnoremap <leader>` :call LspCompletionPopupToggle()<CR>
         endif
 
 " LSP features: switch each on/off while LSP runs ----------------------------
@@ -4311,6 +4311,7 @@
         unlet s:key s:name
         nnoremap <silent> <leader>Ltt :<C-u>LspFeature<CR>
         nnoremap <silent> <leader>Lto :<C-u>LspFeature all on<CR>
+        nnoremap <silent> <leader>LT  :<C-u>LspFeature all<CR>
 
 " Vim-LSP keys and buffer setup ----------------------------------------------
         " Manage LSP server
