@@ -63,57 +63,49 @@ endfunction
 
 command! -bang Messages call <SID>fzf_messages(<bang>0)
 
-function! s:fzf_open_quickfix_item(e) abort
-    let line = a:e
-    let filename = fnameescape(split(line, ':\d\+:')[0])
-    let linenr = matchstr(line, ':\d\+:')[1:-2]
-    let colum = matchstr(line, '\(:\d\+\)\@<=:\d\+:')[1:-2]
-    execute 'e ' . filename
-    call cursor(linenr, colum)
+" Quickfix / location list pickers
+" -- Each line starts with the entry number and a tab (hidden by
+"    --with-nth); the sink jumps with :cc N / :ll N, so the list's current
+"    entry follows (]q, <leader>qj continue from there) and any file name
+"    (spaces, %, :) works
+" -- The location list belongs to the window the picker was started from
+function! s:fzf_list_lines(items) abort
+    return map(copy(a:items), {i, v -> (i + 1) . "\t"
+                \ . (v.bufnr ? bufname(v.bufnr) : '') . ':' . v.lnum . ':'
+                \ . v.col . ':' . v.text})
 endfunction
 
-function! s:fzf_quickfix_to_grep(v) abort
-    return bufname(a:v.bufnr) . ':' . a:v.lnum . ':' . a:v.col . ':' . a:v.text
-endfunction
-
-function! s:fzf_get_quickfix() abort
-    return map(getqflist(), 's:fzf_quickfix_to_grep(v:val)')
-endfunction
-
-function! s:fzf_quickfix(bang) abort
-    let s:source = 'quickfix'
-    let items = s:fzf_get_quickfix()
-    if len(items) == 0
-        call s:warn('No quickfix items!')
+function! s:fzf_open_list_item(cmd, winid, line) abort
+    let l:nr = str2nr(matchstr(a:line, '^\d\+'))
+    if l:nr <= 0
         return
     endif
-    call fzf#run(fzf#wrap('quickfix', {
-                \ 'source': items,
-                \ 'sink':   function('s:fzf_open_quickfix_item'),
-                \ 'options': '--layout=reverse-list --prompt "Quickfix> "'
+    if a:cmd ==# 'll'
+        call win_gotoid(a:winid)
+    endif
+    execute a:cmd l:nr
+    normal! zvzz
+endfunction
+
+function! s:fzf_list(cmd, bang) abort
+    let l:loc = a:cmd ==# 'll'
+    let l:items = l:loc ? getloclist(0) : getqflist()
+    if empty(l:items)
+        call s:warn(l:loc ? 'No location list items!' : 'No quickfix items!')
+        return
+    endif
+    call fzf#run(fzf#wrap(l:loc ? 'location_list' : 'quickfix', {
+                \ 'source': s:fzf_list_lines(l:items),
+                \ 'sink':   function('s:fzf_open_list_item',
+                \                    [a:cmd, win_getid()]),
+                \ 'options': ['--layout=reverse-list', '--delimiter', "\t",
+                \             '--with-nth', '2..', '--prompt',
+                \             l:loc ? 'LocationList> ' : 'Quickfix> '],
                 \ }, a:bang))
 endfunction
 
-function! s:fzf_get_location_list() abort
-    return map(getloclist(0), 's:fzf_quickfix_to_grep(v:val)')
-endfunction
-
-function! s:fzf_location_list(bang) abort
-    let s:source = 'location_list'
-    let items = s:fzf_get_location_list()
-    if len(items) == 0
-        call s:warn('No location list items!')
-        return
-    endif
-    call fzf#run(fzf#wrap('location_list', {
-                \ 'source': items,
-                \ 'sink':   function('s:fzf_open_quickfix_item'),
-                \ 'options': '--layout=reverse-list --prompt "LocationList> "'
-                \ }, a:bang))
-endfunction
-
-command! -bang FZFQuickFix call s:fzf_quickfix(<bang>0)
-command! -bang FZFLocList call s:fzf_location_list(<bang>0)
+command! -bang FZFQuickFix call s:fzf_list('cc', <bang>0)
+command! -bang FZFLocList call s:fzf_list('ll', <bang>0)
 
 function! s:fzf_yank_register(line) abort
     call setreg('"', getreg(a:line[7]))
@@ -147,78 +139,79 @@ command! -bang Registers call s:fzf_registers(<bang>0)
 " ============================================================================
 " from https://github.com/junegunn/fzf.vim/issues/865
 
-function GoTo(jumpline)
-    let values = split(a:jumpline, ":")
-    execute "e ".values[0]
-    call cursor(str2nr(values[1]), str2nr(values[2]))
-    execute "normal zvzz"
+" Lines are 'file:line:col: text' (the preview needs this format). The sink
+" looks the chosen line up in the list it was built from and jumps by buffer
+" number and position, so file names with spaces, % or : work, and so do
+" buffers without a file name.
+
+function! s:get_line(bufnr, lnum) abort
+    let l:lines = getbufline(a:bufnr, a:lnum)
+    return empty(l:lines) ? '' : trim(l:lines[0])
 endfunction
 
-function GetLine(bufnr, lnum)
-    let lines = getbufline(a:bufnr, a:lnum)
-    if len(lines)>0
-        return trim(lines[0])
-    else
-        return ''
-    endif
-endfunction
-
-function Getjumps()
-    let jumps = []
-    let raw_jumps = reverse(copy(getjumplist()[0]))
-    for it in raw_jumps
-        if bufexists(it.bufnr)
-            call add(jumps, it)
-        endif
-    endfor
-    return jumps
-endfunction
-
-function! Jumps()
-    " Get jumps with filename added
-    let tmp_jump = Getjumps()
-    if(tmp_jump == [])
-          call s:warn('Empty jump list!')
-          return
-    endif
-    let jumps = map(Getjumps(),
-        \ { key, val -> extend(val, {'fname': getbufinfo(val.bufnr)[0].name }) })
-
-    let jumptext = map(copy(jumps), { index, val ->
-        \ (val.fname).':'.(val.lnum).':'.(val.col+1).': '.GetLine(val.bufnr, val.lnum) })
-
+" entries: [{'bufnr', 'lnum', 'col'}] (col 0-based, as in getjumplist())
+function! s:fzf_locations(entries, prompt) abort
+    let s:fzf_location_entries = a:entries
+    let s:fzf_location_lines = map(copy(a:entries), {_, v ->
+                \ bufname(v.bufnr) . ':' . v.lnum . ':' . (v.col + 1) . ': '
+                \ . s:get_line(v.bufnr, v.lnum)})
     call fzf#run(fzf#vim#with_preview(fzf#wrap({
-        \ 'source': jumptext,
-        \ 'column': 1,
-        \ 'options': ['--delimiter', ':', '--bind', 'alt-a:select-all,alt-d:deselect-all', '--preview-window', '+{2}-/2'],
-        \ 'sink': function('GoTo')})))
+        \ 'source': s:fzf_location_lines,
+        \ 'options': ['--delimiter', ':', '--prompt', a:prompt,
+        \             '--bind', 'alt-a:select-all,alt-d:deselect-all',
+        \             '--preview-window', '+{2}-/2'],
+        \ 'sink': function('s:fzf_goto_location')})))
 endfunction
 
-command! FZFJumps call Jumps()
+function! s:fzf_goto_location(line) abort
+    let l:idx = index(s:fzf_location_lines, a:line)
+    if l:idx < 0
+        return
+    endif
+    let l:entry = s:fzf_location_entries[l:idx]
+    if l:entry.bufnr != bufnr('')
+        execute 'buffer' l:entry.bufnr
+    endif
+    call cursor(l:entry.lnum, l:entry.col + 1)
+    normal! zvzz
+endfunction
+
+" ============================================================================
+" Jumps list
+" ============================================================================
+" from https://github.com/junegunn/fzf.vim/issues/865
+" -- Newest first; jumps into buffers that no longer exist are skipped
+
+function! s:fzf_jumps() abort
+    let l:jumps = filter(reverse(copy(getjumplist()[0])),
+                \ 'bufexists(v:val.bufnr)')
+    if empty(l:jumps)
+        call s:warn('Empty jump list!')
+        return
+    endif
+    call s:fzf_locations(l:jumps, 'Jumps> ')
+endfunction
+
+command! FZFJumps call s:fzf_jumps()
 
 " ============================================================================
 " Change list
 " ============================================================================
 " from https://github.com/junegunn/fzf.vim/issues/865
+" -- Changes in the current buffer, newest first
 
-function! Changes()
-    let changes  = reverse(copy(getchangelist()[0]))
-    if(changes == [])
+function! s:fzf_changes() abort
+    let l:bufnr = bufnr('')
+    let l:changes = map(reverse(copy(getchangelist()[0])),
+                \ {_, v -> {'bufnr': l:bufnr, 'lnum': v.lnum, 'col': v.col}})
+    if empty(l:changes)
         call s:warn('Empty change list!')
         return
     endif
-
-    let changetext = map(copy(changes), { index, val ->
-        \ expand('%').':'.(val.lnum).':'.(val.col+1).': '.GetLine(bufnr('%'), val.lnum) })
-
-    call fzf#run(fzf#vim#with_preview(fzf#wrap({
-        \ 'source': changetext,
-        \ 'column': 1,
-        \ 'options': ['--delimiter', ':', '--bind', 'alt-a:select-all,alt-d:deselect-all', '--preview-window', '+{2}-/2'],
-        \ 'sink': function('GoTo')})))
+    call s:fzf_locations(l:changes, 'Changes> ')
 endfunction
 
-command! FZFChanges call Changes()
+command! FZFChanges call s:fzf_changes()
 
 " ============================================================================
 " FZF Buffer Delete
@@ -232,14 +225,27 @@ function! s:list_buffers()
     return split(list, "\n")
 endfunction
 
+" -- :bdelete (not :bwipeout), so marks and jumps into the buffer are kept
+" -- Buffers with unsaved changes are skipped and listed (save them, or
+"    :bdelete! N to drop the changes), instead of one E89 stopping all
 function! s:delete_buffers(lines)
-    execute 'bwipeout' join(map(a:lines, {_, line -> split(line)[0]}))
+    let l:skipped = []
+    for l:nr in map(copy(a:lines), {_, line -> str2nr(split(line)[0])})
+        if getbufvar(l:nr, '&modified')
+            call add(l:skipped, l:nr . ' ' . fnamemodify(bufname(l:nr), ':~:.'))
+        else
+            execute 'bdelete' l:nr
+        endif
+    endfor
+    if !empty(l:skipped)
+        call s:warn('Unsaved changes, not deleted: ' . join(l:skipped, ', '))
+    endif
 endfunction
 
 command! FZFBD call fzf#run(fzf#wrap({
     \ 'source': s:list_buffers(),
     \ 'sink*': { lines -> s:delete_buffers(lines) },
-    \ 'options': '--multi --bind V:select-all'}))
+    \ 'options': '--multi --bind alt-a:select-all,alt-d:deselect-all --prompt "Delete buffers> "'}))
 
 " ============================================================================
 " FZF Insert markdown link
