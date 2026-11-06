@@ -1,0 +1,41 @@
+{
+  "$schema": "https://puremourning.github.io/vimspector/schema/vimspector.schema.json",
+  "configurations": {
+    "Python: current file": {
+      "adapter": "debugpy",
+      "filetypes": [ "python" ],
+      "default": true,
+      "configuration": {
+        "request": "launch",
+        "type": "python",
+        "python": "python3",
+        "cwd": "${workspaceRoot}",
+        "program": "${file}",
+        "args": [],
+        "stopOnEntry": false,
+        "justMyCode": true,
+        "console": "integratedTerminal"
+      },
+      "breakpoints": {
+        "exception": { "raised": "N", "uncaught": "Y", "userUnhandled": "" }
+      }
+    },
+    "Python: pytest current file": {
+      "adapter": "debugpy",
+      "filetypes": [ "python" ],
+      "configuration": {
+        "request": "launch",
+        "type": "python",
+        "python": "python3",
+        "cwd": "${workspaceRoot}",
+        "module": "pytest",
+        "args": [ "-q", "${file}" ],
+        "justMyCode": false,
+        "console": "integratedTerminal"
+      },
+      "breakpoints": {
+        "exception": { "raised": "N", "uncaught": "Y", "userUnhandled": "" }
+      }
+    }
+  }
+}
