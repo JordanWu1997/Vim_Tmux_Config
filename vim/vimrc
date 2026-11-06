@@ -4437,7 +4437,7 @@
             endfor
             " LSP keys come from s:on_lsp_buffer_enabled(): vim-lsp fires
             " lsp_buffer_enabled for every loaded buffer with a server (also
-            " after <leader>Ld, as the servers are still running)
+            " after <leader>Lp, as the servers are still running)
             let g:vimrc_lsp_paused = 0
         endfunction
         " Buffer-local keys and options set by s:on_lsp_buffer_enabled()

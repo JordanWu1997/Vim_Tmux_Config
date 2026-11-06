@@ -45,7 +45,7 @@
 <body>
 <main>
 <h1>Vim + tmux User Guide</h1>
-<p class="sub">Task-based guide to the configuration in <code>Vim_Tmux_Config</code> (branch <code>main</code>) for Neovim 0.9+ and Vim 9.1 · updated 2026-11-05. Every key in this guide was checked against the live configuration. The appendix lists all 403 normal-mode leader keys.</p>
+<p class="sub">Task-based guide to the configuration in <code>Vim_Tmux_Config</code> (branch <code>main</code>) for Neovim 0.9+ and Vim 9.1 · updated 2026-11-05. Every key in this guide was checked against the live configuration. The appendix lists all 405 normal-mode leader keys.</p>
 
 <div class="toc">
 <h2>Contents</h2>
@@ -157,7 +157,7 @@
 <ol class="steps">
   <li>Start Vim from the project root (<code>cd repo &amp;&amp; vim</code>). The working directory stays there (<code>noautochdir</code>), so searches and tests are project-wide.</li>
   <li>Open files with <code>&lt;leader&gt;fgf</code> (git files) or <code>&lt;leader&gt;ffs</code>. Use <code>&lt;leader&gt;'</code> to switch buffers, or <kbd>Alt</kbd>+<kbd>1..9</kbd> for the numbered buffers in the tabline.</li>
-  <li>Press <code>&lt;leader&gt;Le</code> to enable LSP. If the project has <code>.venv</code>, <code>venv</code> or <code>env</code> and no virtualenv is active, it's activated first. The statusline then shows <code>LSP</code> / <code>LSP:pylsp-all</code> (in windows wider than 90 columns), plus <code>-lint</code> / <code>-cmp</code> when you switched diagnostics or completion off. Without LSP, <code>&lt;leader&gt;pv</code> (<code>:ProjectVenv</code>) activates the virtualenv on its own; <code>&lt;leader&gt;pV</code> deactivates it.</li>
+  <li>Press <code>&lt;leader&gt;Le</code> to enable LSP. If the project has <code>.venv</code>, <code>venv</code> or <code>env</code> and no virtualenv is active, it's activated first. The statusline then shows <code>LSP</code> / <code>LSP:pylsp-all</code> (in windows wider than 90 columns), plus <code>-lint</code> / <code>-cmp</code> when you switched diagnostics or completion off (<code>-all</code> after <code>&lt;leader&gt;LT</code>). Windows 71&ndash;90 columns wide show just <code>L+</code>; 70 columns or less show nothing. Without LSP, <code>&lt;leader&gt;pv</code> (<code>:ProjectVenv</code>) activates the virtualenv on its own; <code>&lt;leader&gt;pV</code> deactivates it.</li>
   <li>Write code. A completion menu pops up automatically with LSP symbols, <b>words from all open buffers</b> (<code>[buffer]</code>) and <b>file paths</b> (<code>[file]</code>). The first item is pre-selected, so its signature and docs show in a float at once. <kbd>Enter</kbd> accepts it; <kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd> or <kbd>Ctrl</kbd>+<kbd>j/k</kbd> choose another; <kbd>Ctrl</kbd>+<kbd>e</kbd> closes the menu (then <kbd>Enter</kbd> for a new line). After typing <code>(</code> or <code>,</code> in a call, the <b>argument hint</b> shows the signature with the current parameter highlighted. Too busy? <code>&lt;leader&gt;Ltp</code> hides the docs float next to the menu, <code>&lt;leader&gt;Lts</code> the argument hint (section 3.4).</li>
   <li>Format with <code>&lt;leader&gt;nn</code> (ruff for Python, or the filetype's default formatter) or <code>&lt;leader&gt;Lf</code> (language server), and sort imports with <code>&lt;leader&gt;npR</code>. <code>&lt;leader&gt;Tf</code> turns format on save on for this buffer.</li>
   <li>Run the file with <code>&lt;leader&gt;px</code> or the test under the cursor with <code>&lt;leader&gt;ptn</code>. Both run in the tmux run pane, in the project virtualenv: the pane you used last if it's a shell; if it's the agent, the first shell pane in Vim's window (Vim offers to split one if there is none); or the pane you chose with <code>&lt;leader&gt;xT</code>. A half-typed command at that prompt is cleared first.</li>
@@ -176,11 +176,14 @@
   <tr><td><code>&lt;leader&gt;re</code></td><td>Rename symbol</td></tr>
   <tr><td><code>&lt;leader&gt;La</code></td><td>Code actions: quick fix, organize imports (also on a visual selection)</td></tr>
   <tr><td><code>&lt;leader&gt;Lf</code></td><td>Format with the language server: the whole file, or the visual selection</td></tr>
-  <tr><td><code>&lt;leader&gt;Ls</code> / <code>Ld</code> / <code>LR</code> / <code>LM</code></td><td>Server status / disable LSP / restart servers / manage servers</td></tr>
+  <tr><td><code>&lt;leader&gt;Ls</code> / <code>LR</code> / <code>LM</code></td><td>Server status / restart servers / manage servers</td></tr>
+  <tr><td><code>&lt;leader&gt;LT</code></td><td>All LSP features off; press again to bring each back as it was. Servers and LSP keys stay</td></tr>
+  <tr><td><code>&lt;leader&gt;Lp</code></td><td>Pause LSP: Vim's own keys (<code>K</code>, <code>gd</code>, <code>gi</code>, ...) come back, servers keep running so <code>&lt;leader&gt;Le</code> is instant. The statusline shows <code>LSP paused</code> (<code>L-</code> in windows 71&ndash;90 columns wide)</td></tr>
+  <tr><td><code>&lt;leader&gt;Ld</code></td><td>Stop LSP: Vim's own keys come back and all servers shut down; <code>&lt;leader&gt;Le</code> starts them again</td></tr>
 </table></div>
 
 <h3>3.4 Switching LSP features on and off</h3>
-<p>Everything is on when LSP starts. Switch a feature off when it gets in the way and back on when you want it; servers keep running. Your choice also holds after <code>&lt;leader&gt;Ld</code> / <code>&lt;leader&gt;Le</code>.</p>
+<p>Everything is on when LSP starts. Switch a feature off when it gets in the way and back on when you want it; servers keep running. Your choice also holds after <code>&lt;leader&gt;Lp</code> (pause) or <code>&lt;leader&gt;Ld</code> (stop) and <code>&lt;leader&gt;Le</code>.</p>
 <div class="table-wrap"><table>
   <tr><th>Keys</th><th>Feature (<code>:LspFeature</code> name)</th><th>Off means</th></tr>
   <tr><td><code>&lt;leader&gt;Ltd</code></td><td>Diagnostics / lint (<code>diagnostics</code>)</td><td>No signs, underlines or <code>]g</code>/<code>[g</code>. Only hidden: they come back at once.</td></tr>
@@ -371,7 +374,7 @@
   <tr><td>Typed <code>k</code> appears late in insert mode</td><td>The <code>kj</code> escape mapping waits up to 300 ms for a <code>j</code> (by design).</td></tr>
   <tr><td>No completion, <code>gd</code> doesn't work</td><td>LSP is off: press <code>&lt;leader&gt;Le</code>. Server not installed: <code>&lt;leader&gt;LI</code>. Check with <code>&lt;leader&gt;Ls</code>. Completion switched off? <code>:LspFeature</code> (or <code>-cmp</code> in the statusline).</td></tr>
   <tr><td>"tmux pane … runs claude, not a shell: not sent"</td><td>No shell pane was found (and you declined the split), or the run pane you chose is busy. Choose a shell pane with <code>&lt;leader&gt;xT</code>.</td></tr>
-  <tr><td>No diagnostics right after <code>&lt;leader&gt;Ld</code> then <code>&lt;leader&gt;Le</code></td><td>The server only resends them after a change: edit or save the file. Also check <code>-lint</code> in the statusline.</td></tr>
+  <tr><td>No diagnostics right after <code>&lt;leader&gt;Lp</code> or <code>&lt;leader&gt;Ld</code> then <code>&lt;leader&gt;Le</code></td><td>The server only resends them after a change: edit or save the file. Also check <code>-lint</code> in the statusline.</td></tr>
   <tr><td>Tests or LSP use the wrong Python</td><td><code>:ProjectVenv</code> shows the active virtualenv; <code>:ProjectVenv {dir}</code> switches. Running servers keep the old one: <code>&lt;leader&gt;LR</code>.</td></tr>
   <tr><td><code>Session.vim</code> shows up in <code>git status</code></td><td>It's excluded per repo when Vim creates it; for files created before that, add <code>Session.vim</code> to <code>~/.config/git/ignore</code></td></tr>
   <tr><td>Vim opened with an old layout</td><td>Plain <code>vim</code> in a git root restores its <code>Session.vim</code>. <code>:Obsess!</code> deletes it, or start with a file name.</td></tr>
@@ -383,7 +386,7 @@
 </table></div>
 
 <h2>12. Appendix: every leader key (normal mode)</h2>
-<p class="muted">Generated on 2026-11-05 from the live mappings (Neovim 0.9.5, all plugins installed) in a Python buffer with the LSP buffer setup applied and in a markdown note: 403 keys. "buffer: python" means the key exists only in LSP/Python buffers; "buffer: markdown" only in notes. The "Runs" column shows the raw command (long ones are cut).</p>
+<p class="muted">Generated on 2026-11-05 from the live mappings (Neovim 0.9.5, all plugins installed) in a Python buffer with the LSP buffer setup applied and in a markdown note: 405 keys. "buffer: python" means the key exists only in LSP/Python buffers; "buffer: markdown" only in notes. The "Runs" column shows the raw command (long ones are cut).</p>
 <h3>&lt;leader&gt;a — Args / autochdir <span class="muted">(14)</span></h3>
 <div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
 <tr><td><code>&lt;leader&gt;a$</code></td><td><code>:last&lt;CR&gt;:args&lt;CR&gt;</code></td><td>global</td></tr>
@@ -574,17 +577,18 @@
 <div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
 <tr><td><code>&lt;leader&gt;k</code></td><td><code>&lt;Plug&gt;(easymotion-k)</code></td><td>global</td></tr>
 </table></div>
-<h3>&lt;leader&gt;L — LSP / LSP features / LanguageTool <span class="muted">(21)</span></h3>
+<h3>&lt;leader&gt;L — LSP / LSP features / LanguageTool <span class="muted">(23)</span></h3>
 <div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
 <tr><td><code>&lt;leader&gt;La</code></td><td><code>&lt;Plug&gt;(lsp-code-action)</code></td><td>buffer: python</td></tr>
 <tr><td><code>&lt;leader&gt;LC</code></td><td><code>&lt;Esc&gt;:LanguageToolCheck&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;Lc</code></td><td><code>&lt;Esc&gt;:LanguageToolClear&lt;CR&gt;</code></td><td>global</td></tr>
-<tr><td><code>&lt;leader&gt;Ld</code></td><td><code>:call DisableLSP()&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Ld</code></td><td><code>:call DisableLSP(1)&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;Le</code></td><td><code>:call EnableLSP()&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;Lf</code></td><td><code>:LspDocumentFormatSync&lt;CR&gt;</code></td><td>buffer: python</td></tr>
 <tr><td><code>&lt;leader&gt;LI</code></td><td><code>:LspInstallServer&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;LM</code></td><td><code>:LspManageServers&lt;CR&gt;</code></td><td>global</td></tr>
-<tr><td><code>&lt;leader&gt;LR</code></td><td><code>:LspStopServer!&lt;CR&gt;:call lsp#disable()&lt;CR&gt;:call EnableLSP()&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Lp</code></td><td><code>:call DisableLSP(0)&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;LR</code></td><td><code>:LspStopServer!&lt;CR&gt;:call &lt;SID&gt;LspDisable()&lt;CR&gt;:call EnableLSP()&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;LS</code></td><td><code>:LspStopServer </code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;Ls</code></td><td><code>:LspStatus&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;Lta</code></td><td><code>:&lt;C-U&gt;LspFeature code_action&lt;CR&gt;</code></td><td>global</td></tr>
@@ -592,6 +596,7 @@
 <tr><td><code>&lt;leader&gt;Ltd</code></td><td><code>:&lt;C-U&gt;LspFeature diagnostics&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;Lti</code></td><td><code>:&lt;C-U&gt;LspFeature inlay_hints&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;Lto</code></td><td><code>:&lt;C-U&gt;LspFeature all on&lt;CR&gt;</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;LT</code></td><td><code>:&lt;C-U&gt;LspFeature all&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;Ltp</code></td><td><code>:&lt;C-U&gt;LspFeature doc_preview&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;Ltr</code></td><td><code>:&lt;C-U&gt;LspFeature references&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;Lts</code></td><td><code>:&lt;C-U&gt;LspFeature signature&lt;CR&gt;</code></td><td>global</td></tr>

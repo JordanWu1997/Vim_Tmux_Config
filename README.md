@@ -584,21 +584,21 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 | VIM-Mode |   Key Mapping    |            Function             |              Description              |                                     Note                                      |
 | :------: | :--------------: | :-----------------------------: | :-----------------------------------: | :---------------------------------------------------------------------------: |
 |   N/V    |      `[F1]`      |          Vim help page          |       Vim help page (help.txt)        |                               Built-in function                               |
-|   N/V    |      `[F3]`      |         Toggle NerdTree         |        On/Off NerdTree plugin         |                                                                               |
-|   N/V    |  `[LK]`+`[F3]`   |      NerdTree current file      |      Show current file location       |                                                                               |
-|   N/V    |      `[F4]`      |          Toggle Tagbar          |         On/Off Tagbar plugin          |                                                                               |
+|    N     |      `[F3]`      |         Toggle NerdTree         |        On/Off NerdTree plugin         |                                                                               |
+|    N     |  `[LK]`+`[F3]`   |      NerdTree current file      |      Show current file location       |                                                                               |
+|    N     |      `[F4]`      |          Toggle Tagbar          |         On/Off Tagbar plugin          |                                                                               |
 |   N/V    |  `[LK]`+`[F4]`   |    Markdown/Latex previewer     |         Open external Viewer          |            Only in markdown/vimwiki or tex buffers (buffer-local)             |
-|   N/V    | (`[LK]`)+`[F5]`  |  Toggle (Rel)/Abs line number   |      On/Off rel/abs line number       |                                                                               |
-|   N/V    |      `[F6]`      |  Toggle fold column (short-4)   |     On/Off fold column (short-4)      |                      For easier code fold visualization                       |
-|   N/V    |  `[LK]`+`[F6]`   |   Toggle fold column (long-8)   |      On/Off fold column (long-8)      |                      For easier code fold visualization                       |
-|   N/V    |      `[F7]`      |     Toggle show line border     |     On/Off highlight 79th column      |               VIM recommends at most 78 characters for one line               |
-|   N/V    |  `[LK]`+`[F7]`   |     Toggle show line border     | On/Off highlight characters from 79th |               VIM recommends at most 78 characters for one line               |
-|   N/V    |      `[F8]`      |    Toggle highlight comment     |     On/Off highlight code comment     |               Assign brighter color to comment to highlight it                |
-|   N/V    |  `[LK]`+`[F8]`   |      Toggle highlight fold      |       On/Off highlight vim fold       |               Assign brighter color to comment to highlight it                |
-|   N/V    |      `[F9]`      | Toggle indent highlight (line)  |    On/Off indent highlight (line)     |                                                                               |
-|   N/V    |  `[LK]`+`[F9]`   | Toggle indent highlight (block) |    On/Off indent highlight (block)    |                                                                               |
-|   N/V    | (`[LK]`)+`[F10]` |      (Load)/Save vim view       |          Load/Save vim view           | Folds, cursor, etc. (`:mkview`); for splits use `[Ctrl]`+`[s]` (`:mksession`) |
-|   N/V    | (`[LK]`)+`[F11]` |  (Off)/On synchronized cursor   |      Off/On synchronized cursor       |                 Need to execute in every pane to synchronize                  |
+|    N     | (`[LK]`)+`[F5]`  |  Toggle (Rel)/Abs line number   |      On/Off rel/abs line number       |                                                                               |
+|    N     |      `[F6]`      |  Toggle fold column (short-4)   |     On/Off fold column (short-4)      |                      For easier code fold visualization                       |
+|    N     |  `[LK]`+`[F6]`   |   Toggle fold column (long-8)   |      On/Off fold column (long-8)      |                      For easier code fold visualization                       |
+|    N     |      `[F7]`      |     Toggle show line border     |     On/Off highlight 79th column      |               VIM recommends at most 78 characters for one line               |
+|    N     |  `[LK]`+`[F7]`   |     Toggle show line border     | On/Off highlight characters from 79th |               VIM recommends at most 78 characters for one line               |
+|    N     |      `[F8]`      |    Toggle highlight comment     |     On/Off highlight code comment     |               Assign brighter color to comment to highlight it                |
+|    N     |  `[LK]`+`[F8]`   |      Toggle highlight fold      |       On/Off highlight vim fold       |               Assign brighter color to comment to highlight it                |
+|    N     |      `[F9]`      | Toggle indent highlight (line)  |    On/Off indent highlight (line)     |                                                                               |
+|    N     |  `[LK]`+`[F9]`   | Toggle indent highlight (block) |    On/Off indent highlight (block)    |                                                                               |
+|    N     | (`[LK]`)+`[F10]` |      (Load)/Save vim view       |          Load/Save vim view           | Folds, cursor, etc. (`:mkview`); for splits use `[Ctrl]`+`[s]` (`:mksession`) |
+|    N     | (`[LK]`)+`[F11]` |  (Off)/On synchronized cursor   |      Off/On synchronized cursor       |                 Need to execute in every pane to synchronize                  |
 
 - Toggle group (`[LK]`+`[Shift]`+`[t]`): every toggle echoes its new state; the older keys above still work
 
@@ -618,7 +618,7 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 |    N     |  `[LK]`+`[Shift]`+`[t]`+`[g]`  |       Goyo (focus mode)       |                               Same as `[LK]`+`[g]`+`[y]`                                |
 |    N     |  `[LK]`+`[Shift]`+`[t]`+`[t]`  |            Tagbar             |                                     Same as `[F4]`                                      |
 |    N     |  `[LK]`+`[Shift]`+`[t]`+`[d]`  |           ALE lint            |            Only when LSP is off (`lsp` switch 0); same as `[LK]`+`[e]`+`[e]`            |
-|   N/V    |        (`[LK]`)+`[F12]`        |  (Exit)/Enter terminal mode   |                                Exit/Enter terminal mode                                 |
+|    N     |        (`[LK]`)+`[F12]`        |  (Exit)/Enter terminal mode   |                                Exit/Enter terminal mode                                 |
 
 </details>
 
@@ -631,24 +631,24 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 
 | VIM-Mode |          Key Mapping           |            Function             |        Description         |                        Note                        |
 | :------: | :----------------------------: | :-----------------------------: | :------------------------: | :------------------------------------------------: |
-|   N/V    |     `[LK]`+`[b]`+`[a/d/e]`     |   Add/Delete/Edit new buffer    | Add/Delete/Edit new buffer | Here b for (b)uffer. Edit action will switch focus |
-|   N/V    |      `[LK]`+`[b]`+`[n/p]`      |     Go to next/prev buffer      |   Go to next/prev buffer   |                                                    |
-|   N/V    |     `[LK]`+`[a]`+`[a/d/e]`     | Add/Delete/Edit current to args | Add/Delete current to args |  Here a for (a)rg. Edit action will switch focus   |
-|   N/V    |      `[LK]`+`[a]`+`[n/p]`      |       Go to next/prev arg       |    Go to next/prev arg     |                                                    |
-|   N/V    |     `[LK]`+`[t]`+`[a/d/e]`     |     Add/Delete/Edit new tab     |     Add/Delete new tab     |  Here t for (t)ab. Edit action will switch focus   |
-|   N/V    |      `[LK]`+`[t]`+`[n/p]`      |       Go to next/prev tab       |    Go to next/prev tab     |                                                    |
-|   N/V    | `[LK]`+`[t]`+`[Shift]`+`[n/p]` |    Move tab to next/prev tab    | Move tab to next/prev tab  |                                                    |
+|    N     |     `[LK]`+`[b]`+`[a/d/e]`     |   Add/Delete/Edit new buffer    | Add/Delete/Edit new buffer | Here b for (b)uffer. Edit action will switch focus |
+|    N     |      `[LK]`+`[b]`+`[n/p]`      |     Go to next/prev buffer      |   Go to next/prev buffer   |                                                    |
+|    N     |     `[LK]`+`[a]`+`[a/d/e]`     | Add/Delete/Edit current to args | Add/Delete current to args |  Here a for (a)rg. Edit action will switch focus   |
+|    N     |      `[LK]`+`[a]`+`[n/p]`      |       Go to next/prev arg       |    Go to next/prev arg     |                                                    |
+|    N     |     `[LK]`+`[t]`+`[a/d/e]`     |     Add/Delete/Edit new tab     |     Add/Delete new tab     |  Here t for (t)ab. Edit action will switch focus   |
+|    N     |      `[LK]`+`[t]`+`[n/p]`      |       Go to next/prev tab       |    Go to next/prev tab     |                                                    |
+|    N     | `[LK]`+`[t]`+`[Shift]`+`[n/p]` |    Move tab to next/prev tab    | Move tab to next/prev tab  |                                                    |
 
 ##### 2. Split/Window Key Mapping
 
 | VIM-Mode |             Key Mapping              |             Function              |                         Description                          |                            Note                             |
 | :------: | :----------------------------------: | :-------------------------------: | :----------------------------------------------------------: | :---------------------------------------------------------: |
 |   N/V    |        `[Ctrl]`+`[w]`+`[s/v]`        | Add new split Horizontal/Vertical |              Add new split Horizontal/Vertical               |                                                             |
-|   N/V    |         `[Ctrl]`+`[h/j/k/l]`         |      Move between vim splits      |                Move between splits (L/D/U/R)                 | With plugin, you can move between TMUX panes and VIM splits |
+|    N     |         `[Ctrl]`+`[h/j/k/l]`         |      Move between vim splits      |                Move between splits (L/D/U/R)                 | With plugin, you can move between TMUX panes and VIM splits |
 |   N/V    |      `[Ctrl]`+`[w]`+`[h/j/k/l]`      |      Move between vim splits      |                Move between splits (L/D/U/R)                 |                                                             |
 |   N/V    | `[Ctrl]`+`[w]`+`[Shift]`+`[h/j/k/l]` |   Move current split (L/D/U/R)    |                 Move current split (L/D/U/R)                 |                                                             |
 |   N/V    |    `[Ctrl]`+`[w]`+`[Shift]`+`[t]`    |   Move current split to new tab   |                Move current split to new tab                 |                                                             |
-|   N/V    |         `[Alt]`+`[h/j/k/l]`          |     Resize current split size     |                  Resize current split size                   |                                                             |
+|    N     |         `[Alt]`+`[h/j/k/l]`          |     Resize current split size     |                  Resize current split size                   |                                                             |
 |   N/V    |         `[Ctrl]`+`[w]`+`[=]`         |      Re-split splits equally      |                   Re-split splits equally                    |            Here =(equal sign) for equally split             |
 |   N/V    |    `[LK]`+`[r]`+`[w/h]`+`[2/3/4]`    |     Resize split width/height     | Resize current split to 1/2, 1/3, 1/4 of screen width/height |              e.g. for VIM terminal pane resize              |
 
@@ -853,28 +853,30 @@ nvim --startuptime /tmp/startup.log FILE_TO_TEST +q && nvim /tmp/startup.log
 
 - LSP server management
 
-| VIM-Mode |               Key Mapping                |         Function          |                  Description                   |                            Note                            |
-| :------: | :--------------------------------------: | :-----------------------: | :--------------------------------------------: | :--------------------------------------------------------: |
-|    N     |       `[LK]`+`[Shift]`+`[l]`+`[s]`       |  Show LSP server status   |             Show LSP server status             |                                                            |
-|    N     |  `[LK]`+`[Shift]`+`[l]`+`[Shift]`+`[m]`  |     Manage LSP server     |   Manage LSP server (install, remove, etc.)    |                                                            |
-|    N     |  `[LK]`+`[Shift]`+`[l]`+`[Shift]`+`[i]`  |    Install LSP server     |    Install LSP server for current filetype     |                                                            |
-|    N     |      `[LK]`+`[Shift]`+`[l]`+`[e/d]`      | Enable/Disable LSP server |           Enable/Disable LSP server            | LSP is disabled by default: no server starts until enabled |
-|    N     | `[LK]`+`[Shift]`+`[l]`+`[Shift]`+`[s/r]` |  Stop/Restart LSP server  | Stop server (input name) / restart all servers |                                                            |
-|    N     |       `[LK]`+`[Shift]`+`[l]`+`[f]`       |     Run LSP formatter     |     Normal: whole file; visual: selection      |                    Only in LSP buffers                     |
+| VIM-Mode |               Key Mapping                |        Function         |                             Description                              |                            Note                            |
+| :------: | :--------------------------------------: | :---------------------: | :------------------------------------------------------------------: | :--------------------------------------------------------: |
+|    N     |       `[LK]`+`[Shift]`+`[l]`+`[s]`       | Show LSP server status  |                        Show LSP server status                        |                                                            |
+|    N     |  `[LK]`+`[Shift]`+`[l]`+`[Shift]`+`[m]`  |    Manage LSP server    |              Manage LSP server (install, remove, etc.)               |                                                            |
+|    N     |  `[LK]`+`[Shift]`+`[l]`+`[Shift]`+`[i]`  |   Install LSP server    |               Install LSP server for current filetype                |                                                            |
+|    N     |      `[LK]`+`[Shift]`+`[l]`+`[e/p]`      |    Enable/Pause LSP     | Enable / pause: Vim keys (K, gd, gi, ...) back, servers keep running | LSP is disabled by default: no server starts until enabled |
+|    N     |       `[LK]`+`[Shift]`+`[l]`+`[d]`       |        Stop LSP         |               Vim keys back and all servers shut down                |       `[LK]`+`[Shift]`+`[l]`+`[e]` starts them again       |
+|    N     | `[LK]`+`[Shift]`+`[l]`+`[Shift]`+`[s/r]` | Stop/Restart LSP server |            Stop server (input name) / restart all servers            |                                                            |
+|    N     |       `[LK]`+`[Shift]`+`[l]`+`[f]`       |    Run LSP formatter    |                Normal: whole file; visual: selection                 |                    Only in LSP buffers                     |
 
 - LSP features (each can be switched off/on while LSP runs, no server restart; all on by default)
 
-| VIM-Mode |             Key Mapping              |          Function          |                               Description                                |                                           Note                                            |
-| :------: | :----------------------------------: | :------------------------: | :----------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: |
-|    N     |  `[LK]`+`[Shift]`+`[l]`+`[t]`+`[d]`  | Toggle diagnostics (lint)  |          Signs, underline, `]g`/`[g`; hidden only, back at once          |                                 `:LspFeature diagnostics`                                 |
-|    N     |  `[LK]`+`[Shift]`+`[l]`+`[t]`+`[v]`  |    Toggle virtual text     |                Diagnostic message at the end of the line                 |                                `:LspFeature virtual_text`                                 |
-|    N     |  `[LK]`+`[Shift]`+`[l]`+`[t]`+`[c]`  |     Toggle completion      | asyncomplete pop-up; off: AutoComplPop and `[Ctrl]`+`[x]`+`[Ctrl]`+`[o]` |                                 `:LspFeature completion`                                  |
-|    N     |  `[LK]`+`[Shift]`+`[l]`+`[t]`+`[s]`  |   Toggle signature help    |                      Argument hint after `(` / `,`                       |                                  `:LspFeature signature`                                  |
-|    N     |  `[LK]`+`[Shift]`+`[l]`+`[t]`+`[r]`  | Toggle reference highlight |              Highlight other uses of the word under cursor               |                                 `:LspFeature references`                                  |
-|    N     |  `[LK]`+`[Shift]`+`[l]`+`[t]`+`[a]`  |  Toggle code action sign   |                   `A>` sign where a code action exists                   |                                 `:LspFeature code_action`                                 |
-|    N     |  `[LK]`+`[Shift]`+`[l]`+`[t]`+`[i]`  |     Toggle inlay hints     |                       Inline type/parameter hints                        |                               Vim 9 only (`n/a` in neovim)                                |
-|    N     |  `[LK]`+`[Shift]`+`[l]`+`[t]`+`[p]`  |   Toggle completion docs   |      Doc float (signature + docstring) next to the completion menu       |                                 `:LspFeature doc_preview`                                 |
-|    N     | `[LK]`+`[Shift]`+`[l]`+`[t]`+`[t/o]` |    Show state / all on     |                   `:LspFeature` / `:LspFeature all on`                   | `:LspFeature {name} [on/off/toggle]`; state is kept across `[LK]`+`[Shift]`+`[l]`+`[d/e]` |
+| VIM-Mode |              Key Mapping               |          Function          |                               Description                                |                                            Note                                             |
+| :------: | :------------------------------------: | :------------------------: | :----------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: |
+|    N     |   `[LK]`+`[Shift]`+`[l]`+`[t]`+`[d]`   | Toggle diagnostics (lint)  |          Signs, underline, `]g`/`[g`; hidden only, back at once          |                                  `:LspFeature diagnostics`                                  |
+|    N     |   `[LK]`+`[Shift]`+`[l]`+`[t]`+`[v]`   |    Toggle virtual text     |                Diagnostic message at the end of the line                 |                                 `:LspFeature virtual_text`                                  |
+|    N     |   `[LK]`+`[Shift]`+`[l]`+`[t]`+`[c]`   |     Toggle completion      | asyncomplete pop-up; off: AutoComplPop and `[Ctrl]`+`[x]`+`[Ctrl]`+`[o]` |                                  `:LspFeature completion`                                   |
+|    N     |   `[LK]`+`[Shift]`+`[l]`+`[t]`+`[s]`   |   Toggle signature help    |                      Argument hint after `(` / `,`                       |                                   `:LspFeature signature`                                   |
+|    N     |   `[LK]`+`[Shift]`+`[l]`+`[t]`+`[r]`   | Toggle reference highlight |              Highlight other uses of the word under cursor               |                                  `:LspFeature references`                                   |
+|    N     |   `[LK]`+`[Shift]`+`[l]`+`[t]`+`[a]`   |  Toggle code action sign   |                   `A>` sign where a code action exists                   |                                  `:LspFeature code_action`                                  |
+|    N     |   `[LK]`+`[Shift]`+`[l]`+`[t]`+`[i]`   |     Toggle inlay hints     |                       Inline type/parameter hints                        |                                Vim 9 only (`n/a` in neovim)                                 |
+|    N     |   `[LK]`+`[Shift]`+`[l]`+`[t]`+`[p]`   |   Toggle completion docs   |      Doc float (signature + docstring) next to the completion menu       |                                  `:LspFeature doc_preview`                                  |
+|    N     |  `[LK]`+`[Shift]`+`[l]`+`[t]`+`[t/o]`  |    Show state / all on     |                   `:LspFeature` / `:LspFeature all on`                   | `:LspFeature {name} [on/off/toggle]`; state is kept across `[LK]`+`[Shift]`+`[l]`+`[p/d/e]` |
+|    N     | `[LK]`+`[Shift]`+`[l]`+`[Shift]`+`[t]` |  All features off / back   | Any on: all off (servers and LSP keys stay); again: each back as before  |                                      `:LspFeature all`                                      |
 
 - LSP server tool
 
