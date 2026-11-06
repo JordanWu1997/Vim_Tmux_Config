@@ -3750,12 +3750,34 @@
             echo 'Created ' . l:target
         endfunction
         command! VimspectorPythonConfig call s:VimspectorPythonConfig()
+        " Python that runs the debugged program: $VIMSPECTOR_PYTHON, used by
+        " the template's "python" key (vimspector expands environment
+        " variables in .vimspector.json)
+        " -- Same virtualenv as tests and <leader>px (RunVenv()): a venv
+        "    chosen with :ProjectVenv {dir}, else the current file's project
+        "    venv (also a worktree's main checkout), else vim's active one,
+        "    else python3
+        " -- Set again on every start/restart (<leader>Dc, <leader>Dr), so it
+        "    follows the file you debug; python3 until then
+        " -- A .vimspector.json created before this change has "python3":
+        "    change it to "$VIMSPECTOR_PYTHON"
+        function! s:VimspectorPythonEnv() abort
+            let l:venv = RunVenv()
+            let l:python = empty(l:venv) ? exepath('python3')
+                        \ : l:venv . '/bin/python'
+            let $VIMSPECTOR_PYTHON = empty(l:python) ? 'python3' : l:python
+        endfunction
+        if empty($VIMSPECTOR_PYTHON)
+            let $VIMSPECTOR_PYTHON = 'python3'
+        endif
         nmap <leader>Db <Plug>VimspectorToggleBreakpoint
-        nmap <leader>Dc <Plug>VimspectorContinue
+        nmap <silent> <leader>Dc
+                    \ :<C-u>call <SID>VimspectorPythonEnv()<CR><Plug>VimspectorContinue
         nmap <leader>Dn <Plug>VimspectorStepOver
         nmap <leader>Di <Plug>VimspectorStepInto
         nmap <leader>Do <Plug>VimspectorStepOut
-        nmap <leader>Dr <Plug>VimspectorRestart
+        nmap <silent> <leader>Dr
+                    \ :<C-u>call <SID>VimspectorPythonEnv()<CR><Plug>VimspectorRestart
         nnoremap <leader>Dq :VimspectorReset<CR>
         nmap <leader>De <Plug>VimspectorBalloonEval
         xmap <leader>De <Plug>VimspectorBalloonEval
