@@ -2362,10 +2362,25 @@
             return winwidth(0) > 35 ? printf("%3d:%-2d", line('.'), col('.')) : ''
         endfunction
         " LSP state (only after <leader>Le): 'LSP' = enabled, server names
-        " when running for this buffer, e.g. 'LSP:pyright-langserver'
+        " when running for this buffer, e.g. 'LSP:pyright-langserver';
+        " 'LSP paused' after <leader>Lp (servers still running)
+        " -- Compact in windows 71-90 columns wide: 'LSP:R' running, 'LSP:P' paused
+        " -- Hidden in windows of 70 columns or less
         function! LightlineLspStatus()
-            if winwidth(0) <= 90 || !get(g:, 'lsp_user_enabled', 0)
+            let l:width = winwidth(0)
+            if l:width <= 70
                 return ''
+            endif
+            if !get(g:, 'lsp_user_enabled', 0)
+                " <leader>Lp: servers still run for this filetype
+                if !get(g:, 'vimrc_lsp_paused', 0)
+                            \ || empty(lsp#get_allowed_servers())
+                    return ''
+                endif
+                return l:width <= 90 ? 'L:P' : 'LSP paused'
+            endif
+            if l:width <= 90
+                return 'L:R'
             endif
             let l:running = []
             for l:name in lsp#get_allowed_servers()
@@ -4103,10 +4118,19 @@
         " -- :LspFeature                     show the state of every feature
         "    :LspFeature {name} [on|off]     toggle (or set) one feature
         "    :LspFeature all {on|off}        everything at once
+        "    :LspFeature all                 all off, or back to how they were
         " -- Keys <leader>Lt + d diagnostics, v virtual text, c completion,
         "    s signature, r references, a code action, i inlay hints,
         "    p completion doc preview,
         "    t show state, o all on
+        " -- <leader>LT: quick switch for all features. If any is on, all go
+        "    off (servers and LSP keys stay); pressed again, each feature
+        "    returns to its state before (e.g. diagnostics off, rest on)
+        " -- Three levels of "off", lightest first:
+        "    <leader>LT  features off, servers and LSP keys (gd, K, ...) stay
+        "    <leader>Lp  pause: Vim's own keys back, servers keep running,
+        "                so <leader>Le is instant
+        "    <leader>Ld  stop: Vim's own keys back and servers shut down
         " -- No server restart: diagnostics are hidden per buffer (kept, so
         "    they come back at once), completion hands the buffer back to
         "    AutoComplPop, the others are vim-lsp switches read on each event
@@ -4137,8 +4161,13 @@
         function! s:LspFeatureOn(name) abort
             return get(g:vimrc_lsp, a:name, 1) && s:LspFeatureSupported(a:name)
         endfunction
-        " Features switched off (for the statusline), e.g. ['lint', 'cmp']
+        " Features switched off (for the statusline), e.g. ['lint', 'cmp'],
+        " or ['all'] after <leader>LT
         function! LspFeaturesOff() abort
+            if empty(filter(copy(s:lsp_feature_names),
+                        \ 'get(g:vimrc_lsp, v:val, 1)'))
+                return ['all']
+            endif
             let l:short = {'diagnostics': 'lint', 'completion': 'cmp'}
             return map(filter(['diagnostics', 'completion'],
                         \ '!get(g:vimrc_lsp, v:val, 1)'), 'l:short[v:val]')
@@ -4181,6 +4210,20 @@
                 endif
             endfor
         endfunction
+        " Remove reference highlights in the current window/buffer
+        function! s:LspReferencesClear() abort
+            if exists('w:lsp_reference_matches')
+                for l:id in w:lsp_reference_matches
+                    silent! call matchdelete(l:id)
+                endfor
+                unlet w:lsp_reference_matches
+                unlet! w:lsp_reference_positions
+            endif
+            if exists('b:lsp_reference_matches')
+                unlet b:lsp_reference_matches
+                unlet! b:lsp_reference_positions
+            endif
+        endfunction
         " Apply one feature's state everywhere (LSP must be on)
         function! s:LspFeatureApply(name) abort
             let l:on = s:LspFeatureOn(a:name)
@@ -4218,11 +4261,12 @@
                 " Clear what is shown now (vim-lsp would only clear it on the
                 " next InsertEnter/BufLeave)
                 if a:name ==# 'references'
+                    " Same as vim-lsp's own clearing: matches/positions
+                    " variables are removed together (vim-lsp unlets both
+                    " on BufLeave, E108 if only one exists)
                     for l:win in getwininfo()
-                        for l:id in getwinvar(l:win.winid, 'lsp_reference_matches', [])
-                            silent! call matchdelete(l:id, l:win.winid)
-                        endfor
-                        call setwinvar(l:win.winid, 'lsp_reference_matches', [])
+                        call win_execute(l:win.winid,
+                                    \ 'call s:LspReferencesClear()')
                     endfor
                     if exists('*prop_remove')
                         for l:buf in getbufinfo({'bufloaded': 1})
@@ -4272,6 +4316,10 @@
                 echohl WarningMsg | echo 'Use on, off or toggle' | echohl None
                 return
             endif
+            if a:1 ==# 'all' && l:arg ==# 'toggle'
+                call s:LspFeatureToggleAll()
+                return
+            endif
             for l:name in l:names
                 let g:vimrc_lsp[l:name] = l:arg ==# 'toggle'
                             \ ? !get(g:vimrc_lsp, l:name, 1) : l:arg ==# 'on'
@@ -4291,6 +4339,29 @@
             else
                 echo s:LspFeatureStatus()
             endif
+        endfunction
+        " All features off when any is on (their states are remembered),
+        " else back to the remembered states (all on if none remembered)
+        function! s:LspFeatureToggleAll() abort
+            let l:any_on = !empty(filter(copy(s:lsp_feature_names),
+                        \ 'get(g:vimrc_lsp, v:val, 1)'))
+            if l:any_on
+                let s:lsp_features_saved = copy(g:vimrc_lsp)
+            endif
+            let l:saved = get(s:, 'lsp_features_saved', {})
+            for l:name in s:lsp_feature_names
+                let g:vimrc_lsp[l:name] = l:any_on ? 0 : get(l:saved, l:name, 1)
+            endfor
+            if !l:any_on
+                unlet! s:lsp_features_saved
+            endif
+            if get(g:, 'lsp_user_enabled', 0)
+                for l:name in s:lsp_feature_names
+                    call s:LspFeatureApply(l:name)
+                endfor
+            endif
+            echo (l:any_on ? 'LSP features all off (<leader>LT restores them; '
+                        \ . 'servers and LSP keys stay)' : s:LspFeatureStatus())
         endfunction
         function! s:LspFeatureComplete(arglead, cmdline, cursorpos) abort
             let l:args = split(a:cmdline)
@@ -4318,15 +4389,29 @@
         nmap <leader>LM :LspManageServers<CR>
         nmap <leader>LI :LspInstallServer<CR>
         nmap <leader>LS :LspStopServer<space>
+        " lsp#disable(), with a work-around for a vim-lsp bug: completion
+        " documentation and code action signs keep their 's:enabled' flag
+        " after _disable(), so the next lsp#enable() skips them (no doc
+        " float next to the completion menu, no 'A>' signs after
+        " <leader>Lp/Ld/LR then <leader>Le). Sourcing the two files again
+        " resets the flag (their top level only sets state and highlights).
+        function! s:LspDisable() abort
+            call lsp#disable()
+            runtime autoload/lsp/internal/completion/documentation.vim
+            runtime autoload/lsp/internal/document_code_action/signs.vim
+        endfunction
         " Restart: stop all servers (!), then re-enable vim-lsp, which starts
         " servers again for every loaded buffer (vim-lsp API, vim + neovim)
         nmap <leader>LR :LspStopServer!<CR>
-                    \:call lsp#disable()<CR>:call EnableLSP()<CR>
+                    \:call <SID>LspDisable()<CR>:call EnableLSP()<CR>
         " Show LSP server status
         nmap <leader>Ls :LspStatus<CR>
-        " Enable/Disable LSP server (in all buffers)
+        " Enable / pause / stop LSP (in all buffers)
+        " -- Lp: pause, Vim's own keys back, servers keep running (Le is instant)
+        " -- Ld: stop, Vim's own keys back and all servers shut down
         nmap <leader>Le :call EnableLSP()<CR>
-        nmap <leader>Ld :call DisableLSP()<CR>
+        nmap <leader>Lp :call DisableLSP(0)<CR>
+        nmap <leader>Ld :call DisableLSP(1)<CR>
         " Use the project's virtualenv for language servers (and :terminal,
         " :!, vim-test) when none is active (same as :ProjectVenv)
         " -- Looks for .venv, venv, env with bin/python at the project root
@@ -4350,20 +4435,96 @@
             for l:buf in getbufinfo({'buflisted': 1, 'bufloaded': 1})
                 call s:BufferWordsRefresh(l:buf.bufnr)
             endfor
-            nmap <buffer> K <plug>(lsp-hover)
+            " LSP keys come from s:on_lsp_buffer_enabled(): vim-lsp fires
+            " lsp_buffer_enabled for every loaded buffer with a server (also
+            " after <leader>Ld, as the servers are still running)
+            let g:vimrc_lsp_paused = 0
         endfunction
-        " Disable LSP
-        " -- signcolumn=auto (set globally) hides the column once signs are gone
-        " -- K: python buffers fall back to pydoc ('keywordprg' from the
-        "    python filetype plugin), other buffers to :help <word>
-        function! DisableLSP() abort
-            let g:lsp_user_enabled = 0
-            call lsp#disable()
-            if &filetype ==# 'python'
-                silent! nunmap <buffer> K
-            else
-                nmap <buffer> K :execute "help " . expand("<cword>")<CR>
+        " Buffer-local keys and options set by s:on_lsp_buffer_enabled()
+        let s:lsp_buffer_keys = [
+                    \ ['n', 'K'], ['n', 'gd'], ['n', 'g/'], ['n', 'g?'],
+                    \ ['n', 'gr'], ['n', 'gi'], ['n', 'gy'], ['n', '[g'],
+                    \ ['n', ']g'], ['n', '<M-e>'], ['n', '<M-y>'], ['n', '<M-G>'],
+                    \ ['n', '<M-g>'], ['i', '<M-e>'], ['i', '<M-y>'],
+                    \ ['i', '<M-G>'], ['i', '<M-g>'], ['i', '<CR>'],
+                    \ ['n', '<leader>ee'], ['n', '<leader>re'],
+                    \ ['n', '<leader>Lf'], ['x', '<leader>Lf'],
+                    \ ['n', '<leader>La'], ['x', '<leader>La']]
+        " Remember the buffer's own mappings for those keys (e.g. auto-pairs'
+        " <CR>) and its omnifunc/tagfunc, once, before LSP replaces them
+        function! s:LspBufferSave() abort
+            if exists('b:vimrc_lsp_saved')
+                return
             endif
+            let l:maps = {}
+            for [l:mode, l:lhs] in s:lsp_buffer_keys
+                let l:map = maparg(l:lhs, l:mode, 0, 1)
+                if !empty(l:map) && get(l:map, 'buffer', 0)
+                    let l:maps[l:mode . l:lhs] = l:map
+                endif
+            endfor
+            let b:vimrc_lsp_saved = { 'maps': l:maps,
+                        \ 'omnifunc': &l:omnifunc,
+                        \ 'tagfunc': exists('+tagfunc') ? &l:tagfunc : '' }
+        endfunction
+        " Give the current buffer its own keys back: Vim defaults (K =
+        " 'keywordprg', gd, gi, gr, ...) or the buffer's earlier mappings
+        " -- Only keys that still have the LSP mapping: a plugin may have
+        "    mapped over it since (auto-pairs wraps <CR> in buffers opened
+        "    while LSP is on), and that mapping is kept
+        function! s:LspBufferRestore() abort
+            let b:vimrc_lsp_restore = 0
+            if get(g:, 'lsp_user_enabled', 0) || !exists('b:vimrc_lsp_saved')
+                return
+            endif
+            let l:mapped = get(b:, 'vimrc_lsp_mapped', {})
+            for [l:mode, l:lhs] in s:lsp_buffer_keys
+                let l:key = l:mode . l:lhs
+                if !has_key(l:mapped, l:key)
+                            \ || maparg(l:lhs, l:mode) !=# l:mapped[l:key]
+                    continue
+                endif
+                execute 'silent! ' . l:mode . 'unmap <buffer> ' . l:lhs
+                if has_key(b:vimrc_lsp_saved.maps, l:key)
+                    call mapset(l:mode, 0, b:vimrc_lsp_saved.maps[l:key])
+                endif
+            endfor
+            unlet! b:vimrc_lsp_mapped
+            let &l:omnifunc = b:vimrc_lsp_saved.omnifunc
+            if exists('+tagfunc')
+                let &l:tagfunc = b:vimrc_lsp_saved.tagfunc
+            endif
+            unlet b:vimrc_lsp_saved
+            let b:vimrc_lsp_buffer = 0
+        endfunction
+        " Hidden buffers are restored when they are entered next
+        autocmd vimrc BufEnter *
+                    \ if get(b:, 'vimrc_lsp_restore', 0)
+                    \ | call s:LspBufferRestore() | endif
+        " Pause (stop = 0) or stop (stop = 1) LSP in all buffers
+        " -- Both: vim-lsp off (no diagnostics, completion, highlights), LSP
+        "    keys removed so Vim's own keys work again, AutoComplPop back
+        " -- Pause keeps the servers running; nothing is sent to them until
+        "    <leader>Le, which re-sends changed files first
+        " -- signcolumn=auto (set globally) hides the column once signs are gone
+        function! DisableLSP(stop) abort
+            let g:lsp_user_enabled = 0
+            call s:LspDisable()
+            if a:stop
+                silent LspStopServer!
+            endif
+            let g:vimrc_lsp_paused = !a:stop
+            " Restore keys now in buffers shown in a window, on BufEnter in
+            " the others
+            for l:buf in getbufinfo({'bufloaded': 1})
+                if has_key(l:buf.variables, 'vimrc_lsp_saved')
+                    call setbufvar(l:buf.bufnr, 'vimrc_lsp_restore', 1)
+                    if !empty(l:buf.windows)
+                        call win_execute(l:buf.windows[0],
+                                    \ 'call s:LspBufferRestore()')
+                    endif
+                endif
+            endfor
             " Let autocomplpop pop up again in buffers that LSP had taken over
             for l:buf in getbufinfo()
                 call setbufvar(l:buf.bufnr, 'vimrc_lsp_buffer', 0)
@@ -4376,9 +4537,19 @@
             if exists('*s:AcpBufferSync')
                 call s:AcpBufferSync()
             endif
+            echo a:stop ? 'LSP stopped: servers shut down, Vim keys restored'
+                        \ : 'LSP paused: Vim keys restored, servers still running'
+                        \ . ' (<leader>Le resumes, <leader>Ld stops them)'
         endfunction
         " Load LSP settings and keybindings
         function! s:on_lsp_buffer_enabled() abort
+            " vim-lsp also fires this on the first BufEnter of a buffer it
+            " opened earlier; LSP may be paused or stopped by then
+            if !get(g:, 'lsp_user_enabled', 0)
+                return
+            endif
+            let b:vimrc_lsp_restore = 0
+            call s:LspBufferSave()
             " LSP settings
             setlocal omnifunc=lsp#complete
             if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
@@ -4425,6 +4596,11 @@
                 inoremap <buffer><expr> <CR>
                             \ pumvisible() ? asyncomplete#close_popup() : "\<CR>"
             endif
+            " What LSP mapped, so <leader>Lp/Ld remove only these
+            let b:vimrc_lsp_mapped = {}
+            for [l:mode, l:lhs] in s:lsp_buffer_keys
+                let b:vimrc_lsp_mapped[l:mode . l:lhs] = maparg(l:lhs, l:mode)
+            endfor
             " Diagnostics and completion as set by :LspFeature (completion
             " on: asyncomplete pops up here and autocomplpop pauses)
             let b:vimrc_lsp_buffer = 1
