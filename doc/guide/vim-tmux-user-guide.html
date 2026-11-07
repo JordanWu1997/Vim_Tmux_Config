@@ -45,7 +45,7 @@
 <body>
 <main>
 <h1>Vim + tmux User Guide</h1>
-<p class="sub">Task-based guide to the configuration in <code>Vim_Tmux_Config</code> (branch <code>main</code>) for Neovim 0.9+ and Vim 9.1 · updated 2026-11-05. Every key in this guide was checked against the live configuration. The appendix lists all 405 normal-mode leader keys.</p>
+<p class="sub">Task-based guide to the configuration in <code>Vim_Tmux_Config</code> (branch <code>main</code>) for Neovim 0.9+ and Vim 9.1 · updated 2026-11-07. Every key in this guide was checked against the live configuration. The appendix lists all 405 normal-mode leader keys.</p>
 
 <div class="toc">
 <h2>Contents</h2>
@@ -123,6 +123,7 @@
       <li>Vim help tags: <code>&lt;leader&gt;fht</code>.</li>
       <li>Where a key is defined: <code>:verbose nmap &lt;key&gt;</code>.</li>
     </ul></li>
+  <li><b>Files reopen where you left them:</b> the cursor goes back to its last position (not in commit messages or diffs).</li>
   <li><b>The same file works in Vim and Neovim</b> (<code>~/.vimrc</code> or <code>~/.config/nvim/init.vim</code>).</li>
 </ul>
 
@@ -139,10 +140,11 @@
   <tr><td>Git worktree per task or agent</td><td>prefix <kbd>Alt</kbd>+<kbd>w</kbd> (new window) / <kbd>Alt</kbd>+<kbd>W</kbd> (new session) / <kbd>Alt</kbd>+<kbd>X</kbd> (remove)</td><td>fzf picker for branches and worktrees</td></tr>
   <tr><td>Watch a pane (agent finished?)</td><td>prefix <code>N</code></td><td>Marks the pane once it has been quiet for 15 s; its window gets a magenta <code>!</code> in the status bar</td></tr>
   <tr><td>Jump to the window that needs attention</td><td>prefix <kbd>Alt</kbd>+<kbd>a</kbd></td><td>Cycles through windows marked by the watcher or an agent hook (<code>tmux_notify.sh</code>), across sessions; visiting a window clears its mark</td></tr>
-  <tr><td>Paste the system clipboard into a pane</td><td>prefix <code>p</code></td><td>Pastes as typed text (xsel): a multi-line clipboard runs line by line in a shell</td></tr>
+  <tr><td>Paste the system clipboard into a pane</td><td>prefix <code>P</code></td><td>Pastes as typed text (xsel): a multi-line clipboard runs line by line in a shell</td></tr>
   <tr><td>Pane for tests and "run file"</td><td><code>&lt;leader&gt;xT</code> in Vim</td><td>Usually automatic: if the pane you used last is the agent, the first shell pane in Vim's window becomes the run pane (Vim offers to split one if there is none). Commands go only to a shell, never into an agent or REPL (section 3.5).</td></tr>
   <tr><td>Keep the Vim layout across reboots</td><td>Automatic: start Vim in the git root, inside tmux</td><td>A <code>Session.vim</code> is kept up to date there; tmux-resurrect restores Vim with its splits and tabs (section 9)</td></tr>
   <tr><td>Restore saved sessions / clear pane history</td><td>prefix <kbd>Alt</kbd>+<kbd>r</kbd> / <kbd>Alt</kbd>+<kbd>N</kbd></td><td>Both ask first</td></tr>
+  <tr><td>Clear scrollback history: this pane / many panes</td><td>prefix <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>l</kbd> / prefix <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>l</kbd></td><td>The first shows the pane's history length and asks y/n. The second opens a menu of all apps or one app (nvim, ranger, ...) with lines and panes per app, then asks. Panes running <code>htop</code> or <code>intel_gpu_top</code> are also cleared automatically once over 5000 lines (<code>@history_autoclean_*</code> in <code>tmux.conf</code>).</td></tr>
 </table></div>
 
 <h2>3. Python development</h2>
@@ -215,7 +217,7 @@
   <li><b>Quick:</b> <code>&lt;leader&gt;pb</code> inserts <code>breakpoint()</code> above the line. <code>&lt;leader&gt;pB</code> opens <code>python3 -m ipdb</code> (or pdb) on the current file in a terminal split, from the project root with the same virtualenv as tests (ipdb if that venv has it); type the arguments, then <kbd>Enter</kbd>.</li>
   <li><b>Graphical (vimspector):</b>
     <ol>
-      <li>Run <code>:VimspectorPythonConfig</code> once per project (writes <code>.vimspector.json</code> at the git root).</li>
+      <li>Run <code>:VimspectorPythonConfig</code> once per project (writes <code>.vimspector.json</code> at the git root). The program runs with the same virtualenv as tests and <code>&lt;leader&gt;px</code>, picked again on every <code>&lt;leader&gt;Dc</code> / <code>Dr</code>. An older <code>.vimspector.json</code> with <code>"python": "python3"</code> needs <code>"$VIMSPECTOR_PYTHON"</code> there instead.</li>
       <li><code>&lt;leader&gt;Db</code> toggles a breakpoint, <code>&lt;leader&gt;Dc</code> starts or continues ("current file" or "pytest current file").</li>
       <li>Step with <code>&lt;leader&gt;Dn</code> / <code>Di</code> / <code>Do</code> (over, into, out).</li>
       <li><code>&lt;leader&gt;De</code> evaluates the word or selection, <code>&lt;leader&gt;Dr</code> restarts, <code>&lt;leader&gt;Dq</code> quits.</li>
@@ -281,7 +283,7 @@
   <li><b>Reading and moving:</b> notes wrap at words; <code>j</code>/<code>k</code> move by screen line (<code>5j</code> still moves real lines). The cursor stays centred (<code>scrolloff=999</code>).</li>
   <li><b>Folding by heading:</b> enable folds with <code>zi</code>, then <code>zc</code>/<code>zo</code>/<code>zM</code>/<code>zR</code>. The first fold key in a note computes the folds (about half a second for a very long note, once). After that they refresh when you save (<code>:w</code>), and <code>zx</code> recomputes them.</li>
   <li><b>Preview:</b> <code>&lt;leader&gt;&lt;F4&gt;</code> toggles a live preview in the browser (<code>$BROWSER</code>).</li>
-  <li><b>Format:</b> <code>&lt;leader&gt;nmf</code> runs mdformat plus your fix-up patch for CJK links, math and checkboxes.</li>
+  <li><b>Format:</b> <code>&lt;leader&gt;nmf</code> runs mdformat plus your fix-up patch for CJK links, math and checkboxes. The patch decodes only non-ASCII escapes (<code>%E4%B8%AD</code> becomes <code>中</code>, <code>%20</code> stays) and never touches code. If the patch fails, the buffer stays as mdformat left it. One <kbd>u</kbd> undoes the whole format, and only that (an edit you made just before is kept).</li>
   <li><b>Images:</b> <code>&lt;leader&gt;mfp</code> pastes a clipboard image into <code>./figures/</code> and inserts the link; <code>&lt;leader&gt;mfP</code> captures the screen first.</li>
   <li><b>Export:</b> <code>&lt;leader&gt;mfe1</code> Marp slides, <code>mfe2</code>/<code>mfe3</code> pandoc HTML, <code>mfe4</code> PDF with citations, <code>mfe5</code> docx.</li>
   <li><b>Writing quality:</b> spell check is on (<code>en,cjk</code>). <code>&lt;leader&gt;sj/sk</code> jump to the next/previous error, and <code>&lt;leader&gt;sag</code> adds a word to the good list. <code>&lt;leader&gt;LC</code> runs LanguageTool (<code>&lt;leader&gt;Lc</code> clears it).</li>
@@ -297,6 +299,8 @@
   <tr><td>Text in the project (cwd) / from the git root</td><td><code>&lt;leader&gt;frg</code> (or <code>&lt;leader&gt;rg</code>) / <code>&lt;leader&gt;frr</code></td></tr>
   <tr><td>Lines in this buffer / in all buffers</td><td><code>&lt;leader&gt;fbl</code> / <code>&lt;leader&gt;fgl</code></td></tr>
   <tr><td>Buffers, windows, recent files, command/search history</td><td><code>&lt;leader&gt;'</code>, <code>fws</code>, <code>fhs</code>, <code>fh:</code>, <code>fh/</code></td></tr>
+  <tr><td>Pick from the quickfix / location list</td><td><code>&lt;leader&gt;fql</code> / <code>&lt;leader&gt;fel</code>; the list follows your pick, so <code>&lt;leader&gt;qj</code> continues from there</td></tr>
+  <tr><td>Delete buffers</td><td><code>&lt;leader&gt;bD</code>: select with <kbd>Tab</kbd> (<kbd>Alt</kbd>+<kbd>a</kbd> all, <kbd>Alt</kbd>+<kbd>d</kbd> none); buffers with unsaved changes are skipped and listed</td></tr>
   <tr><td>Marks, jumps, changes</td><td><code>&lt;leader&gt;mk</code>, <code>fjl</code>, <code>fcl</code>; <code>'</code> / <code>`</code> open the mark viewer</td></tr>
   <tr><td>File tree / reveal current file / symbols</td><td><code>F3</code> / <code>&lt;leader&gt;&lt;F3&gt;</code> / <code>F4</code> (tagbar)</td></tr>
   <tr><td>Jump anywhere on screen</td><td><code>&lt;leader&gt;j/k/h/l</code>, <code>&lt;leader&gt;/</code> (easymotion)</td></tr>
@@ -363,6 +367,7 @@
   <li><b>Inspect the current values:</b> <code>:echo g:vimrc_features</code> (likewise <code>g:vimrc_paths</code>, <code>g:vimrc_tools</code>, <code>g:vimrc_tmux</code>, <code>g:vimrc_lsp</code>); <code>:LspFeature</code> shows the current LSP feature state.</li>
   <li><b>Lazy-load rules</b> are in the plugin list (<code>{'on': [...]}</code>, <code>{'for': [...]}</code>). Keep Git tools and LSP lazy to keep startup around 65–120 ms.</li>
   <li><b>Speed:</b> use <code>:StartupTime</code> or <code>nvim --startuptime log</code>. See <code>doc/reports/</code> for how the config was measured.</li>
+  <li><b>Options that need a newer version:</b> set them with <code>:SetQ</code> instead of <code>:set</code>. Like tmux <code>set -q</code>, it quietly skips an option this Vim/Neovim doesn't have, or a value it doesn't accept yet (e.g. <code>virtualedit=none</code> needs Neovim 0.7); other errors still show.</li>
   <li><b>After changing</b>: <code>:source $MYVIMRC</code> is safe, because autocommands are grouped and cleared, so they don't pile up.</li>
 </ul>
 
@@ -382,11 +387,12 @@
   <tr><td><code>]h</code> does nothing</td><td>No changes against git in this file, or not a git repo</td></tr>
   <tr><td>Clipboard doesn't reach the other machine over SSH</td><td>Needs X forwarding (<code>ssh -X</code>) and <code>xsel</code>; tmux clipboard sync uses xsel</td></tr>
   <tr><td>Search or tests start in the wrong folder</td><td>Vim was started in a subfolder. Use <code>&lt;leader&gt;frr</code> (git root), <code>:cd</code>, or <code>&lt;leader&gt;ac</code> to toggle autochdir.</td></tr>
+  <tr><td>Vim, ranger or htop feel laggy only inside tmux, worse the longer the server runs</td><td>Huge scrollback histories: with <code>alternate-screen off</code>, full-screen apps redraw into the history. Clear it with prefix <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>l</kbd> (section 2); see "Troubleshooting (TMUX)" in the README.</td></tr>
   <tr><td>Something is slow</td><td><code>:profile start /tmp/p.log | profile func * | profile file *</code>, do the slow action, <code>:profile stop</code></td></tr>
 </table></div>
 
 <h2>12. Appendix: every leader key (normal mode)</h2>
-<p class="muted">Generated on 2026-11-05 from the live mappings (Neovim 0.9.5, all plugins installed) in a Python buffer with the LSP buffer setup applied and in a markdown note: 405 keys. "buffer: python" means the key exists only in LSP/Python buffers; "buffer: markdown" only in notes. The "Runs" column shows the raw command (long ones are cut).</p>
+<p class="muted">Generated on 2026-11-07 from the live mappings (Neovim 0.9.5, all plugins installed) in a Python buffer with the LSP buffer setup applied and in a markdown note: 405 keys. "buffer: python" means the key exists only in LSP/Python buffers; "buffer: markdown" only in notes. The "Runs" column shows the raw command (long ones are cut).</p>
 <h3>&lt;leader&gt;a — Args / autochdir <span class="muted">(14)</span></h3>
 <div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
 <tr><td><code>&lt;leader&gt;a$</code></td><td><code>:last&lt;CR&gt;:args&lt;CR&gt;</code></td><td>global</td></tr>
@@ -448,13 +454,13 @@
 <h3>&lt;leader&gt;D — Debugger <span class="muted">(8)</span></h3>
 <div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
 <tr><td><code>&lt;leader&gt;Db</code></td><td><code>&lt;Plug&gt;VimspectorToggleBreakpoint</code></td><td>global</td></tr>
-<tr><td><code>&lt;leader&gt;Dc</code></td><td><code>&lt;Plug&gt;VimspectorContinue</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Dc</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_VimspectorPythonEnv()&lt;CR&gt;&lt;Plug&gt;VimspectorContinue</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;De</code></td><td><code>&lt;Plug&gt;VimspectorBalloonEval</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;Di</code></td><td><code>&lt;Plug&gt;VimspectorStepInto</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;Dn</code></td><td><code>&lt;Plug&gt;VimspectorStepOver</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;Do</code></td><td><code>&lt;Plug&gt;VimspectorStepOut</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;Dq</code></td><td><code>:VimspectorReset&lt;CR&gt;</code></td><td>global</td></tr>
-<tr><td><code>&lt;leader&gt;Dr</code></td><td><code>&lt;Plug&gt;VimspectorRestart</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;Dr</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_VimspectorPythonEnv()&lt;CR&gt;&lt;Plug&gt;VimspectorRestart</code></td><td>global</td></tr>
 </table></div>
 <h3>&lt;leader&gt;d — Diff <span class="muted">(9)</span></h3>
 <div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
@@ -671,7 +677,7 @@
 <h3>&lt;leader&gt;n — Neoformat <span class="muted">(14)</span></h3>
 <div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
 <tr><td><code>&lt;leader&gt;ncf</code></td><td><code>:Neoformat clangformat&lt;CR&gt;</code></td><td>global</td></tr>
-<tr><td><code>&lt;leader&gt;nmf</code></td><td><code>:Neoformat! markdown mdformat&lt;CR&gt; :execute &#x27;silent! %!python3 &#x27; . g:vimrc_tools.mdformat_patch&lt;CR&gt; :echo &#x27;Neof…</code></td><td>global</td></tr>
+<tr><td><code>&lt;leader&gt;nmf</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_MdformatWithPatch()&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;nn</code></td><td><code>:Neoformat&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;npi</code></td><td><code>:Neoformat isort&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;npR</code></td><td><code>:Neoformat ruffimport&lt;CR&gt;</code></td><td>global</td></tr>
@@ -694,7 +700,7 @@
 </table></div>
 <h3>&lt;leader&gt;p — Python / tests / run / virtualenv <span class="muted">(11)</span></h3>
 <div class="table-wrap"><table class="keys"><tr><th>Keys</th><th>Runs</th><th>Scope</th></tr>
-<tr><td><code>&lt;leader&gt;pB</code></td><td><code>:&lt;C-U&gt;update | split&lt;CR&gt;:&lt;C-R&gt;=&lt;SNR&gt;_PythonDebugCmd()&lt;CR&gt;&lt;Space&gt;</code></td><td>buffer: python</td></tr>
+<tr><td><code>&lt;leader&gt;pB</code></td><td><code>:&lt;C-U&gt;update&lt;C-R&gt;=g:vimrc_is_nvim ? &#x27; &lt;Bar&gt; split&#x27; : &#x27;&#x27;&lt;CR&gt;&lt;CR&gt;:&lt;C-R&gt;=&lt;SNR&gt;_PythonDebugCmd()&lt;CR&gt;&lt;Space&gt;</code></td><td>buffer: python</td></tr>
 <tr><td><code>&lt;leader&gt;pb</code></td><td><code>Obreakpoint()&lt;Esc&gt;</code></td><td>buffer: python</td></tr>
 <tr><td><code>&lt;leader&gt;pl</code></td><td><code>:&lt;C-U&gt;call &lt;SNR&gt;_TmuxRunLast()&lt;CR&gt;</code></td><td>global</td></tr>
 <tr><td><code>&lt;leader&gt;ptf</code></td><td><code>:TestFile&lt;CR&gt;</code></td><td>global</td></tr>
