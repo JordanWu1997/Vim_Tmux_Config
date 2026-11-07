@@ -135,7 +135,7 @@ endfunction
 command! -bang Registers call s:fzf_registers(<bang>0)
 "
 " ============================================================================
-" Jumps list
+" Jump/change list pickers (shared)
 " ============================================================================
 " from https://github.com/junegunn/fzf.vim/issues/865
 

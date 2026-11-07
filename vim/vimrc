@@ -3372,7 +3372,11 @@
         "    patch are one undo step
         function! s:MdformatWithPatch() abort
             let l:view = winsaveview()
+            let l:tick = b:changedtick
             Neoformat! markdown mdformat
+            " Join the patch to mdformat's change only if mdformat made one,
+            " never to your own last edit
+            let l:formatted = b:changedtick != l:tick
             let l:lines = getline(1, '$')
             let l:out = systemlist('python3 '
                         \ . shellescape(g:vimrc_tools.mdformat_patch), l:lines)
@@ -3384,7 +3388,9 @@
                 return
             endif
             if l:out !=# l:lines
-                silent! undojoin
+                if l:formatted
+                    silent! undojoin
+                endif
                 call setline(1, l:out)
                 if len(l:out) < len(l:lines)
                     silent execute (len(l:out) + 1) . ',$delete _'
