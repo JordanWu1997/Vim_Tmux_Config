@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 # vim: set fileencoding=utf-8
-"""Undo what mdformat changes in notes (markdown on stdin -> stdout).
+
+r"""
+Undo what mdformat changes in notes (markdown on stdin -> stdout).
 
 1. Percent-encoded non-ASCII text is decoded back to readable text, e.g. a
    CJK link target %E4%B8%AD%E6%96%87.md -> 中文.md. ASCII escapes (%20,
