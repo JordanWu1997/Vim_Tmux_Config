@@ -10,6 +10,8 @@
    ($...$, $$...$$) are halved: $\\alpha$ -> $\alpha$. A LaTeX line break
    (\\ followed by a space, newline or [) is kept.
 3. Checked task boxes are written as [X]: '- [x] done' -> '- [X] done'.
+4. Escaped underscores after '=' in HTTP(S) URLs are restored:
+   https://example.com/?q=\_value -> https://example.com/?q=_value.
 
 Fenced code blocks (``` / ~~~) and inline code spans are never changed.
 """
@@ -29,6 +31,9 @@ MATH = re.compile(r'\$\$.+?\$\$'
 DOUBLED_BACKSLASH = re.compile(r'\\\\(?=[A-Za-z{}_%#&$,;:!|])')
 # '- [x]' / '* [x]' / '+ [x]' / '1. [x]' at the start of a list item
 CHECKED_BOX = re.compile(r'^(\s*(?:[-*+]|\d+[.)])\s+)\[x\]', re.MULTILINE)
+# Bare HTTP(S) URLs; code spans and fences are excluded by the caller.
+URL = re.compile(r'https?://[^\s<>\x22\x27`]+')
+ESCAPED_URL_UNDERSCORE = re.compile(r'(?<!\\)=\\_')
 # Opening/closing code fence (up to 3 spaces of indent)
 FENCE = re.compile(r'^ {0,3}(`{3,}|~{3,})')
 
@@ -65,10 +70,15 @@ def fix_math(match):
     return DOUBLED_BACKSLASH.sub(r'\\', match.group(0))
 
 
+def fix_url(match):
+    return ESCAPED_URL_UNDERSCORE.sub('=_', match.group(0))
+
+
 def fix_prose(text):
     """Apply the fixes to text that is not code."""
     text = PERCENT_RUN.sub(lambda m: decode_non_ascii(m.group(0)), text)
     text = MATH.sub(fix_math, text)
+    text = URL.sub(fix_url, text)
     return CHECKED_BOX.sub(r'\1[X]', text)
 
 
