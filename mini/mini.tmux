@@ -76,6 +76,10 @@ set -g focus-events on
 set -g extended-keys on
 set -g mouse on
 
+## Let Home/End work in TMUX (NO NEED IF extended-keys on)
+#bind -n Home send-keys Escape "OH"
+#bind -n End send-keys Escape "OF"
+
 # ============================================================================
 # TMUX buffer and copymode
 # ============================================================================
@@ -120,7 +124,8 @@ bind -T copy-mode-vi y send -X copy-selection \; display-message "Yanked: #{buff
 #bind -T copy-mode-vi MouseDragEnd1Pane send -X copy-pipe-and-cancel \
 #   "xsel --input --follow --primary | xsel --input --clipboard" \; display-message "Yanked: #{buffer_sample}"
 ## Map 'p' to paste from xsel (optional, but keeps it consistent with your Vim setup)
-#bind p run "xsel -ob | tmux load-buffer - ; tmux paste-buffer"
+#unbind n; unbind p; bind p run "xsel -ob | tmux load-buffer - ; tmux paste-buffer"
+bind P run "xsel -ob | tmux load-buffer - ; tmux paste-buffer"
 
 # Yank current working directory (Prefix + Y)
 bind Y run-shell "printf '%s' #{q:pane_current_path} | xsel -i -b; tmux set-buffer -- #{q:pane_current_path}" \; display-message "Yanked PWD: #{pane_current_path}"
@@ -336,11 +341,7 @@ bind C-a send-keys 'C-a'
 bind a send-keys 'C-l'
 bind C-l send-keys 'C-l'
 # Clear current pane output and scrollback history
-bind C-S-l confirm-before -p "clear scrollback history? (y/n)" "clear-history \; display-message 'scrollback history cleared'"
-
-# Let Home/End work in TMUX
-bind -n Home send-keys Escape "OH"
-bind -n End send-keys Escape "OF"
+bind C-S-l confirm-before -p "clear scrollback history (#{history_size}/#{history_limit} lines)? (y/n)" "clear-history \; display-message 'scrollback history cleared'"
 
 # Customization mode (added in tmux 3.2, defaults: <prefix> + [C])
 bind M-S-c customize-mode -Z
